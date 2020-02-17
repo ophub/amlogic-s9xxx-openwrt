@@ -12,8 +12,8 @@ The amlogic-s9xxx 5.10 kernel version currently does not support writing to EMMC
 | 7 | X96-Max-4G | S905x2 | u-boot-s905x2-510kernel-sei510.bin |
 | 8 | X96-Max-2G | S905x2| u-boot-s905x2-510kernel-sei510.bin |
 | 9 | Octopus-Planet | S912 | u-boot-s912-510kernel-octopusplanet.bin |
-| 10 | Belink GT-King  S922x | u-boot-s922x-510kernel-gtking.bin |
-| 11 | Belink GT-King Pro  S922x | u-boot-s922x-510kernel-gtkingpro.bin |
-| 12 | UGOOS AM6 Plus  S922x | u-boot-s922x-510kernel-gtkingpro.bin |
+| 10 | Belink GT-King | S922x | u-boot-s922x-510kernel-gtking.bin |
+| 11 | Belink GT-King Pro | S922x | u-boot-s922x-510kernel-gtkingpro.bin |
+| 12 | UGOOS AM6 Plus | S922x | u-boot-s922x-510kernel-gtkingpro.bin |
 | 13 | Phicomm-n1 | S905d | u-boot-s905d-510kernel-phicommn1.bin |
 

@@ -167,7 +167,7 @@ format_image() {
     mke2fs -F -q -t ext4 -L "ROOTFS" -m 0 ${loop}p2 >/dev/null 2>&1
 
     # Complete file
-    complete_path=${make_path}/router/s905x3_phicomm-n1/install-program/files
+    complete_path=${make_path}/install-program/files
     [ -f ${root}/root/hk1box-bootloader.img ] || cp -f ${complete_path}/hk1box-bootloader.img  ${root}/root/
     [ -f ${root}/root/u-boot-2015-phicomm-n1.bin ] || cp -f ${complete_path}/u-boot-2015-phicomm-n1.bin  ${root}/root/
     [ -f ${root}/usr/bin/s905x3-install.sh ] || cp -f ${complete_path}/s905x3-install.sh  ${root}/usr/bin/

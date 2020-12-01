@@ -1,29 +1,29 @@
-#========================================================================================================================
-# https://github.com/ophub/op
-# Description: Automatically Build OpenWrt for Phicomm-N1 & S905x3-Boxs
-# Function: Install and Upgrading the openwrt system to the emmc storage for Phicomm-N1 & S905x3-Boxs
+#======================================================================================
+# https://github.com/ophub/openwrt-for-amlogic-s9xxx
+# Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
+# Function: Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1
+# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
 # Copyright (C) 2020 https://github.com/tuanqing/mknop
-# Copyright (C) 2020 Flippy
-# Copyright (C) 2020 https://github.com/ophub/op
-#========================================================================================================================
+# Copyright (C) 2020 https://github.com/ophub/openwrt-for-amlogic-s9xxx
+#======================================================================================
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=install-program
-PKG_VERSION:=2.1
-PKG_RELEASE:=20201126
+PKG_VERSION:=2.2
+PKG_RELEASE:=20201201
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/$(PKG_NAME)
 	SECTION:=utils
 	CATEGORY:=Utilities
-	TITLE:=Install to emmc storage for Phicomm-N1 and S905x3-Boxs
+	TITLE:=Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1
 	DEPENDS:=+block-mount +blkid +parted +dosfstools +e2fsprogs +lsblk +pv +resize2fs +tune2fs +losetup +uuidgen
 endef
 
 define Package/$(PKG_NAME)/description
-	Install and Upgrading the openwrt system to the emmc storage for Phicomm-N1 and S905x3-Boxs
+	Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1
 endef
 
 define Build/Prepare

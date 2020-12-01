@@ -1,6 +1,6 @@
 # install-program
 
-Install to emmc script for Phicomm-N1 & S905x3-Boxs, which will help you to copy openwrt system to emmc.
+Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1.
 
 ## Install to Phicomm-N1 emmc partition and upgrade instructions
 

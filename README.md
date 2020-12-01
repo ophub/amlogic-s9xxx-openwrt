@@ -18,13 +18,13 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
 - name: Build OpenWrt for S905x3-Boxs and Phicomm-N1
   id: build
   run: |
-    git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git amlogic-s9xxx-kernel-for-openwrt
-    cd amlogic-s9xxx-kernel-for-openwrt
+    git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git  amlogic-s9xxx-kernel-for-openwrt
+    cd amlogic-s9xxx-kernel-for-openwrt/
     mkdir -p openwrt-armvirt
-    cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt
+    cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
     sudo chmod +x make
     sudo ./make -d -b n1_x96_hk1_h96_octopus -k 5.4.77_5.9.8
-    cd out && gzip *.img
+    cd out/ && gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
     echo "::set-output name=status::success"

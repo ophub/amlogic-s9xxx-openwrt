@@ -8,7 +8,7 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
 #======================================================================================================================
 
-#===== Do not modify the following parameter settings, start =====
+#===== Do not modify the following parameter settings, Start =====
 tmp_path="tmp"
 out_path="out"
 armbian_path="armbian"

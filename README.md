@@ -179,7 +179,7 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-kernel
 [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/build_kernel).
 
 ```yaml
-cd build_kernel
+cd build_kernel/
 sudo ./make_use_img.sh        #Use Flippy's amlogic-s9xxx *.img files to package the alternate firmware
 sudo ./make_use_kernel.sh     #Use Flippy's amlogic-s9xxx kernel files to package the alternate firmware
 sudo ./update_dtb.sh          #Update kernel.tar.xz files in the kernel directory with the latest dtb file.

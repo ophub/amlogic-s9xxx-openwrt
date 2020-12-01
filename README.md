@@ -12,7 +12,7 @@ Before using this packaging script, please compile your own personalized openwrt
 
 ## github.com online packaging instructions
 
-[For more instructions please see: .yml example](https://github.com/ophub/openwrt-s905x3-phicomm-n1/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml). 
+[For more instructions please see: .yml example](https://github.com/ophub/openwrt-s905x3-phicomm-n1/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml)
 
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 
@@ -114,7 +114,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 ## Build more kernel files
 
-[For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/build_kernel).
+[For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/build_kernel)
 
 ```yaml
 cd build_kernel/

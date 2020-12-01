@@ -39,7 +39,7 @@ The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
 Uploads OpenWrt Firmware to Actions:
 
 ```yaml
-- name: Upload OpenWrt Firmware to artifact for Phicomm-N1
+- name: Upload OpenWrt Firmware to Actions for Phicomm-N1
   uses: actions/upload-artifact@v2
   with:
     path: ${{ env.FILEPATH }}/openwrt_n1_*

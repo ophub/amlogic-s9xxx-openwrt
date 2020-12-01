@@ -10,7 +10,9 @@ Support local compilation and github.com online compilation, including OpenWrt f
 
 ## github.com online packaging instructions
 
-In your .github/workflows/*.yml file, after completing the openwrt compilation of Subtarget is ARMv8, add the following online packaging code:
+In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
+
+[See .yml example](https://github.com/ophub/openwrt-s905x3-phicomm-n1/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml)
 
 ```yaml
 - name: Build OpenWrt for S905x3-Boxs and Phicomm-N1

@@ -36,7 +36,7 @@ put ***`boot-${flippy_version}.tar.gz, dtb-amlogic-${flippy_version}.tar.gz & mo
 sudo ./make_use_kernel.sh
 ```
 
-The generated files ***` kernel.tar.gz & modules.tar.gz `*** will be directly placed in the kernel directory of this github: ***` ~/op/router/s905x3_phicomm-n1/armbian/phicomm-n1/kernel/${build_save_folder} `***
+The generated files ***` kernel.tar.gz & modules.tar.gz `*** will be directly placed in the kernel directory of this github: ***` ~/openwrt-for-amlogic-s9xxx/armbian/kernel-amlogic/kernel/${build_save_folder} `***
 
 ## Update and supplement dtb file
 

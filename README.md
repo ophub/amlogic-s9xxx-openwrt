@@ -28,7 +28,7 @@ Support local compilation and github.com online compilation, including OpenWrt f
     echo "::set-output name=status::success"
 ```
 
-The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
+- The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
 
 ```yaml
 path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1

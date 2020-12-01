@@ -126,15 +126,6 @@ s905x3-update.sh
 reboot
 ```
 
-## Bypass gateway settings
-
-If used as a bypass gateway, you can add custom firewall rules as needed (Network → Firewall → Custom Rules):
-
-```yaml
-iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE        #If the interface is eth0.
-iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is br-lan bridged.
-```
-
 ## Detailed make compile command
 
 - `sudo ./make -d -b n1 -k 5.9.5`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
@@ -167,7 +158,7 @@ sudo ./make_use_kernel.sh     #Use Flippy's amlogic-s9xxx kernel files to packag
 sudo ./update_dtb.sh          #Update kernel.tar.xz files in the kernel directory with the latest dtb file.
 ```
 
-## ARMv8 Firmware compilation parameters
+## ~/openwrt-armvirt/ Firmware compilation parameters
 
 | Option | Value |
 | ---- | ---- |
@@ -175,4 +166,14 @@ sudo ./update_dtb.sh          #Update kernel.tar.xz files in the kernel director
 | Subtarget | ARMv8 multiplatform |
 | Target Profile | Default |
 | Target Images | squashfs |
+
+
+## Bypass gateway settings
+
+If used as a bypass gateway, you can add custom firewall rules as needed (Network → Firewall → Custom Rules):
+
+```yaml
+iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE        #If the interface is eth0.
+iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is br-lan bridged.
+```
 

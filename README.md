@@ -6,7 +6,7 @@ Support local compilation and github.com online compilation, including OpenWrt f
 
 1. Clone the warehouse to the local. `git clone https://github.com/ophub/openwrt-kernel-for-amlogic-s9xxx.git`
 2. Create an `openwrt-armvirt` folder in the local Eg: `~/openwrt-kernel-for-amlogic-s9xxx/openwrt-armvirt`, and upload the compiled openwrt firmware of the ARM kernel to the `openwrt-armvirt` directory.
-3. Enter the /openwrt-for-amlogic-s9xxx root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated openwrt firmware is in the `out` directory under the root directory.
+3. Enter the /openwrt-kernel-for-amlogic-s9xxx root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated openwrt firmware is in the `out` directory under the root directory.
 
 ## github.com online packaging instructions
 
@@ -16,8 +16,8 @@ In your .github/workflows/*.yml file, after completing the openwrt compilation o
 - name: Build OpenWrt for S905x3-Boxs and Phicomm-N1
   id: build
   run: |
-    git clone https://github.com/ophub/openwrt-kernel-for-amlogic-s9xxx.git openwrt-for-amlogic-s9xxx
-    cd openwrt-for-amlogic-s9xxx
+    git clone https://github.com/ophub/openwrt-kernel-for-amlogic-s9xxx.git openwrt-kernel-for-amlogic-s9xxx
+    cd openwrt-kernel-for-amlogic-s9xxx
     mkdir -p openwrt-armvirt
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt
     sudo chmod +x make
@@ -157,7 +157,7 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 
 ## Option description when installing into s905x3-boxs emmc
 
-You can refer to the [dtb library](https://github.com/ophub/openwrt-for-amlogic-s9xxx/tree/main/armbian/dtb-amlogic) when you customize the file name.
+You can refer to the [dtb library](https://github.com/ophub/openwrt-kernel-for-amlogic-s9xxx/tree/main/armbian/dtb-amlogic) when you customize the file name.
 
 | Serial | Box | Description | DTB |
 | ---- | ---- | ---- | ---- |

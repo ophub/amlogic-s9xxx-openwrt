@@ -89,44 +89,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 ## Install to emmc partition or upgrade instructions
 
-[For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/install-program).
-
-- ***`Install OpenWrt for Phicomm-N1`***
-
-Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
-```yaml
-n1-install.sh
-reboot
-```
-
-- ***`Upgrading OpenWrt for Phicomm-N1`***
-
-Log in to the default IP: 192.168.1.1 (From USB hard drive) → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
-```yaml
-n1-update.sh
-reboot
-```
-
-- ***`Install OpenWrt for S905x3-Boxs`***
-
-Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
-```yaml
-s905x3-install.sh
-reboot
-```
-
-- ***`Upgrading OpenWrt for S905x3-Boxs`***
-
-Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s905x3-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
-```yaml
-mv -f /tmp/upload/*.img.gz /mnt/mmcblk2p4/
-cp -f /usr/bin/s905x3-update.sh /mnt/mmcblk2p4/
-cd /mnt/mmcblk2p4/
-gzip -df *.img.gz
-s905x3-update.sh
-#s905x3-update.sh  your_openwrt_imgFileName.img
-reboot
-```
+[For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/install-program)
 
 ## Detailed make compile command
 

@@ -174,6 +174,18 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-kernel
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
 
+## Build more kernel files
+
+[For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/build_kernel).
+
+```yaml
+cd build_kernel
+sudo ./make_use_img.sh        #Use Flippy's amlogic-s9xxx *.img files to package the alternate firmware
+sudo ./make_use_kernel.sh     #Use Flippy's amlogic-s9xxx kernel files to package the alternate firmware
+sudo ./update_dtb.sh          #Update kernel.tar.xz files in the kernel directory with the latest dtb file.
+```
+
+
 ## ARMv8 Firmware compilation parameters
 
 | Option | Value |

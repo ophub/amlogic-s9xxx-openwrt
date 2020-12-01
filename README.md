@@ -31,24 +31,36 @@ Support local compilation and github.com online compilation, including OpenWrt f
 The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
 
 ```yaml
-${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
-${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
-${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
-${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
-${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
+path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
+path: ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
+path: ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
+path: ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
+path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 ```
 
-Uploads OpenWrt Firmware to Actions:
+- Uploads OpenWrt Firmware to Actions:
 
 ```yaml
 - name: Upload OpenWrt Firmware to Actions for Phicomm-N1
   uses: actions/upload-artifact@v2
   with:
+    name: openwrt_phicomm-n1
     path: ${{ env.FILEPATH }}/openwrt_n1_*
     if-no-files-found: ignore
+
+- name: Upload OpenWrt Firmware to Actions for X96-Max+
+  uses: actions/upload-artifact@v2
+  with:
+    name: openwrt_x96-max
+    path: ${{ env.FILEPATH }}/openwrt_x96_*
+    if-no-files-found: ignore
+
+# More Upload to Actions
+- name: Upload OpenWrt Firmware ...
+
 ```
 
-Uploads OpenWrt Firmware to Release:
+- Uploads OpenWrt Firmware to Release:
 
 ```yaml
 - name: Upload OpenWrt firmware to release for S905x3-Boxs and Phicomm-N1

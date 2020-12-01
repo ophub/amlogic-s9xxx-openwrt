@@ -498,16 +498,16 @@ for b in ${build_openwrt[*]}; do
         {
             kernel=$x
             build=$b
-            process "[ ${b} ] extract armbian files."
+            process " extract armbian files."
             extract_armbian ${b}
             utils
-            process "[ ${b} ] make openwrt image."
+            process " make openwrt image."
             make_image ${b}
-            process "[ ${b} ] format openwrt image."
+            process " format openwrt image."
             format_image ${b}
-            process "[ ${b} ] copy files to image."
+            process " copy files to image."
             copy2image ${b}
-            process "[ ${b} ] generate success."
+            process " generate success."
         } &
     done
 done

@@ -19,7 +19,7 @@ In your .github/workflows/*.yml file, after completing the openwrt compilation o
     git clone https://github.com/ophub/openwrt-for-amlogic-s9xxx.git openwrt-for-amlogic-s9xxx
     cd openwrt-for-amlogic-s9xxx
     mkdir -p openwrt-armvirt
-    cp -rf ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt
+    cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt
     sudo chmod +x make
     sudo ./make -d -b n1_x96_hk1_h96_octopus -k 5.4.77_5.9.8
     cd out && gzip *.img

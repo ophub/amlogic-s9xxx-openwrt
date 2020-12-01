@@ -30,11 +30,13 @@ Support local compilation and github.com online compilation, including OpenWrt f
 
 The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
 
-- ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
-- ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
-- ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
-- ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
-- ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
+```yaml
+${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
+${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
+${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
+${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
+${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
+```
 
 Uploads OpenWrt Firmware to Actions:
 

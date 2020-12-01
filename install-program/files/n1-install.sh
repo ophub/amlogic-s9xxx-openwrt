@@ -1,11 +1,12 @@
 #!/bin/sh
-#===================================================================================
-# https://github.com/ophub/op
-# Description: Automatically Build OpenWrt for PHICOMM N1
-# Function: Install the openwrt system to the emmc storage for PHICOMM N1
+#======================================================================================
+# https://github.com/ophub/openwrt-for-amlogic-s9xxx
+# Description: Automatically Packaged OpenWrt for Phicomm-N1
+# Function: Install and Upgrading openwrt to the emmc for Phicomm-N1
+# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
 # Copyright (C) 2020 https://github.com/tuanqing/mknop
-# Copyright (C) 2020 https://github.com/ophub/op
-#===================================================================================
+# Copyright (C) 2020 https://github.com/ophub/openwrt-for-amlogic-s9xxx
+#======================================================================================
 
 SKIP_MB=16
 BOOT_MB=256

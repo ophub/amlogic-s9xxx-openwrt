@@ -1,27 +1,25 @@
 #!/bin/bash
 
-#=================================================================================================================================
-# https://github.com/ophub/op
-# Description: Automatically Build OpenWrt firmware for Phicomm-N1 & S905x3-Boxs
+#======================================================================================================================
+# https://github.com/ophub/openwrt-for-amlogic-s9xxx
+# Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
 # Function: Update kernel.tar.xz files in the kernel directory with the latest dtb file.
-# Copyright (C) 2020 Flippy's Core files for Phicomm-N1 & S905x3-Boxs
-# Copyright (C) 2020 https://github.com/ophub/op
-#=================================================================================================================================
+# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
+# Copyright (C) 2020 https://github.com/ophub/openwrt-for-amlogic-s9xxx
+#======================================================================================================================
 #
 # Usage: Use Ubuntu 18 LTS 64-bit
 # 01. Log in to the home directory of the local Ubuntu system
-# 02. git clone https://github.com/ophub/op.git
-# 03. Put the new *.dtb file into ~/op/router/s905x3_phicomm-n1/armbian/dtb-amlogic/
-# 04. The script will update all core files in this directory: ~/op/router/s905x3_phicomm-n1/armbian/phicomm-n1/kernel/
-# 05. cd ~/op/router/s905x3_phicomm-n1/build_kernel/
+# 02. git clone https://github.com/ophub/openwrt-for-amlogic-s9xxx.git
+# 03. Put the new *.dtb file into ~/openwrt-for-amlogic-s9xxx/armbian/dtb-amlogic/
+# 04. The script will update all core files in directory: ~/openwrt-for-amlogic-s9xxx/armbian/kernel-amlogic/kernel/
+# 05. cd ~/openwrt-for-amlogic-s9xxx/build_kernel/
 # 06. Run: sudo ./update_dtb.sh
-# 07. The updated file will overwrite the file in the original path: ~/op/router/s905x3_phicomm-n1/armbian/phicomm-n1/kernel/
-# 08. git push to your github
-# 09. Github.com Build openwrt: ~/op/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml
+# 07. The updated file will overwrite in the original path: ~/openwrt-for-amlogic-s9xxx/armbian/kernel-amlogic/kernel/
 #
 # Tips: If run 'sudo ./update_dtb.sh' is 'Command not found'. Run: sudo chmod +x update_dtb.sh
 #
-#=================================================================================================================================
+#======================================================================================================================
 
 # Default setting ( Don't modify )
 build_tmp_folder=${PWD}/"build_tmp"
@@ -66,7 +64,7 @@ update_kernel_dtb() {
 
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
     cd ${build_tmp_folder}
-    cp -rf ../../armbian/phicomm-n1/kernel/* .
+    cp -rf ../../armbian/kernel-amlogic/kernel/* .
 
     if  [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
         echo_color "red" "(1/1) Error: No core file." "..."
@@ -93,7 +91,7 @@ update_kernel_dtb() {
 
             done
 
-        cp -rf * ../../armbian/phicomm-n1/kernel/
+        cp -rf * ../../armbian/kernel-amlogic/kernel/
         sync
         cd ../ && rm -rf ${build_tmp_folder}
 

@@ -28,16 +28,6 @@ Support local compilation and github.com online compilation, including OpenWrt f
     echo "::set-output name=status::success"
 ```
 
-- The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
-
-```yaml
-path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
-path: ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
-path: ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
-path: ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
-path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
-```
-
 - Uploads OpenWrt Firmware to Actions:
 
 ```yaml
@@ -58,6 +48,16 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 # More Upload to Actions
 - name: Upload OpenWrt Firmware ...
 
+```
+
+- The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
+
+```yaml
+path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
+path: ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
+path: ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
+path: ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
+path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 ```
 
 - Uploads OpenWrt Firmware to Release:

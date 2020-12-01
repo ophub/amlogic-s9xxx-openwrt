@@ -1,8 +1,67 @@
 # Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
 
-You can download the OpwnWrt for S905x3-Boxs and Phicomm-N1 firmware from [Releases](https://github.com/ophub/op/releases). Such as `openwrt_s905x3_phicomm-n1_${date}`. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/).
+Support local compilation and github.com online compilation, including OpenWrt firmware writing EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3-Boxs and Phicomm-N1.
 
-## Firmware instructions
+## Local packaging instructions
+The software package supports Github Action cloud compilation, and the compiled firmware can be downloaded directly in [Action](https://github.com/ophub/op/actions) and [Releases](https://github.com/ophub/op/releases). You can also compile locally:
+1. Clone the warehouse to the local. `git clone https://github.com/ophub/openwrt-for-amlogic-s9xxx.git`
+2. Create an `openwrt-armvirt` folder in the local Eg: `~/openwrt-for-amlogic-s9xxx/openwrt-armvirt`, and upload the compiled openwrt firmware of the ARM kernel to the `openwrt-armvirt` directory.
+3. Enter the /openwrt-for-amlogic-s9xxx root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated openwrt firmware is in the `out` directory under the root directory.
+
+## github.com online packaging instructions
+
+In your .github/workflows/*.yml file, after completing the openwrt compilation of Subtarget is ARMv8, add the following online packaging code:
+
+```yaml
+- name: Build OpenWrt for S905x3-Boxs and Phicomm-N1
+  id: build
+  run: |
+    git clone https://github.com/ophub/openwrt-for-amlogic-s9xxx.git openwrt-for-amlogic-s9xxx
+    cd openwrt-for-amlogic-s9xxx
+    mkdir -p openwrt-armvirt
+    cp -rf ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt
+    sudo chmod +x make
+    sudo ./make -d -b n1_x96_hk1_h96_octopus -k 5.4.77_5.9.8
+    cd out && gzip *.img
+    cp -f ../openwrt-armvirt/*.tar.gz . && sync
+    echo "FILEPATH=$PWD" >> $GITHUB_ENV
+    echo "::set-output name=status::success"
+```
+
+The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
+
+- ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
+- ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
+- ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
+- ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
+- ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
+
+Uploads OpenWrt Firmware to Actions:
+
+```yaml
+- name: Upload OpenWrt Firmware to artifact for Phicomm-N1
+  uses: actions/upload-artifact@v2
+  with:
+    path: ${{ env.FILEPATH }}/openwrt_n1_*
+    if-no-files-found: ignore
+```
+
+Uploads OpenWrt Firmware to Release:
+
+```yaml
+- name: Upload OpenWrt firmware to release for S905x3-Boxs and Phicomm-N1
+  uses: svenstaro/upload-release-action@v2
+  with:
+    repo_token: ${{ secrets.GITHUB_TOKEN }}
+    file: ${{ env.FILEPATH }}/*
+    tag: openwrt_s905x3_phicomm-n1
+    overwrite: true
+    file_glob: true
+    body: |
+      This is OpenWrt firmware for S905x3-Boxs and Phicomm-N1
+```
+
+## OpenWrt Firmware instructions
 
 - `n1-v*-openwrt_*.img`: For Phicomm-N1.
 - `x96-v*-openwrt_*.img`: Almost compatible with all S905x3-Boxs, you can choose different box types when installing into EMMC.
@@ -24,7 +83,6 @@ n1-install.sh
 reboot
 ```
 Wait for the installation to complete. remove the USB hard disk, unplug/plug in the power again, reboot into EMMC.
-
 
 ***`Upgrading OpenWrt`***
 
@@ -65,7 +123,6 @@ reboot
 
 Install Recommended practice: After writing the emmc partition from the USB hard disk, ***`first plug in the original USB hard disk and restart it`*** by unplugging/plugging in the power source until the boot is completed and the default IP: 192.168.1.1 can be accessed. Then unplug the USB hard drive, and officially boot from the emmc partition by unplugging/plugging in the power source.
 
-
 Upgrading OpenWrt: `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s905x3-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 ```shell script
 mv -f /tmp/upload/*.img.gz /mnt/mmcblk2p4/
@@ -100,7 +157,7 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 
 ## Option description when installing into s905x3-boxs emmc
 
-You can refer to the [dtb library](https://github.com/ophub/op/tree/main/router/s905x3_phicomm-n1/armbian/dtb-amlogic) when you customize the file name.
+You can refer to the [dtb library](https://github.com/ophub/openwrt-for-amlogic-s9xxx/tree/main/armbian/dtb-amlogic) when you customize the file name.
 
 | Serial | Box | Description | DTB |
 | ---- | ---- | ---- | ---- |
@@ -116,13 +173,8 @@ You can refer to the [dtb library](https://github.com/ophub/op/tree/main/router/
 | 0 | Other | - | Enter the dtb file name |
 
 
-## Local compilation instructions
-The software package supports Github Action cloud compilation, and the compiled firmware can be downloaded directly in [Action](https://github.com/ophub/op/actions) and [Releases](https://github.com/ophub/op/releases). You can also compile locally:
-1. Clone the warehouse to the local. `git clone https://github.com/ophub/openwrt-for-amlogic-s9xxx.git`
-2. Create an `openwrt-armvirt` folder in the local Eg: `~/openwrt-for-amlogic-s9xxx/openwrt-armvirt`, and upload the compiled openwrt firmware of the ARM kernel to the `openwrt-armvirt` directory.
-3. Enter the /openwrt-for-amlogic-s9xxx root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated openwrt firmware is in the `out` directory under the root directory.
-
 ## Detailed make compile command
+
 - `sudo ./make -d -b n1 -k 5.9.5`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
 - `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use "_" to connect.
 - `sudo ./make -d`: Compile all kernel versions of openwrt with the default configuration.
@@ -142,47 +194,7 @@ The software package supports Github Action cloud compilation, and the compiled 
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
 
-## Compilation method
-
-- Select ***`Build OpenWrt for S905x3 and Phicomm-N1`*** on the [Action](https://github.com/ophub/op/actions) page.
-- Click the ***`Run workflow`*** button.
-
-## Configuration file function description
-
-| Folder/file name | Features |
-| ---- | ---- |
-| .config | Firmware related configuration, such as firmware kernel, file type, software package, luci-app, luci-theme, etc. |
-| files | Create a files directory under the root directory of the warehouse and put the relevant files in. You can use custom files such as network/dhcp/wireless by default when compiling. |
-| feeds.conf.default | Just put the feeds.conf.default file into the root directory of the warehouse, it will overwrite the relevant files in the OpenWrt source directory. |
-| diy-part1.sh | Execute before updating and installing feeds, you can write instructions for modifying the source code into the script, such as adding/modifying/deleting feeds.conf.default. |
-| diy-part2.sh | After updating and installing feeds, you can write the instructions for modifying the source code into the script, such as modifying the default IP, host name, theme, adding/removing software packages, etc. |
-| make | Phicomm N1 OpenWrt firmware build script. |
-| armbian | Multi-version kernel file directory. |
-| build_kernel | Use the kernel file shared by Flippy to build this script to build the Armbian kernel of OpenWrt for Phicomm-N1. |
-| install-program | Script to flash firmware to emmc. |
-
-
-## .github/workflow/build-openwrt-phicomm_n1.yml related environment variable description
-
-| Environment variable | Features |
-| ---- | ---- |
-| REPO_URL | Source code warehouse address |
-| REPO_BRANCH | Source branch |
-| FEEDS_CONF | Custom feeds.conf.default file name |
-| CONFIG_FILE | Custom .config file name |
-| DIY_P1_SH | Custom diy-part1.sh file name |
-| DIY_P2_SH | Custom diy-part2.sh file name |
-| UPLOAD_BIN_DIR | Upload the bin directory (all ipk files and firmware). Default false |
-| UPLOAD_FIRMWARE | Upload firmware catalog. Default true |
-| UPLOAD_RELEASE | Upload firmware to release. Default true |
-| UPLOAD_COWTRANSFER | Upload the firmware to CowTransfer.com. Default false |
-| UPLOAD_WERANSFER | Upload the firmware to WeTransfer.com. Default failure |
-| RECENT_LASTEST | maximum retention days for release, artifacts and logs in GitHub Release and Actions. |
-| TZ | Time zone setting |
-| GITHUB_REPOSITORY | Github.com Environment variables. The owner and repository name. For example, ophub/op. |
-| secrets.GITHUB_TOKEN | 1. Personal center: Settings → Developer settings → Personal access tokens → Generate new token ( Name: GITHUB_TOKEN, Select: public_repo, Copy GITHUB_TOKEN's Value ). 2. Op code center: Settings → Secrets → New secret ( Name: RELEASES_TOKEN, Value: Paste GITHUB_TOKEN's Value ). |
-
-## Firmware compilation parameters
+## ARMv8 Firmware compilation parameters
 
 | Option | Value |
 | ---- | ---- |
@@ -190,15 +202,4 @@ The software package supports Github Action cloud compilation, and the compiled 
 | Subtarget | ARMv8 multiplatform |
 | Target Profile | Default |
 | Target Images | squashfs |
-| Utilities  ---> |  <*> install-program |
-| LuCI -> Applications | in the file: .config |
 
-## Firmware information
-
-| Name | Value |
-| ---- | ---- |
-| Default IP | 192.168.1.1 |
-| Default username | root |
-| Default password | password |
-| Default WIFI name | OpenWrt |
-| Default WIFI password | none |

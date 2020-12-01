@@ -1,21 +1,21 @@
 #!/bin/bash
 
 #======================================================================================================================
-# https://github.com/ophub/openwrt-kernel-for-amlogic-s9xxx
+# https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
 # Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
 # Function: Update kernel.tar.xz files in the kernel directory with the latest dtb file.
 # Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
-# Copyright (C) 2020 https://github.com/ophub/openwrt-kernel-for-amlogic-s9xxx
+# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
 #======================================================================================================================
 #
 # Usage: Use Ubuntu 18 LTS 64-bit
 # 01. Log in to the home directory of the local Ubuntu system
-# 02. git clone https://github.com/ophub/openwrt-kernel-for-amlogic-s9xxx.git
-# 03. Put the new *.dtb file into ~/openwrt-kernel-for-amlogic-s9xxx/armbian/dtb-amlogic/
-# 04. The script will update all core files in directory: ~/openwrt-kernel-for-amlogic-s9xxx/armbian/kernel-amlogic/kernel/
-# 05. cd ~/openwrt-kernel-for-amlogic-s9xxx/build_kernel/
+# 02. git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git
+# 03. Put the new *.dtb file into ~/amlogic-s9xxx-kernel-for-openwrt/armbian/dtb-amlogic/
+# 04. The script will update all core files in directory: ~/amlogic-s9xxx-kernel-for-openwrt/armbian/kernel-amlogic/kernel/
+# 05. cd ~/amlogic-s9xxx-kernel-for-openwrt/build_kernel/
 # 06. Run: sudo ./update_dtb.sh
-# 07. The updated file will overwrite in the original path: ~/openwrt-kernel-for-amlogic-s9xxx/armbian/kernel-amlogic/kernel/
+# 07. The updated file will overwrite in the original path: ~/amlogic-s9xxx-kernel-for-openwrt/armbian/kernel-amlogic/kernel/
 #
 # Tips: If run 'sudo ./update_dtb.sh' is 'Command not found'. Run: sudo chmod +x update_dtb.sh
 #

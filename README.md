@@ -3,7 +3,7 @@
 Support local compilation and github.com online compilation, including OpenWrt firmware writing EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3-Boxs and Phicomm-N1.
 
 ## Local packaging instructions
-The software package supports Github Action cloud compilation, and the compiled firmware can be downloaded directly in [Action](https://github.com/ophub/op/actions) and [Releases](https://github.com/ophub/op/releases). You can also compile locally:
+
 1. Clone the warehouse to the local. `git clone https://github.com/ophub/openwrt-for-amlogic-s9xxx.git`
 2. Create an `openwrt-armvirt` folder in the local Eg: `~/openwrt-for-amlogic-s9xxx/openwrt-armvirt`, and upload the compiled openwrt firmware of the ARM kernel to the `openwrt-armvirt` directory.
 3. Enter the /openwrt-for-amlogic-s9xxx root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated openwrt firmware is in the `out` directory under the root directory.

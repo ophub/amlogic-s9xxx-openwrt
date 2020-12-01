@@ -10,7 +10,7 @@ Support local compilation and github.com online compilation, including OpenWrt f
 
 ## github.com online packaging instructions
 
-[See .yml example](https://github.com/ophub/openwrt-s905x3-phicomm-n1/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml). 
+[For more instructions please see: .yml example](https://github.com/ophub/openwrt-s905x3-phicomm-n1/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml). 
 
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 
@@ -87,7 +87,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 ## Install to emmc partition or upgrade instructions
 
-[For more instructions, see: install-program](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/install-program)
+[For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/install-program)
 
 - ***`Install OpenWrt for Phicomm-N1`***
 

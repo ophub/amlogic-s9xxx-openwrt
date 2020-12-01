@@ -1,20 +1,24 @@
 #!/bin/bash
-#========================================================================================================================
-# https://github.com/ophub/op
-# Description: Automatically Build OpenWrt for S905x3-Boxs and Phicomm-N1
-# Function: Use armbian kernel to build openwrt for S905x3-Boxs and Phicomm-N1
-# Copyright (C) 2020 Flippy's Core files for Phicomm-N1 & S905x3-Boxs
+#======================================================================================================================
+# https://github.com/ophub/openwrt-for-amlogic-s9xxx
+# Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
+# Function: Use Flippy's kernrl files for amlogic-s9xxx to build openwrt for S905x3-Boxs and Phicomm-N1
+# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
 # Copyright (C) 2020 https://github.com/tuanqing/mknop
-# Copyright (C) 2020 https://github.com/ophub/op
-#========================================================================================================================
+# Copyright (C) 2020 https://github.com/ophub/openwrt-for-amlogic-s9xxx
+#======================================================================================================================
 
-tmp_path="./tmp"
-out_path="./out"
-armbian_path="./armbian" # don't modify it
-openwrt_path="./openwrt"
-device="phicomm-n1" # don't modify it
+#===== Do not modify the following parameter settings, start =====
+tmp_path="tmp"
+out_path="out"
+armbian_path="armbian"
+openwrt_path="openwrt-armvirt"
+kernel_path="kernel-amlogic"
 build_openwrt=("n1" "x96" "hk1" "h96" "octopus")
 make_path=${PWD}
+#===== Do not modify the following parameter settings, End =======
+
+# Set firmware size (ROOT_MB: must be greater than or equal to 256)
 SKIP_MB=16
 BOOT_MB=256
 ROOT_MB=1024
@@ -37,8 +41,7 @@ error() {
 
 loop_setup() {
     loop=$(losetup -P -f --show "$1")
-    [ $loop ] || die "you used a lower version Linux, 
- please update the util-linux package or upgrade your system."
+    [ $loop ] || die "you used a lower version Linux, please update the util-linux package or upgrade your system."
 }
 
 cleanup() {
@@ -96,8 +99,7 @@ extract_openwrt() {
             break
             ;;
         *)
-            die "unsupported firmware format, this script only supports 
- rootfs.tar[.gz], ext4-factory.img[.gz], root.ext4[.gz] six formats."
+            die "This script only supports rootfs.tar[.gz], ext4-factory.img[.gz], root.ext4[.gz] six formats."
             ;;
         esac
     done
@@ -108,8 +110,8 @@ extract_openwrt() {
 extract_armbian() {
     cd ${make_path}
     build_op=${1}
-    kernel_dir="$armbian_path/$device/kernel/$kernel"
-    root_dir="$armbian_path/$device/root"
+    kernel_dir="$armbian_path/$kernel_path/kernel/$kernel"
+    root_dir="$armbian_path/$kernel_path/root"
     root="$tmp_path/$kernel/$build_op/root"
     boot="$tmp_path/$kernel/$build_op/boot"
 
@@ -147,22 +149,22 @@ utils() {
 
 make_image() {
     build_op=${1}
-    image="$out_path/openwrt_${build_op}_v${kernel}_$(date +"%Y.%m.%d.%H%M").img"
-    rm -f $image
+    build_image_file="$out_path/openwrt_${build_op}_v${kernel}_$(date +"%Y.%m.%d.%H%M").img"
+    rm -f $build_image_file
     sync
 
     [ -d "$out_path/$kernel" ] || mkdir -p "$out_path/$kernel"
-    fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M $image
+    fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M $build_image_file
 }
 
 format_image() {
     build_op=${1}
 
-    parted -s $image mklabel msdos 2>/dev/null
-    parted -s $image mkpart primary ext4 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
-    parted -s $image mkpart primary ext4 $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
+    parted -s $build_image_file mklabel msdos 2>/dev/null
+    parted -s $build_image_file mkpart primary ext4 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
+    parted -s $build_image_file mkpart primary ext4 $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
 
-    loop_setup $image
+    loop_setup $build_image_file
     mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
     mke2fs -F -q -t ext4 -L "ROOTFS" -m 0 ${loop}p2 >/dev/null 2>&1
 
@@ -193,13 +195,13 @@ format_image() {
     
     # Add firmware version information to the terminal page
     if  [ -f ${root}/etc/banner ]; then
-	op_version=$(echo $(ls ${root}/lib/modules/) 2>/dev/null)
-	op_packaged_date=$(date +%Y-%m-%d)
-	echo " OpenWrt Kernel: ${op_version}" >> ${root}/etc/banner
-	echo " Phicomm-N1 installation command: n1-install.sh" >> ${root}/etc/banner
-	echo " S905x3-Boxs installation command: s905x3-install.sh" >> ${root}/etc/banner
-	echo " Packaged Date: ${op_packaged_date}" >> ${root}/etc/banner
-	echo " -----------------------------------------------------" >> ${root}/etc/banner
+        op_version=$(echo $(ls ${root}/lib/modules/) 2>/dev/null)
+        op_packaged_date=$(date +%Y-%m-%d)
+        echo " OpenWrt Kernel: ${op_version}" >> ${root}/etc/banner
+        echo " Phicomm-N1 installation command: n1-install.sh" >> ${root}/etc/banner
+        echo " S905x3-Boxs installation command: s905x3-install.sh" >> ${root}/etc/banner
+        echo " Packaged Date: ${op_packaged_date}" >> ${root}/etc/banner
+        echo " -----------------------------------------------------" >> ${root}/etc/banner
     fi
 }
 
@@ -278,7 +280,7 @@ get_kernels() {
     i=0
     IFS=$'\n'
 
-    local kernel_root="$armbian_path/$device/kernel"
+    local kernel_root="$armbian_path/$kernel_path/kernel"
     [ -d $kernel_root ] && {
         work=$(pwd)
         cd $kernel_root
@@ -291,7 +293,7 @@ get_kernels() {
 
 show_kernels() {
     if [ ${#kernels[*]} = 0 ]; then
-        die "no file in kernel directory!"
+        die "No kernel files in [ ${armbian_path}/${openwrt_path}/kernel ] directory!"
     else
         show_list "${kernels[*]}" "kernel"
     fi
@@ -334,7 +336,7 @@ choose_files() {
                 break
             else
                 ((i++ >= 2)) && exit 1
-                error "wrong type, try again!"
+                error "Wrong type, try again!"
                 sleep 1s
             fi
         done
@@ -392,7 +394,7 @@ EOF
 
 ##
 [ $(id -u) = 0 ] || die "please run this script as root!"
-echo -e " Welcome to phicomm-n1 openwrt image tools!\n"
+echo -e "Welcome to use the OpenWrt automatic packaging tool!\n"
 
 cleanup
 get_firmwares
@@ -406,7 +408,7 @@ while [ "$1" ]; do
     -c | --clean)
         cleanup
         rm -rf $out_path
-        echo " clean up ok!" && exit
+        echo "Clean up ok!" && exit
         ;;
 
     -d | --default)
@@ -428,7 +430,7 @@ while [ "$1" ]; do
              unset build
              : ${build:="all"}
         else
-             die "invalid build [ $2 ]!"
+             die "Invalid build [ $2 ]!"
         fi
         shift
         ;;
@@ -448,7 +450,7 @@ while [ "$1" ]; do
              : ${kernel:="all"}
              shift
         else
-             die "invalid kernel [ $2 ]!"
+             die "Invalid kernel [ $2 ]!"
         fi
         ;;
     --kernel)
@@ -459,22 +461,22 @@ while [ "$1" ]; do
         if [[ "$rootsize" -ge 256 ]]; then
             shift
         else
-            die "invalid size [ $2 ]!"
+            die "Invalid size [ $2 ]!"
         fi
         ;;
     *)
-        die "invalid option [ $1 ]!"
+        die "Invalid option [ $1 ]!"
         ;;
     esac
     shift
 done
 
 if [ ${#firmwares[*]} = 0 ]; then
-    die "no file in openwrt directory!"
+    die "No the [ openwrt-armvirt-64-default-rootfs.tar.gz ] file in [ ${openwrt_path} ] directory!"
 fi
 
 if [ ${#kernels[*]} = 0 ]; then
-    die "no file in kernel directory!"
+    die "No this kernel files in [ ${armbian_path}/${openwrt_path}/kernel ] directory!"
 fi
 
 [ $firmware ] && echo " firmware   ==>   $firmware"
@@ -496,16 +498,16 @@ for b in ${build_openwrt[*]}; do
         {
             kernel=$x
             build=$b
-            process "extract armbian files "
+            process "[ ${b} ] extract armbian files."
             extract_armbian ${b}
             utils
-            process "make openwrt image "
+            process "[ ${b} ] make openwrt image."
             make_image ${b}
-            process "format openwrt image "
+            process "[ ${b} ] format openwrt image."
             format_image ${b}
-            process "copy files to image "
+            process "[ ${b} ] copy files to image."
             copy2image ${b}
-            process "generate success "
+            process "[ ${b} ] generate success."
         } &
     done
 done

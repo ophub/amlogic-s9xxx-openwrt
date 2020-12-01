@@ -2,6 +2,8 @@
 
 Support local compilation and github.com online compilation, including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3-Boxs and Phicomm-N1.
 
+Before using this packaging script, please compile your own personalized openwrt firmware of the ARM kernel. You can package it locally, or clone this warehouse for synchronous packaging when compiling your Personalized firmware online using github.com Actions. example: [https://github.com/ophub/openwrt-s905x3-phicomm-n1](https://github.com/ophub/openwrt-s905x3-phicomm-n1)
+
 ## Local packaging instructions
 
 1. Clone the warehouse to the local. `git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git`

@@ -1,4 +1,4 @@
-# Build OpenWrt's Armbian kernel for Phicomm-N1 & S905x3-Boxs
+# Build OpenWrt's amlogic-s9xxx kernel for Phicomm-N1 & S905x3-Boxs
 
 If you use Phicomm N1 & S905x3-Boxs to install OpenWrt, you must know ‘Flippy’. He provides many versions of openwrt firmware for Phicomm-N1 & S905x3-Boxs and shares his series of Armbian kernels. If you have heard of ‘Flippy’ for the first time, you can find it through a search engine, E.g: ***` Flippy n1 `***
 
@@ -8,7 +8,7 @@ You can install Flippy’s OpenWrt firmware and use it. If you want to define so
 
 The first method: 
 ```shell script
-Example: ~/op/router/s905x3_phicomm-n1/build-kernel/
+Example: ~/openwrt-for-amlogic-s9xxx/build-kernel/
  ├── flippy
  │   ├── N1_Openwrt*.img                   # Recommend Use Flippy's N1_Openwrt.img files
  │   ├── OR: S905x3_Openwrt*.img           # Use Flippy's S905x3_Openwrt*.img files
@@ -23,7 +23,7 @@ sudo ./make_use_img.sh
 
 The second method: 
 ```shell script
-Example: ~/op/router/s905x3_phicomm-n1/build-kernel/
+Example: ~/openwrt-for-amlogic-s9xxx/build-kernel/
  ├── flippy
  │   ├── boot-5.9.5-flippy-48+.tar.gz
  │   ├── dtb-amlogic-5.9.5-flippy-48+.tar.gz
@@ -45,6 +45,3 @@ Update kernel.tar.xz files in the kernel directory with the latest dtb file.
 sudo ./update_dtb.sh
 ```
 
-## Tips
-
-Use this github's program for Phicomm-N1 & S905x3-Boxs: ***` ~/op/router/s905x3_phicomm-n1 `*** , you can customize ` default IP, hostname, theme, add/remove software packages `, etc. to generate special firmware.

@@ -99,7 +99,7 @@ reboot
 
 - ***`Upgrading OpenWrt for Phicomm-N1`***
 
-Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+Log in to the default IP: 192.168.1.1 (From USB hard drive) → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 ```shell script
 n1-update.sh
 reboot

@@ -89,33 +89,33 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 [For more instructions, see: install-program](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/install-program)
 
-***`Install OpenWrt for Phicomm-N1`***
+- ***`Install OpenWrt for Phicomm-N1`***
 
-- Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 ```shell script
 n1-install.sh
 reboot
 ```
 
-***`Upgrading OpenWrt for Phicomm-N1`***
+- ***`Upgrading OpenWrt for Phicomm-N1`***
 
-- Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 ```shell script
 n1-update.sh
 reboot
 ```
 
-***`Install OpenWrt for S905x3-Boxs`***
+- ***`Install OpenWrt for S905x3-Boxs`***
 
-- Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 ```shell script
 s905x3-install.sh
 reboot
 ```
 
-***`Upgrading OpenWrt for S905x3-Boxs`***
+- ***`Upgrading OpenWrt for S905x3-Boxs`***
 
-- Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s905x3-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s905x3-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 ```shell script
 mv -f /tmp/upload/*.img.gz /mnt/mmcblk2p4/
 cp -f /usr/bin/s905x3-update.sh /mnt/mmcblk2p4/
@@ -129,6 +129,7 @@ reboot
 ## Bypass gateway settings
 
 If used as a bypass gateway, you can add custom firewall rules as needed (Network → Firewall → Custom Rules):
+
 ```shell script
 iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE        #If the interface is eth0.
 iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is br-lan bridged.

@@ -11,6 +11,7 @@ Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1.
 Utilities  --->  
    <*> install-program
 ```
+Tips: This installation and upgrade script can be introduced and used separately during github.com online compilation. If the firmware in the `openwrt-armvirt` directory you provided does not integrate this installation and upgrade script, we will add this function to you through the `./make` script when packaging.
 
 ## Install to Phicomm-N1 emmc partition and upgrade instructions
 
@@ -49,6 +50,8 @@ reboot
 
 The `x96-v*-openwrt_*.img` and related s905x3 kernel firmware supports USB hard disk booting. You can also Install the OpenWrt firmware in the USB hard disk into the EMMC partition of S905x3, and start using it from EMMC.
 
+***`Install OpenWrt`***
+
 - Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 7 times in quick succession, and you will see that the developer mode is turned on.
 
 - Turn on USB debugging: After restarting, enter Settings → System → Advanced options → Developer options again (after entering, confirm that the status is on, and the USB debugging status in the list is also on)
@@ -59,16 +62,16 @@ The `x96-v*-openwrt_*.img` and related s905x3 kernel firmware supports USB hard 
 
 - Tips: When booting from USB hard disk, the network card is 100M, and it will automatically become Gigabit after writing into EMMC.
 
-- Install OpenWrt: `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+- Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 ```shell script
 s905x3-install.sh
 reboot
 ```
+***`Upgrading OpenWrt`***
 
 Install Recommended practice: After writing the emmc partition from the USB hard disk, ***`first plug in the original USB hard disk and restart it`*** by unplugging/plugging in the power source until the boot is completed and the default IP: 192.168.1.1 can be accessed. Then unplug the USB hard drive, and officially boot from the EMMC partition by unplugging/plugging in the power source.
 
-
-Upgrading OpenWrt: `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s905x3-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s905x3-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 ```shell script
 mv -f /tmp/upload/*.img.gz /mnt/mmcblk2p4/
 cp -f /usr/bin/s905x3-update.sh /mnt/mmcblk2p4/

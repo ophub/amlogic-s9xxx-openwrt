@@ -92,7 +92,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 - ***`Install OpenWrt for Phicomm-N1`***
 
 Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
-```shell script
+```yaml
 n1-install.sh
 reboot
 ```
@@ -100,7 +100,7 @@ reboot
 - ***`Upgrading OpenWrt for Phicomm-N1`***
 
 Log in to the default IP: 192.168.1.1 (From USB hard drive) → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
-```shell script
+```yaml
 n1-update.sh
 reboot
 ```
@@ -108,7 +108,7 @@ reboot
 - ***`Install OpenWrt for S905x3-Boxs`***
 
 Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
-```shell script
+```yaml
 s905x3-install.sh
 reboot
 ```
@@ -116,7 +116,7 @@ reboot
 - ***`Upgrading OpenWrt for S905x3-Boxs`***
 
 Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s905x3-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
-```shell script
+```yaml
 mv -f /tmp/upload/*.img.gz /mnt/mmcblk2p4/
 cp -f /usr/bin/s905x3-update.sh /mnt/mmcblk2p4/
 cd /mnt/mmcblk2p4/
@@ -130,7 +130,7 @@ reboot
 
 If used as a bypass gateway, you can add custom firewall rules as needed (Network → Firewall → Custom Rules):
 
-```shell script
+```yaml
 iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE        #If the interface is eth0.
 iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is br-lan bridged.
 ```
@@ -184,7 +184,6 @@ sudo ./make_use_img.sh        #Use Flippy's amlogic-s9xxx *.img files to package
 sudo ./make_use_kernel.sh     #Use Flippy's amlogic-s9xxx kernel files to package the alternate firmware
 sudo ./update_dtb.sh          #Update kernel.tar.xz files in the kernel directory with the latest dtb file.
 ```
-
 
 ## ARMv8 Firmware compilation parameters
 

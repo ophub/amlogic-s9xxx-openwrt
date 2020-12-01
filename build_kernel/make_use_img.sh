@@ -1,35 +1,33 @@
 #!/bin/bash
 
-#========================================================================================================================
-# https://github.com/ophub/op
-# Description: Automatically Build OpenWrt firmware for Phicomm-N1 & S905x3-Boxs
-# Function: Use Flippy's OpenWrt firmware for Phicomm-N1 & S905x3-Boxs to build kernel.tar.xz & modules.tar.xz
-# Copyright (C) 2020 Flippy's Core files for Phicomm-N1 & S905x3-Boxs
-# Copyright (C) 2020 https://github.com/ophub/op
-#========================================================================================================================
+#======================================================================================================================
+# https://github.com/ophub/openwrt-for-amlogic-s9xxx
+# Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
+# Function: Use Flippy's amlogic-s9xxx *.img files to package the alternate firmware
+# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
+# Copyright (C) 2020 https://github.com/ophub/openwrt-for-amlogic-s9xxx
+#======================================================================================================================
 #
-# example: ~/op/router/s905x3_phicomm-n1/build_kernel/
+# example: ~/openwrt-for-amlogic-s9xxx/build_kernel/
 # ├── flippy
 # │   └── N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img
 # └── make_use_img.sh
 #
 # Usage: Use Ubuntu 18 LTS 64-bit
 # 01. Log in to the home directory of the local Ubuntu system
-# 02. git clone https://github.com/ophub/op.git
-# 03. cd ~/op/router/s905x3_phicomm-n1/build_kernel/
+# 02. git clone https://github.com/ophub/openwrt-for-amlogic-s9xxx.git
+# 03. cd ~/openwrt-for-amlogic-s9xxx/build_kernel/
 # 04. Prepare Flippy's ${flippy_file}, support: N1_Openwrt*.img, S905x3_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img
 #     Support to put the original *.img.xz file into the directory and use it directly.
 # 05. Put Flippy's ${flippy_file} file into ${flippy_folder}
 # 06. Modify ${flippy_file} to kernel file name. E.g: flippy_file="N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img"
 #     If the file of ${flippy_file} is not found, Will search for other *.img and *.img.xz files in directory.
 # 07. Run: sudo ./make_use_img.sh
-# 08. The generated files path: ~/op/router/s905x3_phicomm-n1/armbian/phicomm-n1/kernel/${build_save_folder}
-# 09. git push to your github
-# 10. Github.com Build openwrt: ~/op/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml
+# 08. The generated files path: ~/openwrt-for-amlogic-s9xxx/armbian/kernel-amlogic/kernel/${build_save_folder}
 #
 # Tips: If run 'sudo ./make_use_img.sh' is 'Command not found'. Run: sudo chmod +x make_use_img.sh
 #
-#========================================================================================================================
+#======================================================================================================================
 
 # Modify Flippy's kernel folder & *.img file name
 flippy_folder=${PWD}/"flippy"
@@ -227,12 +225,12 @@ build_kernel_modules() {
 
 }
 
-# copy kernel.tar.xz & modules.tar.xz to ~/op/router/phicomm_n1/armbian/phicomm-n1/kernel/${build_save_folder}
+# copy kernel.tar.xz & modules.tar.xz to ~/openwrt-for-amlogic-s9xxx/armbian/kernel-amlogic/kernel/${build_save_folder}
 copy_kernel_modules() {
 
-   cp -rf ${build_save_folder} ../armbian/phicomm-n1/kernel/ && sync
+   cp -rf ${build_save_folder} ../armbian/kernel-amlogic/kernel/ && sync
 
-   echo_color "green" "(6/7) End copy_kernel_modules"  "Copy /${build_save_folder}/kernel.tar.xz & modules.tar.xz to ../armbian/phicomm-n1/kernel/ ..."
+   echo_color "green" "(6/7) End copy_kernel_modules"  "Copy /${build_save_folder}/kernel.tar.xz & modules.tar.xz to ../armbian/kernel-amlogic/kernel/ ..."
 
 }
 

@@ -1,4 +1,4 @@
-# Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
+# Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
 
 Support local compilation and github.com online compilation, including OpenWrt firmware writing EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3-Boxs and Phicomm-N1.
 

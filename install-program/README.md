@@ -2,6 +2,16 @@
 
 Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1.
 
+## Instructions
+
+1. `svn co https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/trunk/install-program package/install-program`
+2. Execute make `menuconfig` and select `install-program` under `Utilities`
+
+```shell script
+Utilities  --->  
+   <*> install-program
+```
+
 ## Install to Phicomm-N1 emmc partition and upgrade instructions
 
 The `n1-v*-openwrt_*.img` firmware supports USB hard disk booting. You can also Install the OpenWrt firmware in the USB hard disk into the EMMC partition of Phicomm N1, and start using it from EMMC.

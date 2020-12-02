@@ -14,7 +14,7 @@ You can modify the configuration file in the `router` directory, customize the f
 
 
 
-## github.com clone packaging instructions
+- ## github.com clone packaging instructions
 
 [For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml)
 
@@ -83,7 +83,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
       This is OpenWrt firmware for S905x3-Boxs and Phicomm-N1
 ```
 
-## Local packaging instructions
+- ## Local packaging instructions
 
 1. Clone the warehouse to the local. `git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git`
 2. Create an `openwrt-armvirt` folder in the local Eg: `~/amlogic-s9xxx-kernel-for-openwrt/openwrt-armvirt`, and upload the compiled openwrt firmware of the ARM kernel to the `openwrt-armvirt` directory.

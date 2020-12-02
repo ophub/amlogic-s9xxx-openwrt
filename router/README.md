@@ -1,5 +1,7 @@
 # OpenWrt for S905x3-Boxs and Phicomm-N1
 
+You can modify the configuration file, customize the OpenWrt firmware.
+
 ## Configuration file function description
 
 | Folder/file name | Features |

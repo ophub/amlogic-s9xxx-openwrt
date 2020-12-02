@@ -1,6 +1,6 @@
 # Build amlogic-s9xxx kernel for Phicomm-N1 & S905x3-Boxs
 
-If you use Phicomm N1 & S905x3-Boxs to install OpenWrt, you must know ‘Flippy’. He provides many versions of openwrt firmware for Phicomm-N1 & S905x3-Boxs and shares his series of Armbian kernels. If you have heard of ‘Flippy’ for the first time, you can find it through a search engine, E.g: ***` Flippy n1 `***
+If you use Phicomm N1 & S905x3-Boxs to install OpenWrt, you must know ‘Flippy’. He provides many versions of openwrt firmware for Phicomm-N1 & S905x3-Boxs and shares his series of Amlogic S9xxx kernels.
 
 ## Usage
 

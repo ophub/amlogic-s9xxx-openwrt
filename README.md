@@ -151,7 +151,7 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 - [OpenWrt](https://github.com/openwrt/openwrt)
 - [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
 - [Lienol/openwrt](https://github.com/Lienol/openwrt)
-- Flippy
+- Flippy: Kernel maker
 - [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
 - [tuanqing/mknop](https://github.com/tuanqing/mknop)
 

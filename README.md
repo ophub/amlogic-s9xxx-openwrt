@@ -5,7 +5,7 @@ Support `github.com One-stop compilation`, `github.com clone packaging`, `Local 
 The latest version of the OpenWrt firmware is automatically compiled every Monday & Thursday, which can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/releases).
 
 
-## github.com One-stop compilation instructions
+## - github.com One-stop compilation instructions
 
 You can modify the configuration file in the `router` directory, customize the firmware, and complete the packaging online through `Actions`, and complete all the compilation of openwrt firmware in github.com One-stop.
 

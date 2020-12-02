@@ -146,3 +146,20 @@ iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE        #If the interface is
 iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is br-lan bridged.
 ```
 
+## Acknowledgments
+
+- [OpenWrt](https://github.com/openwrt/openwrt)
+- [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
+- [Lienol/openwrt](https://github.com/Lienol/openwrt)
+- Flippy
+- [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
+- [tuanqing/mknop](https://github.com/tuanqing/mknop)
+
+- [Mikubill/transfer](https://github.com/Mikubill/transfer)
+
+
+## License
+
+[LICENSE](https://github.com/ophub/op/blob/main/LICENSE) © OPHUB
+
+

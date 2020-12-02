@@ -8,7 +8,7 @@ Thanks ***`Flippy`***: The maker of Amlogic s9xxx Kernel for openwrt. A good lif
 
 - ## github.com One-stop compilation instructions
 
-You can modify the configuration file in the `router` directory, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
+You can modify the configuration file in the `router` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
 
 1. Personalized plug-in configuration in [router](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/router) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml) file.
 2. Select ***`Build OpenWrt for S905x3-Boxs and Phicomm-N1`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/actions) page. Click the ***`Run workflow`*** button.

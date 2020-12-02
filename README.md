@@ -7,7 +7,7 @@ The latest version of the OpenWrt firmware is automatically compiled every Monda
 
 ## github.com One-stop compilation instructions
 
-You can modify the configuration file in the `router` directory, customize the firmware, and complete the packaging online through [Actions](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/actions), and complete all the compilation of openwrt firmware in github.com One-stop.
+You can modify the configuration file in the `router` directory, customize the firmware, and complete the packaging online through `Actions`, and complete all the compilation of openwrt firmware in github.com One-stop.
 
 1. Personalized plug-in configuration in [router](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/router) directory.
 2. Select ***`Build OpenWrt for S905x3-Boxs and Phicomm-N1`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/actions) page. Click the ***`Run workflow`*** button.

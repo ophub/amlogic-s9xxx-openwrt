@@ -1,18 +1,22 @@
-# Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
+# OpenWrt for S905x3-Boxs and Phicomm-N1
 
-Support local compilation and github.com online compilation, including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3-Boxs and Phicomm-N1.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3-Boxs and Phicomm-N1.
 
-Before using this packaging script, please compile your own personalized openwrt firmware of the ARM kernel. You can package it locally, or clone this warehouse for synchronous packaging when compiling your Personalized firmware online using github.com Actions. example: [https://github.com/ophub/openwrt-s905x3-phicomm-n1](https://github.com/ophub/openwrt-s905x3-phicomm-n1)
+The latest version of the OpenWrt firmware is automatically compiled every Monday & Thursday, which can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/releases).
 
-## Local packaging instructions
 
-1. Clone the warehouse to the local. `git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git`
-2. Create an `openwrt-armvirt` folder in the local Eg: `~/amlogic-s9xxx-kernel-for-openwrt/openwrt-armvirt`, and upload the compiled openwrt firmware of the ARM kernel to the `openwrt-armvirt` directory.
-3. Enter the `~/amlogic-s9xxx-kernel-for-openwrt` root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated openwrt firmware is in the `out` directory under the root directory.
+## github.com One-stop compilation instructions
 
-## github.com online packaging instructions
+You can modify the configuration file in the `router` directory, customize the firmware, and complete the packaging online through [Actions](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/actions), and complete all the compilation of openwrt firmware in github.com One-stop.
 
-[For more instructions please see: .yml example](https://github.com/ophub/openwrt-s905x3-phicomm-n1/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml)
+1. Personalized plug-in configuration in [router](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/router) directory.
+2. Select ***`Build OpenWrt for S905x3-Boxs and Phicomm-N1`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/actions) page. Click the ***`Run workflow`*** button.
+
+
+
+## github.com clone packaging instructions
+
+[For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml)
 
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 
@@ -78,6 +82,13 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
     body: |
       This is OpenWrt firmware for S905x3-Boxs and Phicomm-N1
 ```
+
+## Local packaging instructions
+
+1. Clone the warehouse to the local. `git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git`
+2. Create an `openwrt-armvirt` folder in the local Eg: `~/amlogic-s9xxx-kernel-for-openwrt/openwrt-armvirt`, and upload the compiled openwrt firmware of the ARM kernel to the `openwrt-armvirt` directory.
+3. Enter the `~/amlogic-s9xxx-kernel-for-openwrt` root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated openwrt firmware is in the `out` directory under the root directory.
+
 
 ## OpenWrt Firmware instructions
 

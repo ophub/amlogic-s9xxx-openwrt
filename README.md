@@ -10,14 +10,14 @@ Thanks ***`Flippy`***: The maker of Amlogic s9xxx Kernel for openwrt. A good lif
 
 You can modify the configuration file in the `router_config` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
 
-1. Personalized plug-in configuration in [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml) file.
+1. Personalized plug-in configuration in [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file.
 2. Select ***`Build OpenWrt for S905x3-Boxs and Phicomm-N1`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
 
 
 
 - ## github.com clone packaging instructions
 
-[For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt.yml)
+[For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml)
 
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 

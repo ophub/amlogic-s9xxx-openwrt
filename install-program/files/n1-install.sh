@@ -1,10 +1,10 @@
 #!/bin/sh
 #===================================================================================
-# https://github.com/ophub/op
+# https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Build OpenWrt for PHICOMM N1
 # Function: Install the openwrt system to the emmc storage for PHICOMM N1
 # Copyright (C) 2020 Flippy
-# Copyright (C) 2020 https://github.com/ophub/op
+# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #===================================================================================
 
 # you can change this size >= 72

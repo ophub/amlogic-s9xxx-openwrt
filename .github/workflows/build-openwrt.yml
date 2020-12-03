@@ -7,7 +7,7 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #========================================================================================================================
 
-name: Build OpenWrt for S905x3-Boxs and Phicomm-N1
+name: Build OpenWrt
 
 on:
   repository_dispatch:

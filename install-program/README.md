@@ -4,7 +4,7 @@ Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1.
 
 ## Instructions
 
-1. `svn co https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/trunk/install-program package/install-program`
+1. `svn co https://github.com/ophub/amlogic-s9xxx-openwrt/trunk/install-program package/install-program`
 2. Execute make `menuconfig` and select `install-program` under `Utilities`
 
 ```shell script
@@ -98,7 +98,7 @@ reboot
 
 ## Option description when installing into s905x3-boxs emmc
 
-You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/armbian/dtb-amlogic) when you customize the file name.
+You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) when you customize the file name.
 
 | Serial | Box | Description | DTB |
 | ---- | ---- | ---- | ---- |
@@ -112,5 +112,4 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-kernel
 | 8 | H96-Max-X3 | S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz | meson-sm1-h96-max-x3-oc.dtb |
 | 9 | Octopus-Planet | S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxm-octopus-planet.dtb |
 | 0 | Other | - | Enter the dtb file name |
-
 

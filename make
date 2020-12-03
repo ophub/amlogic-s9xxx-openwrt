@@ -177,7 +177,7 @@ format_image() {
     [ -f ${root}/usr/bin/n1-install.sh ] || cp -f ${complete_path}/n1-install.sh  ${root}/usr/bin/
     [ -f ${root}/usr/bin/n1-update.sh ] || cp -f ${complete_path}/n1-update.sh  ${root}/usr/bin/
     [ -f ${root}/etc/config/fstab ] || cp -f ${complete_path}/fstab  ${root}/etc/config/
-    [ -f ${root}/etc/config/fstab.bak ] || cp -f ${complete_path}/fstab.bak  ${root}/etc/config/
+    [ -f ${root}/etc/config/fstab ] || cp -f ${complete_path}/fstab  ${root}/etc/config/fstab.bak
 
     # Write the specified bootloader
     if [ "${build_op}" != "n1" ]; then

@@ -8,7 +8,7 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================================================
 #
-# example: ~/amlogic-s9xxx-openwrt/build_kernel/
+# example: ~/build_kernel/
 # ├── flippy
 # │   ├── boot-5.9.5-flippy-48+.tar.gz
 # │   ├── dtb-amlogic-5.9.5-flippy-48+.tar.gz
@@ -18,13 +18,13 @@
 # Usage: Use Ubuntu 18 LTS 64-bit
 # 01. Log in to the home directory of the local Ubuntu system
 # 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
-# 03. cd ~/amlogic-s9xxx-openwrt/build_kernel/
+# 03. cd ~/build_kernel/
 # 04. Prepare Flippy's ${build_boot}, ${build_dtb} & ${build_modules} three files. 
 # 05. Put this three files into ${flippy_folder}
 # 06. Modify ${flippy_version} to kernel version. E.g: flippy_version="5.9.5-flippy-48+"
 #     If the files of ${flippy_version} is not found, Will search for other files in the ${flippy_folder} directory.
 # 07. Run: sudo ./make_use_kernel.sh
-# 08. The generated files path: ~/amlogic-s9xxx-openwrt/armbian/kernel-amlogic/kernel/${build_save_folder}
+# 08. The generated files path: ~/armbian/kernel-amlogic/kernel/${build_save_folder}
 #
 # Tips: If run 'sudo ./make_use_kernel.sh' is 'Command not found'. Run: sudo chmod +x make_use_kernel.sh
 #

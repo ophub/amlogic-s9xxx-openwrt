@@ -1,10 +1,10 @@
 #!/bin/bash
 #========================================================================================================================
-# https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
+# https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Build OpenWrt for S905x3-Boxs and Phicomm-N1
 # Function: Diy script (Before Update feeds, Modify the default IP, hostname, theme, add/remove software packages, etc.)
 # Copyright (C) 2020 https://github.com/P3TERX/Actions-OpenWrt
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
+# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #========================================================================================================================
 
 # Uncomment a feed source

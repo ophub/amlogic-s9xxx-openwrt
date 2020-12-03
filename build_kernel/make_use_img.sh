@@ -1,29 +1,29 @@
 #!/bin/bash
 
 #======================================================================================================================
-# https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
+# https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
 # Function: Use Flippy's amlogic-s9xxx *.img files to package the alternate firmware
 # Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
+# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================================================
 #
-# example: ~/amlogic-s9xxx-kernel-for-openwrt/build_kernel/
+# example: ~/amlogic-s9xxx-openwrt/build_kernel/
 # ├── flippy
 # │   └── N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img
 # └── make_use_img.sh
 #
 # Usage: Use Ubuntu 18 LTS 64-bit
 # 01. Log in to the home directory of the local Ubuntu system
-# 02. git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git
-# 03. cd ~/amlogic-s9xxx-kernel-for-openwrt/build_kernel/
+# 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
+# 03. cd ~/amlogic-s9xxx-openwrt/build_kernel/
 # 04. Prepare Flippy's ${flippy_file}, support: N1_Openwrt*.img, S905x3_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img
 #     Support to put the original *.img.xz file into the directory and use it directly.
 # 05. Put Flippy's ${flippy_file} file into ${flippy_folder}
 # 06. Modify ${flippy_file} to kernel file name. E.g: flippy_file="N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img"
 #     If the file of ${flippy_file} is not found, Will search for other *.img and *.img.xz files in directory.
 # 07. Run: sudo ./make_use_img.sh
-# 08. The generated files path: ~/amlogic-s9xxx-kernel-for-openwrt/armbian/kernel-amlogic/kernel/${build_save_folder}
+# 08. The generated files path: ~/amlogic-s9xxx-openwrt/armbian/kernel-amlogic/kernel/${build_save_folder}
 #
 # Tips: If run 'sudo ./make_use_img.sh' is 'Command not found'. Run: sudo chmod +x make_use_img.sh
 #
@@ -225,7 +225,7 @@ build_kernel_modules() {
 
 }
 
-# copy kernel.tar.xz & modules.tar.xz to ~/amlogic-s9xxx-kernel-for-openwrt/armbian/kernel-amlogic/kernel/${build_save_folder}
+# copy kernel.tar.xz & modules.tar.xz to armbian/kernel-amlogic/kernel/${build_save_folder}
 copy_kernel_modules() {
 
    cp -rf ${build_save_folder} ../armbian/kernel-amlogic/kernel/ && sync

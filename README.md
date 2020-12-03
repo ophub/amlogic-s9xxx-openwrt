@@ -17,7 +17,7 @@ You can modify the configuration file in the `router_config` directory and `.yml
 
 - ## github.com clone packaging instructions
 
-[For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml)
+[For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt.yml)
 
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 

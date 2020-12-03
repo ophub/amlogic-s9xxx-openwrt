@@ -2,7 +2,7 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
 # Function: Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1
-# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
+# Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/tuanqing/mknop
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
@@ -10,8 +10,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=install-program
-PKG_VERSION:=2.2
-PKG_RELEASE:=20201201
+PKG_VERSION:=2.3
+PKG_RELEASE:=20201203
 
 include $(INCLUDE_DIR)/package.mk
 

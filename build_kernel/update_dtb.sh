@@ -4,7 +4,7 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
 # Function: Update kernel.tar.xz files in the kernel directory with the latest dtb file.
-# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
+# Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================================================
 #

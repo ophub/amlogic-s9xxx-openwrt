@@ -93,6 +93,14 @@ while [ $WAIT -ge 1 ]; do
       WAIT=$(( WAIT - 1 ))
 done
 
+# backup old bootloader
+if  [ ! -f /root/backup-bootloader.img ]; then
+    echo "Backup bootloader -> [ backup-bootloader.img ] ... "
+    dd if=/dev/mmcblk2 of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
+    echo "Backup bootloader complete."
+    echo
+fi
+
 # umount loop devices (openwrt will auto mount some partition)
 MOUNTED_DEVS=$(lsblk -l -o NAME,PATH,MOUNTPOINT | grep "$LOOP_DEV" | awk '$3 !~ /^$/ {print $2}')
 for dev in $MOUNTED_DEVS; do

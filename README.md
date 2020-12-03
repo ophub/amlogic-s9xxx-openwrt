@@ -2,7 +2,7 @@
 
 Support `github.com One-stop compilation`, `github.com clone packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3-Boxs and Phicomm-N1.
 
-The latest version of the OpenWrt firmware is automatically compiled every Monday & Thursday, which can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/releases).
+The latest version of the OpenWrt firmware is automatically compiled every Monday & Thursday, which can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases).
 
 Thanks ***`Flippy`***: The maker of Amlogic s9xxx Kernel for openwrt. A good life online starts with you.
 
@@ -10,8 +10,8 @@ Thanks ***`Flippy`***: The maker of Amlogic s9xxx Kernel for openwrt. A good lif
 
 You can modify the configuration file in the `router_config` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
 
-1. Personalized plug-in configuration in [router_config](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/router_config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml) file.
-2. Select ***`Build OpenWrt for S905x3-Boxs and Phicomm-N1`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/actions) page. Click the ***`Run workflow`*** button.
+1. Personalized plug-in configuration in [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml) file.
+2. Select ***`Build OpenWrt for S905x3-Boxs and Phicomm-N1`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
 
 
 
@@ -25,8 +25,8 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
 - name: Build OpenWrt for S905x3-Boxs and Phicomm-N1
   id: build
   run: |
-    git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git  amlogic-s9xxx-kernel-for-openwrt
-    cd amlogic-s9xxx-kernel-for-openwrt/
+    git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git  amlogic-s9xxx-openwrt
+    cd amlogic-s9xxx-openwrt/
     mkdir -p openwrt-armvirt
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
     sudo chmod +x make
@@ -86,9 +86,9 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 - ## Local packaging instructions
 
-1. Clone the warehouse to the local. `git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git`
-2. Create an `openwrt-armvirt` folder in the local Eg: `~/amlogic-s9xxx-kernel-for-openwrt/openwrt-armvirt`, and upload the compiled OpenWrt firmware of the ARM kernel to the `openwrt-armvirt` directory.
-3. Enter the `~/amlogic-s9xxx-kernel-for-openwrt` root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated OpenWrt firmware is in the `out` directory under the root directory.
+1. Clone the warehouse to the local. `git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git`
+2. Create an `openwrt-armvirt` folder in the local Eg: `~/amlogic-s9xxx-openwrt/openwrt-armvirt`, and upload the compiled OpenWrt firmware of the ARM kernel to the `openwrt-armvirt` directory.
+3. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated OpenWrt firmware is in the `out` directory under the root directory.
 
 
 ## OpenWrt Firmware instructions
@@ -101,7 +101,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 ## Install to emmc partition or upgrade instructions
 
-[For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/install-program)
+[For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
 
 ## Detailed make compile command
 
@@ -126,7 +126,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 ## Build more kernel files
 
-[For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt/tree/main/build_kernel)
+[For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/build_kernel)
 
 ## ~/openwrt-armvirt/ Firmware compilation parameters
 

@@ -1,11 +1,10 @@
 #!/bin/sh
 #======================================================================================
-# https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
+# https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Packaged OpenWrt for S905x3-Boxs
 # Function: Install and Upgrading openwrt to the emmc for S905x3-Boxs
-# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
-# Copyright (C) 2020 https://github.com/tuanqing/mknop
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
+# Copyright (C) 2020 Flippy
+# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
 
 SKIP1=64

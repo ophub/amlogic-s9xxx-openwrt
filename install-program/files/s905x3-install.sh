@@ -136,9 +136,9 @@ if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
 fi
 
 # backup old bootloader
-if [ ! -f backup-bootloader.img ]; then
+if [ ! -f /root/backup-bootloader.img ]; then
     echo "Backup bootloader -> [ backup-bootloader.img ] ... "
-    dd if=/dev/$EMMC_NAME of=backup-bootloader.img bs=1M count=4 conv=fsync
+    dd if=/dev/$EMMC_NAME of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
     echo "Backup bootloader complete."
     echo
 fi
@@ -245,7 +245,7 @@ EOF
 fdisk /dev/$EMMC_NAME < /tmp/fdisk.script
 if [ $? -ne 0 ]; then
     echo "The fdisk partition fails, the backup bootloader will be restored, and then exit."
-    dd if=bootloader-backup.bin of=/dev/$EMMC_NAME conf=fsync
+    dd if=/root/backup-bootloader.img of=/dev/$EMMC_NAME conf=fsync
     exit 1
 fi
 echo "Partition complete."

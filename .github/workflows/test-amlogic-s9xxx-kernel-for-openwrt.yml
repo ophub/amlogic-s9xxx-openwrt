@@ -1,5 +1,5 @@
 #========================================================================================================================
-# https://github.com/ophub/op
+# https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt
 # Description: Automatically Build OpenWrt for All S905x3-Boxs and Phicomm-N1
 # Function: Workflows for Build All S905x3-Boxs and Phicomm-N1
 # Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
@@ -41,8 +41,6 @@ jobs:
       id: build
       if: (!cancelled())
       run: |
-        git clone https://github.com/ophub/amlogic-s9xxx-kernel-for-openwrt.git amlogic-s9xxx-kernel-for-openwrt
-        cd amlogic-s9xxx-kernel-for-openwrt/
         mkdir -p openwrt-armvirt
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s905x3_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
         [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)

@@ -7,7 +7,6 @@
 
 name: Test-amlogic-s9xxx-kernel-for-openwrt
 
-
 on:
   repository_dispatch:
   workflow_dispatch:
@@ -21,7 +20,7 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   UPLOAD_WETRANSFER: true
-  RECENT_LASTEST: 15
+  RECENT_LASTEST: 10
   TZ: Asia/Shanghai
 
 jobs:

@@ -166,8 +166,8 @@ sync
 
 fdisk /dev/$DST_NAME < /tmp/fdisk.script
 if  [ $? -ne 0 ]; then
-    echo "fdisk failed, restore the backup bootloader, and abort"
-    dd if=/root/bootloader-backup.bin of=$DST_NAME
+    echo "fdisk failed, restore the backup bootloader, and abort."
+    dd if=/root/bootloader-backup.bin of=/dev/$DST_NAME
     sync
     exit 1
 fi

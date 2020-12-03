@@ -31,9 +31,9 @@ else
 fi
 
 # backup old bootloader
-if  [ ! -f bootloader-backup.bin ];then
+if  [ ! -f /root/bootloader-backup.bin ];then
     echo "Backup the bootloader ->  bootloader-backup.bin ... "
-    dd if=/dev/$DST_NAME of=bootloader-backup.bin bs=1M count=4
+    dd if=/dev/$DST_NAME of=/root/bootloader-backup.bin bs=1M count=4
     sync
 fi
 

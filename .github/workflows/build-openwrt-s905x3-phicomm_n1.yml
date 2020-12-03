@@ -23,10 +23,10 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: router/.config
-  DIY_P1_SH: router/diy-part1.sh
-  DIY_P2_SH: router/diy-part2.sh
+  FEEDS_CONF: router_config/feeds.conf.default
+  CONFIG_FILE: router_config/.config
+  DIY_P1_SH: router_config/diy-part1.sh
+  DIY_P2_SH: router_config/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true

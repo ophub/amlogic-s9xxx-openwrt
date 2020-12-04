@@ -25,7 +25,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
 - name: Build OpenWrt for S905x3-Boxs and Phicomm-N1
   id: build
   run: |
-    git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git  amlogic-s9xxx-openwrt
+    git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git -b main amlogic-s9xxx-openwrt
     cd amlogic-s9xxx-openwrt/
     mkdir -p openwrt-armvirt
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/

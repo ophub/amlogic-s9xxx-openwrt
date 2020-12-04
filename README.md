@@ -6,6 +6,14 @@ The latest version of the OpenWrt firmware is automatically compiled every Monda
 
 Thanks ***`Flippy`***: The maker of Amlogic s9xxx Kernel for openwrt. A good life online starts with you.
 
+## OpenWrt Firmware instructions
+
+- `n1-v*-openwrt_*.img`: For Phicomm-N1.
+- `x96-v*-openwrt_*.img`: Almost compatible with all S905x3-Boxs, you can choose different box types when installing into EMMC.
+- `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3).
+- `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3).
+- `octopus-v*-openwrt_*.img` For Octopus-Planet.
+
 - ## github.com One-stop compilation instructions
 
 You can modify the configuration file in the `router_config` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
@@ -89,15 +97,6 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 1. Clone the warehouse to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 2. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
 3. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated OpenWrt firmware is in the `out` directory under the root directory.
-
-
-## OpenWrt Firmware instructions
-
-- `n1-v*-openwrt_*.img`: For Phicomm-N1.
-- `x96-v*-openwrt_*.img`: Almost compatible with all S905x3-Boxs, you can choose different box types when installing into EMMC.
-- `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3).
-- `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3).
-- `octopus-v*-openwrt_*.img` For Octopus-Planet.
 
 ## Install to emmc partition or upgrade instructions
 

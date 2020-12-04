@@ -87,7 +87,8 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 - ## Local packaging instructions
 
 1. Clone the warehouse to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
-2. Create a `openwrt-armvirt` folder and upload the compiled OpenWrt firmware of the ARM kernel to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
+2. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel(Eg: `openwrt-armvirt-64-default-rootfs.tar.gz
+`) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
 3. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated OpenWrt firmware is in the `out` directory under the root directory.
 
 

@@ -100,6 +100,11 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 ## Install to emmc partition or upgrade instructions
 
+Insert the USB hard disk with the written openwrt firmware. Log in to the default IP: 192.168.1.1 → Login in to openwrt → system menu → TTYD terminal → input command:
+
+- Phicomm-N1 installation command: `n1-install.sh`
+- S905x3-Boxs installation command: `s905x3-install.sh`
+
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
 
 ## Detailed make compile command

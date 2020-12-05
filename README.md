@@ -14,14 +14,22 @@ Thanks ***`Flippy`***: The maker of Amlogic s9xxx Kernel for openwrt. A good lif
 - `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3).
 - `octopus-v*-openwrt_*.img` For Octopus-Planet.
 
+## Install to emmc partition or upgrade instructions
+
+Insert the USB hard disk with the written openwrt firmware. Log in to the default IP: 192.168.1.1 → Login in to openwrt → system menu → TTYD terminal → input command:
+
+- Phicomm-N1 installation command: `n1-install.sh`
+- S905x3-Boxs installation command: `s905x3-install.sh`
+
+[For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
+
+
 - ## github.com One-stop compilation instructions
 
 You can modify the configuration file in the `router_config` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
 
 1. Personalized plug-in configuration in [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file.
 2. Select ***`Build OpenWrt`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
-
-
 
 - ## github.com clone packaging instructions
 
@@ -97,15 +105,6 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 1. Clone the warehouse to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 2. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
 3. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5` to complete the compilation. The generated OpenWrt firmware is in the `out` directory under the root directory.
-
-## Install to emmc partition or upgrade instructions
-
-Insert the USB hard disk with the written openwrt firmware. Log in to the default IP: 192.168.1.1 → Login in to openwrt → system menu → TTYD terminal → input command:
-
-- Phicomm-N1 installation command: `n1-install.sh`
-- S905x3-Boxs installation command: `s905x3-install.sh`
-
-[For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
 
 ## Detailed make compile command
 

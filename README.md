@@ -16,7 +16,7 @@ Thanks ***`Flippy`***: The maker of Amlogic s9xxx Kernel for openwrt. A good lif
 
 ## Install to emmc partition or upgrade instructions
 
-Insert the USB hard disk with the written openwrt firmware. Log in to the default IP: 192.168.1.1 → Login in to openwrt → system menu → TTYD terminal → input command:
+Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
 - Phicomm-N1 installation command: `n1-install.sh`
 - S905x3-Boxs installation command: `s905x3-install.sh`

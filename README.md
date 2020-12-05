@@ -6,7 +6,7 @@ The latest version of the OpenWrt firmware is automatically compiled every Monda
 
 This OpenWrt firmware is packaged using ***`Flippy's`*** [Amlogic S9xxx Kernel for OpenWrt](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian), and the [Installation and Updaue scripts](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program), etc. Special thanks The maker Flippy. A good life online starts with you.
 
-Welcome to use `forks` for personalized openwrt configuration. If you like it, Please click the `stars`.
+Welcome to use `forks` for personalized OpenWrt firmware configuration. If you like it, Please click the `stars`.
 
 ## OpenWrt Firmware instructions
 

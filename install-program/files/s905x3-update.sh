@@ -311,7 +311,7 @@ rm -f aml_autoscript* s905_autoscript*
 sync
 
 echo "Update boot parameters ... "
-if  [ -f /tmp/uEnv.txt ];then
+if  [ -f /tmp/uEnv.txt ]; then
     lines=$(wc -l < /tmp/uEnv.txt)
     lines=$(( lines - 1 ))
     head -n $lines /tmp/uEnv.txt > uEnv.txt

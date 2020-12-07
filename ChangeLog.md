@@ -32,5 +32,5 @@ The version update instructions record each important update point for everyone 
 | - | All | UPDATE | ✩✩ | [make_use_kernel.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/build_kernel/make_use_kernel.sh) | Add fuzzy matching function. When the version specified by the script is not found, other firmware will be searched from the flippy directory. Thus, you can directly put the kernel file you want to use into the flippy directory for extraction, without manually changing the relevant parameters each time. |
 | 2020.11.01 | S905x3 | ADD | ✩✩✩✩✩ | [s905x3-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s905x3-install.sh) | Added the function of writing emmc partition to s905x3 series boxes. |
 | - | S905x3 | ADD | ✩✩✩✩✩ | [s905x3-update.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s905x3-update.sh) | Added the function of updating emmc partition firmware to s905x3 series boxes. |
-| 2020.10.25 | All | ADD | ✩ | [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) | Add OpenWrt Firmware for S905x3-Boxs and Phicomm-N1. |
+| 2020.10.25 | All | ADD | ✩ | [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) | Open this Github. |
 

@@ -1,4 +1,5 @@
 !.gitignore
+/openwrt-armvirt
 /out
 /tmp
 .DS_Store

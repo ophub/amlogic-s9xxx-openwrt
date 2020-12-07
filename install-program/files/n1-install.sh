@@ -158,7 +158,6 @@ if  [ $? -ne 0 ]; then
     exit 1
 fi
 echo "fdisk done"
-echo
 
 BLDR_ORIG=/root/u-boot-2015-phicomm-n1.bin
 if  [ -f "${BLDR_ORIG}" ]; then

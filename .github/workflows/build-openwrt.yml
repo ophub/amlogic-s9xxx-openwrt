@@ -244,7 +244,6 @@ jobs:
 
     - name: Delete older releases
       uses: dev-drprasad/delete-older-releases@v0.1.0
-      if: env.DELETE_RELEASE == 'true'
       with:
         keep_latest: ${{ env.RECENT_LASTEST }}
         delete_tags: true

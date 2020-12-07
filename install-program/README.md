@@ -11,7 +11,7 @@ Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1.
 Utilities  --->  
    <*> install-program
 ```
-Tips: This installation and upgrade script can be introduced and used separately during github.com online compilation. If the firmware in the `openwrt-armvirt` directory you provided does not integrate this installation and upgrade script, ***`Will auto add`*** this function to you through the `./make` script when packaging.
+💡Tips: This installation and upgrade script can be introduced and used separately during github.com online compilation. If the firmware in the `openwrt-armvirt` directory you provided does not integrate this installation and upgrade script, ***`Will auto add`*** this function to you through the `./make` script when packaging.
 
 ## Install to Phicomm-N1 emmc partition and upgrade instructions
 

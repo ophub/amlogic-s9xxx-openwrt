@@ -77,7 +77,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
 
 ```
 
-- The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/```
+- The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/*```
 
 ```yaml
 path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1

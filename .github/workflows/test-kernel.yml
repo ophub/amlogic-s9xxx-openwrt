@@ -119,15 +119,14 @@ jobs:
         ./transfer wet -s -p 16 --no-progress ${{ env.FILEPATH }} 2>&1 | tee wetransfer.log
         echo "WET_URL=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV
 
-    - name: Upload firmware to release
-      uses: svenstaro/upload-release-action@v2
+    - name: Upload OpenWrt Firmware to Release
+      uses: softprops/action-gh-release@v1
       if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ env.FILEPATH }}/*
-        tag: openwrt_s905x3_phicomm-n1_${{ env.FILE_DATE }}
-        overwrite: true
-        file_glob: true
+        tag_name: openwrt_s905x3_phicomm-n1_${{ env.FILE_DATE }}
+        files: ${{ env.FILEPATH }}/*
         body: |
           This is OpenWrt firmware for S905x3-Boxs and Phicomm-N1
           * Firmware information

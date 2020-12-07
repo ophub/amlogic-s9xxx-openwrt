@@ -133,7 +133,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/build_kernel)
 
-## ~/openwrt-armvirt/ Firmware compilation parameters
+## ~/openwrt-armvirt/* Firmware compilation parameters
 
 | Option | Value |
 | ---- | ---- |
@@ -142,6 +142,17 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 | Target Profile | Default |
 | Target Images | squashfs |
 
+[For more instructions please see: router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config)
+
+## Firmware information
+
+| Name | Value |
+| ---- | ---- |
+| Default IP | 192.168.1.1 |
+| Default username | root |
+| Default password | password |
+| Default WIFI name | OpenWrt |
+| Default WIFI password | none |
 
 ## Bypass gateway settings
 

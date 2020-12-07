@@ -39,20 +39,6 @@ else
     fi
 fi
 
-echo "The following steps will overwrite the original data, please be sure to confirm!"
-echo "Remind again, remember to back up your important data!"
-echo -ne "Select y to install openwrt to emmc disk, are you sure?  y/n [n]\b\b"
-read yn
-case $yn in 
-      y|Y) yn='y';;
-      *)   yn='n';;
-esac
-
-if [ "$yn" == "n" ]; then
-    echo "Bye bye!"
-    exit 0
-fi
-
 # backup old bootloader
 if  [ ! -f /root/bootloader-backup.bin ]; then
     echo -n "backup the bootloader ->  bootloader-backup.bin ... "
@@ -220,13 +206,13 @@ while [ $i -le $max_try ]; do
             fi
       else
             echo "mount ok"
-            echo -n "copy boot ..."
+            echo "copy boot ..."
             cd /mnt/${DST_NAME}p1
             rm -rf /boot/'System Volume Information/'
             (cd /boot && tar cf - .) | tar mxf -
             sync
             echo "done"
-            echo -n "Write uEnv.txt ... "
+            echo "Write uEnv.txt ... "
             lines=$(wc -l < /boot/uEnv.txt)
             lines=$((lines-1))
             head -n $lines /boot/uEnv.txt > uEnv.txt
@@ -270,7 +256,7 @@ while [ $i -le $max_try ]; do
               COPY_SRC="root etc bin sbin lib opt usr www"
               echo "copy data ... "
               for src in $COPY_SRC;do
-                    echo -n "copy $src ... "
+                    echo "copy [ $src ] ... "
                     (cd / && tar cf - $src) | tar mxf -
                     sync
                     echo "done"
@@ -278,7 +264,7 @@ while [ $i -le $max_try ]; do
               rm -rf opt/docker && ln -sf /mnt/${DST_NAME}p3/docker/ opt/docker
               echo "copy done"
 
-              echo -n "Edit other config files ... "
+              echo "Edit other config files ... "
               cd /mnt/${DST_NAME}p2/root
               #rm -f inst-to-emmc.sh update-to-emmc.sh
               cd /mnt/${DST_NAME}p2/etc/rc.d
@@ -344,6 +330,7 @@ if  [ -f /mnt/${DST_NAME}p2/etc/config/AdGuardHome ]; then
     rm -rf /mnt/${DST_NAME}p2/usr/bin/AdGuardHome
     ln -sf /mnt/${DST_NAME}p3/AdGuardHome /mnt/${DST_NAME}p2/usr/bin/AdGuardHome
 fi
+sync
 echo "done"
 
 echo "All done, please [ reboot ] Phicomm-N1."

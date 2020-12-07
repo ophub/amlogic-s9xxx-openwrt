@@ -283,19 +283,21 @@ echo "Start creating file system ... "
 echo "Create a boot file system ... "
 
 echo "format boot partiton..."
-mkfs.fat -F 32 -n "EMMC_BOOT" /dev/${EMMC_NAME}p1 >/dev/null
+mkfs.fat -n EMMC_BOOT -F 32 /dev/${EMMC_NAME}p1
 mkdir -p /mnt/${EMMC_NAME}p1
 sleep 2
 umount -f /mnt/${EMMC_NAME}p1 2>/dev/null
 
 echo "format rootfs1 partiton..."
-mkfs.ext4 -F -L "EMMC_ROOTFS1" -m 0 /dev/${EMMC_NAME}p2  >/dev/null
+ROOTFS1_UUID=$(/usr/bin/uuidgen)
+mkfs.btrfs -f -U ${ROOTFS1_UUID} -L EMMC_ROOTFS1 -m single /dev/${EMMC_NAME}p2
 mkdir -p /mnt/${EMMC_NAME}p2
 sleep 2
 umount -f /mnt/${EMMC_NAME}p2 2>/dev/null
 
 echo "format rootfs2 partiton..."
-mkfs.ext4 -F -L "EMMC_ROOTFS2" -m 0 /dev/${EMMC_NAME}p3 >/dev/null
+ROOTFS2_UUID=$(/usr/bin/uuidgen)
+mkfs.btrfs -f -U ${ROOTFS2_UUID} -L EMMC_ROOTFS2 -m single /dev/${EMMC_NAME}p3
 mkdir -p /mnt/${EMMC_NAME}p3
 sleep 2
 umount -f /mnt/${EMMC_NAME}p3 2>/dev/null
@@ -330,16 +332,8 @@ while [ $i -le $max_try ]; do
 LINUX=/zImage
 INITRD=/uInitrd
 FDT=/dtb/amlogic/${FDTFILE}
-APPEND=root=LABEL=ROOTFS console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
+APPEND=root=UUID=${ROOTFS1_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
-	
-        uuid=$(blkid /dev/${EMMC_NAME}p2 | awk '{ print $3 }' | cut -d '"' -f 2)
-        echo "uuid is: [ $uuid ]"
-        if [ "$uuid" ]; then
-           sed -i "s/LABEL=ROOTFS/UUID=$uuid/" uEnv.txt
-        else
-           sed -i 's/ROOTFS/EMMC_ROOTFS1/' uEnv.txt
-        fi
 
         rm -f s905_autoscript* aml_autoscript*
         if [ $U_BOOT_EXT -eq 1 ]; then
@@ -357,7 +351,7 @@ echo "complete."
 echo "Wait for the rootfs file system to mount ... "
 i=1
 while [ $i -le $max_try ]; do
-    mount -t ext4 /dev/${EMMC_NAME}p2 /mnt/${EMMC_NAME}p2 2>/dev/null
+    mount -t btrfs -o compress=zstd /dev/${EMMC_NAME}p2 /mnt/${EMMC_NAME}p2 2>/dev/null
     sleep 2
     mnt=$(lsblk -l -o MOUNTPOINT | grep /mnt/${EMMC_NAME}p2)
     if [ "$mnt" == "" ]; then
@@ -384,35 +378,48 @@ while [ $i -le $max_try ]; do
             (cd / && tar cf - $src) | tar xf -
             sync
         done
-	rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker
+        rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker
+        rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/
         echo "Copy complete."
 		
         echo "Edit configuration file ..."
-
+        #cd /mnt/${EMMC_NAME}p2/usr/bin/
+        #rm -f s905x3-install.sh s905x3-update.sh
         cd /mnt/${EMMC_NAME}p2/etc/rc.d
         ln -sf ../init.d/dockerd S99dockerd
+        cd /mnt/${EMMC_NAME}p2/etc
+        cat > fstab <<EOF
+UUID=${ROOTFS1_UUID} / btrfs compress=zstd 0 1
+LABEL=EMMC_BOOT /boot vfat defaults 0 2
+#tmpfs /tmp tmpfs defaults,nosuid 0 0
+EOF
 
         cd /mnt/${EMMC_NAME}p2/etc/config
-        cp fstab.bak fstab
-        echo "edit fstab..."
-        sed -i "s/'BOOT'/'EMMC_BOOT'/" fstab
-        if [ "$uuid" ]; then
-            sed -i -e '/ROOTFS/ s/label/uuid/' fstab
-            sed -i "s/ROOTFS/$uuid/" fstab
-        else
-            sed -i 's/ROOTFS/EMMC_ROOTFS1/' fstab
-        fi
+        cat > fstab <<EOF
+config  global
+        option anon_swap '0'
+        option anon_mount '1'
+        option auto_swap '0'
+        option auto_mount '1'
+        option delay_root '5'
+        option check_fs '0'
 
-        macaddr=$(uuidgen | md5sum | sed 's/^\(..\)\(..\)\(..\)\(..\)\(..\).*$/fc:\1:\2:\3:\4:\5/')
-        [ "$macaddr" ] && {
-            (
-                cd /lib/firmware/brcm
-                sdio="brcmfmac43455-sdio.phicomm,n1.txt"
-                [ -f $sdio ] || ln -s brcmfmac43455-sdio.txt $sdio
-                sed -i "s/macaddr=b8:27:eb:74:f2:6c/macaddr=$macaddr/" $sdio
-            )
-        }
+config  mount
+        option target '/overlay'
+        option uuid '${ROOTFS1_UUID}'
+        option enabled '1'
+        option enabled_fsck '1'
+        option fstype 'btrfs'
+        option options 'compress=zstd'
 
+config  mount
+        option target '/boot'
+        option label 'EMMC_BOOT'
+        option enabled '1'
+        option enabled_fsck '0'
+        option fstype 'vfat'
+
+EOF
         cd /
         umount -f /mnt/${EMMC_NAME}p2
         break
@@ -421,9 +428,9 @@ done
 echo "complete."
 
 echo "Create a shared file system: format to [ ext4 ] ... "
-mkfs.ext4 -F -L "EMMC_SHARED"  -m 0 /dev/${EMMC_NAME}p4 >/dev/null
+mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
 mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-mkdir -p /mnt/${EMMC_NAME}p4/docker
+mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
 echo "complete."
 
 echo "Note: The original bootloader has been exported to [ /root/backup-bootloader.img ], please download and save!"

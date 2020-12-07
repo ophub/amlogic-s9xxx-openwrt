@@ -123,7 +123,7 @@ P2=${WORK_DIR}/root
 mkdir -p $P1 $P2
 
 echo "Mount [ ${LOOP_DEV}p1 ] -> [ ${P1} ] ... "
-mount -t vfat ${LOOP_DEV}p1 ${P1}
+mount -t vfat -o ro ${LOOP_DEV}p1 ${P1}
 if  [ $? -ne 0 ]; then
     echo "Mount p1 [ ${LOOP_DEV}p1 ] failed!"
     losetup -D
@@ -131,7 +131,7 @@ if  [ $? -ne 0 ]; then
 fi	
 
 echo "Mount [ ${LOOP_DEV}p2 ] -> [ ${P2} ] ... "
-mount -t ext4 ${LOOP_DEV}p2 ${P2}
+mount -t btrfs -o ro,compress=zstd ${LOOP_DEV}p2 ${P2}
 if  [ $? -ne 0 ]; then
     echo "Mount p2 [ ${LOOP_DEV}p2 ] failed!"
     umount -f ${P1}
@@ -222,6 +222,8 @@ if  [ -f ${BOOTLOADER} ]; then
     fi
 fi
 
+#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s905x3-install.sh
+#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s905x3-update.sh
 sync
 echo "Copy data complete ..."
 
@@ -309,7 +311,7 @@ rm -f aml_autoscript* s905_autoscript*
 sync
 
 echo "Update boot parameters ... "
-if  [ -f /tmp/uEnv.txt ]; then
+if  [ -f /tmp/uEnv.txt ];then
     lines=$(wc -l < /tmp/uEnv.txt)
     lines=$(( lines - 1 ))
     head -n $lines /tmp/uEnv.txt > uEnv.txt
@@ -320,9 +322,7 @@ else
     cat > uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
-
 FDT=/dtb/amlogic/meson-sm1-x96-max-plus.dtb
-
 APPEND=root=UUID=${NEW_ROOT_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 fi

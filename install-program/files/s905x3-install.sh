@@ -13,8 +13,6 @@ ROOT1=1024
 SKIP2=258
 ROOT2=1024
 
-TARGET_SHARED_FSTYPE=f2fs
-
 hasdrives=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 if [ "$hasdrives" = "" ]; then
     echo "No EMMC or SD devices were found in this system!!! "

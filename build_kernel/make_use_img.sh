@@ -76,30 +76,30 @@ echo_color() {
 # Check files
 check_build_files() {
 
-      if  [ -f ${flippy_folder}/${flippy_file} ]; then
-          echo_color "blue" "(1/7) The specified file exists." "USE: ${flippy_file} ..."
-      elif [ $( ls ${flippy_folder}/*.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-          unset flippy_file
-          flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
-          flippy_file=${flippy_file##*/}
-          echo_color "yellow" "(1/7) Unset flippy_file is [ ${flippy_file} ]"  "\n \
-          Try to extract the kernel using this file."
-      elif [ $( ls ${flippy_folder}/*.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-          xz_file=$( ls ${flippy_folder}/*.img.xz | head -n 1 )
-          xz_file=${xz_file##*/}
-          cd ${flippy_folder} && xz -d ${xz_file} && cd ../
-          unset flippy_file
-          flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
-          flippy_file=${flippy_file##*/}
-          echo_color "yellow" "(1/7) Unset flippy_file is [ ${flippy_file} ]"  "\n \
-          Try to extract the kernel using this file."
-      else
-          echo_color "red" "(1/7) Error: Please put the compiled files in the [ ${flippy_folder} ] directory." "..."
-      fi
+    if  [ -f ${flippy_folder}/${flippy_file} ]; then
+        echo_color "blue" "(1/7) The specified file exists." "USE: ${flippy_file} ..."
+    elif [ $( ls ${flippy_folder}/*.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+        unset flippy_file
+        flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
+        flippy_file=${flippy_file##*/}
+        echo_color "yellow" "(1/7) Unset flippy_file is [ ${flippy_file} ]"  "\n \
+        Try to extract the kernel using this file."
+    elif [ $( ls ${flippy_folder}/*.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+        xz_file=$( ls ${flippy_folder}/*.img.xz | head -n 1 )
+        xz_file=${xz_file##*/}
+        cd ${flippy_folder} && xz -d ${xz_file} && cd ../
+        unset flippy_file
+        flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
+        flippy_file=${flippy_file##*/}
+        echo_color "yellow" "(1/7) Unset flippy_file is [ ${flippy_file} ]"  "\n \
+        Try to extract the kernel using this file."
+    else
+        echo_color "red" "(1/7) Error: Please put the compiled files in the [ ${flippy_folder} ] directory." "..."
+    fi
 
-      # begin run the script
-      echo_color "purple" "Start building" "..."
-      echo_color "green" "(1/7) End check_build_files"  "..."
+    # begin run the script
+    echo_color "purple" "Start building" "..."
+    echo_color "green" "(1/7) End check_build_files"  "..."
 
 }
 

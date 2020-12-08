@@ -18,7 +18,7 @@ build_openwrt=("n1" "x96" "hk1" "h96" "octopus")
 make_path=${PWD}
 #===== Do not modify the following parameter settings, End =======
 
-# Set firmware size (ROOT_MB: must be ≥ 256)
+# Set firmware size ( ROOT_MB must be ≥ 256 )
 SKIP_MB=16
 BOOT_MB=256
 ROOT_MB=1024

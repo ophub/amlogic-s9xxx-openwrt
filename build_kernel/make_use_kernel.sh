@@ -30,7 +30,6 @@
 #
 #======================================================================================================================
 
-
 # Modify Flippy's kernel folder & version
 flippy_folder=${PWD}/"flippy"
 flippy_version="5.9.5-flippy-48+"
@@ -41,9 +40,6 @@ build_boot="boot-${flippy_version}.tar.gz"
 build_dtb="dtb-amlogic-${flippy_version}.tar.gz"
 build_modules="modules-${flippy_version}.tar.gz"
 build_save_folder=${flippy_version%-flippy*}
-
-get_tree_status=$(dpkg --get-selections | grep tree)
-[ $? = 0 ] || sudo apt install tree
 
 # echo color codes
 echo_color() {
@@ -237,14 +233,18 @@ build_modules() {
      fi
 
   cd ${flippy_version}
+  
+     rm -f *.ko
      x=0
-     for file in $(tree -i -f); do
-         if [ "${file##*.}"c = "ko"c ]; then
-             ln -s $file .
-             x=$(($x+1))
-         fi
-     done
-     echo_color "blue" "(3/4) Have [ ${x} ] files make ko link"  "..."
+     find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+     sync && sleep 3
+     x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
+     
+     if [ $x -eq 0 ]; then
+        echo_color "red" "(3/4) Error *.KO Files not found"  "..."
+     else
+        echo_color "blue" "(3/4) Have [ ${x} ] files make ko link"  "..."
+     fi
 
   cd ../ && rm -rf ${build_modules} && cd ../../
      echo_color "blue" "(3/4) Start zip modules.tar.xz"  "..."

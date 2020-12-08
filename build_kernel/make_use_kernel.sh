@@ -93,6 +93,7 @@ check_build_files() {
             build_boot=$( ls ${flippy_folder}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
             flippy_version=${build_boot/boot-/} && flippy_version=${flippy_version/.tar.gz/}
             build_save_folder=${flippy_version%-flippy*}
+            build_save_folder=$(echo ${build_save_folder} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
         else
             echo_color "red" "(1/7) Error: Have no boot-*.tar.gz file found in the ${flippy_folder} directory." "..."
         fi

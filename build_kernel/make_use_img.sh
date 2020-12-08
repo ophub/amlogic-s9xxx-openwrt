@@ -106,6 +106,8 @@ check_build_files() {
 #losetup & mount ${flippy_file} boot:kernel.tar.xz root:modules.tar.xz
 losetup_mount_img() {
 
+   [ $(id -u) = 0 ] || echo_color "red" "(2/7) Error: Please run this script as [ root ]" "sudo ./make_use_img.sh"
+
    [ -d ${build_tmp_folder} ] && rm -rf ${build_tmp_folder} 2>/dev/null
    mkdir -p ${boot_tmp} ${root_tmp} ${kernel_tmp} ${modules_tmp}
 
@@ -200,10 +202,12 @@ build_kernel_modules() {
 
      rm -f *.ko
      x=0
-     find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-     sync && sleep 3
-     x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
-
+     for file in $(tree -i -f); do
+         if [ "${file##*.}"c = "ko"c ]; then
+             ln -s $file .
+             x=$(($x+1))
+         fi
+     done
      if [ $x -eq 0 ]; then
         echo_color "red" "(5/7) Error *.KO Files not found"  "..."
      else

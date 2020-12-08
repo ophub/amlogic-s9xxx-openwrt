@@ -106,7 +106,7 @@ check_build_files() {
 #losetup & mount ${flippy_file} boot:kernel.tar.xz root:modules.tar.xz
 losetup_mount_img() {
 
-   [ $(id -u) = 0 ] || echo_color "red" "(2/7) Error: Please run this script as [ root ]" "sudo ./make_use_img.sh"
+   [ $(id -u) = 0 ] || echo_color "red" "(2/7) Error: Please run this script as root: " "[ sudo ./make_use_img.sh ]"
 
    [ -d ${build_tmp_folder} ] && rm -rf ${build_tmp_folder} 2>/dev/null
    mkdir -p ${boot_tmp} ${root_tmp} ${kernel_tmp} ${modules_tmp}

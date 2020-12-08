@@ -16,7 +16,7 @@ Example: ~/build-kernel/
  └── make_use_img.sh
 ```
 
-Put the ***`Flippy’s *.img file`*** E.g: ***`N1_Openwrt*.img`*** file into the ***`${flippy_folder}`*** folder, Modify ${flippy_file} to kernel file name. E.g: ***`flippy_file="N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img"`***. then run the script:
+Put the ***`Flippy’s *.img file`*** E.g: ***`N1_Openwrt*.img`*** file into the ***`${flippy_folder}`*** folder, Modify ${flippy_file} to kernel file name. E.g: ***`flippy_file="N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img"`***. ( If the file of ${flippy_file} is not found, Will search for other *.img and *.img.xz files in the ${flippy_folder} directory ). then run the script:
 ```shell scriptt
 sudo ./make_use_img.sh
 ```
@@ -31,7 +31,7 @@ Example: ~/build-kernel/
  └── make_use_kernel.sh
 ```
 
-put ***`boot-${flippy_version}.tar.gz, dtb-amlogic-${flippy_version}.tar.gz & modules-${flippy_version}.tar.gz`*** the three files into the ***`${flippy_folder}`*** folder, Modify ${flippy_version} to kernel version. E.g: ***`flippy_version="5.9.5-flippy-48+"`***. then run the script:
+put ***`boot-${flippy_version}.tar.gz, dtb-amlogic-${flippy_version}.tar.gz & modules-${flippy_version}.tar.gz`*** the three files into the ***`${flippy_folder}`*** folder, Modify ${flippy_version} to kernel version. E.g: ***`flippy_version="5.9.5-flippy-48+"`***. ( If the files of ${flippy_version} is not found, Will search for other files in the ${flippy_folder} directory ). then run the script:
 ```shell script
 sudo ./make_use_kernel.sh
 ```

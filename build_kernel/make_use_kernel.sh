@@ -241,9 +241,9 @@ build_modules() {
      x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
      
      if [ $x -eq 0 ]; then
-        echo_color "red" "(3/4) Error *.KO Files not found"  "..."
+        echo_color "red" "(3/4) Error *.ko Files not found"  "..."
      else
-        echo_color "blue" "(3/4) Have [ ${x} ] files make ko link"  "..."
+        echo_color "blue" "(3/4) Have [ ${x} ] files make *.ko link"  "..."
      fi
 
   cd ../ && rm -rf ${build_modules} && cd ../../

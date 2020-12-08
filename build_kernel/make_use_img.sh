@@ -202,12 +202,10 @@ build_kernel_modules() {
 
      rm -f *.ko
      x=0
-     for file in $(tree -i -f); do
-         if [ "${file##*.}"c = "ko"c ]; then
-             ln -s $file .
-             x=$(($x+1))
-         fi
-     done
+     find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+     sync && sleep 3
+     x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
+     
      if [ $x -eq 0 ]; then
         echo_color "red" "(5/7) Error *.KO Files not found"  "..."
      else

@@ -160,7 +160,7 @@ build_kernel() {
         echo_color "red" "(2/4) Error build_kernel"  "The suffix of ${build_dtb} must be .tar.gz or .tar.xz ..."
      fi
 
-     echo_color "blue" "(2/4) Start Copy ${build_dtb} one files"  "..."
+     echo_color "blue" "(2/4) Start Copy ${build_dtb}"  "..."
      [ -f meson-gxl-s905d-phicomm-n1.dtb ] && cp -rf *.dtb Temp_kernel/dtb/amlogic/ || echo_color "yellow" "(2/4) All *.dtb files does not exist." "..."
      sync
 

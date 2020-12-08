@@ -30,6 +30,7 @@
 #
 #======================================================================================================================
 
+
 # Modify Flippy's kernel folder & version
 flippy_folder=${PWD}/"flippy"
 flippy_version="5.9.5-flippy-48+"
@@ -40,6 +41,9 @@ build_boot="boot-${flippy_version}.tar.gz"
 build_dtb="dtb-amlogic-${flippy_version}.tar.gz"
 build_modules="modules-${flippy_version}.tar.gz"
 build_save_folder=${flippy_version%-flippy*}
+
+get_tree_status=$(dpkg --get-selections | grep tree)
+[ $? = 0 ] || sudo apt install tree
 
 # echo color codes
 echo_color() {
@@ -160,7 +164,7 @@ build_kernel() {
         echo_color "red" "(2/4) Error build_kernel"  "The suffix of ${build_dtb} must be .tar.gz or .tar.xz ..."
      fi
 
-     echo_color "blue" "(2/4) Start Copy ${build_dtb}"  "..."
+     echo_color "blue" "(2/4) Start Copy ${build_dtb} one files"  "..."
      [ -f meson-gxl-s905d-phicomm-n1.dtb ] && cp -rf *.dtb Temp_kernel/dtb/amlogic/ || echo_color "yellow" "(2/4) All *.dtb files does not exist." "..."
      sync
 
@@ -233,18 +237,19 @@ build_modules() {
      fi
 
   cd ${flippy_version}
-  
-     rm -f *.ko
      x=0
-     find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-     sync && sleep 3
+     for file in $(tree -i -f); do
+         if [ "${file##*.}"c = "ko"c ]; then
+             ln -s $file .
+             x=$(($x+1))
+         fi
+     done
+     #rm -rf *.ko
+     #find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+     #sync && sleep 3
      x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
-     
-     if [ $x -eq 0 ]; then
-        echo_color "red" "(3/4) Error *.KO Files not found"  "..."
-     else
-        echo_color "blue" "(3/4) Have [ ${x} ] files make ko link"  "..."
-     fi
+
+     echo_color "blue" "(3/4) Have [ ${x} ] files make ko link"  "..."
 
   cd ../ && rm -rf ${build_modules} && cd ../../
      echo_color "blue" "(3/4) Start zip modules.tar.xz"  "..."

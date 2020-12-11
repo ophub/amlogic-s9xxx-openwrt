@@ -7,9 +7,9 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #===================================================================================
 
-# you can change this size >= 72
+# you can change this size ≥ 72
 TARGET_BOOT_SIZE_MB=256
-# you can change this size >= 320
+# you can change this size ≥ 320
 TARGET_ROOTFS_SIZE_MB=1024
 # shared partition can be ext4, xfs, btrfs, f2fs
 TARGET_SHARED_FSTYPE=btrfs

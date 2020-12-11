@@ -381,8 +381,8 @@ while [ $i -le $max_try ]; do
             (cd / && tar cf - $src) | tar xf -
             sync
         done
-        rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker
-        rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/
+        rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker >/dev/null
+        rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/ >/dev/null
         echo "Copy complete."
 		
         echo "Edit configuration file ..."

@@ -11,7 +11,7 @@
 TARGET_BOOT_SIZE_MB=256
 # you can change this size >= 320
 TARGET_ROOTFS_SIZE_MB=1024
-# shared partition can be ext4, xfs, btrfs
+# shared partition can be ext4, xfs, btrfs, f2fs
 TARGET_SHARED_FSTYPE=btrfs
 
 # EMMC DEVICE MAJOR
@@ -311,13 +311,16 @@ echo "done"
 echo "create shared filesystem ... "
 mkdir -p /mnt/${DST_NAME}p3
 case  $TARGET_SHARED_FSTYPE in
-      xfs) mkfs.xfs -f -L EMMC_SHARED /dev/${DST_NAME}p3
+      xfs) mkfs.xfs -f -L EMMC_SHARED /dev/${DST_NAME}p3 >/dev/null
            mount -t xfs /dev/${DST_NAME}p3 /mnt/${DST_NAME}p3
            ;;
-    btrfs) mkfs.btrfs -L EMMC_SHARED /dev/${DST_NAME}p3
+    btrfs) mkfs.btrfs -L EMMC_SHARED /dev/${DST_NAME}p3 >/dev/null
            mount -t btrfs /dev/${DST_NAME}p3 /mnt/${DST_NAME}p3
            ;;
-        *) mkfs.ext4 -L EMMC_SHARED  /dev/${DST_NAME}p3
+     f2fs) mkfs.f2fs -f -l EMMC_SHARED /dev/${DST_NAME}p3 >/dev/null
+           mount -t f2fs /dev/${DST_NAME}p3 /mnt/${DST_NAME}p3
+           ;;
+        *) mkfs.ext4 -L EMMC_SHARED  /dev/${DST_NAME}p3 >/dev/null
            mount -t ext4 /dev/${DST_NAME}p3 /mnt/${DST_NAME}p3
            ;;
 esac

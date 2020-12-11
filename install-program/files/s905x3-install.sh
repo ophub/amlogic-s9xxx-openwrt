@@ -8,10 +8,15 @@
 #======================================================================================
 
 SKIP1=64
+# you can change BOOT size ≥ 72
 BOOT=256
+# you can change ROOT1 size ≥ 320
 ROOT1=1024
 SKIP2=258
+# you can change ROOT2 size ≥ 320
 ROOT2=1024
+# shared partition can be ext4, xfs, btrfs
+TARGET_SHARED_FSTYPE=btrfs
 
 hasdrives=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 if [ "$hasdrives" = "" ]; then
@@ -425,14 +430,26 @@ EOF
 done
 echo "complete."
 
-echo "Create a shared file system: format to [ ext4 ] ... "
-mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
-mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+echo "Create a shared file system."
+mkdir -p /mnt/${EMMC_NAME}p4
+case $TARGET_SHARED_FSTYPE in
+	xfs) mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+	     mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+	     ;;
+      btrfs) mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
+	     mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+	     ;;
+       f2fs) mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+	     mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+	     ;;
+	  *) mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
+	     mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+	     ;;
+esac
 mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
+sync
 echo "complete."
 
 echo "Note: The original bootloader has been exported to [ /root/backup-bootloader.img ], please download and save!"
 echo "Install completed, please [ reboot ] the system!"
-sync
-exit 0
 

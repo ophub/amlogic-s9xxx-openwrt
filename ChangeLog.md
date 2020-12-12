@@ -14,9 +14,13 @@ The version update instructions record each important update point for everyone 
 | ---- | ---- | ---- | ---- | ---- | ---- |
 | 2020.12.12 | S9xxx | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh) | Added the shared partition formatting type selection, which can be changed in `$TARGET_SHARED_FSTYPE`. |
 | - | N1 | UPDATE | ✩✩ | [n1-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/n1-install.sh) | Added the shared partition formatting type selection, which can be changed in `$TARGET_SHARED_FSTYPE`. |
-| - | N1 | ADD | ✩✩ | [5.9.14](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.9.14) | Add New kernel. |
-| - | N1 | ADD | ✩✩ | [5.4.83](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.4.83) | Add New kernel. |
-| - | N1 | ADD | ✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Support Belink GT-King and Belink GT-King Pro. |
+| - | All | ADD | ✩✩ | [5.9.14](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.9.14) | Add New kernel. |
+| - | All | ADD | ✩✩ | [5.4.83](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.4.83) | Add New kernel. |
+| - | S9xxx | ADD | ✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Support Belink GT-King and Belink GT-King Pro. |
+| - | All | ADD | ✩✩✩✩ | [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) | Added dtb files for Belink GT-King Pro and other boxes. |
+| - | All | ADD | ✩✩✩ | [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel) | The kernel files in the repository are all updated to the latest for dtb files. |
+| - | S9xxx | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh) | s905x3-install.sh Renamed s9xxx-install.sh |
+| - | S9xxx | UPDATE | ✩✩ | [s9xxx-update.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-update.sh) | s905x3-update.sh Renamed s9xxx-update.sh |
 | 2020.12.07 | S9xxx | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh) | Upgrade the installation script to `flippy` version. |
 | - | N1 | UPDATE | ✩✩ | [n1-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/n1-install.sh) | Upgrade the installation script to `flippy` version. |
 | 2020.11.28 | All | UPDATE | ✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Add firmware version information to the terminal page. |

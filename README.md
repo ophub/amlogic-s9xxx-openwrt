@@ -16,6 +16,7 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3). [🔍](https://www.ebay.com/itm/2020-H96-MAX-X3-4GB-32GB-Android-9-0-TV-Box-Smart-Amlogic-S905X3-Dual-WIFI-BT-UK/293499265183)
 - `belink-v*-openwrt_*.img` For Belink GT-King. [🔍](https://www.ebay.com/itm/BEELINK-GT-KING-WiFi-6-NEW-MODEL-S922X-4G-64G-Android-9-Box-4K-H-265-BT-4-1/303604712848)
 - `belinkpro-v*-openwrt_*.img` For Belink GT-King Pro. [🔍](https://www.ebay.com/itm/Beelink-GT-King-Pro-TV-Box-DDR4-4GB-64GB-S922X-H-Quad-core-ARM-Cortex-A73/324411782338)
+- `ugoos-v*-openwrt_*.img` For UGOOS AM6 Plus. [🔍](https://www.ebay.com/itm/UGOOS-AM6-PLUS-Amlogic-S922X-J-Android-9-0-TV-Box-4GB-DDR4-32GB-ROM/254590989143)
 - `n1-v*-openwrt_*.img`: For Phicomm-N1.
 - `octopus-v*-openwrt_*.img` For Octopus-Planet.
 

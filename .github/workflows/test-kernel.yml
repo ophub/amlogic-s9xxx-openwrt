@@ -36,7 +36,7 @@ jobs:
       if: (!cancelled())
       run: df -hT
 
-    - name: Build OpenWrt for S905x3-Boxs and Phicomm-N1
+    - name: Build OpenWrt for S9xxx-Boxs and Phicomm-N1
       id: build
       if: (!cancelled())
       run: |
@@ -76,7 +76,7 @@ jobs:
         retention-days: ${{ env.RECENT_LASTEST }}
         if-no-files-found: ignore
 
-    - name: Upload OpenWrt Firmware to Actions for S9xxx-Boxs
+    - name: Upload firmware directory for S9xxx-Boxs
       uses: actions/upload-artifact@v2
       if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:

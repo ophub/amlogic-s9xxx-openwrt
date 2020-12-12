@@ -80,7 +80,7 @@ Please select s9xxx box model:
 3. H96-Max-X3 ----------- [Standard] [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2124Mtz ]
 4. X96-Max-4G ----------- [Standard] [ S905x2: NETWORK: 1000M / TF: 50Mtz / CPU: 1944Mtz ]
 5. X96-Max-2G ----------- [Standard] [ S905x2: NETWORK: 100M  / TF: 50Mtz / CPU: 1944Mtz ]
-6. X96-Max+ ------------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2244Mtz ]
+6. X96-Max+ ------------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2208Mtz ]
 7. HK1-Box -------------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2184Mtz ]
 8. H96-Max-X3 ----------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz ]
 9. Octopus-Planet ------- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]

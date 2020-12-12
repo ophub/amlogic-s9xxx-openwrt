@@ -14,7 +14,7 @@ out_path="out"
 armbian_path="armbian"
 openwrt_path="openwrt-armvirt"
 kernel_path="kernel-amlogic"
-build_openwrt=("s9xxx" "n1" "x96" "hk1" "h96" "octopus" "belinkpro" "belink")
+build_openwrt=("s9xxx" "n1" "x96" "hk1" "h96" "octopus" "belinkpro" "belink" "ugoos")
 make_path=${PWD}
 #===== Do not modify the following parameter settings, End =======
 
@@ -261,6 +261,10 @@ copy2image() {
             new_fdt_dtb="meson-g12b-gtking.dtb"
             sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
             ;;
+        ugoos)
+            new_fdt_dtb="meson-g12b-ugoos-am6.dtb"
+            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
+            ;;           
         *)
             die "Have no this firmware: [ ${build_op} - ${kernel} ]"
             ;;

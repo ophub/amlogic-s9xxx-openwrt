@@ -86,6 +86,7 @@ Please select s9xxx box model:
 9. Octopus-Planet ------- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
 10. Belink_GT-King ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
 11. Belink_GT-King Pro -- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+12. UGOOS AM6 Plus ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
 -------------------------------------------------------------------------------------------
@@ -124,6 +125,9 @@ case  $boxtype in
       11) FDTFILE="meson-g12b-gtking-pro.dtb"
          U_BOOT_EXT=1
          ;;
+      12) FDTFILE="meson-g12b-ugoos-am6.dtb"
+         U_BOOT_EXT=1
+         ;;	 
       0) cat <<EOF
 Please enter the dtb file name of your box, do not include the path.
 For example: $FDTFILE

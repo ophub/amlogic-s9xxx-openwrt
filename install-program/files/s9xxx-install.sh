@@ -87,7 +87,7 @@ Please select s9xxx box model:
 10. Belink_GT-King ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
 11. Belink_GT-King Pro -- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
 
-0. Other ---------------- [ Enter the dtb file name ]
+0. Other ---------------- [ Enter the dtb file name of your box ]
 -------------------------------------------------------------------------------------------
 EOF
 echo  "Please choose:"
@@ -125,7 +125,7 @@ case  $boxtype in
          U_BOOT_EXT=1
          ;;
       0) cat <<EOF
-Please enter the dtb file name, do not include the path.
+Please enter the dtb file name of your box, do not include the path.
 For example: $FDTFILE
 EOF
          echo  "dtb File name:"

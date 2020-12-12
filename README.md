@@ -86,14 +86,14 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
 
 ```yaml
 path: ${{ env.FILEPATH }}/openwrt_s9xxx_*        #For S9xxx series box general firmware
-path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
 path: ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
 path: ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
 path: ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
-path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 path: ${{ env.FILEPATH }}/openwrt_belink_*       #For Belink GT-King
 path: ${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
 path: ${{ env.FILEPATH }}/openwrt_ugoos_*        #For UGOOS AM6 Plus
+path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
+path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 ```
 
 - Uploads OpenWrt Firmware to Release:

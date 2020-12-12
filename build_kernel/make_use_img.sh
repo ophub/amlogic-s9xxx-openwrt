@@ -177,6 +177,11 @@ copy_boot_root() {
       echo_color "yellow" "(3/7) The octopus-planet [10,11].dtb files is Missing. Has been copied from the dtb library!" "..."
    fi
 
+   if [ ! -f "meson-g12b-ugoos-am6.dtb" ]; then
+      cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-ugoos-am6.dtb .
+      echo_color "yellow" "(3/7) The octopus-planet [12].dtb files is Missing. Has been copied from the dtb library!" "..."
+   fi
+
    sync
 
    echo_color "green" "(3/7) End copy_boot_root"  "..."

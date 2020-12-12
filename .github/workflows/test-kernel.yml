@@ -1,7 +1,7 @@
 #========================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Build OpenWrt for All S905x3-Boxs and Phicomm-N1
-# Function: Workflows for Build All S905x3-Boxs and Phicomm-N1
+# Description: Automatically Build OpenWrt for All S9xxx-Boxs and Phicomm-N1
+# Function: Workflows for Build All S9xxx-Boxs and Phicomm-N1
 # Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
 #========================================================================================================================
 
@@ -44,7 +44,7 @@ jobs:
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s905x3_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
         [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
         sudo chmod +x make
-        sudo ./make -d -b n1_x96_hk1_h96_octopus -k 5.9.14_5.4.83
+        sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belinkpro_belink -k 5.9.14_5.4.83
         cd out/ && gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -73,6 +73,15 @@ jobs:
       with:
         name: openwrt_phicomm-n1_${{ env.FILE_DATE }}
         path: ${{ env.FILEPATH }}/openwrt_n1_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
+    - name: Upload OpenWrt Firmware to Actions for S9xxx-Boxs
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_s9xxx_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_s9xxx_*
         retention-days: ${{ env.RECENT_LASTEST }}
         if-no-files-found: ignore
 
@@ -125,10 +134,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: openwrt_s905x3_phicomm-n1_${{ env.FILE_DATE }}
+        tag_name: openwrt_s9xxx_phicomm-n1_${{ env.FILE_DATE }}
         files: ${{ env.FILEPATH }}/*
         body: |
-          This is OpenWrt firmware for S905x3-Boxs and Phicomm-N1
+          This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1
           * Firmware information
           Default IP: 192.168.1.1
           Default username: root

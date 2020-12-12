@@ -10,7 +10,7 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 
 ## OpenWrt Firmware instructions
 
-- `s9xxx-v*-openwrt_*.img`: Almost compatible with ***`all S9xxx-Boxs`***, you can choose different box types when installing into EMMC.
+- `s9xxx-v*-openwrt_*.img`: Almost compatible with ***`ALL S9xxx-Boxs`***, you can choose different box types when installing into EMMC.
 - `x96-v*-openwrt_*.img`: For X96-Max+(S905x3).
 - `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3).
 - `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3).

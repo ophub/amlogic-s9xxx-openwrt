@@ -19,7 +19,7 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `belinkpro-v*-openwrt_*.img` For Belink GT-King Pro.
 - `n1-v*-openwrt_*.img`: For Phicomm-N1.
 
-For more firmware, please select in the [installation script](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
+For more OpenWrt firmware .dtb files are in the [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) directory. You can use the `s9xxx-v*-openwrt_*.img` firmware to install via USB hard disk. When installing into emmc, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program), and use the S9xxx-Boxs you own.
 
 ## Install to emmc partition or upgrade instructions
 

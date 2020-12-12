@@ -21,7 +21,7 @@ make_path=${PWD}
 # Set firmware size ( ROOT_MB must be ≥ 256 )
 SKIP_MB=16
 BOOT_MB=256
-ROOT_MB=1024
+ROOT_MB=768
 
 tag() {
     echo -e " [ \033[1;36m$1\033[0m ]"

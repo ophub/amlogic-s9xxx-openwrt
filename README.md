@@ -131,7 +131,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 ## Build more kernel files
 
-[For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/build_kernel)
+***`Flippy`*** has shared with us dozens of versions of firmware, The `amlogic-s9xxx series boxes` bring unlimited freedom. We have treasured a lot in [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel). If you think it’s not enough, or you don’t find the version you miss, you can use the kernel build tool to add the `Flippy kernel` to the Kernel library of the repository, and package out what you miss For that one. [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/build_kernel)
 
 ## ~/openwrt-armvirt/* Firmware compilation parameters
 

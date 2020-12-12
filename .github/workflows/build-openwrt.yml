@@ -150,7 +150,7 @@ jobs:
         mkdir -p openwrt-armvirt
         cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
         sudo chmod +x make
-        sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belinkpro_belink -k 5.9.14_5.4.83
+        sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belinkpro_belink_ugoos -k 5.9.14_5.4.83
         cd out/ && gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -180,6 +180,33 @@ jobs:
       with:
         name: openwrt_s9xxx_${{ env.FILE_DATE }}
         path: ${{ env.FILEPATH }}/openwrt_s9xxx_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
+    - name: Upload OpenWrt Firmware to Actions for Belink GT-King
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_belink_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_belink_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
+    - name: Upload OpenWrt Firmware to Actions for Belink GT-King Pro
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_belinkpro_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_belinkpro_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
+    - name: Upload OpenWrt Firmware to Actions for UGOOS AM6 Plus
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_ugoos_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_ugoos_*
         retention-days: ${{ env.RECENT_LASTEST }}
         if-no-files-found: ignore
 

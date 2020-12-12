@@ -1,6 +1,6 @@
-# Build amlogic-s9xxx kernel for Phicomm-N1 & S905x3-Boxs
+# Build amlogic-s9xxx kernel for Phicomm-N1 & S9xxx-Boxs
 
-If you use Phicomm N1 & S905x3-Boxs to install OpenWrt, you must know `Flippy`. He provides many versions of openwrt firmware for Phicomm-N1 & S905x3-Boxs and shares his series of Amlogic S9xxx kernels.
+If you use Phicomm N1 & S9xxx-Boxs to install OpenWrt, you must know `Flippy`. He provides many versions of openwrt firmware for Phicomm-N1 & S9xxx-Boxs and shares his series of Amlogic S9xxx kernels.
 
 ## Usage
 
@@ -11,7 +11,7 @@ The first method:
 Example: ~/build-kernel/
  ├── flippy
  │   ├── N1_Openwrt*.img                   # Recommend Use Flippy's N1_Openwrt.img files
- │   ├── OR: S905x3_Openwrt*.img           # Use Flippy's S905x3_Openwrt*.img files
+ │   ├── OR: S9***_Openwrt*.img            # Use Flippy's S9***_Openwrt*.img files
  │   └── OR: Armbian*Aml-s9xxx*.img        # Use Flippy's Armbian*.img files
  └── make_use_img.sh
 ```

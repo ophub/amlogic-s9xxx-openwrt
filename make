@@ -172,8 +172,8 @@ format_image() {
     complete_path=${make_path}/install-program/files
     [ -f ${root}/root/hk1box-bootloader.img ] || cp -f ${complete_path}/hk1box-bootloader.img  ${root}/root/
     [ -f ${root}/root/u-boot-2015-phicomm-n1.bin ] || cp -f ${complete_path}/u-boot-2015-phicomm-n1.bin  ${root}/root/
-    [ -f ${root}/usr/bin/s905x3-install.sh ] || cp -f ${complete_path}/s905x3-install.sh  ${root}/usr/bin/
-    [ -f ${root}/usr/bin/s905x3-update.sh ] || cp -f ${complete_path}/s905x3-update.sh  ${root}/usr/bin/
+    [ -f ${root}/usr/bin/s9xxx-install.sh ] || cp -f ${complete_path}/s9xxx-install.sh  ${root}/usr/bin/
+    [ -f ${root}/usr/bin/s9xxx-update.sh ] || cp -f ${complete_path}/s9xxx-update.sh  ${root}/usr/bin/
     [ -f ${root}/usr/bin/n1-install.sh ] || cp -f ${complete_path}/n1-install.sh  ${root}/usr/bin/
     [ -f ${root}/usr/bin/n1-update.sh ] || cp -f ${complete_path}/n1-update.sh  ${root}/usr/bin/
     [ -f ${root}/etc/config/fstab ] || cp -f ${complete_path}/fstab  ${root}/etc/config/
@@ -199,7 +199,7 @@ format_image() {
         op_packaged_date=$(date +%Y-%m-%d)
         echo " OpenWrt Kernel: ${op_version}" >> ${root}/etc/banner
         echo " Phicomm-N1 installation command: n1-install.sh" >> ${root}/etc/banner
-        echo " S905x3-Boxs installation command: s905x3-install.sh" >> ${root}/etc/banner
+        echo " s9xxx-Boxs installation command: s9xxx-install.sh" >> ${root}/etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> ${root}/etc/banner
         echo " -----------------------------------------------------" >> ${root}/etc/banner
     fi

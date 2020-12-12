@@ -26,7 +26,7 @@ For more firmware, please select in the [installation script](https://github.com
 Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
 - Phicomm-N1 installation command: `n1-install.sh`
-- S905x3-Boxs installation command: `s905x3-install.sh`
+- S9xxx-Boxs installation command: `s9xxx-install.sh`
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
 
@@ -40,7 +40,7 @@ You can modify the configuration file in the `router_config` directory and `.yml
 
 - ## github.com clone packaging instructions
 
-[For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s905x3-phicomm_n1.yml)
+[For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
 
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 

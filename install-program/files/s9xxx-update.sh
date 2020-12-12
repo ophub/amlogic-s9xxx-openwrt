@@ -1,8 +1,8 @@
 #!/bin/sh
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S905x3-Boxs
-# Function: Install and Upgrading openwrt to the emmc for S905x3-Boxs
+# Description: Automatically Packaged OpenWrt for S9xxx-Boxs
+# Function: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
@@ -222,8 +222,8 @@ if  [ -f ${BOOTLOADER} ]; then
     fi
 fi
 
-#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s905x3-install.sh
-#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s905x3-update.sh
+#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-install.sh
+#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-update.sh
 sync
 echo "Copy data complete ..."
 

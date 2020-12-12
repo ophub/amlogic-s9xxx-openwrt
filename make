@@ -277,6 +277,12 @@ copy2image() {
     umount -f $bootfs 2>/dev/null
     umount -f $rootfs 2>/dev/null
     losetup -d $loop 2>/dev/null
+
+    cd ${out_path} && gzip *.img
+    sync
+
+    cd ${make_path}
+
 }
 
 get_firmwares() {

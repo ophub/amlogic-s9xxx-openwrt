@@ -1,6 +1,6 @@
-# OpenWrt for S905x3-Boxs and Phicomm-N1
+# OpenWrt for S9xxx-Boxs and Phicomm-N1
 
-Support `github.com One-stop compilation`, `github.com clone packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3-Boxs and Phicomm-N1.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3, S905x2, S922x and Phicomm-N1.
 
 The latest version of the OpenWrt firmware is automatically compiled every Monday & Thursday, which can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
@@ -10,11 +10,16 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 
 ## OpenWrt Firmware instructions
 
-- `n1-v*-openwrt_*.img`: For Phicomm-N1.
-- `x96-v*-openwrt_*.img`: Almost compatible with all S905x3-Boxs, you can choose different box types when installing into EMMC.
+- `s9xxx-v*-openwrt_*.img`: Almost compatible with ***`all S9xxx-Boxs`***, you can choose different box types when installing into EMMC.
+- `x96-v*-openwrt_*.img`: For X96-Max+(S905x3).
 - `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3).
 - `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3).
 - `octopus-v*-openwrt_*.img` For Octopus-Planet.
+- `belink-v*-openwrt_*.img` For Belink GT-King.
+- `belinkpro-v*-openwrt_*.img` For Belink GT-King Pro.
+- `n1-v*-openwrt_*.img`: For Phicomm-N1.
+
+For more firmware, please select in the [installation script](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
 
 ## Install to emmc partition or upgrade instructions
 
@@ -40,7 +45,7 @@ You can modify the configuration file in the `router_config` directory and `.yml
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 
 ```yaml
-- name: Build OpenWrt for S905x3-Boxs and Phicomm-N1
+- name: Build OpenWrt for S9xxx-Boxs and Phicomm-N1
   id: build
   run: |
     git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
@@ -48,7 +53,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     mkdir -p openwrt-armvirt
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
     sudo chmod +x make
-    sudo ./make -d -b n1_x96_hk1_h96_octopus -k 5.4.77_5.9.8
+    sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belinkpro_belink -k 5.4.77_5.9.8
     cd out/ && gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -58,6 +63,13 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
 - Uploads OpenWrt Firmware to Actions:
 
 ```yaml
+- name: Upload OpenWrt Firmware to Actions for S9xxx
+  uses: actions/upload-artifact@v2
+  with:
+    name: openwrt_s9xxx
+    path: ${{ env.FILEPATH }}/openwrt_s9xxx_*
+    if-no-files-found: ignore
+
 - name: Upload OpenWrt Firmware to Actions for Phicomm-N1
   uses: actions/upload-artifact@v2
   with:
@@ -65,41 +77,36 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     path: ${{ env.FILEPATH }}/openwrt_n1_*
     if-no-files-found: ignore
 
-- name: Upload OpenWrt Firmware to Actions for X96-Max+
-  uses: actions/upload-artifact@v2
-  with:
-    name: openwrt_x96-max
-    path: ${{ env.FILEPATH }}/openwrt_x96_*
-    if-no-files-found: ignore
-
 # More Upload to Actions
 - name: Upload OpenWrt Firmware ...
-
 ```
 
 - The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/*```
 
 ```yaml
+path: ${{ env.FILEPATH }}/openwrt_s9xxx_*        #For S9xxx series box general firmware
 path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
 path: ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
 path: ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
 path: ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
 path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
+path: ${{ env.FILEPATH }}/openwrt_belink_*       #For Belink GT-King
+path: ${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
 ```
 
 - Uploads OpenWrt Firmware to Release:
 
 ```yaml
-- name: Upload OpenWrt firmware to release for S905x3-Boxs and Phicomm-N1
+- name: Upload OpenWrt firmware to release for S9xxx-Boxs and Phicomm-N1
   uses: svenstaro/upload-release-action@v2
   with:
     repo_token: ${{ secrets.GITHUB_TOKEN }}
     file: ${{ env.FILEPATH }}/*
-    tag: openwrt_s905x3_phicomm-n1
+    tag: openwrt_s9xxx_phicomm-n1
     overwrite: true
     file_glob: true
     body: |
-      This is OpenWrt firmware for S905x3-Boxs and Phicomm-N1
+      This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1
 ```
 
 - ## Local packaging instructions

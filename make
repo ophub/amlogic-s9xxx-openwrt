@@ -1,8 +1,8 @@
 #!/bin/bash
 #======================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
-# Function: Use Flippy's kernrl files for amlogic-s9xxx to build openwrt for S905x3-Boxs and Phicomm-N1
+# Description: Automatically Packaged OpenWrt for S9xxx-Boxs and Phicomm-N1
+# Function: Use Flippy's kernrl files for amlogic-s9xxx to build openwrt for S9xxx-Boxs and Phicomm-N1
 # Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
 # Copyright (C) 2020 https://github.com/tuanqing/mknop
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
@@ -14,7 +14,7 @@ out_path="out"
 armbian_path="armbian"
 openwrt_path="openwrt-armvirt"
 kernel_path="kernel-amlogic"
-build_openwrt=("n1" "x96" "hk1" "h96" "octopus")
+build_openwrt=("s9xxx" "n1" "x96" "hk1" "h96" "octopus" "belinkpro" "belink")
 make_path=${PWD}
 #===== Do not modify the following parameter settings, End =======
 
@@ -233,6 +233,10 @@ copy2image() {
 
         n1_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
         case "${build_op}" in
+        s9xxx)
+            new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
+            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
+            ;;
         x96)
             new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
             sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
@@ -247,6 +251,14 @@ copy2image() {
             ;;
         octopus)
             new_fdt_dtb="meson-gxm-octopus-planet.dtb"
+            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
+            ;;
+        belinkpro)
+            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
+            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
+            ;;
+        belink)
+            new_fdt_dtb="meson-g12b-gtking.dtb"
             sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
             ;;
         *)

@@ -21,7 +21,7 @@ make_path=${PWD}
 # Set firmware size ( ROOT_MB must be ≥ 256 )
 SKIP_MB=16
 BOOT_MB=256
-ROOT_MB=768
+ROOT_MB=512
 
 tag() {
     echo -e " [ \033[1;36m$1\033[0m ]"
@@ -392,7 +392,7 @@ Usage:
 Options:
     -c, --clean          clean up the output and temporary directories
 
-    -d, --default        the kernel version is "all", and the rootfs partition size is "768m"
+    -d, --default        the kernel version is "all", and the rootfs partition size is "512m"
 
     -b, --build=BUILD    Specify multiple cores, use "_" to connect
        , -b all          Compile all types of openwrt

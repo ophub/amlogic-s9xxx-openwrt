@@ -17,7 +17,7 @@
 # 01. Log in to the home directory of the local Ubuntu system
 # 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
 # 03. cd ~/build_kernel/
-# 04. Prepare Flippy's ${flippy_file}, support: N1_Openwrt*.img, S905x3_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img
+# 04. Prepare Flippy's ${flippy_file}, support: N1_Openwrt*.img, S9***_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img
 #     Support to put the original *.img.xz file into the directory and use it directly.
 # 05. Put Flippy's ${flippy_file} file into ${flippy_folder}
 # 06. Modify ${flippy_file} to kernel file name. E.g: flippy_file="N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img"

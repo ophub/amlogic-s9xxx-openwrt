@@ -113,5 +113,6 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 | 9 | Octopus-Planet | S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxm-octopus-planet.dtb |
 | 10 | Belink GT-King | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-gtking.dtb |
 | 11 | Belink GT-King Pro | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-gtking-pro.dtb |
+| 12 | UGOOS AM6 Plus | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-ugoos-am6.dtb |
 | 0 | Other | - | Enter the dtb file name of your box |
 

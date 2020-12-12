@@ -54,7 +54,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     mkdir -p openwrt-armvirt
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
     sudo chmod +x make
-    sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belinkpro_belink -k 5.4.77_5.9.8
+    sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belinkpro_belink_ugoos -k 5.4.77_5.9.8
     cd out/ && gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -93,6 +93,7 @@ path: ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
 path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 path: ${{ env.FILEPATH }}/openwrt_belink_*       #For Belink GT-King
 path: ${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
+path: ${{ env.FILEPATH }}/openwrt_ugoos_*        #For UGOOS AM6 Plus
 ```
 
 - Uploads OpenWrt Firmware to Release:

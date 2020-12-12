@@ -97,16 +97,16 @@ path: ${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
 - Uploads OpenWrt Firmware to Release:
 
 ```yaml
-- name: Upload OpenWrt firmware to release for S9xxx-Boxs and Phicomm-N1
-  uses: svenstaro/upload-release-action@v2
+- name: Upload OpenWrt Firmware to Release
+  uses: softprops/action-gh-release@v1
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   with:
-    repo_token: ${{ secrets.GITHUB_TOKEN }}
-    file: ${{ env.FILEPATH }}/*
-    tag: openwrt_s9xxx_phicomm-n1
-    overwrite: true
-    file_glob: true
+    tag_name: openwrt_s9xxx_phicomm-n1
+    files: ${{ env.FILEPATH }}/*
     body: |
-      This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1
+      This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1.
+      More information ...
 ```
 
 - ## Local packaging instructions

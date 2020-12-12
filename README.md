@@ -118,10 +118,10 @@ path: ${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
 ## Detailed make compile command
 
 - `sudo ./make -d -b n1 -k 5.9.5`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
-- `sudo ./make -d -b n1_x96 -k 5.4.75_5.9.5`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use "_" to connect.
+- `sudo ./make -d -b n1_s9xxx -k 5.4.75_5.9.5`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use "_" to connect.
 - `sudo ./make -d`: Compile all kernel versions of openwrt with the default configuration.
 - `sudo ./make -d -b n1 -k 5.9.2 -s 1024`: Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation.
-- `sudo ./make -d -b n1_x96`: Use the default configuration, specify multiple firmware, use "_" to connect. compile all kernels.
+- `sudo ./make -d -b n1_s9xxx`: Use the default configuration, specify multiple firmware, use "_" to connect. compile all kernels.
 - `sudo ./make -d -k 5.4.73_5.9.2`: Use the default configuration. Specify multiple cores, use "_" to connect.
 - `sudo ./make -d -k latest`: Use the default configuration to compile the latest kernel version of the openwrt firmware.
 - `sudo ./make -d -s 1024 -k 5.7.15`: Use the default configuration and set the partition size to 1024m, and only compile the openwrt firmware with the kernel version 5.7.15.
@@ -131,7 +131,7 @@ path: ${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
 | Parameter | Types | Description |
 | ---- | ---- | ---- |
 | -d | Defaults | Compile all cores and all firmware types. |
-| -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b n1` . Multiple firmware use `_` connect such as `-b n1_x96` . The model represented by the relevant variable： `n1` is phicomm-n1, `x96` is X96-Max+, `hk1` is HK1-Box, `h96` is H96-Max-X3, `octopus` is Octopus-Planet. |
+| -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b n1` . Multiple firmware use `_` connect such as `-b n1_s9xxx` . The model represented by the relevant variable： `s9xxx` is S9xxx series Boxs general firmware, `belinkpro` is Belink GT-King Pro, `belink` is Belink GT-King, `n1` is Phicomm-N1, `x96` is X96-Max+, `hk1` is HK1-Box, `h96` is H96-Max-X3, `octopus` is Octopus-Planet. |
 | -k | Kernel | Specify the kernel type. Write the kernel name individually such as `-k 5.4.50` . Multiple cores use `_` connection such as `-k 5.4.50_5.9.5` |
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |

@@ -2,7 +2,7 @@
 
 #======================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
+# Description: Automatically Packaged OpenWrt for S9xxx-Boxs and Phicomm-N1
 # Function: Update kernel.tar.xz files in the kernel directory with the latest dtb file.
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
@@ -82,7 +82,7 @@ update_kernel_dtb() {
                 kernel_version=${kernel_folder%/*}
                 cd ${kernel_version}
                 mkdir -p tmp_kernel && tar -xJf kernel.tar.xz -C tmp_kernel
-                cp -rf ../../../armbian/dtb-amlogic/* tmp_kernel/dtb/amlogic/ && sync && cd tmp_kernel
+                cp -f ../../../armbian/dtb-amlogic/* tmp_kernel/dtb/amlogic/ && sync && cd tmp_kernel
                 tar -cf kernel.tar *
                 xz -z kernel.tar
                 mv -f kernel.tar.xz ../kernel.tar.xz && sync && cd ../ && rm -rf tmp_kernel && cd ../

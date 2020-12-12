@@ -1,6 +1,6 @@
 # install-program
 
-Install and Upgrading openwrt to the emmc for S905x3-Boxs and Phicomm-N1.
+Install and Upgrading openwrt to the emmc for S9xxx-Boxs and Phicomm-N1.
 
 ## Instructions
 
@@ -46,9 +46,9 @@ sync
 reboot
 ```
 
-## Install to S905x3-Boxs EMMC partition and upgrade instructions
+## Install to S9xxx-Boxs EMMC partition and upgrade instructions
 
-The `x96-v*-openwrt_*.img` and related s905x3 kernel firmware supports USB hard disk booting. You can also Install the OpenWrt firmware in the USB hard disk into the EMMC partition of S905x3, and start using it from EMMC.
+The `s9xxx-v*-openwrt_*.img` and related s9xxx kernel firmware supports USB hard disk booting. You can also Install the OpenWrt firmware in the USB hard disk into the EMMC partition of s9xxx, and start using it from EMMC.
 
 ***`Install OpenWrt`***
 
@@ -58,31 +58,31 @@ The `x96-v*-openwrt_*.img` and related s905x3 kernel firmware supports USB hard 
 
 - Boot from USB hard disk: Unplug the power → insert the USB hard disk → insert the thimble into the AV port (top reset button) → insert the power → release the thimble of the av port → the system will boot from the USB hard disk.
 
-- Log in to the system: Connect the computer and the s905x3 box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as ***`192.168.1.2`***. The netmask is ***`255.255.255.0`***, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: ***`192.168.1.1`***, Account: ***`root`***, Password: ***`password`***, and then log in OpenWrt system.
+- Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as ***`192.168.1.2`***. The netmask is ***`255.255.255.0`***, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: ***`192.168.1.1`***, Account: ***`root`***, Password: ***`password`***, and then log in OpenWrt system.
 
 - Tips: When booting from USB hard disk, the network card is 100M, and it will automatically become Gigabit after writing into EMMC.
 
 - Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 ```shell script
-s905x3-install.sh
+s9xxx-install.sh
 reboot
 ```
 ***`Upgrading OpenWrt`***
 
 Install Recommended practice: After writing the emmc partition from the USB hard disk, ***`first plug in the original USB hard disk and restart it`*** by unplugging/plugging in the power source until the boot is completed and the default IP: 192.168.1.1 can be accessed. Then unplug the USB hard drive, and officially boot from the EMMC partition by unplugging/plugging in the power source.
 
-- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s905x3-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`s9xxx-openwrt.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 ```shell script
 mv -f /tmp/upload/*.img.gz /mnt/mmcblk2p4/
-cp -f /usr/bin/s905x3-update.sh /mnt/mmcblk2p4/
+cp -f /usr/bin/s9xxx-update.sh /mnt/mmcblk2p4/
 cd /mnt/mmcblk2p4/
 gzip -df *.img.gz
-s905x3-update.sh
-#s905x3-update.sh  your_openwrt_imgFileName.img
+s9xxx-update.sh
+#s9xxx-update.sh  your_openwrt_imgFileName.img
 reboot
 ```
 
-Tips: If there is only one `.img` file in the ***`/mnt/mmcblk2p4/`*** directory, you can just enter the ***`s905x3-update.sh`*** command without specifying a specific file name. The upgrade script will vaguely look for `.img` files from the fixed directory and try to upgrade. If there are multiple `.img` files in the ***`/mnt/mmcblk2p4/`*** directory, please use the ***`s905x3-update.sh your_openwrt_imgFileName.img`*** command to specify the firmware upgrade.
+Tips: If there is only one `.img` file in the ***`/mnt/mmcblk2p4/`*** directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific file name. The upgrade script will vaguely look for `.img` files from the fixed directory and try to upgrade. If there are multiple `.img` files in the ***`/mnt/mmcblk2p4/`*** directory, please use the ***`s9xxx-update.sh your_openwrt_imgFileName.img`*** command to specify the firmware upgrade.
 
 Upgrade Recommended method: After the upgrade is completed, if the system cannot be started, ***`you can plug in the USB hard disk with the openwrt system to boot once`***, until you can access the default IP of the firmware on the USB hard disk. Then unplug the USB hard drive, and officially boot from the emmc partition by unplugging/plugging in the power source.
 
@@ -96,7 +96,7 @@ sync
 reboot
 ```
 
-## Option description when installing into s905x3-boxs emmc
+## Option description when installing into s9xxx-boxs emmc
 
 You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) when you customize the file name.
 

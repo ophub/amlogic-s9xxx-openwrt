@@ -1,8 +1,8 @@
 #!/bin/sh
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S905x3-Boxs
-# Function: Install and Upgrading openwrt to the emmc for S905x3-Boxs
+# Description: Automatically Packaged OpenWrt for S9xxx-Boxs
+# Function: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
@@ -73,20 +73,22 @@ echo "BOOT: $BOOT_NAME"
 FDTFILE="meson-sm1-x96-max-plus.dtb"
 U_BOOT_EXT=0
 cat <<EOF
--------------------------------------------------------------------------------------
-Please select S905x3 box model:
-1. X96-Max+        [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
-2. HK1-Box         [Standard] [ S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2124Mtz ]
-3. H96-Max-X3      [Standard] [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2124Mtz ]
-4. X96-Max-4G      [Standard] [ S905x2: NETWORK: 1000M / TF: 50Mtz / CPU: 1944Mtz ]
-5. X96-Max-2G      [Standard] [ S905x2: NETWORK: 100M  / TF: 50Mtz / CPU: 1944Mtz ]
-6. X96-Max+        [Beta]     [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2244Mtz ]
-7. HK1-Box         [Beta]     [ S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2184Mtz ]
-8. H96-Max-X3      [Beta]     [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz ]
-9. Octopus-Planet  [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+-------------------------------------------------------------------------------------------
+Please select s9xxx box model:
+1. X96-Max+ ------------- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+2. HK1-Box -------------- [Standard] [ S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2124Mtz ]
+3. H96-Max-X3 ----------- [Standard] [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2124Mtz ]
+4. X96-Max-4G ----------- [Standard] [ S905x2: NETWORK: 1000M / TF: 50Mtz / CPU: 1944Mtz ]
+5. X96-Max-2G ----------- [Standard] [ S905x2: NETWORK: 100M  / TF: 50Mtz / CPU: 1944Mtz ]
+6. X96-Max+ ------------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2244Mtz ]
+7. HK1-Box -------------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2184Mtz ]
+8. H96-Max-X3 ----------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz ]
+9. Octopus-Planet ------- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+10. Belink_GT-King ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+11. Belink_GT-King Pro -- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
 
-0. Other           [ Enter the dtb file name ]
--------------------------------------------------------------------------------------
+0. Other ---------------- [ Enter the dtb file name ]
+-------------------------------------------------------------------------------------------
 EOF
 echo  "Please choose:"
 read  boxtype
@@ -131,7 +133,7 @@ esac
 
 if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
     echo "/boot/dtb/amlogic/${FDTFILE} does not exist!"
-    echo "You can download the .dtb file from [ https://github.com/ophub/op/tree/main/router/s905x3_phicomm-n1/armbian/dtb-amlogic ]"
+    echo "You can download the .dtb file from [ https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic ]"
     echo "Copy it to [ /boot/dtb/amlogic/ ]."
     echo "Then execute this installation command."
     exit 1
@@ -387,7 +389,7 @@ while [ $i -le $max_try ]; do
 		
         echo "Edit configuration file ..."
         #cd /mnt/${EMMC_NAME}p2/usr/bin/
-        #rm -f s905x3-install.sh s905x3-update.sh
+        #rm -f s9xxx-install.sh s9xxx-update.sh
         cd /mnt/${EMMC_NAME}p2/etc/rc.d
         ln -sf ../init.d/dockerd S99dockerd
         cd /mnt/${EMMC_NAME}p2/etc

@@ -2,7 +2,7 @@
 
 #======================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S905x3-Boxs and Phicomm-N1
+# Description: Automatically Packaged OpenWrt for S9xxx-Boxs and Phicomm-N1
 # Function: Use Flippy's amlogic-s9xxx *.img files to package the alternate firmware
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
@@ -169,6 +169,12 @@ copy_boot_root() {
    if [ ! -f "meson-gxm-octopus-planet.dtb" ]; then
       cp -f ../../../../../armbian/dtb-amlogic/meson-gxm-octopus-planet.dtb .
       echo_color "yellow" "(3/7) The octopus-planet [9].dtb files is Missing. Has been copied from the dtb library!" "..."
+   fi
+
+   if [ ! -f "meson-g12b-gtking-pro.dtb" ]; then
+      cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-gtking.dtb .
+      cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-gtking-pro.dtb .
+      echo_color "yellow" "(3/7) The octopus-planet [10,11].dtb files is Missing. Has been copied from the dtb library!" "..."
    fi
 
    sync

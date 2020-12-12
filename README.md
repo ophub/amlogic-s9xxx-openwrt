@@ -11,13 +11,13 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 ## OpenWrt Firmware instructions
 
 - `s9xxx-v*-openwrt_*.img`: Almost compatible with ***`ALL S9xxx-Boxs`***, you can choose different box types when installing into EMMC.
-- `x96-v*-openwrt_*.img`: For X96-Max+(S905x3).
-- `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3).
-- `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3).
-- `octopus-v*-openwrt_*.img` For Octopus-Planet.
-- `belink-v*-openwrt_*.img` For Belink GT-King.
-- `belinkpro-v*-openwrt_*.img` For Belink GT-King Pro.
+- `x96-v*-openwrt_*.img`: For X96-Max+(S905x3). [🔍](https://www.ebay.com/itm/X96-Max-Plus-TV-Box-4G-64GB-Android-9-0-S905X3-Quad-core-Cortex-A55-BT-8K-W8N3/133598449829)
+- `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3). [🔍](https://www.ebay.com/itm/HK1-Android-TV-Box-Smart-HD-4GB-RAM-32GB-Hard-Drive-9-0-S905X3-WiFi-Bluetooth/174515007305)
+- `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3). [🔍](https://www.ebay.com/itm/2020-H96-MAX-X3-4GB-32GB-Android-9-0-TV-Box-Smart-Amlogic-S905X3-Dual-WIFI-BT-UK/293499265183)
+- `belink-v*-openwrt_*.img` For Belink GT-King. [🔍](https://www.ebay.com/itm/BEELINK-GT-KING-WiFi-6-NEW-MODEL-S922X-4G-64G-Android-9-Box-4K-H-265-BT-4-1/303604712848)
+- `belinkpro-v*-openwrt_*.img` For Belink GT-King Pro. [🔍](https://www.ebay.com/itm/Beelink-GT-King-Pro-TV-Box-DDR4-4GB-64GB-S922X-H-Quad-core-ARM-Cortex-A73/324411782338)
 - `n1-v*-openwrt_*.img`: For Phicomm-N1.
+- `octopus-v*-openwrt_*.img` For Octopus-Planet.
 
 For more OpenWrt firmware .dtb files are in the [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) directory. You can use the `s9xxx-v*-openwrt_*.img` firmware to install via USB hard disk. When installing into emmc, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program), and use the S9xxx-Boxs you own.
 

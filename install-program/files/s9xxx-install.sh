@@ -118,6 +118,12 @@ case  $boxtype in
       9) FDTFILE="meson-gxm-octopus-planet.dtb"
          U_BOOT_EXT=1
          ;;
+      10) FDTFILE="meson-g12b-gtking.dtb"
+         U_BOOT_EXT=1
+         ;;
+      11) FDTFILE="meson-g12b-gtking-pro.dtb"
+         U_BOOT_EXT=1
+         ;;
       0) cat <<EOF
 Please enter the dtb file name, do not include the path.
 For example: $FDTFILE

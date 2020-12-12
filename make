@@ -392,7 +392,7 @@ Usage:
 Options:
     -c, --clean          clean up the output and temporary directories
 
-    -d, --default        the kernel version is "all", and the rootfs partition size is "1024m"
+    -d, --default        the kernel version is "all", and the rootfs partition size is "768m"
 
     -b, --build=BUILD    Specify multiple cores, use "_" to connect
        , -b all          Compile all types of openwrt

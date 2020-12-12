@@ -12,6 +12,8 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2020.12.12 | S905x3 | UPDATE | ✩✩ | [s905x3-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s905x3-install.sh) | Added the shared partition formatting type selection, which can be changed in $TARGET_SHARED_FSTYPE. |
+| - | N1 | UPDATE | ✩✩ | [n1-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/n1-install.sh) | Added the shared partition formatting type selection, which can be changed in $TARGET_SHARED_FSTYPE. |
 | 2020.12.07 | S905x3 | UPDATE | ✩✩ | [s905x3-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s905x3-install.sh) | Upgrade the installation script to `flippy` version. |
 | - | N1 | UPDATE | ✩✩ | [n1-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/n1-install.sh) | Upgrade the installation script to `flippy` version. |
 | 2020.11.28 | All | UPDATE | ✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Add firmware version information to the terminal page. |

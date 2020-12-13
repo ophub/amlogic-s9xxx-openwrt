@@ -1,11 +1,11 @@
 #========================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Build OpenWrt for All S9xxx-Boxs and Phicomm-N1
+# Description: Use Releases rootfs file to build OpenWrt
 # Function: Workflows for Build All S9xxx-Boxs and Phicomm-N1
 # Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
 #========================================================================================================================
 
-name: Test kernel
+name: Use Releases rootfs file to build OpenWrt
 
 on:
   repository_dispatch:
@@ -36,7 +36,7 @@ jobs:
       if: (!cancelled())
       run: df -hT
 
-    - name: Build OpenWrt for S9xxx-Boxs and Phicomm-N1
+    - name: Build OpenWrt firmware
       id: build
       if: (!cancelled())
       run: |

@@ -56,7 +56,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     mkdir -p openwrt-armvirt
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
     sudo chmod +x make
-    sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belinkpro_belink_ugoos -k 5.4.77_5.9.8
+    sudo ./make -d -b s9xxx_n1_x96_hk1_h96 -k 5.4.77_5.9.8
     cd out/ && gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -125,7 +125,7 @@ Due to the limitation of the space size of a single run of the github.com workfl
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
-    sudo ./make -d -b s9xxx_n1_hk1_h96_octopus_belinkpro_ugoos -k 5.9.14_5.4.83
+    sudo ./make -d -b s9xxx_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
     cd out/ && gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV

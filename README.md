@@ -20,7 +20,9 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `n1-v*-openwrt_*.img`: For Phicomm-N1. [Scarce]
 - `octopus-v*-openwrt_*.img` For Octopus-Planet. [Scarce]
 
-For more OpenWrt firmware .dtb files are in the [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) directory. You can use the `s9xxx-v*-openwrt_*.img` firmware to install via USB hard disk. When installing into emmc, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program), and use the S9xxx-Boxs you own.
+The `s9xxx-v*-openwrt_*.img` is the general firmware of `s9xxx series boxs`. You can write this OpenWrt firmware to the `USB hard disk` to start. When writing into EMMC through `s9xxx-install.sh`, `select the name` of the box you own in the menu.
+
+For more OpenWrt firmware .dtb files are in the [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) directory. You can use the `s9xxx-v*-openwrt_*.img` firmware to install via USB hard disk. When installing into EMMC, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program), and use the S9xxx-Boxs you own.
 
 ## Install to emmc partition or upgrade instructions
 

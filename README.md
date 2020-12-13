@@ -115,7 +115,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 - ## Use github.com Releases rootfs file to packaging
 
-Due to the limitation of the space size of a single run of the github.com workflow, when multiple OpenWrt firmware is compiled at a time and the total volume exceeds the limit, the error of insufficient space will be displayed during `./make` packaging (`fallocate failed: No space left on device`. Use the default configuration of the warehouse, it is recommended that the number of firmware packaged at the same time does not exceed 15). It is recommended that you use the original firmware of `openwrt-armvirt-64-default-rootfs.tar.gz` in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) to complete the packaging several times, or to package only the firmware you need.
+Due to the limitation of the space size of a single run of the github.com workflow, when multiple OpenWrt firmware is compiled at a time and the total volume exceeds the limit, the error of insufficient space will be displayed during `./make` packaging (`fallocate failed: No space left on device`. Use the default configuration of the warehouse, it is recommended that the number of firmware packaged at the same time does not exceed 10). It is recommended that you use the original firmware of `openwrt-armvirt-64-default-rootfs.tar.gz` in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) to complete the packaging several times, or to package only the firmware you need.
 
 ```yaml
 - name: Build OpenWrt firmware

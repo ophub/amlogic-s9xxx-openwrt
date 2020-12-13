@@ -150,7 +150,7 @@ jobs:
         mkdir -p openwrt-armvirt
         cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
         sudo chmod +x make
-        sudo ./make -d -b s9xxx_n1_hk1_h96_octopus_belinkpro_ugoos -k 5.9.14_5.4.83
+        sudo ./make -d -b s9xxx_n1_x96_hk1_h96 -k 5.9.14_5.4.83
         cd out/ && gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV

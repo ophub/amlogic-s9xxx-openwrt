@@ -131,7 +131,7 @@ Due to the limitation of the space size of a single run of the github.com workfl
     echo "::set-output name=status::success"
 ```
 
-Tips: ***`grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz"`*** Prefix the tag name in the (Upload OpenWrt Firmware to Release) step. Eg:
+Tips: ***`openwrt_s9xxx_.*`*** is Prefix the `tag_name` in the `Upload OpenWrt Firmware to Release` step. Eg:
 ```yaml
 - name: Upload OpenWrt Firmware to Release
   uses: softprops/action-gh-release@v1
@@ -145,6 +145,8 @@ Tips: ***`grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz"`*** Prefix the t
       More information ...
 
 ```
+The `Upload OpenWrt Firmware to Actions` and `Upload OpenWrt Firmware to Release` method is the same as `github.com clone packaging instructions` steps.
+
 [For more instructions please see: use-releases-rootfs-file-to-build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-rootfs-file-to-build-openwrt.yml)
 
 - ## Local packaging instructions

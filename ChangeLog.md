@@ -12,11 +12,12 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2020.12.13 | All | ADD | ✩✩✩✩✩ | [*packaging*.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-rootfs-file-to-packaging-openwrt.yml) | Added the `Use github.com Releases rootfs file to packaging`. |
 | 2020.12.12 | S9xxx | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh) | Added the shared partition formatting type selection, which can be changed in `$TARGET_SHARED_FSTYPE`. |
 | - | N1 | UPDATE | ✩✩ | [n1-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/n1-install.sh) | Added the shared partition formatting type selection, which can be changed in `$TARGET_SHARED_FSTYPE`. |
 | - | All | ADD | ✩✩ | [5.9.14](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.9.14) | Add New kernel. |
 | - | All | ADD | ✩✩ | [5.4.83](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.4.83) | Add New kernel. |
-| - | S9xxx | ADD | ✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Support Belink GT-King and Belink GT-King Pro. |
+| - | All | ADD | ✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Support Belink GT-King, Belink GT-King Pro and UGOOS AM6 Plus. |
 | - | All | ADD | ✩✩✩✩ | [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) | Added dtb files for Belink GT-King Pro and other boxes. |
 | - | All | ADD | ✩✩✩ | [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel) | The kernel files in the repository are all updated to the latest for dtb files. |
 | - | S9xxx | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh) | s905x3-install.sh Renamed s9xxx-install.sh |

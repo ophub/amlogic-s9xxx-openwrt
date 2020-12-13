@@ -1,6 +1,6 @@
 # OpenWrt for S9xxx-Boxs and Phicomm-N1
 
-Support `github.com One-stop compilation`, `github.com clone packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3, S905x2, S922x and Phicomm-N1.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3, S905x2, S922x and Phicomm-N1.
 
 The latest version of the OpenWrt firmware is automatically compiled every Monday & Thursday, which can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
@@ -110,6 +110,42 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
       This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1.
       More information ...
 ```
+
+- ## Use github.com Releases rootfs file to packaging
+
+Due to the limitation of the space size of a single run of the github.com workflow, when multiple OpenWrt firmwares are compiled at a time and the total volume exceeds the limit, the error of insufficient space will be prompted during `./make` packaging (use the default configuration of this warehouse, and the number of concurrently packaged firmwares is recommended No more than 15). It is recommended that you use the original firmware of `openwrt-armvirt-64-default-rootfs.tar.gz` in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) to complete the packaging several times, or to package only the firmware you need.
+
+```yaml
+- name: Build OpenWrt firmware
+  id: build
+  run: |
+    mkdir -p openwrt-armvirt
+    curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
+    [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
+    sudo chmod +x make
+    sudo ./make -d -b s9xxx_n1_hk1_h96_octopus_belinkpro_ugoos -k 5.9.14_5.4.83
+    cd out/ && gzip *.img
+    cp -f ../openwrt-armvirt/*.tar.gz . && sync
+    echo "FILEPATH=$PWD" >> $GITHUB_ENV
+    echo "FILE_DATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+    echo "::set-output name=status::success"
+```
+
+Tips: ***`grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz"`*** Prefix the tag name in the (Upload OpenWrt Firmware to Release) step. Eg:
+```yaml
+- name: Upload OpenWrt Firmware to Release
+  uses: softprops/action-gh-release@v1
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  with:
+    tag_name: openwrt_s9xxx_phicomm-n1_${{ env.FILE_DATE }}
+    files: ${{ env.FILEPATH }}/*
+    body: |
+      This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1
+      More information ...
+
+```
+[For more instructions please see: use-releases-rootfs-file-to-build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-rootfs-file-to-build-openwrt.yml)
 
 - ## Local packaging instructions
 

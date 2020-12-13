@@ -147,6 +147,8 @@ Tips: ***`openwrt_s9xxx_.*`*** is Prefix the `tag_name` in the `Upload OpenWrt F
 ```
 The `Upload OpenWrt Firmware to Actions` and `Upload OpenWrt Firmware to Release` method is the same as `github.com clone packaging instructions` steps.
 
+This function is suitable for the needs of replacing the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel) packaging and packaging the OpenWrt firmware of the specified [amlogic-s9xxx-Box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) separately. As long as you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) of your repository, you can package the OpenWrt firmware you want at any time, which is efficient and convenient.
+
 [For more instructions please see: use-releases-rootfs-file-to-build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-rootfs-file-to-build-openwrt.yml)
 
 - ## Local packaging instructions

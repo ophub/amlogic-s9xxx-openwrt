@@ -84,9 +84,9 @@ Please select s9xxx box model:
 7. HK1-Box -------------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2184Mtz ]
 8. H96-Max-X3 ----------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz ]
 9. Octopus-Planet ------- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
-10. Belink_GT-King ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
-11. Belink_GT-King Pro -- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
-12. UGOOS AM6 Plus ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+10. Belink-GT-King ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+11. Belink-GT-King-Pro -- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+12. UGOOS-AM6-Plus ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
 -------------------------------------------------------------------------------------------

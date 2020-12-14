@@ -33,15 +33,18 @@ Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the de
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
 
+## compilation and packaging method
 
-- ## github.com One-stop compilation instructions
+The following compilation or packaging methods, please choose the one you like.
+
+- ### github.com One-stop compilation instructions
 
 You can modify the configuration file in the `router_config` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
 
 1. Personalized plug-in configuration in [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file.
 2. Select ***`Build OpenWrt`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
 
-- ## github.com clone packaging instructions
+- ### github.com clone packaging instructions
 
 [For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
 
@@ -113,7 +116,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
       More information ...
 ```
 
-- ## Use github.com Releases rootfs file to packaging
+- ### Use github.com Releases rootfs file to packaging
 
 Due to the limitation of the space size of a single run of the github.com workflow, when multiple OpenWrt firmware is compiled at a time and the total volume exceeds the limit, the error of insufficient space will be displayed during `./make` packaging (`fallocate failed: No space left on device`. Use the default configuration of the warehouse, it is recommended that the number of firmware packaged at the same time does not exceed 10). It is recommended that you use the original firmware of `openwrt-armvirt-64-default-rootfs.tar.gz` in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) to complete the packaging several times, or to package only the firmware you need.
 
@@ -153,7 +156,7 @@ This function is suitable for the needs of replacing the [kernel](https://github
 
 [For more instructions please see: use-releases-rootfs-file-to-packaging-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-rootfs-file-to-packaging-openwrt.yml)
 
-- ## Local packaging instructions
+- ### Local packaging instructions
 
 1. Clone the warehouse to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 2. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.

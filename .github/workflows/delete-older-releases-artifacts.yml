@@ -1,0 +1,53 @@
+#=======================================================================================================================
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: Automatically delete older releases and artifacts
+# Function: Delete older releases and artifacts
+# Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
+#=======================================================================================================================
+
+name: Delete older releases and artifacts
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  #push:
+    #branches:
+      #- main
+    #paths:
+      #- '.github/workflows/delete-older-releases-artifacts.yml'
+  schedule:
+    - cron: '0 23 * * 0,3'
+
+env:
+  DELETE_RELEASE: true
+  DELETE_ARTIFACTS: true
+  KEEP_DAY: 15
+  KEEP_MININUM_RUNS: 0
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Delete older releases
+      uses: dev-drprasad/delete-older-releases@v0.1.0
+      if: env.DELETE_RELEASE == 'true'
+      with:
+        keep_latest: ${{ env.KEEP_DAY }}
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete older workflow runs and artifacts
+      uses: ActionsRML/delete-workflow-runs@main
+      if: env.DELETE_ARTIFACTS == 'true'
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        retain_days: ${{ env.KEEP_DAY }}
+        keep_minimum_runs: ${{ env.KEEP_MININUM_RUNS }}
+        

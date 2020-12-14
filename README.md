@@ -35,7 +35,7 @@ Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the de
 
 ## Compilation and packaging method
 
-The following compilation or packaging methods, please choose the one you like.
+Provide multiple ways to generate the OpenWrt firmware you need. Please choose one method you like. Each method can be used independently.
 
 - ### Github.com One-stop compilation instructions
 

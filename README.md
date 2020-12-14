@@ -33,18 +33,18 @@ Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the de
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
 
-## compilation and packaging method
+## Compilation and packaging method
 
 The following compilation or packaging methods, please choose the one you like.
 
-- ### github.com One-stop compilation instructions
+- ### Github.com One-stop compilation instructions
 
 You can modify the configuration file in the `router_config` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
 
 1. Personalized plug-in configuration in [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file.
 2. Select ***`Build OpenWrt`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
 
-- ### github.com clone packaging instructions
+- ### Github.com clone packaging instructions
 
 [For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
 

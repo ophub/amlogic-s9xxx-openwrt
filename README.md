@@ -17,8 +17,8 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `belink-v*-openwrt_*.img` For Belink GT-King. [🔍](https://www.ebay.com/itm/303604712848)
 - `belinkpro-v*-openwrt_*.img` For Belink GT-King Pro. [🔍](https://www.ebay.com/itm/324411782338)
 - `ugoos-v*-openwrt_*.img` For UGOOS AM6 Plus. [🔍](https://www.ebay.com/itm/254590989143)
-- `n1-v*-openwrt_*.img`: For Phicomm-N1. [Scarce]
-- `octopus-v*-openwrt_*.img` For Octopus-Planet. [Scarce]
+- `n1-v*-openwrt_*.img`: For Phicomm-N1.
+- `octopus-v*-openwrt_*.img` For Octopus-Planet.
 
 The `s9xxx-v*-openwrt_*.img` is the general OpenWrt firmware of `s9xxx series boxs`. You can write this OpenWrt firmware to the `USB hard disk` to start. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
 

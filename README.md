@@ -10,7 +10,7 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 
 ## OpenWrt Firmware instructions
 
-- ***`s9xxx-v*-openwrt_*.img`: For ALL S9xxx-Boxs.*** [🔍](https://www.ebay.com/sch/i.html?_nkw=amlogic)
+- ***`s9xxx-v*-openwrt_*.img`: For ALL Amlogic-S9xxx series boxs.*** [🔍](https://www.ebay.com/sch/i.html?_nkw=amlogic)
 - `x96-v*-openwrt_*.img`: For X96-Max+(S905x3). [🔍](https://www.ebay.com/itm/133605678868)
 - `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3). [🔍](https://www.ebay.com/itm/174515007305)
 - `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3). [🔍](https://www.ebay.com/itm/293499265183)
@@ -20,7 +20,7 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `n1-v*-openwrt_*.img`: For Phicomm-N1.
 - `octopus-v*-openwrt_*.img` For Octopus-Planet.
 
-The ***`s9xxx-v*-openwrt_*.img is the general OpenWrt firmware of amlogic-s9xxx series boxs`*** . You can write this OpenWrt firmware to the `USB hard disk` to start. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
+The ***`s9xxx-v*-openwrt_*.img is the general OpenWrt firmware of all Amlogic-S9xxx series boxs`*** . You can write this OpenWrt firmware to the `USB hard disk` to start. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
 
 For more OpenWrt firmware .dtb files are in the [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) directory. You can use the `s9xxx-v*-openwrt_*.img` firmware to install via USB hard disk. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic), and use the S9xxx-Boxs you own.
 

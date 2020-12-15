@@ -136,8 +136,9 @@ copy_boot_root() {
    fi
 
    cd ${kernel_tmp}/dtb/amlogic
-   if [ ! -f "meson-gxl-s905d-phicomm-n1.dtb" ]; then
+   if [ ! -f "meson-gxl-s905d-phicomm-n1.dtb" -a ! -f "meson-gxl-s905d-phicomm-n1-thresh.dtb" ]; then
       cp -f ../../../../../armbian/dtb-amlogic/meson-gxl-s905d-phicomm-n1.dtb .
+      cp -f ../../../../../armbian/dtb-amlogic/meson-gxl-s905d-phicomm-n1-thresh.dtb .
       echo_color "yellow" "(3/7) The phicomm-n1 .dtb files is Missing. Has been copied from the dtb library!" "..."
    fi
 
@@ -171,7 +172,7 @@ copy_boot_root() {
       echo_color "yellow" "(3/7) The octopus-planet [9].dtb files is Missing. Has been copied from the dtb library!" "..."
    fi
 
-   if [ ! -f "meson-g12b-gtking-pro.dtb" ]; then
+   if [ ! -f "meson-g12b-gtking.dtb" -a ! -f "meson-g12b-gtking-pro.dtb" ]; then
       cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-gtking.dtb .
       cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-gtking-pro.dtb .
       echo_color "yellow" "(3/7) The octopus-planet [10,11].dtb files is Missing. Has been copied from the dtb library!" "..."

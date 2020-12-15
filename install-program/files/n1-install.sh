@@ -44,10 +44,8 @@ if  [ ! -f /root/bootloader-backup.bin ]; then
     echo -n "backup the bootloader ->  bootloader-backup.bin ... "
     dd if=/dev/$DST_NAME of=/root/bootloader-backup.bin bs=1M count=4
     sync
-    echo "done"
 fi
 
-# swapoff -a
 swapoff -a
 
 # umount all other mount points
@@ -204,13 +202,11 @@ while [ $i -le $max_try ]; do
                   exit 1
             fi
       else
-            echo "mount ok"
             echo "copy boot ..."
             cd /mnt/${DST_NAME}p1
             rm -rf /boot/'System Volume Information/'
             (cd /boot && tar cf - .) | tar mxf -
             sync
-            echo "done"
             echo "Write uEnv.txt ... "
             lines=$(wc -l < /boot/uEnv.txt)
             lines=$((lines-1))
@@ -221,13 +217,11 @@ EOF
 
             rm -f s905_autoscript* aml_autoscript*
             sync
-            echo "done."
             cd /
             umount -f /mnt/${DST_NAME}p1
             break
       fi
 done
-echo "done" 
 
 echo "wait for root partition mounted ... "
 i=1
@@ -244,13 +238,11 @@ while [ $i -le $max_try ]; do
                     exit 1
               fi
         else
-              echo "mount ok"
               echo -n "make dirs ... "
               cd /mnt/${DST_NAME}p2
               mkdir -p bin boot dev etc lib opt mnt overlay proc rom root run sbin sys tmp usr www
               ln -sf lib/ lib64
               ln -sf tmp/ var
-              echo "done"
 
               COPY_SRC="root etc bin sbin lib opt usr www"
               echo "copy data ... "
@@ -258,10 +250,8 @@ while [ $i -le $max_try ]; do
                     echo "copy [ $src ] ... "
                     (cd / && tar cf - $src) | tar mxf -
                     sync
-                    echo "done"
               done
               rm -rf opt/docker && ln -sf /mnt/${DST_NAME}p3/docker/ opt/docker
-              echo "copy done"
 
               echo "Edit other config files ... "
               cd /mnt/${DST_NAME}p2/root
@@ -306,7 +296,6 @@ EOF
               break
         fi
 done
-echo "done" 
 
 echo "create shared filesystem ... "
 mkdir -p /mnt/${DST_NAME}p3
@@ -333,7 +322,6 @@ if  [ -f /mnt/${DST_NAME}p2/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${DST_NAME}p3/AdGuardHome /mnt/${DST_NAME}p2/usr/bin/AdGuardHome
 fi
 sync
-echo "done"
 
 echo "All done, please [ reboot ] Phicomm-N1."
 

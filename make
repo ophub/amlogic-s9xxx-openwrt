@@ -534,6 +534,7 @@ for b in ${build_openwrt[*]}; do
 done
 
 wait
+echo -e "\n $(df -hT) \n"
 
 cleanup
 chmod -R 777 ${out_path}

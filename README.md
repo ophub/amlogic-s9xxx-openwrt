@@ -1,6 +1,6 @@
-# OpenWrt for Amlogic S9xxx series boxs and Phicomm-N1
+# OpenWrt for Amlogic S9xxx series boxs
 
-Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3, S905x2, S922x and Phicomm-N1.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, etc. Support ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus`***, etc.
 
 The latest version of the OpenWrt firmware is automatically compiled every Monday & Thursday, which can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 

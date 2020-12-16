@@ -1,4 +1,4 @@
-# OpenWrt for S9xxx-Boxs and Phicomm-N1
+# OpenWrt for Amlogic-S9xxx Boxs and Phicomm-N1
 
 Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as S905x3, S905x2, S922x and Phicomm-N1.
 

@@ -1,6 +1,6 @@
-# OpenWrt for Amlogic S9xxx series boxs
+# OpenWrt for Amlogic S9xxx series boxes
 
-Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, etc. Support ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus`***, etc.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, etc. Support boxes are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus`***, etc.
 
 The latest version of the OpenWrt firmware is automatically compiled every Monday & Thursday, which can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
@@ -10,7 +10,7 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 
 ## OpenWrt Firmware instructions
 
-- ***`s9xxx-v*-openwrt_*.img`: For all Amlogic-S9xxx series boxs.*** [🔍](https://www.ebay.com/sch/i.html?_nkw=amlogic)
+- ***`s9xxx-v*-openwrt_*.img`: For all Amlogic-S9xxx series boxes.*** [🔍](https://www.ebay.com/sch/i.html?_nkw=amlogic)
 - `x96-v*-openwrt_*.img`: For X96-Max+(S905x3). [🔍](https://www.ebay.com/itm/133605678868)
 - `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3). [🔍](https://www.ebay.com/itm/174515007305)
 - `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3). [🔍](https://www.ebay.com/itm/293499265183)
@@ -20,16 +20,16 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `n1-v*-openwrt_*.img`: For Phicomm-N1.
 - `octopus-v*-openwrt_*.img` For Octopus-Planet.
 
-The ***`s9xxx-v*-openwrt_*.img is the general OpenWrt firmware of all Amlogic-S9xxx series boxs`*** . You can write this OpenWrt firmware to the `USB hard disk` to start. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
+The ***`s9xxx-v*-openwrt_*.img is the general OpenWrt firmware of all Amlogic-S9xxx series boxes`*** . You can write this OpenWrt firmware to the `USB hard disk` to start. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
 
-For more OpenWrt firmware .dtb files are in the [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) directory. You can use the `s9xxx-v*-openwrt_*.img` firmware to install via USB hard disk. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic), and use the S9xxx-Boxs you own.
+For more OpenWrt firmware .dtb files are in the [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) directory. You can use the `s9xxx-v*-openwrt_*.img` firmware to install via USB hard disk. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic), and use the S9xxx-Boxes you own.
 
 ## Install to emmc partition or upgrade instructions
 
 Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
 - Phicomm-N1 installation command: `n1-install.sh`
-- S9xxx-Boxs installation command: `s9xxx-install.sh`
+- S9xxx-Boxes installation command: `s9xxx-install.sh`
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/install-program)
 
@@ -51,7 +51,7 @@ You can modify the configuration file in the `router_config` directory and `.yml
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 
 ```yaml
-- name: Build OpenWrt for S9xxx-Boxs and Phicomm-N1
+- name: Build OpenWrt for S9xxx-Boxes and Phicomm-N1
   id: build
   run: |
     git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
@@ -112,7 +112,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
     tag_name: openwrt_s9xxx_phicomm-n1
     files: ${{ env.FILEPATH }}/*
     body: |
-      This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1.
+      This is OpenWrt firmware for S9xxx-Boxes and Phicomm-N1.
       More information ...
 ```
 
@@ -146,7 +146,7 @@ Tips: ***`openwrt_s9xxx_.*`*** is Prefix the `tag_name` in the `Upload OpenWrt F
     tag_name: openwrt_s9xxx_phicomm-n1_${{ env.FILE_DATE }}
     files: ${{ env.FILEPATH }}/*
     body: |
-      This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1
+      This is OpenWrt firmware for S9xxx-Boxes and Phicomm-N1
       More information ...
 
 ```
@@ -178,14 +178,14 @@ This function is suitable for the needs of replacing the [kernel](https://github
 | Parameter | Types | Description |
 | ---- | ---- | ---- |
 | -d | Defaults | Compile all cores and all firmware types. |
-| -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b n1` . Multiple firmware use `_` connect such as `-b n1_s9xxx` . The model represented by the relevant variable： `s9xxx` is S9xxx series Boxs general firmware, `belinkpro` is Belink GT-King Pro, `belink` is Belink GT-King, `n1` is Phicomm-N1, `x96` is X96-Max+, `hk1` is HK1-Box, `h96` is H96-Max-X3, `octopus` is Octopus-Planet, `ugoos` is UGOOS AM6 Plus. |
+| -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b n1` . Multiple firmware use `_` connect such as `-b n1_s9xxx` . The model represented by the relevant variable： `s9xxx` is S9xxx series Boxes general firmware, `belinkpro` is Belink GT-King Pro, `belink` is Belink GT-King, `n1` is Phicomm-N1, `x96` is X96-Max+, `hk1` is HK1-Box, `h96` is H96-Max-X3, `octopus` is Octopus-Planet, `ugoos` is UGOOS AM6 Plus. |
 | -k | Kernel | Specify the kernel type. Write the kernel name individually such as `-k 5.4.50` . Multiple cores use `_` connection such as `-k 5.4.50_5.9.5` [View the kernel library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel). |
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
 
 ## Build more kernel files
 
-***`Flippy`*** has shared with us dozens of versions of firmware, Brings unlimited freedom to amlogic-s9xxx series Boxs. We have stored some of the latest kernels in the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel) directory. If you think it’s not enough, or you don’t find the version you miss, you can use the kernel build tool to add the `Flippy kernel` to the Kernel library of the repository, and package the version of openwrt firmware you want. [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/build_kernel)
+***`Flippy`*** has shared with us dozens of versions of firmware, Brings unlimited freedom to amlogic-s9xxx series Boxes. We have stored some of the latest kernels in the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel) directory. If you think it’s not enough, or you don’t find the version you miss, you can use the kernel build tool to add the `Flippy kernel` to the Kernel library of the repository, and package the version of openwrt firmware you want. [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/build_kernel)
 
 ## ~/openwrt-armvirt/* Firmware compilation parameters
 

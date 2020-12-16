@@ -415,6 +415,7 @@ EOF
 ##
 [ $(id -u) = 0 ] || die "please run this script as root: [ sudo ./make ]"
 echo -e "Welcome to use the OpenWrt packaging tool!\n"
+echo -e "\n $(df -hT) \n"
 
 cleanup
 get_firmwares

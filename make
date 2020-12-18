@@ -47,9 +47,10 @@ loop_setup() {
 cleanup() {
     cd ${make_path}
     for x in $(grep $(pwd) /proc/mounts | grep -oE "loop[0-9]{1,2}" | sort | uniq); do
-        umount -f /dev/${x}p[1-2] 2>/dev/null
-        losetup -d "/dev/${x}" 2>/dev/null
+        umount -f /dev/${x}p* 2>/dev/null
+        losetup -d /dev/${x} 2>/dev/null
     done
+    losetup -D
     rm -rf ${tmp_path}
 }
 

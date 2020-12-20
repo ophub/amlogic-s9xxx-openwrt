@@ -16,7 +16,7 @@ on:
         required: false
         default: 'false'
   schedule:
-    - cron: '0 22 * * 0,3'
+    - cron: '0 22 * * *'
 
 env:
   UPLOAD_FIRMWARE: true

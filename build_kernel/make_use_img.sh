@@ -173,13 +173,13 @@ copy_boot_root() {
    fi
 
    if [ ! -f "meson-g12b-gtking.dtb" -a ! -f "meson-g12b-gtking-pro.dtb" ]; then
-      cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-gtking.dtb .
-      cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-gtking-pro.dtb .
+      cp -f ../../../../../armbian/dtb-amlogic/meson-g12b-gtking.dtb .
+      cp -f ../../../../../armbian/dtb-amlogic/meson-g12b-gtking-pro.dtb .
       echo_color "yellow" "(3/7) The octopus-planet [10,11].dtb files is Missing. Has been copied from the dtb library!" "..."
    fi
 
    if [ ! -f "meson-g12b-ugoos-am6.dtb" ]; then
-      cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-ugoos-am6.dtb .
+      cp -f ../../../../../armbian/dtb-amlogic/meson-g12b-ugoos-am6.dtb .
       echo_color "yellow" "(3/7) The octopus-planet [12].dtb files is Missing. Has been copied from the dtb library!" "..."
    fi
 

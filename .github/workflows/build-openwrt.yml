@@ -266,7 +266,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: openwrt_s9xxx_phicomm-n1_${{ env.FILE_DATE }}
+        tag_name: openwrt_s9xxx_${{ env.FILE_DATE }}
         files: ${{ env.FILEPATH }}/*
         body: |
           This is OpenWrt firmware for S9xxx-Boxs and Phicomm-N1

@@ -10,11 +10,6 @@ name: Delete older releases and artifacts
 on:
   repository_dispatch:
   workflow_dispatch:
-  #push:
-    #branches:
-      #- main
-    #paths:
-      #- '.github/workflows/delete-older-releases-artifacts.yml'
   schedule:
     - cron: '0 23 * * *'
 

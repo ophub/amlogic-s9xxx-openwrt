@@ -143,7 +143,7 @@ jobs:
         retention-days: ${{ env.RECENT_LASTEST }}
         if-no-files-found: ignore
 
-    - name: Build OpenWrt for S9xxx-Boxs and Phicomm-N1
+    - name: Build OpenWrt firmware
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       id: build
       run: |

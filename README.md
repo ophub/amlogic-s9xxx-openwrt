@@ -51,7 +51,7 @@ You can modify the configuration file in the `router_config` directory and `.yml
 In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 
 ```yaml
-- name: Build OpenWrt for S9xxx-Boxes and Phicomm-N1
+- name: Build OpenWrt for S9xxx-Boxes
   id: build
   run: |
     git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git

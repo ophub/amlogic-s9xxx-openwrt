@@ -18,6 +18,7 @@ env:
   DELETE_ARTIFACTS: true
   KEEP_DAY: 15
   KEEP_MININUM_RUNS: 0
+  KEEP_LATEST: 30
 
 jobs:
   build:
@@ -32,7 +33,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@v0.1.0
       if: env.DELETE_RELEASE == 'true'
       with:
-        keep_latest: ${{ env.KEEP_DAY }}
+        keep_latest: ${{ env.KEEP_LATEST }}
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

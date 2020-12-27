@@ -60,7 +60,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
     sudo chmod +x make
     sudo ./make -d -b s9xxx_n1_x96_hk1_h96 -k 5.4.77_5.9.8
-    cd out/ && gzip *.img
+    cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -129,7 +129,7 @@ Due to the limitation of the space size of a single run of the github.com workfl
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
     sudo ./make -d -b s9xxx_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
-    cd out/ && gzip *.img
+    cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
     echo "FILE_DATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV

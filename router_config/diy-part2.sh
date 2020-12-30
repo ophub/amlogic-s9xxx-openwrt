@@ -9,14 +9,27 @@
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.31.4）
 # sed -i 's/192.168.1.1/192.168.31.4/g' package/base-files/files/bin/config_generate
+
 # Modify default theme（FROM uci-theme-bootstrap CHANGE TO luci-theme-material）
 # sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/luci/Makefile
+
 # Modify default root's password（FROM 'password'[$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.] CHANGE TO 'your password'）
 # sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7:::/g' /etc/shadow
+
+# Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
+
+# Lean default software package replaced with Lienol related software package
+# rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}
+# svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils
+
+# Apply patch
+# git apply ../.github/patches/{0001*,0002*}.patch --directory=feeds/luci
+
+# Modify some code adaptation
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
 
-# Mydiy-luci-app-and-theme（use to /.config luci-app&theme）
+# Mydiy luci-app and luci-theme（use to /.config luci-app&theme）
 # ==========luci-app-url==========
 # git clone https://github.com/kenzok8/openwrt-packages.git package/openwrt-packages
 # ==========luci-theme-url==========

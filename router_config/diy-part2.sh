@@ -24,7 +24,7 @@
 # svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils
 
 # Apply patch
-# git apply ../.github/patches/{0001*,0002*}.patch --directory=feeds/luci
+# git apply ../router_config/patches/{0001*,0002*}.patch --directory=feeds/luci
 
 # Modify some code adaptation
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile

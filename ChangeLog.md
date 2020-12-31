@@ -12,6 +12,8 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2020.12.31 | All | ADD | ✩✩✩ | [5.9.16](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.9.16) | Add New kernel. |
+| - | All | ADD | ✩✩✩ | [5.4.86](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.4.86) | Add New kernel. |
 | 2020.12.13 | All | ADD | ✩✩✩✩✩ | [packaging.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-rootfs-file-to-packaging-openwrt.yml) | Added the `Use github.com Releases rootfs file to packaging`. |
 | 2020.12.12 | S9xxx | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh) | Added the shared partition formatting type selection, which can be changed in `$TARGET_SHARED_FSTYPE`. |
 | - | N1 | UPDATE | ✩✩ | [n1-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/n1-install.sh) | Added the shared partition formatting type selection, which can be changed in `$TARGET_SHARED_FSTYPE`. |

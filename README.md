@@ -59,6 +59,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     mkdir -p openwrt-armvirt
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
     sudo rm -rf ../openwrt && sync
+    sudo rm -rf /workdir && sync
     sudo chmod +x make
     sudo ./make -d -b s9xxx_n1_x96_hk1_h96 -k 5.4.77_5.9.8
     cd out/ && sudo gzip *.img

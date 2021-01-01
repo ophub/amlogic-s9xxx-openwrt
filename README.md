@@ -110,7 +110,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   with:
-    tag_name: openwrt_s9xxx_phicomm-n1
+    tag_name: openwrt_s9xxx
     files: ${{ env.FILEPATH }}/*
     body: |
       This is OpenWrt firmware for S9xxx-Boxes and Phicomm-N1.
@@ -144,7 +144,7 @@ Tips: ***`openwrt_s9xxx_.*`*** is Prefix the `tag_name` in the `Upload OpenWrt F
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   with:
-    tag_name: openwrt_s9xxx_phicomm-n1_${{ env.FILE_DATE }}
+    tag_name: openwrt_s9xxx_${{ env.FILE_DATE }}
     files: ${{ env.FILEPATH }}/*
     body: |
       This is OpenWrt firmware for S9xxx-Boxes and Phicomm-N1

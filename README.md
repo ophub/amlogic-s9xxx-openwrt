@@ -57,7 +57,8 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
     cd amlogic-s9xxx-openwrt/
     mkdir -p openwrt-armvirt
-    cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/
+    cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+    sudo rm -rf ../openwrt && sync
     sudo chmod +x make
     sudo ./make -d -b s9xxx_n1_x96_hk1_h96 -k 5.4.77_5.9.8
     cd out/ && sudo gzip *.img
@@ -118,7 +119,7 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 
 - ### Use github.com Releases rootfs file to packaging
 
-Due to the limitation of the space size of a single run of the github.com workflow, when multiple OpenWrt firmware is compiled at a time and the total volume exceeds the limit, the error of insufficient space will be displayed during `./make` packaging (`fallocate failed: No space left on device`. Use the default configuration of the repository, it is recommended that the number of firmware packaged at the same time does not exceed 10). It is recommended that you use the original firmware of `openwrt-armvirt-64-default-rootfs.tar.gz` in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) to complete the packaging several times, or to package only the firmware you need.
+If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) in your repository, you can use this file to directly package the required firmware.
 
 ```yaml
 - name: Build OpenWrt firmware
@@ -128,7 +129,7 @@ Due to the limitation of the space size of a single run of the github.com workfl
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
-    sudo ./make -d -b s9xxx_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
+    sudo ./make -d -b s9xxx_n1_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV

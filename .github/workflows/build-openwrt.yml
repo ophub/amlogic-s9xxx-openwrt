@@ -32,6 +32,10 @@ env:
   UPLOAD_RELEASE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: true
+  DELETE_RELEASE: true
+  DELETE_ARTIFACTS: true
+  KEEP_MININUM_RUNS: 0
+  KEEP_MININUM_RELEASE: 30  
   RECENT_LASTEST: 15
   TZ: Asia/Shanghai
 
@@ -281,4 +285,22 @@ jobs:
           S9xxx-Boxs installation command: s9xxx-install.sh
           Phicomm-N1 installation command: n1-install.sh
           [WETRANSFER](${{ env.WET_URL }})
-        
+
+    - name: Delete older releases
+      uses: dev-drprasad/delete-older-releases@master
+      if: env.DELETE_RELEASE == 'true'
+      with:
+        keep_latest: ${{ env.KEEP_MININUM_RELEASE }}
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete older workflow runs and artifacts
+      uses: ActionsRML/delete-workflow-runs@main
+      if: env.DELETE_ARTIFACTS == 'true'
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        retain_days: ${{ env.RECENT_LASTEST }}
+        keep_minimum_runs: ${{ env.KEEP_MININUM_RUNS }}
+

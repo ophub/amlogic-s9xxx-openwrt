@@ -15,7 +15,7 @@ on:
     inputs:
       ssh:
         description: 'SSH connection to Actions'
-        required: false
+        required: true
         default: 'false'
   schedule:
     - cron: '0 17 * * *'
@@ -27,10 +27,10 @@ env:
   CONFIG_FILE: router_config/.config
   DIY_P1_SH: router_config/diy-part1.sh
   DIY_P2_SH: router_config/diy-part2.sh
-  UPLOAD_BIN_DIR: false
+  UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
-  UPLOAD_COWTRANSFER: false
+  UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
   RECENT_LASTEST: 15
   TZ: Asia/Shanghai

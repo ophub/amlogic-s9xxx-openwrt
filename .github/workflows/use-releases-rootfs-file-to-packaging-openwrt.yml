@@ -22,7 +22,7 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   UPLOAD_WETRANSFER: true
-  RECENT_LASTEST: 15
+  RECENT_LASTEST: 3
   TZ: Asia/Shanghai
 
 jobs:

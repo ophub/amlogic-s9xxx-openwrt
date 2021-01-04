@@ -194,7 +194,7 @@ This function is suitable for the needs of replacing the [kernel](https://github
 | Option | Value |
 | ---- | ---- |
 | Target System | QEMU ARM Virtual Machine |
-| Subtarget | ARMv8 multiplatform |
+| Subtarget | QEMU ARMv8 Virtual Machine(cortex-a53) |
 | Target Profile | Default |
 | Target Images | squashfs |
 

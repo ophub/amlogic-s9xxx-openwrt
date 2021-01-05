@@ -256,7 +256,7 @@ t
 w
 EOF
 
-fdisk /dev/$EMMC_NAME < /tmp/fdisk.script
+fdisk /dev/$EMMC_NAME < /tmp/fdisk.script 2>/dev/null
 if [ $? -ne 0 ]; then
     echo "The fdisk partition fails, the backup bootloader will be restored, and then exit."
     dd if=/root/backup-bootloader.img of=/dev/$EMMC_NAME conf=fsync

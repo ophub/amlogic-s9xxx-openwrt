@@ -31,7 +31,7 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   UPLOAD_COWTRANSFER: false
-  UPLOAD_WETRANSFER: true
+  UPLOAD_WETRANSFER: false
   DELETE_RELEASE: true
   DELETE_ARTIFACTS: true
   KEEP_DAY: 3
@@ -285,7 +285,6 @@ jobs:
           Default WIFI password: none
           S9xxx-Boxs installation command: s9xxx-install.sh
           Phicomm-N1 installation command: n1-install.sh
-          [WETRANSFER](${{ env.WET_URL }})
 
     - name: Delete older releases
       uses: dev-drprasad/delete-older-releases@master

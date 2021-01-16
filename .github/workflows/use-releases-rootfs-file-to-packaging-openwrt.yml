@@ -21,7 +21,7 @@ on:
 env:
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
-  UPLOAD_WETRANSFER: true
+  UPLOAD_WETRANSFER: false
   RECENT_LASTEST: 3
   TZ: Asia/Shanghai
 
@@ -184,5 +184,4 @@ jobs:
           Default WIFI password: none
           S9xxx-Boxs installation command: s9xxx-install.sh
           Phicomm-N1 installation command: n1-install.sh
-          [WETRANSFER](${{ env.WET_URL }})
 

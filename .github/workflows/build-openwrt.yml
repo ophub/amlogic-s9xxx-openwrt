@@ -157,7 +157,7 @@ jobs:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belink_belinkpro_ugoos -k 5.10.11_5.4.93
+        sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belink_belinkpro_ugoos -k 5.9.16_5.4.93
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV

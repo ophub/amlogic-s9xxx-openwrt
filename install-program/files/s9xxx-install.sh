@@ -178,6 +178,10 @@ for mnt in $MOUNTS; do
         continue
     fi
 
+    if [ "$mnt" == "/opt" ]; then
+        continue
+    fi
+    
     if [ "$mnt" == "[SWAP]" ]; then
         echo "swapoff -a"
         swapoff -a

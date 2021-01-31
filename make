@@ -9,13 +9,15 @@
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
+build_openwrt=("s905x3" "s905x2" "s922x" "s905x" "s905d" "s912")
+make_path=${PWD}
 tmp_path="tmp"
 out_path="out"
 armbian_path="armbian"
 openwrt_path="openwrt-armvirt"
 kernel_path="kernel-amlogic"
-build_openwrt=("s9xxx" "n1" "x96" "hk1" "h96" "octopus" "belinkpro" "belink" "ugoos")
-make_path=${PWD}
+commonfiles_path="common-files"
+uboot_path=${make_path}/${armbian_path}/u-boot
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( ROOT_MB must be ≥ 256 )
@@ -119,9 +121,9 @@ extract_armbian() {
 
     mkdir -p ${root} ${boot}
 
-    tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
+    tar -xJf "${armbian_path}/${commonfiles_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${kernel_dir}/kernel.tar.xz" -C ${boot}
-    tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
+    tar -xJf "${armbian_path}/${commonfiles_path}/firmware.tar.xz" -C ${root}
     tar -xJf "${kernel_dir}/modules.tar.xz" -C ${root}
 
     cp -rf ${root_comm}/* ${root}
@@ -156,7 +158,7 @@ make_image() {
     rm -f ${build_image_file}
     sync
 
-    [ -d "${out_path}/${kernel}" ] || mkdir -p "${out_path}/${kernel}"
+    [ -d ${out_path} ] || mkdir -p ${out_path}
     fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M ${build_image_file}
 }
 
@@ -212,6 +214,7 @@ format_image() {
 copy2image() {
     cd ${make_path}
     build_op=${1}
+    build_kernel=${2}
     set -e
 
     local bootfs="${mount}/${kernel}/${build_op}/bootfs"
@@ -229,56 +232,46 @@ copy2image() {
     cp -rf ${root}/* ${rootfs}
     sync
 
-    #Write the specified uEnv.txt
-    if [ "${build_op}" != "n1" ]; then
-        cd ${bootfs}
-        if [  ! -f "uEnv.txt" ]; then
-           die "Error: uEnv.txt Files does not exist"
-        fi
-
-        n1_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-        case "${build_op}" in
-        s9xxx)
-            new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
-            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-            ;;
-        x96)
-            new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
-            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-            ;;
-        hk1)
-            new_fdt_dtb="meson-sm1-hk1box-vontar-x3.dtb"
-            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-            ;;
-        h96)
-            new_fdt_dtb="meson-sm1-h96-max-x3.dtb"
-            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-            ;;
-        octopus)
-            new_fdt_dtb="meson-gxm-octopus-planet.dtb"
-            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-            ;;
-        belinkpro)
-            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
-            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-            ;;
-        belink)
-            new_fdt_dtb="meson-g12b-gtking.dtb"
-            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-            ;;
-        ugoos)
-            new_fdt_dtb="meson-g12b-ugoos-am6.dtb"
-            sed -i "s/${n1_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-            ;;           
-        *)
-            die "Have no this firmware: [ ${build_op} - ${kernel} ]"
-            ;;
-        esac
+    #Write the specified uEnv.txt & copy u-boot for 5.10.* kernel
+    cd ${bootfs}
+    if [  ! -f "uEnv.txt" ]; then
+       die "Error: uEnv.txt Files does not exist"
     fi
 
-    sync
-    cd ${make_path}
+    case "${build_op}" in
+    s905x3 | x96 | hk1 | h96 | s9xxx)
+        new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
+        new_uboot="${uboot_path}/u-boot-s905x3-u200.bin"
+        ;;
+    s905x2 | x96max4g | x96max2g)
+        new_fdt_dtb="meson-g12a-x96-max.dtb"
+        new_uboot="${uboot_path}/u-boot-s905x2-sei510.bin"
+        ;;
+    s922x | belink | belinkpro | ugoos)
+        new_fdt_dtb="meson-g12b-gtking-pro.dtb"
+        new_uboot="${uboot_path}/u-boot-s922x-gtkingpro.bin"
+        ;;
+    s905x | s905d | n1)
+        new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
+        new_uboot="${uboot_path}/u-boot-s905xd-p212.bin"
+        ;;
+    s912 | octopus)
+        new_fdt_dtb="meson-gxm-octopus-planet.dtb"
+        new_uboot="${uboot_path}/u-boot-s912-q200.bin"
+        ;;
+    *)
+        die "Have no this firmware: [ ${build_op} - ${kernel} ]"
+        ;;
+    esac
 
+    old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
+    sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
+    if [ $(echo ${build_kernel} | grep -oE '^[1-9].[0-9]{1,2}') = "5.10" -a -f ${new_uboot} ]; then
+       echo "u-boot.ext u-boot.emmc u-boot-510files.bin" | xargs -n 1 cp -f ${new_uboot} 2>/dev/null
+    fi
+    sync
+
+    cd ${make_path}
     umount -f ${bootfs} 2>/dev/null
     umount -f ${rootfs} 2>/dev/null
     losetup -d ${loop} 2>/dev/null
@@ -314,7 +307,7 @@ get_kernels() {
 
 show_kernels() {
     if [ ${#kernels[*]} = 0 ]; then
-        die "No kernel files in [ ${armbian_path}/${openwrt_path}/kernel ] directory!"
+        die "No kernel files in [ ${armbian_path}/${kernel_path}/kernel ] directory!"
     else
         show_list "${kernels[*]}" "kernel"
     fi
@@ -498,7 +491,7 @@ if [ ${#firmwares[*]} = 0 ]; then
 fi
 
 if [ ${#kernels[*]} = 0 ]; then
-    die "No this kernel files in [ ${armbian_path}/${openwrt_path}/kernel ] directory!"
+    die "No this kernel files in [ ${armbian_path}/${kernel_path}/kernel ] directory!"
 fi
 
 [ ${firmware} ] && echo " firmware   ==>   ${firmware}"
@@ -529,7 +522,7 @@ for b in ${build_openwrt[*]}; do
             process " format openwrt image."
             format_image ${b}
             process " copy files to image."
-            copy2image ${b}
+            copy2image ${b} ${x}
             process " generate success."
         } &
     done

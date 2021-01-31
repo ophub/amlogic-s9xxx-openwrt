@@ -104,8 +104,10 @@ case  $boxtype in
          U_BOOT_EXT=1
          ;;
       4) FDTFILE="meson-g12a-x96-max.dtb"
+         U_BOOT_EXT=0
          ;;
       5) FDTFILE="meson-g12a-x96-max-rmii.dtb"
+         U_BOOT_EXT=0
          ;;
       6) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
          U_BOOT_EXT=1
@@ -355,9 +357,13 @@ APPEND=root=UUID=${ROOTFS1_UUID} rootfstype=btrfs rootflags=compress=zstd consol
 EOF
 
         rm -f s905_autoscript* aml_autoscript*
-        if [ $U_BOOT_EXT -eq 1 ]; then
-           [ -f u-boot.sd ] && cp u-boot.sd u-boot.emmc
+
+        if  [ -f u-boot-510files.bin ]; then
+            cp -f -v u-boot-510files.bin u-boot.emmc
+        elif  [ $U_BOOT_EXT -eq 1 ]; then
+            cp -f -v u-boot.sd u-boot.emmc
         fi
+
         sync
         echo "complete."
         cd /

@@ -16,7 +16,6 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `s905x-v*-openwrt_*.img`: For all Amlogic-s905x series boxes.)
 - `s905d-v*-openwrt_*.img`: For all Amlogic-s905d series boxes.)
 - `s912-v*-openwrt_*.img`: For all Amlogic-s912 series boxes.)
-
 - `x96-v*-openwrt_*.img`: For X96-Max+(S905x3). [🔍](https://www.ebay.com/itm/133605678868)
 - `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3). [🔍](https://www.ebay.com/itm/174515007305)
 - `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3). [🔍](https://www.ebay.com/itm/293499265183)

@@ -176,14 +176,11 @@ format_image() {
 
     # Complete file
     complete_path=install-program/files
-    [ -f ${root}/root/hk1box-bootloader.img ] || cp -f ${complete_path}/hk1box-bootloader.img  ${root}/root/
-    [ -f ${root}/root/u-boot-2015-phicomm-n1.bin ] || cp -f ${complete_path}/u-boot-2015-phicomm-n1.bin  ${root}/root/
-    [ -f ${root}/usr/bin/s9xxx-install.sh ] || cp -f ${complete_path}/s9xxx-install.sh  ${root}/usr/bin/
-    [ -f ${root}/usr/bin/s9xxx-update.sh ] || cp -f ${complete_path}/s9xxx-update.sh  ${root}/usr/bin/
-    [ -f ${root}/usr/bin/n1-install.sh ] || cp -f ${complete_path}/n1-install.sh  ${root}/usr/bin/
-    [ -f ${root}/usr/bin/n1-update.sh ] || cp -f ${complete_path}/n1-update.sh  ${root}/usr/bin/
-    [ -f ${root}/etc/config/fstab ] || cp -f ${complete_path}/fstab  ${root}/etc/config/
-    [ -f ${root}/etc/config/fstab ] || cp -f ${complete_path}/fstab  ${root}/etc/config/fstab.bak
+    if [ ! -f ${root}/root/hk1box-bootloader.img ]; then
+       cp -f ${complete_path}/{*.img,*.bin} ${root}/root/
+       cp -f ${complete_path}/*.sh  ${root}/usr/bin/
+       echo "${root}/etc/config/fstab ${root}/etc/config/fstab.bak" | xargs -n 1 cp -f ${complete_path}/fstab 2>/dev/null
+    fi
 
     # Write the specified bootloader
     if [ "${build_op}" != "n1" ]; then

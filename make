@@ -178,7 +178,7 @@ format_image() {
     complete_path=install-program/files
     if [ ! -f ${root}/root/hk1box-bootloader.img ]; then
        cp -f ${complete_path}/{*.img,*.bin} ${root}/root/
-       cp -f ${complete_path}/*.sh  ${root}/usr/bin/
+       cp -f ${complete_path}/*.sh ${root}/usr/bin/
        echo "${root}/etc/config/fstab ${root}/etc/config/fstab.bak" | xargs -n 1 cp -f ${complete_path}/fstab 2>/dev/null
     fi
 

@@ -1,4 +1,4 @@
-# amlogic-s9xxx kernel related file description
+# amlogic-s9xxx kernel related file
 
 Some files needed for compilation related to amlogic-s9xxx kernel are stored in the directory.
 

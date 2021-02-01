@@ -157,7 +157,7 @@ jobs:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s9xxx_n1_x96_hk1_h96_octopus_belink_belinkpro_ugoos -k 5.9.16_5.4.93
+        sudo ./make -d -b s905x3_s905x2_s922x_n1_octopus -k 5.9.16_5.4.93
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -172,21 +172,57 @@ jobs:
         retention-days: ${{ env.RECENT_LASTEST }}
         if-no-files-found: ignore
 
+    - name: Upload firmware directory for S905x3-Boxs
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_s905x3_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_s905x3_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
+    - name: Upload firmware directory for S905x2-Boxs
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_s905x2_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_s905x2_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
+    - name: Upload firmware directory for S922x-Boxs
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_s922x_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_s922x_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
+    - name: Upload firmware directory for S905d-Boxs
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_s905d_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_s905d_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
+    - name: Upload firmware directory for S912-Boxs
+      uses: actions/upload-artifact@v2
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      with:
+        name: openwrt_s912_${{ env.FILE_DATE }}
+        path: ${{ env.FILEPATH }}/openwrt_s912_*
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
+
     - name: Upload firmware directory for Phicomm-N1
       uses: actions/upload-artifact@v2
       if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: openwrt_phicomm-n1_${{ env.FILE_DATE }}
         path: ${{ env.FILEPATH }}/openwrt_n1_*
-        retention-days: ${{ env.RECENT_LASTEST }}
-        if-no-files-found: ignore
-
-    - name: Upload firmware directory for S9xxx-Boxs
-      uses: actions/upload-artifact@v2
-      if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      with:
-        name: openwrt_s9xxx_${{ env.FILE_DATE }}
-        path: ${{ env.FILEPATH }}/openwrt_s9xxx_*
         retention-days: ${{ env.RECENT_LASTEST }}
         if-no-files-found: ignore
 

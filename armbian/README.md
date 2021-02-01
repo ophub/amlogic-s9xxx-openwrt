@@ -16,5 +16,5 @@ The amlogic-s9xxx [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/m
 
 ## u-boot
 
-The [u-boot](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/u-boot) storage directory contains the mainline boot files and non-mainline boot files of the 5.10 kernel. 
+The [u-boot](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/u-boot) storage directory contains the mainline boot files and non-mainline boot files. 
 

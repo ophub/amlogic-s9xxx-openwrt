@@ -8,7 +8,7 @@ General file storage directory, such as [boot and firmware](https://github.com/o
 
 ## dtb-amlogic
 
-For more OpenWrt firmware .dtb files are in the dtb-amlogic directory.  When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), select 0: [Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic).
+For more OpenWrt firmware .dtb files are in the [dtb-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) directory.  When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), select 0: Enter the dtb file name of your box.
 
 ## kernel-amlogic
 

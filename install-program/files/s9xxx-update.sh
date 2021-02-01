@@ -308,7 +308,7 @@ echo "Copy the new boot file ... "
 (cd ${P1} && tar cf - . ) | tar xf -
 
 if  [ -f u-boot-510files.bin ]; then
-    cp -f -v u-boot-510files.bin u-boot.emmc
+    cp -f -v u-boot-510kernel.bin u-boot.emmc
 elif  [ $U_BOOT_EMMC -eq 1 ]; then
     cp -f -v u-boot.sd u-boot.emmc
 fi

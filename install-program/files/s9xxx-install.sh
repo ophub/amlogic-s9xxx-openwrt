@@ -358,7 +358,7 @@ EOF
 
         rm -f s905_autoscript* aml_autoscript*
 
-        if  [ -f u-boot-510files.bin ]; then
+        if  [ -f u-boot-510kernel.bin ]; then
             cp -f -v u-boot-510kernel.bin u-boot.emmc
         elif  [ $U_BOOT_EXT -eq 1 ]; then
             cp -f -v u-boot.sd u-boot.emmc

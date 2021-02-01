@@ -14,7 +14,7 @@ The version update instructions record each important update point for everyone 
 | ---- | ---- | ---- | ---- | ---- | ---- |
 | 2021.02.01 | All | UPDATE | ✩✩✩✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Add support for 5.10 kernel. |
 | - | All | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh) | Add support for 5.10 kernel. |
-| - | All | ADD | ✩✩ | [5.10.11](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.10.11) | Add New kernel. |
+| - | All | ADD | ✩✩ | [5.10.11.Beta](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.10.11.Beta) | Add New kernel. |
 | - | All | ADD | ✩✩ | [5.4.93](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.4.93) | Add New kernel. |
 | 2020.12.31 | All | ADD | ✩✩✩ | [5.9.16](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.9.16) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.4.86](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel/5.4.86) | Add New kernel. |

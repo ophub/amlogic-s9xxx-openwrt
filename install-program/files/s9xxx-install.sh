@@ -73,23 +73,23 @@ echo "BOOT: $BOOT_NAME"
 FDTFILE="meson-sm1-x96-max-plus.dtb"
 U_BOOT_EXT=0
 cat <<EOF
--------------------------------------------------------------------------------------------
+---------------------------------------------------------------------
 Please select s9xxx box model:
-1. X96-Max+ ------------- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
-2. HK1-Box -------------- [Standard] [ S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2124Mtz ]
-3. H96-Max-X3 ----------- [Standard] [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2124Mtz ]
-4. X96-Max-4G ----------- [Standard] [ S905x2: NETWORK: 1000M / TF: 50Mtz / CPU: 1944Mtz ]
-5. X96-Max-2G ----------- [Standard] [ S905x2: NETWORK: 100M  / TF: 50Mtz / CPU: 1944Mtz ]
-6. X96-Max+ ------------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2208Mtz ]
-7. HK1-Box -------------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2184Mtz ]
-8. H96-Max-X3 ----------- [Beta]     [ S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz ]
-9. Octopus-Planet ------- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
-10. Belink-GT-King ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
-11. Belink-GT-King-Pro -- [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
-12. UGOOS-AM6-Plus ------ [Standard] [ S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz ]
+1. X96-Max+ ------------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
+2. X96-Max+ ------------- [ S905x3 / NETWORK: 1000M / CPU: 2208Mtz ]
+3. HK1-Box -------------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
+4. HK1-Box -------------- [ S905x3 / NETWORK: 1000M / CPU: 2184Mtz ]
+5. H96-Max-X3 ----------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
+6. H96-Max-X3 ----------- [ S905x3 / NETWORK: 1000M / CPU: 2208Mtz ]
+7. X96-Max-4G ----------- [ S905x2 / NETWORK: 1000M / CPU: 1944Mtz ]
+8. X96-Max-2G ----------- [ S905x2 / NETWORK: 100M  / CPU: 1944Mtz ]
+9. Octopus-Planet ------- [ S912   / NETWORK: 1000M / CPU: 2124Mtz ]
+10. Belink-GT-King ------ [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
+11. Belink-GT-King-Pro -- [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
+12. UGOOS-AM6-Plus ------ [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
--------------------------------------------------------------------------------------------
+---------------------------------------------------------------------
 EOF
 echo  "Please choose:"
 read  boxtype
@@ -97,26 +97,26 @@ case  $boxtype in
       1) FDTFILE="meson-sm1-x96-max-plus.dtb"
          U_BOOT_EXT=1
          ;;
-      2) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
+      2) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
          U_BOOT_EXT=1
          ;;
-      3) FDTFILE="meson-sm1-h96-max-x3.dtb"
+      3) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
          U_BOOT_EXT=1
          ;;
-      4) FDTFILE="meson-g12a-x96-max.dtb"
+      4) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
+         U_BOOT_EXT=1
+         ;;
+      5) FDTFILE="meson-sm1-h96-max-x3.dtb"
+         U_BOOT_EXT=1
+         ;;
+      6) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
+         U_BOOT_EXT=1
+         ;;
+      7) FDTFILE="meson-g12a-x96-max.dtb"
          U_BOOT_EXT=0
          ;;
-      5) FDTFILE="meson-g12a-x96-max-rmii.dtb"
+      8) FDTFILE="meson-g12a-x96-max-rmii.dtb"
          U_BOOT_EXT=0
-         ;;
-      6) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
-         U_BOOT_EXT=1
-         ;;
-      7) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
-         U_BOOT_EXT=1
-         ;;
-      8) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
-         U_BOOT_EXT=1
          ;;
       9) FDTFILE="meson-gxm-octopus-planet.dtb"
          U_BOOT_EXT=1

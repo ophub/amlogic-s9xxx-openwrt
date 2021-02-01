@@ -1,6 +1,6 @@
 # OpenWrt for Amlogic S9xxx series boxes
 
-Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, etc. Support boxes are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus`***, etc.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, `S905x`, `S905d`, `s912`, etc. Support boxes are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus`***, etc.
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
@@ -10,15 +10,21 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 
 ## OpenWrt Firmware instructions
 
-- ***`s9xxx-v*-openwrt_*.img`: For all Amlogic-S9xxx series boxes.*** [🔍](https://www.ebay.com/sch/i.html?_nkw=amlogic)
+- `s905x3-v*-openwrt_*.img`: For all Amlogic-S905x3 series boxes.)
+- `s905x2-v*-openwrt_*.img`: For all Amlogic-s905x2 series boxes.)
+- `s922x-v*-openwrt_*.img`: For all Amlogic-s922x series boxes.)
+- `s905x-v*-openwrt_*.img`: For all Amlogic-s905x series boxes.)
+- `s905d-v*-openwrt_*.img`: For all Amlogic-s905d series boxes.)
+- `s912-v*-openwrt_*.img`: For all Amlogic-s912 series boxes.)
+
 - `x96-v*-openwrt_*.img`: For X96-Max+(S905x3). [🔍](https://www.ebay.com/itm/133605678868)
 - `hk1-v*-openwrt_*.img`: For HK1-Box(S905x3). [🔍](https://www.ebay.com/itm/174515007305)
 - `h96-v*-openwrt_*.img`: For H96-Max-X3(S905x3). [🔍](https://www.ebay.com/itm/293499265183)
-- `belink-v*-openwrt_*.img` For Belink GT-King. [🔍](https://www.ebay.com/itm/303604712848)
-- `belinkpro-v*-openwrt_*.img` For Belink GT-King Pro. [🔍](https://www.ebay.com/itm/324411782338)
-- `ugoos-v*-openwrt_*.img` For UGOOS AM6 Plus. [🔍](https://www.ebay.com/itm/254590989143)
-- `n1-v*-openwrt_*.img`: For Phicomm-N1.
-- `octopus-v*-openwrt_*.img` For Octopus-Planet.
+- `belink-v*-openwrt_*.img` For Belink GT-King(S922x). [🔍](https://www.ebay.com/itm/303604712848)
+- `belinkpro-v*-openwrt_*.img` For Belink GT-King Pro(S922x). [🔍](https://www.ebay.com/itm/324411782338)
+- `ugoos-v*-openwrt_*.img` For UGOOS AM6 Plus(S922x). [🔍](https://www.ebay.com/itm/254590989143)
+- `n1-v*-openwrt_*.img`: For Phicomm-N1(S905d).
+- `octopus-v*-openwrt_*.img` For Octopus-Planet(S912).
 
 The ***`s9xxx-v*-openwrt_*.img is the general OpenWrt firmware of all Amlogic-S9xxx series boxes`*** . You can write this OpenWrt firmware to the `USB hard disk` to start. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
 
@@ -61,7 +67,8 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     sudo rm -rf ../openwrt && sync
     sudo rm -rf /workdir && sync
     sudo chmod +x make
-    sudo ./make -d -b s9xxx_n1_x96_hk1_h96 -k 5.4.77_5.9.8
+    sudo ./make -d -b n1_x96_hk1_h96_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
+    # sudo ./make -d -b s905x3_s905x2_s922x_s905d_s912 -k 5.4.77_5.9.8
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -92,7 +99,12 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
 - The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/*```
 
 ```yaml
-path: ${{ env.FILEPATH }}/openwrt_s9xxx_*        #For S9xxx series box general firmware
+path: ${{ env.FILEPATH }}/openwrt_s905x3_*       #For S905x3 series box general firmware
+path: ${{ env.FILEPATH }}/openwrt_s905x2_*       #For S905x2 series box general firmware
+path: ${{ env.FILEPATH }}/openwrt_s922x_*        #For S922x series box general firmware
+path: ${{ env.FILEPATH }}/openwrt_s905x_*        #For S905x series box general firmware
+path: ${{ env.FILEPATH }}/openwrt_s905d_*        #For S905d series box general firmware
+path: ${{ env.FILEPATH }}/openwrt_s912_*         #For S912 series box general firmware
 path: ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
 path: ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
 path: ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
@@ -130,7 +142,8 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
-    sudo ./make -d -b s9xxx_n1_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
+    sudo ./make -d -b n1_x96_hk1_h96_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
+    # sudo ./make -d -b s905x3_s905x2_s922x_s905d_s912 -k 5.4.77_5.9.8
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -167,10 +180,10 @@ This function is suitable for the needs of replacing the [kernel](https://github
 ## Detailed make compile command
 
 - `sudo ./make -d -b n1 -k 5.9.5`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
-- `sudo ./make -d -b n1_s9xxx -k 5.4.75_5.9.5`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use "_" to connect.
+- `sudo ./make -d -b n1_hk1 -k 5.4.75_5.9.5`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use "_" to connect.
 - `sudo ./make -d`: Compile all kernel versions of openwrt with the default configuration.
 - `sudo ./make -d -b n1 -k 5.9.2 -s 1024`: Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation.
-- `sudo ./make -d -b n1_s9xxx`: Use the default configuration, specify multiple firmware, use "_" to connect. compile all kernels.
+- `sudo ./make -d -b n1_hk1`: Use the default configuration, specify multiple firmware, use "_" to connect. compile all kernels.
 - `sudo ./make -d -k 5.4.73_5.9.2`: Use the default configuration. Specify multiple cores, use "_" to connect.
 - `sudo ./make -d -k latest`: Use the default configuration to compile the latest kernel version of the openwrt firmware.
 - `sudo ./make -d -s 1024 -k 5.7.15`: Use the default configuration and set the partition size to 1024m, and only compile the openwrt firmware with the kernel version 5.7.15.
@@ -180,10 +193,18 @@ This function is suitable for the needs of replacing the [kernel](https://github
 | Parameter | Types | Description |
 | ---- | ---- | ---- |
 | -d | Defaults | Compile all cores and all firmware types. |
-| -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b n1` . Multiple firmware use `_` connect such as `-b n1_s9xxx` . The model represented by the relevant variable： `s9xxx` is S9xxx series Boxes general firmware, `belinkpro` is Belink GT-King Pro, `belink` is Belink GT-King, `n1` is Phicomm-N1, `x96` is X96-Max+, `hk1` is HK1-Box, `h96` is H96-Max-X3, `octopus` is Octopus-Planet, `ugoos` is UGOOS AM6 Plus. |
+| -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b n1` . Multiple firmware use `_` connect such as `-b n1_hk1` . The model represented by the relevant variable： `belinkpro` is Belink GT-King Pro, `belink` is Belink GT-King, `n1` is Phicomm-N1, `x96` is X96-Max+, `hk1` is HK1-Box, `h96` is H96-Max-X3, `octopus` is Octopus-Planet, `ugoos` is UGOOS AM6 Plus. You can also use model codes: `s905x3`, `s905x2`, `s922x`, `s905x`, `s905d`, `s912` |
 | -k | Kernel | Specify the kernel type. Write the kernel name individually such as `-k 5.4.50` . Multiple cores use `_` connection such as `-k 5.4.50_5.9.5` [View the kernel library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel). |
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
+
+| Model  | Boxes |
+| ---- | ---- |
+| s905x3 | x96, hk1, h96 |
+| s905x2 | x96max4g, x96max2g |
+| s922x | belink, belinkpro, ugoos |
+| s905d | phicomm-n1 |
+| s912 | octopus-planet |
 
 ## Build more kernel files
 
@@ -230,9 +251,7 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 
 - [Mikubill/transfer](https://github.com/Mikubill/transfer)
 
-
 ## License
 
 [LICENSE](https://github.com/ophub/op/blob/main/LICENSE) © OPHUB
-
 

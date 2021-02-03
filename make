@@ -43,7 +43,7 @@ error() {
 
 loop_setup() {
     loop=$(losetup -P -f --show "${1}")
-    [ ${loop} ] || die "you used a lower version Linux, please update the util-linux package or upgrade your system."
+    [ ${loop} ] || die "losetup ${1} failed."
 }
 
 cleanup() {

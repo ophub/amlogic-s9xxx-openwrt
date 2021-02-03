@@ -183,14 +183,14 @@ format_image() {
     fi
 
     # Write the specified bootloader
-    if [ "${build_op}" != "n1" ]; then
+    if [ "${build_op}" != "n1" -a "${build_op}" != "s905x" -a "${build_op}" != "s905d" ]; then
         BTLD_BIN="${root}/root/hk1box-bootloader.img"
         if [ -f ${BTLD_BIN} ]; then
            mkdir -p ${root}/lib/u-boot
            cp -f ${BTLD_BIN} ${root}/lib/u-boot/
            #echo "Write bootloader for ${build_op}: [ $( ls ${root}/lib/u-boot/*.img 2>/dev/null ) ]."
-           dd if=${BTLD_BIN} of=${lodev} bs=1 count=442 conv=fsync 2>/dev/null
-           dd if=${BTLD_BIN} of=${lodev} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+           dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+           dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         else
            die "bootloader does not exist."
         fi

@@ -61,7 +61,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
   run: |
     git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
     cd amlogic-s9xxx-openwrt/
-    mkdir -p openwrt-armvirt
+    [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
     sudo rm -rf ../openwrt && sync
     sudo rm -rf /workdir && sync
@@ -137,7 +137,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
 - name: Build OpenWrt firmware
   id: build
   run: |
-    mkdir -p openwrt-armvirt
+    [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make

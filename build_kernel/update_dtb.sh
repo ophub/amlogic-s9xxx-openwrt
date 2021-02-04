@@ -9,7 +9,7 @@
 #======================================================================================================================
 #
 # Usage: Use Ubuntu 18 LTS 64-bit
-# 01. Log in to the home directory of the local Ubuntu system
+# 01. Log in to the home directory of the local Ubuntu system.
 # 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
 # 03. Put the new *.dtb file into ~/*/armbian/dtb-amlogic/
 # 04. The script will update all core files in directory: ~/*/armbian/kernel-amlogic/kernel/

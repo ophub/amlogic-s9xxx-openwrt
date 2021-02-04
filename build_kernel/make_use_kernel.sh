@@ -8,7 +8,7 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================================================
 #
-# example: ~/build_kernel/
+# example: ~/*/build_kernel/
 # ├── flippy
 # │   ├── boot-5.9.5-flippy-48+.tar.gz
 # │   ├── dtb-amlogic-5.9.5-flippy-48+.tar.gz
@@ -18,24 +18,25 @@
 # Usage: Use Ubuntu 18 LTS 64-bit
 # 01. Log in to the home directory of the local Ubuntu system
 # 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
-# 03. cd ~/build_kernel/
+# 03. cd ~/*/build_kernel/
 # 04. Prepare Flippy's ${build_boot}, ${build_dtb} & ${build_modules} three files. 
 # 05. Put this three files into ${flippy_folder}
 # 06. Modify ${flippy_version} to kernel version. E.g: flippy_version="5.9.5-flippy-48+"
 #     If the files of ${flippy_version} is not found, Will search for other files in the ${flippy_folder} directory.
 # 07. Run: sudo ./make_use_kernel.sh
-# 08. The generated files path: ~/armbian/kernel-amlogic/kernel/${build_save_folder}
+# 08. The generated files path: ~/*/armbian/kernel-amlogic/kernel/${build_save_folder}
 #
 # Tips: If run 'sudo ./make_use_kernel.sh' is 'Command not found'. Run: sudo chmod +x make_use_kernel.sh
 #
 #======================================================================================================================
 
 # Modify Flippy's kernel folder & version
-flippy_folder=${PWD}/"flippy"
+build_path=${PWD}
+flippy_folder=${build_path}/"flippy"
 flippy_version="5.9.5-flippy-48+"
 
 # Default setting ( Don't modify )
-build_tmp_folder=${PWD}/"build_tmp"
+build_tmp_folder=${build_path}/"build_tmp"
 build_boot="boot-${flippy_version}.tar.gz"
 build_dtb="dtb-amlogic-${flippy_version}.tar.gz"
 build_modules="modules-${flippy_version}.tar.gz"
@@ -43,7 +44,6 @@ build_save_folder=${flippy_version%-flippy*}
 
 # echo color codes
 echo_color() {
-
     this_color=${1}
         case "${this_color}" in
         red)
@@ -71,12 +71,10 @@ echo_color() {
             echo -e " \033[1;30m[ ${2} ]\033[0m ${3}"
             ;;
         esac
-
 }
 
 # Check files
 check_build_files() {
-
     if   [ -f "${flippy_folder}/${build_boot}" -a -f "${flippy_folder}/${build_dtb}" -a -f "${flippy_folder}/${build_modules}" ]; then
 
         echo_color "blue" "(1/7) The specified file exists." "USE: ${build_boot} and other files to start compiling ..."
@@ -125,7 +123,6 @@ check_build_files() {
 
 # build kernel.tar.xz
 build_kernel() {
-
      [ -d ${build_tmp_folder} ] && rm -rf ${build_tmp_folder} 2>/dev/null
      mkdir -p ${build_tmp_folder}/kernel/Temp_kernel/dtb/amlogic
      mkdir -p ${build_save_folder}
@@ -160,56 +157,44 @@ build_kernel() {
         echo_color "red" "(2/4) Error build_kernel"  "The suffix of ${build_dtb} must be .tar.gz or .tar.xz ..."
      fi
 
-     echo_color "blue" "(2/4) Start Copy ${build_dtb} one files"  "..."
+     echo_color "blue" "(2/4) Start Copy ${build_dtb} files"  "..."
      [ -f meson-gxl-s905d-phicomm-n1.dtb ] && cp -rf *.dtb Temp_kernel/dtb/amlogic/ || echo_color "yellow" "(2/4) All *.dtb files does not exist." "..."
      sync
 
   cd ${build_tmp_folder}/kernel/Temp_kernel/dtb/amlogic/
-     if [ ! -f "meson-gxl-s905d-phicomm-n1.dtb" -a ! -f "meson-gxl-s905d-phicomm-n1-thresh.dtb" ]; then
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-gxl-s905d-phicomm-n1.dtb .
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-gxl-s905d-phicomm-n1-thresh.dtb .
+     if [ ! -f meson-gxl-s905d-phicomm-n1.dtb ]; then
+        cp -f ~/*/armbian/dtb-amlogic/*phicomm-n1* .
         echo_color "yellow" "(3/7) The phicomm-n1 .dtb files is Missing. Has been copied from the dtb library!" "..."
      fi
 
-     if [ ! -f "meson-sm1-x96-max-plus-100m.dtb" -a ! -f "meson-sm1-x96-max-plus.dtb" ]; then
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-sm1-x96-max-plus-100m.dtb .
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-sm1-x96-max-plus.dtb .
-        echo_color "yellow" "(3/7) The X96 [1].dtb core files is Missing. Has been copied from the dtb library!" "..."
+     if [ ! -f meson-sm1-x96-max-plus-100m.dtb ]; then
+        cp -f ~/*/armbian/dtb-amlogic/*x96-max* .
+        echo_color "yellow" "(3/7) The X96 .dtb core files is Missing. Has been copied from the dtb library!" "..."
      fi
 
-     if [ ! -f "meson-g12a-x96-max.dtb" -a ! -f "meson-g12a-x96-max-rmii.dtb" -a ! -f "meson-sm1-x96-max-plus-oc.dtb" ]; then
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-g12a-x96-max.dtb .
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-g12a-x96-max-rmii.dtb .
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-sm1-x96-max-plus-oc.dtb .
-        echo_color "yellow" "(3/7) Some X96 [4,5,6].dtb files is Missing. Has been copied from the dtb library!" "..."
+     if [ ! -f meson-sm1-hk1box-vontar-x3.dtb ]; then
+        cp -f ~/*/armbian/dtb-amlogic/*hk1box* .
+        echo_color "yellow" "(3/7) Some HX1 .dtb files is Missing. Has been copied from the dtb library!" "..."
      fi
 
-     if [ ! -f "meson-sm1-hk1box-vontar-x3.dtb" -a ! -f "meson-sm1-hk1box-vontar-x3-oc.dtb" ]; then
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-sm1-hk1box-vontar-x3.dtb .
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-sm1-hk1box-vontar-x3-oc.dtb .
-        echo_color "yellow" "(3/7) Some HX1 [2,7].dtb files is Missing. Has been copied from the dtb library!" "..."
+     if [ ! -f meson-sm1-h96-max-x3.dtb ]; then
+        cp -f ~/*/armbian/dtb-amlogic/*h96-max* .
+        echo_color "yellow" "(3/7) Some H96 .dtb files is Missing. Has been copied from the dtb library!" "..."
      fi
 
-     if [ ! -f "meson-sm1-h96-max-x3.dtb" -a ! -f "meson-sm1-h96-max-x3-oc.dtb" ]; then
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-sm1-h96-max-x3.dtb .
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-sm1-h96-max-x3-oc.dtb .
-        echo_color "yellow" "(3/7) Some H96 [3,8].dtb files is Missing. Has been copied from the dtb library!" "..."
+     if [ ! -f meson-gxm-octopus-planet.dtb ]; then
+        cp -f ~/*/armbian/dtb-amlogic/*octopus* .
+        echo_color "yellow" "(3/7) The octopus-planet .dtb files is Missing. Has been copied from the dtb library!" "..."
      fi
 
-     if [ ! -f "meson-gxm-octopus-planet.dtb" ]; then
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-gxm-octopus-planet.dtb .
-        echo_color "yellow" "(3/7) The octopus-planet [9].dtb files is Missing. Has been copied from the dtb library!" "..."
+     if [ ! -f meson-g12b-gtking-pro.dtb ]; then
+        cp -f ~/*/armbian/dtb-amlogic/*gtking* .
+        echo_color "yellow" "(3/7) The gtking .dtb files is Missing. Has been copied from the dtb library!" "..."
      fi
 
-     if [ ! -f "meson-g12b-gtking.dtb" -a ! -f "meson-g12b-gtking-pro.dtb" ]; then
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-gtking.dtb .
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-gtking-pro.dtb .
-        echo_color "yellow" "(3/7) The octopus-planet [10,11].dtb files is Missing. Has been copied from the dtb library!" "..."
-     fi
-
-     if [ ! -f "meson-g12b-ugoos-am6.dtb" ]; then
-        cp -f ../../../../../../armbian/dtb-amlogic/meson-g12b-ugoos-am6.dtb .
-        echo_color "yellow" "(3/7) The octopus-planet [12].dtb files is Missing. Has been copied from the dtb library!" "..."
+     if [ ! -f meson-g12b-ugoos-am6.dtb ]; then
+        cp -f ~/*/armbian/dtb-amlogic/*ugoos* .
+        echo_color "yellow" "(3/7) The ugoos .dtb files is Missing. Has been copied from the dtb library!" "..."
      fi
 
      sync
@@ -218,19 +203,16 @@ build_kernel() {
      echo_color "blue" "(2/4) Start zip kernel.tar.xz"  "..."
      tar -cf kernel.tar *
      xz -z kernel.tar
-     cp -rf kernel.tar.xz ../../../${build_save_folder}/kernel.tar.xz && sync
+     mv -f kernel.tar.xz ${build_path}/${build_save_folder} && sync
 
      echo_color "green" "(2/4) End build_kernel"  "The save path is /${build_save_folder}/kernel.tar.xz ..."
-
 }
 
 # build modules.tar.xz
 build_modules() {
-
-  cd ../../../
-     rm -rf ${build_tmp_folder}
+  cd ${build_path}
+     rm -rf ${build_tmp_folder} && sync
      mkdir -p ${build_tmp_folder}/modules/lib/modules
-
      cp -rf ${flippy_folder}/${build_modules} ${build_tmp_folder}/modules/lib/modules && sync
 
   cd ${build_tmp_folder}/modules/lib/modules
@@ -245,7 +227,6 @@ build_modules() {
      fi
 
   cd ${flippy_version}
-  
      rm -f *.ko
      x=0
      find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
@@ -258,25 +239,26 @@ build_modules() {
         echo_color "blue" "(3/4) Have [ ${x} ] files make *.ko link"  "..."
      fi
 
-  cd ../ && rm -rf ${build_modules} && cd ../../
+  cd ${build_tmp_folder}/modules/lib/modules
+     rm -f ${build_modules}
+
+  cd ${build_tmp_folder}/modules/
      echo_color "blue" "(3/4) Start zip modules.tar.xz"  "..."
      tar -cf modules.tar *
      xz -z modules.tar
-     cp -rf modules.tar.xz ../../${build_save_folder}/modules.tar.xz && sync
+     mv -f modules.tar.xz ${build_path}/${build_save_folder} && sync
 
-  cd ../../ && rm -rf ${build_tmp_folder} 2>/dev/null
      echo_color "green" "(3/4) End build_modules"  "The save path is /${build_save_folder}/modules.tar.xz ..."
-
 }
 
 # copy kernel.tar.xz & modules.tar.xz to armbian/kernel-amlogic/kernel/${build_save_folder}
 copy_kernel_modules() {
+     cd ${build_path}
 
      cp -rf ${build_save_folder} ../armbian/kernel-amlogic/kernel/ && sync
-     rm -rf ${flippy_folder}/* ${build_save_folder} 2>/dev/null
+     rm -rf ${build_tmp_folder} ${build_save_folder} ${flippy_folder}/* 2>/dev/null
 
-     echo_color "green" "(4/4) End copy_kernel_modules"  "Copy /${build_save_folder}/kernel.tar.xz & modules.tar.xz to ../armbian/kernel-amlogic/kernel/ ..."
-
+     echo_color "green" "(4/4) End copy_kernel_modules"  "Copy ${build_save_folder}/kernel.tar.xz & modules.tar.xz to ~/*/armbian/kernel-amlogic/kernel/ ..."
 }
 
 check_build_files

@@ -14,7 +14,7 @@
 # └── make_use_img.sh
 #
 # Usage: Use Ubuntu 18 LTS 64-bit
-# 01. Log in to the home directory of the local Ubuntu system
+# 01. Log in to the home directory of the local Ubuntu system.
 # 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
 # 03. cd ~/*/build_kernel/
 # 04. Prepare Flippy's ${flippy_file}, support: N1_Openwrt*.img, S9***_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img

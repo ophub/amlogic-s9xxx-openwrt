@@ -122,20 +122,6 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     echo "::set-output name=status::success"
 ```
 
-Tips: ***`openwrt_s9xxx_.*`*** is Prefix the `tag_name` in the `Upload OpenWrt Firmware to Release` step. Eg:
-```yaml
-- name: Upload OpenWrt Firmware to Release
-  uses: softprops/action-gh-release@v1
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  with:
-    tag_name: openwrt_s9xxx_${{ env.FILE_DATE }}
-    files: ${{ env.FILEPATH }}/*
-    body: |
-      This is OpenWrt firmware for S9xxx-Boxes and Phicomm-N1
-      More information ...
-
-```
 The `Upload OpenWrt Firmware to Actions` and `Upload OpenWrt Firmware to Release` method is the same as `github.com clone packaging instructions` steps.
 
 This function is suitable for the needs of replacing the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/kernel-amlogic/kernel) packaging and packaging the OpenWrt firmware of the specified [amlogic-s9xxx-Box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) separately. As long as you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) of your repository, you can package the OpenWrt firmware you want at any time, which is efficient and convenient.

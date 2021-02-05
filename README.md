@@ -53,7 +53,7 @@ You can modify the configuration file in the `router_config` directory and `.yml
 
 [For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
 
-In your .github/workflows/*.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
+In your .github/workflows/.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 
 ```yaml
 - name: Build OpenWrt for S9xxx-Boxes
@@ -74,32 +74,7 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     echo "::set-output name=status::success"
 ```
 
-- Uploads OpenWrt Firmware to Actions (Method One):
-
-This is the `Actions` upload method officially provided by github.com.
-
-```yaml
-- name: Upload OpenWrt Firmware to Actions for S9xxx
-  uses: actions/upload-artifact@v2
-  with:
-    name: openwrt_s9xxx
-    path: ${{ env.FILEPATH }}/openwrt_s9xxx_*
-    if-no-files-found: ignore
-
-- name: Upload OpenWrt Firmware to Actions for Phicomm-N1
-  uses: actions/upload-artifact@v2
-  with:
-    name: openwrt_phicomm-n1
-    path: ${{ env.FILEPATH }}/openwrt_n1_*
-    if-no-files-found: ignore
-
-# Upload more OpenWrt Firmware to Actions
-- name: Upload OpenWrt Firmware ...
-```
-
-- Uploads OpenWrt Firmware to Actions (Method Two):
-
-This is `Actions` upload support provided by [kittaakos/upload-artifact-as-is](https://github.com/kittaakos/upload-artifact-as-is). All firmware uploads can be completed in one step without reusing the official upload function (The official single limit is 2G. Multi-firmware needs to be uploaded in multiple parts).
+- Uploads OpenWrt Firmware to Actions:
  
 ```yaml
 - name: Upload artifact to Actions
@@ -121,25 +96,6 @@ This is `Actions` upload support provided by [kittaakos/upload-artifact-as-is](h
     body: |
       This is OpenWrt firmware for S9xxx-Boxes and Phicomm-N1.
       More information ...
-```
-
-- When uploading to `Actions` and `Release`, you can specify the firmware upload, the corresponding relationship is as follows:
-
-```yaml
-${{ env.FILEPATH }}/openwrt_s905x3_*       #For S905x3 series box general firmware
-${{ env.FILEPATH }}/openwrt_s905x2_*       #For S905x2 series box general firmware
-${{ env.FILEPATH }}/openwrt_s922x_*        #For S922x series box general firmware
-${{ env.FILEPATH }}/openwrt_s905x_*        #For S905x series box general firmware
-${{ env.FILEPATH }}/openwrt_s905d_*        #For S905d series box general firmware
-${{ env.FILEPATH }}/openwrt_s912_*         #For S912 series box general firmware
-${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
-${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
-${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
-${{ env.FILEPATH }}/openwrt_belink_*       #For Belink GT-King
-${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
-${{ env.FILEPATH }}/openwrt_ugoos_*        #For UGOOS AM6 Plus
-${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
-${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 ```
 
 - ### Use github.com Releases rootfs file to packaging

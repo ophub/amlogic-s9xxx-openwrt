@@ -48,7 +48,7 @@ reboot
 
 ## Install to S9xxx-Boxs EMMC partition and upgrade instructions
 
-The `s9xxx-v*-openwrt_*.img` and related s9xxx kernel firmware supports USB hard disk booting. You can also Install the OpenWrt firmware in the USB hard disk into the EMMC partition of s9xxx, and start using it from EMMC.
+The `openwrt_s905x3_v*.img` and related s9xxx kernel firmware supports USB hard disk booting. You can also Install the OpenWrt firmware in the USB hard disk into the EMMC partition of s9xxx, and start using it from EMMC.
 
 ***`Install OpenWrt`***
 

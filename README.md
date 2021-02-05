@@ -74,7 +74,9 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     echo "::set-output name=status::success"
 ```
 
-- Uploads OpenWrt Firmware to Actions:
+- Uploads OpenWrt Firmware to Actions (Method One):
+
+This is the `Actions` upload method officially provided by github.com.
 
 ```yaml
 - name: Upload OpenWrt Firmware to Actions for S9xxx
@@ -91,27 +93,19 @@ In your .github/workflows/*.yml file, after completing the compilation of Subtar
     path: ${{ env.FILEPATH }}/openwrt_n1_*
     if-no-files-found: ignore
 
-# More Upload to Actions
+# Upload more OpenWrt Firmware to Actions
 - name: Upload OpenWrt Firmware ...
 ```
 
-- The upload path of the packaged openwrt is ```${{ env.FILEPATH }}/*```
+- Uploads OpenWrt Firmware to Actions (Method Two):
 
+This is `Actions` upload support provided by [kittaakos/upload-artifact-as-is](https://github.com/kittaakos/upload-artifact-as-is). All firmware uploads can be completed in one step without reusing the official upload function (The official single limit is 2G. Multi-firmware needs to be uploaded in multiple parts).
+ 
 ```yaml
-path: ${{ env.FILEPATH }}/openwrt_s905x3_*       #For S905x3 series box general firmware
-path: ${{ env.FILEPATH }}/openwrt_s905x2_*       #For S905x2 series box general firmware
-path: ${{ env.FILEPATH }}/openwrt_s922x_*        #For S922x series box general firmware
-path: ${{ env.FILEPATH }}/openwrt_s905x_*        #For S905x series box general firmware
-path: ${{ env.FILEPATH }}/openwrt_s905d_*        #For S905d series box general firmware
-path: ${{ env.FILEPATH }}/openwrt_s912_*         #For S912 series box general firmware
-path: ${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
-path: ${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
-path: ${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
-path: ${{ env.FILEPATH }}/openwrt_belink_*       #For Belink GT-King
-path: ${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
-path: ${{ env.FILEPATH }}/openwrt_ugoos_*        #For UGOOS AM6 Plus
-path: ${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
-path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
+- name: Upload artifact to Actions
+  uses: kittaakos/upload-artifact-as-is@master
+  with:
+    path: ${{ env.FILEPATH }}/
 ```
 
 - Uploads OpenWrt Firmware to Release:
@@ -127,6 +121,25 @@ path: ${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
     body: |
       This is OpenWrt firmware for S9xxx-Boxes and Phicomm-N1.
       More information ...
+```
+
+- When uploading to `Actions` and `Release`, you can specify the firmware upload, the corresponding relationship is as follows:
+
+```yaml
+${{ env.FILEPATH }}/openwrt_s905x3_*       #For S905x3 series box general firmware
+${{ env.FILEPATH }}/openwrt_s905x2_*       #For S905x2 series box general firmware
+${{ env.FILEPATH }}/openwrt_s922x_*        #For S922x series box general firmware
+${{ env.FILEPATH }}/openwrt_s905x_*        #For S905x series box general firmware
+${{ env.FILEPATH }}/openwrt_s905d_*        #For S905d series box general firmware
+${{ env.FILEPATH }}/openwrt_s912_*         #For S912 series box general firmware
+${{ env.FILEPATH }}/openwrt_x96_*          #For X96-Max+
+${{ env.FILEPATH }}/openwrt_hk1_*          #For HK1-Box
+${{ env.FILEPATH }}/openwrt_h96_*          #For H96-Max-X3
+${{ env.FILEPATH }}/openwrt_belink_*       #For Belink GT-King
+${{ env.FILEPATH }}/openwrt_belinkpro_*    #For Belink GT-King Pro
+${{ env.FILEPATH }}/openwrt_ugoos_*        #For UGOOS AM6 Plus
+${{ env.FILEPATH }}/openwrt_n1_*           #For Phicomm-N1
+${{ env.FILEPATH }}/openwrt_octopus_*      #For Octopus-Planet
 ```
 
 - ### Use github.com Releases rootfs file to packaging

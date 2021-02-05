@@ -102,8 +102,8 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 
 If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) in your repository, you can use this file to directly package the required firmware.
 
-💡Tips: `openwrt_s9xxx_.*` is Prefix the `tag_name` in the Release.
-💡Tips: `openwrt-armvirt-64-default-rootfs.tar.gz` is the firmware you are going to package, please refer to [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) for compilation method.
+- `openwrt_s9xxx_.*` is Prefix the `tag_name` in the Release.
+- `openwrt-armvirt-64-default-rootfs.tar.gz` is the firmware you are going to package, please refer to [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) for compilation method.
 
 ```yaml
 - name: Build OpenWrt firmware

@@ -1,7 +1,7 @@
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S9xxx-Boxs and Phicomm-N1
-# Function: Install and Upgrading openwrt to the emmc for S9xxx-Boxs and Phicomm-N1
+# Description: Automatically Packaged OpenWrt for S9xxx-Boxs
+# Function: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/tuanqing/mknop
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
@@ -18,12 +18,12 @@ include $(INCLUDE_DIR)/package.mk
 define Package/$(PKG_NAME)
 	SECTION:=utils
 	CATEGORY:=Utilities
-	TITLE:=Install and Upgrading openwrt to the emmc for S9xxx-Boxs and Phicomm-N1
+	TITLE:=Install and Upgrading openwrt to the emmc for S9xxx-Boxs
 	DEPENDS:=+block-mount +blkid +parted +dosfstools +e2fsprogs +lsblk +pv +resize2fs +tune2fs +losetup +uuidgen
 endef
 
 define Package/$(PKG_NAME)/description
-	Install and Upgrading openwrt to the emmc for S9xxx-Boxs and Phicomm-N1
+	Install and Upgrading openwrt to the emmc for S9xxx-Boxs
 endef
 
 define Build/Prepare

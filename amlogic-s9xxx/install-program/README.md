@@ -1,10 +1,10 @@
 # install-program
 
-Install and Upgrading openwrt to the emmc for S9xxx-Boxs and Phicomm-N1.
+Install and Upgrading openwrt to the emmc for S9xxx-Boxs.
 
 ## Instructions
 
-1. `svn co https://github.com/ophub/amlogic-s9xxx-openwrt/trunk/install-program package/install-program`
+1. `svn co https://github.com/ophub/amlogic-s9xxx-openwrt/trunk/amlogic-s9xxx/install-program package/install-program`
 2. Execute make `menuconfig` and select `install-program` under `Utilities`
 
 ```shell script
@@ -98,7 +98,7 @@ reboot
 
 ## Option description when installing into s9xxx-boxs emmc
 
-You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic) when you customize the file name.
+You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) when you customize the file name.
 
 | Serial | Box | Description | DTB |
 | ---- | ---- | ---- | ---- |

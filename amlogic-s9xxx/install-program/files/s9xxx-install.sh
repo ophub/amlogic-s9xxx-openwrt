@@ -145,7 +145,7 @@ esac
 
 if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
     echo "/boot/dtb/amlogic/${FDTFILE} does not exist!"
-    echo "You can download the .dtb file from [ https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/armbian/dtb-amlogic ]"
+    echo "You can download the .dtb file from [ https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb ]"
     echo "Copy it to [ /boot/dtb/amlogic/ ]."
     echo "Then execute this installation command."
     exit 1

@@ -11,11 +11,11 @@
 # Usage: Use Ubuntu 18 LTS 64-bit
 # 01. Log in to the home directory of the local Ubuntu system.
 # 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
-# 03. Put the new *.dtb file into ~/*/armbian/dtb-amlogic/
-# 04. The script will update all core files in directory: ~/*/armbian/kernel-amlogic/kernel/
-# 05. cd ~/*/build_kernel/
+# 03. Put the new *.dtb file into ~/*/amlogic-s9xxx/amlogic-dtb/
+# 04. The script will update all core files in directory: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
+# 05. cd ~/*/amlogic-s9xxx/amlogic-kernel/build_kernel/
 # 06. Run: sudo ./update_dtb.sh
-# 07. The updated file will overwrite in the original path: ~/*/armbian/kernel-amlogic/kernel/
+# 07. The updated file will overwrite in the original path: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
 #
 # Tips: If run 'sudo ./update_dtb.sh' is 'Command not found'. Run: sudo chmod +x update_dtb.sh
 #
@@ -24,6 +24,7 @@
 # Default setting ( Don't modify )
 build_path=${PWD}
 build_tmp_folder=${build_path}/"build_tmp"
+amlogic_path=${build_path%/amlogic-kernel*}
 
 # echo color codes
 echo_color() {
@@ -62,7 +63,7 @@ echo_color "purple" "Start Update dtb files"  "..."
 update_kernel_dtb() {
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
     cd ${build_tmp_folder}
-    cp -rf ~/*/armbian/kernel-amlogic/kernel/* .
+    cp -rf ../kernel/* .
 
     if  [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
         echo_color "red" "(1/1) Error: No core file." "..."
@@ -78,7 +79,7 @@ update_kernel_dtb() {
                 kernel_version=${kernel_folder%/*}
                 cd ${kernel_version}
                 mkdir -p tmp_kernel && tar -xJf kernel.tar.xz -C tmp_kernel
-                cp -f ~/*/armbian/dtb-amlogic/* tmp_kernel/dtb/amlogic/ && sync && cd tmp_kernel
+                cp -f ${amlogic_path}/amlogic-dtb/* tmp_kernel/dtb/amlogic/ && sync && cd tmp_kernel
                 tar -cf kernel.tar *
                 xz -z kernel.tar
                 mv -f kernel.tar.xz ../kernel.tar.xz && sync && cd ../ && rm -rf tmp_kernel && cd ../
@@ -86,7 +87,7 @@ update_kernel_dtb() {
                 current_kernel=$(($current_kernel + 1))
             done
 
-        cp -rf * ../../armbian/kernel-amlogic/kernel/
+        cp -rf * ../../kernel/
         sync
         cd ../ && rm -rf ${build_tmp_folder}
     fi

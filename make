@@ -13,11 +13,12 @@ build_openwrt=("s905x3" "s905x2" "s922x" "s905x" "s905d" "s912")
 make_path=${PWD}
 tmp_path="tmp"
 out_path="out"
-armbian_path="armbian"
+amlogic_path="amlogic-s9xxx"
 openwrt_path="openwrt-armvirt"
-kernel_path="kernel-amlogic"
+kernel_path="amlogic-kernel"
 commonfiles_path="common-files"
-uboot_path=${make_path}/${armbian_path}/u-boot
+uboot_path=${make_path}/${amlogic_path}/u-boot
+installfiles_path=${make_path}/${amlogic_path}/install-program/files
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( ROOT_MB must be ≥ 256 )
@@ -114,20 +115,20 @@ extract_openwrt() {
 extract_armbian() {
     cd ${make_path}
     build_op=${1}
-    kernel_dir="${armbian_path}/${kernel_path}/kernel/${kernel}"
-    root_dir="${armbian_path}/${kernel_path}/root"
+    kernel_dir="${amlogic_path}/${kernel_path}/kernel/${kernel}"
+    # root_dir="${amlogic_path}/${kernel_path}/root"
     root="${tmp_path}/${kernel}/${build_op}/root"
     boot="${tmp_path}/${kernel}/${build_op}/boot"
 
     mkdir -p ${root} ${boot}
 
-    tar -xJf "${armbian_path}/${commonfiles_path}/boot-common.tar.xz" -C ${boot}
+    tar -xJf "${amlogic_path}/${commonfiles_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${kernel_dir}/kernel.tar.xz" -C ${boot}
-    tar -xJf "${armbian_path}/${commonfiles_path}/firmware.tar.xz" -C ${root}
+    tar -xJf "${amlogic_path}/${commonfiles_path}/firmware.tar.xz" -C ${root}
     tar -xJf "${kernel_dir}/modules.tar.xz" -C ${root}
 
     cp -rf ${root_comm}/* ${root}
-    [ $(ls ${root_dir} | wc -w) != 0 ] && cp -r ${root_dir}/* ${root}
+    # [ $(ls ${root_dir} | wc -w) != 0 ] && cp -r ${root_dir}/* ${root}
     sync
 }
 
@@ -175,11 +176,10 @@ format_image() {
     mke2fs -F -q -t ext4 -L "ROOTFS" -m 0 ${loop}p2 >/dev/null 2>&1
 
     # Complete file
-    complete_path=install-program/files
     if [ ! -f ${root}/root/hk1box-bootloader.img ]; then
-       cp -f ${complete_path}/{*.img,*.bin} ${root}/root/
-       cp -f ${complete_path}/*.sh ${root}/usr/bin/
-       echo "${root}/etc/config/fstab ${root}/etc/config/fstab.bak" | xargs -n 1 cp -f ${complete_path}/fstab 2>/dev/null
+       cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
+       cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
+       echo "${root}/etc/config/fstab ${root}/etc/config/fstab.bak" | xargs -n 1 cp -f ${installfiles_path}/fstab 2>/dev/null
     fi
 
     # Write the specified bootloader
@@ -211,7 +211,7 @@ format_image() {
 copy2image() {
     cd ${make_path}
     build_op=${1}
-    build_kernel=${2}
+    build_usekernel=${2}
     set -e
 
     local bootfs="${mount}/${kernel}/${build_op}/bootfs"
@@ -263,7 +263,7 @@ copy2image() {
 
     old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
     sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-    if [ $(echo ${build_kernel} | grep -oE '^[1-9].[0-9]{1,2}') = "5.10" -a -f ${new_uboot} ]; then
+    if [ $(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}') = "5.10" -a -f ${new_uboot} ]; then
        echo "u-boot.ext u-boot.emmc u-boot-510kernel.bin" | xargs -n 1 cp -f ${new_uboot} 2>/dev/null
     fi
     sync
@@ -291,7 +291,7 @@ get_kernels() {
     i=0
     IFS=$'\n'
 
-    local kernel_root="${armbian_path}/${kernel_path}/kernel"
+    local kernel_root="${amlogic_path}/${kernel_path}/kernel"
     [ -d ${kernel_root} ] && {
         work=$(pwd)
         cd ${kernel_root}
@@ -304,7 +304,7 @@ get_kernels() {
 
 show_kernels() {
     if [ ${#kernels[*]} = 0 ]; then
-        die "No kernel files in [ ${armbian_path}/${kernel_path}/kernel ] directory!"
+        die "No kernel files in [ ${amlogic_path}/${kernel_path}/kernel ] directory!"
     else
         show_list "${kernels[*]}" "kernel"
     fi
@@ -488,7 +488,7 @@ if [ ${#firmwares[*]} = 0 ]; then
 fi
 
 if [ ${#kernels[*]} = 0 ]; then
-    die "No this kernel files in [ ${armbian_path}/${kernel_path}/kernel ] directory!"
+    die "No this kernel files in [ ${amlogic_path}/${kernel_path}/kernel ] directory!"
 fi
 
 [ ${firmware} ] && echo " firmware   ==>   ${firmware}"

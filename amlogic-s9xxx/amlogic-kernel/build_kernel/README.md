@@ -4,7 +4,7 @@ You can install `Flippy’s` OpenWrt firmware and use it. If you want to define 
 
 The first method: 
 ```shell script
-Example: ~/*/build-kernel/
+Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
  │   ├── N1_Openwrt*.img                   # Recommend Use Flippy's N1_Openwrt.img files
  │   ├── OR: S9***_Openwrt*.img            # Use Flippy's S9***_Openwrt*.img files
@@ -20,7 +20,7 @@ sudo ./make_use_img.sh
 
 The second method: 
 ```shell script
-Example: ~/*/build-kernel/
+Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
  │   ├── boot-5.9.5-flippy-48+.tar.gz
  │   ├── amlogic-dtb-5.9.5-flippy-48+.tar.gz
@@ -41,12 +41,12 @@ The generated files ***` kernel.tar.xz & modules.tar.xz `*** will be directly pl
 Thanks for the `Flippy's` continuous research, `OpenWrt` can be installed and used in more boxes, but these latest .dtb files are not in the old version of the kernel package, you can use the latest version of [the .dtb file library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) in the repository to update the previous kernel package. Update `kernel.tar.xz` files in the [kernel directory](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) with the latest .dtb file.
 
 ```shell script
-Example: ~/*/
- ├── amlogic-s9xxx
- │   └── amlogic-dtb
- │       └── *.dtb
- └── build-kernel
-     └── update_dtb.sh
+Example: ~/*/amlogic-s9xxx/
+ ├── amlogic-dtb
+ │   └── *.dtb
+ └── amlogic-kernel
+     └── build_kernel
+         └── update_dtb.sh
 ```
 
 ```shell script

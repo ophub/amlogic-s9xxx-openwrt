@@ -164,7 +164,7 @@ build_kernel() {
 
   cd ${build_tmp_folder}/kernel/Temp_kernel/dtb/amlogic/
      if [ ! -f meson-gxl-s905d-phicomm-n1.dtb ]; then
-        cp -f ${amlogic_path}/amlogic-dtb/amlogic-dtb/*phicomm-n1* .
+        cp -f ${amlogic_path}/amlogic-dtb/*phicomm-n1* .
         echo_color "yellow" "(3/7) The phicomm-n1 .dtb files is Missing. Has been copied from the dtb library!" "..."
      fi
 

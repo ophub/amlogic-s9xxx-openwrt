@@ -63,7 +63,7 @@ echo_color "purple" "Start Update dtb files"  "..."
 update_kernel_dtb() {
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
     cd ${build_tmp_folder}
-    cp -rf ../kernel/* .
+    cp -rf ../../kernel/* .
 
     if  [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
         echo_color "red" "(1/1) Error: No core file." "..."

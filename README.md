@@ -153,14 +153,16 @@ This function is suitable for the needs of replacing the [kernel](https://github
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
 
-The codes of the following `Model` and `Boxes` can be used in `sudo ./make -d -b Your_Model_or_Boxes`. The generated firmware is the same by each model and related boxes. You can enter parameters as needed. 
+- ### Supported Models and Boxes
+
+The codes of the following `Model` and `Boxes` can be used in `sudo ./make -d -b Your_Model_or_Boxes`. The generated firmware is `the same by each model and related boxes`. You can enter parameters as needed. 
 
 | Model  | Boxes |
 | ---- | ---- |
-| s905x3 | x96, hk1, h96 |
+| s905x3, s9xxx | x96, hk1, h96 |
 | s905x2 | x96max4g, x96max2g |
 | s922x | belink, belinkpro, ugoos |
-| s905d | n1 |
+| s905d, s905x | n1 |
 | s912 | octopus |
 
 ## Build more kernel files

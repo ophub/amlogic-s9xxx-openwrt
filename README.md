@@ -145,8 +145,6 @@ This function is suitable for the needs of replacing the [kernel](https://github
 - `sudo ./make -h`: Display help information and view detailed description of each parameter.
 - `sudo ./make`: If you are familiar with the relevant setting requirements of the phicomm_n1 firmware, you can follow the prompts, such as selecting the firmware you want to make, the kernel version, setting the ROOTFS partition size, etc. If you don’t know these settings, just press Enter.
 
-- ### The meaning of make parameters
-
 | Parameter | Types | Description |
 | ---- | ---- | ---- |
 | -d | Defaults | Compile all cores and all firmware types. |

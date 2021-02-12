@@ -138,6 +138,7 @@ This function is suitable for the needs of replacing the [kernel](https://github
 
 The parameters of make can be combined as needed. 
 | Example | Description |
+| ---- | ---- |
 | `sudo ./make -d -b n1 -k 5.9.5` | recommend. Use the default configuration, specify a kernel and a firmware for compilation. |
 | `sudo ./make -d -b n1_hk1 -k 5.4.75_5.9.5` | Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect. |
 | `sudo ./make -d` | Compile all kernel versions of openwrt with the default configuration. |

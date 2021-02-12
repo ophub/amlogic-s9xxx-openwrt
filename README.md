@@ -12,9 +12,9 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 
 - `openwrt_s905x3_v*.img`: For all Amlogic-S905x3 series boxes.
 - `openwrt_s905x2_v*.img`: For all Amlogic-s905x2 series boxes.
-- `openwrt_s922x_v*.img`: For all Amlogic-s922x series boxes.
 - `openwrt_s905x_v*.img`: For all Amlogic-s905x series boxes.
 - `openwrt_s905d_v*.img`: For all Amlogic-s905d series boxes.
+- `openwrt_s922x_v*.img`: For all Amlogic-s922x series boxes.
 - `openwrt_s912_v*.img`: For all Amlogic-s912 series boxes.
 - `openwrt_x96_v*.img`: For X96-Max+(S905x3). [🔍](https://www.ebay.com/itm/133605678868)
 - `openwrt_hk1_v*.img`: For HK1-Box(S905x3). [🔍](https://www.ebay.com/itm/174515007305)
@@ -67,7 +67,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
     sudo rm -rf /workdir && sync
     sudo chmod +x make
     sudo ./make -d -b n1_x96_hk1_h96_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
-    # sudo ./make -d -b s905x3_s905x2_s922x_s905d_s912 -k 5.4.77_5.9.8
+    # sudo ./make -d -b s905x3_s905x2_s905d_s922x_s912 -k 5.4.77_5.9.8
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -116,7 +116,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
     sudo ./make -d -b n1_x96_hk1_h96_octopus_belink_belinkpro_ugoos -k 5.9.14_5.4.83
-    # sudo ./make -d -b s905x3_s905x2_s922x_s905d_s912 -k 5.4.77_5.9.8
+    # sudo ./make -d -b s905x3_s905x2_s905d_s922x_s912 -k 5.4.77_5.9.8
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -135,11 +135,11 @@ This function is suitable for the needs of replacing the [kernel](https://github
 ## Detailed make compile command
 
 - `sudo ./make -d -b n1 -k 5.9.5`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
-- `sudo ./make -d -b n1_hk1 -k 5.4.75_5.9.5`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use "_" to connect.
+- `sudo ./make -d -b n1_hk1 -k 5.4.75_5.9.5`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
 - `sudo ./make -d`: Compile all kernel versions of openwrt with the default configuration.
 - `sudo ./make -d -b n1 -k 5.9.2 -s 1024`: Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation.
-- `sudo ./make -d -b n1_hk1`: Use the default configuration, specify multiple firmware, use "_" to connect. compile all kernels.
-- `sudo ./make -d -k 5.4.73_5.9.2`: Use the default configuration. Specify multiple cores, use "_" to connect.
+- `sudo ./make -d -b n1_hk1`: Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels.
+- `sudo ./make -d -k 5.4.73_5.9.2`: Use the default configuration. Specify multiple cores, use `_` to connect.
 - `sudo ./make -d -k latest`: Use the default configuration to compile the latest kernel version of the openwrt firmware.
 - `sudo ./make -d -s 1024 -k 5.7.15`: Use the default configuration and set the partition size to 1024m, and only compile the openwrt firmware with the kernel version 5.7.15.
 - `sudo ./make -h`: Display help information and view detailed description of each parameter.
@@ -148,19 +148,21 @@ This function is suitable for the needs of replacing the [kernel](https://github
 | Parameter | Types | Description |
 | ---- | ---- | ---- |
 | -d | Defaults | Compile all cores and all firmware types. |
-| -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b n1` . Multiple firmware use `_` connect such as `-b n1_hk1` . The model represented by the relevant variable： `belinkpro` is Belink GT-King Pro, `belink` is Belink GT-King, `n1` is Phicomm-N1, `x96` is X96-Max+, `hk1` is HK1-Box, `h96` is H96-Max-X3, `octopus` is Octopus-Planet, `ugoos` is UGOOS AM6 Plus. You can also use model codes: `s905x3`, `s905x2`, `s922x`, `s905x`, `s905d`, `s912` |
+| -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b n1` . Multiple firmware use `_` connect such as `-b n1_hk1` . The model represented by the relevant variable： `belinkpro` is Belink GT-King Pro, `belink` is Belink GT-King, `n1` is Phicomm-N1, `x96` is X96-Max+, `hk1` is HK1-Box, `h96` is H96-Max-X3, `octopus` is Octopus-Planet, `ugoos` is UGOOS AM6 Plus. You can also use model codes: `s905x3`, `s905x2`, `s905x`, `s905d`, `s922x`, `s912` |
 | -k | Kernel | Specify the kernel type. Write the kernel name individually such as `-k 5.4.50` . Multiple cores use `_` connection such as `-k 5.4.50_5.9.5` [View the kernel library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel). |
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
 
-The codes of the following `Model` and `Boxes` can be used in `sudo ./make -d -b Your_Model_or_Boxes`. The generated firmware is the same by each model and related boxes. You can enter parameters as needed. 
+- ### Supported Models and Boxes
+
+The codes of the following `Model` and `Boxes` can be used in `sudo ./make -d -b Your_Model_or_Boxes`. The generated firmware is `the same by each model and related boxes`. You can enter parameters as needed. 
 
 | Model  | Boxes |
 | ---- | ---- |
 | s905x3 | x96, hk1, h96 |
 | s905x2 | x96max4g, x96max2g |
+| s905x, s905d | n1 |
 | s922x | belink, belinkpro, ugoos |
-| s905d | n1 |
 | s912 | octopus |
 
 ## Build more kernel files

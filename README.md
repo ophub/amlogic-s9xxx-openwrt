@@ -139,16 +139,16 @@ This function is suitable for the needs of replacing the [kernel](https://github
 The parameters of make can be combined as needed. 
 | Example | Description |
 | ---- | ---- |
-| `sudo ./make -d -b n1 -k 5.9.5` | recommend. Use the default configuration, specify a kernel and a firmware for compilation. |
-| `sudo ./make -d -b n1_hk1 -k 5.4.75_5.9.5` | Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect. |
-| `sudo ./make -d` | Compile all kernel versions of openwrt with the default configuration. |
-| `sudo ./make -d -b n1 -k 5.9.2 -s 1024` | Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation. |
-| `sudo ./make -d -b n1_hk1` | Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels. |
-| `sudo ./make -d -k 5.4.73_5.9.2` | Use the default configuration. Specify multiple cores, use `_` to connect. |
-| `sudo ./make -d -k latest` | Use the default configuration to compile the latest kernel version of the openwrt firmware. |
-| `sudo ./make -d -s 1024 -k 5.7.15` | Use the default configuration and set the partition size to 1024m, and only compile the openwrt firmware with the kernel version 5.7.15. |
-| `sudo ./make -h` | Display help information and view detailed description of each parameter. |
-| `sudo ./make` | If you are familiar with the relevant setting requirements of the phicomm_n1 firmware, you can follow the prompts, such as selecting the firmware you want to make, the kernel version, setting the ROOTFS partition size, etc. If you don’t know these settings, just press Enter. |
+| sudo ./make -d -b n1 -k 5.9.5 | recommend. Use the default configuration, specify a kernel and a firmware for compilation. |
+| sudo ./make -d -b n1_hk1 -k 5.4.75_5.9.5 | Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect. |
+| sudo ./make -d | Compile all kernel versions of openwrt with the default configuration. |
+| sudo ./make -d -b n1 -k 5.9.2 -s 1024 | Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation. |
+| sudo ./make -d -b n1_hk1 | Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels. |
+| sudo ./make -d -k 5.4.73_5.9.2 | Use the default configuration. Specify multiple cores, use `_` to connect. |
+| sudo ./make -d -k latest | Use the default configuration to compile the latest kernel version of the openwrt firmware. |
+| sudo ./make -d -s 1024 -k 5.7.15 | Use the default configuration and set the partition size to 1024m, and only compile the openwrt firmware with the kernel version 5.7.15. |
+| sudo ./make -h | Display help information and view detailed description of each parameter. |
+| sudo ./make | If you are familiar with the relevant setting requirements of the phicomm_n1 firmware, you can follow the prompts, such as selecting the firmware you want to make, the kernel version, setting the ROOTFS partition size, etc. If you don’t know these settings, just press Enter. |
 
 - ### The meaning of make parameters
 

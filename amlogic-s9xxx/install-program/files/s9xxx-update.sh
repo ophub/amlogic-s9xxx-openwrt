@@ -31,13 +31,6 @@ if  [ "${BOOT_PART_MSG}" == "" ]; then
     exit 1
 fi
 
-BR_FLAG=1
-echo -e "Do you want to the upgraded system? y/n [y]\b\b"
-read yn
-case $yn in
-     n*|N*) BR_FLAG=0;;
-esac
-
 BOOT_NAME=$(echo $BOOT_PART_MSG | awk '{print $1}')
 BOOT_PATH=$(echo $BOOT_PART_MSG | awk '{print $2}')
 BOOT_UUID=$(echo $BOOT_PART_MSG | awk '{print $4}')

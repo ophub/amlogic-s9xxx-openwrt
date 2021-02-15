@@ -120,7 +120,7 @@ case  $boxtype in
          U_BOOT_EXT=0
          ;;
       9) FDTFILE="meson-gxm-octopus-planet.dtb"
-         U_BOOT_EXT=1
+         U_BOOT_EXT=0
          ;;
       10) FDTFILE="meson-g12b-gtking.dtb"
          U_BOOT_EXT=1
@@ -135,10 +135,10 @@ case  $boxtype in
          U_BOOT_EXT=0
          ;;
       0) cat <<EOF
-Please enter the dtb file name of your box, do not include the path.
+Please enter the .dtb file name of your box, do not include the path.
 For example: $FDTFILE
 EOF
-         echo  "dtb File name:"
+         echo  "Enter the .dtb File name:"
          read  CUST_FDTFILE
          FDTFILE=$CUST_FDTFILE
          ;;

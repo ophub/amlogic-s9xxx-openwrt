@@ -16,10 +16,12 @@ General file storage directory, such as [boot and firmware](https://github.com/o
 
 ## install-program
 
-Install and Upgrading openwrt to the emmc for S9xxx-Boxs. Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+Install openwrt to the emmc for S9xxx-Boxs. Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
-- Phicomm-N1 installation command: `n1-install.sh`
-- S9xxx-Boxes installation command: `s9xxx-install.sh`
+- installation command: `s9xxx-install.sh`
+
+[For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
+
 
 ## u-boot
 

@@ -183,26 +183,23 @@ format_image() {
     fi
 
     # Write the specified bootloader
-    if [ "${build_op}" != "n1" -a "${build_op}" != "s905x" -a "${build_op}" != "s905d" ]; then
-        BTLD_BIN="${root}/root/hk1box-bootloader.img"
-        if [ -f ${BTLD_BIN} ]; then
-           mkdir -p ${root}/lib/u-boot
-           cp -f ${BTLD_BIN} ${root}/lib/u-boot/
-           #echo "Write bootloader for ${build_op}: [ $( ls ${root}/lib/u-boot/*.img 2>/dev/null ) ]."
-           dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
-           dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        else
-           die "bootloader does not exist."
-        fi
+    if [ "${build_op}" = "n1" -o "${build_op}" = "s905x" -o "${build_op}" = "s905d" ]; then
+       BTLD_BIN="${root}/root/u-boot-2015-phicomm-n1.bin"
+    else
+       BTLD_BIN="${root}/root/hk1box-bootloader.img"
     fi
-    
+
+    if [ -f ${BTLD_BIN} ]; then
+       dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+       dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+    fi
+
     # Add firmware version information to the terminal page
     if  [ -f ${root}/etc/banner ]; then
         op_version=$(echo $(ls ${root}/lib/modules/) 2>/dev/null)
         op_packaged_date=$(date +%Y-%m-%d)
         echo " OpenWrt Kernel: ${op_version}" >> ${root}/etc/banner
-        echo " Phicomm-N1 installation command: n1-install.sh" >> ${root}/etc/banner
-        echo " s9xxx-Boxs installation command: s9xxx-install.sh" >> ${root}/etc/banner
+        echo " installation command: s9xxx-install.sh" >> ${root}/etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> ${root}/etc/banner
         echo " -----------------------------------------------------" >> ${root}/etc/banner
     fi

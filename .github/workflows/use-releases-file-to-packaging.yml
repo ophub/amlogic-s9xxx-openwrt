@@ -99,6 +99,5 @@ jobs:
           Default password: password
           Default WIFI name: OpenWrt
           Default WIFI password: none
-          S9xxx-Boxs installation command: s9xxx-install.sh
-          Phicomm-N1 installation command: n1-install.sh
+          Common installation command: s9xxx-install.sh
 

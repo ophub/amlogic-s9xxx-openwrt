@@ -1,8 +1,8 @@
 #!/bin/sh
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S9xxx-Boxs
-# Function: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
+# Description: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
+# Function: Install openwrt to the emmc for S9xxx-Boxs
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
@@ -16,7 +16,7 @@ SKIP2=258
 # you can change ROOT2 size ≥ 320
 ROOT2=1024
 # shared partition can be ext4, xfs, btrfs, f2fs
-TARGET_SHARED_FSTYPE=btrfs
+TARGET_SHARED_FSTYPE=ext4
 
 hasdrives=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 if [ "$hasdrives" = "" ]; then
@@ -87,6 +87,7 @@ Please select s9xxx box model:
 10. Belink-GT-King ------ [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
 11. Belink-GT-King-Pro -- [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
 12. UGOOS-AM6-Plus ------ [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
+13. Phicomm-n1 ---------- [ S905d  / NETWORK: 1000M / CPU: 2124Mtz ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
 ---------------------------------------------------------------------
@@ -129,7 +130,10 @@ case  $boxtype in
          ;;
       12) FDTFILE="meson-g12b-ugoos-am6.dtb"
          U_BOOT_EXT=1
-         ;;	 
+         ;;
+      13) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
+         U_BOOT_EXT=0
+         ;;
       0) cat <<EOF
 Please enter the dtb file name of your box, do not include the path.
 For example: $FDTFILE
@@ -283,15 +287,20 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
-BLDR=/lib/u-boot/hk1box-bootloader.img
-if [ -f "${BLDR}" ]; then
-    if echo "${FDTFILE}" | grep meson-sm1-x96-max-plus >/dev/null; then
-        echo "Write new bootloader: [ ${BLDR} ] ..."
-        dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=1 count=442
-        dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=512 skip=1 seek=1
-        sync
-        echo "Write complete."
-    fi
+if echo "${FDTFILE}" | grep 'meson-sm1-x96-max-plus' >/dev/null; then
+    BLDR="/root/hk1box-bootloader.img"
+    echo "Write new bootloader: [ ${BLDR} ] ..."
+    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=1 count=442
+    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=512 skip=1 seek=1
+    sync
+    echo "Write complete."
+elif echo "${FDTFILE}" | grep 'meson-gxl-s905d-phicomm-n1.dtb' >/dev/null; then
+    BLDR="/root/u-boot-2015-phicomm-n1.bin"
+    echo "Write new bootloader: [ ${BLDR} ] ..."
+    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=1 count=442
+    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=512 skip=1 seek=1
+    sync
+    echo "Write complete."
 fi
 
 # fix wifi macaddr
@@ -455,16 +464,16 @@ echo "complete."
 echo "Create a shared file system."
 mkdir -p /mnt/${EMMC_NAME}p4
 case $TARGET_SHARED_FSTYPE in
-	xfs) mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+	     xfs) mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
 	     mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
 	     ;;
-      btrfs) mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
+       btrfs) mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
 	     mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
 	     ;;
        f2fs) mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
 	     mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
 	     ;;
-	  *) mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
+	     *) mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
 	     mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
 	     ;;
 esac

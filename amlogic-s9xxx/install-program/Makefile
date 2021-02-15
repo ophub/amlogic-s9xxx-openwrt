@@ -39,8 +39,6 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/config/
 	$(INSTALL_DIR) $(1)/root/
-	$(INSTALL_BIN) ./files/n1-install.sh $(1)/usr/bin/n1-install.sh
-	$(INSTALL_BIN) ./files/n1-update.sh $(1)/usr/bin/n1-update.sh
 	$(INSTALL_BIN) ./files/s9xxx-install.sh $(1)/usr/bin/s9xxx-install.sh
 	$(INSTALL_BIN) ./files/s9xxx-update.sh $(1)/usr/bin/s9xxx-update.sh
 	$(INSTALL_BIN) ./files/u-boot-2015-phicomm-n1.bin $(1)/root/u-boot-2015-phicomm-n1.bin

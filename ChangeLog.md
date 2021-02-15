@@ -12,6 +12,8 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.02.15 | All | UPDATE | ✩✩✩✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh) | Merging scripts, common for phicomm-n1 and s9xxx-Boxes. |
+| - | All | UPDATE | ✩✩✩✩✩ | [s9xxx-update.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-update.sh) | Merging scripts, common for phicomm-n1 and s9xxx-Boxes. |
 | 2021.02.01 | All | UPDATE | ✩✩✩✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Add support for 5.10 kernel. |
 | - | All | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh) | Add support for 5.10 kernel. |
 | - | All | ADD | ✩✩ | [5.10.11.Beta](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.11.Beta) | Add New kernel. |

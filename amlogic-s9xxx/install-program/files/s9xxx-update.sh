@@ -231,12 +231,12 @@ fi
 
 if dmesg | grep 'AMedia X96 Max+'; then
     BOOTLOADER="/root/hk1box-bootloader.img"
-    echo "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+    echo -e "\033[1;32m Write new bootloader: [ ${BOOTLOADER} ] \033[0m"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 elif dmesg | grep 'Phicomm N1'; then
     BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
-    echo "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+    echo -e "\033[1;32m Write new bootloader: [ ${BOOTLOADER} ] \033[0m"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 fi

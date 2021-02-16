@@ -478,8 +478,8 @@ case $TARGET_SHARED_FSTYPE in
 esac
 mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
 sync
-echo "complete."
+wait
 
-echo "Note: The original bootloader has been exported to [ /root/backup-bootloader.img ], please download and save!"
+echo "The original bootloader has been exported to [ /root/backup-bootloader.img ], please download and save!"
 echo "Install completed, please [ reboot ] the system!"
 

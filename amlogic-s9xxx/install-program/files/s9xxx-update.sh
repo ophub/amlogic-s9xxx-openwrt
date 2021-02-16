@@ -359,6 +359,8 @@ umount -f ${P1} ${P2} 2>/dev/null
 losetup -D 2>/dev/null
 rm -rf ${P1} ${P2} 2>/dev/null
 rm -f ${IMG_NAME} 2>/dev/null
+sync
+wait
 
 echo "The upgrade is complete, please [ reboot ] the system!"
 

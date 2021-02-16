@@ -136,11 +136,11 @@ fi
 
 #Upgrade version prompt
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
-VERSION_OLD=$(echo ${version_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
-VERSION_NEW=$(echo ${version_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
-if  [ ${VERSION_NEW} = "5.10" ]; then
+if  [ "${VERSION_NEW}" = "5.10" ]; then
     echo "The 5.10 kernel currently only supports the use of TF/SD cards, writing to EMMC may fail to start!"
     read -p "Are you sure to continue writing?  y/n" pause
         case $pause in

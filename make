@@ -233,29 +233,29 @@ copy2image() {
     fi
 
     case "${build_op}" in
-    s905x3 | x96 | hk1 | h96 | s9xxx)
-        new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
-        new_uboot="${uboot_path}/u-boot-s905x3-510kernel-u200.bin"
-        ;;
-    s905x2 | x96max4g | x96max2g)
-        new_fdt_dtb="meson-g12a-x96-max.dtb"
-        new_uboot="${uboot_path}/u-boot-s905x2-510kernel-sei510.bin"
-        ;;
-    s922x | belink | belinkpro | ugoos)
-        new_fdt_dtb="meson-g12b-gtking-pro.dtb"
-        new_uboot="${uboot_path}/u-boot-s922x-510kernel-gtkingpro.bin"
-        ;;
-    s905x | s905d | n1)
-        new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-        new_uboot="${uboot_path}/u-boot-s905xd-510kernel-p212.bin"
-        ;;
-    s912 | octopus)
-        new_fdt_dtb="meson-gxm-octopus-planet.dtb"
-        new_uboot="${uboot_path}/u-boot-s912-510kernel-q200.bin"
-        ;;
-    *)
-        die "Have no this firmware: [ ${build_op} - ${kernel} ]"
-        ;;
+        s905x3 | x96 | hk1 | h96 | s9xxx)
+            new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
+            new_uboot="${uboot_path}/u-boot-s905x3-510kernel-u200.bin"
+            ;;
+        s905x2 | x96max4g | x96max2g)
+            new_fdt_dtb="meson-g12a-x96-max.dtb"
+            new_uboot="${uboot_path}/u-boot-s905x2-510kernel-sei510.bin"
+            ;;
+        s922x | belink | belinkpro | ugoos)
+            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
+            new_uboot="${uboot_path}/u-boot-s922x-510kernel-gtkingpro.bin"
+            ;;
+        s905x | s905d | n1)
+            new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
+            new_uboot="${uboot_path}/u-boot-s905xd-510kernel-p212.bin"
+            ;;
+        s912 | octopus)
+            new_fdt_dtb="meson-gxm-octopus-planet.dtb"
+            new_uboot="${uboot_path}/u-boot-s912-510kernel-q200.bin"
+            ;;
+        *)
+            die "Have no this firmware: [ ${build_op} - ${kernel} ]"
+            ;;
     esac
 
     old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"

@@ -39,8 +39,9 @@ mv -f /tmp/upload/*.img.gz /mnt/mmcblk*p4/
 cp -f /usr/bin/s9xxx-update.sh /mnt/mmcblk*p4/
 cd /mnt/mmcblk*p4/
 gzip -df *.img.gz
-s9xxx-update.sh
-#s9xxx-update.sh  your_openwrt_imgFileName.img
+chmod 755 s9xxx-update.sh
+./s9xxx-update.sh
+# ./s9xxx-update.sh  your_openwrt_imgFileName.img
 reboot
 ```
 
@@ -83,4 +84,11 @@ reboot
 | 0 | Other | - | Enter the dtb file name of your box |
 
 You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) when you customize the file name.
+
+## Turn on the USB disk boot mode of the s9xxx-boxs
+
+- Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 7 times in quick succession, and you will see that the developer mode is turned on.
+- Turn on USB debugging: After restarting, enter Settings → System → Advanced options → Developer options again (after entering, confirm that the status is on, and the USB debugging status in the list is also on)
+- Boot from USB hard disk: Unplug the power → insert the USB hard disk → insert the thimble into the AV port (top reset button) → insert the power → release the thimble of the av port → the system will boot from the USB hard disk.
+- Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
 

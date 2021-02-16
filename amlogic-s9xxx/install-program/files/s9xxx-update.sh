@@ -134,6 +134,27 @@ if  [ $? -ne 0 ]; then
     exit 1
 fi
 
+#Upgrade version prompt
+MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
+VERSION_OLD=$(echo ${version_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
+VERSION_NEW=$(echo ${version_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
+if  [ ${VERSION_NEW} = "5.10" ]; then
+    echo "The 5.10 kernel currently only supports the use of TF/SD cards, writing to EMMC may fail to start!"
+    read -p "Are you sure to continue writing?  y/n" pause
+        case $pause in
+            n|N) echo "Stop writing emmc, continue to use TF/SD card."
+                 umount -f ${P1}
+                 umount -f ${P2}
+                 losetup -D
+                 exit 1
+                 ;;
+            y|Y) break
+                 ;;
+        esac
+fi
+
 #format NEW_ROOT
 echo "umount [ ${NEW_ROOT_MP} ]"
 umount -f "${NEW_ROOT_MP}"
@@ -194,6 +215,8 @@ for src in $COPY_SRC; do
     (cd ${P2} && tar cf - $src) | tar xf -
     sync
 done
+wait
+
 [ -d /mnt/${EMMC_NAME}p4/docker ] || mkdir -p /mnt/${EMMC_NAME}p4/docker
 rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker
 
@@ -208,16 +231,14 @@ fi
 
 if dmesg | grep 'AMedia X96 Max+'; then
     BOOTLOADER="/root/hk1box-bootloader.img"
-    echo "Write new bootloader [ ${BOOTLOADER} ] ... "
+    echo "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-    echo "Write complete."
 elif dmesg | grep 'Phicomm N1'; then
     BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
-    echo "Write new bootloader [ ${BOOTLOADER} ] ... "
+    echo "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-    echo "Write complete."
 fi
 
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-install.sh

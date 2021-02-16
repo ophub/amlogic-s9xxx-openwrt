@@ -287,20 +287,17 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
-if echo "${FDTFILE}" | grep 'meson-sm1-x96-max-plus' >/dev/null; then
-    BLDR="/root/hk1box-bootloader.img"
-    echo "Write new bootloader: [ ${BLDR} ] ..."
+if  [ "${FDTFILE}" = "meson-sm1-x96-max-plus" ]; then
+    BLDR=/root/hk1box-bootloader.img
+elif [ "${FDTFILE}" = "meson-gxl-s905d-phicomm-n1.dtb" ]; then
+    BLDR=/root/u-boot-2015-phicomm-n1.bin
+fi
+
+if  [ -f ${BLDR} ]; then
+    echo -e "Write new bootloader: [\033[1;32m ${BLDR} \033[0m]"
     dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=1 count=442
     dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=512 skip=1 seek=1
     sync
-    echo "Write complete."
-elif echo "${FDTFILE}" | grep 'meson-gxl-s905d-phicomm-n1.dtb' >/dev/null; then
-    BLDR="/root/u-boot-2015-phicomm-n1.bin"
-    echo "Write new bootloader: [ ${BLDR} ] ..."
-    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=1 count=442
-    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=512 skip=1 seek=1
-    sync
-    echo "Write complete."
 fi
 
 # fix wifi macaddr
@@ -412,6 +409,8 @@ while [ $i -le $max_try ]; do
             (cd / && tar cf - $src) | tar xf -
             sync
         done
+        wait
+
         rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker >/dev/null
         rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/ >/dev/null
         echo "Copy complete."

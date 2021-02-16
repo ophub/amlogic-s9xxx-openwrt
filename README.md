@@ -46,8 +46,9 @@ mv -f /tmp/upload/*.img.gz /mnt/mmcblk*p4/
 cp -f /usr/bin/s9xxx-update.sh /mnt/mmcblk*p4/
 cd /mnt/mmcblk*p4/
 gzip -df *.img.gz
-s9xxx-update.sh
-#s9xxx-update.sh  your_openwrt_imgFileName.img
+chmod 755 s9xxx-update.sh
+./s9xxx-update.sh
+# ./s9xxx-update.sh  your_openwrt_imgFileName.img
 reboot
 ```
 

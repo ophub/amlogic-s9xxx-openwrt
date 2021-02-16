@@ -463,18 +463,22 @@ echo "complete."
 echo "Create a shared file system."
 mkdir -p /mnt/${EMMC_NAME}p4
 case $TARGET_SHARED_FSTYPE in
-	     xfs) mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
-	     mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-	     ;;
-       btrfs) mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
-	     mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-	     ;;
-       f2fs) mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
-	     mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-	     ;;
-	     *) mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
-	     mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-	     ;;
+    xfs)
+        mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    btrfs)
+        mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    f2fs)
+        mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    *)
+        mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
 esac
 mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
 sync

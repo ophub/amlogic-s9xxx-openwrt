@@ -6,9 +6,9 @@ The first method:
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
- │   ├── N1_Openwrt*.img                   # Recommend Use Flippy's N1_Openwrt.img files
- │   ├── OR: S9***_Openwrt*.img            # Use Flippy's S9***_Openwrt*.img files
- │   └── OR: Armbian*Aml-s9xxx*.img        # Use Flippy's Armbian*.img files
+ │   ├── N1_Openwrt*.img               #Support suffix: .img/.7z/.img.xz, Use Flippy's N1_Openwrt.img files
+ │   ├── OR: S9***_Openwrt*.img        #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
+ │   └── OR: Armbian*Aml-s9xxx*.img    #Support suffix: .img/.7z/.img.xz, Use Flippy's Armbian*.img files
  └── make_use_img.sh
 ```
 

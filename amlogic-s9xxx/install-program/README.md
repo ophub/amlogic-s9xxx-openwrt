@@ -35,13 +35,10 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 - Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
-mv -f /tmp/upload/*.img.gz /mnt/mmcblk*p4/
-cp -f /usr/bin/s9xxx-update.sh /mnt/mmcblk*p4/
 cd /mnt/mmcblk*p4/
-gzip -df *.img.gz
-chmod 755 s9xxx-update.sh
+mv -f /tmp/upload/*.img.gz /mnt/mmcblk*p4/ && gzip -df *.img.gz
+cp -f /usr/bin/s9xxx-update.sh /mnt/mmcblk*p4/ && chmod 755 s9xxx-update.sh
 ./s9xxx-update.sh
-# ./s9xxx-update.sh  your_openwrt_imgFileName.img
 reboot
 ```
 

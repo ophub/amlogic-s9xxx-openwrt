@@ -36,8 +36,8 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ```yaml
 cd /mnt/mmcblk*p4/
-mv -f /tmp/upload/*.img.gz /mnt/mmcblk*p4/ && gzip -df *.img.gz
-cp -f /usr/bin/s9xxx-update.sh /mnt/mmcblk*p4/ && chmod 755 s9xxx-update.sh
+mv -f /tmp/upload/*.img.gz . && gzip -df *.img.gz
+cp -f /usr/bin/s9xxx-update.sh . && chmod 755 s9xxx-update.sh
 ./s9xxx-update.sh
 reboot
 ```

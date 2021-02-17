@@ -42,7 +42,7 @@ cp -f /usr/bin/s9xxx-update.sh . && chmod 755 s9xxx-update.sh
 reboot
 ```
 
-Tips: If there is only one `.img` file in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific file name. The upgrade script will vaguely look for `.img` files from the fixed directory and try to upgrade. If there are multiple `.img` files in the ***`/mnt/mmcblk*p4/`*** directory, please use the ***`s9xxx-update.sh your_openwrt_imgFileName.img`*** command to specify the firmware upgrade.
+Tips: If there is only one `.img` file in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`./s9xxx-update.sh`*** command without specifying a specific file name. The upgrade script will vaguely look for `.img` files from the fixed directory and try to upgrade. If there are multiple `.img` files in the ***`/mnt/mmcblk*p4/`*** directory, please use the ***`./s9xxx-update.sh your_openwrt_imgFileName.img`*** command to specify the firmware upgrade.
 
 ***`Write bootloader`***
 

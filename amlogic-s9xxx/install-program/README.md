@@ -15,7 +15,9 @@ Utilities  --->
 
 ## Install to S9xxx-Boxs EMMC partition and upgrade instructions
 
-Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx-Boxs. Common for `Phicomm-n1` and `s9xxx-Boxes`.
+Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx-Boxs.
+
+Common for `Phicomm-n1` and `s9xxx-Boxes`, etc.
 
 ***`Install OpenWrt`***
 

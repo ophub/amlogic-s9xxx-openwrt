@@ -141,18 +141,19 @@ MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
 if  [ "${VERSION_NEW}" = "5.10" ]; then
-    echo "The 5.10 kernel currently only supports the use of TF/SD cards, writing to EMMC may fail to start!"
-    read -p "Are you sure to continue writing?  y/n" pause
-        case $pause in
-            n|N) echo "Stop writing emmc, continue to use TF/SD card."
-                 umount -f ${P1}
-                 umount -f ${P2}
-                 losetup -D
-                 exit 1
-                 ;;
-            y|Y) break
-                 ;;
-        esac
+    echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+    echo "Are you sure you want to write into emmc? y/n"
+    read pause
+    case $pause in
+        n|N) echo "Stop write into emmc, continue to use TF/SD card."
+             umount -f ${P1}
+             umount -f ${P2}
+             losetup -D
+             exit 1
+             ;;
+        y|Y) break
+             ;;
+    esac
 fi
 
 #format NEW_ROOT

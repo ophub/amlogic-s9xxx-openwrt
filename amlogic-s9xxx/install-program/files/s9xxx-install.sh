@@ -70,6 +70,24 @@ echo "ROOTFS: $ROOT_NAME"
 BOOT_NAME=$(lsblk -l -o NAME,MAJ:MIN,MOUNTPOINT | grep -e '/boot$' | awk '{print $1}')
 echo "BOOT: $BOOT_NAME"
 
+#Check version information
+MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
+VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
+if  [ "${VERSION_NOW}" = "5.10" ]; then
+    echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+    echo "Are you sure you want to write into emmc? y/n"
+    read pause
+    case $pause in
+        n|N) echo "Stop write into emmc, continue to use TF/SD card."
+             exit 1
+             ;;
+        y|Y) break
+             ;;
+    esac
+fi
+
+#Choose the type of installation box
 FDTFILE="meson-sm1-x96-max-plus.dtb"
 U_BOOT_EXT=0
 cat <<EOF
@@ -156,7 +174,7 @@ if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
 fi
 
 # backup old bootloader
-if [ ! -f /root/backup-bootloader.img ]; then
+if [ ! -f "/root/backup-bootloader.img" ]; then
     echo "Backup bootloader -> [ backup-bootloader.img ] ... "
     dd if=/dev/$EMMC_NAME of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
     echo "Backup bootloader complete."

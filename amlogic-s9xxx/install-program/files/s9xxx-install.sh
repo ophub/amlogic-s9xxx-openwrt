@@ -7,13 +7,11 @@
 # Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
 
-SKIP1=64
-# you can change BOOT size ≥ 72
+# you can change BOOT size >= 128
 BOOT=256
-# you can change ROOT1 size ≥ 320
+# you can change ROOT1 size >= 320
 ROOT1=1024
-SKIP2=258
-# you can change ROOT2 size ≥ 320
+# you can change ROOT2 size >= 320
 ROOT2=1024
 # shared partition can be ext4, xfs, btrfs, f2fs
 TARGET_SHARED_FSTYPE=ext4
@@ -93,19 +91,19 @@ U_BOOT_EXT=0
 cat <<EOF
 ---------------------------------------------------------------------
 Please select s9xxx box model:
-1. X96-Max+ ------------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
-2. X96-Max+ ------------- [ S905x3 / NETWORK: 1000M / CPU: 2208Mtz ]
-3. HK1-Box -------------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
-4. HK1-Box -------------- [ S905x3 / NETWORK: 1000M / CPU: 2184Mtz ]
-5. H96-Max-X3 ----------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
-6. H96-Max-X3 ----------- [ S905x3 / NETWORK: 1000M / CPU: 2208Mtz ]
-7. X96-Max-4G ----------- [ S905x2 / NETWORK: 1000M / CPU: 1944Mtz ]
-8. X96-Max-2G ----------- [ S905x2 / NETWORK: 100M  / CPU: 1944Mtz ]
-9. Octopus-Planet ------- [ S912   / NETWORK: 1000M / CPU: 2124Mtz ]
-10. Belink-GT-King ------ [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
-11. Belink-GT-King-Pro -- [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
-12. UGOOS-AM6-Plus ------ [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
-13. Phicomm-n1 ---------- [ S905d  / NETWORK: 1000M / CPU: 2124Mtz ]
+1. X96-Max+ ------------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+2. X96-Max+ ------------- [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
+3. HK1-Box -------------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+4. HK1-Box -------------- [ S905x3 / CPU: 2184Mtz / NETWORK: 1000M ]
+5. H96-Max-X3 ----------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+6. H96-Max-X3 ----------- [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
+7. X96-Max-4G ----------- [ S905x2 / CPU: 1944Mtz / NETWORK: 1000M ]
+8. X96-Max-2G ----------- [ S905x2 / CPU: 1944Mtz / NETWORK: 100M  ]
+9. Octopus-Planet ------- [ S912   / CPU: 2124Mtz / NETWORK: 1000M ]
+10. Belink-GT-King ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+11. Belink-GT-King-Pro -- [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+12. UGOOS-AM6-Plus ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+13. Phicomm-n1 ---------- [ S905d  / CPU: 2124Mtz / NETWORK: 1000M ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
 ---------------------------------------------------------------------
@@ -235,6 +233,17 @@ while [ $p -ge 1 ]; do
 done
 
 # Create new partition
+if  [ "${FDTFILE}" = "meson-gxm-octopus-planet.dtb" ]; then
+    SKIP1=700
+    SKIP2=0
+elif [ "${FDTFILE}" = "meson-gxl-s905d-phicomm-n1.dtb" ]; then
+    SKIP1=68
+    SKIP2=0
+else
+    SKIP1=68
+    SKIP2=162
+fi
+
 DST_TOTAL_MB=$((EMMC_SIZE/1024/1024))
 
 start1=$(( SKIP1 * 2048 ))

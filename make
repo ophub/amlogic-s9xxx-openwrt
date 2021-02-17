@@ -235,7 +235,7 @@ copy2image() {
     case "${build_op}" in
         s905x3 | x96 | hk1 | h96 | s9xxx)
             new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
-            new_uboot="${uboot_path}/u-boot-s905x3-510kernel-u200.bin"
+            new_uboot="${uboot_path}/u-boot-s905x3-510kernel-x96max.bin"
             ;;
         s905x2 | x96max4g | x96max2g)
             new_fdt_dtb="meson-g12a-x96-max.dtb"
@@ -247,11 +247,11 @@ copy2image() {
             ;;
         s905x | s905d | n1)
             new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-            new_uboot="${uboot_path}/u-boot-s905xd-510kernel-p212.bin"
+            new_uboot="${uboot_path}/u-boot-s905d-510kernel-phicommn1.bin"
             ;;
         s912 | octopus)
             new_fdt_dtb="meson-gxm-octopus-planet.dtb"
-            new_uboot="${uboot_path}/u-boot-s912-510kernel-q200.bin"
+            new_uboot="${uboot_path}/u-boot-s912-510kernel-octopusplanet.bin"
             ;;
         *)
             die "Have no this firmware: [ ${build_op} - ${kernel} ]"
@@ -261,7 +261,7 @@ copy2image() {
     old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
     sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
     if [ $(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}') = "5.10" -a -f ${new_uboot} ]; then
-       echo "u-boot.ext u-boot.emmc u-boot-510kernel.bin" | xargs -n 1 cp -f ${new_uboot} 2>/dev/null
+       echo "u-boot.ext u-boot-510kernel.bin" | xargs -n 1 cp -f ${new_uboot} 2>/dev/null
     fi
     sync
 

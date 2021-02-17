@@ -3,8 +3,8 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
 # Function: Upgrading openwrt to the emmc for S9xxx-Boxs
-# Copyright (C) 2020 Flippy
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
+# Copyright (C) 2020~ Flippy
+# Copyright (C) 2020~ https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
 
 EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)

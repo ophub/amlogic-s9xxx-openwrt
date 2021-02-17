@@ -21,8 +21,7 @@ uboot_path=${make_path}/${amlogic_path}/u-boot
 installfiles_path=${make_path}/${amlogic_path}/install-program/files
 #===== Do not modify the following parameter settings, End =======
 
-# Set firmware size ( ROOT_MB must be ≥ 256 )
-SKIP_MB=16
+# Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
 BOOT_MB=256
 ROOT_MB=1024
 
@@ -160,20 +159,21 @@ make_image() {
     sync
 
     [ -d ${out_path} ] || mkdir -p ${out_path}
+    SKIP_MB=16
     fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M ${build_image_file}
-}
-
-format_image() {
-    cd ${make_path}
-    build_op=${1}
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
-    parted -s ${build_image_file} mkpart primary ext4 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
+    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
     parted -s ${build_image_file} mkpart primary ext4 $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
 
     loop_setup ${build_image_file}
     mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
     mke2fs -F -q -t ext4 -L "ROOTFS" -m 0 ${loop}p2 >/dev/null 2>&1
+}
+
+format_image() {
+    cd ${make_path}
+    build_op=${1}
 
     # Complete file
     if [ ! -f ${root}/root/hk1box-bootloader.img ]; then
@@ -198,8 +198,8 @@ format_image() {
     if  [ -f ${root}/etc/banner ]; then
         op_version=$(echo $(ls ${root}/lib/modules/) 2>/dev/null)
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " OpenWrt Kernel: ${op_version}" >> ${root}/etc/banner
-        echo " installation command: s9xxx-install.sh" >> ${root}/etc/banner
+        echo " Kernel: ${op_version}" >> ${root}/etc/banner
+        echo " Installation command: s9xxx-install.sh" >> ${root}/etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> ${root}/etc/banner
         echo " -----------------------------------------------------" >> ${root}/etc/banner
     fi

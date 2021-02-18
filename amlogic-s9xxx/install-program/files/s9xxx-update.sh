@@ -126,7 +126,7 @@ if  [ $? -ne 0 ]; then
 fi
 
 echo "Mount [ ${LOOP_DEV}p2 ] -> [ ${P2} ] ... "
-mount -t ext4 ${LOOP_DEV}p2 ${P2}
+mount -t btrfs -o ro,compress=zstd ${LOOP_DEV}p2 ${P2}
 if  [ $? -ne 0 ]; then
     echo "Mount p2 [ ${LOOP_DEV}p2 ] failed!"
     umount -f ${P1}

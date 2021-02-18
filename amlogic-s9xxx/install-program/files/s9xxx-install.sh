@@ -14,7 +14,7 @@ ROOT1=1024
 # you can change ROOT2 size >= 320
 ROOT2=1024
 # shared partition can be ext4, xfs, btrfs, f2fs
-TARGET_SHARED_FSTYPE=ext4
+TARGET_SHARED_FSTYPE=btrfs
 
 hasdrives=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 if [ "$hasdrives" = "" ]; then

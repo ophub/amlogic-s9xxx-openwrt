@@ -132,45 +132,37 @@ extract_armbian() {
 }
 
 utils() {
-    (
-        cd ${root}
-        # add other operations below
-
-        echo 'pwm_meson' > etc/modules.d/pwm-meson
-        if ! grep -q 'ulimit -n' etc/init.d/boot; then
-            sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
-        fi
-        if ! grep -q '/tmp/upgrade' etc/init.d/boot; then
-            sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/upgrade' etc/init.d/boot
-        fi
-        sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
-        sed -i 's/ttyS0/tty0/' etc/inittab
-
-        mkdir -p boot run opt
-        chown -R 0:0 ./
-    )
-}
-
-make_image() {
     cd ${make_path}
     build_op=${1}
-    build_image_file="${out_path}/openwrt_${build_op}_v${kernel}_$(date +"%Y.%m.%d.%H%M").img"
-    rm -f ${build_image_file}
-    sync
+    build_usekernel=${2}
 
-    [ -d ${out_path} ] || mkdir -p ${out_path}
-    SKIP_MB=16
-    fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M ${build_image_file}
+    cd ${root}
 
-    parted -s ${build_image_file} mklabel msdos 2>/dev/null
-    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
-    parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
+    # add other operations below
+    echo 'pwm_meson' > etc/modules.d/pwm-meson
+    if ! grep -q 'ulimit -n' etc/init.d/boot; then
+        sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
+    fi
+    if ! grep -q '/tmp/upgrade' etc/init.d/boot; then
+        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/upgrade' etc/init.d/boot
+    fi
+    sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
+    sed -i 's/ttyS0/tty0/' etc/inittab
 
-    loop_setup ${build_image_file}
-    mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
-    ROOTFS_UUID=$(uuidgen)
-    #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
-    mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
+    mkdir -p boot run opt
+    chown -R 0:0 ./
+
+    # Add firmware version information to the terminal page
+    if  [ -f etc/banner ]; then
+        op_version=$(echo $(ls lib/modules/) 2>/dev/null)
+        op_packaged_date=$(date +%Y-%m-%d)
+        echo " Kernel: ${op_version}" >> etc/banner
+        echo " Installation command: s9xxx-install.sh" >> etc/banner
+        echo " Packaged Date: ${op_packaged_date}" >> etc/banner
+        echo " -----------------------------------------------------" >> etc/banner
+    fi
+
+    cd ${make_path}
 
     # Complete file
     cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
@@ -178,62 +170,15 @@ make_image() {
     cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
     cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
     sync
+
+    #Edit fstab
+    ROOTFS_UUID=$(uuidgen)
+    #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" ${root}/etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" ${root}/etc/config/fstab 2>/dev/null
 
-}
-
-format_image() {
-    cd ${make_path}
-    build_op=${1}
-
-    # Write the specified bootloader
-    if [ "${build_op}" = "n1" -o "${build_op}" = "s905x" -o "${build_op}" = "s905d" ]; then
-       BTLD_BIN="${root}/root/u-boot-2015-phicomm-n1.bin"
-    else
-       BTLD_BIN="${root}/root/hk1box-bootloader.img"
-    fi
-
-    if [ -f ${BTLD_BIN} ]; then
-       dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
-       dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-    fi
-
-    # Add firmware version information to the terminal page
-    if  [ -f ${root}/etc/banner ]; then
-        op_version=$(echo $(ls ${root}/lib/modules/) 2>/dev/null)
-        op_packaged_date=$(date +%Y-%m-%d)
-        echo " Kernel: ${op_version}" >> ${root}/etc/banner
-        echo " Installation command: s9xxx-install.sh" >> ${root}/etc/banner
-        echo " Packaged Date: ${op_packaged_date}" >> ${root}/etc/banner
-        echo " -----------------------------------------------------" >> ${root}/etc/banner
-    fi
-}
-
-copy2image() {
-    cd ${make_path}
-    build_op=${1}
-    build_usekernel=${2}
-    set -e
-
-    local bootfs="${mount}/${kernel}/${build_op}/bootfs"
-    local rootfs="${mount}/${kernel}/${build_op}/rootfs"
-
-    mkdir -p ${bootfs} ${rootfs}
-    if ! mount ${loop}p1 ${bootfs}; then
-        die "mount ${loop}p1 failed!"
-    fi
-    if ! mount ${loop}p2 ${rootfs}; then
-        die "mount ${loop}p2 failed!"
-    fi
-
-    cp -rf ${boot}/* ${bootfs}
-    cp -rf ${root}/* ${rootfs}
-    sync
-
     #Write the specified uEnv.txt & copy u-boot for 5.10.* kernel
-    cd ${bootfs}
-    if [  ! -f "uEnv.txt" ]; then
+    if [  ! -f "${boot}/uEnv.txt" ]; then
        die "Error: uEnv.txt Files does not exist"
     fi
 
@@ -264,10 +209,74 @@ copy2image() {
     esac
 
     old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-    sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-    if [ $(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}') = "5.10" -a -f ${new_uboot} ]; then
-       echo "u-boot.ext u-boot-510kernel.bin" | xargs -n 1 cp -f ${new_uboot} 2>/dev/null
+    sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" ${boot}/uEnv.txt
+    if [ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" = "5.10" ]; then
+       if [ -f ${new_uboot} ]; then
+          echo "${boot}/u-boot.ext ${boot}/u-boot-510kernel.bin" | xargs -n 1 cp -f ${new_uboot} 2>/dev/null
+       else
+          die "Have no this 5.10 kernel u-boot file: [ ${new_uboot} ]"
+       fi
     fi
+
+    sync
+}
+
+make_image() {
+    cd ${make_path}
+    build_op=${1}
+    build_image_file="${out_path}/openwrt_${build_op}_v${kernel}_$(date +"%Y.%m.%d.%H%M").img"
+    rm -f ${build_image_file}
+    sync
+
+    [ -d ${out_path} ] || mkdir -p ${out_path}
+    SKIP_MB=16
+    fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M ${build_image_file}
+
+    parted -s ${build_image_file} mklabel msdos 2>/dev/null
+    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
+    parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
+
+    loop_setup ${build_image_file}
+    mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
+    mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
+}
+
+format_image() {
+    cd ${make_path}
+    build_op=${1}
+
+    # Write the specified bootloader
+    if [ "${build_op}" = "n1" -o "${build_op}" = "s905x" -o "${build_op}" = "s905d" ]; then
+       BTLD_BIN="${root}/root/u-boot-2015-phicomm-n1.bin"
+    else
+       BTLD_BIN="${root}/root/hk1box-bootloader.img"
+    fi
+
+    if [ -f ${BTLD_BIN} ]; then
+       dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+       dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+    fi
+}
+
+copy2image() {
+    cd ${make_path}
+    build_op=${1}
+
+    set -e
+
+    local bootfs="${mount}/${kernel}/${build_op}/bootfs"
+    local rootfs="${mount}/${kernel}/${build_op}/rootfs"
+
+    mkdir -p ${bootfs} ${rootfs}
+    if ! mount ${loop}p1 ${bootfs}; then
+        die "mount ${loop}p1 failed!"
+    fi
+    if ! mount ${loop}p2 ${rootfs}; then
+        die "mount ${loop}p2 failed!"
+    fi
+
+    cp -rf ${boot}/* ${bootfs}
+    cp -rf ${root}/* ${rootfs}
     sync
 
     cd ${make_path}
@@ -515,13 +524,13 @@ for b in ${build_openwrt[*]}; do
             build=${b}
             process " extract armbian files."
             extract_armbian ${b}
-            utils
+            utils ${b} ${x}
             process " make openwrt image."
             make_image ${b}
             process " format openwrt image."
             format_image ${b}
             process " copy files to image."
-            copy2image ${b} ${x}
+            copy2image ${b}
             process " generate success."
         } &
     done

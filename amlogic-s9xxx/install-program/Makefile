@@ -44,7 +44,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./files/s9xxx-update.sh $(1)/usr/bin/s9xxx-update.sh
 	$(INSTALL_BIN) ./files/u-boot-2015-phicomm-n1.bin $(1)/root/u-boot-2015-phicomm-n1.bin
 	$(INSTALL_BIN) ./files/hk1box-bootloader.img $(1)/root/hk1box-bootloader.img
-	$(INSTALL_CONF) ./files/fstab $(1)/etc/fstab
+	$(INSTALL_CONF) ./files/fstab.etc $(1)/etc/fstab
 	$(INSTALL_CONF) ./files/fstab.config $(1)/etc/config/fstab
 endef
 

@@ -176,12 +176,12 @@ make_image() {
     if [ ! -f ${root}/root/hk1box-bootloader.img ]; then
        cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
        cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
-       cp -f ${installfiles_path}/fstab ${root}/etc/fstab
+       cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
        cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
     fi
     sync
-    sed -i "s/ROOTFS_UUID/${ROOTFS_UUID}/" ${root}/etc/fstab
-    sed -i "s/ROOTFS_UUID/${ROOTFS_UUID}/" ${root}/etc/config/fstab
+    sed -i "s/ROOTFS_UUID/${ROOTFS_UUID}/" ${root}/etc/fstab 2>/dev/null
+    sed -i "s/ROOTFS_UUID/${ROOTFS_UUID}/" ${root}/etc/config/fstab 2>/dev/null
 
 }
 

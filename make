@@ -244,11 +244,6 @@ make_image() {
     loop_setup ${build_image_file}
     mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
     mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
-}
-
-format_image() {
-    cd ${make_path}
-    build_op=${1}
 
     # Write the specified bootloader
     if [ "${build_op}" = "n1" -o "${build_op}" = "s905x" -o "${build_op}" = "s905d" ]; then
@@ -532,8 +527,6 @@ for b in ${build_openwrt[*]}; do
             utils ${b} ${x}
             process " make openwrt image."
             make_image ${b}
-            process " format openwrt image."
-            format_image ${b}
             process " copy files to image."
             copy2image ${b}
             process " generate success."

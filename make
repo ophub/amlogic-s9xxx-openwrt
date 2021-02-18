@@ -11,14 +11,14 @@
 #===== Do not modify the following parameter settings, Start =====
 build_openwrt=("s905x3" "s905x2" "s922x" "s905x" "s905d" "s912")
 make_path=${PWD}
-tmp_path="tmp"
-out_path="out"
-amlogic_path="amlogic-s9xxx"
-openwrt_path="openwrt-armvirt"
-kernel_path="amlogic-kernel"
-commonfiles_path="common-files"
-uboot_path=${make_path}/${amlogic_path}/u-boot
-installfiles_path=${make_path}/${amlogic_path}/install-program/files
+tmp_path=${make_path}/tmp
+out_path=${make_path}/out
+openwrt_path=${make_path}/openwrt-armvirt
+amlogic_path=${make_path}/amlogic-s9xxx
+kernel_path=${amlogic_path}/amlogic-kernel
+commonfiles_path=${amlogic_path}/common-files
+uboot_path=${amlogic_path}/u-boot
+installfiles_path=${amlogic_path}/install-program/files
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -114,16 +114,16 @@ extract_openwrt() {
 extract_armbian() {
     cd ${make_path}
     build_op=${1}
-    kernel_dir="${amlogic_path}/${kernel_path}/kernel/${kernel}"
-    # root_dir="${amlogic_path}/${kernel_path}/root"
+    kernel_dir="${kernel_path}/kernel/${kernel}"
+    # root_dir="${kernel_path}/root"
     root="${tmp_path}/${kernel}/${build_op}/root"
     boot="${tmp_path}/${kernel}/${build_op}/boot"
 
     mkdir -p ${root} ${boot}
 
-    tar -xJf "${amlogic_path}/${commonfiles_path}/boot-common.tar.xz" -C ${boot}
+    tar -xJf "${commonfiles_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${kernel_dir}/kernel.tar.xz" -C ${boot}
-    tar -xJf "${amlogic_path}/${commonfiles_path}/firmware.tar.xz" -C ${root}
+    tar -xJf "${commonfiles_path}/firmware.tar.xz" -C ${root}
     tar -xJf "${kernel_dir}/modules.tar.xz" -C ${root}
 
     cp -rf ${root_comm}/* ${root}
@@ -178,7 +178,7 @@ utils() {
 
 
     #Edit ${boot}/* files ========== Begin ==========
-    cd {boot}
+    cd ${boot}
 
     #Write the specified uEnv.txt & copy u-boot for 5.10.* kernel
     if [  ! -f "uEnv.txt" ]; then
@@ -307,7 +307,7 @@ get_kernels() {
     i=0
     IFS=$'\n'
 
-    local kernel_root="${amlogic_path}/${kernel_path}/kernel"
+    local kernel_root="${kernel_path}/kernel"
     [ -d ${kernel_root} ] && {
         work=$(pwd)
         cd ${kernel_root}
@@ -320,7 +320,7 @@ get_kernels() {
 
 show_kernels() {
     if [ ${#kernels[*]} = 0 ]; then
-        die "No kernel files in [ ${amlogic_path}/${kernel_path}/kernel ] directory!"
+        die "No kernel files in [ ${kernel_path}/kernel ] directory!"
     else
         show_list "${kernels[*]}" "kernel"
     fi
@@ -504,7 +504,7 @@ if [ ${#firmwares[*]} = 0 ]; then
 fi
 
 if [ ${#kernels[*]} = 0 ]; then
-    die "No this kernel files in [ ${amlogic_path}/${kernel_path}/kernel ] directory!"
+    die "No this kernel files in [ ${kernel_path}/kernel ] directory!"
 fi
 
 [ ${firmware} ] && echo " firmware   ==>   ${firmware}"

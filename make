@@ -128,6 +128,12 @@ extract_armbian() {
 
     cp -rf ${root_comm}/* ${root}
     # [ $(ls ${root_dir} | wc -w) != 0 ] && cp -r ${root_dir}/* ${root}
+
+    # Complete file
+    cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
+    cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
+    cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
+    cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
     sync
 }
 
@@ -136,6 +142,7 @@ utils() {
     build_op=${1}
     build_usekernel=${2}
 
+    #Edit ${root}/* files ========== Begin ==========
     cd ${root}
 
     # add other operations below
@@ -152,6 +159,12 @@ utils() {
     mkdir -p boot run opt
     chown -R 0:0 ./
 
+    #Edit fstab
+    ROOTFS_UUID=$(uuidgen)
+    #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
+    sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
+    sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
+
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/) 2>/dev/null)
@@ -161,47 +174,37 @@ utils() {
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi
+    #Edit ${root}/* files ========== End ==========
 
-    cd ${make_path}
 
-    # Complete file
-    cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
-    cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
-    cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
-    cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
-    sync
-
-    #Edit fstab
-    ROOTFS_UUID=$(uuidgen)
-    #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
-    sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" ${root}/etc/fstab 2>/dev/null
-    sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" ${root}/etc/config/fstab 2>/dev/null
+    #Edit ${boot}/* files ========== Begin ==========
+    cd {boot}
 
     #Write the specified uEnv.txt & copy u-boot for 5.10.* kernel
-    if [  ! -f "${boot}/uEnv.txt" ]; then
+    if [  ! -f "uEnv.txt" ]; then
        die "Error: uEnv.txt Files does not exist"
     fi
 
     case "${build_op}" in
         s905x3 | x96 | hk1 | h96 | s9xxx)
             new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
-            new_uboot="${uboot_path}/u-boot-s905x3-510kernel-x96max.bin"
+            new_uboot="u-boot-s905x3-510kernel-x96max.bin"
             ;;
         s905x2 | x96max4g | x96max2g)
             new_fdt_dtb="meson-g12a-x96-max.dtb"
-            new_uboot="${uboot_path}/u-boot-s905x2-510kernel-sei510.bin"
+            new_uboot="u-boot-s905x2-510kernel-sei510.bin"
             ;;
         s922x | belink | belinkpro | ugoos)
             new_fdt_dtb="meson-g12b-gtking-pro.dtb"
-            new_uboot="${uboot_path}/u-boot-s922x-510kernel-gtkingpro.bin"
+            new_uboot="u-boot-s922x-510kernel-gtkingpro.bin"
             ;;
         s905x | s905d | n1)
             new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-            new_uboot="${uboot_path}/u-boot-s905d-510kernel-phicommn1.bin"
+            new_uboot="u-boot-s905d-510kernel-phicommn1.bin"
             ;;
         s912 | octopus)
             new_fdt_dtb="meson-gxm-octopus-planet.dtb"
-            new_uboot="${uboot_path}/u-boot-s912-510kernel-octopusplanet.bin"
+            new_uboot="u-boot-s912-510kernel-octopusplanet.bin"
             ;;
         *)
             die "Have no this firmware: [ ${build_op} - ${kernel} ]"
@@ -209,14 +212,16 @@ utils() {
     esac
 
     old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-    sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" ${boot}/uEnv.txt
+    sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
+
     if [ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" = "5.10" ]; then
-       if [ -f ${new_uboot} ]; then
-          echo "${boot}/u-boot.ext ${boot}/u-boot-510kernel.bin" | xargs -n 1 cp -f ${new_uboot} 2>/dev/null
+       if [ -f ${uboot_path}/${new_uboot} ]; then
+          echo "u-boot.ext u-boot-510kernel.bin" | xargs -n 1 cp -f ${uboot_path}/${new_uboot} 2>/dev/null
        else
-          die "Have no this 5.10 kernel u-boot file: [ ${new_uboot} ]"
+          die "Have no this 5.10 kernel u-boot file: [ ${uboot_path}/${new_uboot} ]"
        fi
     fi
+    #Edit ${boot}/* files ========== End ==========
 
     sync
 }

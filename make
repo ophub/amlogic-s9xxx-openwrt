@@ -164,23 +164,30 @@ make_image() {
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
     parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
-    parted -s ${build_image_file} mkpart primary ext4 $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
+    parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
 
     loop_setup ${build_image_file}
     mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
-    mke2fs -F -q -t ext4 -L "ROOTFS" -m 0 ${loop}p2 >/dev/null 2>&1
-}
-
-format_image() {
-    cd ${make_path}
-    build_op=${1}
+    ROOTFS_UUID=$(uuidgen)
+    #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
+    mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
 
     # Complete file
     if [ ! -f ${root}/root/hk1box-bootloader.img ]; then
        cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
        cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
-       echo "${root}/etc/config/fstab ${root}/etc/config/fstab.bak" | xargs -n 1 cp -f ${installfiles_path}/fstab 2>/dev/null
+       cp -f ${installfiles_path}/fstab ${root}/etc/fstab
+       cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
     fi
+    sync
+    sed -i "s/ROOTFS_UUID/${ROOTFS_UUID}/" ${root}/etc/fstab
+    sed -i "s/ROOTFS_UUID/${ROOTFS_UUID}/" ${root}/etc/config/fstab
+
+}
+
+format_image() {
+    cd ${make_path}
+    build_op=${1}
 
     # Write the specified bootloader
     if [ "${build_op}" = "n1" -o "${build_op}" = "s905x" -o "${build_op}" = "s905d" ]; then

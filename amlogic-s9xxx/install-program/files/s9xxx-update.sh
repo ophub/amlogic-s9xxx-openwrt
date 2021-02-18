@@ -1,15 +1,17 @@
 #!/bin/sh
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S9xxx-Boxs
-# Function: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
-# Copyright (C) 2020 Flippy
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
+# Function: Upgrading openwrt to the emmc for S9xxx-Boxs
+# Copyright (C) 2020-2021 Flippy
+# Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
+
+EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 
 # check cmd param
 if  [ "$1" == "" ]; then
-    IMG_NAME=$( ls /mnt/mmcblk2p4/*.img 2>/dev/null | head -n 1 )
+    IMG_NAME=$( ls /mnt/${EMMC_NAME}p4/*.img 2>/dev/null | head -n 1 )
 else
     IMG_NAME=$1
 fi
@@ -29,13 +31,6 @@ if  [ "${BOOT_PART_MSG}" == "" ]; then
     exit 1
 fi
 
-BR_FLAG=1
-echo -e "Do you want to the upgraded system? y/n [y]\b\b"
-read yn
-case $yn in
-     n*|N*) BR_FLAG=0;;
-esac
-
 BOOT_NAME=$(echo $BOOT_PART_MSG | awk '{print $1}')
 BOOT_PATH=$(echo $BOOT_PART_MSG | awk '{print $2}')
 BOOT_UUID=$(echo $BOOT_PART_MSG | awk '{print $4}')
@@ -46,16 +41,16 @@ ROOT_NAME=$(echo $ROOT_PART_MSG | awk '{print $1}')
 ROOT_PATH=$(echo $ROOT_PART_MSG | awk '{print $2}')
 ROOT_UUID=$(echo $ROOT_PART_MSG | awk '{print $4}')
 
-case $ROOT_NAME in 
-     mmcblk2p2) NEW_ROOT_NAME=mmcblk2p3
-	        NEW_ROOT_LABEL=EMMC_ROOTFS2
-	        ;;
-     mmcblk2p3) NEW_ROOT_NAME=mmcblk2p2
-	        NEW_ROOT_LABEL=EMMC_ROOTFS1
-	        ;;
-             *) echo "ROOTFS The partition location is incorrect, so the upgrade cannot continue!"
-                exit 1
-                ;;
+case  $ROOT_NAME in
+      ${EMMC_NAME}p2) NEW_ROOT_NAME=${EMMC_NAME}p3
+                      NEW_ROOT_LABEL=EMMC_ROOTFS2
+                      ;;
+      ${EMMC_NAME}p3) NEW_ROOT_NAME=${EMMC_NAME}p2
+                      NEW_ROOT_LABEL=EMMC_ROOTFS1
+                      ;;
+      *) echo "ROOTFS The partition location is incorrect, so the upgrade cannot continue!"
+                      exit 1
+                      ;;
 esac
 echo "NEW_ROOT_NAME: [ ${NEW_ROOT_NAME} ]"
 
@@ -75,7 +70,7 @@ echo "NEW_ROOT_MP: [ ${NEW_ROOT_MP} ]"
 # backup old bootloader
 if  [ ! -f /root/backup-bootloader.img ]; then
     echo "Backup bootloader -> [ backup-bootloader.img ] ... "
-    dd if=/dev/mmcblk2 of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
+    dd if=/dev/${EMMC_NAME} of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
     echo "Backup bootloader complete."
     echo
 fi
@@ -128,7 +123,7 @@ if  [ $? -ne 0 ]; then
     echo "Mount p1 [ ${LOOP_DEV}p1 ] failed!"
     losetup -D
     exit 1
-fi	
+fi
 
 echo "Mount [ ${LOOP_DEV}p2 ] -> [ ${P2} ] ... "
 mount -t btrfs -o ro,compress=zstd ${LOOP_DEV}p2 ${P2}
@@ -137,7 +132,33 @@ if  [ $? -ne 0 ]; then
     umount -f ${P1}
     losetup -D
     exit 1
-fi	
+fi
+
+#Upgrade version prompt
+source /boot/uEnv.txt 2>/dev/null
+CUR_FDTFILE=${FDT}
+
+MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
+VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
+VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
+echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
+if  [ "${VERSION_NEW}" = "5.10" ]; then
+    echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+    echo "Are you sure you want to write into emmc? y/n"
+    read pause
+    case $pause in
+        n|N) echo "Stop write into emmc, continue to use TF/SD card."
+             umount -f ${P1}
+             umount -f ${P2}
+             losetup -D
+             exit 1
+             ;;
+        y|Y) break
+             ;;
+    esac
+fi
 
 #format NEW_ROOT
 echo "umount [ ${NEW_ROOT_MP} ]"
@@ -199,27 +220,30 @@ for src in $COPY_SRC; do
     (cd ${P2} && tar cf - $src) | tar xf -
     sync
 done
-[ -d /mnt/mmcblk2p4/docker ] || mkdir -p /mnt/mmcblk2p4/docker
-rm -rf opt/docker && ln -sf /mnt/mmcblk2p4/docker/ opt/docker
+wait
+
+[ -d /mnt/${EMMC_NAME}p4/docker ] || mkdir -p /mnt/${EMMC_NAME}p4/docker
+rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker
 
 if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
-    [ -d /mnt/mmcblk2p4/AdGuardHome/data ] || mkdir -p /mnt/mmcblk2p4/AdGuardHome/data
+    [ -d /mnt/${EMMC_NAME}p4/AdGuardHome/data ] || mkdir -p /mnt/${EMMC_NAME}p4/AdGuardHome/data
     if  [ ! -L /usr/bin/AdGuardHome ]; then
         [ -d /usr/bin/AdGuardHome ] && \
-        cp -a /usr/bin/AdGuardHome/* /mnt/mmcblk2p4/AdGuardHome/
+        cp -a /usr/bin/AdGuardHome/* /mnt/${EMMC_NAME}p4/AdGuardHome/
     fi
-    ln -sf /mnt/mmcblk2p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
+    ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-BOOTLOADER="./lib/u-boot/hk1box-bootloader.img"
-if  [ -f ${BOOTLOADER} ]; then
-    if dmesg | grep 'AMedia X96 Max+'; then
-        echo "Write new bootloader [ ${BOOTLOADER} ] ... "
-        # write u-boot
-        dd if=${BOOTLOADER} of=/dev/mmcblk2 bs=1 count=442 conv=fsync
-        dd if=${BOOTLOADER} of=/dev/mmcblk2 bs=512 skip=1 seek=1 conv=fsync
-        echo "Write complete."
-    fi
+if dmesg | grep 'AMedia X96 Max+'; then
+    BOOTLOADER="/root/hk1box-bootloader.img"
+    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+elif dmesg | grep 'Phicomm N1'; then
+    BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
+    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 fi
 
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-install.sh
@@ -229,7 +253,7 @@ echo "Copy data complete ..."
 
 echo "Modify the configuration file ... "
 rm -f "./etc/rc.local.orig" "./usr/bin/mk_newpart.sh" "./etc/part_size"
-rm -rf "./opt/docker" && ln -sf "/mnt/mmcblk2p4/docker" "./opt/docker"
+rm -rf "./opt/docker" && ln -sf "/mnt/${EMMC_NAME}p4/docker" "./opt/docker"
 
 cat > ./etc/fstab <<EOF
 UUID=${NEW_ROOT_UUID} / btrfs compress=zstd 0 1
@@ -328,11 +352,10 @@ else
     cat > uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
-FDT=/dtb/amlogic/meson-sm1-x96-max-plus.dtb
+FDT=${CUR_FDTFILE}
 APPEND=root=UUID=${NEW_ROOT_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 fi
-
 sync
 
 cd $WORK_DIR
@@ -340,6 +363,8 @@ umount -f ${P1} ${P2} 2>/dev/null
 losetup -D 2>/dev/null
 rm -rf ${P1} ${P2} 2>/dev/null
 rm -f ${IMG_NAME} 2>/dev/null
+sync
+wait
 
 echo "The upgrade is complete, please [ reboot ] the system!"
 

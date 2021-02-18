@@ -1,19 +1,17 @@
 #!/bin/sh
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S9xxx-Boxs
-# Function: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
-# Copyright (C) 2020 Flippy
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
+# Function: Install openwrt to the emmc for S9xxx-Boxs
+# Copyright (C) 2020-2021 Flippy
+# Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
 
-SKIP1=64
-# you can change BOOT size ≥ 72
+# you can change BOOT size >= 128
 BOOT=256
-# you can change ROOT1 size ≥ 320
+# you can change ROOT1 size >= 320
 ROOT1=1024
-SKIP2=258
-# you can change ROOT2 size ≥ 320
+# you can change ROOT2 size >= 320
 ROOT2=1024
 # shared partition can be ext4, xfs, btrfs, f2fs
 TARGET_SHARED_FSTYPE=btrfs
@@ -70,23 +68,42 @@ echo "ROOTFS: $ROOT_NAME"
 BOOT_NAME=$(lsblk -l -o NAME,MAJ:MIN,MOUNTPOINT | grep -e '/boot$' | awk '{print $1}')
 echo "BOOT: $BOOT_NAME"
 
+#Check version information
+MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
+VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
+if  [ "${VERSION_NOW}" = "5.10" ]; then
+    echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+    echo "Are you sure you want to write into emmc? y/n"
+    read pause
+    case $pause in
+        n|N) echo "Stop write into emmc, continue to use TF/SD card."
+             exit 1
+             ;;
+        y|Y) break
+             ;;
+    esac
+fi
+
+#Choose the type of installation box
 FDTFILE="meson-sm1-x96-max-plus.dtb"
 U_BOOT_EXT=0
 cat <<EOF
 ---------------------------------------------------------------------
 Please select s9xxx box model:
-1. X96-Max+ ------------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
-2. X96-Max+ ------------- [ S905x3 / NETWORK: 1000M / CPU: 2208Mtz ]
-3. HK1-Box -------------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
-4. HK1-Box -------------- [ S905x3 / NETWORK: 1000M / CPU: 2184Mtz ]
-5. H96-Max-X3 ----------- [ S905x3 / NETWORK: 1000M / CPU: 2124Mtz ]
-6. H96-Max-X3 ----------- [ S905x3 / NETWORK: 1000M / CPU: 2208Mtz ]
-7. X96-Max-4G ----------- [ S905x2 / NETWORK: 1000M / CPU: 1944Mtz ]
-8. X96-Max-2G ----------- [ S905x2 / NETWORK: 100M  / CPU: 1944Mtz ]
-9. Octopus-Planet ------- [ S912   / NETWORK: 1000M / CPU: 2124Mtz ]
-10. Belink-GT-King ------ [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
-11. Belink-GT-King-Pro -- [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
-12. UGOOS-AM6-Plus ------ [ S922x  / NETWORK: 1000M / CPU: 2124Mtz ]
+1. X96-Max+ ------------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+2. X96-Max+ ------------- [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
+3. HK1-Box -------------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+4. HK1-Box -------------- [ S905x3 / CPU: 2184Mtz / NETWORK: 1000M ]
+5. H96-Max-X3 ----------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+6. H96-Max-X3 ----------- [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
+7. X96-Max-4G ----------- [ S905x2 / CPU: 1944Mtz / NETWORK: 1000M ]
+8. X96-Max-2G ----------- [ S905x2 / CPU: 1944Mtz / NETWORK: 100M  ]
+9. Octopus-Planet ------- [ S912   / CPU: 2124Mtz / NETWORK: 1000M ]
+10. Belink-GT-King ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+11. Belink-GT-King-Pro -- [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+12. UGOOS-AM6-Plus ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+13. Phicomm-n1 ---------- [ S905d  / CPU: 2124Mtz / NETWORK: 1000M ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
 ---------------------------------------------------------------------
@@ -119,7 +136,7 @@ case  $boxtype in
          U_BOOT_EXT=0
          ;;
       9) FDTFILE="meson-gxm-octopus-planet.dtb"
-         U_BOOT_EXT=1
+         U_BOOT_EXT=0
          ;;
       10) FDTFILE="meson-g12b-gtking.dtb"
          U_BOOT_EXT=1
@@ -129,12 +146,15 @@ case  $boxtype in
          ;;
       12) FDTFILE="meson-g12b-ugoos-am6.dtb"
          U_BOOT_EXT=1
-         ;;	 
+         ;;
+      13) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
+         U_BOOT_EXT=0
+         ;;
       0) cat <<EOF
-Please enter the dtb file name of your box, do not include the path.
+Please enter the .dtb file name of your box, do not include the path.
 For example: $FDTFILE
 EOF
-         echo  "dtb File name:"
+         echo  "Enter the .dtb File name:"
          read  CUST_FDTFILE
          FDTFILE=$CUST_FDTFILE
          ;;
@@ -152,7 +172,7 @@ if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
 fi
 
 # backup old bootloader
-if [ ! -f /root/backup-bootloader.img ]; then
+if [ ! -f "/root/backup-bootloader.img" ]; then
     echo "Backup bootloader -> [ backup-bootloader.img ] ... "
     dd if=/dev/$EMMC_NAME of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
     echo "Backup bootloader complete."
@@ -213,6 +233,17 @@ while [ $p -ge 1 ]; do
 done
 
 # Create new partition
+if  [ "${FDTFILE}" = "meson-gxm-octopus-planet.dtb" ]; then
+    SKIP1=700
+    SKIP2=0
+elif [ "${FDTFILE}" = "meson-gxl-s905d-phicomm-n1.dtb" ]; then
+    SKIP1=68
+    SKIP2=0
+else
+    SKIP1=68
+    SKIP2=162
+fi
+
 DST_TOTAL_MB=$((EMMC_SIZE/1024/1024))
 
 start1=$(( SKIP1 * 2048 ))
@@ -283,15 +314,17 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
-BLDR=/lib/u-boot/hk1box-bootloader.img
-if [ -f "${BLDR}" ]; then
-    if echo "${FDTFILE}" | grep meson-sm1-x96-max-plus >/dev/null; then
-        echo "Write new bootloader: [ ${BLDR} ] ..."
-        dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=1 count=442
-        dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=512 skip=1 seek=1
-        sync
-        echo "Write complete."
-    fi
+if  [ "${FDTFILE}" = "meson-sm1-x96-max-plus" ]; then
+    BLDR=/root/hk1box-bootloader.img
+elif [ "${FDTFILE}" = "meson-gxl-s905d-phicomm-n1.dtb" ]; then
+    BLDR=/root/u-boot-2015-phicomm-n1.bin
+fi
+
+if  [ -f ${BLDR} ]; then
+    echo -e "Write new bootloader: [\033[1;32m ${BLDR} \033[0m]"
+    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=1 count=442
+    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=512 skip=1 seek=1
+    sync
 fi
 
 # fix wifi macaddr
@@ -403,6 +436,8 @@ while [ $i -le $max_try ]; do
             (cd / && tar cf - $src) | tar xf -
             sync
         done
+        wait
+
         rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker >/dev/null
         rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/ >/dev/null
         echo "Copy complete."
@@ -455,23 +490,27 @@ echo "complete."
 echo "Create a shared file system."
 mkdir -p /mnt/${EMMC_NAME}p4
 case $TARGET_SHARED_FSTYPE in
-	xfs) mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
-	     mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-	     ;;
-      btrfs) mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
-	     mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-	     ;;
-       f2fs) mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
-	     mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-	     ;;
-	  *) mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
-	     mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-	     ;;
+    xfs)
+        mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    btrfs)
+        mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    f2fs)
+        mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    *)
+        mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
 esac
 mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
 sync
-echo "complete."
+wait
 
-echo "Note: The original bootloader has been exported to [ /root/backup-bootloader.img ], please download and save!"
+echo "The original bootloader has been exported to [ /root/backup-bootloader.img ], please download and save!"
 echo "Install completed, please [ reboot ] the system!"
 

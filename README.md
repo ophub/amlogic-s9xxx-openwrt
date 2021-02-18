@@ -25,16 +25,29 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `openwrt_n1_v*.img`: For Phicomm-N1(S905d).
 - `openwrt_octopus_v*.img` For Octopus-Planet(S912).
 
-The ***`openwrt_s905x3_v*.img is the general OpenWrt firmware of all Amlogic-S9xxx series boxes`*** . You can write this OpenWrt firmware to the `USB hard disk` to start. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
+## Install to S9xxx-Boxs EMMC partition and upgrade instructions
 
-For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the S9xxx-Boxes you own.
+Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx-Boxs. Common for `Phicomm-n1` and `s9xxx-Boxes`.
 
-## Install to emmc partition or upgrade instructions
+***`Install OpenWrt`***
 
-Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+- Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
-- Phicomm-N1 installation command: `n1-install.sh`
-- S9xxx-Boxes installation command: `s9xxx-install.sh`
+```yaml
+s9xxx-install.sh
+reboot
+```
+***`Upgrading OpenWrt`***
+
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+
+```yaml
+cd /mnt/mmcblk*p4/
+mv -f /tmp/upload/*.img.gz . && gzip -df *.img.gz
+cp -f /usr/bin/s9xxx-update.sh . && chmod 755 s9xxx-update.sh
+./s9xxx-update.sh
+reboot
+```
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
 

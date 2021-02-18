@@ -18,7 +18,7 @@
 # 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
 # 03. cd ~/*/amlogic-s9xxx/amlogic-kernel/build_kernel/
 # 04. Prepare Flippy's ${flippy_file}, support: N1_Openwrt*.img, S9***_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img
-#     Support to put the original *.img.xz file into the directory and use it directly.
+#     Support to put the original .7z/.img.xz file into the directory and use it directly.
 # 05. Put Flippy's ${flippy_file} file into ${flippy_folder}
 # 06. Modify ${flippy_file} to kernel file name. E.g: flippy_file="N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img"
 #     If the file of ${flippy_file} is not found, Will search for other *.img and *.img.xz files in directory.
@@ -87,6 +87,15 @@ check_build_files() {
         xz_file=$( ls ${flippy_folder}/*.img.xz | head -n 1 )
         xz_file=${xz_file##*/}
         cd ${flippy_folder} && xz -d ${xz_file} && cd ../
+        unset flippy_file
+        flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
+        flippy_file=${flippy_file##*/}
+        echo_color "yellow" "(1/7) Unset flippy_file is [ ${flippy_file} ]"  "\n \
+        Try to extract the kernel using this file."
+    elif [ $( ls ${flippy_folder}/*.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+        xz_file=$( ls ${flippy_folder}/*.7z | head -n 1 )
+        xz_file=${xz_file##*/}
+        cd ${flippy_folder} && 7z x ${xz_file} -aoa -y && cd ../
         unset flippy_file
         flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
         flippy_file=${flippy_file##*/}

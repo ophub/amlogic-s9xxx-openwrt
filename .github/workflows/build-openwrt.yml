@@ -36,7 +36,7 @@ env:
   DELETE_ARTIFACTS: true
   KEEP_DAY: 3
   KEEP_MININUM_RUNS: 0
-  KEEP_MININUM_RELEASE: 3
+  KEEP_MININUM_RELEASE: 1
   RECENT_LASTEST: 3
   TZ: Asia/Shanghai
 
@@ -158,7 +158,7 @@ jobs:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s922x_n1_octopus -k 5.9.16_5.4.93
+        sudo ./make -d -b s905x3_s905x2_s922x_n1_octopus -k 5.9.16_5.4.98
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -200,8 +200,7 @@ jobs:
           Default password: password
           Default WIFI name: OpenWrt
           Default WIFI password: none
-          S9xxx-Boxs installation command: s9xxx-install.sh
-          Phicomm-N1 installation command: n1-install.sh
+          Common installation command: s9xxx-install.sh
 
     - name: Delete older releases
       uses: dev-drprasad/delete-older-releases@master

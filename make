@@ -3,26 +3,25 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Packaged OpenWrt for S9xxx-Boxs and Phicomm-N1
 # Function: Use Flippy's kernrl files for amlogic-s9xxx to build openwrt for S9xxx-Boxs and Phicomm-N1
-# Copyright (C) 2020 Flippy's kernrl files for amlogic-s9xxx
-# Copyright (C) 2020 https://github.com/tuanqing/mknop
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
+# Copyright (C) 2020-2021 Flippy's kernrl files for amlogic-s9xxx
+# Copyright (C) 2020-2021 https://github.com/tuanqing/mknop
+# Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
 build_openwrt=("s905x3" "s905x2" "s922x" "s905x" "s905d" "s912")
 make_path=${PWD}
-tmp_path="tmp"
-out_path="out"
-amlogic_path="amlogic-s9xxx"
-openwrt_path="openwrt-armvirt"
-kernel_path="amlogic-kernel"
-commonfiles_path="common-files"
-uboot_path=${make_path}/${amlogic_path}/u-boot
-installfiles_path=${make_path}/${amlogic_path}/install-program/files
+tmp_path=${make_path}/tmp
+out_path=${make_path}/out
+openwrt_path=${make_path}/openwrt-armvirt
+amlogic_path=${make_path}/amlogic-s9xxx
+kernel_path=${amlogic_path}/amlogic-kernel
+commonfiles_path=${amlogic_path}/common-files
+uboot_path=${amlogic_path}/u-boot
+installfiles_path=${amlogic_path}/install-program/files
 #===== Do not modify the following parameter settings, End =======
 
-# Set firmware size ( ROOT_MB must be ≥ 256 )
-SKIP_MB=16
+# Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
 BOOT_MB=256
 ROOT_MB=1024
 
@@ -115,41 +114,116 @@ extract_openwrt() {
 extract_armbian() {
     cd ${make_path}
     build_op=${1}
-    kernel_dir="${amlogic_path}/${kernel_path}/kernel/${kernel}"
-    # root_dir="${amlogic_path}/${kernel_path}/root"
+    kernel_dir="${kernel_path}/kernel/${kernel}"
+    # root_dir="${kernel_path}/root"
     root="${tmp_path}/${kernel}/${build_op}/root"
     boot="${tmp_path}/${kernel}/${build_op}/boot"
 
     mkdir -p ${root} ${boot}
 
-    tar -xJf "${amlogic_path}/${commonfiles_path}/boot-common.tar.xz" -C ${boot}
+    tar -xJf "${commonfiles_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${kernel_dir}/kernel.tar.xz" -C ${boot}
-    tar -xJf "${amlogic_path}/${commonfiles_path}/firmware.tar.xz" -C ${root}
+    tar -xJf "${commonfiles_path}/firmware.tar.xz" -C ${root}
     tar -xJf "${kernel_dir}/modules.tar.xz" -C ${root}
 
     cp -rf ${root_comm}/* ${root}
     # [ $(ls ${root_dir} | wc -w) != 0 ] && cp -r ${root_dir}/* ${root}
+
+    # Complete file
+    cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
+    cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
+    cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
+    cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
     sync
 }
 
 utils() {
-    (
-        cd ${root}
-        # add other operations below
+    cd ${make_path}
+    build_op=${1}
+    build_usekernel=${2}
 
-        echo 'pwm_meson' > etc/modules.d/pwm-meson
-        if ! grep -q 'ulimit -n' etc/init.d/boot; then
-            sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
-        fi
-        if ! grep -q '/tmp/upgrade' etc/init.d/boot; then
-            sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/upgrade' etc/init.d/boot
-        fi
-        sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
-        sed -i 's/ttyS0/tty0/' etc/inittab
+    #Edit ${root}/* files ========== Begin ==========
+    cd ${root}
 
-        mkdir -p boot run opt
-        chown -R 0:0 ./
-    )
+    # add other operations below
+    echo 'pwm_meson' > etc/modules.d/pwm-meson
+    if ! grep -q 'ulimit -n' etc/init.d/boot; then
+        sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
+    fi
+    if ! grep -q '/tmp/upgrade' etc/init.d/boot; then
+        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/upgrade' etc/init.d/boot
+    fi
+    sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
+    sed -i 's/ttyS0/tty0/' etc/inittab
+
+    mkdir -p boot run opt
+    chown -R 0:0 ./
+
+    #Edit fstab
+    ROOTFS_UUID=$(uuidgen)
+    #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
+    sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
+    sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
+
+    # Add firmware version information to the terminal page
+    if  [ -f etc/banner ]; then
+        op_version=$(echo $(ls lib/modules/) 2>/dev/null)
+        op_packaged_date=$(date +%Y-%m-%d)
+        echo " Kernel: ${op_version}" >> etc/banner
+        echo " Installation command: s9xxx-install.sh" >> etc/banner
+        echo " Packaged Date: ${op_packaged_date}" >> etc/banner
+        echo " -----------------------------------------------------" >> etc/banner
+    fi
+    #Edit ${root}/* files ========== End ==========
+
+
+    #Edit ${boot}/* files ========== Begin ==========
+    cd ${boot}
+
+    #Write the specified uEnv.txt & copy u-boot for 5.10.* kernel
+    if [  ! -f "uEnv.txt" ]; then
+       die "Error: uEnv.txt Files does not exist"
+    fi
+
+    case "${build_op}" in
+        s905x3 | x96 | hk1 | h96 | s9xxx)
+            new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
+            new_uboot="u-boot-s905x3-510kernel-x96max.bin"
+            ;;
+        s905x2 | x96max4g | x96max2g)
+            new_fdt_dtb="meson-g12a-x96-max.dtb"
+            new_uboot="u-boot-s905x2-510kernel-sei510.bin"
+            ;;
+        s922x | belink | belinkpro | ugoos)
+            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
+            new_uboot="u-boot-s922x-510kernel-gtkingpro.bin"
+            ;;
+        s905x | s905d | n1)
+            new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
+            new_uboot="u-boot-s905d-510kernel-phicommn1.bin"
+            ;;
+        s912 | octopus)
+            new_fdt_dtb="meson-gxm-octopus-planet.dtb"
+            new_uboot="u-boot-s912-510kernel-octopusplanet.bin"
+            ;;
+        *)
+            die "Have no this firmware: [ ${build_op} - ${kernel} ]"
+            ;;
+    esac
+
+    old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
+    sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
+
+    if [ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" = "5.10" ]; then
+       if [ -f ${uboot_path}/${new_uboot} ]; then
+          echo "u-boot.ext u-boot-510kernel.bin" | xargs -n 1 cp -f ${uboot_path}/${new_uboot} 2>/dev/null
+       else
+          die "Have no this 5.10 kernel u-boot file: [ ${uboot_path}/${new_uboot} ]"
+       fi
+    fi
+    #Edit ${boot}/* files ========== End ==========
+
+    sync
 }
 
 make_image() {
@@ -160,58 +234,34 @@ make_image() {
     sync
 
     [ -d ${out_path} ] || mkdir -p ${out_path}
+    SKIP_MB=16
     fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M ${build_image_file}
-}
-
-format_image() {
-    cd ${make_path}
-    build_op=${1}
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
-    parted -s ${build_image_file} mkpart primary ext4 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
-    parted -s ${build_image_file} mkpart primary ext4 $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
+    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
+    parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
 
     loop_setup ${build_image_file}
     mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
-    mke2fs -F -q -t ext4 -L "ROOTFS" -m 0 ${loop}p2 >/dev/null 2>&1
-
-    # Complete file
-    if [ ! -f ${root}/root/hk1box-bootloader.img ]; then
-       cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
-       cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
-       echo "${root}/etc/config/fstab ${root}/etc/config/fstab.bak" | xargs -n 1 cp -f ${installfiles_path}/fstab 2>/dev/null
-    fi
+    mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
 
     # Write the specified bootloader
-    if [ "${build_op}" != "n1" -a "${build_op}" != "s905x" -a "${build_op}" != "s905d" ]; then
-        BTLD_BIN="${root}/root/hk1box-bootloader.img"
-        if [ -f ${BTLD_BIN} ]; then
-           mkdir -p ${root}/lib/u-boot
-           cp -f ${BTLD_BIN} ${root}/lib/u-boot/
-           #echo "Write bootloader for ${build_op}: [ $( ls ${root}/lib/u-boot/*.img 2>/dev/null ) ]."
-           dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
-           dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        else
-           die "bootloader does not exist."
-        fi
+    if [ "${build_op}" = "n1" -o "${build_op}" = "s905x" -o "${build_op}" = "s905d" ]; then
+       BTLD_BIN="${root}/root/u-boot-2015-phicomm-n1.bin"
+    else
+       BTLD_BIN="${root}/root/hk1box-bootloader.img"
     fi
-    
-    # Add firmware version information to the terminal page
-    if  [ -f ${root}/etc/banner ]; then
-        op_version=$(echo $(ls ${root}/lib/modules/) 2>/dev/null)
-        op_packaged_date=$(date +%Y-%m-%d)
-        echo " OpenWrt Kernel: ${op_version}" >> ${root}/etc/banner
-        echo " Phicomm-N1 installation command: n1-install.sh" >> ${root}/etc/banner
-        echo " s9xxx-Boxs installation command: s9xxx-install.sh" >> ${root}/etc/banner
-        echo " Packaged Date: ${op_packaged_date}" >> ${root}/etc/banner
-        echo " -----------------------------------------------------" >> ${root}/etc/banner
+
+    if [ -f ${BTLD_BIN} ]; then
+       dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+       dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
     fi
 }
 
 copy2image() {
     cd ${make_path}
     build_op=${1}
-    build_usekernel=${2}
+
     set -e
 
     local bootfs="${mount}/${kernel}/${build_op}/bootfs"
@@ -227,45 +277,6 @@ copy2image() {
 
     cp -rf ${boot}/* ${bootfs}
     cp -rf ${root}/* ${rootfs}
-    sync
-
-    #Write the specified uEnv.txt & copy u-boot for 5.10.* kernel
-    cd ${bootfs}
-    if [  ! -f "uEnv.txt" ]; then
-       die "Error: uEnv.txt Files does not exist"
-    fi
-
-    case "${build_op}" in
-    s905x3 | x96 | hk1 | h96 | s9xxx)
-        new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
-        new_uboot="${uboot_path}/u-boot-s905x3-510kernel-u200.bin"
-        ;;
-    s905x2 | x96max4g | x96max2g)
-        new_fdt_dtb="meson-g12a-x96-max.dtb"
-        new_uboot="${uboot_path}/u-boot-s905x2-510kernel-sei510.bin"
-        ;;
-    s922x | belink | belinkpro | ugoos)
-        new_fdt_dtb="meson-g12b-gtking-pro.dtb"
-        new_uboot="${uboot_path}/u-boot-s922x-510kernel-gtkingpro.bin"
-        ;;
-    s905x | s905d | n1)
-        new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-        new_uboot="${uboot_path}/u-boot-s905xd-510kernel-p212.bin"
-        ;;
-    s912 | octopus)
-        new_fdt_dtb="meson-gxm-octopus-planet.dtb"
-        new_uboot="${uboot_path}/u-boot-s912-510kernel-q200.bin"
-        ;;
-    *)
-        die "Have no this firmware: [ ${build_op} - ${kernel} ]"
-        ;;
-    esac
-
-    old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-    sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-    if [ $(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}') = "5.10" -a -f ${new_uboot} ]; then
-       echo "u-boot.ext u-boot.emmc u-boot-510kernel.bin" | xargs -n 1 cp -f ${new_uboot} 2>/dev/null
-    fi
     sync
 
     cd ${make_path}
@@ -291,7 +302,7 @@ get_kernels() {
     i=0
     IFS=$'\n'
 
-    local kernel_root="${amlogic_path}/${kernel_path}/kernel"
+    local kernel_root="${kernel_path}/kernel"
     [ -d ${kernel_root} ] && {
         work=$(pwd)
         cd ${kernel_root}
@@ -304,7 +315,7 @@ get_kernels() {
 
 show_kernels() {
     if [ ${#kernels[*]} = 0 ]; then
-        die "No kernel files in [ ${amlogic_path}/${kernel_path}/kernel ] directory!"
+        die "No kernel files in [ ${kernel_path}/kernel ] directory!"
     else
         show_list "${kernels[*]}" "kernel"
     fi
@@ -488,7 +499,7 @@ if [ ${#firmwares[*]} = 0 ]; then
 fi
 
 if [ ${#kernels[*]} = 0 ]; then
-    die "No this kernel files in [ ${amlogic_path}/${kernel_path}/kernel ] directory!"
+    die "No this kernel files in [ ${kernel_path}/kernel ] directory!"
 fi
 
 [ ${firmware} ] && echo " firmware   ==>   ${firmware}"
@@ -513,13 +524,11 @@ for b in ${build_openwrt[*]}; do
             build=${b}
             process " extract armbian files."
             extract_armbian ${b}
-            utils
+            utils ${b} ${x}
             process " make openwrt image."
             make_image ${b}
-            process " format openwrt image."
-            format_image ${b}
             process " copy files to image."
-            copy2image ${b} ${x}
+            copy2image ${b}
             process " generate success."
         } &
     done

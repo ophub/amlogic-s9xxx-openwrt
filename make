@@ -173,15 +173,13 @@ make_image() {
     mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
 
     # Complete file
-    if [ ! -f ${root}/root/hk1box-bootloader.img ]; then
-       cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
-       cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
-       cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
-       cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
-    fi
+    cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
+    cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
+    cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
+    cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
     sync
-    sed -i "s/ROOTFS_UUID/${ROOTFS_UUID}/" ${root}/etc/fstab 2>/dev/null
-    sed -i "s/ROOTFS_UUID/${ROOTFS_UUID}/" ${root}/etc/config/fstab 2>/dev/null
+    sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" ${root}/etc/fstab 2>/dev/null
+    sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" ${root}/etc/config/fstab 2>/dev/null
 
 }
 

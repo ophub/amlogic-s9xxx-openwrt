@@ -135,11 +135,15 @@ if  [ $? -ne 0 ]; then
 fi
 
 #Upgrade version prompt
+source /boot/uEnv.txt 2>/dev/null
+CUR_FDTFILE=${FDT}
+
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
 VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
+echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
 if  [ "${VERSION_NEW}" = "5.10" ]; then
     echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
     echo "Are you sure you want to write into emmc? y/n"
@@ -348,7 +352,7 @@ else
     cat > uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
-FDT=/dtb/amlogic/meson-sm1-x96-max-plus.dtb
+FDT=${CUR_FDTFILE}
 APPEND=root=UUID=${NEW_ROOT_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 fi

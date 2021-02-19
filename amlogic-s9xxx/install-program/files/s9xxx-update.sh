@@ -98,7 +98,7 @@ case  $ROOT_NAME in
       ${EMMC_NAME}p3) NEW_ROOT_NAME=${EMMC_NAME}p2
                       NEW_ROOT_LABEL=EMMC_ROOTFS1
                       ;;
-      *) echo "ROOTFS The partition location is incorrect, so the upgrade cannot continue!"
+                   *) echo "ROOTFS The partition location is incorrect, so the upgrade cannot continue!"
                       exit 1
                       ;;
 esac
@@ -108,7 +108,7 @@ echo "NEW_ROOT_NAME: [ ${NEW_ROOT_NAME} ]"
 NEW_ROOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | grep "${NEW_ROOT_NAME}" | awk '$3 ~ /^part$/ && $5 !~ /^\/$/ && $5 !~ /^\/boot$/ {print $0}')
 if  [ "${NEW_ROOT_PART_MSG}" == "" ]; then
     echo "The new ROOTFS partition does not exist, so the upgrade cannot continue!"
-	  exit 1
+    exit 1
 fi
 
 NEW_ROOT_NAME=$(echo $NEW_ROOT_PART_MSG | awk '{print $1}')

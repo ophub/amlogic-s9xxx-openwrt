@@ -58,10 +58,10 @@ elif [ $( ls /tmp/upload/*.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     7z x ${gz_file} -aoa -y
     IMG_NAME=$( ls *.img | head -n 1 )
 else
-    echo -e "\033[1;31m Please upload or specify the upgrade file: \033[0m"
+    echo -e "\033[1;31m Please upload or specify the upgrade file. \033[0m"
     echo -e "\033[1;35m - Upload method: system menu → file transfer → upload the upgrade file to [ /tmp/upload/ ] \033[0m"
     echo -e "\033[1;35m - Specify method: Place the upgrade file in [ /mnt/mmcblk*p4/ ] \033[0m"
-    echo -e "Tips: The supported file formats are: \033[1;33m *.img, *.img.xz, *.img.gz, *.7z \033[0m"
+    echo -e "The supported file suffixes are: \033[1;33m *.img, *.img.xz, *.img.gz, *.7z \033[0m"
     echo -e "After choosing a method to upload the upgrade file, run \033[1;32m s9xxx-update.sh \033[0m again."
     exit 1
 fi

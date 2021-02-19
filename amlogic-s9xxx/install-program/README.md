@@ -40,7 +40,7 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 s9xxx-update.sh
 reboot
 ```
-You can also put the upgrade file in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` script will automatically find the upgrade file from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories, and the supported suffixes are `*.img, *.img.xz, *.img.gz`
+You can also put the upgrade file in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` script will automatically find the upgrade file from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories, and the supported suffixes are `*.img, *.img.xz, *.img.gz, *.7z`
     
 Tips: If there is only one `.img` file in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific file name. The upgrade script will vaguely look for `.img` files from the fixed directory and try to upgrade. If there are multiple `.img` files in the ***`/mnt/mmcblk*p4/`*** directory, please use the ***`s9xxx-update.sh your_openwrt_imgFileName.img`*** command to specify the firmware upgrade.
 

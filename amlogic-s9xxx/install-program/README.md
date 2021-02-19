@@ -42,8 +42,7 @@ reboot
 ```
 You can also put the upgrade file in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` script will automatically find the upgrade file from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories, and the supported suffixes are `*.img, *.img.xz, *.img.gz, *.7z`
     
-Tips: If there is only one `upgrade` file in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific file name. The upgrade script will vaguely look for `upgrade` files from this directory and try to upgrade. If there are multiple `upgrade` files in the ***`/mnt/mmcblk*p4/`*** directory, please use the ***`s9xxx-update.sh your_upgrade_file_name`*** command to specify the firmware upgrade. When the `upgrade` file is not found in the `/mnt/mmcblk*p4/` directory, the script will search for the upgrade file in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the upgrade operation. 
-
+Tips: If there is only one `upgrade` file in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/upload/`***  directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific file name. The `s9xxx-update.sh` will vaguely look for `upgrade` files from this directory and try to upgrade. If there are multiple `upgrade` files in the `/mnt/mmcblk*p4/` directory, please use the ***`s9xxx-update.sh your_upgrade_file_name`*** command to specify the firmware upgrade. When the `upgrade` file is not found in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` will search for the `upgrade` file in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the upgrade operation. 
 
 ***`Write bootloader`***
 

@@ -171,6 +171,7 @@ utils() {
         op_packaged_date=$(date +%Y-%m-%d)
         echo " Kernel: ${op_version}" >> etc/banner
         echo " Installation command: s9xxx-install.sh" >> etc/banner
+        echo " Installation command: s9xxx-update.sh" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi

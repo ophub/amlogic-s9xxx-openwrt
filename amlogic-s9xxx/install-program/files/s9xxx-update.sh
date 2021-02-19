@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
@@ -7,18 +7,68 @@
 # Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
 
+IMG_NAME=${1}
 EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
+cd /mnt/${EMMC_NAME}p4/
 
-# check cmd param
-if  [ "$1" == "" ]; then
-    IMG_NAME=$( ls /mnt/${EMMC_NAME}p4/*.img 2>/dev/null | head -n 1 )
+if [[ "${IMG_NAME}" == *.img ]]; then
+    echo -e "Try to using this specified file [\033[1;32m ${IMG_NAME} \033[0m] to upgrading. Please wait a moment ..."
+elif [ $( ls *.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    IMG_NAME=$( ls *.img | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${IMG_NAME} \033[0m] ] to upgrading. Please wait a moment ..."
+elif [ $( ls *.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    xz_file=$( ls *.img.xz | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${xz_file} \033[0m] to upgrading. Please wait a moment ..."
+    xz -d ${xz_file}
+    IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $( ls *.img.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    gz_file=$( ls *.img.gz | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to upgrading. Please wait a moment ..."
+    gzip -df ${gz_file}
+    IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $( ls *.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    gz_file=$( ls *.7z | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to upgrading. Please wait a moment ..."
+    7z x ${gz_file} -aoa -y
+    IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $( ls /tmp/upload/*.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    up_file=$( ls /tmp/upload/*.img | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${up_file} \033[0m] to upgrading. Please wait a moment ..."
+    mv -f ${up_file} .
+    IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $( ls /tmp/upload/*.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    xz_file=$( ls /tmp/upload/*.img.xz | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${xz_file} \033[0m] to upgrading. Please wait a moment ..."
+    mv -f ${xz_file} .
+    xz_file=${xz_file##*/}
+    xz -d ${xz_file}
+    IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $( ls /tmp/upload/*.img.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    gz_file=$( ls /tmp/upload/*.img.gz | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to upgrading. Please wait a moment ..."
+    mv -f ${gz_file} .
+    gz_file=${gz_file##*/}
+    gzip -df ${gz_file}
+    IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $( ls /tmp/upload/*.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    gz_file=$( ls /tmp/upload/*.7z | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to upgrading. Please wait a moment ..."
+    mv -f ${gz_file} .
+    gz_file=${gz_file##*/}
+    7z x ${gz_file} -aoa -y
+    IMG_NAME=$( ls *.img | head -n 1 )
 else
-    IMG_NAME=$1
+    echo -e "\033[1;31m Please upload or specify the upgrade file: \033[0m"
+    echo -e "\033[1;35m - Upload method: system menu → file transfer → upload the upgrade file to [ /tmp/upload/ ] \033[0m"
+    echo -e "\033[1;35m - Specify method: Place the upgrade file in [ /mnt/mmcblk*p4/ ] \033[0m"
+    echo -e "Tips: The supported file formats are: \033[1;33m *.img, *.img.xz, *.img.gz, *.7z \033[0m"
+    echo -e "After choosing a method to upload the upgrade file, run \033[1;32m s9xxx-update.sh \033[0m again."
+    exit 1
 fi
 
 # check file
 if  [ ! -f "$IMG_NAME" ]; then
-    echo "[ $IMG_NAME ] does not exist."
+    echo "No upgrade file found."
     exit 1
 else
     echo "Start upgrade from [ ${IMG_NAME} ]"
@@ -234,16 +284,18 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-if dmesg | grep 'AMedia X96 Max+'; then
+if [[ "${CUR_FDTFILE}" == *sm1-x96-max* ]]; then
     BOOTLOADER="/root/hk1box-bootloader.img"
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-elif dmesg | grep 'Phicomm N1'; then
+elif [[ "${CUR_FDTFILE}" == *gxl-s905d-phicomm-n1* ]]; then
     BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+else
+    echo -e "Select [ ${CUR_FDTFILE} ]: No change the bootloader."
 fi
 
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-install.sh

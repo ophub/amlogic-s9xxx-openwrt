@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
@@ -163,6 +163,8 @@ EOF
          ;;
 esac
 
+echo -e "\033[1;32m FDT Value [ ${FDTFILE} ] \033[0m"
+
 if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
     echo "/boot/dtb/amlogic/${FDTFILE} does not exist!"
     echo "You can download the .dtb file from [ https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb ]"
@@ -314,17 +316,18 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
-if  [ "${FDTFILE}" = "meson-sm1-x96-max-plus" ]; then
-    BLDR=/root/hk1box-bootloader.img
-elif [ "${FDTFILE}" = "meson-gxl-s905d-phicomm-n1.dtb" ]; then
-    BLDR=/root/u-boot-2015-phicomm-n1.bin
-fi
-
-if  [ -f ${BLDR} ]; then
-    echo -e "Write new bootloader: [\033[1;32m ${BLDR} \033[0m]"
-    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=1 count=442
-    dd if=${BLDR} of="/dev/${EMMC_NAME}" conv=fsync bs=512 skip=1 seek=1
-    sync
+if [[ "${FDTFILE}" == *sm1-x96-max* ]]; then
+    BOOTLOADER="/root/hk1box-bootloader.img"
+    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+elif [[ "${FDTFILE}" == *gxl-s905d-phicomm-n1* ]]; then
+    BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
+    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+else
+    echo -e "Select [ ${FDTFILE} ]: No change the bootloader."
 fi
 
 # fix wifi macaddr

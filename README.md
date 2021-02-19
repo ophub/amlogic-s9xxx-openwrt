@@ -42,10 +42,7 @@ reboot
 - Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
-cd /mnt/mmcblk*p4/
-mv -f /tmp/upload/*.img.gz . && gzip -df *.img.gz
-cp -f /usr/bin/s9xxx-update.sh . && chmod 755 s9xxx-update.sh
-./s9xxx-update.sh
+s9xxx-update.sh
 reboot
 ```
 

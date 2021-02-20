@@ -169,9 +169,9 @@ utils() {
     if  [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/) 2>/dev/null)
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " Amlogic SOC: ${build_op}" >> etc/banner
+        echo " Amlogic Box: ${build_op}" >> etc/banner
         echo " Kernel: ${op_version}" >> etc/banner
-        echo " Installation command: s9xxx-install.sh" >> etc/banner
+        echo " Install command: s9xxx-install.sh" >> etc/banner
         echo " Upgrade command: s9xxx-update.sh" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner

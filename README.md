@@ -13,8 +13,8 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `openwrt_s905x3_v*.img`: For all Amlogic-S905x3 series boxes.
 - `openwrt_s905x2_v*.img`: For all Amlogic-s905x2 series boxes.
 - `openwrt_s905x_v*.img`: For all Amlogic-s905x series boxes.
-- `openwrt_s905d_v*.img`: For all Amlogic-s905d series boxes.
 - `openwrt_s922x_v*.img`: For all Amlogic-s922x series boxes.
+- `openwrt_s905d_v*.img`: For all Amlogic-s905d series boxes.
 - `openwrt_s912_v*.img`: For all Amlogic-s912 series boxes.
 - `openwrt_x96_v*.img`: For X96-Max+(S905x3). [🔍](https://www.ebay.com/itm/133605678868)
 - `openwrt_hk1_v*.img`: For HK1-Box(S905x3). [🔍](https://www.ebay.com/itm/174515007305)
@@ -22,6 +22,8 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `openwrt_belink_v*.img` For Belink GT-King(S922x). [🔍](https://www.ebay.com/itm/303604712848)
 - `openwrt_belinkpro_v*.img` For Belink GT-King Pro(S922x). [🔍](https://www.ebay.com/itm/324411782338)
 - `openwrt_ugoos_v*.img` For UGOOS AM6 Plus(S922x). [🔍](https://www.ebay.com/itm/254590989143)
+- `openwrt_hg680p_v*.img`: For Fiberhome HG680P(S905x). [🔍](https://tokopedia.link/NWF1Skg21db)
+- `openwrt_b860h_v*.img`: For ZTE B860H(S905x). [🔍](https://tokopedia.link/fp8wG3711db)
 - `openwrt_n1_v*.img`: For Phicomm-N1(S905d).
 - `openwrt_octopus_v*.img` For Octopus-Planet(S912).
 
@@ -169,7 +171,8 @@ The codes of the following `Model` and `Boxes` can be used in `sudo ./make -d -b
 | ---- | ---- |
 | s905x3 | x96, hk1, h96 |
 | s905x2 | x96max4g, x96max2g |
-| s905x, s905d | n1 |
+| s905x | hg680p, b860h |
+| s905d | n1 |
 | s922x | belink, belinkpro, ugoos |
 | s912 | octopus |
 

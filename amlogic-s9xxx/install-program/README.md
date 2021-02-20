@@ -34,21 +34,21 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ***`Upgrade OpenWrt`***
 
-- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
 s9xxx-update.sh
 reboot
 ```
-You can also put the `upgrade file` in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` script will automatically find the `upgrade file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories, and the supported suffixes are `*.img, *.img.xz, *.img.gz, *.7z` files.
+You can also put the `upgrade file` in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` script will automatically find the `upgrade file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories, and the supported suffixes are `*.img, *.img.xz, *.img.gz, *.7z, *.zip` files.
     
 💡Tips: If there is only one `upgrade file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/upload/`***  directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific `upgrade file`. The `s9xxx-update.sh` will vaguely look for `upgrade file` from this directory and try to upgrade. If there are multiple `upgrade file` in the `/mnt/mmcblk*p4/` directory, please use the ***`s9xxx-update.sh specified_upgrade_file`*** command to specify the `upgrade file`. When the `upgrade file` is not found in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` will search for the `upgrade file` in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the upgrade operation. 
 
 - The `s9xxx-update.sh` upgrade file search order
 
-| Directory | `/mnt/mmcblk*p4/` 1-5 | `/tmp/upload/` 6-8 |
+| Directory | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
 | ---- | ---- | ---- |
-| Oeder | `specified_upgrade_file` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → | `*.img.xz` → `*.img.gz` → `*.7z` |
+| Oeder | `specified_upgrade_file` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
 
 ***`Write bootloader`***
 

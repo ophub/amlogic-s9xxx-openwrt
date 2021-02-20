@@ -25,7 +25,7 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `openwrt_n1_v*.img`: For Phicomm-N1(S905d).
 - `openwrt_octopus_v*.img` For Octopus-Planet(S912).
 
-## Install to S9xxx-Boxs EMMC partition and upgrade instructions
+## Install to EMMC partition and upgrade instructions
 
 Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx-Boxs. Common for `Phicomm-n1` and `s9xxx-Boxes`.
 
@@ -35,7 +35,6 @@ Choose the corresponding firmware according to your box. Then write the IMG file
 
 ```yaml
 s9xxx-install.sh
-reboot
 ```
 ***`Upgrade OpenWrt`***
 
@@ -43,7 +42,6 @@ reboot
 
 ```yaml
 s9xxx-update.sh
-reboot
 ```
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)

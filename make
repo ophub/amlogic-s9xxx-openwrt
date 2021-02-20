@@ -200,11 +200,15 @@ utils() {
             new_fdt_dtb="meson-g12b-gtking-pro.dtb"
             new_uboot="u-boot-s922x-510kernel-gtkingpro.bin"
             ;;
-        s905x | s905d | n1)
+        s905d | n1)
             new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
             new_uboot="u-boot-s905d-510kernel-phicommn1.bin"
             ;;
-        s912 | octopus)
+         s905x | hg680p | b860h)
+            new_fdt_dtb="meson-gxl-s905x-p212.dtb"
+            new_uboot="u-boot-s905x-510kernel-p212.bin"
+            ;;
+         s912 | octopus)
             new_fdt_dtb="meson-gxm-octopus-planet.dtb"
             new_uboot="u-boot-s912-510kernel-octopusplanet.bin"
             ;;

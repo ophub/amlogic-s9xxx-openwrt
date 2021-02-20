@@ -31,6 +31,11 @@ elif [ $( ls *.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to upgrading. Please wait a moment ..."
     7z x ${gz_file} -aoa -y
     IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $( ls *.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    zip_file=$( ls *.zip | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${zip_file} \033[0m] to upgrading. Please wait a moment ..."
+    unzip -o ${zip_file}
+    IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls /tmp/upload/*.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     xz_file=$( ls /tmp/upload/*.img.xz | head -n 1 )
     echo -e "Try to using the found file [\033[1;32m ${xz_file} \033[0m] to upgrading. Please wait a moment ..."
@@ -52,11 +57,18 @@ elif [ $( ls /tmp/upload/*.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     gz_file=${gz_file##*/}
     7z x ${gz_file} -aoa -y
     IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $( ls /tmp/upload/*.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    zip_file=$( ls /tmp/upload/*.zip | head -n 1 )
+    echo -e "Try to using the found file [\033[1;32m ${zip_file} \033[0m] to upgrading. Please wait a moment ..."
+    mv -f ${zip_file} .
+    zip_file=${zip_file##*/}
+    unzip -o  ${zip_file}
+    IMG_NAME=$( ls *.img | head -n 1 )
 else
     echo -e "\033[1;31m Please upload or specify the upgrade file. \033[0m"
     echo -e "\033[1;35m - Upload method: system menu → file transfer → upload the upgrade file to [ /tmp/upload/ ] \033[0m"
     echo -e "\033[1;35m - Specify method: Place the upgrade file in [ /mnt/mmcblk*p4/ ] \033[0m"
-    echo -e "The supported file suffixes are: \033[1;33m *.img, *.img.xz, *.img.gz, *.7z \033[0m"
+    echo -e "The supported file suffixes are: \033[1;33m *.img, *.img.xz, *.img.gz, *.7z, *.zip \033[0m"
     echo -e "After choosing a method to upload the upgrade file, run \033[1;32m s9xxx-update.sh \033[0m again."
     exit 1
 fi

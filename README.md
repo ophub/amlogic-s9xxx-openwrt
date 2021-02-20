@@ -218,8 +218,8 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 - Flippy: The maker of Amlogic s9xxx Kernel for openwrt
 - [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
 - [tuanqing/mknop](https://github.com/tuanqing/mknop)
-
 - [Mikubill/transfer](https://github.com/Mikubill/transfer)
+- [Rureka Blog](https://rureka.com/)
 
 ## License
 

@@ -37,7 +37,7 @@ Choose the corresponding firmware according to your box. Then write the IMG file
 s9xxx-install.sh
 reboot
 ```
-***`Upgrading OpenWrt`***
+***`Upgrade OpenWrt`***
 
 - Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 

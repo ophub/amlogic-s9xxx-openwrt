@@ -9,7 +9,7 @@
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
-build_openwrt=("s905x3" "s905x2" "s922x" "s905x" "s905d" "s912")
+build_openwrt=("s905x3" "s905x2" "s905x" "s905d" "s912" "s922x")
 make_path=${PWD}
 tmp_path=${make_path}/tmp
 out_path=${make_path}/out
@@ -204,11 +204,11 @@ utils() {
             new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
             new_uboot="u-boot-s905d-510kernel-phicommn1.bin"
             ;;
-         s905x | hg680p | b860h)
+        s905x | hg680p | b860h)
             new_fdt_dtb="meson-gxl-s905x-p212.dtb"
             new_uboot="u-boot-s905x-510kernel-p212.bin"
             ;;
-         s912 | octopus)
+        s912 | octopus)
             new_fdt_dtb="meson-gxm-octopus-planet.dtb"
             new_uboot="u-boot-s912-510kernel-octopusplanet.bin"
             ;;

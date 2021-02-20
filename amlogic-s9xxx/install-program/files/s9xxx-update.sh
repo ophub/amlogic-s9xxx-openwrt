@@ -31,11 +31,6 @@ elif [ $( ls *.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to upgrading. Please wait a moment ..."
     7z x ${gz_file} -aoa -y
     IMG_NAME=$( ls *.img | head -n 1 )
-elif [ $( ls /tmp/upload/*.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    up_file=$( ls /tmp/upload/*.img | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${up_file} \033[0m] to upgrading. Please wait a moment ..."
-    mv -f ${up_file} .
-    IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls /tmp/upload/*.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     xz_file=$( ls /tmp/upload/*.img.xz | head -n 1 )
     echo -e "Try to using the found file [\033[1;32m ${xz_file} \033[0m] to upgrading. Please wait a moment ..."

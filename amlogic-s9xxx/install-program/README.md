@@ -25,7 +25,6 @@ Common for `Phicomm-n1` and `s9xxx-Boxes`, etc.
 
 ```yaml
 s9xxx-install.sh
-reboot
 ```
 
 When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
@@ -38,7 +37,6 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ```yaml
 s9xxx-update.sh
-reboot
 ```
 You can also put the `upgrade file` in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` script will automatically find the `upgrade file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories, and the supported suffixes are `*.img, *.img.xz, *.img.gz, *.7z, *.zip` files.
     

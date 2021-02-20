@@ -25,24 +25,28 @@ Common for `Phicomm-n1` and `s9xxx-Boxes`, etc.
 
 ```yaml
 s9xxx-install.sh
-reboot
 ```
 
 When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh), `select the name` of the box you own in the menu.
 
 For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the S9xxx-Boxes you own.
 
-***`Upgrading OpenWrt`***
+***`Upgrade OpenWrt`***
 
-- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
 s9xxx-update.sh
-reboot
 ```
-You can also put the upgrade file in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` script will automatically find the upgrade file from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories, and the supported suffixes are `*.img, *.img.xz, *.img.gz, *.7z`
+💡Tips: You can also put the `upgrade file` in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` script will automatically find the `upgrade file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories.
     
-Tips: If there is only one `.img` file in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific file name. The upgrade script will vaguely look for `.img` files from the fixed directory and try to upgrade. If there are multiple `.img` files in the ***`/mnt/mmcblk*p4/`*** directory, please use the ***`s9xxx-update.sh your_openwrt_imgFileName.img`*** command to specify the firmware upgrade.
+If there is only one `upgrade file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/upload/`***  directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific `upgrade file`. The `s9xxx-update.sh` will vaguely look for `upgrade file` from this directory and try to upgrade. If there are multiple `upgrade file` in the `/mnt/mmcblk*p4/` directory, please use the ***`s9xxx-update.sh specified_upgrade_file`*** command to specify the `upgrade file`. When the `upgrade file` is not found in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` will search for the `upgrade file` in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the upgrade operation. 
+
+- The `s9xxx-update.sh` upgrade file search order
+
+| Directory | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
+| ---- | ---- | ---- |
+| Oeder | `specified_upgrade_file` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
 
 ***`Write bootloader`***
 

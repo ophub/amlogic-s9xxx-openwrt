@@ -99,5 +99,6 @@ jobs:
           Default password: password
           Default WIFI name: OpenWrt
           Default WIFI password: none
-          Common installation command: s9xxx-install.sh
+          Install command: s9xxx-install.sh
+          Upgrade command: s9xxx-update.sh
 

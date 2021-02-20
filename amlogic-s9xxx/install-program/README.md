@@ -44,6 +44,12 @@ You can also put the `upgrade file` in the `/mnt/mmcblk*p4/` directory, the `s9x
     
 💡Tips: If there is only one `upgrade file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/upload/`***  directory, you can just enter the ***`s9xxx-update.sh`*** command without specifying a specific `upgrade file`. The `s9xxx-update.sh` will vaguely look for `upgrade file` from this directory and try to upgrade. If there are multiple `upgrade file` in the `/mnt/mmcblk*p4/` directory, please use the ***`s9xxx-update.sh your_upgrade_file_name`*** command to specify the `upgrade file`. When the `upgrade file` is not found in the `/mnt/mmcblk*p4/` directory, the `s9xxx-update.sh` will search for the `upgrade file` in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the upgrade operation. 
 
+- The `s9xxx-update.sh` upgrade file search order
+
+| Directory | `/mnt/mmcblk*p4/` 1-4 | `/tmp/upload/` 5-8 |
+| ---- | ---- | ---- |
+| Oeder | `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` | `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` |
+
 ***`Write bootloader`***
 
 If your box is X96-Max+, you must write the bootloader of HK1-Box included in the firmware to EMMC before it can be gigabit. This step is now integrated into the installation script and is automatically completed during installation:

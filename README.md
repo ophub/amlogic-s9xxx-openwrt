@@ -39,7 +39,7 @@ reboot
 ```
 ***`Upgrade OpenWrt`***
 
-- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
 s9xxx-update.sh

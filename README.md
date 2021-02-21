@@ -1,10 +1,10 @@
 # OpenWrt for Amlogic S9xxx series boxes
 
-Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, `S905x`, `S905d`, `s912`, etc. Support boxes are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus`***, etc.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, `S905x`, `S905d`, `s912`, etc. Support boxes are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`***, etc.
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
-This OpenWrt firmware is packaged using ***`Flippy's`*** [Amlogic S9xxx Kernel for OpenWrt](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx), and the [Installation and Update scripts](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program), etc. Special thanks The maker `Flippy`.
+This OpenWrt firmware is packaged using ***`Flippy's`*** [Amlogic S9xxx Kernel for OpenWrt](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx), and the [Install and Upgrade scripts](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program), etc. Special thanks The maker `Flippy`.
 
 Welcome to use `forks` for personalized OpenWrt firmware configuration. If you like it, Please click the `stars`.
 
@@ -14,14 +14,16 @@ Welcome to use `forks` for personalized OpenWrt firmware configuration. If you l
 - `openwrt_s905x2_v*.img`: For all Amlogic-s905x2 series boxes.
 - `openwrt_s905x_v*.img`: For all Amlogic-s905x series boxes.
 - `openwrt_s905d_v*.img`: For all Amlogic-s905d series boxes.
-- `openwrt_s922x_v*.img`: For all Amlogic-s922x series boxes.
 - `openwrt_s912_v*.img`: For all Amlogic-s912 series boxes.
-- `openwrt_x96_v*.img`: For X96-Max+(S905x3). [🔍](https://www.ebay.com/itm/133605678868)
-- `openwrt_hk1_v*.img`: For HK1-Box(S905x3). [🔍](https://www.ebay.com/itm/174515007305)
-- `openwrt_h96_v*.img`: For H96-Max-X3(S905x3). [🔍](https://www.ebay.com/itm/293499265183)
-- `openwrt_belink_v*.img` For Belink GT-King(S922x). [🔍](https://www.ebay.com/itm/303604712848)
-- `openwrt_belinkpro_v*.img` For Belink GT-King Pro(S922x). [🔍](https://www.ebay.com/itm/324411782338)
-- `openwrt_ugoos_v*.img` For UGOOS AM6 Plus(S922x). [🔍](https://www.ebay.com/itm/254590989143)
+- `openwrt_s922x_v*.img`: For all Amlogic-s922x series boxes.
+- `openwrt_x96_v*.img`: For X96-Max+(S905x3). [🔍](https://tokopedia.link/uMaH09s41db)
+- `openwrt_hk1_v*.img`: For HK1-Box(S905x3). [🔍](https://tokopedia.link/pNHf5AE41db)
+- `openwrt_h96_v*.img`: For H96-Max-X3(S905x3). [🔍](https://tokopedia.link/wRh6SVI41db)
+- `openwrt_belink_v*.img` For Belink GT-King(S922x). [🔍](https://tokopedia.link/RAgZmOM41db)
+- `openwrt_belinkpro_v*.img` For Belink GT-King Pro(S922x). [🔍](https://tokopedia.link/sfTHlfS41db)
+- `openwrt_ugoos_v*.img` For UGOOS AM6 Plus(S922x). [🔍](https://tokopedia.link/pHGKXuV41db)
+- `openwrt_hg680p_v*.img`: For Fiberhome HG680P(S905x). [🔍](https://tokopedia.link/NWF1Skg21db)
+- `openwrt_b860h_v*.img`: For ZTE B860H(S905x). [🔍](https://tokopedia.link/fp8wG3711db)
 - `openwrt_n1_v*.img`: For Phicomm-N1(S905d).
 - `openwrt_octopus_v*.img` For Octopus-Planet(S912).
 
@@ -169,7 +171,8 @@ The codes of the following `Model` and `Boxes` can be used in `sudo ./make -d -b
 | ---- | ---- |
 | s905x3 | x96, hk1, h96 |
 | s905x2 | x96max4g, x96max2g |
-| s905x, s905d | n1 |
+| s905x | hg680p, b860h |
+| s905d | n1 |
 | s922x | belink, belinkpro, ugoos |
 | s912 | octopus |
 
@@ -215,8 +218,8 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 - Flippy: The maker of Amlogic s9xxx Kernel for openwrt
 - [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
 - [tuanqing/mknop](https://github.com/tuanqing/mknop)
-
 - [Mikubill/transfer](https://github.com/Mikubill/transfer)
+- [Rureka Blog](https://rureka.com/)
 
 ## License
 

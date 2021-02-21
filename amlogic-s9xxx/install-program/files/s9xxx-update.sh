@@ -194,13 +194,13 @@ fi
 #Upgrade version prompt
 source /boot/uEnv.txt 2>/dev/null
 CUR_FDTFILE=${FDT}
+echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
 
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
 VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
-echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
 if  [ "${VERSION_NEW}" = "5.10" ]; then
     echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
     echo "Are you sure you want to write into emmc? y/n"
@@ -302,7 +302,7 @@ elif [[ "${CUR_FDTFILE}" == *gxl-s905d-phicomm-n1* ]]; then
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 else
-    echo -e "Select [ ${CUR_FDTFILE} ]: No change the bootloader."
+    echo "Select [ ${CUR_FDTFILE} ]: No change the bootloader."
 fi
 
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-install.sh

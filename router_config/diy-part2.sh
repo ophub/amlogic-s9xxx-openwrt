@@ -35,5 +35,3 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 # ==========luci-theme-url==========
 # svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod
 
-svn co https://github.com/jwrdegoede/rtl8189ES_linux.git package/kernel/rtl8189ES_linux
-

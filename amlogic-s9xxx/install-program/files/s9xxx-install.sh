@@ -235,11 +235,8 @@ while [ $p -ge 1 ]; do
 done
 
 # Create new partition
-if  [ "${FDTFILE}" = "meson-gxm-octopus-planet.dtb" ]; then
+if [[ "${FDTFILE}" == *phicomm-n1* || "${FDTFILE}" == *octopus-planet* ]]; then
     SKIP1=700
-    SKIP2=0
-elif [ "${FDTFILE}" = "meson-gxl-s905d-phicomm-n1.dtb" ]; then
-    SKIP1=68
     SKIP2=0
 else
     SKIP1=68

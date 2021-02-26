@@ -291,12 +291,12 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-if [[ "${CUR_FDTFILE}" == *sm1-x96-max* ]]; then
+if [[ "${CUR_FDTFILE}" == *x96-max* ]]; then
     BOOTLOADER="/root/hk1box-bootloader.img"
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-elif [[ "${CUR_FDTFILE}" == *gxl-s905d-phicomm-n1* ]]; then
+elif [[ "${CUR_FDTFILE}" == *phicomm-n1* ]]; then
     BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync

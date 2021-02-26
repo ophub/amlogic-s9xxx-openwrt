@@ -313,12 +313,12 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
-if [[ "${FDTFILE}" == *sm1-x96-max* ]]; then
+if [[ "${FDTFILE}" == *x96-max* ]]; then
     BOOTLOADER="/root/hk1box-bootloader.img"
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-elif [[ "${FDTFILE}" == *gxl-s905d-phicomm-n1* ]]; then
+elif [[ "${FDTFILE}" == *phicomm-n1* ]]; then
     BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync

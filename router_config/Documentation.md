@@ -251,8 +251,9 @@ Click the `Actions` button in the `repository navigation bar`. In the `All workf
 Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic S9xxx boxes`. The icons are as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
-![Snip20210227_15](https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg)
-![Snip20210227_16](https://user-images.githubusercontent.com/68696949/109418841-55edb900-7a05-11eb-9650-7100ebd6042c.jpg)
+<img src=https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418841-55edb900-7a05-11eb-9650-7100ebd6042c.jpg width="300" />
+</div>
 
 ### 7.3 Download from third parties
 
@@ -264,6 +265,10 @@ UPLOAD_WETRANSFER: false
 ```
 
 The support for uploading to a third party comes from [Mikubill/transfer](https://github.com/Mikubill/transfer). If you need it, you can add more third-party support according to his instructions (control your creativity and don't waste too many free resources). The icons are as follows:
+
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418921-b5e45f80-7a05-11eb-80ba-02edb0698270.jpg width="300" />
+</div>
 
 ## 8. Install the firmware
 
@@ -302,6 +307,12 @@ When `manually starting the GitHub Actions` firmware compilation, change the val
 During SSH operation, copy the green SSH remote connection command in `ssh...io`. Apple MAC computers can directly use the `terminal` that comes with the system. If you have `OpenWrt` running, you can use the `TTYD terminal` under its system menu. If your computer has software such as `SecureCRT` or `PuTTY` installed, you can use any software that supports the SSH protocol.
 
 If you don't have any SSH terminal, you can copy the `https://tma...` URL under the green URL, open it in a `browser`, and enter the same command as in the terminal according to the prompt. The browser's response speed may be slower than SSH, so be patient. The icons are as follows:
+
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418960-e1ffe080-7a05-11eb-94f6-2c9bd8f5481c.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418962-e4fad100-7a05-11eb-87af-e924d4ff3da6.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418965-e926ee80-7a05-11eb-8f25-4443b9f845f7.jpg width="300" />
+</div>
 
 ### 10.4 Custom feeds configuration file
 

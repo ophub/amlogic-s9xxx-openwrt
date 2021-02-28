@@ -49,8 +49,6 @@ CONFIG_PACKAGE_luci-i18n-base-fr=y
 
 All the personalized customization in the `.config` file can be done in this way. For items you don't need, fill in `#` at the beginning of the line, and change `=y` to `is not set` at the end of the line. For the items you need, remove the `#` at the beginning of the line and change `is not set` to `=y` at the end
 
-.config文件里的个性化定制全部这样操作即可。把自己不需要的项目，在行首填写# ，在行尾把=y改为is not set。对于自己需要的项目，去掉行首的# ，结尾把 is not set改为=y
-
 #### 4.1.2 Select the personalized software package
 
 in `#LuCI-app:` The practice of enabling and deleting the default software package is the same as above. This time we delete the `luci-app-zerotier` plug-in in the default software package, just put

@@ -60,6 +60,13 @@ Set the GitHub privacy variable `GitHub_TOKEN`. After the firmware is compiled, 
 
 Now you can `Fork` the `repository`, open the repository [https://github.com/ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt), click the `Fork` button on the `upper right`, Will copy a copy of the repository code to your account, `wait a few seconds`, and prompt the Fork to complete Later, go to your account to access `amlogic-s9xxx-openwrt` in `your repository`. In the upper right corner of `Settings` > `Secrets` > `New repostiory secret` (Name: `RELEASES_TOKEN`, Value: `Fill in the value of GitHub_TOKEN` just now), `save it`. The icons are as follows:
 
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418571-12467f80-7a04-11eb-878e-012c2ba11772.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418573-15417000-7a04-11eb-97a7-93973d7479c2.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418579-1c687e00-7a04-11eb-9941-3d37be9012ef.jpg width="300" />
+</div>
+
 ## 4. Personalized OpenWrt firmware customization file description
 
 After the previous 3 steps of preparation, let's start personalized firmware customization now. Have some files in the `/router_config` directory. Except for the description files, the other three are files for customizing OpenWrt firmware. In this chapter, we only make the simplest instructions, so that you can experience the happiness of personalized customization with your hands. I put more complex customization operations in `Section 10`, which requires you to have a little foundation.

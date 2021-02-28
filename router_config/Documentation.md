@@ -222,7 +222,7 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
       Install command: s9xxx-install.sh
       Upgrade command: s9xxx-update.sh
 ```
-### 6.3 Save to a third party (such as WeTransfer)
+### 6.3 Save to a third party
 
 ```yaml
 - name: Upload OpenWrt Firmware to WeTransfer

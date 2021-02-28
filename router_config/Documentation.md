@@ -69,7 +69,7 @@ Now you can `Fork` the `repository`, open the repository [https://github.com/oph
 
 ## 4. Personalized OpenWrt firmware customization file description
 
-After the previous 3 steps of preparation, let's start personalized firmware customization now. Have some files in the [/router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Except for the description files, the other three are files for customizing OpenWrt firmware. In this chapter, we only make the simplest instructions, so that you can experience the happiness of personalized customization with your hands. I put more complex customization operations in `Section 10`, which requires you to have a little foundation.
+After the previous 3 steps of preparation, let's start personalized firmware customization now. Have some files in the [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Except for the description files, the other three are files for customizing OpenWrt firmware. In this chapter, we only make the simplest instructions, so that you can experience the happiness of personalized customization with your hands. I put more complex customization operations in `Section 10`, which requires you to have a little foundation.
 
 ### 4.1 .config file description
 

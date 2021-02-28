@@ -241,7 +241,6 @@ Download our compiled openwrt firmware.
 
 Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic S9xxx boxes`. The icons are as follows: 
 
-
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418782-08714c00-7a05-11eb-9556-91575640a4bb.jpg width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/109418785-0ad3a600-7a05-11eb-9fdd-519835a14eaa.jpg width="300" />
@@ -250,6 +249,10 @@ Click the `Actions` button in the `repository navigation bar`. In the `All workf
 ### 7.2 Download from GitHub Releases
 
 Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic S9xxx boxes`. The icons are as follows:
+
+<div style="width:100%;margin-top:40px;margin:5px;">
+![Snip20210227_15](https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg)
+![Snip20210227_16](https://user-images.githubusercontent.com/68696949/109418841-55edb900-7a05-11eb-9650-7100ebd6042c.jpg)
 
 ### 7.3 Download from third parties
 

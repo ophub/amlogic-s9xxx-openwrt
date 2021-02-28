@@ -169,6 +169,12 @@ The firmware compilation process is controlled in the [.github/workflows/build-o
 
 In the `navigation bar of your repository`, click the `Actions` button, and then click `Build OpenWrt` > `Run workflow` > `Run workflow` to start the compilation, wait about `3 hours`, and complete the compilation after all the processes are over. The icons are as follows:
 
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418662-a0226a80-7a04-11eb-97f6-aeb893336e8c.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418663-a31d5b00-7a04-11eb-8d34-57d430696901.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418666-a7497880-7a04-11eb-9ed0-be738e22f7ae.jpg width="300" />
+</div>
+
 ### 5.2 Compile at the agreed time
 
 In the [.github/workflows/build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file, use `cron` to set the timing compilation. The 5 different positions represent min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday). Set the time by modifying the values of different positions. The system uses `UTC standard time` by default, please convert it according to the time zone of your country.

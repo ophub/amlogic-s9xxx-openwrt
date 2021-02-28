@@ -9,41 +9,35 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
 # Tutorial directory
 
 - [1. Register your own GitHub account](#1-register-your-own-github-account)
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#1-register-your-own-github-account
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#2-set-the-privacy-variable-github_token
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#3-fork-repository-and-set-releases_token
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#4-personalized-openwrt-firmware-customization-file-description
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#41-config-file-description
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#411-let-the-firmware-support-the-native-language
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#412-select-the-personalized-software-package
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#42-diy-script-operation-diy-part1sh-and-diy-part2sh
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#example-1-add-a-third-party-software-package
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#example-2-replace-the-existing-software-package
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#example-3-modifying-the-code-in-the-source-code-library
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#5-compile-the-firmware
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#51-manual-compilation
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#52-compile-at-the-agreed-time
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#6-save-the-firmware
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#61-save-to-github-actions
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#62-save-to-github-releases
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#63-save-to-a-third-party-such-as-wetransfer
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#7-download-the-firmware
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#71-download-from-github-actions
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#72-download-from-github-releases
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#73-download-from-third-parties
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#8-install-the-firmware
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#9-upgrade-firmware
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#10-personalized-firmware-customization-upgrade-tutorial
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#101-know-the-complete-config-file
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#102-know-the-workflow-file
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#103-use-ssh-to-remotely-connect-to-github-actions
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#104-custom-feeds-configuration-file
-https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#105-custom-software-default-configuration-information
-
-
-
-
-
+- [2. Set the privacy variable GitHub_TOKEN](#2-set-the-privacy-variable-github_token)
+- [3. Fork repository and set RELEASES_TOKEN](#3-fork-repository-and-set-releases_token)
+- [4. Personalized OpenWrt firmware customization file description](#4-personalized-openwrt-firmware-customization-file-description)
+- [4.1 .config file description](#41-config-file-description)
+- [4.1.1 Let the firmware support the native language](#411-let-the-firmware-support-the-native-language)
+- [4.1.2 Select the personalized software package](#412-select-the-personalized-software-package)
+- [4.2 DIY script operation: diy-part1.sh and diy-part2.sh](#42-diy-script-operation-diy-part1sh-and-diy-part2sh)
+- [Example 1, add a third-party software package](#example-1-add-a-third-party-software-package)
+- [Example 2: Replace the existing software package](#example-2-replace-the-existing-software-package)
+- [Example 3: Modifying the code in the source code library](#example-3-modifying-the-code-in-the-source-code-library)
+- [5. Compile the firmware](#5-compile-the-firmware)
+- [5.1 Manual compilation](#51-manual-compilation)
+- [5.2 Compile at the agreed time](#52-compile-at-the-agreed-time)
+- [6. Save the firmware](#6-save-the-firmware)
+- [6.1 Save to GitHub Actions](#61-save-to-github-actions)
+- [6.2 Save to GitHub Releases](#62-save-to-github-releases)
+- [6.3 Save to a third party](#63-save-to-a-third-party-such-as-wetransfer)
+- [7. Download the firmware](#7-download-the-firmware)
+- [7.1 Download from GitHub Actions](#71-download-from-github-actions)
+- [7.2 Download from GitHub Releases](#72-download-from-github-releases)
+- [7.3 Download from third parties](#73-download-from-third-parties)
+- [8. Install the firmware](#8-install-the-firmware)
+- [9. Upgrade firmware](#9-upgrade-firmware)
+- [10. Personalized firmware customization upgrade tutorial](#10-personalized-firmware-customization-upgrade-tutorial)
+- [10.1 Know the complete .config file](#101-know-the-complete-config-file)
+- [10.2 Know the workflow file](#102-know-the-workflow-file)
+- [10.3 Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
+- [10.4 Custom feeds configuration file](#104-custom-feeds-configuration-file)
+- [10.5 Custom software default configuration information](#105-custom-software-default-configuration-information)
 
 ## 1. Register your own GitHub account
 

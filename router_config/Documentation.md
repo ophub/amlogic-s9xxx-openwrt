@@ -8,6 +8,39 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
 
 # Tutorial directory
 
+- [1. Register your own GitHub account](#1-register-your-own-github-account)
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#1-register-your-own-github-account
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#2-set-the-privacy-variable-github_token
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#3-fork-repository-and-set-releases_token
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#4-personalized-openwrt-firmware-customization-file-description
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#41-config-file-description
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#411-let-the-firmware-support-the-native-language
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#412-select-the-personalized-software-package
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#42-diy-script-operation-diy-part1sh-and-diy-part2sh
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#example-1-add-a-third-party-software-package
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#example-2-replace-the-existing-software-package
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#example-3-modifying-the-code-in-the-source-code-library
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#5-compile-the-firmware
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#51-manual-compilation
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#52-compile-at-the-agreed-time
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#6-save-the-firmware
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#61-save-to-github-actions
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#62-save-to-github-releases
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#63-save-to-a-third-party-such-as-wetransfer
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#7-download-the-firmware
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#71-download-from-github-actions
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#72-download-from-github-releases
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#73-download-from-third-parties
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#8-install-the-firmware
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#9-upgrade-firmware
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#10-personalized-firmware-customization-upgrade-tutorial
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#101-know-the-complete-config-file
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#102-know-the-workflow-file
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#103-use-ssh-to-remotely-connect-to-github-actions
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#104-custom-feeds-configuration-file
+https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md#105-custom-software-default-configuration-information
+
+
 
 
 
@@ -236,7 +269,7 @@ After you complete the `OpenWrt personalized configuration` locally, `save and e
 
 The official GitHub gave a detailed explanation. Regarding the use of `GitHub Actions`, you can start to get to know it from here: [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart)
 
-### 10.3 Use SSH to remotely connect to GitHub Actions for personalized configuration
+### 10.3 Use SSH to remotely connect to GitHub Actions
 
 You have performed `localization compilation` in 10.1 and have a certain understanding of related interactive interfaces. This experience is very useful. In the future, you can implement the same operations as localization in the cloud compilation of `GitHub Actions`.
 

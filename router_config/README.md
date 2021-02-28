@@ -1,6 +1,6 @@
 # OpenWrt for S905x3-Boxs and Phicomm-N1
 
-You can modify the configuration file, customize the OpenWrt firmware.
+You can modify the configuration file, [customize the OpenWrt firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md).
 
 ## Related script usage instructions
 

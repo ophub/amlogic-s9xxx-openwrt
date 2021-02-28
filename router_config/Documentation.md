@@ -25,7 +25,7 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
 6. [Save the firmware](#6-save-the-firmware)
     - 6.1 [Save to GitHub Actions](#61-save-to-github-actions)
     - 6.2 [Save to GitHub Releases](#62-save-to-github-releases)
-    - 6.3 [Save to a third party](#63-save-to-a-third-party-such-as-wetransfer)
+    - 6.3 [Save to a third party](#63-save-to-a-third-party)
 7. [Download the firmware](#7-download-the-firmware)
     - 7.1 [Download from GitHub Actions](#71-download-from-github-actions)
     - 7.2 [Download from GitHub Releases](#72-download-from-github-releases)

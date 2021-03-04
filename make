@@ -165,6 +165,10 @@ utils() {
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 
+    #patches
+    [ -f etc/modules.d/rtl8189fs ] || printf '8189fs' >etc/modules.d/rtl8189fs
+    [ -f etc/modules.d/rtl8188fu ] || printf 'rtl8188fu' >etc/modules.d/rtl8188fu
+
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/) 2>/dev/null)
@@ -188,7 +192,7 @@ utils() {
     fi
 
     case "${build_op}" in
-        s905x3 | x96 | hk1 | h96 | s9xxx)
+        s905x3 | x96 | hk1 | h96)
             new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
             new_uboot="u-boot-s905x3-510kernel-x96max.bin"
             ;;
@@ -196,21 +200,21 @@ utils() {
             new_fdt_dtb="meson-g12a-x96-max.dtb"
             new_uboot="u-boot-s905x2-510kernel-sei510.bin"
             ;;
-        s922x | belink | belinkpro | ugoos)
-            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
-            new_uboot="u-boot-s922x-510kernel-gtkingpro.bin"
+        s905x | hg680p | b860h)
+            new_fdt_dtb="meson-gxl-s905x-p212.dtb"
+            new_uboot="u-boot-s905x-510kernel-p212.bin"
             ;;
         s905d | n1)
             new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
             new_uboot="u-boot-s905d-510kernel-phicommn1.bin"
             ;;
-        s905x | hg680p | b860h)
-            new_fdt_dtb="meson-gxl-s905x-p212.dtb"
-            new_uboot="u-boot-s905x-510kernel-p212.bin"
-            ;;
         s912 | octopus)
             new_fdt_dtb="meson-gxm-octopus-planet.dtb"
             new_uboot="u-boot-s912-510kernel-octopusplanet.bin"
+            ;;
+        s922x | belink | belinkpro | ugoos)
+            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
+            new_uboot="u-boot-s922x-510kernel-gtkingpro.bin"
             ;;
         *)
             die "Have no this firmware: [ ${build_op} - ${kernel} ]"

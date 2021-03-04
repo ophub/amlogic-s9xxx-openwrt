@@ -128,9 +128,9 @@ update_modules_files() {
                    x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
 
                    if [ $x -eq 0 ]; then
-                      echo_color "red" "Error: No *.ko file found in the ${kernel_version}/modules.tar.xz"  "..."
+                      echo_color "red" "(2/2) Error: No *.ko file found in the ${kernel_version}/modules.tar.xz"  "..."
                    else
-                      echo_color "blue" "Have [ ${x} ] files make *.ko link"  "..."
+                      echo_color "blue" "${kernel_version} have [ ${x} ] files make *.ko link"  "..."
                    fi
                 sync && cd ${build_tmp_folder}/${kernel_version}/tmp_modules
                 tar -cf modules.tar *
@@ -158,7 +158,7 @@ case  $pause in
       modules.tar.xz | modules | m) echo_color "green" "You choose to update the [ modules.tar.xz ] files" "..."
            update_modules_files
            ;;
-      all | a | *) echo echo_color "green" "You choose to update [ all ] files" "..."
+      all | a | *) echo_color "green" "You choose to update [ all ] files" "..."
            update_kernel_files
            update_modules_files
            ;;

@@ -75,6 +75,7 @@ echo_color() {
 
 # Check files
 check_build_files() {
+    echo "Check files ..."
     if  [ -f ${flippy_folder}/${flippy_file} ]; then
         echo_color "blue" "(1/7) The specified file exists." "USE: ${flippy_file} ..."
     elif [ $( ls ${flippy_folder}/*.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
@@ -131,6 +132,8 @@ losetup_mount_img() {
 copy_boot_root() {
    cp -rf ${boot_tmp}/{dtb,config*,initrd.img*,System.map*,uInitrd,zImage} ${kernel_tmp}
    cp -rf ${root_tmp}/lib/modules ${modules_tmp}
+   #Add drivers from {amlogic_path}/amlogic-kernel/build_kernel/patches/root/
+   cp -rf ${amlogic_path}/amlogic-kernel/build_kernel/patches/root/wireless/* ${modules_tmp}/modules/*/kernel/drivers/net/wireless/
    sync
 
    #Check core files

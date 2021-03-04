@@ -76,6 +76,7 @@ echo_color() {
 
 # Check files
 check_build_files() {
+    echo "Check files ..."
     if   [ -f "${flippy_folder}/${build_boot}" -a -f "${flippy_folder}/${build_dtb}" -a -f "${flippy_folder}/${build_modules}" ]; then
 
         echo_color "blue" "(1/7) The specified file exists." "USE: ${build_boot} and other files to start compiling ..."
@@ -214,7 +215,10 @@ build_modules() {
   cd ${build_path}
      rm -rf ${build_tmp_folder} && sync
      mkdir -p ${build_tmp_folder}/modules/lib/modules
-     cp -rf ${flippy_folder}/${build_modules} ${build_tmp_folder}/modules/lib/modules && sync
+     cp -rf ${flippy_folder}/${build_modules} ${build_tmp_folder}/modules/lib/modules
+     #Add drivers from {amlogic_path}/amlogic-kernel/build_kernel/patches/root/
+     cp -rf ${amlogic_path}/amlogic-kernel/build_kernel/patches/root/wireless/* ${build_tmp_folder}/modules/lib/modules/*/kernel/drivers/net/wireless/
+     sync
 
   cd ${build_tmp_folder}/modules/lib/modules
 

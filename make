@@ -168,6 +168,9 @@ utils() {
     #Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
     [ -f etc/modules.d/rtl8189fs ] || printf '8189fs' >etc/modules.d/rtl8189fs
     [ -f etc/modules.d/rtl8188fu ] || printf 'rtl8188fu' >etc/modules.d/rtl8188fu
+    [ -f etc/modules.d/usb-net-rtl8150 ] || printf 'rtl8150' >etc/modules.d/usb-net-rtl8150
+    [ -f etc/modules.d/usb-net-rtl8152 ] || printf 'r8152' >etc/modules.d/usb-net-rtl8152
+    [ -f etc/modules.d/usb-net-asix-ax88179 ] || printf 'ax88179_178a' >etc/modules.d/usb-net-asix-ax88179
 
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then

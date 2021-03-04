@@ -16,7 +16,7 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
         - 4.1.1 [Let the firmware support the native language](#411-let-the-firmware-support-the-native-language)
         - 4.1.2 [Select the personalized software package](#412-select-the-personalized-software-package)
     - 4.2 [DIY script operation: diy-part1.sh and diy-part2.sh](#42-diy-script-operation-diy-part1sh-and-diy-part2sh)
-        - 4.2.1 [Example 1: add a third-party software package](#example-1-add-a-third-party-software-package)
+        - 4.2.1 [Example 1: Add a third-party software package](#example-1-add-a-third-party-software-package)
         - 4.2.2 [Example 2: Replace the existing software package](#example-2-replace-the-existing-software-package)
         - 4.2.3 [Example 3: Modifying the code in the source code library](#example-3-modifying-the-code-in-the-source-code-library)
 5. [Compile the firmware](#5-compile-the-firmware)
@@ -112,7 +112,7 @@ The scripts `diy-part1.sh` and `diy-part2.sh` are executed `before and after` th
 
 Our following operations are based on this source code library: [https://github.com/coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
 
-#### Example 1, add a third-party software package
+#### Example 1, Add a third-party software package
 
 The first step is to add the following code to `diy-part2.sh`:
 

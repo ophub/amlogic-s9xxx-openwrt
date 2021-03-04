@@ -61,6 +61,7 @@ echo_color "purple" "Start Update dtb files"  "..."
 
 # update kernel.tar.xz *.dtb
 update_kernel_dtb() {
+    echo "Upgrade kernel.tar.xz for *.dtb ..."
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
     cd ${build_tmp_folder}
     cp -rf ../../kernel/* .

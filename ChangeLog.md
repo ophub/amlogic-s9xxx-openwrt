@@ -12,6 +12,7 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.02.28 | All | ADD | ✩✩✩✩✩ | [Documentation.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md) | Add detailed description of openwrt personalized compilation. |
 | 2021.02.19 | All | UPDATE | ✩✩✩✩✩ | [s9xxx-update.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-update.sh) | Optimize online upgrade method. |
 | 2021.02.17 | All | ADD | ✩✩✩ | [5.4.98](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.98) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.10.16.Beta](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.16.Beta) | Add New kernel. |

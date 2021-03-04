@@ -60,19 +60,19 @@ echo_color() {
 echo_color "purple" "Start Update dtb files"  "..."
 
 # update kernel.tar.xz *.dtb
-update_kernel_dtb() {
-    echo "Upgrade kernel.tar.xz for *.dtb ..."
+update_kernel_files() {
+    echo "Upgrade kernel.tar.xz ..."
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
     cd ${build_tmp_folder}
     cp -rf ../../kernel/* .
 
     if  [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
-        echo_color "red" "(1/1) Error: No core file." "..."
+        echo_color "red" "(1/2) Error: No kernel files." "..."
     else
-        echo_color "blue" "A total of [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) ] kernels will update the *.dtb files."  "\n \
+        echo_color "blue" "A total of [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) ] kernel.tar.xz will update the files."  "\n \
         The kernel list is as follows: \n \
         $( ls -d */ | head -c-2 ) \n \
-        Start Update ..."
+        Start Update kernel.tar.xz files..."
 
             total_kernel=$( ls . -l 2>/dev/null | grep "^d" | wc -l )
             current_kernel=1
@@ -80,11 +80,12 @@ update_kernel_dtb() {
                 kernel_version=${kernel_folder%/*}
                 cd ${kernel_version}
                 mkdir -p tmp_kernel && tar -xJf kernel.tar.xz -C tmp_kernel
-                cp -f ${amlogic_path}/amlogic-dtb/* tmp_kernel/dtb/amlogic/ && sync && cd tmp_kernel
+                cp -f ${amlogic_path}/amlogic-dtb/* tmp_kernel/dtb/amlogic/
+                sync && cd tmp_kernel
                 tar -cf kernel.tar *
                 xz -z kernel.tar
                 mv -f kernel.tar.xz ../kernel.tar.xz && sync && cd ../ && rm -rf tmp_kernel && cd ../
-                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version}"  "The *.dtb files update complete."
+                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version}"  "The files update complete."
                 current_kernel=$(($current_kernel + 1))
             done
 
@@ -93,13 +94,76 @@ update_kernel_dtb() {
         cd ../ && rm -rf ${build_tmp_folder}
     fi
 
-    echo_color "green" "(1/1) End update_kernel_dtb"  "..."
+    echo_color "green" "(1/2) End update_kernel_files"  "..."
 }
 
+# update modules.tar.xz
+update_modules_files() {
+    echo "Upgrade modules.tar.xz ..."
+    [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
+    cd ${build_tmp_folder}
+    cp -rf ../../kernel/* .
 
-update_kernel_dtb
+    if  [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
+        echo_color "red" "(2/2) Error: No kernel files." "..."
+    else
+        echo_color "blue" "A total of [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) ] modules.tar.xz will update the files."  "\n \
+        The kernel list is as follows: \n \
+        $( ls -d */ | head -c-2 ) \n \
+        Start Update modules.tar.xz files..."
 
-echo_color "purple" "Update dtb files completed"  "..."
+            total_kernel=$( ls . -l 2>/dev/null | grep "^d" | wc -l )
+            current_kernel=1
+            for kernel_folder in $( ls -d */ | head -c-2 ); do
+                kernel_version=${kernel_folder%/*}
+                cd ${kernel_version}
+                mkdir -p tmp_modules && tar -xJf modules.tar.xz -C tmp_modules
+                #Add drivers from {amlogic_path}/amlogic-kernel/build_kernel/patches/root/
+                cp -rf ${amlogic_path}/amlogic-kernel/build_kernel/patches/root/wireless/* tmp_modules/lib/modules/*/kernel/drivers/net/wireless/
+                sync && cd tmp_modules/lib/modules/*/
+                   rm -f *.ko
+                   x=0
+                   find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+                   sync && sleep 3
+                   x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
 
+                   if [ $x -eq 0 ]; then
+                      echo_color "red" "Error: No *.ko file found in the ${kernel_version}/modules.tar.xz"  "..."
+                   else
+                      echo_color "blue" "Have [ ${x} ] files make *.ko link"  "..."
+                   fi
+                sync && cd ${build_tmp_folder}/${kernel_version}/tmp_modules
+                tar -cf modules.tar *
+                xz -z modules.tar
+                mv -f modules.tar.xz ../modules.tar.xz && sync && cd ../ && rm -rf tmp_modules && cd ../
+                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version}"  "The files update complete."
+                current_kernel=$(($current_kernel + 1))
+            done
+
+        cp -rf * ../../kernel/
+        sync
+        cd ../ && rm -rf ${build_tmp_folder}
+    fi
+
+    echo_color "green" "(2/2) End update_modules_files"  "..."
+}
+
+echo_color "yellow" "Which files do you choose to update: " "kernel.tar.xz[k], modules.tar.xz[m], all[a]"
+echo_color "yellow" "Please enter: k/m/a"
+read  pause
+case  $pause in
+      kernel.tar.xz | kernel | k) echo_color "green" "You choose to update the [ kernel.tar.xz ] files" "..."
+           update_kernel_files
+           ;;
+      modules.tar.xz | modules | m) echo_color "green" "You choose to update the [ modules.tar.xz ] files" "..."
+           update_modules_files
+           ;;
+      all | a | *) echo echo_color "green" "You choose to update [ all ] files" "..."
+           update_kernel_files
+           update_modules_files
+           ;;
+esac
+
+echo_color "purple" "Update files completed"  "..."
 # end run the script
 

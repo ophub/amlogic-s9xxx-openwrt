@@ -165,7 +165,7 @@ utils() {
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 
-    #patches
+    #Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
     [ -f etc/modules.d/rtl8189fs ] || printf '8189fs' >etc/modules.d/rtl8189fs
     [ -f etc/modules.d/rtl8188fu ] || printf 'rtl8188fu' >etc/modules.d/rtl8188fu
 

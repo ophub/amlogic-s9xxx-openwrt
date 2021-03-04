@@ -204,7 +204,7 @@ utils() {
             new_uboot="u-boot-s905x2-510kernel-sei510.bin"
             ;;
         s905x | hg680p | b860h)
-            new_fdt_dtb="meson-gxl-s905x-p212.dtb"
+            new_fdt_dtb="meson-gxl-s905x-khadas-vim-mod.dtb"
             new_uboot="u-boot-s905x-510kernel-p212.bin"
             ;;
         s905d | n1)

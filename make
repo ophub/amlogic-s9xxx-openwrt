@@ -17,7 +17,7 @@ openwrt_path=${make_path}/openwrt-armvirt
 amlogic_path=${make_path}/amlogic-s9xxx
 kernel_path=${amlogic_path}/amlogic-kernel
 commonfiles_path=${amlogic_path}/common-files
-uboot_path=${amlogic_path}/u-boot
+uboot_path=${amlogic_path}/amlogic-u-boot
 installfiles_path=${amlogic_path}/install-program/files
 #===== Do not modify the following parameter settings, End =======
 
@@ -130,7 +130,6 @@ extract_armbian() {
     # [ $(ls ${root_dir} | wc -w) != 0 ] && cp -r ${root_dir}/* ${root}
 
     # Complete file
-    cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
     cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
     cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
     cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
@@ -142,10 +141,59 @@ utils() {
     build_op=${1}
     build_usekernel=${2}
 
+    case "${build_op}" in
+        s905x3 | x96 | hk1 | h96)
+            new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
+            new_uboot_510kernel="s905x3-u-boot-510kernel-x96maxplus.bin"
+            new_bootloader_510kernel="s905x3-bootloader-510kernel-x96maxplus.bin.sd.bin"
+            new_bootloader_non510kernel="s905x3-bootloader-non510kernel-hk1box.img"
+            ;;
+        s905x2 | x96max4g | x96max2g)
+            new_fdt_dtb="meson-g12a-x96-max.dtb"
+            new_uboot_510kernel="s905x2-u-boot-510kernel-sei510.bin"
+            new_bootloader_510kernel=""
+            new_bootloader_non510kernel=""
+            ;;
+        s905x | hg680p | b860h)
+            new_fdt_dtb="meson-gxl-s905x-khadas-vim-mod.dtb"
+            new_uboot_510kernel="s905x-u-boot-510kernel-p212.bin"
+            new_bootloader_510kernel=""
+            new_bootloader_non510kernel=""
+            ;;
+        s905d | n1)
+            new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
+            new_uboot_510kernel="s905d-u-boot-510kernel-phicommn1.bin"
+            new_bootloader_510kernel=""
+            new_bootloader_non510kernel="s905d-bootloader-non510kernel-2015-phicomm-n1.bin"
+            ;;
+        s912 | octopus)
+            new_fdt_dtb="meson-gxm-octopus-planet.dtb"
+            new_uboot_510kernel="s912-u-boot-510kernel-octopusplanet.bin"
+            new_bootloader_510kernel=""
+            new_bootloader_non510kernel=""
+            ;;
+        s922x | belink | belinkpro | ugoos)
+            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
+            new_uboot_510kernel="s922x-u-boot-510kernel-gtkingpro.bin"
+            new_bootloader_510kernel=""
+            new_bootloader_non510kernel=""
+            ;;
+        *)
+            die "Have no this firmware: [ ${build_op} - ${kernel} ]"
+            ;;
+    esac
+
     #Edit ${root}/* files ========== Begin ==========
     cd ${root}
 
-    # add other operations below
+    # Add bootloader
+    if [[ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" == "5.10" && -n "${new_bootloader_510kernel}" ]]; then
+       cp -f ${uboot_path}/bootloader/${new_bootloader_510kernel} root/ && printf 'yes' >root/support_emmc_startup
+    elif [[ -n "${new_bootloader_non510kernel}" ]]; then
+       cp -f ${uboot_path}/bootloader/${new_bootloader_non510kernel} root/
+    fi
+
+    # Add other operations below
     echo 'pwm_meson' > etc/modules.d/pwm-meson
     if ! grep -q 'ulimit -n' etc/init.d/boot; then
         sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
@@ -165,7 +213,7 @@ utils() {
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 
-    #Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
+    # Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
     [ -f etc/modules.d/rtl8189fs ] || printf '8189fs' >etc/modules.d/rtl8189fs
     [ -f etc/modules.d/rtl8188fu ] || printf 'rtl8188fu' >etc/modules.d/rtl8188fu
     [ -f etc/modules.d/usb-net-rtl8150 ] || printf 'rtl8150' >etc/modules.d/usb-net-rtl8150
@@ -183,6 +231,8 @@ utils() {
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi
+
+    sync
     #Edit ${root}/* files ========== End ==========
 
 
@@ -194,49 +244,20 @@ utils() {
        die "Error: uEnv.txt Files does not exist"
     fi
 
-    case "${build_op}" in
-        s905x3 | x96 | hk1 | h96)
-            new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
-            new_uboot="u-boot-s905x3-510kernel-x96max.bin"
-            ;;
-        s905x2 | x96max4g | x96max2g)
-            new_fdt_dtb="meson-g12a-x96-max.dtb"
-            new_uboot="u-boot-s905x2-510kernel-sei510.bin"
-            ;;
-        s905x | hg680p | b860h)
-            new_fdt_dtb="meson-gxl-s905x-khadas-vim-mod.dtb"
-            new_uboot="u-boot-s905x-510kernel-p212.bin"
-            ;;
-        s905d | n1)
-            new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-            new_uboot="u-boot-s905d-510kernel-phicommn1.bin"
-            ;;
-        s912 | octopus)
-            new_fdt_dtb="meson-gxm-octopus-planet.dtb"
-            new_uboot="u-boot-s912-510kernel-octopusplanet.bin"
-            ;;
-        s922x | belink | belinkpro | ugoos)
-            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
-            new_uboot="u-boot-s922x-510kernel-gtkingpro.bin"
-            ;;
-        *)
-            die "Have no this firmware: [ ${build_op} - ${kernel} ]"
-            ;;
-    esac
-
     old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
     sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
 
+    # Add u-boot.ext & u-boot-510kernel.bin
     if [ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" = "5.10" ]; then
-       if [ -f ${uboot_path}/${new_uboot} ]; then
-          echo "u-boot.ext u-boot-510kernel.bin" | xargs -n 1 cp -f ${uboot_path}/${new_uboot} 2>/dev/null
+       if [ -f ${uboot_path}/boot/${new_uboot_510kernel} ]; then
+          echo "u-boot.ext u-boot-510kernel.bin" | xargs -n 1 cp -f ${uboot_path}/boot/${new_uboot_510kernel} 2>/dev/null
        else
-          die "Have no this 5.10 kernel u-boot file: [ ${uboot_path}/${new_uboot} ]"
+          die "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${uboot_path}/boot/${new_uboot_510kernel} ]"
        fi
     fi
-    #Edit ${boot}/* files ========== End ==========
 
     sync
+    #Edit ${boot}/* files ========== End ==========
 }
 
 make_image() {
@@ -259,13 +280,8 @@ make_image() {
     mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
 
     # Write the specified bootloader
-    if [ "${build_op}" = "n1" -o "${build_op}" = "s905x" -o "${build_op}" = "s905d" ]; then
-       BTLD_BIN="${root}/root/u-boot-2015-phicomm-n1.bin"
-    else
-       BTLD_BIN="${root}/root/hk1box-bootloader.img"
-    fi
-
-    if [ -f ${BTLD_BIN} ]; then
+    if [ $( ls ${root}/root/*-bootloader-* -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+       BTLD_BIN=$( ls ${root}/root/*-bootloader-* | head -n 1 )
        dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
        dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
     fi

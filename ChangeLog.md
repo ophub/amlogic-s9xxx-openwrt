@@ -12,15 +12,19 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.03.05 | All | ADD | ✩✩✩ | [5.4.101](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.101) | Add New kernel. |
+| - | All | ADD | ✩✩✩ | [5.10.19.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.19.TF) | Add New kernel. |
+| - | All | UPDATE | ✩✩✩ | [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program) | According to the latest kernel, adjusted the `install/upgrade` script. |
+| - | All | UPDATE | ✩✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | According to the latest kernel, adjusted the `make` script. |
 | 2021.02.28 | All | ADD | ✩✩✩✩✩ | [Documentation.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md) | Add detailed description of openwrt personalized compilation. |
 | 2021.02.19 | All | UPDATE | ✩✩✩✩✩ | [s9xxx-update.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-update.sh) | Optimize online upgrade method. |
 | 2021.02.17 | All | ADD | ✩✩✩ | [5.4.98](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.98) | Add New kernel. |
-| - | All | ADD | ✩✩✩ | [5.10.16.Beta](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.16.Beta) | Add New kernel. |
+| - | All | ADD | ✩✩✩ | [5.10.16.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.16.TF) | Add New kernel. |
 | 2021.02.15 | All | UPDATE | ✩✩✩✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh) | Merging scripts, common for phicomm-n1 and s9xxx-Boxes. |
 | - | All | UPDATE | ✩✩✩✩✩ | [s9xxx-update.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-update.sh) | Merging scripts, common for phicomm-n1 and s9xxx-Boxes. |
 | 2021.02.01 | All | UPDATE | ✩✩✩✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Add support for 5.10 kernel. |
 | - | All | UPDATE | ✩✩ | [s9xxx-install.sh](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/s9xxx-install.sh) | Add support for 5.10 kernel. |
-| - | All | ADD | ✩✩ | [5.10.11.Beta](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.11.Beta) | Add New kernel. |
+| - | All | ADD | ✩✩ | [5.10.11.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.11.TF) | Add New kernel. |
 | - | All | ADD | ✩✩ | [5.4.93](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.93) | Add New kernel. |
 | 2020.12.31 | All | ADD | ✩✩✩ | [5.9.16](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.9.16) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.4.86](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.86) | Add New kernel. |

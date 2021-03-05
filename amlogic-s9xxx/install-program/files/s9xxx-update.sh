@@ -281,8 +281,8 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-if  [ $( ls /root/*-bootloader-* -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    BOOTLOADER=$( ls /root/*-bootloader-* | head -n 1 )
+if  [ $( ls ${P2}/root/*-bootloader-* -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    BOOTLOADER=$( ls ${P2}/root/*-bootloader-* | head -n 1 )
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"

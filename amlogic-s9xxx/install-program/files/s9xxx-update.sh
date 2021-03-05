@@ -202,7 +202,7 @@ MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
 
-if  [[ "${VERSION_NEW}" = "5.10" && ! -f "/root/support_emmc_startup" ]]; then
+if  [[ "${VERSION_NEW}" = "5.10" && ! -f "${P2}/root/support_emmc_startup" ]]; then
     echo "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
     exit 1
 fi

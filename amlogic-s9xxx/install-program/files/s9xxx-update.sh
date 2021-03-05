@@ -125,9 +125,9 @@ NEW_ROOT_MP=$(echo $NEW_ROOT_PART_MSG | awk '{print $5}')
 echo "NEW_ROOT_MP: [ ${NEW_ROOT_MP} ]"
 
 # backup old bootloader
-if  [ ! -f /root/backup-bootloader.img ]; then
-    echo "Backup bootloader -> [ backup-bootloader.img ] ... "
-    dd if=/dev/${EMMC_NAME} of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
+if  [ ! -f /root/BackupOldBootloader.img ]; then
+    echo "Backup bootloader -> [ BackupOldBootloader.img ] ... "
+    dd if=/dev/${EMMC_NAME} of=/root/BackupOldBootloader.img bs=1M count=4 conv=fsync
     echo "Backup bootloader complete."
     echo
 fi
@@ -201,20 +201,10 @@ VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
-if  [ "${VERSION_NEW}" = "5.10" ]; then
-    echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
-    echo "Are you sure you want to write into emmc? y/n"
-    read pause
-    case $pause in
-        n|N) echo "Stop write into emmc, continue to use TF/SD card."
-             umount -f ${P1}
-             umount -f ${P2}
-             losetup -D
-             exit 1
-             ;;
-        y|Y) break
-             ;;
-    esac
+
+if  [[ "${VERSION_NEW}" = "5.10" && ! -f "/root/support_emmc_startup" ]]; then
+    echo "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+    exit 1
 fi
 
 #format NEW_ROOT
@@ -291,18 +281,13 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-if [[ "${CUR_FDTFILE}" == *x96-max* ]]; then
-    BOOTLOADER="/root/hk1box-bootloader.img"
-    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+if  [ $( ls /root/*-bootloader-* -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    BOOTLOADER=$( ls /root/*-bootloader-* | head -n 1 )
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-elif [[ "${CUR_FDTFILE}" == *phicomm-n1* ]]; then
-    BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 else
-    echo "Select [ ${CUR_FDTFILE} ]: No change the bootloader."
+    echo -e "No change the bootloader."
 fi
 
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-install.sh

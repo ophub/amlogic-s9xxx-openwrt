@@ -93,6 +93,7 @@ update_kernel_files() {
         sync
         cd ../ && rm -rf ${build_tmp_folder}
     fi
+    sync
 
     echo_color "green" "(1/2) End update_kernel_files"  "..."
 }
@@ -102,7 +103,7 @@ update_modules_files() {
     echo "Upgrade modules.tar.xz ..."
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
     cd ${build_tmp_folder}
-    cp -rf ../../kernel/* .
+    cp -rf ${amlogic_path}/amlogic-kernel/kernel/* .
 
     if  [ $( ls . -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
         echo_color "red" "(2/2) Error: No kernel files." "..."
@@ -129,14 +130,12 @@ update_modules_files() {
 
                    if [ $x -eq 0 ]; then
                       echo_color "red" "(2/2) Error: No *.ko file found in the ${kernel_version}/modules.tar.xz"  "..."
-                   else
-                      echo_color "blue" "${kernel_version} have [ ${x} ] files make *.ko link"  "..."
                    fi
                 sync && cd ${build_tmp_folder}/${kernel_version}/tmp_modules
                 tar -cf modules.tar *
                 xz -z modules.tar
                 mv -f modules.tar.xz ../modules.tar.xz && sync && cd ../ && rm -rf tmp_modules && cd ../
-                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version}"  "The files update complete."
+                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version} "  "Have [ ${x} ] files make *.ko link. The files update complete."
                 current_kernel=$(($current_kernel + 1))
             done
 
@@ -144,12 +143,13 @@ update_modules_files() {
         sync
         cd ../ && rm -rf ${build_tmp_folder}
     fi
+    sync
 
     echo_color "green" "(2/2) End update_modules_files"  "..."
 }
 
 echo_color "yellow" "Which files do you choose to update: " "kernel.tar.xz[k], modules.tar.xz[m], all[a]"
-echo_color "yellow" "Please enter: k/m/a"
+echo_color "yellow" "Please enter: " "k/m/a"
 read  pause
 case  $pause in
       kernel.tar.xz | kernel | k) echo_color "green" "You choose to update the [ kernel.tar.xz ] files" "..."

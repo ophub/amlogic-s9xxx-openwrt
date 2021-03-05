@@ -68,23 +68,6 @@ echo "ROOTFS: $ROOT_NAME"
 BOOT_NAME=$(lsblk -l -o NAME,MAJ:MIN,MOUNTPOINT | grep -e '/boot$' | awk '{print $1}')
 echo "BOOT: $BOOT_NAME"
 
-#Check version information
-MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
-VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
-echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
-if  [ "${VERSION_NOW}" = "5.10" ]; then
-    echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
-    echo "Are you sure you want to write into emmc? y/n"
-    read pause
-    case $pause in
-        n|N) echo "Stop write into emmc, continue to use TF/SD card."
-             exit 1
-             ;;
-        y|Y) break
-             ;;
-    esac
-fi
-
 #Choose the type of installation box
 FDTFILE="meson-sm1-x96-max-plus.dtb"
 U_BOOT_EXT=0
@@ -173,10 +156,20 @@ if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
     exit 1
 fi
 
+#Check version information
+MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
+VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
+
+if  [[ "${VERSION_NOW}" = "5.10" && ! -f "/root/support_emmc_startup" ]]; then
+    echo "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+    exit 1
+fi
+
 # backup old bootloader
-if [ ! -f "/root/backup-bootloader.img" ]; then
-    echo "Backup bootloader -> [ backup-bootloader.img ] ... "
-    dd if=/dev/$EMMC_NAME of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
+if [ ! -f "/root/BackupOldBootloader.img" ]; then
+    echo "Backup bootloader -> [ BackupOldBootloader.img ] ... "
+    dd if=/dev/$EMMC_NAME of=/root/BackupOldBootloader.img bs=1M count=4 conv=fsync
     echo "Backup bootloader complete."
     echo
 fi
@@ -295,7 +288,7 @@ EOF
 fdisk /dev/$EMMC_NAME < /tmp/fdisk.script 2>/dev/null
 if [ $? -ne 0 ]; then
     echo "The fdisk partition fails, the backup bootloader will be restored, and then exit."
-    dd if=/root/backup-bootloader.img of=/dev/$EMMC_NAME conf=fsync
+    dd if=/root/BackupOldBootloader.img of=/dev/$EMMC_NAME conf=fsync
     exit 1
 fi
 echo "Partition complete."
@@ -313,18 +306,13 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
-if [[ "${FDTFILE}" == *x96-max* ]]; then
-    BOOTLOADER="/root/hk1box-bootloader.img"
-    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+if  [ $( ls /root/*-bootloader-* -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+    BOOTLOADER=$( ls /root/*-bootloader-* | head -n 1 )
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-elif [[ "${FDTFILE}" == *phicomm-n1* ]]; then
-    BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
     echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 else
-    echo -e "Select [ ${FDTFILE} ]: No change the bootloader."
+    echo -e "No change the bootloader."
 fi
 
 # fix wifi macaddr
@@ -511,6 +499,6 @@ mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
 sync
 wait
 
-echo "The original bootloader has been exported to [ /root/backup-bootloader.img ], please download and save!"
+echo "The original bootloader has been exported to [ /root/BackupOldBootloader.img ], please download and save!"
 echo "Install completed, please [ reboot ] the system!"
 

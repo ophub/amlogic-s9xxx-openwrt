@@ -204,6 +204,7 @@ echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0
 #Check 5.10 kernel mainline bootloader
 source ${P2}/lib/u-boot/support_emmc_startup 2>/dev/null
 MAINLINE_UBOOT=${MAINLINE_UBOOT}
+U_BOOT_EXT=${U_BOOT_EXT}
 if  [[ "${VERSION_NEW}" == "5.10" ]]; then
     if [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
        CUR_BOOTLOADER="${P2}${MAINLINE_UBOOT}"
@@ -377,11 +378,14 @@ rm -rf *
 
 echo "Copy the new boot file ... "
 (cd ${P1} && tar cf - . ) | tar xf -
+sync
 
-if  [[ -f "u-boot.ext" ]]; then
-    cp -f -v u-boot.ext u-boot.emmc
-else
-    cp -f -v u-boot.sd u-boot.emmc
+if  [ ${U_BOOT_EXT} -eq 1 ]; then
+    if  [ -f u-boot.ext ]; then
+        cp -f -v u-boot.ext u-boot.emmc
+    elif [ -f u-boot.sd ]; then
+        cp -f -v u-boot.sd u-boot.emmc
+    fi
 fi
 
 mv -f boot-emmc.ini boot.ini

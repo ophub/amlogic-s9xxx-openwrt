@@ -287,8 +287,6 @@ make_image() {
         dd if=${root}${ANDROID_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         printf "ANDROID_UBOOT=${ANDROID_UBOOT}" >${root}/lib/u-boot/support_emmc_startup
         #echo -e "${build_op}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
-    else
-        #echo -e "${build_op}_v${kernel}: No bootloader is written."
     fi
 }
 

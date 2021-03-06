@@ -365,7 +365,7 @@ MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
 VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
 
-if  [[ "${VERSION_NOW}" == "5.10" && "${MAINLINE_UBOOT}" == "" ]]; then
+if  [[ "${VERSION_NOW}" == "5.10" && -z "${MAINLINE_UBOOT}" ]]; then
     echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
     exit 1
 elif  [[ "${VERSION_NOW}" == "5.10" && ${FLASH_MAINLINE_UBOOT} -eq 0 ]]; then

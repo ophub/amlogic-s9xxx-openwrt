@@ -336,7 +336,7 @@ seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
 FLASH_MAINLINE_UBOOT=0
-if  [[ "${MAINLINE_UBOOT}" != "" && -f "${MAINLINE_UBOOT}" ]]; then
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
@@ -377,7 +377,7 @@ if  [[ ${FLASH_MAINLINE_UBOOT} -eq 1 ]]; then
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
     echo -e "Write Mainline bootloader: [\033[1;32m ${MAINLINE_UBOOT} \033[0m]"
-elif [[ "${ANDROID_UBOOT}" != ""  && -f "${ANDROID_UBOOT}" ]]; then
+elif [[ -n "${ANDROID_UBOOT}" && -f "${ANDROID_UBOOT}" ]]; then
     dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
     echo -e "Write Android bootloader: [\033[1;32m ${ANDROID_UBOOT} \033[0m]"

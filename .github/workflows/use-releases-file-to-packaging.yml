@@ -56,7 +56,7 @@ jobs:
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
         [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s922x_n1_octopus -k 5.9.16_5.4.98_5.7.2
+        sudo ./make -d -b s905x3_s905x2_s905x_s922x_n1_octopus -k 5.10.19.TF_5.4.101
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV

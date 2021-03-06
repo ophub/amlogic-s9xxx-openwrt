@@ -17,7 +17,7 @@ openwrt_path=${make_path}/openwrt-armvirt
 amlogic_path=${make_path}/amlogic-s9xxx
 kernel_path=${amlogic_path}/amlogic-kernel
 commonfiles_path=${amlogic_path}/common-files
-uboot_path=${amlogic_path}/u-boot
+uboot_path=${amlogic_path}/amlogic-u-boot
 installfiles_path=${amlogic_path}/install-program/files
 #===== Do not modify the following parameter settings, End =======
 
@@ -130,10 +130,12 @@ extract_armbian() {
     # [ $(ls ${root_dir} | wc -w) != 0 ] && cp -r ${root_dir}/* ${root}
 
     # Complete file
-    cp -f ${installfiles_path}/{*.img,*.bin} ${root}/root/
     cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
     cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
     cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
+    [ -d ${root}/lib/u-boot ] || mkdir -p ${root}/lib/u-boot
+    cp -f ${uboot_path}/with_fip/* ${root}/lib/u-boot/
+    cp -f ${uboot_path}/without_fip/* ${boot}/
     sync
 }
 
@@ -142,10 +144,58 @@ utils() {
     build_op=${1}
     build_usekernel=${2}
 
+    case "${build_op}" in
+        s905x3 | x96 | hk1 | h96)
+            FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
+            U_BOOT_EXT=1
+            UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+            MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+            ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+            ;;
+        s905x2 | x96max4g | x96max2g)
+            FDTFILE="meson-g12a-x96-max.dtb"
+            U_BOOT_EXT=0
+            UBOOT_OVERLOAD="u-boot-x96max.bin"
+            MAINLINE_UBOOT=""
+            ANDROID_UBOOT=""
+            ;;
+        s905x | hg680p | b860h)
+            FDTFILE="meson-gxl-s905x-p212.dtb"
+            U_BOOT_EXT=0
+            UBOOT_OVERLOAD="u-boot-p212.bin"
+            MAINLINE_UBOOT=""
+            ANDROID_UBOOT=""
+            ;;
+        s905d | n1)
+            FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
+            U_BOOT_EXT=0
+            UBOOT_OVERLOAD="u-boot-n1.bin"
+            MAINLINE_UBOOT=""
+            ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
+            ;;
+        s912 | octopus)
+            FDTFILE="meson-gxm-octopus-planet.dtb"
+            U_BOOT_EXT=0
+            UBOOT_OVERLOAD="u-boot-zyxq.bin"
+            MAINLINE_UBOOT=""
+            ANDROID_UBOOT=""
+            ;;
+        s922x | belink | belinkpro | ugoos)
+            FDTFILE="meson-g12b-gtking-pro.dtb"
+            U_BOOT_EXT=1
+            UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+            MAINLINE_UBOOT=""
+            ANDROID_UBOOT=""
+            ;;
+        *)
+            die "Have no this firmware: [ ${build_op} - ${kernel} ]"
+            ;;
+    esac
+
     #Edit ${root}/* files ========== Begin ==========
     cd ${root}
 
-    # add other operations below
+    # Add other operations below
     echo 'pwm_meson' > etc/modules.d/pwm-meson
     if ! grep -q 'ulimit -n' etc/init.d/boot; then
         sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
@@ -165,7 +215,7 @@ utils() {
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 
-    #Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
+    # Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
     [ -f etc/modules.d/rtl8189fs ] || printf '8189fs' >etc/modules.d/rtl8189fs
     [ -f etc/modules.d/rtl8188fu ] || printf 'rtl8188fu' >etc/modules.d/rtl8188fu
     [ -f etc/modules.d/usb-net-rtl8150 ] || printf 'rtl8150' >etc/modules.d/usb-net-rtl8150
@@ -183,60 +233,42 @@ utils() {
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi
-    #Edit ${root}/* files ========== End ==========
 
-
-    #Edit ${boot}/* files ========== Begin ==========
-    cd ${boot}
-
-    #Write the specified uEnv.txt & copy u-boot for 5.10.* kernel
-    if [  ! -f "uEnv.txt" ]; then
-       die "Error: uEnv.txt Files does not exist"
-    fi
-
-    case "${build_op}" in
-        s905x3 | x96 | hk1 | h96)
-            new_fdt_dtb="meson-sm1-x96-max-plus-100m.dtb"
-            new_uboot="u-boot-s905x3-510kernel-x96max.bin"
-            ;;
-        s905x2 | x96max4g | x96max2g)
-            new_fdt_dtb="meson-g12a-x96-max.dtb"
-            new_uboot="u-boot-s905x2-510kernel-sei510.bin"
-            ;;
-        s905x | hg680p | b860h)
-            new_fdt_dtb="meson-gxl-s905x-khadas-vim-mod.dtb"
-            new_uboot="u-boot-s905x-510kernel-p212.bin"
-            ;;
-        s905d | n1)
-            new_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-            new_uboot="u-boot-s905d-510kernel-phicommn1.bin"
-            ;;
-        s912 | octopus)
-            new_fdt_dtb="meson-gxm-octopus-planet.dtb"
-            new_uboot="u-boot-s912-510kernel-octopusplanet.bin"
-            ;;
-        s922x | belink | belinkpro | ugoos)
-            new_fdt_dtb="meson-g12b-gtking-pro.dtb"
-            new_uboot="u-boot-s922x-510kernel-gtkingpro.bin"
-            ;;
-        *)
-            die "Have no this firmware: [ ${build_op} - ${kernel} ]"
-            ;;
-    esac
-
-    old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-    sed -i "s/${old_fdt_dtb}/${new_fdt_dtb}/g" uEnv.txt
-
-    if [ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" = "5.10" ]; then
-       if [ -f ${uboot_path}/${new_uboot} ]; then
-          echo "u-boot.ext u-boot-510kernel.bin" | xargs -n 1 cp -f ${uboot_path}/${new_uboot} 2>/dev/null
-       else
-          die "Have no this 5.10 kernel u-boot file: [ ${uboot_path}/${new_uboot} ]"
-       fi
-    fi
-    #Edit ${boot}/* files ========== End ==========
+    # Add firmware information to the support_emmc_startup
+    echo "FDTFILE=${FDTFILE}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "U_BOOT_EXT=${U_BOOT_EXT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "UBOOT_OVERLOAD=${UBOOT_OVERLOAD}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "MAINLINE_UBOOT=${MAINLINE_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "ANDROID_UBOOT=${ANDROID_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "AMLOGIC_SOC=${build_op}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "KERNEL_VERSION=${build_usekernel}" >> lib/u-boot/support_emmc_startup 2>/dev/null
 
     sync
+    # Edit ${root}/* files ========== End ==========
+
+
+    # Edit ${boot}/* files ========== Begin ==========
+    cd ${boot}
+
+    # Edit the uEnv.txt
+    if [  ! -f "uEnv.txt" ]; then
+       die "Error: uEnv.txt Files does not exist"
+    else
+       old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
+       sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt
+    fi
+
+    # Add u-boot.ext for 5.10 kernel
+    if [[ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" == "5.10" && -n "${UBOOT_OVERLOAD}" ]]; then
+       if [ -f ${UBOOT_OVERLOAD} ]; then
+          cp -f ${UBOOT_OVERLOAD} u-boot.ext
+       else
+          die "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
+       fi
+    fi
+
+    sync
+    #Edit ${boot}/* files ========== End ==========
 }
 
 make_image() {
@@ -259,15 +291,14 @@ make_image() {
     mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
 
     # Write the specified bootloader
-    if [ "${build_op}" = "n1" -o "${build_op}" = "s905x" -o "${build_op}" = "s905d" ]; then
-       BTLD_BIN="${root}/root/u-boot-2015-phicomm-n1.bin"
-    else
-       BTLD_BIN="${root}/root/hk1box-bootloader.img"
-    fi
-
-    if [ -f ${BTLD_BIN} ]; then
-       dd if=${BTLD_BIN} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
-       dd if=${BTLD_BIN} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+    if  [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
+        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+        #echo -e "${build_op}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
+    elif [[ "${ANDROID_UBOOT}" != ""  && -f "${root}${ANDROID_UBOOT}" ]]; then
+        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+        #echo -e "${build_op}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
 }
 

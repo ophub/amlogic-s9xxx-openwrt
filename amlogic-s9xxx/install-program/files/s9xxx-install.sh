@@ -68,23 +68,6 @@ echo "ROOTFS: $ROOT_NAME"
 BOOT_NAME=$(lsblk -l -o NAME,MAJ:MIN,MOUNTPOINT | grep -e '/boot$' | awk '{print $1}')
 echo "BOOT: $BOOT_NAME"
 
-#Check version information
-MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
-VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
-echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
-if  [ "${VERSION_NOW}" = "5.10" ]; then
-    echo "\033[1;31m The 5.10 kernel only supports the use of TF/SD cards! \033[0m"
-    echo "Are you sure you want to write into emmc? y/n"
-    read pause
-    case $pause in
-        n|N) echo "Stop write into emmc, continue to use TF/SD card."
-             exit 1
-             ;;
-        y|Y) break
-             ;;
-    esac
-fi
-
 #Choose the type of installation box
 FDTFILE="meson-sm1-x96-max-plus.dtb"
 U_BOOT_EXT=0
@@ -113,42 +96,81 @@ read  boxtype
 case  $boxtype in
       1) FDTFILE="meson-sm1-x96-max-plus.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+         ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          ;;
       2) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+         ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          ;;
       3) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
          ;;
       4) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
          ;;
       5) FDTFILE="meson-sm1-h96-max-x3.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
          ;;
       6) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
          ;;
       7) FDTFILE="meson-g12a-x96-max.dtb"
          U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-x96max.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       8) FDTFILE="meson-g12a-x96-max-rmii.dtb"
          U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-x96max.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       9) FDTFILE="meson-gxm-octopus-planet.dtb"
          U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-zyxq.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       10) FDTFILE="meson-g12b-gtking.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-gtking.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       11) FDTFILE="meson-g12b-gtking-pro.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       12) FDTFILE="meson-g12b-ugoos-am6.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       13) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
          U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-n1.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
          ;;
       0) cat <<EOF
 Please enter the .dtb file name of your box, do not include the path.
@@ -174,9 +196,9 @@ if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
 fi
 
 # backup old bootloader
-if [ ! -f "/root/backup-bootloader.img" ]; then
-    echo "Backup bootloader -> [ backup-bootloader.img ] ... "
-    dd if=/dev/$EMMC_NAME of=/root/backup-bootloader.img bs=1M count=4 conv=fsync
+if [ ! -f "/root/BackupOldBootloader.img" ]; then
+    echo "Backup bootloader -> [ BackupOldBootloader.img ] ... "
+    dd if=/dev/$EMMC_NAME of=/root/BackupOldBootloader.img bs=1M count=4 conv=fsync
     echo "Backup bootloader complete."
     echo
 fi
@@ -295,7 +317,7 @@ EOF
 fdisk /dev/$EMMC_NAME < /tmp/fdisk.script 2>/dev/null
 if [ $? -ne 0 ]; then
     echo "The fdisk partition fails, the backup bootloader will be restored, and then exit."
-    dd if=/root/backup-bootloader.img of=/dev/$EMMC_NAME conf=fsync
+    dd if=/root/BackupOldBootloader.img of=/dev/$EMMC_NAME conf=fsync
     exit 1
 fi
 echo "Partition complete."
@@ -313,18 +335,54 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
-if [[ "${FDTFILE}" == *x96-max* ]]; then
-    BOOTLOADER="/root/hk1box-bootloader.img"
-    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-elif [[ "${FDTFILE}" == *phicomm-n1* ]]; then
-    BOOTLOADER="/root/u-boot-2015-phicomm-n1.bin"
-    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+FLASH_MAINLINE_UBOOT=0
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
+    cat <<EOF
+----------------------------------------------------------------------------------
+Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
+Advantage: Gigabit network card is normal, HDMI color is normal,
+    fast startup speed, and compatible with all versions of linux kernel.
+Disadvantage: If you want to restore to Android firmware after flashing in,
+    you must restore the Android bootloader first.
+    Or you can only use the short-circuit method to restore the Android firmware.
+----------------------------------------------------------------------------------
+EOF
+    while :; do
+        read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
+        case $yn in
+            y|Y) FLASH_MAINLINE_UBOOT=1
+                break
+                ;;
+            n|N) FLASH_MAINLINE_UBOOT=0
+                break
+                ;;
+        esac
+    done
+fi
+
+#Check if writing to EMMC is supported
+MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
+VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
+
+if  [[ "${VERSION_NOW}" == "5.10" && -z "${MAINLINE_UBOOT}" ]]; then
+    echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+    exit 1
+elif  [[ "${VERSION_NOW}" == "5.10" && ${FLASH_MAINLINE_UBOOT} -eq 0 ]]; then
+    echo -e "\033[1;31m Use the 5.10 kernel Write to EMMC must select Mainline bootloader! \033[0m"
+    exit 1
+fi
+
+if  [[ ${FLASH_MAINLINE_UBOOT} -eq 1 ]]; then
+    dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+    echo -e "Write Mainline bootloader: [\033[1;32m ${MAINLINE_UBOOT} \033[0m]"
+elif [[ -n "${ANDROID_UBOOT}" && -f "${ANDROID_UBOOT}" ]]; then
+    dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+    echo -e "Write Android bootloader: [\033[1;32m ${ANDROID_UBOOT} \033[0m]"
 else
-    echo -e "Select [ ${FDTFILE} ]: No change the bootloader."
+    echo -e "No bootloader is written."
 fi
 
 # fix wifi macaddr
@@ -391,11 +449,17 @@ EOF
 
         rm -f s905_autoscript* aml_autoscript*
 
-        if  [ -f u-boot-510kernel.bin ]; then
-            cp -f -v u-boot-510kernel.bin u-boot.emmc
-        elif  [ $U_BOOT_EXT -eq 1 ]; then
-            cp -f -v u-boot.sd u-boot.emmc
+        if  [ ${U_BOOT_EXT} -eq 1 ]; then
+            if  [ -f ${UBOOT_OVERLOAD} ]; then
+                cp -f -v ${UBOOT_OVERLOAD} u-boot.emmc
+            else
+                cp -f -v u-boot.sd u-boot.emmc
+            fi
         fi
+
+        mv -f boot-emmc.ini boot.ini
+        mv -f boot-emmc.cmd boot.cmd
+        mv -f boot-emmc.scr boot.scr
 
         sync
         echo "complete."
@@ -511,6 +575,6 @@ mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
 sync
 wait
 
-echo "The original bootloader has been exported to [ /root/backup-bootloader.img ], please download and save!"
+echo "The original bootloader has been exported to [ /root/BackupOldBootloader.img ], please download and save!"
 echo "Install completed, please [ reboot ] the system!"
 

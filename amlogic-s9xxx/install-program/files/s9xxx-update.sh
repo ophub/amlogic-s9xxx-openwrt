@@ -205,7 +205,7 @@ echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0
 source ${P2}/lib/u-boot/support_emmc_startup 2>/dev/null
 MAINLINE_UBOOT=${MAINLINE_UBOOT}
 if  [[ "${VERSION_NEW}" == "5.10" ]]; then
-    if [[ ! -z "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
+    if [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
        CUR_BOOTLOADER="${P2}${MAINLINE_UBOOT}"
     else
        echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
@@ -287,7 +287,7 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-if  [[ ! -z "${CUR_BOOTLOADER}" && -f "${CUR_BOOTLOADER}" ]]; then
+if  [[ -n "${CUR_BOOTLOADER}" && -f "${CUR_BOOTLOADER}" ]]; then
     dd if=${CUR_BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${CUR_BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
     echo -e "Write new bootloader: [\033[1;32m ${CUR_BOOTLOADER} \033[0m]"

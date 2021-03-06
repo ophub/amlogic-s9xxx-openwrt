@@ -195,16 +195,24 @@ fi
 source /boot/uEnv.txt 2>/dev/null
 CUR_FDTFILE=${FDT}
 echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
+
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
 VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
 
-#Check 5.10 kernel mainline bootloader
+#support_emmc_startup info
 source ${P2}/lib/u-boot/support_emmc_startup 2>/dev/null
-MAINLINE_UBOOT=${MAINLINE_UBOOT}
+FDTFILE=${FDTFILE}
 U_BOOT_EXT=${U_BOOT_EXT}
+UBOOT_OVERLOAD=${UBOOT_OVERLOAD}
+MAINLINE_UBOOT=${MAINLINE_UBOOT}
+ANDROID_UBOOT=${ANDROID_UBOOT}
+AMLOGIC_SOC=${AMLOGIC_SOC}
+KERNEL_VERSION=${KERNEL_VERSION}
+
+#Check 5.10 kernel mainline bootloader
 if  [[ "${VERSION_NEW}" == "5.10" ]]; then
     if [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
        CUR_BOOTLOADER="${P2}${MAINLINE_UBOOT}"
@@ -380,10 +388,12 @@ echo "Copy the new boot file ... "
 (cd ${P1} && tar cf - . ) | tar xf -
 sync
 
+rm -f s905_autoscript* aml_autoscript*
+
 if  [ ${U_BOOT_EXT} -eq 1 ]; then
-    if  [ -f u-boot.ext ]; then
-        cp -f -v u-boot.ext u-boot.emmc
-    elif [ -f u-boot.sd ]; then
+    if  [ -f ${UBOOT_OVERLOAD} ]; then
+        cp -f -v ${UBOOT_OVERLOAD} u-boot.emmc
+    else
         cp -f -v u-boot.sd u-boot.emmc
     fi
 fi
@@ -391,7 +401,6 @@ fi
 mv -f boot-emmc.ini boot.ini
 mv -f boot-emmc.cmd boot.cmd
 mv -f boot-emmc.scr boot.scr
-rm -f aml_autoscript* s905_autoscript*
 sync
 
 echo "Update boot parameters ... "

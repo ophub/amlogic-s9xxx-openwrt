@@ -175,13 +175,14 @@ utils() {
             ;;
         s912 | octopus)
             FDTFILE="meson-gxm-octopus-planet.dtb"
-            U_BOOT_EXT=1
+            U_BOOT_EXT=0
             UBOOT_OVERLOAD="u-boot-zyxq.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
             ;;
         s922x | belink | belinkpro | ugoos)
             FDTFILE="meson-g12b-gtking-pro.dtb"
+            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""

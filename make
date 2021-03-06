@@ -147,30 +147,35 @@ utils() {
     case "${build_op}" in
         s905x3 | x96 | hk1 | h96)
             FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
+            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
             MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
             ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
             ;;
         s905x2 | x96max4g | x96max2g)
             FDTFILE="meson-g12a-x96-max.dtb"
+            U_BOOT_EXT=0
             UBOOT_OVERLOAD="u-boot-x96max.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
             ;;
         s905x | hg680p | b860h)
             FDTFILE="meson-gxl-s905x-p212.dtb"
+            U_BOOT_EXT=0
             UBOOT_OVERLOAD="u-boot-p212.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
             ;;
         s905d | n1)
             FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
+            U_BOOT_EXT=0
             UBOOT_OVERLOAD="u-boot-n1.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
             ;;
         s912 | octopus)
             FDTFILE="meson-gxm-octopus-planet.dtb"
+            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-zyxq.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
@@ -228,6 +233,15 @@ utils() {
         echo " -----------------------------------------------------" >> etc/banner
     fi
 
+    # Add firmware information to the support_emmc_startup
+    echo "FDTFILE=${FDTFILE}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "U_BOOT_EXT=${U_BOOT_EXT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "UBOOT_OVERLOAD=${UBOOT_OVERLOAD}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "MAINLINE_UBOOT=${MAINLINE_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "ANDROID_UBOOT=${ANDROID_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "AMLOGIC_SOC=${build_op}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "KERNEL_VERSION=${build_usekernel}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+
     sync
     # Edit ${root}/* files ========== End ==========
 
@@ -247,7 +261,6 @@ utils() {
     if [[ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" == "5.10" && -n "${UBOOT_OVERLOAD}" ]]; then
        if [ -f ${UBOOT_OVERLOAD} ]; then
           cp -f ${UBOOT_OVERLOAD} u-boot.ext
-          rm -f u-boot.sd u-boot.usb
        else
           die "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
        fi
@@ -280,12 +293,10 @@ make_image() {
     if  [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
         dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
         dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        printf "MAINLINE_UBOOT=${MAINLINE_UBOOT}" >${root}/lib/u-boot/support_emmc_startup
         #echo -e "${build_op}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
     elif [[ "${ANDROID_UBOOT}" != ""  && -f "${root}${ANDROID_UBOOT}" ]]; then
         dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
         dd if=${root}${ANDROID_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        printf "ANDROID_UBOOT=${ANDROID_UBOOT}" >${root}/lib/u-boot/support_emmc_startup
         #echo -e "${build_op}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
 }

@@ -82,10 +82,10 @@ Please select s9xxx box model:
 6. H96-Max-X3 ----------- [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
 7. X96-Max-4G ----------- [ S905x2 / CPU: 1944Mtz / NETWORK: 1000M ]
 8. X96-Max-2G ----------- [ S905x2 / CPU: 1944Mtz / NETWORK: 100M  ]
-9. Octopus-Planet ------- [ S912   / CPU: 2124Mtz / NETWORK: 1000M ]
-10. Belink-GT-King ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
-11. Belink-GT-King-Pro -- [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
-12. UGOOS-AM6-Plus ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+9. Belink-GT-King ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+10. Belink-GT-King-Pro -- [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+11. UGOOS-AM6-Plus ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+12. Octopus-Planet ------- [ S912   / CPU: 2124Mtz / NETWORK: 1000M ]
 13. Phicomm-n1 ---------- [ S905d  / CPU: 2124Mtz / NETWORK: 1000M ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
@@ -142,27 +142,27 @@ case  $boxtype in
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
-      9) FDTFILE="meson-gxm-octopus-planet.dtb"
-         U_BOOT_EXT=0
-         UBOOT_OVERLOAD="u-boot-zyxq.bin"
-         MAINLINE_UBOOT=""
-         ANDROID_UBOOT=""
-         ;;
-      10) FDTFILE="meson-g12b-gtking.dtb"
+      9) FDTFILE="meson-g12b-gtking.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtking.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
-      11) FDTFILE="meson-g12b-gtking-pro.dtb"
+      10) FDTFILE="meson-g12b-gtking-pro.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
-      12) FDTFILE="meson-g12b-ugoos-am6.dtb"
+      11) FDTFILE="meson-g12b-ugoos-am6.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         ;;
+      12) FDTFILE="meson-gxm-octopus-planet.dtb"
+         U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-zyxq.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
@@ -192,6 +192,15 @@ if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
     echo "You can download the .dtb file from [ https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb ]"
     echo "Copy it to [ /boot/dtb/amlogic/ ]."
     echo "Then execute this installation command."
+    exit 1
+fi
+
+#Check if writing to EMMC is supported
+MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
+VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+echo -e "\033[1;32m This Kernel [ ${MODULES_NOW} ] \033[0m"
+if  [[ "${VERSION_NOW}" == "5.10" && "${FDTFILE}" != *-sm1-* ]]; then
+    echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
     exit 1
 fi
 
@@ -335,6 +344,7 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
+#Mainline U-BOOT detection
 FLASH_MAINLINE_UBOOT=0
 if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
     cat <<EOF
@@ -360,19 +370,6 @@ EOF
     done
 fi
 
-#Check if writing to EMMC is supported
-MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
-VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
-echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
-
-if  [[ "${VERSION_NOW}" == "5.10" && -z "${MAINLINE_UBOOT}" ]]; then
-    echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
-    exit 1
-elif  [[ "${VERSION_NOW}" == "5.10" && ${FLASH_MAINLINE_UBOOT} -eq 0 ]]; then
-    echo -e "\033[1;31m Use the 5.10 kernel Write to EMMC must select Mainline bootloader! \033[0m"
-    exit 1
-fi
-
 if  [[ ${FLASH_MAINLINE_UBOOT} -eq 1 ]]; then
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
@@ -382,7 +379,7 @@ elif [[ -n "${ANDROID_UBOOT}" && -f "${ANDROID_UBOOT}" ]]; then
     dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
     echo -e "Write Android bootloader: [\033[1;32m ${ANDROID_UBOOT} \033[0m]"
 else
-    echo -e "No bootloader is written."
+    echo "Did not change the original bootloader."
 fi
 
 # fix wifi macaddr

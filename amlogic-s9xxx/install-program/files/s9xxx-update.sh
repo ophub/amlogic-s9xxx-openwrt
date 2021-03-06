@@ -198,9 +198,9 @@ echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
 
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
 VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
-MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
-VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
-echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
+MODULES_NOW=$(ls ${P2}/lib/modules/ 2>/dev/null)
+VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ] \033[0m"
 
 #support_emmc_startup info
 source ${P2}/lib/u-boot/support_emmc_startup 2>/dev/null
@@ -213,13 +213,9 @@ AMLOGIC_SOC=${AMLOGIC_SOC}
 KERNEL_VERSION=${KERNEL_VERSION}
 
 #Check 5.10 kernel mainline bootloader
-if  [[ "${VERSION_NEW}" == "5.10" ]]; then
-    if [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
-       CUR_BOOTLOADER="${P2}${MAINLINE_UBOOT}"
-    else
-       echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
-       exit 1
-    fi
+if  [[ "${VERSION_NOW}" == "5.10" && "${FDTFILE}" != *-sm1-* ]]; then
+    echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+    exit 1
 fi
 
 #format NEW_ROOT
@@ -296,14 +292,6 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-if  [[ -n "${CUR_BOOTLOADER}" && -f "${CUR_BOOTLOADER}" ]]; then
-    dd if=${CUR_BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-    dd if=${CUR_BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-    echo -e "Write new bootloader: [\033[1;32m ${CUR_BOOTLOADER} \033[0m]"
-else
-    echo -e "No bootloader is written."
-fi
-
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-install.sh
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-update.sh
 sync
@@ -375,6 +363,44 @@ exit
 EOF
 
 chmod 755 ./etc/rc.local*
+
+#Mainline U-BOOT detection
+FLASH_MAINLINE_UBOOT=0
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
+    cat <<EOF
+----------------------------------------------------------------------------------
+Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
+Advantage: Gigabit network card is normal, HDMI color is normal,
+    fast startup speed, and compatible with all versions of linux kernel.
+Disadvantage: If you want to restore to Android firmware after flashing in,
+    you must restore the Android bootloader first.
+    Or you can only use the short-circuit method to restore the Android firmware.
+----------------------------------------------------------------------------------
+EOF
+    while :; do
+        read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
+        case $yn in
+            y|Y) FLASH_MAINLINE_UBOOT=1
+                break
+                ;;
+            n|N) FLASH_MAINLINE_UBOOT=0
+                break
+                ;;
+        esac
+    done
+fi
+
+if  [[ ${FLASH_MAINLINE_UBOOT} -eq 1 ]]; then
+    dd if=${P2}${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${P2}${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+    echo -e "Write Mainline bootloader: [\033[1;32m ${MAINLINE_UBOOT} \033[0m]"
+elif [[ -n "${ANDROID_UBOOT}" && -f "${P2}${ANDROID_UBOOT}" ]]; then
+    dd if=${P2}${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${P2}${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+    echo -e "Write Android bootloader: [\033[1;32m ${ANDROID_UBOOT} \033[0m]"
+else
+    echo "Did not change the original bootloader."
+fi
 
 cd ${WORK_DIR}
  

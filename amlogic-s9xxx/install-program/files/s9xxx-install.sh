@@ -458,8 +458,8 @@ EOF
         fi
 
         mv -f boot-emmc.ini boot.ini
-			  mv -f boot-emmc.cmd boot.cmd
-			  mv -f boot-emmc.scr boot.scr
+	mv -f boot-emmc.cmd boot.cmd
+	mv -f boot-emmc.scr boot.scr
 
         sync
         echo "complete."

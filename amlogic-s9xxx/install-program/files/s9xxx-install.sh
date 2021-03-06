@@ -96,42 +96,81 @@ read  boxtype
 case  $boxtype in
       1) FDTFILE="meson-sm1-x96-max-plus.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+         ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          ;;
       2) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+         ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          ;;
       3) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
          ;;
       4) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
          ;;
       5) FDTFILE="meson-sm1-h96-max-x3.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
          ;;
       6) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
          ;;
       7) FDTFILE="meson-g12a-x96-max.dtb"
          U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-x96max.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       8) FDTFILE="meson-g12a-x96-max-rmii.dtb"
          U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-x96max.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       9) FDTFILE="meson-gxm-octopus-planet.dtb"
          U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-zyxq.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       10) FDTFILE="meson-g12b-gtking.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-gtking.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       11) FDTFILE="meson-g12b-gtking-pro.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       12) FDTFILE="meson-g12b-ugoos-am6.dtb"
          U_BOOT_EXT=1
+         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       13) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
          U_BOOT_EXT=0
+         UBOOT_OVERLOAD="u-boot-n1.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
          ;;
       0) cat <<EOF
 Please enter the .dtb file name of your box, do not include the path.
@@ -161,8 +200,8 @@ MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
 VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Install version [ ${MODULES_NOW} ] \033[0m"
 
-if  [[ "${VERSION_NOW}" = "5.10" && ! -f "/root/support_emmc_startup" ]]; then
-    echo "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+if  [[ "${VERSION_NOW}" == "5.10" && "${MAINLINE_UBOOT}" == "" ]]; then
+    echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
     exit 1
 fi
 
@@ -306,13 +345,40 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
-if  [ $( ls /root/*-bootloader-* -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    BOOTLOADER=$( ls /root/*-bootloader-* | head -n 1 )
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+if  [[ "${MAINLINE_UBOOT}" != "" && -f "${MAINLINE_UBOOT}" ]]; then
+    cat <<EOF
+----------------------------------------------------------------------------------
+Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
+Advantage: Gigabit network card is normal, HDMI color is normal,
+    fast startup speed, and compatible with all versions of linux kernel.
+Disadvantage: If you want to restore to Android firmware after flashing in,
+    you must restore the Android bootloader first.
+    Or you can only use the short-circuit method to restore the Android firmware.
+----------------------------------------------------------------------------------
+EOF
+    while :; do
+        read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
+        case $yn in
+            y|Y) FLASH_MAINLINE_UBOOT=1
+                break
+                ;;
+            n|N) FLASH_MAINLINE_UBOOT=0
+                break
+                ;;
+        esac
+    done
+fi
+
+if  [[ ${FLASH_MAINLINE_UBOOT} -eq 1 ]]; then
+    dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+    echo -e "Write Mainline bootloader: [\033[1;32m ${MAINLINE_UBOOT} \033[0m]"
+elif [[ "${ANDROID_UBOOT}" != ""  && -f "${ANDROID_UBOOT}" ]]; then
+    dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+    echo -e "Write Android bootloader: [\033[1;32m ${ANDROID_UBOOT} \033[0m]"
 else
-    echo -e "No change the bootloader."
+    echo -e "No bootloader is written."
 fi
 
 # fix wifi macaddr
@@ -379,11 +445,17 @@ EOF
 
         rm -f s905_autoscript* aml_autoscript*
 
-        if  [ -f u-boot-510kernel.bin ]; then
-            cp -f -v u-boot-510kernel.bin u-boot.emmc
-        elif  [ $U_BOOT_EXT -eq 1 ]; then
-            cp -f -v u-boot.sd u-boot.emmc
+        if  [ ${U_BOOT_EXT} -eq 1 ]; then
+            if  [ -f ${UBOOT_OVERLOAD} ]; then
+                cp -f -v ${UBOOT_OVERLOAD} u-boot.emmc
+            else
+                cp -f -v u-boot.sd u-boot.emmc
+            fi
         fi
+
+        mv -f boot-emmc.ini boot.ini
+			  mv -f boot-emmc.cmd boot.cmd
+			  mv -f boot-emmc.scr boot.scr
 
         sync
         echo "complete."

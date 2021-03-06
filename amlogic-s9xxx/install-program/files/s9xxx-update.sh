@@ -195,16 +195,22 @@ fi
 source /boot/uEnv.txt 2>/dev/null
 CUR_FDTFILE=${FDT}
 echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
-
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
 VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 MODULES_NEW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NEW=$(echo ${MODULES_NEW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0m"
 
-if  [[ "${VERSION_NEW}" = "5.10" && ! -f "${P2}/root/support_emmc_startup" ]]; then
-    echo "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
-    exit 1
+#Check 5.10 kernel mainline bootloader
+source ${P2}/lib/u-boot/support_emmc_startup 2>/dev/null
+MAINLINE_UBOOT=${MAINLINE_UBOOT}
+if  [[ "${VERSION_NEW}" == "5.10" ]]; then
+    if [[ ! -z ${MAINLINE_UBOOT} && -f "${P2}${MAINLINE_UBOOT}" ]]; then
+       CUR_BOOTLOADER="${P2}${MAINLINE_UBOOT}"
+    else
+       echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
+       exit 1
+    fi
 fi
 
 #format NEW_ROOT
@@ -281,13 +287,12 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-if  [ $( ls ${P2}/root/*-bootloader-* -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    BOOTLOADER=$( ls ${P2}/root/*-bootloader-* | head -n 1 )
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-    dd if=${BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-    echo -e "Write new bootloader: [\033[1;32m ${BOOTLOADER} \033[0m]"
+if  [[ ! -z "${CUR_BOOTLOADER}" && -f "${CUR_BOOTLOADER}" ]]; then
+    dd if=${CUR_BOOTLOADER} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${CUR_BOOTLOADER} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+    echo -e "Write new bootloader: [\033[1;32m ${CUR_BOOTLOADER} \033[0m]"
 else
-    echo -e "No change the bootloader."
+    echo -e "No bootloader is written."
 fi
 
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/s9xxx-install.sh

@@ -373,19 +373,20 @@ echo "Start copying data， from [ ${P1} ] to [ /boot ] ..."
 cd /boot
 echo "Delete the old boot file ..."
 cp uEnv.txt /tmp/uEnv.txt
-U_BOOT_EMMC=0
-[ -f u-boot.emmc ] && U_BOOT_EMMC=1
 rm -rf *
 
 echo "Copy the new boot file ... "
 (cd ${P1} && tar cf - . ) | tar xf -
 
-if  [ -f u-boot-510kernel.bin ]; then
-    cp -f -v u-boot-510kernel.bin u-boot.emmc
-elif  [ $U_BOOT_EMMC -eq 1 ]; then
+if  [[ -f "u-boot.ext" ]]; then
+    cp -f -v u-boot.ext u-boot.emmc
+else
     cp -f -v u-boot.sd u-boot.emmc
 fi
 
+mv -f boot-emmc.ini boot.ini
+mv -f boot-emmc.cmd boot.cmd
+mv -f boot-emmc.scr boot.scr
 rm -f aml_autoscript* s905_autoscript*
 sync
 

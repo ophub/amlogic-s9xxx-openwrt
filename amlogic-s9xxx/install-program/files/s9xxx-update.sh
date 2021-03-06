@@ -205,7 +205,7 @@ echo -e "\033[1;32m Upgrade from [ ${MODULES_OLD} ] to [ ${MODULES_NEW} ] \033[0
 source ${P2}/lib/u-boot/support_emmc_startup 2>/dev/null
 MAINLINE_UBOOT=${MAINLINE_UBOOT}
 if  [[ "${VERSION_NEW}" == "5.10" ]]; then
-    if [[ ! -z ${MAINLINE_UBOOT} && -f "${P2}${MAINLINE_UBOOT}" ]]; then
+    if [[ ! -z "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
        CUR_BOOTLOADER="${P2}${MAINLINE_UBOOT}"
     else
        echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"

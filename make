@@ -216,11 +216,20 @@ utils() {
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 
     # Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
-    [ -f etc/modules.d/rtl8189fs ] || printf '8189fs' >etc/modules.d/rtl8189fs
-    [ -f etc/modules.d/rtl8188fu ] || printf 'rtl8188fu' >etc/modules.d/rtl8188fu
-    [ -f etc/modules.d/usb-net-rtl8150 ] || printf 'rtl8150' >etc/modules.d/usb-net-rtl8150
-    [ -f etc/modules.d/usb-net-rtl8152 ] || printf 'r8152' >etc/modules.d/usb-net-rtl8152
-    [ -f etc/modules.d/usb-net-asix-ax88179 ] || printf 'ax88179_178a' >etc/modules.d/usb-net-asix-ax88179
+    [ -f etc/modules.d/rtl8189fs ] || echo "8189fs" > etc/modules.d/rtl8189fs
+    [ -f etc/modules.d/rtl8188fu ] || echo "rtl8188fu" > etc/modules.d/rtl8188fu
+    [ -f etc/modules.d/usb-net-rtl8150 ] || echo "rtl8150" > etc/modules.d/usb-net-rtl8150
+    [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > etc/modules.d/usb-net-rtl8152
+    [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179
+
+    # Add firmware information to the support_emmc_startup
+    echo "FDTFILE=${FDTFILE}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "U_BOOT_EXT=${U_BOOT_EXT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "UBOOT_OVERLOAD=${UBOOT_OVERLOAD}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "MAINLINE_UBOOT=${MAINLINE_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "ANDROID_UBOOT=${ANDROID_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "AMLOGIC_SOC=${build_op}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "KERNEL_VERSION=${build_usekernel}" >> lib/u-boot/support_emmc_startup 2>/dev/null
 
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then
@@ -233,15 +242,6 @@ utils() {
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi
-
-    # Add firmware information to the support_emmc_startup
-    echo "FDTFILE=${FDTFILE}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "U_BOOT_EXT=${U_BOOT_EXT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "UBOOT_OVERLOAD=${UBOOT_OVERLOAD}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "MAINLINE_UBOOT=${MAINLINE_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "ANDROID_UBOOT=${ANDROID_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "AMLOGIC_SOC=${build_op}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "KERNEL_VERSION=${build_usekernel}" >> lib/u-boot/support_emmc_startup 2>/dev/null
 
     sync
     # Edit ${root}/* files ========== End ==========

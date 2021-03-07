@@ -15,9 +15,7 @@ Utilities  --->
 
 ## Install to Amlogic S9xxx STB EMMC and update instructions
 
-Choose the corresponding firmware according to your Amlogic S9xxx STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the Amlogic S9xxx STB.
-
-Common for `Phicomm-n1` and `s9xxx-Boxes`, etc.
+Choose the corresponding firmware according to your Amlogic S9xxx STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the Amlogic S9xxx STB. Common for all `Amlogic s9xxx STB`.
 
 ***`Install OpenWrt`***
 

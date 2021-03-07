@@ -28,7 +28,7 @@ Choose the corresponding firmware according to your box. Then write the IMG file
 ```yaml
 openwrt-install
 ```
-***`update OpenWrt`***
+***`Update OpenWrt`***
 
 - Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 

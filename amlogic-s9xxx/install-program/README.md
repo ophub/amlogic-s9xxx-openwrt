@@ -1,6 +1,6 @@
 # install-program
 
-Install and Update openwrt to the emmc for S9xxx-Boxs.
+Install and Update openwrt to emmc for Amlogic S9xxx STB.
 
 ## Instructions
 
@@ -13,11 +13,9 @@ Utilities  --->
 ```
 💡Tips: This installation and update script can be introduced and used separately during github.com online compilation. If the firmware in the `openwrt-armvirt` directory you provided does not integrate this installation and update script, ***`Will auto add`*** this function to you through the `./make` script when packaging.
 
-## Install to S9xxx-Boxs EMMC partition and update instructions
+## Install to Amlogic S9xxx STB EMMC and update instructions
 
-Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx-Boxs.
-
-Common for `Phicomm-n1` and `s9xxx-Boxes`, etc.
+Choose the corresponding firmware according to your Amlogic S9xxx STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the Amlogic S9xxx STB. Common for all `Amlogic S9xxx STB`.
 
 ***`Install OpenWrt`***
 
@@ -27,9 +25,9 @@ Common for `Phicomm-n1` and `s9xxx-Boxes`, etc.
 openwrt-install
 ```
 
-When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install), `select the name` of the box you own in the menu.
+When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install), `select the name` of the Amlogic S9xxx STB you own in the menu.
 
-For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the S9xxx-Boxes you own.
+For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic S9xxx STB you own.
 
 ***`Update OpenWrt`***
 
@@ -65,9 +63,9 @@ dd if=/lib/u-boot/u-boot-2015-phicomm-n1.bin of=/dev/mmcblk1
 sync
 reboot
 ```
-## Option description when installing into s9xxx-boxs emmc
+## Option description when installing into Amlogic S9xxx STB emmc
 
-| Serial | Box | Description | DTB |
+| Serial | STB | Description | DTB |
 | ---- | ---- | ---- | ---- |
 | 1 | X96-Max+ | S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-sm1-x96-max-plus.dtb |
 | 2 | X96-Max+ | 905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2208Mtz | meson-sm1-x96-max-plus-oc.dtb |
@@ -86,7 +84,7 @@ reboot
 
 You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) when you customize the file name.
 
-## Turn on the USB disk boot mode of the s9xxx-boxs
+## Turn on the USB disk boot mode of the Amlogic S9xxx STB
 
 - Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 7 times in quick succession, and you will see that the developer mode is turned on.
 - Turn on USB debugging: After restarting, enter Settings → System → Advanced options → Developer options again (after entering, confirm that the status is on, and the USB debugging status in the list is also on)

@@ -1,7 +1,7 @@
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S9xxx-Boxs
-# Function: Install and Update openwrt to the emmc for S9xxx-Boxs
+# Description: Automatically Packaged OpenWrt for Amlogic S9xxx STB
+# Function: Install and Update openwrt to the emmc for Amlogic S9xxx STB
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/tuanqing/mknop
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
@@ -18,7 +18,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/$(PKG_NAME)
 	SECTION:=utils
 	CATEGORY:=Utilities
-	TITLE:=Install and Update openwrt to the emmc for S9xxx-Boxs
+	TITLE:=Install and Update openwrt to the emmc for Amlogic S9xxx STB
 	DEPENDS:=+block-mount +blkid +parted +dosfstools +e2fsprogs +lsblk +pv +resize2fs +tune2fs +losetup +uuidgen
 endef
 

@@ -238,7 +238,7 @@ utils() {
         echo " Amlogic Box: ${build_op}" >> etc/banner
         echo " Kernel: ${op_version}" >> etc/banner
         echo " Install command: openwrt-install" >> etc/banner
-        echo " update command: openwrt-update" >> etc/banner
+        echo " Update command: openwrt-update" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi

@@ -31,7 +31,7 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
     - 7.2 [Download from GitHub Releases](#72-download-from-github-releases)
     - 7.3 [Download from third parties](#73-download-from-third-parties)
 8. [Install the firmware](#8-install-the-firmware)
-9. [update firmware](#9-update-firmware)
+9. [Update firmware](#9-update-firmware)
 10. [Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
     - 10.1 [Know the complete .config file](#101-know-the-complete-config-file)
     - 10.2 [Know the workflow file](#102-know-the-workflow-file)
@@ -280,7 +280,7 @@ Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is
 
 More detailed operations can be viewed in the detailed installation instructions of the repository: [amlogic-s9xxx/install-program](https://github.com/ophub/amlogic-s9xxx-OpenWrt/tree/main/amlogic-s9xxx/install-program)
 
-## 9. update firmware
+## 9. Update firmware
 
 `Log in to your OpenWrt system`, under the `System` menu, select the `File Transfer` function to `upload the OpenWrt.img.gz firmware`, and `wait a while`, and see the system prompts that the `upload is complete`, select the `System menu` > `TTYD terminal` , and enter the `openwrt-update` command to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 

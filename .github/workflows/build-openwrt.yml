@@ -28,6 +28,7 @@ env:
   DIY_P1_SH: router_config/diy-part1.sh
   DIY_P2_SH: router_config/diy-part2.sh
   UPLOAD_BIN_DIR: false
+  UPLOAD_ARMVIRT: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   UPLOAD_COWTRANSFER: false
@@ -133,7 +134,7 @@ jobs:
 
     - name: Organize armvirt files
       id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      if: env.UPLOAD_ARMVIRT == 'true' && !cancelled()
       run: |
         cd openwrt/bin/targets/*/*
         rm -rf packages
@@ -142,7 +143,7 @@ jobs:
 
     - name: Upload armvirt directory to Actions
       uses: actions/upload-artifact@v2
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_ARMVIRT == 'true' && !cancelled()
       with:
         name: openwrt_armvirt_64_${{ env.FILE_DATE }}
         path: ${{ env.TMPFILEPATH }}

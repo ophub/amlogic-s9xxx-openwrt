@@ -434,26 +434,26 @@ Usage:
     make [option]
 
 Options:
-    -c, --clean          clean up the output and temporary directories
+    -c, --clean            clean up the output and temporary directories
 
-    -d, --default        the kernel version is "all", and the rootfs partition size is "1024m"
+    -d, --default          the kernel version is "all", and the rootfs partition size is "1024m"
 
-    -b, --build=BUILD    Specify multiple cores, use "_" to connect
-       , -b all          Compile all types of openwrt
-       , -b n1           Specify a single openwrt for compilation
-       , -b n1_x96_hk1   Specify multiple openwrt, use "_" to connect
+    -b, --build=BUILD      Specify multiple cores, use "_" to connect
+       , -b all            Compile all types of openwrt
+       , -b s905x3         Specify a single openwrt for compilation
+       , -b s905x3_s905d   Specify multiple openwrt, use "_" to connect
 
-    -k=VERSION           set the kernel version, which must be in the "kernel" directory
-       , -k all          build all the kernel version
-       , -k latest       build the latest kernel version
-       , -k 5.4.6        Specify a single kernel for compilation
-       , -k 5.4.6_5.9.0  Specify multiple cores, use "_" to connect
+    -k=VERSION             set the kernel version, which must be in the "kernel" directory
+       , -k all            build all the kernel version
+       , -k latest         build the latest kernel version
+       , -k 5.4.6          Specify a single kernel for compilation
+       , -k 5.4.6_5.9.0    Specify multiple cores, use "_" to connect
 
-    --kernel             show all kernel version in "kernel" directory
+    --kernel               show all kernel version in "kernel" directory
 
-    -s, --size=SIZE      set the rootfs partition size, do not less than 256m
+    -s, --size=SIZE        set the rootfs partition size, do not less than 256m
 
-    -h, --help           display this help
+    -h, --help             display this help
 
 EOF
 }

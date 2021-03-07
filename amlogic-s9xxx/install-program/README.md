@@ -53,15 +53,15 @@ If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/u
 If your box is X96-Max+, you must write the bootloader of HK1-Box included in the firmware to EMMC before it can be gigabit. This step is now integrated into the installation script and is automatically completed during installation:
 
 ```shell script
-dd if=/root/hk1box-bootloader.img  of=/dev/mmcblk2 bs=1 count=442 conv=fsync 2>/dev/null
-dd if=/root/hk1box-bootloader.img  of=/dev/mmcblk2 bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+dd if=/lib/u-boot/hk1box-bootloader.img  of=/dev/mmcblk2 bs=1 count=442 conv=fsync 2>/dev/null
+dd if=/lib/u-boot/hk1box-bootloader.img  of=/dev/mmcblk2 bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
 sync
 reboot
 ```
 
 If the Phicomm-n1 partition fails and cannot be written, you can restore the bootloader, restart it, and run the relevant command again.
 ```shell script
-dd if=/root/u-boot-2015-phicomm-n1.bin of=/dev/mmcblk1
+dd if=/lib/u-boot/u-boot-2015-phicomm-n1.bin of=/dev/mmcblk1
 sync
 reboot
 ```

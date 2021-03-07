@@ -132,8 +132,8 @@ losetup_mount_img() {
 copy_boot_root() {
    cp -rf ${boot_tmp}/{dtb,config*,initrd.img*,System.map*,uInitrd,zImage} ${kernel_tmp}
    cp -rf ${root_tmp}/lib/modules ${modules_tmp}
-   #Add drivers from {amlogic_path}/amlogic-kernel/build_kernel/patches/root/
-   cp -rf ${amlogic_path}/amlogic-kernel/build_kernel/patches/root/wireless/* ${modules_tmp}/modules/*/kernel/drivers/net/wireless/
+   #Add drivers
+   cp -rf ${amlogic_path}/common-files/patches/wireless/* ${modules_tmp}/modules/*/kernel/drivers/net/wireless/
    sync
 
    #Check core files

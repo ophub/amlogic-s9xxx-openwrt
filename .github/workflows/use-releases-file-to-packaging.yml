@@ -100,5 +100,5 @@ jobs:
           Default WIFI name: OpenWrt
           Default WIFI password: none
           Install command: openwrt-install
-          update command: openwrt-update
+          Update command: openwrt-update
 

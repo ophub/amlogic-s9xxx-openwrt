@@ -220,7 +220,7 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
       Default WIFI name: OpenWrt
       Default WIFI password: none
       Install command: openwrt-install
-      update command: openwrt-update
+      Update command: openwrt-update
 ```
 ### 6.3 Save to a third party
 

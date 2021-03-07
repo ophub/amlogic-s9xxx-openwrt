@@ -1,6 +1,6 @@
-# OpenWrt for Amlogic S9xxx series boxes
+# OpenWrt for Amlogic S9xxx STB
 
-Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and update related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, `S905x`, `S905d`, `s912`, etc. Support boxes are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`***, etc.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and update related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, `S905x`, `S905d`, `s912`, etc. Support STB are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`***, etc.
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
@@ -8,7 +8,7 @@ This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel fo
 
 ## OpenWrt Firmware instructions
 
-| Model  | Boxes | OpenWrt Firmware |
+| Model  | STB | OpenWrt Firmware |
 | ---- | ---- | ---- |
 | s905x3 | [x96](https://tokopedia.link/uMaH09s41db), [hk1](https://tokopedia.link/pNHf5AE41db), [h96](https://tokopedia.link/wRh6SVI41db) | openwrt_s905x3_v*.img |
 | s905x2 | [x96max4g](https://tokopedia.link/HcfLaRzjqeb), [x96max2g](https://tokopedia.link/ro207Hsjqeb) | openwrt_s905x2_v*.img |
@@ -19,7 +19,7 @@ This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel fo
 
 ## Install to EMMC partition and update instructions
 
-Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx-Boxs. Common for all `s9xxx-Boxes`.
+Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx STB. Common for all `s9xxx STB`.
 
 ***`Install OpenWrt`***
 
@@ -56,7 +56,7 @@ You can modify the configuration file in the `router_config` directory and `.yml
 In your .github/workflows/.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
 
 ```yaml
-- name: Build OpenWrt for S9xxx-Boxes
+- name: Build OpenWrt for Amlogic S9xxx STB
   id: build
   run: |
     git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
@@ -93,7 +93,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
     tag_name: openwrt_s9xxx
     files: ${{ env.FILEPATH }}/*
     body: |
-      This is OpenWrt firmware for S9xxx-Boxes and Phicomm-N1.
+      This is OpenWrt firmware for Amlogic S9xxx STB.
       More information ...
 ```
 
@@ -122,7 +122,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     echo "::set-output name=status::success"
 ```
 
-This function is suitable for the needs of replacing the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) packaging and packaging the OpenWrt firmware of the specified [amlogic-s9xxx-Box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) separately. As long as you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) of your repository, you can package the OpenWrt firmware you want at any time, which is efficient and convenient.
+This function is suitable for the needs of replacing the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) packaging and packaging the OpenWrt firmware of the specified [amlogic-s9xxx-STB](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) separately. As long as you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) of your repository, you can package the OpenWrt firmware you want at any time, which is efficient and convenient.
 
 - ### Local packaging instructions
 
@@ -153,7 +153,7 @@ This function is suitable for the needs of replacing the [kernel](https://github
 
 ## Build more kernel files
 
-***`Flippy`*** has shared with us dozens of versions of firmware, Brings unlimited freedom to amlogic-s9xxx series Boxes. We have stored some of the latest kernels in the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) directory. If you think it’s not enough, or you don’t find the version you miss, you can use the kernel build tool to add the `Flippy kernel` to the Kernel library of the repository, and package the version of openwrt firmware you want. [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel)
+***`Flippy`*** has shared with us dozens of versions of firmware, Brings unlimited freedom to amlogic s9xxx STB. We have stored some of the latest kernels in the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) directory. If you think it’s not enough, or you don’t find the version you miss, you can use the kernel build tool to add the `Flippy kernel` to the Kernel library of the repository, and package the version of openwrt firmware you want. [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel)
 
 ## ~/openwrt-armvirt/* Firmware compilation parameters
 
@@ -194,7 +194,6 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 - [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
 - [tuanqing/mknop](https://github.com/tuanqing/mknop)
 - [Mikubill/transfer](https://github.com/Mikubill/transfer)
-- [Rureka Blog](https://rureka.com/)
 
 ## License
 

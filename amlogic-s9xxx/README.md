@@ -18,7 +18,7 @@ General file storage directory, such as [boot and firmware](https://github.com/o
 
 Install openwrt to the emmc for S9xxx-Boxs. Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
-- installation command: `openwrt-install`
+- Install command: `openwrt-install`
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
 

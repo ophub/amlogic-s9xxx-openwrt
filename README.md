@@ -1,10 +1,10 @@
 # OpenWrt for Amlogic S9xxx series boxes
 
-Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and upgrade related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, `S905x`, `S905d`, `s912`, etc. Support boxes are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`***, etc.
+Support `github.com One-stop compilation`, `github.com clone packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and update related functions. Support Amlogic-s9xxx chip series such as `S905x3`, `S905x2`, `S922x`, `S905x`, `S905d`, `s912`, etc. Support boxes are ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`***, etc.
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
-This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel for OpenWrt, and the Install and Upgrade scripts, etc. Welcome to use `Forks` for [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md). If you like it, Please click the `Star`.
+This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel for OpenWrt, and the Install and update scripts, etc. Welcome to use `Forks` for [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md). If you like it, Please click the `Star`.
 
 ## OpenWrt Firmware instructions
 
@@ -25,7 +25,7 @@ This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel fo
 - `openwrt_n1_v*.img`: For Phicomm-N1(S905d).
 - `openwrt_octopus_v*.img` For Octopus-Planet(S912).
 
-## Install to EMMC partition and upgrade instructions
+## Install to EMMC partition and update instructions
 
 Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx-Boxs. Common for `Phicomm-n1` and `s9xxx-Boxes`.
 
@@ -34,14 +34,14 @@ Choose the corresponding firmware according to your box. Then write the IMG file
 - Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
-s9xxx-install.sh
+openwrt-install
 ```
-***`Upgrade OpenWrt`***
+***`update OpenWrt`***
 
 - Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
-s9xxx-update.sh
+openwrt-update
 ```
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)

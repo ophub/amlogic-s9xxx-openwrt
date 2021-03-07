@@ -16,9 +16,10 @@ out_path=${make_path}/out
 openwrt_path=${make_path}/openwrt-armvirt
 amlogic_path=${make_path}/amlogic-s9xxx
 kernel_path=${amlogic_path}/amlogic-kernel
-commonfiles_path=${amlogic_path}/common-files
+armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 installfiles_path=${amlogic_path}/install-program/files
+config_files=${amlogic_path}/common-files/files
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -115,21 +116,20 @@ extract_armbian() {
     cd ${make_path}
     build_op=${1}
     kernel_dir="${kernel_path}/kernel/${kernel}"
-    # root_dir="${kernel_path}/root"
     root="${tmp_path}/${kernel}/${build_op}/root"
     boot="${tmp_path}/${kernel}/${build_op}/boot"
 
     mkdir -p ${root} ${boot}
 
-    tar -xJf "${commonfiles_path}/boot-common.tar.xz" -C ${boot}
+    tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${kernel_dir}/kernel.tar.xz" -C ${boot}
-    tar -xJf "${commonfiles_path}/firmware.tar.xz" -C ${root}
+    tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
     tar -xJf "${kernel_dir}/modules.tar.xz" -C ${root}
 
     cp -rf ${root_comm}/* ${root}
-    # [ $(ls ${root_dir} | wc -w) != 0 ] && cp -r ${root_dir}/* ${root}
 
     # Complete file
+    [ $(ls ${config_files} | wc -w) != 0 ] && cp -r ${config_files}/* ${root}
     cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
     cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
     cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
@@ -200,8 +200,8 @@ utils() {
     if ! grep -q 'ulimit -n' etc/init.d/boot; then
         sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
     fi
-    if ! grep -q '/tmp/upgrade' etc/init.d/boot; then
-        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/upgrade' etc/init.d/boot
+    if ! grep -q '/tmp/update' etc/init.d/boot; then
+        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/update' etc/init.d/boot
     fi
     sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
     sed -i 's/ttyS0/tty0/' etc/inittab
@@ -237,8 +237,8 @@ utils() {
         op_packaged_date=$(date +%Y-%m-%d)
         echo " Amlogic Box: ${build_op}" >> etc/banner
         echo " Kernel: ${op_version}" >> etc/banner
-        echo " Install command: s9xxx-install.sh" >> etc/banner
-        echo " Upgrade command: s9xxx-update.sh" >> etc/banner
+        echo " Install command: openwrt-install" >> etc/banner
+        echo " update command: openwrt-update" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi

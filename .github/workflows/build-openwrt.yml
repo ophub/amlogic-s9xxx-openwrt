@@ -151,7 +151,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Build OpenWrt firmware
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       id: build
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt

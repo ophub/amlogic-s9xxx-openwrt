@@ -202,7 +202,7 @@ jobs:
           Default WIFI name: OpenWrt
           Default WIFI password: none
           Install command: openwrt-install
-          update command: openwrt-update
+          Update command: openwrt-update
 
     - name: Delete older releases
       uses: dev-drprasad/delete-older-releases@master

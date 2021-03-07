@@ -101,13 +101,4 @@ jobs:
           Default WIFI password: none
           Install command: openwrt-install
           Update command: openwrt-update
-          | Model  | STB | OpenWrt Firmware |
-          | ---- | ---- | ---- |
-          | s905x3 | x96, hk1, h96 | openwrt_s905x3_v*.img |
-          | s905x2 | x96max4g, x96max2g | openwrt_s905x2_v*.img |
-          | s905x | hg680p, b860h | openwrt_s905x_v*.img |
-          | s922x | belink, belinkpro, ugoos | openwrt_s922x_v*.img |
-          | s912 | octopus | openwrt_s912_v*.img |
-          | s905d | n1 | openwrt_s905d_v*.img |
-
 

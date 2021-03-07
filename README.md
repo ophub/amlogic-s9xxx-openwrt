@@ -19,7 +19,7 @@ This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel fo
 
 ## Install to EMMC partition and update instructions
 
-Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the S9xxx STB. Common for all `s9xxx STB`.
+Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the Amlogic s9xxx STB. Common for all `Amlogic s9xxx STB`.
 
 ***`Install OpenWrt`***
 

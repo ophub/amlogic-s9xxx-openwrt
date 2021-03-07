@@ -23,7 +23,7 @@ define Package/$(PKG_NAME)
 endef
 
 define Package/$(PKG_NAME)/description
-	Install and Update openwrt to the emmc for S9xxx-Boxs
+	Install and Update openwrt to the emmc for Amlogic S9xxx STB
 endef
 
 define Build/Prepare

@@ -35,8 +35,3 @@ Install openwrt to emmc for Amlogic S9xxx STB. Insert the `USB hard disk` with t
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
 
-
-## u-boot
-
-The [u-boot](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/u-boot) storage directory contains the mainline boot files and non-mainline boot files. 
-

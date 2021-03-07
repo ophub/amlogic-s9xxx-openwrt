@@ -1,7 +1,7 @@
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Packaged OpenWrt for S9xxx-Boxs
-# Function: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
+# Function: Install and Update openwrt to the emmc for S9xxx-Boxs
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/tuanqing/mknop
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
@@ -18,12 +18,12 @@ include $(INCLUDE_DIR)/package.mk
 define Package/$(PKG_NAME)
 	SECTION:=utils
 	CATEGORY:=Utilities
-	TITLE:=Install and Upgrading openwrt to the emmc for S9xxx-Boxs
+	TITLE:=Install and Update openwrt to the emmc for S9xxx-Boxs
 	DEPENDS:=+block-mount +blkid +parted +dosfstools +e2fsprogs +lsblk +pv +resize2fs +tune2fs +losetup +uuidgen
 endef
 
 define Package/$(PKG_NAME)/description
-	Install and Upgrading openwrt to the emmc for S9xxx-Boxs
+	Install and Update openwrt to the emmc for S9xxx-Boxs
 endef
 
 define Build/Prepare
@@ -39,8 +39,8 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/config/
-	$(INSTALL_BIN) ./files/s9xxx-install.sh $(1)/usr/bin/s9xxx-install.sh
-	$(INSTALL_BIN) ./files/s9xxx-update.sh $(1)/usr/bin/s9xxx-update.sh
+	$(INSTALL_BIN) ./files/openwrt-install $(1)/usr/bin/openwrt-install
+	$(INSTALL_BIN) ./files/openwrt-update $(1)/usr/bin/openwrt-update
 	$(INSTALL_CONF) ./files/fstab.etc $(1)/etc/fstab
 	$(INSTALL_CONF) ./files/fstab.config $(1)/etc/config/fstab
 endef

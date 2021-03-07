@@ -1,7 +1,7 @@
 #!/bin/bash
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Install and Upgrading openwrt to the emmc for S9xxx-Boxs
+# Description: Install and Update openwrt to the emmc for S9xxx-Boxs
 # Function: Install openwrt to the emmc for S9xxx-Boxs
 # Copyright (C) 2020-2021 Flippy
 # Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
@@ -505,7 +505,7 @@ while [ $i -le $max_try ]; do
 		
         echo "Edit configuration file ..."
         #cd /mnt/${EMMC_NAME}p2/usr/bin/
-        #rm -f s9xxx-install.sh s9xxx-update.sh
+        #rm -f openwrt-install openwrt-update
         cd /mnt/${EMMC_NAME}p2/etc/rc.d
         ln -sf ../init.d/dockerd S99dockerd
         cd /mnt/${EMMC_NAME}p2/etc

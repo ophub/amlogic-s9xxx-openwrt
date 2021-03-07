@@ -1,8 +1,8 @@
 #!/bin/bash
 #======================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Install and update openwrt to the emmc for Amlogic S9xxx STB
-# Function: Update openwrt to the emmc for Amlogic S9xxx STB
+# Description: Install and update openwrt to emmc for Amlogic S9xxx STB
+# Function: Update openwrt to emmc for Amlogic S9xxx STB
 # Copyright (C) 2020-2021 Flippy
 # Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================

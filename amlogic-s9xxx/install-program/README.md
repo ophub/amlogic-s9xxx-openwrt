@@ -1,6 +1,6 @@
 # install-program
 
-Install and Update openwrt to the emmc for Amlogic S9xxx STB.
+Install and Update openwrt to emmc for Amlogic S9xxx STB.
 
 ## Instructions
 
@@ -15,7 +15,7 @@ Utilities  --->
 
 ## Install to Amlogic S9xxx STB EMMC and update instructions
 
-Choose the corresponding firmware according to your Amlogic S9xxx STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the Amlogic S9xxx STB. Common for all `Amlogic s9xxx STB`.
+Choose the corresponding firmware according to your Amlogic S9xxx STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the Amlogic S9xxx STB. Common for all `Amlogic S9xxx STB`.
 
 ***`Install OpenWrt`***
 

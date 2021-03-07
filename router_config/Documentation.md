@@ -212,7 +212,7 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
     tag_name: openwrt_s9xxx_${{ env.FILE_DATE }}
     files: ${{ env.FILEPATH }}/*
     body: |
-      This is OpenWrt firmware for S9xxx-Boxs
+      This is OpenWrt firmware for Amlogic S9xxx STB
       * Firmware information
       Default IP: 192.168.1.1
       Default username: root

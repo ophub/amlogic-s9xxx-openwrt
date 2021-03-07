@@ -2,8 +2,8 @@
 
 #======================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S9xxx-Boxs
-# Function: Use Flippy's amlogic-s9xxx *.img files to package the alternate firmware
+# Description: Automatically Packaged OpenWrt for Amlogic S9xxx STB
+# Function: Use Flippy's amlogic-s9xxx *.img files to build kernel
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================================================

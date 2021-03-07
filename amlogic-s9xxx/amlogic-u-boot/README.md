@@ -1,6 +1,6 @@
 # u-boot files of amlogic-s9xxx 5.10 kernel
 
-The amlogic-s9xxx 5.10 kernel version currently does not support writing to EMMC and only supports starting and using in `TF/SD card`. When using the 5.10 kernel version, you need to copy the corresponding `u-boot-*.bin` file to `u-boot.ext` (TF/SD card boot file) and `u-boot.emmc` (EMMC boot file).
+When using the 5.10 kernel version, you need to copy the corresponding `u-boot-*.bin` file to `u-boot.ext` (TF/SD card boot file) and `u-boot.emmc` (EMMC boot file).
 
 ## Correspondence for Amlogic S9xxx STB 5.10 kernel
 

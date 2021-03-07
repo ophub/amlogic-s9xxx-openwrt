@@ -2,8 +2,8 @@
 
 #======================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for S9xxx-Boxs and Phicomm-N1
-# Function: Update kernel.tar.xz files in the kernel directory with the latest dtb file.
+# Description: Automatically Packaged OpenWrt for Amlogic S9xxx STB
+# Function: Update kernel files
 # Copyright (C) 2020 Flippy
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================================================
@@ -148,7 +148,7 @@ update_modules_files() {
     echo_color "green" "(2/2) End update_modules_files"  "..."
 }
 
-echo_color "yellow" "Which files do you choose to update: " "kernel.tar.xz[k], modules.tar.xz[m], all[a]"
+echo_color "yellow" "Which files do you choose to update: " "kernel.tar.xz=[k], modules.tar.xz=[m], all=[a]"
 echo_color "yellow" "Please enter: " "k/m/a"
 read  pause
 case  $pause in

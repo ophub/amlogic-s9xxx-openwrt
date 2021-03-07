@@ -16,9 +16,10 @@ out_path=${make_path}/out
 openwrt_path=${make_path}/openwrt-armvirt
 amlogic_path=${make_path}/amlogic-s9xxx
 kernel_path=${amlogic_path}/amlogic-kernel
-commonfiles_path=${amlogic_path}/common-files
+armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 installfiles_path=${amlogic_path}/install-program/files
+config_files=${amlogic_path}/common-files/files
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -115,21 +116,20 @@ extract_armbian() {
     cd ${make_path}
     build_op=${1}
     kernel_dir="${kernel_path}/kernel/${kernel}"
-    # root_dir="${kernel_path}/root"
     root="${tmp_path}/${kernel}/${build_op}/root"
     boot="${tmp_path}/${kernel}/${build_op}/boot"
 
     mkdir -p ${root} ${boot}
 
-    tar -xJf "${commonfiles_path}/boot-common.tar.xz" -C ${boot}
+    tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${kernel_dir}/kernel.tar.xz" -C ${boot}
-    tar -xJf "${commonfiles_path}/firmware.tar.xz" -C ${root}
+    tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
     tar -xJf "${kernel_dir}/modules.tar.xz" -C ${root}
 
     cp -rf ${root_comm}/* ${root}
-    # [ $(ls ${root_dir} | wc -w) != 0 ] && cp -r ${root_dir}/* ${root}
 
     # Complete file
+    [ $(ls ${config_files} | wc -w) != 0 ] && cp -r ${config_files}/* ${root}
     cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
     cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
     cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
@@ -200,8 +200,8 @@ utils() {
     if ! grep -q 'ulimit -n' etc/init.d/boot; then
         sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
     fi
-    if ! grep -q '/tmp/upgrade' etc/init.d/boot; then
-        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/upgrade' etc/init.d/boot
+    if ! grep -q '/tmp/update' etc/init.d/boot; then
+        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/update' etc/init.d/boot
     fi
     sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
     sed -i 's/ttyS0/tty0/' etc/inittab
@@ -216,23 +216,11 @@ utils() {
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 
     # Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
-    [ -f etc/modules.d/rtl8189fs ] || printf '8189fs' >etc/modules.d/rtl8189fs
-    [ -f etc/modules.d/rtl8188fu ] || printf 'rtl8188fu' >etc/modules.d/rtl8188fu
-    [ -f etc/modules.d/usb-net-rtl8150 ] || printf 'rtl8150' >etc/modules.d/usb-net-rtl8150
-    [ -f etc/modules.d/usb-net-rtl8152 ] || printf 'r8152' >etc/modules.d/usb-net-rtl8152
-    [ -f etc/modules.d/usb-net-asix-ax88179 ] || printf 'ax88179_178a' >etc/modules.d/usb-net-asix-ax88179
-
-    # Add firmware version information to the terminal page
-    if  [ -f etc/banner ]; then
-        op_version=$(echo $(ls lib/modules/) 2>/dev/null)
-        op_packaged_date=$(date +%Y-%m-%d)
-        echo " Amlogic Box: ${build_op}" >> etc/banner
-        echo " Kernel: ${op_version}" >> etc/banner
-        echo " Install command: s9xxx-install.sh" >> etc/banner
-        echo " Upgrade command: s9xxx-update.sh" >> etc/banner
-        echo " Packaged Date: ${op_packaged_date}" >> etc/banner
-        echo " -----------------------------------------------------" >> etc/banner
-    fi
+    [ -f etc/modules.d/rtl8189fs ] || echo "8189fs" > etc/modules.d/rtl8189fs
+    [ -f etc/modules.d/rtl8188fu ] || echo "rtl8188fu" > etc/modules.d/rtl8188fu
+    [ -f etc/modules.d/usb-net-rtl8150 ] || echo "rtl8150" > etc/modules.d/usb-net-rtl8150
+    [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > etc/modules.d/usb-net-rtl8152
+    [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179
 
     # Add firmware information to the support_emmc_startup
     echo "FDTFILE=${FDTFILE}" >> lib/u-boot/support_emmc_startup 2>/dev/null
@@ -242,6 +230,18 @@ utils() {
     echo "ANDROID_UBOOT=${ANDROID_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
     echo "AMLOGIC_SOC=${build_op}" >> lib/u-boot/support_emmc_startup 2>/dev/null
     echo "KERNEL_VERSION=${build_usekernel}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+
+    # Add firmware version information to the terminal page
+    if  [ -f etc/banner ]; then
+        op_version=$(echo $(ls lib/modules/) 2>/dev/null)
+        op_packaged_date=$(date +%Y-%m-%d)
+        echo " Amlogic Box: ${build_op}" >> etc/banner
+        echo " Kernel: ${op_version}" >> etc/banner
+        echo " Install command: openwrt-install" >> etc/banner
+        echo " Update command: openwrt-update" >> etc/banner
+        echo " Packaged Date: ${op_packaged_date}" >> etc/banner
+        echo " -----------------------------------------------------" >> etc/banner
+    fi
 
     sync
     # Edit ${root}/* files ========== End ==========

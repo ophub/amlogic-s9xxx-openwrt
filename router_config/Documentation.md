@@ -2,7 +2,7 @@
 
 The Documentation idea of this repository comes from [Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt) shared by P3TERX. The tutorial mainly relies on his Chinese instruction document, and some instructions applicable to `OpenWrt for Amlogic S9xxx series boxes` were added during the writing process. If you understand Chinese, you can check his Chinese documentation in his repository.
 
-Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on the packaging script provided by `tuanqing`, based on the `OpenWrt for Amlogic S9xxx` kernel files and installation/upgrade scripts and other resources provided by `Flippy`, I integrated them together. Share with friends who use the `OpenWrt` system on `Amlogic S9xxx`, so that you have more choices when customizing your personalized software package. Due to my limited programming skills and limited language skills, if there are errors in the content, please correct me, and I would like to express my gratitude.
+Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on the packaging script provided by `tuanqing`, based on the `OpenWrt for Amlogic S9xxx` kernel files and installation/update scripts and other resources provided by `Flippy`, I integrated them together. Share with friends who use the `OpenWrt` system on `Amlogic S9xxx`, so that you have more choices when customizing your personalized software package. Due to my limited programming skills and limited language skills, if there are errors in the content, please correct me, and I would like to express my gratitude.
 
 `GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
 
@@ -31,8 +31,8 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
     - 7.2 [Download from GitHub Releases](#72-download-from-github-releases)
     - 7.3 [Download from third parties](#73-download-from-third-parties)
 8. [Install the firmware](#8-install-the-firmware)
-9. [Upgrade firmware](#9-upgrade-firmware)
-10. [Personalized firmware customization upgrade tutorial](#10-personalized-firmware-customization-upgrade-tutorial)
+9. [update firmware](#9-update-firmware)
+10. [Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
     - 10.1 [Know the complete .config file](#101-know-the-complete-config-file)
     - 10.2 [Know the workflow file](#102-know-the-workflow-file)
     - 10.3 [Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
@@ -219,8 +219,8 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
       Default password: password
       Default WIFI name: OpenWrt
       Default WIFI password: none
-      Install command: s9xxx-install.sh
-      Upgrade command: s9xxx-update.sh
+      Install command: openwrt-install
+      Update command: openwrt-update
 ```
 ### 6.3 Save to a third party
 
@@ -276,15 +276,15 @@ After downloading the compiled firmware, `decompress it` to get the `OpenWrt.img
 
 In the wired network settings of `your computer`, change the IPV4 `IP` to manual settings, fill in the IP `192.168.1.2`, fill in the subnet mask `255.255.255.0`, and leave the other blanks blank.
 
-Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is `root` and the default password is `password`. After logging in, under the `System` menu, select the `TTYD terminal`, enter `s9xxx-install.sh` directly, and `press Enter`. Automatic installation. During the process, let you choose the type of your `Amlogic S9xxx boxes`, fill in the serial number correctly, such as `13`, `enter and press Enter` to continue the installation. The firmware will be written into the `EMMC` of the `Amlogic S9xxx boxes`. After the prompt is complete, `unplug the USB hard drive`, `unplug the power supply`, and `reinsert the power supply`. OpenWrt will boot from the `EMMC` partition of the `Amlogic S9xxx boxes`. Wait `1 minute` to log in. The IP is still `192.168.1.1`, and the account password is still the `default`. (If you don’t like to write to the `EMMC` of the `Amlogic S9xxx boxes`, you can `always plug in the USB hard disk and use OpenWrt in the USB`. The EMMC system responds `faster` to the USB hard disk.)
+Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is `root` and the default password is `password`. After logging in, under the `System` menu, select the `TTYD terminal`, enter `openwrt-install` directly, and `press Enter`. Automatic installation. During the process, let you choose the type of your `Amlogic S9xxx boxes`, fill in the serial number correctly, such as `13`, `enter and press Enter` to continue the installation. The firmware will be written into the `EMMC` of the `Amlogic S9xxx boxes`. After the prompt is complete, `unplug the USB hard drive`, `unplug the power supply`, and `reinsert the power supply`. OpenWrt will boot from the `EMMC` partition of the `Amlogic S9xxx boxes`. Wait `1 minute` to log in. The IP is still `192.168.1.1`, and the account password is still the `default`. (If you don’t like to write to the `EMMC` of the `Amlogic S9xxx boxes`, you can `always plug in the USB hard disk and use OpenWrt in the USB`. The EMMC system responds `faster` to the USB hard disk.)
 
 More detailed operations can be viewed in the detailed installation instructions of the repository: [amlogic-s9xxx/install-program](https://github.com/ophub/amlogic-s9xxx-OpenWrt/tree/main/amlogic-s9xxx/install-program)
 
-## 9. Upgrade firmware
+## 9. update firmware
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `File Transfer` function to `upload the OpenWrt.img.gz firmware`, and `wait a while`, and see the system prompts that the `upload is complete`, select the `System menu` > `TTYD terminal` , and enter the `s9xxx-update.sh` command to upgrade. (You can upgrade from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the upgrade, and `you can freely upgrade/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `File Transfer` function to `upload the OpenWrt.img.gz firmware`, and `wait a while`, and see the system prompts that the `upload is complete`, select the `System menu` > `TTYD terminal` , and enter the `openwrt-update` command to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
-## 10. Personalized firmware customization upgrade tutorial
+## 10. Personalized firmware customization update tutorial
 
 If you see this step in the tutorial, I believe you already know how to play happily. If you don’t continue to read what is said later, I believe you will not be at ease. But, but ah, if you continue to explore in depth, you will start an extraordinary journey of tossing. You will encounter a lot of problems. This requires you to be prepared for continuous exploration, and you must be good at using `search engines` to solve problems. The time can go to various `OpenWrt communities` to learn.
 

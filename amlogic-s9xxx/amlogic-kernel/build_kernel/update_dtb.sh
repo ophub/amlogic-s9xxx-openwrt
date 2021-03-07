@@ -61,7 +61,7 @@ echo_color "purple" "Start Update dtb files"  "..."
 
 # update kernel.tar.xz *.dtb
 update_kernel_files() {
-    echo "Upgrade kernel.tar.xz ..."
+    echo "update kernel.tar.xz ..."
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
     cd ${build_tmp_folder}
     cp -rf ../../kernel/* .
@@ -100,7 +100,7 @@ update_kernel_files() {
 
 # update modules.tar.xz
 update_modules_files() {
-    echo "Upgrade modules.tar.xz ..."
+    echo "update modules.tar.xz ..."
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
     cd ${build_tmp_folder}
     cp -rf ${amlogic_path}/amlogic-kernel/kernel/* .
@@ -119,8 +119,8 @@ update_modules_files() {
                 kernel_version=${kernel_folder%/*}
                 cd ${kernel_version}
                 mkdir -p tmp_modules && tar -xJf modules.tar.xz -C tmp_modules
-                #Add drivers from {amlogic_path}/amlogic-kernel/build_kernel/patches/root/
-                cp -rf ${amlogic_path}/amlogic-kernel/build_kernel/patches/root/wireless/* tmp_modules/lib/modules/*/kernel/drivers/net/wireless/
+                #Add drivers
+                cp -rf ${amlogic_path}/common-files/patches/wireless/* tmp_modules/lib/modules/*/kernel/drivers/net/wireless/
                 sync && cd tmp_modules/lib/modules/*/
                    rm -f *.ko
                    x=0

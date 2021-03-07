@@ -1,8 +1,8 @@
 # Use GitHub Actions to compile OpenWrt
 
-The Documentation idea of this repository comes from [Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt) shared by P3TERX. The tutorial mainly relies on his Chinese instruction document, and some instructions applicable to `OpenWrt for Amlogic S9xxx series boxes` were added during the writing process. If you understand Chinese, you can check his Chinese documentation in his repository.
+The Documentation idea of this repository comes from [Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt) shared by P3TERX. The tutorial mainly relies on his Chinese instruction document, and some instructions applicable to `OpenWrt for Amlogic S9xxx STB` were added during the writing process. If you understand Chinese, you can check his Chinese documentation in his repository.
 
-Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on the packaging script provided by `tuanqing`, based on the `OpenWrt for Amlogic S9xxx` kernel files and installation/update scripts and other resources provided by `Flippy`, I integrated them together. Share with friends who use the `OpenWrt` system on `Amlogic S9xxx`, so that you have more choices when customizing your personalized software package. Due to my limited programming skills and limited language skills, if there are errors in the content, please correct me, and I would like to express my gratitude.
+Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on the packaging script provided by `tuanqing`, based on the `OpenWrt for Amlogic S9xxx STB` kernel files and installation/update scripts and other resources provided by `Flippy`, I integrated them together. Share with friends who use the `OpenWrt` system on `Amlogic S9xxx STB`, so that you have more choices when customizing your personalized software package. Due to my limited programming skills and limited language skills, if there are errors in the content, please correct me, and I would like to express my gratitude.
 
 `GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
 
@@ -239,7 +239,7 @@ Download our compiled openwrt firmware.
 
 ### 7.1 Download from GitHub Actions
 
-Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic S9xxx boxes`. The icons are as follows: 
+Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic S9xxx STB`. The icons are as follows: 
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418782-08714c00-7a05-11eb-9556-91575640a4bb.jpg width="300" />
@@ -248,7 +248,7 @@ Click the `Actions` button in the `repository navigation bar`. In the `All workf
 
 ### 7.2 Download from GitHub Releases
 
-Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic S9xxx boxes`. The icons are as follows:
+Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic S9xxx STB`. The icons are as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg width="300" />
@@ -272,11 +272,11 @@ The support for uploading to a third party comes from [Mikubill/transfer](https:
 
 ## 8. Install the firmware
 
-After downloading the compiled firmware, `decompress it` to get the `OpenWrt.img` file (the file name varies according to the `Amlogic S9xxx boxes`), use a mirror writing tool such as `balenaEtcher` to write the `OpenWrt.img` file to the `USB hard disk`, and then insert the USB hard disk In the USB port of your `Amlogic S9xxx boxes`, plug in the power and turn on the computer. Wait about `1 minute` to complete the `OpenWrt system startup`. Connect the `Amlogic S9xxx boxes` to your computer directly with a network cable.
+After downloading the compiled firmware, `decompress it` to get the `OpenWrt.img` file (the file name varies according to the `Amlogic S9xxx STB`), use a mirror writing tool such as `balenaEtcher` to write the `OpenWrt.img` file to the `USB hard disk`, and then insert the USB hard disk In the USB port of your `Amlogic S9xxx STB`, plug in the power and turn on the computer. Wait about `1 minute` to complete the `OpenWrt system startup`. Connect the `Amlogic S9xxx STB` to your computer directly with a network cable.
 
 In the wired network settings of `your computer`, change the IPV4 `IP` to manual settings, fill in the IP `192.168.1.2`, fill in the subnet mask `255.255.255.0`, and leave the other blanks blank.
 
-Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is `root` and the default password is `password`. After logging in, under the `System` menu, select the `TTYD terminal`, enter `openwrt-install` directly, and `press Enter`. Automatic installation. During the process, let you choose the type of your `Amlogic S9xxx boxes`, fill in the serial number correctly, such as `13`, `enter and press Enter` to continue the installation. The firmware will be written into the `EMMC` of the `Amlogic S9xxx boxes`. After the prompt is complete, `unplug the USB hard drive`, `unplug the power supply`, and `reinsert the power supply`. OpenWrt will boot from the `EMMC` partition of the `Amlogic S9xxx boxes`. Wait `1 minute` to log in. The IP is still `192.168.1.1`, and the account password is still the `default`. (If you don’t like to write to the `EMMC` of the `Amlogic S9xxx boxes`, you can `always plug in the USB hard disk and use OpenWrt in the USB`. The EMMC system responds `faster` to the USB hard disk.)
+Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is `root` and the default password is `password`. After logging in, under the `System` menu, select the `TTYD terminal`, enter `openwrt-install` directly, and `press Enter`. Automatic installation. During the process, let you choose the type of your `Amlogic S9xxx STB`, fill in the serial number correctly, such as `13`, `enter and press Enter` to continue the installation. The firmware will be written into the `EMMC` of the `Amlogic S9xxx STB`. After the prompt is complete, `unplug the USB hard drive`, `unplug the power supply`, and `reinsert the power supply`. OpenWrt will boot from the `EMMC` partition of the `Amlogic S9xxx STB`. Wait `1 minute` to log in. The IP is still `192.168.1.1`, and the account password is still the `default`. (If you don’t like to write to the `EMMC` of the `Amlogic S9xxx STB`, you can `always plug in the USB hard disk and use OpenWrt in the USB`. The EMMC system responds `faster` to the USB hard disk.)
 
 More detailed operations can be viewed in the detailed installation instructions of the repository: [amlogic-s9xxx/install-program](https://github.com/ophub/amlogic-s9xxx-OpenWrt/tree/main/amlogic-s9xxx/install-program)
 

@@ -7,6 +7,13 @@
 # Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
 
+# The MAINLINE_UBOOT is not perfect yet, and the installation is not prompted by default.
+if [[ "${1}" == "TEST-UBOOT" ]]; then
+    IFSHOW_MAINLINE_UBOOT=1
+else
+    IFSHOW_MAINLINE_UBOOT=0
+fi
+
 # you can change BOOT size >= 128
 BOOT=256
 # you can change ROOT1 size >= 320
@@ -345,9 +352,8 @@ seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
 #Mainline U-BOOT detection
-IFSHOW_MAINLINE_UBOOT=0
 FLASH_MAINLINE_UBOOT=0
-if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" && IFSHOW_MAINLINE_UBOOT -eq 1 ]]; then
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" && "${IFSHOW_MAINLINE_UBOOT}" -eq 1 ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.

@@ -97,37 +97,37 @@ case  $boxtype in
       1) FDTFILE="meson-sm1-x96-max-plus.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+         MAINLINE_UBOOT=""
          ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          ;;
       2) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+         MAINLINE_UBOOT=""
          ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          ;;
       3) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
+         MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
       4) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
+         MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
       5) FDTFILE="meson-sm1-h96-max-x3.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
+         MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
       6) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
+         MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
       7) FDTFILE="meson-g12a-x96-max.dtb"

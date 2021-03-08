@@ -365,8 +365,9 @@ EOF
 chmod 755 ./etc/rc.local*
 
 #Mainline U-BOOT detection
+IFSHOW_MAINLINE_UBOOT=0
 FLASH_MAINLINE_UBOOT=0
-if  [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" && IFSHOW_MAINLINE_UBOOT -eq 1 ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.

@@ -97,14 +97,14 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 - The `mainline u-boot` is not perfect yet, and the install is not prompted by default.
 - If you are willing to try it, you can use the `openwrt-install TEST-UBOOT` command to install and choose.
 
-################################################
-#                                              #
-# TTL: Solder a 5K-10K Resistor.               #
-#      between TTL's RX and GND (pull down).   #
-#                                              #
-#                                              #
-#      3.3V   RX       TX       GND            #
-#              ┖————█████████————┚             #
-#                Resistor (5~10K)              #
-#                                              #
-################################################
+------------------------------------------------
+|                                              |
+| TTL: Solder a 5K-10K Resistor.               |
+|      between TTL's RX and GND (pull down).   |
+|                                              |
+|                                              |
+|      3.3V   RX       TX       GND            |
+|              ┖————█████████————┚             |
+|                Resistor (5~10K)              |
+|                                              |
+------------------------------------------------

@@ -130,7 +130,7 @@ extract_armbian() {
 
     # Complete file
     [ $(ls ${config_files} | wc -w) != 0 ] && cp -r ${config_files}/* ${root}
-    cp -f ${installfiles_path}/*.sh ${root}/usr/bin/
+    cp -f ${installfiles_path}/openwrt* ${root}/usr/bin/
     cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
     cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
     [ -d ${root}/lib/u-boot ] || mkdir -p ${root}/lib/u-boot

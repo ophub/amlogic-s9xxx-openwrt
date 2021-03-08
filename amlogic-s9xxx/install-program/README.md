@@ -98,16 +98,14 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 - If you are willing to try it, you can use the `openwrt-install TEST-UBOOT` command to install and choose.
 
 ```yaml
-################################################
-#                                              #
-# TTL: Solder a 5K-10K Resistor.               #
-#      between TTL's RX and GND (pull-down).   #
-#                                              #
-#                                              #
-#      3.3V   RX       TX       GND            #
-#              ┖————█████████————┚             #
-#                Resistor (5~10K)              #
-#                                              #
-################################################
+#######################################################            #####################################################
+#                                                     #            #                                                   # 
+#   Resistor (pull-down): between TTL's RX and GND    #            #   Resistor (pull-up): between TTL's 3.3V and RX   #
+#                                                     #            #                                                   #
+#            3.3V   RX       TX       GND             #     OR     #        3.3V               RX     TX     GND       #
+#                    ┖————█████████————┚              #            #         ┖————█████████————┚                       #
+#                      Resistor (5~10K)               #            #           Resistor (5~10K)                        #
+#                                                     #            #                                                   #
+#######################################################            #####################################################
 ```
 

@@ -94,7 +94,7 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 ## Mainline u-boot startup failure
 
 - Some Amlogic S905x3 STB sometimes fail to boot after flashing into the `mainline u-boot`. The fault phenomenon is usually the `=>` prompt of u-boot automatically. The reason is that TTL lacks a pull-up resistor or pull-down resistor and is easily interfered by surrounding electromagnetic signals. The solution is to solder a 5K-10K resistor (pull-down) between TTL RX and GND, or solder a resistor between RX and 3.3V. A resistance of 5K-10K (pull-up).
-- The `mainline u-boot` is not perfect yet, and `the install is not prompted by default`.
+- The `mainline u-boot` is not perfect yet, and the install is not prompted by default. The relatively stable BootLoader is currently installed by default.
 - If you are willing to try it, you can use the `openwrt-install TEST-UBOOT` command to install and choose.
 
 ```yaml

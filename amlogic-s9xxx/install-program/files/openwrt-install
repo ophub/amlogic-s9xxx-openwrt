@@ -97,37 +97,37 @@ case  $boxtype in
       1) FDTFILE="meson-sm1-x96-max-plus.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
          ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          ;;
       2) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
          ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          ;;
       3) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       4) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       5) FDTFILE="meson-sm1-h96-max-x3.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       6) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       7) FDTFILE="meson-g12a-x96-max.dtb"
@@ -345,8 +345,9 @@ seek=$((start4 / 2048))
 dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
 #Mainline U-BOOT detection
+IFSHOW_MAINLINE_UBOOT=0
 FLASH_MAINLINE_UBOOT=0
-if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" && IFSHOW_MAINLINE_UBOOT -eq 1 ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.

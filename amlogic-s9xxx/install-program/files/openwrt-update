@@ -10,7 +10,7 @@
 IMG_NAME=${1}
 
 # The MAINLINE_UBOOT is not perfect yet, and the installation is not prompted by default.
-if [[ "${2}" == "TEST-UBOOT" ]]; then
+if  [[ "${2}" == "TEST-UBOOT" ]]; then
     IFSHOW_MAINLINE_UBOOT=1
 else
     IFSHOW_MAINLINE_UBOOT=0
@@ -424,17 +424,15 @@ sync
 
 rm -f s905_autoscript* aml_autoscript*
 
-if  [ ${U_BOOT_EXT} -eq 1 ]; then
-    if  [ -f ${UBOOT_OVERLOAD} ]; then
-        cp -f -v ${UBOOT_OVERLOAD} u-boot.emmc
-    else
-        cp -f -v u-boot.sd u-boot.emmc
-    fi
+if  [ -f u-boot.ext ]; then
+    cp -f -v u-boot.ext u-boot.emmc
+elif  [ ${U_BOOT_EXT} -eq 1 ]; then
+    cp -f -v u-boot.sd u-boot.emmc
 fi
 
-mv -f boot-emmc.ini boot.ini
-mv -f boot-emmc.cmd boot.cmd
-mv -f boot-emmc.scr boot.scr
+#mv -f boot-emmc.ini boot.ini
+#mv -f boot-emmc.cmd boot.cmd
+#mv -f boot-emmc.scr boot.scr
 sync
 
 echo "Update boot parameters ... "

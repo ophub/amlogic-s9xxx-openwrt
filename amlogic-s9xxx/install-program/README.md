@@ -91,3 +91,21 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 - Boot from USB hard disk: Unplug the power → insert the USB hard disk → insert the thimble into the AV port (top reset button) → insert the power → release the thimble of the av port → the system will boot from the USB hard disk.
 - Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
 
+## Mainline u-boot startup failure
+
+- Some Amlogic S905x3 STB sometimes fail to boot after use the `mainline u-boot`. The fault phenomenon is usually the `=>` prompt of u-boot automatically. The reason is that TTL lacks a pull-up resistor or pull-down resistor and is easily interfered by surrounding electromagnetic signals. The solution is to solder a 5K-10K resistor (pull-down) between TTL RX and GND, or solder a resistor between RX and 3.3V. A resistance of 5K-10K (pull-up).
+- The `mainline u-boot` is not perfect yet, and the install is not prompted by default. The relatively stable BootLoader is currently installed by default.
+- If you are willing to try it, you can use the `openwrt-install TEST-UBOOT` command to install and choose.
+
+```yaml
+#######################################################            #####################################################
+#                                                     #            #                                                   # 
+#   Resistor (pull-down): between TTL's RX and GND    #            #   Resistor (pull-up): between TTL's 3.3V and RX   #
+#                                                     #            #                                                   #
+#            3.3V   RX       TX       GND             #     OR     #        3.3V               RX     TX     GND       #
+#                    ┖————█████████————┚              #            #         ┖————█████████————┚                       #
+#                      Resistor (5~10K)               #            #           Resistor (5~10K)                        #
+#                                                     #            #                                                   #
+#######################################################            #####################################################
+```
+

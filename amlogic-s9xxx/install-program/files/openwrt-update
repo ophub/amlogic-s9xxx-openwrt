@@ -8,6 +8,14 @@
 #======================================================================================
 
 IMG_NAME=${1}
+
+# The MAINLINE_UBOOT is not perfect yet, and the installation is not prompted by default.
+if  [[ "${2}" == "TEST-UBOOT" ]]; then
+    IFSHOW_MAINLINE_UBOOT=1
+else
+    IFSHOW_MAINLINE_UBOOT=0
+fi
+
 EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 cd /mnt/${EMMC_NAME}p4/
 
@@ -366,7 +374,7 @@ chmod 755 ./etc/rc.local*
 
 #Mainline U-BOOT detection
 FLASH_MAINLINE_UBOOT=0
-if  [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" && "${IFSHOW_MAINLINE_UBOOT}" -eq 1 ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
@@ -416,17 +424,15 @@ sync
 
 rm -f s905_autoscript* aml_autoscript*
 
-if  [ ${U_BOOT_EXT} -eq 1 ]; then
-    if  [ -f ${UBOOT_OVERLOAD} ]; then
-        cp -f -v ${UBOOT_OVERLOAD} u-boot.emmc
-    else
-        cp -f -v u-boot.sd u-boot.emmc
-    fi
+if  [ -f u-boot.ext ]; then
+    cp -f -v u-boot.ext u-boot.emmc
+elif  [ ${U_BOOT_EXT} -eq 1 ]; then
+    cp -f -v u-boot.sd u-boot.emmc
 fi
 
-mv -f boot-emmc.ini boot.ini
-mv -f boot-emmc.cmd boot.cmd
-mv -f boot-emmc.scr boot.scr
+#mv -f boot-emmc.ini boot.ini
+#mv -f boot-emmc.cmd boot.cmd
+#mv -f boot-emmc.scr boot.scr
 sync
 
 echo "Update boot parameters ... "

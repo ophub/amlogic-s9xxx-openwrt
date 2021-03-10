@@ -91,13 +91,58 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 - Boot from USB hard disk: Unplug the power → insert the USB hard disk → insert the thimble into the AV port (top reset button) → insert the power → release the thimble of the av port → the system will boot from the USB hard disk.
 - Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
 
-## Mainline u-boot startup failure
+## How to recover if the installation fails and cannot be started
+
+- Under normal circumstances, re-insert the USB hard disk and install it again.
+
+- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic S9xxx STB to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic S9xxx STB to factory settings first, and then reinstall it.
+
+```
+Take x96max+ as an example.
+
+Prepare materials:
+
+1. [ A USB male-to-male data cable ]: https://www.ebay.com/itm/152516378334
+2. [ A paper clip ]: https://www.ebay.com/itm/133577738858
+3. Install the software and Download the Android TV firmware
+   [ Install the USB_Burning_Tool ]: https://androidmtk.com/download-amlogic-usb-burning-tool
+   [ Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
+4. [ Find the two short-circuit points on the motherboard ]:
+   https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
+
+Operation method:
+
+1. Connect the Amlogic S9xxx STB to the computer with a USB male-to-male data cable.
+2. Open the USB Burning Tool:
+   [ Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
+   [ Check ]：Erase flash
+   [ Check ]：Erase bootloader
+   Click to [ Start ] button
+3. Use a paperclip to connect the two short-circuit points on the motherboard at the same time.
+   If the progress bar does not respond after the short-circuit, plug in the power supply after the short-circuit.
+   Generally, there is no need to plug in the power supply.
+4. Loosen the short contact after seeing the progress bar moving.
+5. After the progress bar is 100%, the restoration of the original Android TV system is completed.
+6. If the progress bar is interrupted, repeat the above steps until it succeeds.
+```
+After restoring the factory settings, the operation method is the same as when you install openwrt on the Amlogic S9xxx STB for the first time:
+
+- Make an openwrt mirrored usb hard disk and insert it into the USB port of the Amlogic S9xxx STB. Use a paper clip or other objects to press and hold the reset button in the AV hole, plug in the power, wait 5 seconds and then release the reset button, the system will boot from the USB hard disk, enter the openwrt system, enter The installation command can reinstall openwrt.
+
+## If you can’t startup after using the Mainline u-boot
 
 - Some Amlogic S905x3 STB sometimes fail to boot after use the `mainline u-boot`. The fault phenomenon is usually the `=>` prompt of u-boot automatically. The reason is that TTL lacks a pull-up resistor or pull-down resistor and is easily interfered by surrounding electromagnetic signals. The solution is to solder a 5K-10K resistor (pull-down) between TTL RX and GND, or solder a resistor between RX and 3.3V. A resistance of 5K-10K (pull-up).
 - The `mainline u-boot` is not perfect yet, and the install is not prompted by default. The relatively stable BootLoader is currently installed by default.
-- If you are willing to try it, you can use the `openwrt-install TEST-UBOOT` command to install and choose.
+- If you are willing to try it, you can use the `openwrt-install TEST-UBOOT` command to install and choose. But I strongly recommend that you don't try it. When it is stable, I will enable the recommendation prompt in the install and update script. It is still in the testing period.
 
-```yaml
+If you choose to use the `mainline u-boot` during installation and it fails to start, please connect the Amlogic S905x3 STB to the monitor. If the screen shows the following prompt:
+```
+Net: eth0: ethernet0ff3f0000
+Hit any key to stop autoboot: 0
+=>
+```
+You need to install a resistor on the TTL:
+```
 #######################################################            #####################################################
 #                                                     #            #                                                   # 
 #   Resistor (pull-down): between TTL's RX and GND    #            #   Resistor (pull-up): between TTL's 3.3V and RX   #

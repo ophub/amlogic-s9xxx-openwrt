@@ -104,9 +104,9 @@ Prepare materials:
 
 1. A USB male-to-male data cable
 2. A paper clip
-3. Install the [ recovery software ] and Download the [ Android TV firmware ]
-   [ Install recovery software ]: [USB_Burning_Tool](https://androidmtk.com/download-amlogic-usb-burning-tool)
-   [ Download the Android TV firmware ]: [X96 Max Plus 2 Stock Firmware ROM](https://xdafirmware.com/x96-max-plus-2)
+3. Install the software and Download the Android TV firmware
+   Install the USB_Burning_Tool: https://androidmtk.com/download-amlogic-usb-burning-tool
+   Android TV firmware: https://xdafirmware.com/x96-max-plus-2
 
 Operation method:
 

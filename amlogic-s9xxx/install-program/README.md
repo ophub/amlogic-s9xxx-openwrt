@@ -105,8 +105,8 @@ Prepare materials:
 1. A USB male-to-male data cable
 2. A paper clip
 3. Install the [ recovery software ] and Download the [ Android TV firmware ]
-   [ Install recovery software ]: USB_Burning_Tool_v2.1.6.8
-   [ Download the Android TV firmware ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
+   [ Install recovery software ]: [USB_Burning_Tool](https://androidmtk.com/download-amlogic-usb-burning-tool)
+   [ Download the Android TV firmware ]: [X96 Max Plus 2 Stock Firmware ROM](https://xdafirmware.com/x96-max-plus-2)
 
 Operation method:
 

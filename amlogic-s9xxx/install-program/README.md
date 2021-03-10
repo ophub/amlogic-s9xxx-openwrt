@@ -102,12 +102,12 @@ Take x96max+ as an example.
 
 Prepare materials:
 
-1. A USB male-to-male data cable
-2. A paper clip
+1. [ A USB male-to-male data cable ]: https://www.ebay.com/itm/152516378334
+2. [ A paper clip ]: https://www.ebay.com/itm/133577738858
 3. Install the software and Download the Android TV firmware
    [ Install the USB_Burning_Tool ]: https://androidmtk.com/download-amlogic-usb-burning-tool
    [ Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
-4. Find the two short-circuit points on the motherboard:
+4. [ Find the two short-circuit points on the motherboard ]:
    https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
 
 Operation method:

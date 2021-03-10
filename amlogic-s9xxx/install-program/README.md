@@ -117,7 +117,8 @@ Operation method:
    [ Check ]：Erase bootloader
    Click to [ Start ]
 3. Use a paperclip to connect the two short-circuit points on the motherboard at the same time.
-   (if the progress bar does not respond after the short-circuit, plug in the power supply after the short-circuit. Generally, there is no need to plug in the power supply.)
+   If the progress bar does not respond after the short-circuit, plug in the power supply after the short-circuit.
+   Generally, there is no need to plug in the power supply.
 4. Loosen the short contact after seeing the progress bar moving.
 5. After the progress bar is 100%, the restoration of the original Android TV system is completed.
 6. If the progress bar is interrupted, repeat the above steps until it succeeds.

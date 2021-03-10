@@ -104,9 +104,9 @@ Prepare materials:
 
 1. A USB male-to-male data cable
 2. A paper clip
-3. Download the [ recovery software ] and [ Android TV firmware ]
+3. Install the [ recovery software ] and Download the [ Android TV firmware ]
    [ Install recovery software ]: USB_Burning_Tool_v2.1.6.8
-   [ Unzip and get the Android TV firmware ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
+   [ Download the Android TV firmware ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
 
 Operation method:
 

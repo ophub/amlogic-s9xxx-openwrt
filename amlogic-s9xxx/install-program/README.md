@@ -91,7 +91,7 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 - Boot from USB hard disk: Unplug the power → insert the USB hard disk → insert the thimble into the AV port (top reset button) → insert the power → release the thimble of the av port → the system will boot from the USB hard disk.
 - Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
 
-## How to recover if the installation fails and cannot be started
+## How to recover if the install fails and cannot be started
 
 - Under normal circumstances, re-insert the USB hard disk and install it again.
 

@@ -105,17 +105,17 @@ Prepare materials:
 1. A USB male-to-male data cable
 2. A paper clip
 3. Install the software and Download the Android TV firmware
-   Install the USB_Burning_Tool: https://androidmtk.com/download-amlogic-usb-burning-tool
-   Android TV firmware: https://xdafirmware.com/x96-max-plus-2
+   [ Install the USB_Burning_Tool ]: https://androidmtk.com/download-amlogic-usb-burning-tool
+   [ Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
 
 Operation method:
 
 1. Connect the Amlogic S9xxx STB to the computer with a USB male-to-male data cable.
 2. Open the USB Burning Tool:
-   [ Import image ] X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
+   [ Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
    [ Check ]：Erase flash
    [ Check ]：Erase bootloader
-   Click to [ Start ]
+   Click to [ Start ] button
 3. Use a paperclip to connect the two short-circuit points on the motherboard at the same time.
    If the progress bar does not respond after the short-circuit, plug in the power supply after the short-circuit.
    Generally, there is no need to plug in the power supply.

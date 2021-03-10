@@ -38,6 +38,7 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
     - 10.3 [Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
     - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
     - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)
+    - 10.6 [How to recover if the installation fails and cannot be started](#106-how-to-recover-if-the-installation-fails-and-cannot-be-started)
 
 ## 1. Register your own GitHub account
 

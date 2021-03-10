@@ -235,8 +235,13 @@ utils() {
     if  [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/) 2>/dev/null)
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " Amlogic Box: ${build_op}" >> etc/banner
+        echo " Amlogic SoC: ${build_op}" >> etc/banner
         echo " Kernel: ${op_version}" >> etc/banner
+        if  [[ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" == "5.10" ]]; then
+            echo " Support install to EMMC: No" >> etc/banner
+        else
+            echo " Support install to EMMC: Yes" >> etc/banner
+        fi
         echo " Install command: openwrt-install" >> etc/banner
         echo " Update command: openwrt-update" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner

@@ -98,13 +98,15 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 - If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic S9xxx STB to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic S9xxx STB to factory settings first, and then reinstall it.
 
 ```
+Take x96max+ as an example.
+
 Prepare materials:
 
 1. A USB male-to-male data cable
 2. A paper clip
 3. Download the [ recovery software ] and [ Android TV firmware ]
-   - Install recovery software：USB_Burning_Tool_v2.1.6.8
-   - Unzip and get the x96max+ original Android TV system firmware package：X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
+   [ Install recovery software ]: USB_Burning_Tool_v2.1.6.8
+   [ Unzip and get the Android TV firmware ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
 
 Operation method:
 
@@ -114,13 +116,10 @@ Operation method:
    [ Check ]：Erase flash
    [ Check ]：Erase bootloader
    Click to [ Start ]
-
-3. Use a paperclip to connect the two short-circuit points on the motherboard at the same time (if the progress bar does not respond after the short-circuit, plug in the power supply after the short-circuit. Generally, there is no need to plug in the power supply.)
-
+3. Use a paperclip to connect the two short-circuit points on the motherboard at the same time.
+   (if the progress bar does not respond after the short-circuit, plug in the power supply after the short-circuit. Generally, there is no need to plug in the power supply.)
 4. Loosen the short contact after seeing the progress bar moving.
-
 5. After the progress bar is 100%, the restoration of the original Android TV system is completed.
-
 6. If the progress bar is interrupted, repeat the above steps until it succeeds.
 ```
 After restoring the factory settings, the operation method is the same as when you install openwrt on the Amlogic S9xxx STB for the first time:

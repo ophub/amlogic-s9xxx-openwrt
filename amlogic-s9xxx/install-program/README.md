@@ -97,14 +97,14 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 - The `mainline u-boot` is not perfect yet, and the install is not prompted by default. The relatively stable BootLoader is currently installed by default.
 - If you are willing to try it, you can use the `openwrt-install TEST-UBOOT` command to install and choose.
 
-If you choose to use the main line u-boot during installation and it fails to start, please connect the STB to the monitor. If the screen shows the following prompt:
+If you choose to use the `mainline u-boot` during installation and it fails to start, please connect the Amlogic S905x3 STB to the monitor. If the screen shows the following prompt:
 ```
 Net: eth0: ethernet0ff3f0000
 Hit any key to stop autoboot: 0
 =>
 ```
 You need to install a resistor on the TTL:
-```yaml
+```
 #######################################################            #####################################################
 #                                                     #            #                                                   # 
 #   Resistor (pull-down): between TTL's RX and GND    #            #   Resistor (pull-up): between TTL's 3.3V and RX   #

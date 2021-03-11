@@ -91,7 +91,7 @@ You can refer to the [dtb library](https://github.com/ophub/amlogic-s9xxx-openwr
 - Boot from USB hard disk: Unplug the power → insert the USB hard disk → insert the thimble into the AV port (top reset button) → insert the power → release the thimble of the av port → the system will boot from the USB hard disk.
 - Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
 
-## How to recover if the installation fails and cannot be started
+## How to recover if the install fails and cannot be started
 
 - Under normal circumstances, re-insert the USB hard disk and install it again.
 
@@ -112,17 +112,18 @@ Prepare materials:
 
 Operation method:
 
-1. Connect the Amlogic S9xxx STB to the computer with a USB male-to-male data cable.
+1. Connect the [ Amlogic S9xxx STB ] to the [ computer ] with a [ USB male-to-male data cable ].
 2. Open the USB Burning Tool:
-   [ Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
+   [ File → Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
    [ Check ]：Erase flash
    [ Check ]：Erase bootloader
-   Click to [ Start ] button
-3. Use a paperclip to connect the two short-circuit points on the motherboard at the same time.
-   If the progress bar does not respond after the short-circuit, plug in the power supply after the short-circuit.
+   Click the [ Start ] button
+3. Use a [ paper clip ] to [ connect the two short-circuit points ] on the motherboard at the same time.
+   If the progress bar does not respond after the short-circuit, plug in the [ power ] supply after the short-circuit.
    Generally, there is no need to plug in the power supply.
-4. Loosen the short contact after seeing the progress bar moving.
-5. After the progress bar is 100%, the restoration of the original Android TV system is completed.
+4. Loosen the short contact after seeing the [ progress bar moving ].
+5. After the [ progress bar is 100% ], the restoration of the original Android TV system is completed.
+   Click [ stop ], unplug the [ USB male-to-male data cable ] and [ power ].
 6. If the progress bar is interrupted, repeat the above steps until it succeeds.
 ```
 After restoring the factory settings, the operation method is the same as when you install openwrt on the Amlogic S9xxx STB for the first time:

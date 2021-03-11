@@ -38,6 +38,7 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
     - 10.3 [Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
     - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
     - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)
+    - 10.6 [How to recover if the install fails and cannot be started](#106-how-to-recover-if-the-install-fails-and-cannot-be-started)
 
 ## 1. Register your own GitHub account
 
@@ -333,4 +334,11 @@ When we use `OpenWrt`, we have already configured many software. Most of the `co
 ```
 
 Please do not copy the configuration information files that `involve privacy`. If `your repository is public`, then the files you put in the `files` directory are also `public`. Do not disclose the secrets. Some passwords and other information can be used using the `private key settings` you just learned in [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart). You must understand what you are doing.
+
+### 10.6 How to recover if the install fails and cannot be started
+
+Under normal circumstances, re-insert the USB hard disk and install it again.
+
+- [If you cannot start the OpenWrt system from the USB hard disk again](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program#how-to-recover-if-the-install-fails-and-cannot-be-started)
+- [If you can’t startup after using the Mainline u-boot](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program#if-you-cant-startup-after-using-the-mainline-u-boot)
 

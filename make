@@ -19,7 +19,7 @@ kernel_path=${amlogic_path}/amlogic-kernel
 armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 installfiles_path=${amlogic_path}/install-program/files
-config_files=${amlogic_path}/common-files/files
+configfiles_path=${amlogic_path}/common-files
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -129,13 +129,7 @@ extract_armbian() {
     cp -rf ${root_comm}/* ${root}
 
     # Complete file
-    [ $(ls ${config_files} | wc -w) != 0 ] && cp -r ${config_files}/* ${root}
-    cp -f ${installfiles_path}/openwrt* ${root}/usr/bin/
-    cp -f ${installfiles_path}/fstab.etc ${root}/etc/fstab
-    cp -f ${installfiles_path}/fstab.config ${root}/etc/config/fstab
-    [ -d ${root}/lib/u-boot ] || mkdir -p ${root}/lib/u-boot
-    cp -f ${uboot_path}/with_fip/* ${root}/lib/u-boot/
-    cp -f ${uboot_path}/without_fip/* ${boot}/
+    [ $(ls ${configfiles_path}/files 2>/dev/null | wc -w) != 0 ] && cp -rf ${configfiles_path}/files/* ${root}
     sync
 }
 
@@ -209,6 +203,10 @@ utils() {
     mkdir -p boot run opt
     chown -R 0:0 ./
 
+    # Complete file: openwrt-install openwrt-update
+    [ -f ${root}/usr/bin/openwrt-install ] || cp -f ${installfiles_path}/openwrt-install ${root}/usr/bin/
+    [ -f ${root}/usr/bin/openwrt-update ] || cp -f ${installfiles_path}/openwrt-update ${root}/usr/bin/
+
     #Edit fstab
     ROOTFS_UUID=$(uuidgen)
     #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
@@ -241,9 +239,9 @@ utils() {
             echo " Support install to EMMC: No" >> etc/banner
         else
             echo " Support install to EMMC: Yes" >> etc/banner
+            echo " Install command: openwrt-install" >> etc/banner
+            echo " Update command: openwrt-update" >> etc/banner
         fi
-        echo " Install command: openwrt-install" >> etc/banner
-        echo " Update command: openwrt-update" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi
@@ -265,8 +263,8 @@ utils() {
 
     # Add u-boot.ext for 5.10 kernel
     if [[ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" == "5.10" && -n "${UBOOT_OVERLOAD}" ]]; then
-       if [ -f ${UBOOT_OVERLOAD} ]; then
-          cp -f ${UBOOT_OVERLOAD} u-boot.ext
+       if [ -f ${uboot_path}/${UBOOT_OVERLOAD} ]; then
+          cp -f ${uboot_path}/${UBOOT_OVERLOAD} u-boot.ext
        else
           die "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
        fi

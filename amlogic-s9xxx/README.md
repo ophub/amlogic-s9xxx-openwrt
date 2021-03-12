@@ -16,16 +16,16 @@ The amlogic-s9xxx [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/m
 
 ## amlogic-u-boot
 
-When using the 5.10 kernel version, you need to copy the corresponding `u-boot-*.bin` file to `u-boot.ext` (TF/SD card boot file) and `u-boot.emmc` (EMMC boot file).
+When using the 5.10 kernel version, you need to copy the corresponding [u-boot-*.bin](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-u-boot) file to `u-boot.ext` (TF/SD card boot file) and `u-boot.emmc` (EMMC boot file).
 
 ## common-files
 
-- files: The files in the `files` directory are custom files, which must be completely consistent with the structure and file naming and storage under the ***`root`*** directory in openwrt. If there are files in this directory, they will be automatically copied to the openwrt directory during `sudo ./make`. E.g:
+- files: The files in the [files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files) directory are custom files, which must be completely consistent with the structure and file naming and storage under the ***`root`*** directory in openwrt. If there are files in this directory, they will be automatically copied to the openwrt directory during `sudo ./make`. E.g:
 ```yaml
 etc/config/network
 lib/u-boot
 ```
-- patches: The files in the `patches` directory are patch files, which are integrated when build kernel files.
+- patches: The files in the [patches](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches) directory are patch files, which are integrated when build kernel files.
 
 ## install-program
 

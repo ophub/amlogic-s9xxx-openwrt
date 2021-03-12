@@ -128,7 +128,7 @@ extract_armbian() {
 
     cp -rf ${root_comm}/* ${root}
 
-    # Complete file
+    # Complete file for ${root}: [ /etc ], [ /lib/u-boot ] etc.
     [ $(ls ${configfiles_path}/files 2>/dev/null | wc -w) != 0 ] && cp -rf ${configfiles_path}/files/* ${root}
     sync
 }

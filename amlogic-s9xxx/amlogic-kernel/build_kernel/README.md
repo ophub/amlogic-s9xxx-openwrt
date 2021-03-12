@@ -23,12 +23,12 @@ The second method:
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
  │   ├── boot-5.9.5-flippy-48+.tar.gz
- │   ├── amlogic-dtb-5.9.5-flippy-48+.tar.gz
+ │   ├── dtb-amlogic-5.9.5-flippy-48+.tar.gz
  │   └── modules-5.9.5-flippy-48+.tar.gz
  └── make_use_kernel.sh
 ```
 
-put ***`boot-${flippy_version}.tar.gz, amlogic-dtb-${flippy_version}.tar.gz & modules-${flippy_version}.tar.gz`*** the three files into the ***`${flippy_folder}`*** folder, Modify ${flippy_version} to kernel version. E.g: ***`flippy_version="5.9.5-flippy-48+"`***. ( If the files of ${flippy_version} is not found, Will search for other files in the ${flippy_folder} directory. ) then run the script:
+put ***`boot-${flippy_version}.tar.gz, dtb-amlogic-${flippy_version}.tar.gz & modules-${flippy_version}.tar.gz`*** the three files into the ***`${flippy_folder}`*** folder, Modify ${flippy_version} to kernel version. E.g: ***`flippy_version="5.9.5-flippy-48+"`***. ( If the files of ${flippy_version} is not found, Will search for other files in the ${flippy_folder} directory. ) then run the script:
 ```shell script
 cd build-kernel/
 sudo ./make_use_kernel.sh

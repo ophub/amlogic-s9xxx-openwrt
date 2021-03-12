@@ -374,11 +374,12 @@ opkg list | grep <pkgs>         #Find similar packages names
 
 After you have flashed the OpenWrt firmware to your device, you can install additional software packages via WebUI.
 
-- 1. Navigate to LuCI → System → Software.
-- 2. Click Update lists button to fetch a list of available packages.
-- 3. Fill in Filter field and click Find package button to search for a specific package.
-- 4. Switch to Available packages tab to show and install available packages.
-- 5. Switch to Installed packages tab to show and remove installed packages.
+  - 1. Navigate to LuCI → System → Software.
+  - 2. Click Update lists button to fetch a list of available packages.
+  - 3. Fill in Filter field and click Find package button to search for a specific package.
+  - 4. Switch to Available packages tab to show and install available packages.
+  - 5. Switch to Installed packages tab to show and remove installed packages.
+
 Search and install `luci-app-*` packages if you want to configure services using LuCI.
 
 [For more instructions please see: packages](https://openwrt.org/packages/start)

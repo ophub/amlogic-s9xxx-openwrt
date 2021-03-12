@@ -39,7 +39,8 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
     - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
     - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)
     - 10.6 [Opkg Package Manager](#106-opkg-package-manager)
-    - 10.7 [How to recover if the install fails and cannot be started](#107-how-to-recover-if-the-install-fails-and-cannot-be-started)
+    - 10.7 [Manage packages using web interface](#107-manage-packages-using-web-interface)
+    - 10.8 [How to recover if the install fails and cannot be started](#108-how-to-recover-if-the-install-fails-and-cannot-be-started)
 
 ## 1. Register your own GitHub account
 
@@ -369,7 +370,20 @@ opkg list | grep <pkgs>         #Find similar packages names
 ```
 [For more instructions please see: opkg](https://openwrt.org/docs/guide-user/additional-software/opkg)
 
-### 10.7 How to recover if the install fails and cannot be started
+### 10.7 Manage packages using web interface
+
+After you have flashed the OpenWrt firmware to your device, you can install additional software packages via WebUI.
+
+- 1. Navigate to LuCI → System → Software.
+- 2. Click Update lists button to fetch a list of available packages.
+- 3. Fill in Filter field and click Find package button to search for a specific package.
+- 4. Switch to Available packages tab to show and install available packages.
+- 5. Switch to Installed packages tab to show and remove installed packages.
+Search and install `luci-app-*` packages if you want to configure services using LuCI.
+
+[For more instructions please see: packages](https://openwrt.org/packages/start)
+
+### 10.8 How to recover if the install fails and cannot be started
 
 Under normal circumstances, re-insert the USB hard disk and install it again.
 

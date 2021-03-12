@@ -11,7 +11,7 @@
 # example: ~/*/amlogic-s9xxx/amlogic-kernel/build_kernel/
 # ├── flippy
 # │   ├── boot-5.9.5-flippy-48+.tar.gz
-# │   ├── amlogic-dtb-5.9.5-flippy-48+.tar.gz
+# │   ├── dtb-amlogic-5.9.5-flippy-48+.tar.gz
 # │   └── modules-5.9.5-flippy-48+.tar.gz
 # └── make_use_kernel.sh
 #
@@ -38,7 +38,7 @@ flippy_version="5.9.5-flippy-48+"
 # Default setting ( Don't modify )
 build_tmp_folder=${build_path}/"build_tmp"
 build_boot="boot-${flippy_version}.tar.gz"
-build_dtb="amlogic-dtb-${flippy_version}.tar.gz"
+build_dtb="dtb-amlogic-${flippy_version}.tar.gz"
 build_modules="modules-${flippy_version}.tar.gz"
 build_save_folder=${flippy_version%-flippy*}
 amlogic_path=${build_path%/amlogic-kernel*}
@@ -88,16 +88,15 @@ check_build_files() {
         if  [ $( ls ${flippy_folder}/boot-*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
             build_boot=$( ls ${flippy_folder}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
             flippy_version=${build_boot/boot-/} && flippy_version=${flippy_version/.tar.gz/}
-            build_save_folder=${flippy_version%-flippy*}
-            build_save_folder=$(echo ${build_save_folder} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
+            build_save_folder=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
         else
             echo_color "red" "(1/7) Error: Have no boot-*.tar.gz file found in the ${flippy_folder} directory." "..."
         fi
 
-        if  [ -f ${flippy_folder}/amlogic-dtb-${flippy_version}.tar.gz ]; then
-            build_dtb="amlogic-dtb-${flippy_version}.tar.gz"
+        if  [ -f ${flippy_folder}/dtb-amlogic-${flippy_version}.tar.gz ]; then
+            build_dtb="dtb-amlogic-${flippy_version}.tar.gz"
         else
-            echo_color "red" "(1/7) Error: Have no amlogic-dtb-*.tar.gz file found in the ${flippy_folder} directory." "..."
+            echo_color "red" "(1/7) Error: Have no dtb-amlogic-*.tar.gz file found in the ${flippy_folder} directory." "..."
         fi
 
         if  [ -f ${flippy_folder}/modules-${flippy_version}.tar.gz ]; then
@@ -216,8 +215,6 @@ build_modules() {
      rm -rf ${build_tmp_folder} && sync
      mkdir -p ${build_tmp_folder}/modules/lib/modules
      cp -rf ${flippy_folder}/${build_modules} ${build_tmp_folder}/modules/lib/modules
-     #Add drivers
-     cp -rf ${amlogic_path}/common-files/patches/wireless/* ${build_tmp_folder}/modules/lib/modules/*/kernel/drivers/net/wireless/
      sync
 
   cd ${build_tmp_folder}/modules/lib/modules
@@ -230,6 +227,9 @@ build_modules() {
      else
         echo_color "red" "(3/4) Error build_modules"  "The suffix of ${build_modules} must be .tar.gz or .tar.xz ..."
      fi
+
+     #Add drivers
+     cp -rf ${amlogic_path}/common-files/patches/wireless/* ${flippy_version}/kernel/drivers/net/wireless/
 
   cd ${flippy_version}
      rm -f *.ko

@@ -12,6 +12,10 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.03.12 | All | UPDATE | ✩✩✩✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Optimize the directory structure to increase the readability of the program. |
+| - | All | UPDATE | ✩✩✩ | [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program) | Optimize the `install/update` script. |
+| - | All | ADD | ✩✩✩ | [5.4.105](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.105) | Add New kernel. |
+| - | All | ADD | ✩✩✩ | [5.10.23.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.23.TF) | Add New kernel. |
 | 2021.03.05 | All | ADD | ✩✩✩ | [5.4.101](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.101) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.10.19.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.19.TF) | Add New kernel. |
 | - | All | UPDATE | ✩✩✩ | [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program) | According to the latest kernel, adjusted the `install/update` script. |

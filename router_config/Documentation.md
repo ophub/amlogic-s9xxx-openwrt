@@ -38,7 +38,8 @@ Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on 
     - 10.3 [Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
     - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
     - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)
-    - 10.6 [How to recover if the install fails and cannot be started](#106-how-to-recover-if-the-install-fails-and-cannot-be-started)
+    - 10.6 [Opkg Package Manager]((#106-opkg-package-manager))
+    - 10.7 [How to recover if the install fails and cannot be started](#107-how-to-recover-if-the-install-fails-and-cannot-be-started)
 
 ## 1. Register your own GitHub account
 
@@ -335,7 +336,40 @@ When we use `OpenWrt`, we have already configured many software. Most of the `co
 
 Please do not copy the configuration information files that `involve privacy`. If `your repository is public`, then the files you put in the `files` directory are also `public`. Do not disclose the secrets. Some passwords and other information can be used using the `private key settings` you just learned in [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart). You must understand what you are doing.
 
-### 10.6 How to recover if the install fails and cannot be started
+### 10.6 Opkg Package Manager
+
+Like most Linux distributions (or mobile device operating systems like say Android or iOS), the functionality of the system can be upgraded rather significantly by downloading and installing pre-made packages from package repositories (local or on the Internet).
+
+The opkg utility is the lightweight package manager used for this job. which is designed to add software to stock firmware of embedded devices. Opkg is a full package manager for the root file system, including kernel modules and drivers.
+
+The package manager opkg attempts to resolve dependencies with packages in the repositories - if this fails, it will report an error and abort the installation of that package.
+
+Missing dependencies with third-party packages are probably available from the source of the package.
+To ignore dependency errors, pass the `--force-depends` flag.
+
+- If you are using a snapshot / trunk / bleeding edge version, installing packages may fail if the package in the repository is for a newer kernel version than the kernel version you have.
+In this case, you will get the error message “Cannot satisfy the following dependencies for…”.
+For such usage of OpenWrt firmware, **`it's warmly recommended to use the Image Builder to make a flashable image containing all packages you need`**.
+
+- Non-openwrt.org official plug-ins, such as `luci-app-uugamebooster`, `luci-app-xlnetacc`, etc., need to be personalized during firmware compilation. These packages cannot be directly installed from the mirror server using opkg, But you can manually `upload to openwrt and use opkg to install`.
+
+- When on trunk/snapshot, kernel and kmod packages are flagged as hold, the `opkg upgrade` command won't attempt to update them.
+
+Common commands:
+```
+opkg update                     #Update list of available packages  
+opkg upgrade <pkgs>             #Upgrade packages  
+opkg install <pkgs>             #Install package(s)  
+opkg configure <pkgs>           #Configure unpacked package(s)  
+opkg remove <pkgs | regexp>     #Remove package(s)
+opkg list                       #List available packages  
+opkg list-installed             #List installed packages  
+opkg list-upgradable            #List installed and upgradable packages
+opkg list | grep <pkgs>         #Find similar packages names
+```
+[For more instructions please see: opkg](https://openwrt.org/docs/guide-user/additional-software/opkg)
+
+### 10.7 How to recover if the install fails and cannot be started
 
 Under normal circumstances, re-insert the USB hard disk and install it again.
 

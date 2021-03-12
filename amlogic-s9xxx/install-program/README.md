@@ -142,7 +142,7 @@ Net: eth0: ethernet0ff3f0000
 Hit any key to stop autoboot: 0
 =>
 ```
-You need to install a resistor on the TTL:
+You need to install a resistor on the TTL: https://user-images.githubusercontent.com/68696949/110910162-ec967000-834b-11eb-8fa6-64727ccbe4af.jpg
 ```
 #######################################################            #####################################################
 #                                                     #            #                                                   # 

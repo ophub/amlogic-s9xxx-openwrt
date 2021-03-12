@@ -204,8 +204,8 @@ utils() {
     chown -R 0:0 ./
 
     # Complete file: openwrt-install openwrt-update
-    [ -f ${root}/usr/bin/openwrt-install ] || cp -f ${installfiles_path}/openwrt-install ${root}/usr/bin/
-    [ -f ${root}/usr/bin/openwrt-update ] || cp -f ${installfiles_path}/openwrt-update ${root}/usr/bin/
+    [ -f usr/bin/openwrt-install ] || cp -f ${installfiles_path}/openwrt-install usr/bin/
+    [ -f usr/bin/openwrt-update ] || cp -f ${installfiles_path}/openwrt-update usr/bin/
 
     #Edit fstab
     ROOTFS_UUID=$(uuidgen)

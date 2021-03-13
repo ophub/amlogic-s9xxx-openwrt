@@ -231,7 +231,7 @@ utils() {
 
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then
-        op_version=$(echo $(ls lib/modules/) 2>/dev/null)
+        op_version=$(echo $(ls lib/modules/ 2>/dev/null ))
         op_packaged_date=$(date +%Y-%m-%d)
         echo " Amlogic SoC: ${build_op}" >> etc/banner
         echo " Kernel: ${op_version}" >> etc/banner

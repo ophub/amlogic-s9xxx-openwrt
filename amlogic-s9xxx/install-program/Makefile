@@ -10,8 +10,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=install-program
-PKG_VERSION:=3.3
-PKG_RELEASE:=20210306
+PKG_VERSION:=3.4
+PKG_RELEASE:=20210312
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,12 +37,8 @@ endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/etc/
-	$(INSTALL_DIR) $(1)/etc/config/
 	$(INSTALL_BIN) ./files/openwrt-install $(1)/usr/bin/openwrt-install
 	$(INSTALL_BIN) ./files/openwrt-update $(1)/usr/bin/openwrt-update
-	$(INSTALL_CONF) ./files/fstab.etc $(1)/etc/fstab
-	$(INSTALL_CONF) ./files/fstab.config $(1)/etc/config/fstab
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))

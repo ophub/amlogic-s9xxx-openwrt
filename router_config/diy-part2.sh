@@ -34,6 +34,8 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 # git clone https://github.com/kenzok8/openwrt-packages.git package/openwrt-packages
 # svn co https://github.com/libremesh/lime-packages/trunk/packages/{pirania-app,pirania} package/lean
 git clone https://github.com/libremesh/lime-packages.git package/lean/lime-packages
+sed -i "/DEFAULT_PACKAGES/ s/$/ pirania-app pirania-app/" target/linux/armvirt/Makefile
+
 
 # ==========luci-theme-url==========
 # svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod

@@ -25,7 +25,8 @@
 
 # Add third-party software packages
 # git clone https://github.com/libremesh/lime-packages.git package/lime-packages
-# sed -i "/DEFAULT_PACKAGES/ s/$/ pirania-app pirania ip6tables-mod-nat ipset/" target/linux/armvirt/Makefile
+svn co https://github.com/libremesh/lime-packages/trunk/packages/{shared-state-pirania,pirania-app,pirania} package/lime-packages/packages
+sed -i "/DEFAULT_PACKAGES/ s/$/ pirania-app pirania ip6tables-mod-nat ipset shared-state-pirania uhttpd-mod-lua/" target/linux/armvirt/Makefile
 
 # Apply patch
 # git apply ../router_config/patches/{0001*,0002*}.patch --directory=feeds/luci

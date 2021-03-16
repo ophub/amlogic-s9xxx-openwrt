@@ -36,7 +36,7 @@ openwrt-install
 openwrt-update
 ```
 
-更多安装/升级说明详见 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
+更多安装/升级说明详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
 
 ## OpenWrt固件编译及打包说明
 
@@ -51,7 +51,7 @@ openwrt-update
 
 - ### 仅单独跨仓库引入打包脚本进行固件打包
 
-相关代码可以查看 [For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
+相关代码可以查看 [.yml](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
 
 在你的仓库里，当你完成 ARMv8 类型的 OpenWrt 固件包编译时，可以在流程控制文件 .github/workflows/.yml 中单独引入本仓库的打包脚本进行打包，代码如下:
 
@@ -97,14 +97,14 @@ openwrt-update
       More information ...
 ```
 
-- ### 使用github.com 的 `Releases` 中已有的 rootfs 文件直接进行固件打包
+- ### 使用github.com 的 Releases 中已有的 rootfs 文件直接进行固件打包
 
-如果你仓库的 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中已经有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你可以直接进行打包.
+如果你仓库的 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中已经有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你可以直接进行打包。
 
 - Releases中的 `tag_name` 标签必须以 `openwrt_s9xxx_.*` 的样式进行命名。
 - `openwrt-armvirt-64-default-rootfs.tar.gz` 是打包要使用的文件。
 
-相关代码可以查看 [For more instructions please see: use-releases-file-to-packaging.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-file-to-packaging.yml)
+相关代码可以查看 [use-releases-file-to-packaging.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-file-to-packaging.yml)
 
 ```yaml
 - name: Build OpenWrt firmware
@@ -122,13 +122,13 @@ openwrt-update
     echo "::set-output name=status::success"
 ```
 
-这个功能一般用于更换内核快速打包，如果你的仓库中有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你想使用其他内核版本的 OpenWrt 时，就可以直接指定相关内核进行快速打包了，而不用再进行漫长的固件编译等待。仓库里收藏了 `Flippy` 的很多内核 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 和 Amlogic 的 dtb 文件 [amlogic-s9xxx-STB](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) ，你可以随时调用进行编译。
+这个功能一般用于更换内核快速打包，如果你的仓库中有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你想使用其他内核版本的 OpenWrt 时，就可以直接指定相关内核进行快速打包了，而不用再进行漫长的固件编译等待。仓库里收藏了 `Flippy` 的很多内核 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 和 Amlogic 的 dtb 文件 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) ，你可以随时调用进行编译。
 
 - ### 本地化打包
 
 1. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
-2. 在根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至 `~/amlogic-s9xxx-openwrt/openwrt-armvirt` 目录.
-3. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3_s905d -k 5.4.75_5.9.5` ，打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里.
+2. 在根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。
+3. 进入仓库 `~/amlogic-s9xxx-openwrt` 的根目录中，输入打包命令，如 `sudo ./make -d -b s905x3_s905d -k 5.4.75_5.9.5` ，打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
 
 ## 打包命令的相关参数说明
 
@@ -136,24 +136,24 @@ openwrt-update
 - `sudo ./make -d -b s905x3_s905d -k 5.4.75_5.9.5` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接.
 - `sudo ./make -d` : 使用默认配置，使用内核库中的全部内核包 、对全部型号的机顶盒进行打包（这需要很大很大的空间存储全部固件）.
 - `sudo ./make -d -b s905x3 -k 5.9.2 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为1024M。
-- `sudo ./make -d -b s905x3_s905d`  使用默认配置，对多个型号的机顶盒进行全部内核打包, 使用 `_` 进行多型号连接（这个也需要很大很大的存储空间）。
-- `sudo ./make -d -k 5.4.73_5.9.2` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接.
-- `sudo ./make -d -k latest` : 使用默认配置，最新的内核包，对全部型号的机顶盒进行打包.
+- `sudo ./make -d -b s905x3_s905d`  使用默认配置，对多个型号的机顶盒进行全部内核打包, 使用 `_` 进行多型号连接（也要大空间）。
+- `sudo ./make -d -k 5.4.73_5.9.2` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。
+- `sudo ./make -d -k latest` : 使用默认配置，最新的内核包，对全部型号的机顶盒进行打包。
 - `sudo ./make -d -s 1024 -k 5.7.15` : 使用默认配置，设置固件大小为 1024M, 并指定内核为 5.7.15 ，对全部型号机顶盒进行打包。
-- `sudo ./make -h` : 显示帮助文档.
+- `sudo ./make -h` : 显示帮助文档。
 - `sudo ./make` : 如果你对脚本很熟悉，可以在本地编译时，这样进行问答式参数配置。
 
 | 参数 | 含义 | 说明 |
 | ---- | ---- | ---- |
 | -d | Defaults | 使用默认配置 |
 | -b | Build | 指定机顶盒型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 可以指定的型号有: `s905x3`, `s905x2`, `s905x`, `s905d`, `s922x`, `s912` |
-| -k | Kernel | 指定内核，如 `-k 5.4.50` . 多个内核使用 `_` 进行连接，如 `-k 5.4.50_5.9.5` 内核库请查阅 [View the kernel library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) |
+| -k | Kernel | 指定内核，如 `-k 5.4.50` . 多个内核使用 `_` 进行连接，如 `-k 5.4.50_5.9.5` 内核库请查阅 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) |
 | -s | Size | 对固件的大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
 | -h | help | 展示帮助文档. |
 
 ## 构建更多内核包
 
-***`Flippy`*** 分享了他的众多内核包，让我们在 Amlogic S9xxx 机顶盒中使用 OpenWrt 变的如此简单。我们珍藏了很多内核包，你可以在 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 目录里查阅。如果你想构建内核目录里没有的其他内核，可以使用仓库提供的工具，从 Flippy 分享的 Armbian/OpenWrt/Kernel 等资源中进行自动提取和生成。相关工具见 [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel)
+***`Flippy`*** 分享了他的众多内核包，让我们在 Amlogic S9xxx 机顶盒中使用 OpenWrt 变的如此简单。我们珍藏了很多内核包，你可以在 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 目录里查阅。如果你想构建内核目录里没有的其他内核，可以使用仓库提供的工具，从 Flippy 分享的 Armbian/OpenWrt/Kernel 等资源中进行自动提取和生成。相关工具见 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel)
 
 ## ~/openwrt-armvirt/* 用于打包的文件编译选项
 
@@ -164,7 +164,7 @@ openwrt-update
 | Target Profile | Default |
 | Target Images | squashfs |
 
-更多信息请查阅 [For more instructions please see: router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config)
+更多信息请查阅 [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config)
 
 ## OpenWrt 固件默认信息
 
@@ -176,7 +176,7 @@ openwrt-update
 | 默认 WIFI 名称 | OpenWrt |
 | 默认 WIFI 密码 | none |
 
-## 旁路网管设置
+## 旁路网关设置
 
 如果你的机顶盒以旁路网关的方式运行，你可以根据需要在防火墙中添加路由规则 (网络 → 防火墙 → 自定义路由规则):
 

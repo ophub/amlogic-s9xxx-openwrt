@@ -1,65 +1,393 @@
-# OpenWrt for Amlogic S9xxx STB
+# Use GitHub Actions to compile OpenWrt
 
-You can modify the configuration file, [customize the OpenWrt firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md).
+View Chinese description  |  [查看中文说明](README.cn.md)
 
-## Related script usage instructions
+The method of Use GitHub Actions to compile OpenWrt, as well as many contents in this document, come from many technical innovators and resource sharers such as `P3TERX`, `Flippy`, `tuanqing`, etc. Because of the dedication of everyone, let us use OpenWrt in Amlogic S9xxx STB So Easy.
 
-There are currently two DIY scripts in the root directory of the warehouse: `diy-part1.sh`, `diy-part2.sh` and `.config`, which are executed before and after the update and installation of ` ./scripts/feeds update && ./scripts/feeds install `. You can write the instructions for modifying the source code into the script, such as modifying `the default IP , Host name, theme, add/remove software package...`, etc. If the additional software package has the same name as the existing software package in the OpenWrt source code, the software package with the same name in the OpenWrt source code needs to be deleted, otherwise the packages in OpenWrt will be compiled first. It will automatically traverse all files in the `package` directory when compiling.
+`GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
 
+# Tutorial directory
 
-Just put the `feeds.conf.default` file into the root directory of the warehouse, it will overwrite the relevant files in the OpenWrt source directory. Create a new `files` directory under the root directory of the warehouse, and put the customized related files in the same directory structure as OpenWrt, and the OpenWrt configuration will be overwritten during compilation.
+1. [Register your own GitHub account](#1-register-your-own-github-account)
+2. [Set the privacy variable GitHub_TOKEN](#2-set-the-privacy-variable-github_token)
+3. [Fork repository and set RELEASES_TOKEN](#3-fork-repository-and-set-releases_token)
+4. [Personalized OpenWrt firmware customization file description](#4-personalized-openwrt-firmware-customization-file-description)
+    - 4.1 [.config file description](#41-config-file-description)
+        - 4.1.1 [Let the firmware support the native language](#411-let-the-firmware-support-the-native-language)
+        - 4.1.2 [Select the personalized software package](#412-select-the-personalized-software-package)
+    - 4.2 [DIY script operation: diy-part1.sh and diy-part2.sh](#42-diy-script-operation-diy-part1sh-and-diy-part2sh)
+        - 4.2.1 [Example 1: Add a third-party software package](#example-1-add-a-third-party-software-package)
+        - 4.2.2 [Example 2: Replace the existing software package](#example-2-replace-the-existing-software-package)
+        - 4.2.3 [Example 3: Modifying the code in the source code library](#example-3-modifying-the-code-in-the-source-code-library)
+5. [Compile the firmware](#5-compile-the-firmware)
+    - 5.1 [Manual compilation](#51-manual-compilation)
+    - 5.2 [Compile at the agreed time](#52-compile-at-the-agreed-time)
+6. [Save the firmware](#6-save-the-firmware)
+    - 6.1 [Save to GitHub Actions](#61-save-to-github-actions)
+    - 6.2 [Save to GitHub Releases](#62-save-to-github-releases)
+    - 6.3 [Save to a third party](#63-save-to-a-third-party)
+7. [Download the firmware](#7-download-the-firmware)
+    - 7.1 [Download from GitHub Actions](#71-download-from-github-actions)
+    - 7.2 [Download from GitHub Releases](#72-download-from-github-releases)
+    - 7.3 [Download from third parties](#73-download-from-third-parties)
+8. [Install the firmware](#8-install-the-firmware)
+9. [Update firmware](#9-update-firmware)
+10. [Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
+    - 10.1 [Know the complete .config file](#101-know-the-complete-config-file)
+    - 10.2 [Know the workflow file](#102-know-the-workflow-file)
+    - 10.3 [Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
+    - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
+    - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)
+    - 10.6 [Opkg Package Manager](#106-opkg-package-manager)
+    - 10.7 [Manage packages using web interface](#107-manage-packages-using-web-interface)
+    - 10.8 [How to recover if the install fails and cannot be started](#108-how-to-recover-if-the-install-fails-and-cannot-be-started)
 
+## 1. Register your own GitHub account
 
-On the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Select ***`Build OpenWrt`*** in the list on the left, and Click the ***`Run workflow`*** button on the right. Set ***`SSH connection to Actions: true`*** to use tmate to connect to the `GitHub Actions` virtual server environment. You can directly perform the `make menuconfig` operation to generate the compilation configuration, or any customized operation. After triggering the workflow, wait for the `SSH connection to Actions` step to be executed on the `Actions` page, and then the following three lines of messages will be displayed: 1.` To connect to this session copy-n-paste the following into a terminal or browser`, 2.***` ssh Y26QenMRd@nyc1.tmate.io `***, 3.***` https://tmate.io/t/Y26QenMRd `***. Then copy the `SSH connection command` and paste it into `the terminal` for execution, or copy `the link` to open it in `the browser` and use `the web terminal`. enter the command: ***` cd openwrt && make menuconfig `*** for personalized configuration (The web terminal may encounter a black screen, just press ***`Ctrl+C`***). After completion, press the shortcut key ***` Ctrl+D `*** or execute the ***` exit `*** command to exit, and the subsequent compilation work will proceed automatically.
+Register your own account, so that you can continue to customize the firmware. Click the `Sign up` button in the upper right corner of the `giuhub.com` website and follow the prompts to `register your account`.
 
+## 2. Set the privacy variable GitHub_TOKEN
 
-## Configuration file function description
+Set the GitHub privacy variable `GitHub_TOKEN`. After the firmware is compiled, we need to upload the firmware to `GitHub Releases`. We set this variable according to the official requirements of GitHub. The method is as follows:
+`Personal center`: `Settings` > `Developer settings` > `Personal access tokens` > `Generate new token` ( Name: `GitHub_TOKEN`, Select: `public_repo` ). `Other options` can be selected according to your needs. Submit and save, copy the `Encrypted KEY Value` generated by the system, and `save it` to your computer's notepad first. This value will be used in the next step. The icons are as follows:
 
-| Folder/file name | Features |
-| ---- | ---- |
-| .config | Firmware related configuration, such as firmware kernel, file type, software package, luci-app, luci-theme, etc. |
-| files | Create a files directory under the root directory of the warehouse and put the relevant files in. You can use custom files such as network/dhcp/wireless by default when compiling. |
-| feeds.conf.default | Just put the feeds.conf.default file into the root directory of the warehouse, it will overwrite the relevant files in the OpenWrt source directory. |
-| diy-part1.sh | Execute before updating and installing feeds, you can write instructions for modifying the source code into the script, such as adding/modifying/deleting feeds.conf.default. |
-| diy-part2.sh | After updating and installing feeds, you can write the instructions for modifying the source code into the script, such as modifying the default IP, host name, theme, adding/removing software packages, etc. |
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418474-85032b00-7a03-11eb-85a2-759b0320cc2a.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418479-8b91a280-7a03-11eb-8383-9d970f4fffb6.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418483-90565680-7a03-11eb-8320-0df1174b0267.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418493-9815fb00-7a03-11eb-862e-deca4a976374.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418485-93514700-7a03-11eb-848d-36de784a4438.jpg width="300" />
+</div>
 
+## 3. Fork repository and set RELEASES_TOKEN
 
-## .github/workflow/*.yml related environment variable description
+Now you can `Fork` the `repository`, open the repository [https://github.com/ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt), click the `Fork` button on the `upper right`, Will copy a copy of the repository code to your account, `wait a few seconds`, and prompt the Fork to complete Later, go to your account to access `amlogic-s9xxx-openwrt` in `your repository`. In the upper right corner of `Settings` > `Secrets` > `New repostiory secret` (Name: `RELEASES_TOKEN`, Value: `Fill in the value of GitHub_TOKEN` just now), `save it`. The icons are as follows:
 
-| Environment variable | Features |
-| ---- | ---- |
-| REPO_URL | Source code warehouse address |
-| REPO_BRANCH | Source branch |
-| FEEDS_CONF | Custom feeds.conf.default file name |
-| CONFIG_FILE | Custom .config file name |
-| DIY_P1_SH | Custom diy-part1.sh file name |
-| DIY_P2_SH | Custom diy-part2.sh file name |
-| UPLOAD_BIN_DIR | Upload the bin directory (all ipk files and firmware). Default false |
-| UPLOAD_FIRMWARE | Upload firmware catalog. Default true |
-| UPLOAD_RELEASE | Upload firmware to release. Default true |
-| UPLOAD_COWTRANSFER | Upload the firmware to CowTransfer.com. Default false |
-| UPLOAD_WERANSFER | Upload the firmware to WeTransfer.com. Default failure |
-| RECENT_LASTEST | maximum retention days for release, artifacts and logs in GitHub Release and Actions. |
-| TZ | Time zone setting |
-| GITHUB_REPOSITORY | Github.com Environment variables. The owner and repository name. For example, ophub/op. |
-| secrets.GITHUB_TOKEN | Personal center: Settings → Developer settings → Personal access tokens → Generate new token ( Name: GITHUB_TOKEN, Select: public_repo ). |
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418571-12467f80-7a04-11eb-878e-012c2ba11772.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418573-15417000-7a04-11eb-97a7-93973d7479c2.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418579-1c687e00-7a04-11eb-9941-3d37be9012ef.jpg width="300" />
+</div>
 
-## Firmware compilation parameters
+## 4. Personalized OpenWrt firmware customization file description
 
-| Option | Value |
-| ---- | ---- |
-| Target System | QEMU ARM Virtual Machine |
-| Subtarget | QEMU ARMv8 Virtual Machine(cortex-a53) |
-| Target Profile | Default |
-| Target Images | squashfs |
-| LuCI -> Applications | in the file: .config |
+After the previous 3 steps of preparation, let's start personalized firmware customization now. Have some files in the [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) directory. Except for the description files, the other three are files for customizing OpenWrt firmware. In this chapter, we only make the simplest instructions, so that you can experience the happiness of personalized customization with your hands. I put more complex customization operations in `Section 10`, which requires you to have a little foundation.
 
-## Firmware information
+### 4.1 .config file description
 
-| Name | Value |
-| ---- | ---- |
-| Default IP | 192.168.1.1 |
-| Default username | root |
-| Default password | password |
-| Default WIFI name | OpenWrt |
-| Default WIFI password | none |
+The `.config` file is the core file for personalized customization of the OpenWrt software package. It contains all the configuration information. Each line of code in the file represents a personalized configuration option. Although there are many projects, management is very simple. Let's get started.
+
+#### 4.1.1 Let the firmware support the native language
+
+in `# National language packs, luci-i18n-base:` Take France as an example, if you enable French language support, just put
+
+```yaml
+# CONFIG_PACKAGE_luci-i18n-base-fr is not set
+```
+
+change into
+
+```yaml
+CONFIG_PACKAGE_luci-i18n-base-fr=y
+```
+
+All the personalized customization in the `.config` file can be done in this way. For items you don't need, fill in `#` at the beginning of the line, and change `=y` to `is not set` at the end of the line. For the items you need, remove the `#` at the beginning of the line and change `is not set` to `=y` at the end
+
+#### 4.1.2 Select the personalized software package
+
+in `#LuCI-app:` The practice of enabling and deleting the default software package is the same as above. This time we delete the `luci-app-zerotier` plug-in in the default software package, just put
+
+```yaml
+CONFIG_PACKAGE_luci-app-zerotier=y
+```
+change into
+
+```yaml
+# CONFIG_PACKAGE_luci-app-zerotier is not set
+```
+
+I think you already know how to personalize the configuration. Each line of the `.config` file represents a configuration item. You can use this method to enable or delete the default configuration in the firmware. The complete content of this file has several thousand lines, I provide This is only a simplified version. How to obtain a complete configuration file for more complex and personalized customization is introduced in `Section 10`.
+
+### 4.2 DIY script operation: diy-part1.sh and diy-part2.sh
+
+The scripts `diy-part1.sh` and `diy-part2.sh` are executed `before and after` the `update and installation` of `feeds` respectively. When we introduce the OpenWrt source code library for personalized firmware compilation, sometimes we want to rewrite part of the code in the source code library, or add Some third-party software packages, delete or replace some software packages in the source code library, such as `modifying the default IP, host name, theme, adding/deleting software packages`, etc., these `modification instructions` to the source code library can be written to these two Script. Let's take the `OpenWrt` source code library provided by `coolsnowwolf` as the compilation object, to give a few examples.
+
+Our following operations are based on this source code library: [https://github.com/coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
+
+#### Example 1, Add a third-party software package
+
+The first step is to add the following code to `diy-part2.sh`:
+
+```yaml
+git clone https://github.com/jerrykuku/luci-app-ttnode.git package/lean/luci-app-ttnode
+```
+
+The second step is to add the activation code of this third-party software package to the `.config` file
+
+```yaml
+CONFIG_PACKAGE_luci-app-ttnode=y
+```
+
+This completes the integration of third-party software packages and expands the software packages that are not in the current source code repository.
+
+#### Example 2: Replace the existing software package
+
+Replace the existing software package with the same name in the current source code library with a third-party software package. The first step is to add the following code to `diy-part2.sh`:
+
+First delete the original software package in the source code library, and Introduce a third-party package of the same name.
+
+```yaml
+rm -rf package/lean/luci-theme-argon
+git clone https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
+```
+
+The second step is to add third-party software packages to the `.config` file.
+
+```yaml
+CONFIG_PACKAGE_luci-theme-argon=y
+```
+
+This realizes the use of a third-party software package to replace the existing software package with the same name in the current source code library.
+
+#### Example 3: Modifying the code in the source code library
+
+To achieve certain requirements by modifying the code in the source code library. We have added `luci-app-cpufreq` support for `aarch64` so that it can be used in our firmware (some modifications need to be cautious, you must know what you are doing).
+
+Source file address: [luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/lede/blob/master/package/lean/luci-app-cpufreq/Makefile)
+
+```yaml
+sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
+```
+
+This realizes the modification of the source code.
+
+Through `diy-part1.sh` and `diy-part2.sh` two scripts, we add operation commands to make more powerful functions.
+
+## 5. Compile the firmware
+
+The firmware compilation process is controlled in the [.github/workflows/build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file. There are other `yml files` in the `workflows` directory to achieve other different functions. There are many ways to compile firmware, you can set timed compilation, manual compilation, or set some specific events to trigger compilation. Let's start with simple operations.
+
+### 5.1 Manual compilation
+
+In the `navigation bar of your repository`, click the `Actions` button, and then click `Build OpenWrt` > `Run workflow` > `Run workflow` to start the compilation, wait about `3 hours`, and complete the compilation after all the processes are over. The icons are as follows:
+
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418662-a0226a80-7a04-11eb-97f6-aeb893336e8c.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418663-a31d5b00-7a04-11eb-8d34-57d430696901.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418666-a7497880-7a04-11eb-9ed0-be738e22f7ae.jpg width="300" />
+</div>
+
+### 5.2 Compile at the agreed time
+
+In the [.github/workflows/build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file, use `cron` to set the timing compilation. The 5 different positions represent min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday). Set the time by modifying the values of different positions. The system uses `UTC standard time` by default, please convert it according to the time zone of your country.
+
+```yaml
+schedule:
+  - cron: '0 17 * * *'
+```
+
+## 6. Save the firmware
+
+The settings saved by the firmware are also controlled in the [.github/workflows/build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file. We will automatically upload the compiled firmware to the `Actions` and `Releases` officially provided by `GitHub` through scripts, or upload it to a `third party` (such as WeTransfer).
+
+Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is permanent`, and third parties such as WeTransfer are 7 days. First of all, we thank these service providers for their free support, but we also ask you to use it sparingly. We advocate the reasonable use of free services.
+
+### 6.1 Save to GitHub Actions
+
+```yaml
+- name: Upload artifact to Actions
+  uses: kittaakos/upload-artifact-as-is@master
+  if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+  with:
+    path: ${{ env.FILEPATH }}/
+```
+
+### 6.2 Save to GitHub Releases
+
+```yaml
+- name: Upload OpenWrt Firmware to Release
+  uses: softprops/action-gh-release@v1
+  if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  with:
+    tag_name: openwrt_s9xxx_${{ env.FILE_DATE }}
+    files: ${{ env.FILEPATH }}/*
+    body: |
+      This is OpenWrt firmware for Amlogic S9xxx STB
+      * Firmware information
+      Default IP: 192.168.1.1
+      Default username: root
+      Default password: password
+      Default WIFI name: OpenWrt
+      Default WIFI password: none
+      Install command: openwrt-install
+      Update command: openwrt-update
+```
+### 6.3 Save to a third party
+
+```yaml
+- name: Upload OpenWrt Firmware to WeTransfer
+  if: steps.build.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+  run: |
+    curl -fsSL git.io/file-transfer | sh
+    ./transfer wet -s -p 16 --no-progress ${{ env.FILEPATH }}/{openwrt_s9xxx_*,openwrt_n1_*} 2>&1 | tee wetransfer.log
+    echo "WET_URL=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV
+```
+
+## 7. Download the firmware
+
+Download our compiled openwrt firmware.
+
+### 7.1 Download from GitHub Actions
+
+Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic S9xxx STB`. The icons are as follows: 
+
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418782-08714c00-7a05-11eb-9556-91575640a4bb.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418785-0ad3a600-7a05-11eb-9fdd-519835a14eaa.jpg width="300" />
+</div>
+
+### 7.2 Download from GitHub Releases
+
+Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic S9xxx STB`. The icons are as follows:
+
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418841-55edb900-7a05-11eb-9650-7100ebd6042c.jpg width="300" />
+</div>
+
+### 7.3 Download from third parties
+
+In the [.github/workflows/build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file, upload to the third party is closed by default. If you need, change `false` to `true`, and upload to the third party when the compilation is completed next time. The third-party URL can be seen `in the log` of the firmware compilation process, and can also be output to the compilation information.
+
+```yaml
+UPLOAD_COWTRANSFER: false
+UPLOAD_WETRANSFER: false
+```
+
+The support for uploading to a third party comes from [Mikubill/transfer](https://github.com/Mikubill/transfer). If you need it, you can add more third-party support according to his instructions (control your creativity and don't waste too many free resources). The icons are as follows:
+
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418921-b5e45f80-7a05-11eb-80ba-02edb0698270.jpg width="300" />
+</div>
+
+## 8. Install the firmware
+
+After downloading the compiled firmware, `decompress it` to get the `OpenWrt.img` file (the file name varies according to the `Amlogic S9xxx STB`), use a mirror writing tool such as `balenaEtcher` to write the `OpenWrt.img` file to the `USB hard disk`, and then insert the USB hard disk In the USB port of your `Amlogic S9xxx STB`, plug in the power and turn on the computer. Wait about `1 minute` to complete the `OpenWrt system startup`. Connect the `Amlogic S9xxx STB` to your computer directly with a network cable.
+
+In the wired network settings of `your computer`, change the IPV4 `IP` to manual settings, fill in the IP `192.168.1.2`, fill in the subnet mask `255.255.255.0`, and leave the other blanks blank.
+
+Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is `root` and the default password is `password`. After logging in, under the `System` menu, select the `TTYD terminal`, enter `openwrt-install` directly, and `press Enter`. Automatic installation. During the process, let you choose the type of your `Amlogic S9xxx STB`, fill in the serial number correctly, such as `13`, `enter and press Enter` to continue the installation. The firmware will be written into the `EMMC` of the `Amlogic S9xxx STB`. After the prompt is complete, `unplug the USB hard drive`, `unplug the power supply`, and `reinsert the power supply`. OpenWrt will boot from the `EMMC` partition of the `Amlogic S9xxx STB`. Wait `1 minute` to log in. The IP is still `192.168.1.1`, and the account password is still the `default`. (If you don’t like to write to the `EMMC` of the `Amlogic S9xxx STB`, you can `always plug in the USB hard disk and use OpenWrt in the USB`. The EMMC system responds `faster` to the USB hard disk.)
+
+More detailed operations can be viewed in the detailed installation instructions of the repository: [amlogic-s9xxx/install-program](https://github.com/ophub/amlogic-s9xxx-OpenWrt/tree/main/amlogic-s9xxx/install-program)
+
+## 9. Update firmware
+
+`Log in to your OpenWrt system`, under the `System` menu, select the `File Transfer` function to `upload the OpenWrt.img.gz firmware`, and `wait a while`, and see the system prompts that the `upload is complete`, select the `System menu` > `TTYD terminal` , and enter the `openwrt-update` command to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+
+## 10. Personalized firmware customization update tutorial
+
+If you see this step in the tutorial, I believe you already know how to play happily. If you don’t continue to read what is said later, I believe you will not be at ease. But, but ah, if you continue to explore in depth, you will start an extraordinary journey of tossing. You will encounter a lot of problems. This requires you to be prepared for continuous exploration, and you must be good at using `search engines` to solve problems. The time can go to various `OpenWrt communities` to learn.
+
+### 10.1 Know the complete .config file
+
+Use the official source code library of `OpenWrt` or the source code library of other branches to perform a `localized compilation`. For example, select the source code library of [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede), and install the `Ubuntu system` locally and deploy the environment according to its compilation instructions. And `complete a local compilation`. In the local compilation configuration interface, you can also see a lot of rich instructions, which will strengthen your understanding of the OpenWrt compilation process.
+
+After you complete the `OpenWrt personalized configuration` locally, `save and exit` the configuration interface. You can find the `.config` file in the root directory of the local OpenWrt source code library. You can upload this file directly to `your repository on github.com`, Replace the `router_config/.config` file.
+
+### 10.2 Know the workflow file
+
+The official GitHub gave a detailed explanation. Regarding the use of `GitHub Actions`, you can start to get to know it from here: [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart)
+
+### 10.3 Use SSH to remotely connect to GitHub Actions
+
+You have performed `localization compilation` in 10.1 and have a certain understanding of related interactive interfaces. This experience is very useful. In the future, you can implement the same operations as localization in the cloud compilation of `GitHub Actions`.
+
+When `manually starting the GitHub Actions` firmware compilation, change the value of `SSH connection to Actions` from the default `false` to `true`, and then wait about `10 minutes` in the `workflow`. When the compilation process completes the previous steps and arrives at the step of `SSH connection to Actions`, You can see the green `SSH remote connection command` and `browser access URL` from the `running log`. It is recommended to copy the green `SSH remote connection command`, `paste` the command in the SSH running terminal and press `Enter`, press the `q` key to enter the control panel according to the prompt, and enter `cd OpenWrt && make menuconfig` command to enter the OpenWrt personalized configuration options panel, `save` and exit after completing various operations, press `ctrl + d` to `exit` the SSH remote connection process, and let GitHub Actions continue to compile.
+
+During SSH operation, copy the green SSH remote connection command in `ssh...io`. Apple MAC computers can directly use the `terminal` that comes with the system. If you have `OpenWrt` running, you can use the `TTYD terminal` under its system menu. If your computer has software such as `SecureCRT` or `PuTTY` installed, you can use any software that supports the SSH protocol.
+
+If you don't have any SSH terminal, you can copy the `https://tma...` URL under the green URL, open it in a `browser`, and enter the same command as in the terminal according to the prompt. The browser's response speed may be slower than SSH, so be patient. The icons are as follows:
+
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/109418960-e1ffe080-7a05-11eb-94f6-2c9bd8f5481c.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418962-e4fad100-7a05-11eb-87af-e924d4ff3da6.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/109418965-e926ee80-7a05-11eb-8f25-4443b9f845f7.jpg width="300" />
+</div>
+
+### 10.4 Custom feeds configuration file
+
+When you look at the `feeds.conf.default` file in the `source code repository`, do you find that there are a lot of package libraries introduced here? You understand that right, we can find the source code library officially provided by OpenWrt on GitHub, as well as the branches of OpenWrt shared by many people. If you know them, you can add them from here. For example, [feeds.conf.default](https://github.com/coolsnowwolf/lede/blob/master/feeds.conf.default) in the `coolsnowwolf` source code library.
+
+### 10.5 Custom software default configuration information
+
+When we use `OpenWrt`, we have already configured many software. Most of the `configuration information` of these software is stored in your OpenWrt's `/etc/config/` and other related directories. Copy the storage files of these configuration information to In the `files` folder under the root directory of the `repository in GitHub`, please `keep the directory structure and files the same`. During OpenWrt compilation, the storage files of these configuration information will be compiled into your firmware. The specific method is in the [.github/workflows/build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) file. Let's take a look at this code together:
+
+```yaml
+- name: Load custom configuration
+  run: |
+    [ -e files ] && mv files openwrt/files
+    [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+    chmod +x $DIY_P2_SH
+    cd openwrt
+    $GITHUB_WORKSPACE/$DIY_P2_SH
+```
+
+Please do not copy the configuration information files that `involve privacy`. If `your repository is public`, then the files you put in the `files` directory are also `public`. Do not disclose the secrets. Some passwords and other information can be used using the `private key settings` you just learned in [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart). You must understand what you are doing.
+
+### 10.6 Opkg Package Manager
+
+Like most Linux distributions (or mobile device operating systems like say Android or iOS), the functionality of the system can be upgraded rather significantly by downloading and installing pre-made packages from package repositories (local or on the Internet).
+
+The opkg utility is the lightweight package manager used for this job. which is designed to add software to stock firmware of embedded devices. Opkg is a full package manager for the root file system, including kernel modules and drivers.
+
+The package manager opkg attempts to resolve dependencies with packages in the repositories - if this fails, it will report an error and abort the installation of that package.
+
+Missing dependencies with third-party packages are probably available from the source of the package.
+To ignore dependency errors, pass the `--force-depends` flag.
+
+- If you are using a snapshot / trunk / bleeding edge version, installing packages may fail if the package in the repository is for a newer kernel version than the kernel version you have.
+In this case, you will get the error message “Cannot satisfy the following dependencies for…”.
+For such usage of OpenWrt firmware, **`it's warmly recommended to use the Image Builder to make a flashable image containing all packages you need`**.
+
+- Non-openwrt.org official plug-ins, such as `luci-app-uugamebooster`, `luci-app-xlnetacc`, etc., need to be personalized during firmware compilation. These packages cannot be directly installed from the mirror server using opkg, But you can manually `upload to openwrt and use opkg to install`.
+
+- When on trunk/snapshot, kernel and kmod packages are flagged as hold, the `opkg upgrade` command won't attempt to update them.
+
+Common commands:
+```
+opkg update                     #Update list of available packages  
+opkg upgrade <pkgs>             #Upgrade packages  
+opkg install <pkgs>             #Install package(s)  
+opkg configure <pkgs>           #Configure unpacked package(s)  
+opkg remove <pkgs | regexp>     #Remove package(s)
+opkg list                       #List available packages  
+opkg list-installed             #List installed packages  
+opkg list-upgradable            #List installed and upgradable packages
+opkg list | grep <pkgs>         #Find similar packages names
+```
+[For more instructions please see: opkg](https://openwrt.org/docs/guide-user/additional-software/opkg)
+
+### 10.7 Manage packages using web interface
+
+After you have flashed the OpenWrt firmware to your device, you can install additional software packages via WebUI.
+
+1. Navigate to LuCI → System → Software.
+2. Click Update lists button to fetch a list of available packages.
+3. Fill in Filter field and click Find package button to search for a specific package.
+4. Switch to Available packages tab to show and install available packages.
+5. Switch to Installed packages tab to show and remove installed packages.
+
+Search and install `luci-app-*` packages if you want to configure services using LuCI.
+
+[For more instructions please see: packages](https://openwrt.org/packages/start)
+
+### 10.8 How to recover if the install fails and cannot be started
+
+Under normal circumstances, re-insert the USB hard disk and install it again.
+
+- [If you cannot start the OpenWrt system from the USB hard disk again](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program#how-to-recover-if-the-install-fails-and-cannot-be-started)
+- [If you can’t startup after using the Mainline u-boot](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program#if-you-cant-startup-after-using-the-mainline-u-boot)
+

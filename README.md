@@ -157,7 +157,7 @@ This function is suitable for the needs of replacing the [kernel](https://github
 
 ***`Flippy`*** has shared with us dozens of versions of firmware, Brings unlimited freedom to Amlogic S9xxx STB. We have stored some of the latest kernels in the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) directory. If you think it’s not enough, or you don’t find the version you miss, you can use the kernel build tool to add the `Flippy kernel` to the Kernel library of the repository, and package the version of openwrt firmware you want. [For more instructions please see: build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel)
 
-## ~/openwrt-armvirt/* Firmware compilation parameters
+## ~/openwrt-armvirt/*-rootfs.tar.gz Firmware compilation parameters
 
 | Option | Value |
 | ---- | ---- |

@@ -1,5 +1,7 @@
 # install-program
 
+View Chinese description  |  [查看中文说明](README.cn.md)
+
 Install and Update openwrt to emmc for Amlogic S9xxx STB.
 
 ## Instructions

@@ -6,7 +6,7 @@
 
 最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。一些重要的更新内容可以在 [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) 中查阅。
 
-本仓库的 OpenWrt 固件打包使用了 ***`Flippy's`*** 的 Amlogic S9xxx 内核，以及安装/升级脚本等众多资源。欢迎你 `Forks` 并进行个性化软件包定制  [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md) 。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
+本仓库的 OpenWrt 固件打包使用了 ***`Flippy's`*** 的 Amlogic S9xxx 内核，以及安装/升级脚本等众多资源。欢迎你 `Fork` 并进行 [个性化软件包定制](router_config/README.cn.md) 。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
 
 ## OpenWrt固件说明
 
@@ -38,7 +38,7 @@ openwrt-install
 openwrt-update
 ```
 
-更多安装/升级说明详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
+更多安装/升级说明详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program/README.cn.md)
 
 ## OpenWrt固件编译及打包说明
 
@@ -48,8 +48,8 @@ openwrt-update
 
 你可以通过修改 `router_config` 目录的相关个性化固件配置文件，以及 `.yml` 文件, 自定义和编译适合你的 OpenWrt 固件,  固件可以上传至 github.com 的 `Actions` 和 `Releases` 等处.
 
-1. 你可以在 [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config) 目录里进行个性化固件配置. 编译流程控制文件是 [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) 
-2. 在github.com的 [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) 选择 ***`Build OpenWrt`*** . 点击 ***`Run workflow`*** 按钮进行固件一站式编译和打包。
+1. 你可以在 [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config/README.cn.md) 中查看个性化固件配置说明。编译流程控制文件是 [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml) 
+2. 在 github.com 的 [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) 选择 ***`Build OpenWrt`*** . 点击 ***`Run workflow`*** 按钮进行固件一站式编译和打包。
 
 - ### 仅单独跨仓库引入打包脚本进行固件打包
 
@@ -99,7 +99,7 @@ openwrt-update
       More information ...
 ```
 
-- ### 使用github.com 的 Releases 中已有的 rootfs 文件直接进行固件打包
+- ### 使用 github.com 的 Releases 中已有的 rootfs 文件直接进行固件打包
 
 如果你仓库的 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中已经有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你可以直接进行打包.
 
@@ -155,9 +155,9 @@ openwrt-update
 
 ## 构建更多内核包
 
-***`Flippy`*** 分享了他的众多内核包，让我们在 Amlogic S9xxx 机顶盒中使用 OpenWrt 变的如此简单。我们珍藏了很多内核包，你可以在 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 目录里查阅。如果你想构建内核目录里没有的其他内核，可以使用仓库提供的工具，从 Flippy 分享的 Armbian/OpenWrt/Kernel 等资源中进行自动提取和生成。相关工具见 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel)
+***`Flippy`*** 分享了他的众多内核包，让我们在 Amlogic S9xxx 机顶盒中使用 OpenWrt 变的如此简单。我们珍藏了很多内核包，你可以在 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 目录里查阅。如果你想构建内核目录里没有的其他内核，可以使用仓库提供的工具，从 Flippy 分享的 Armbian/OpenWrt/Kernel 等资源中进行自动提取和生成。相关工具见 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.cn.md)
 
-## ~/openwrt-armvirt/* 用于打包的文件编译选项
+## ~/openwrt-armvirt/*-rootfs.tar.gz 用于打包的文件编译选项
 
 | Option | Value |
 | ---- | ---- |
@@ -166,7 +166,7 @@ openwrt-update
 | Target Profile | Default |
 | Target Images | squashfs |
 
-更多信息请查阅 [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config)
+更多信息请查阅 [router_config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router_config/README.cn.md)
 
 ## OpenWrt 固件默认信息
 

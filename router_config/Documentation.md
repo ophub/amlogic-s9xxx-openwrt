@@ -1,6 +1,6 @@
 # Use GitHub Actions to compile OpenWrt
 
-View Chinese description  |  [查看中文说明](README.cn.md)
+View Chinese description  |  [查看中文说明](Documentation.cn.md)
 
 The Documentation idea of this repository comes from [Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt) shared by P3TERX. The tutorial mainly relies on his Chinese instruction document, and some instructions applicable to `OpenWrt for Amlogic S9xxx STB` were added during the writing process. If you understand Chinese, you can check his Chinese documentation in his repository.
 

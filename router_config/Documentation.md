@@ -1,10 +1,8 @@
 # Use GitHub Actions to compile OpenWrt
 
-View Chinese description  |  [查看中文说明](Documentation.cn.md)
+View Chinese description  |  [查看中文说明](README.cn.md)
 
-The Documentation idea of this repository comes from [Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt) shared by P3TERX. The tutorial mainly relies on his Chinese instruction document, and some instructions applicable to `OpenWrt for Amlogic S9xxx STB` were added during the writing process. If you understand Chinese, you can check his Chinese documentation in his repository.
-
-Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on the packaging script provided by `tuanqing`, based on the `OpenWrt for Amlogic S9xxx STB` kernel files and installation/update scripts and other resources provided by `Flippy`, I integrated them together. Share with friends who use the `OpenWrt` system on `Amlogic S9xxx STB`, so that you have more choices when customizing your personalized software package. Due to my limited programming skills and limited language skills, if there are errors in the content, please correct me, and I would like to express my gratitude.
+The method of Use GitHub Actions to compile OpenWrt, as well as many contents in this document, come from many technical innovators and resource sharers such as `P3TERX`, `Flippy`, `tuanqing`, etc. Because of the dedication of everyone, let us use OpenWrt in Amlogic S9xxx STB So Easy.
 
 `GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
 

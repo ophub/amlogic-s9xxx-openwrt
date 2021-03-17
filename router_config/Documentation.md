@@ -1,5 +1,7 @@
 # Use GitHub Actions to compile OpenWrt
 
+View Chinese description  |  [查看中文说明](Documentation.cn.md)
+
 The Documentation idea of this repository comes from [Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt) shared by P3TERX. The tutorial mainly relies on his Chinese instruction document, and some instructions applicable to `OpenWrt for Amlogic S9xxx STB` were added during the writing process. If you understand Chinese, you can check his Chinese documentation in his repository.
 
 Based on the GitHub Actions compilation tutorial provided by `P3TERX`, based on the packaging script provided by `tuanqing`, based on the `OpenWrt for Amlogic S9xxx STB` kernel files and installation/update scripts and other resources provided by `Flippy`, I integrated them together. Share with friends who use the `OpenWrt` system on `Amlogic S9xxx STB`, so that you have more choices when customizing your personalized software package. Due to my limited programming skills and limited language skills, if there are errors in the content, please correct me, and I would like to express my gratitude.

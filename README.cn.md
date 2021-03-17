@@ -6,7 +6,7 @@
 
 最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。一些重要的更新内容可以在 [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) 中查阅。
 
-本仓库的 OpenWrt 固件打包使用了 ***`Flippy's`*** 的 Amlogic S9xxx 内核，以及安装/升级脚本等众多资源。欢迎你 `Forks` 并进行 [个性化软件包定制](router_config/Documentation.cn.md) 。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
+本仓库的 OpenWrt 固件打包使用了 ***`Flippy's`*** 的 Amlogic S9xxx 内核，以及安装/升级脚本等众多资源。欢迎你 `Fork` 并进行 [个性化软件包定制](router_config/Documentation.cn.md) 。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
 
 ## OpenWrt固件说明
 

@@ -6,7 +6,7 @@ Support `github.com One-stop compilation`, `github.com clone packaging`, `Use gi
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
-This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel for OpenWrt, and the Install and update scripts, etc. Welcome to use `Forks` for [personalized OpenWrt firmware configuration](router_config/Documentation.md) | [查看个性化 OpenWrt 固件定制中文说明](router_config/Documentation.cn.md). If you like it, Please click the `Star`.
+This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel for OpenWrt, and the Install and update scripts, etc. Welcome to use `Fork` for [personalized OpenWrt firmware configuration](router_config/Documentation.md) | [查看个性化 OpenWrt 固件定制中文说明](router_config/Documentation.cn.md). If you like it, Please click the `Star`.
 
 ## OpenWrt Firmware instructions
 

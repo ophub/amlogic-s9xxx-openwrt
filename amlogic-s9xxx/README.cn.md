@@ -22,7 +22,7 @@ Armbian 相关文件存储目录。这里存放的文件是打包 OpenWrt 时使
 
 ## common-files
 
-- files: 这里存放的是 OpenWrt 固件的个性化配置文件，将在打包脚本 `sudo ./make` 执行时自动将相关文件集成到你的固件里，俗称 files 大法。相关目录及文件命名均须与 OpenWrt 中 root 分区 ( 即在TTYD 终端里输入： `cd / && ls .` 你所看到的目录及各目录里面的文件名称 ) 保持完全一致。你的网络配置文件，广告过滤插件的配置文件等均可以通过这样的方式自动集成（推荐你将 nerwork 文件等内容格式比较固定的配置文件放置于此，但是有些插件升级变化太大，可能与最新插件不兼容，你这样放置时可能导致因为配置文件不兼容而出现奇怪的现象。files 大法虽好，但一定要熟知你添加的配置文件，在安装后若有问题，可以把相关插件的配置文件先删除，再手动重新配置）。具体的例子请查看  [files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files) 
+- files: 这里存放的是 OpenWrt 固件的个性化配置文件，将在打包脚本 `sudo ./make` 执行时自动将相关文件集成到你的固件里，俗称 files 大法。相关目录及文件命名均须与 OpenWrt 中 ROOTFS 分区 ( 即在TTYD 终端里输入： `cd / && ls .` 你所看到的目录及各目录里面的文件名称 ) 保持完全一致。你的网络配置文件，广告过滤插件的配置文件等均可以通过这样的方式自动集成（推荐你将 nerwork 文件等内容格式比较固定的配置文件放置于此，但是有些插件升级变化太大，可能与最新插件不兼容，你这样放置时可能导致因为配置文件不兼容而出现奇怪的现象。files 大法虽好，但一定要熟知你添加的配置文件，在安装后若有问题，可以把相关插件的配置文件先删除，再手动重新配置）。具体的例子请查看  [files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files) 
 ```yaml
 etc/config/network
 lib/u-boot

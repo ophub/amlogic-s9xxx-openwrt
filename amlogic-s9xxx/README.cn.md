@@ -14,7 +14,7 @@ Armbian 相关文件存储目录。这里存放的文件是打包 OpenWrt 时使
 
 ## amlogic-kernel
 
-这是各版本内核的存放目录，集中珍藏了 Flippy 分享的众多内核。具体详见 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 。 如果目录中没有你要的内核，你可以通过内核提取工具从 Flippy 的Armbian/OpenWrt/kernel 等文件中提取生成，相关工具及使用方法查阅 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel) 
+这是各版本内核的存放目录，集中珍藏了 Flippy 分享的众多内核。具体详见 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 。 如果目录中没有你要的内核，你可以通过内核提取工具从 Flippy 的Armbian/OpenWrt/kernel 等文件中提取生成，相关工具及使用方法查阅 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.cn.md) 
 
 ## amlogic-u-boot
 
@@ -35,5 +35,5 @@ lib/u-boot
 
 - Install command: `openwrt-install`
 
-更多安装/升级功能介绍详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
+更多安装/升级功能介绍详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.cn.md)
 

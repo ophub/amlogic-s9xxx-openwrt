@@ -35,6 +35,8 @@ The method of Use GitHub Actions to compile OpenWrt, as well as many contents in
 10. [Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
     - 10.1 [Know the complete .config file](#101-know-the-complete-config-file)
     - 10.2 [Know the workflow file](#102-know-the-workflow-file)
+        - 10.2.1 [Replacing source code repositories and branches](#1021-replacing-source-code-repositories-and-branches)
+        - 10.2.2 [Change STB model and kernel version](#1022-change-stb-model-and-kernel-version)
     - 10.3 [Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
     - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
     - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)

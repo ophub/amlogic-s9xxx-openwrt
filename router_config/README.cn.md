@@ -35,6 +35,8 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
 10. [个性化固件定制晋级教程](#10-个性化固件定制晋级教程)
     - 10.1 [认识完整的 .config 文件](#101-认识完整的-config-文件)
     - 10.2 [认识 workflow 文件](#102-认识-workflow-文件)
+        - 10.2.1 [更换编译源码库的地址和分支](#1021-更换编译源码库的地址和分支)
+        - 10.2.2 [更改盒子的型号和内核版本号](#1022-更改盒子的型号和内核版本号)
     - 10.3 [使用 SSH 远程连接 GitHub Actions 进行个性化配置](#103-使用-ssh-远程连接-github-actions-进行个性化配置)
     - 10.4 [自定义 feeds 配置文件](#104-自定义-feeds-配置文件)
     - 10.5 [自定义软件默认配置信息](#105-自定义软件默认配置信息)
@@ -290,6 +292,45 @@ UPLOAD_WETRANSFER: false
 ### 10.2 认识 workflow 文件
 
 GitHub官方给出了详细的说明，关于 GitHub Actions 的使用方法，你可以从这里开始认识它: [GitHub Actions 快速入门](https://docs.github.com/cn/actions/quickstart)
+
+让我们以现在仓库中正在使用的这个编译流程控制文件为例简单介绍下: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
+
+#### 10.2.1 更换编译源码库的地址和分支
+
+
+```yaml
+#在第24行: 是指定openwrt编译源码的地址
+REPO_URL: https://github.com/coolsnowwolf/lede
+
+#在第25行: 是指定分支的名称
+REPO_BRANCH: master
+```
+你可以修改成其他源码库的地址，如采用官方的源码库，使用其 `openwrt-19.07` 分支:
+```yaml
+REPO_URL: https://github.com/openwrt/openwrt
+REPO_BRANCH: openwrt-19.07
+```
+
+#### 10.2.2 更改盒子的型号和内核版本号
+
+在第153行附近, 查找标题为 `Build OpenWrt firmware` 的编译步骤, 其代码块类似这样:
+```yaml
+    - name: Build OpenWrt firmware
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      id: build
+      run: |
+        [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
+        cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+        sudo rm -rf openwrt && sync
+        sudo rm -rf /workdir && sync
+        sudo chmod +x make
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.23.TF_5.4.105
+        cd out/ && sudo gzip *.img
+        cp -f ../openwrt-armvirt/*.tar.gz . && sync
+        echo "FILEPATH=$PWD" >> $GITHUB_ENV
+        echo "::set-output name=status::success"
+```
+修改 `-d` 后面的参数为你的机顶盒的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.7.2` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/codesnas/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
 
 ### 10.3 使用 SSH 远程连接 GitHub Actions 进行个性化配置
 

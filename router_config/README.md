@@ -303,7 +303,7 @@ After you complete the `OpenWrt personalized configuration` locally, `save and e
 
 The official GitHub gave a detailed explanation. Regarding the use of `GitHub Actions`, you can start to get to know it from here: [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart)
 
-Let’s make a few brief introductions based on the files being used in the warehouse: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
+Let’s make a few brief introductions based on the files being used in the repository: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
 
 #### 10.2.1 Replacing source code repositories and branches
 

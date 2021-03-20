@@ -293,7 +293,7 @@ UPLOAD_WETRANSFER: false
 
 GitHub官方给出了详细的说明，关于 GitHub Actions 的使用方法，你可以从这里开始认识它: [GitHub Actions 快速入门](https://docs.github.com/cn/actions/quickstart)
 
-Let’s make a few brief introductions based on the files being used in the warehouse: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
+让我们以现在仓库中正在使用的这个编译流程控制文件为例简单介绍下: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
 
 #### 10.2.1 更换编译源码库的地址和分支
 

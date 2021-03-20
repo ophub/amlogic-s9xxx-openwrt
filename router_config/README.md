@@ -35,6 +35,8 @@ The method of Use GitHub Actions to compile OpenWrt, as well as many contents in
 10. [Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
     - 10.1 [Know the complete .config file](#101-know-the-complete-config-file)
     - 10.2 [Know the workflow file](#102-know-the-workflow-file)
+        - 10.2.1 [Replacing source code repositories and branches](#1021-replacing-source-code-repositories-and-branches)
+        - 10.2.2 [Change STB model and kernel version](#1022-change-stb-model-and-kernel-version)
     - 10.3 [Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
     - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
     - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)
@@ -300,6 +302,46 @@ After you complete the `OpenWrt personalized configuration` locally, `save and e
 ### 10.2 Know the workflow file
 
 The official GitHub gave a detailed explanation. Regarding the use of `GitHub Actions`, you can start to get to know it from here: [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart)
+
+Let’s make a few brief introductions based on the files being used in the warehouse: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
+
+#### 10.2.1 Replacing source code repositories and branches
+
+
+```yaml
+#On Line 24: Source code library address
+REPO_URL: https://github.com/coolsnowwolf/lede
+
+#On Line 25: Branch name
+REPO_BRANCH: master
+```
+You can modify it to other, such as official:
+```yaml
+REPO_URL: https://github.com/openwrt/openwrt
+REPO_BRANCH: openwrt-19.07
+```
+
+#### 10.2.2 Change STB model and kernel version
+
+Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
+```yaml
+    - name: Build OpenWrt firmware
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      id: build
+      run: |
+        [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
+        cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+        sudo rm -rf openwrt && sync
+        sudo rm -rf /workdir && sync
+        sudo chmod +x make
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.23.TF_5.4.105
+        cd out/ && sudo gzip *.img
+        cp -f ../openwrt-armvirt/*.tar.gz . && sync
+        echo "FILEPATH=$PWD" >> $GITHUB_ENV
+        echo "::set-output name=status::success"
+```
+Modify the -d parameter to the model of your STB, and modify the value after the -k parameter to the version number of the kernel you want to compile:
+`sudo ./make -d -b s905x -k 5.7.2`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
 
 ### 10.3 Use SSH to remotely connect to GitHub Actions
 

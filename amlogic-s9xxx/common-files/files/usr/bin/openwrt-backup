@@ -93,6 +93,7 @@ restore() {
         tar xzf "${BACKUP_FILE}"
 	echo "Recovery has been completed using the [ ${BACKUP_FILE} ] file."
     else
+        [ -d "${BACKUP_DIR}" ] || mkdir -p "${BACKUP_DIR}"
         echo "The backup file [ ${BACKUP_FILE} ] not found!"
         exit 1
     fi

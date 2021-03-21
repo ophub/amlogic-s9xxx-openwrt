@@ -1,0 +1,213 @@
+#!/bin/bash
+# /etc configuration files
+
+BACKUP_DIR="/.reserved"
+BACKUP_FILE="${BACKUP_DIR}/openwrt_config.tar.gz"
+BACKUP_LIST='./etc/AdGuardHome.yaml \
+./etc/adblocklist/ \
+./etc/amule/ \
+./etc/china_ssr.txt \
+./etc/cifs/cifsdpwd.db \
+./etc/smbd/smbdpwd.db \
+./etc/ksmbd/ksmbdpwd.db \
+./etc/config/ \
+./etc/openclash/backup/ \
+./etc/openclash/core/ \
+./etc/openclash/config/ \
+./etc/openclash/custom/ \
+./etc/openclash/game_rules/ \
+./etc/openclash/rule_provider/ \
+./etc/openclash/proxy_provider/ \
+./etc/dnsforwarder/ \
+./etc/dnsmasq.conf \
+./etc/dnsmasq.d/ \
+./etc/dnsmasq.oversea/ \
+./etc/dnsmasq.ssr/ \
+./etc/docker/key.json \
+./etc/dropbear/dropbear_rsa_host_key \
+./etc/easy-rsa/ \
+./etc/environment \
+./etc/exports \
+./etc/firewall.user \
+./etc/gfwlist/ \
+./etc/haproxy.cfg \
+./etc/hosts \
+./etc/ipsec.conf \
+./etc/ipsec.d/ \
+./etc/ipsec.secrets \
+./etc/ipsec.user \
+./etc/ipset/ \
+./etc/mwan3.user \
+./etc/nginx/nginx.conf \
+./etc/ocserv/ \
+./etc/openvpn/ \
+./etc/pptpd.conf \
+./etc/qBittorrent/ \
+./etc/rc.local \
+./etc/samba/smbpasswd \
+./etc/shadow \
+./etc/smartdns/ \
+./etc/sqm/ \
+./etc/ssh/*key*  \
+./etc/ssl/private/  \
+./etc/ssrplus/ \
+./etc/transmission/ \
+./etc/urandom.seed \
+./root/.ssh/'
+
+if dmesg | grep 'meson' >/dev/null 2>&1; then
+    PLATFORM="amlogic"
+elif dmesg | grep 'rockchip' >/dev/null 2>&1; then
+    PLATFORM="rockchip"
+elif dmesg | grep 'sun50i-h6' >/dev/null 2>&1; then
+    PLATFORM="allwinner"
+else
+   echo "Unknown platform, only support amlogic or rockchip or allwinner h6!"
+   exit 1
+fi
+
+backup() {
+    cd /
+    echo -n "backup config files ... "
+    [ -d "${BACKUP_DIR}" ] || mkdir -p "${BACKUP_DIR}"
+    eval tar czf "${BACKUP_FILE}" "${BACKUP_LIST}" 2>/dev/null
+    if [ -f "${BACKUP_FILE}" ];then
+        echo "done"
+        exit 0
+    else
+        echo "failed!"
+        exit 1
+    fi
+}
+
+restore() {
+    if [ -f "${BACKUP_FILE}" ];then
+	echo -n "restore config files ... "
+        cd /
+        tar xzf "${BACKUP_FILE}"
+	echo "done"
+    else
+        echo "backup file: ${BACKUP_FILE} not found!"
+        exit 1
+    fi
+}
+
+gen_fstab() {
+    ROOT_MSG=$(lsblk -l -o NAME,PATH,MOUNTPOINT,UUID,FSTYPE,LABEL | awk '$3 ~ /^\/$/ {print $0}')
+    if [ "$ROOT_MSG" == "" ];then
+	echo "Get rootfs message failed!"
+	exit 1
+    fi
+
+    ROOT_NAME=$(echo $ROOT_MSG | awk '{print $1}')
+    ROOT_DEV=$(echo $ROOT_MSG | awk '{print $2}')
+    ROOT_UUID=$(echo $ROOT_MSG | awk '{print $4}')
+    ROOT_FSTYPE=$(echo $ROOT_MSG | awk '{print $5}')
+    ROOT_LABEL=$(echo $ROOT_MSG | awk '{print $6}')
+
+    EMMC_NAME=$(echo $ROOT_NAME | cut -c 1-7)
+
+    BOOT_NAME="${EMMC_NAME}p1"
+    BOOT_MSG=$(lsblk -l -o NAME,UUID,FSTYPE,LABEL | grep "${BOOT_NAME}")
+    BOOT_DEV="/dev/${BOOT_NAME}"
+    BOOT_UUID=$(echo $BOOT_MSG | awk '{print $2}')
+    BOOT_FSTYPE=$(echo $BOOT_MSG | awk '{print $3}')
+    BOOT_LABEL=$(echo $BOOT_MSG | awk '{print $4}')
+
+    cat > /etc/config/fstab <<EOF
+config global
+	option anon_swap '0'
+	option anon_mount '1'
+	option auto_swap '0'
+	option auto_mount '1'
+	option delay_root '5'
+	option check_fs '0'
+
+config mount
+	option target '/overlay'
+	option uuid '${ROOT_UUID}'
+	option enabled '1'
+	option enabled_fsck '1'
+	option fstype '${ROOT_FSTYPE}'
+EOF
+
+    if [ "${ROOT_FSTYPE}" == "btrfs" ];then
+        echo "	option options 'compress=zstd'" >> /etc/config/fstab
+    fi
+
+    cat >> /etc/config/fstab <<EOF
+
+config mount
+	option target '/boot'
+EOF
+    
+    if [ "${BOOT_FSTYPE}" == "vfat" ];then
+        echo "	option label '${BOOT_LABEL}'" >> /etc/config/fstab
+    else
+        echo "	option uuid '${BOOT_UUID}'" >> /etc/config/fstab
+    fi
+
+    cat >> /etc/config/fstab <<EOF
+	option enabled '1'
+	option enabled_fsck '0'
+	option fstype '${BOOT_FSTYPE}'
+           
+EOF
+    echo "/etc/config/fstab generated."
+    echo "please reboot"
+    exit 0
+}
+
+print_list() {
+    echo "${BACKUP_LIST}"
+    exit 0
+}
+
+print_help() {
+    echo "Usage: $0  -b    (backup)"
+    echo "       $0  -r    (restore)"
+    echo "       $0  -p    (print backup list)"
+    echo "       $0  -g    (generate fstab)"
+    echo "       $0  -h    (help)"
+    exit 0
+}
+
+menu() {
+    while :;do
+        clear
+        cat <<EOF
+
+        -----------------------------------
+        |        b. backup                |
+        |        r. restore               |
+        |        p. print backup list     |
+        |        g. generate fstab        |
+        |        h. help                  |
+        |        q. quit                  |
+        -----------------------------------
+EOF
+echo -ne "please select: [ ]\b\b"
+      read select
+	case $select in 
+	    b)  backup;;
+	    r)  restore
+		gen_fstab;;
+	    p)  print_list;;
+            g)  gen_fstab;;
+	    h)  print_help;;
+	    q)  exit 0;;
+	esac
+    done
+}
+
+getopts 'brpgh' opts
+case $opts in 
+    b) backup;;
+    r) restore
+       gen_fstab;;
+    p) print_list;;
+    g) gen_fstab;;
+    h) print_help;;
+    *) menu;;
+esac
+

@@ -96,6 +96,13 @@ if  [ "${BOOT_PART_MSG}" == "" ]; then
     exit 1
 fi
 
+BR_FLAG=1
+echo -ne "Whether to keep the current configuration information after the update? y/n [y]\b\b"
+read yn
+case $yn in
+     n*|N*) BR_FLAG=0;;
+esac
+
 BOOT_NAME=$(echo $BOOT_PART_MSG | awk '{print $1}')
 BOOT_PATH=$(echo $BOOT_PART_MSG | awk '{print $2}')
 BOOT_UUID=$(echo $BOOT_PART_MSG | awk '{print $4}')
@@ -304,6 +311,32 @@ fi
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/openwrt-update
 sync
 echo "Copy data complete ..."
+
+BACKUP_LIST=$(${P2}/usr/bin/openwrt-backup -p)
+if [[ ${BR_FLAG} -eq 1 && -n ${BACKUP_LIST} ]];then
+    # restore old config files
+    OLD_RELEASE=$(grep "DISTRIB_REVISION=" /etc/openwrt_release | awk -F "'" '{print $2}'|awk -F 'R' '{print $2}' | awk -F '.' '{printf("%02d%02d%02d\n", $1,$2,$3)}')
+    NEW_RELEASE=$(grep "DISTRIB_REVISION=" ./etc/uci-defaults/99-default-settings | awk -F "'" '{print $2}'|awk -F 'R' '{print $2}' | awk -F '.' '{printf("%02d%02d%02d\n", $1,$2,$3)}')
+    if  [ ${OLD_RELEASE} -le 200311 ] && [ ${NEW_RELEASE} -ge 200319 ];then
+        mv ./etc/config/shadowsocksr ./etc/config/shadowsocksr.${NEW_RELEASE}
+    fi
+
+    echo -n "Start restoring configuration files ... "
+    (
+      cd /
+      eval tar czf ${NEW_ROOT_MP}/.reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
+    )
+    tar xzf ${NEW_ROOT_MP}/.reserved/openwrt_config.tar.gz
+    if  [ ${OLD_RELEASE} -le 200311 ] && [ ${NEW_RELEASE} -ge 200319 ];then
+        mv ./etc/config/shadowsocksr ./etc/config/shadowsocksr.${OLD_RELEASE}
+        mv ./etc/config/shadowsocksr.${NEW_RELEASE} ./etc/config/shadowsocksr
+    fi
+
+    sed -e "s/option wan_mode 'false'/option wan_mode 'true'/" -i ./etc/config/dockerman 2>/dev/null
+    sed -e 's/config setting/config verysync/' -i ./etc/config/verysync 2>/dev/null
+    sync
+    echo "Restore configuration information complete."
+fi
 
 echo "Modify the configuration file ... "
 rm -f "./etc/rc.local.orig" "./usr/bin/mk_newpart.sh" "./etc/part_size"

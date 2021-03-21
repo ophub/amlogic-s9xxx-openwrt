@@ -50,7 +50,7 @@ If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/u
 
 ***`Backup & Restore`***
 
-You can backup and restore software config information at any time when you need it, and the software list can be adjusted according to your needs: [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup). Please operate according to the prompts, if `b` is for `backup`, `r` is for `restore`.
+You can backup and restore software config information at any time when you need it, and the software list can be adjusted according to your needs: [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup) . Please operate according to the prompts, if `b` is for `backup`, `r` is for `restore`.
 
 - Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
@@ -58,7 +58,7 @@ You can backup and restore software config information at any time when you need
 openwrt-backup
 ```
 
-When `opemwrt-update` the software, you will also be asked whether to keep the current config. If you choose `Yes`, the current software config information will be automatically restored after the update is completed. If the config information of a certain software in the current version is different from the previous version, the restored config may not work normally. Please manually clear the config information of this software and reconfigure it.
+When `opemwrt-update` the software, you will also be asked whether to keep the current config. If you choose `y`, the current software config information will be automatically restored after the update is completed. If the config information of a certain software in the current version is different from the previous version, the restored config may not work normally. Please manually clear the config information of this software and reconfigure it.
 
 ***`Write bootloader`***
 

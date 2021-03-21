@@ -73,10 +73,10 @@ backup() {
     [ -d "${BACKUP_DIR}" ] || mkdir -p "${BACKUP_DIR}"
     eval tar czf "${BACKUP_FILE}" "${BACKUP_LIST}" 2>/dev/null
     if [ -f "${BACKUP_FILE}" ];then
-        echo "done"
+        echo "Your configuration file has been backed up to [ ${BACKUP_FILE} ], please download and save."
         exit 0
     else
-        echo "failed!"
+        echo "Backup failed!"
         exit 1
     fi
 }
@@ -86,9 +86,9 @@ restore() {
 	echo -n "restore config files ... "
         cd /
         tar xzf "${BACKUP_FILE}"
-	echo "done"
+	echo "Recovery has been completed using the [ ${BACKUP_FILE} ] file."
     else
-        echo "backup file: ${BACKUP_FILE} not found!"
+        echo "The backup file [ ${BACKUP_FILE} ] not found!"
         exit 1
     fi
 }

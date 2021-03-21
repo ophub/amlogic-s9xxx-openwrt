@@ -23,7 +23,7 @@ Utilities  --->
 
 ***`安装 OpenWrt`***
 
-- 从浏览器访问OpenWrt的默认IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
+- 从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
 
 ```yaml
 openwrt-install
@@ -35,7 +35,7 @@ openwrt-install
 
 ***`升级 OpenWrt`***
 
-- 从浏览器访问OpenWrt的IP如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
+- 从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
 
 ```yaml
 openwrt-update
@@ -50,6 +50,18 @@ openwrt-update
 | 目录 | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
 | ---- | ---- | ---- |
 | 顺序 | `你指定使用的升级固件` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
+
+***`备份与恢复`***
+
+你可以在需要的时候随时备份和恢复软件配置信息，软件清单可以根据自己的需要调整: [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup) 。请根据提示进行选择，如选择 `b` 是备份，选择 `r` 是恢复。
+
+- 从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入命令: 
+
+```yaml
+openwrt-backup
+```
+
+在软件更新时，也会咨问你是否保留当前的配置，如果选择了 `y` ，在更新完成后，将自动恢复当前软件的配置信息。如果当前版本中某个软件的配置信息和旧版有差异，可能恢复后的配置不能正常使用，请手动清空这个软件的配置信息并重新配置。
 
 ***`安装 bootloader`***
 

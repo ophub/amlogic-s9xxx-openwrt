@@ -490,7 +490,7 @@ while [ $i -le $max_try ]; do
         echo "Successfully mounted"
         echo "Create folder ... "
         cd /mnt/${EMMC_NAME}p2
-        mkdir -p bin boot dev etc lib opt mnt overlay proc rom root run sbin sys tmp usr www
+        mkdir -p bin boot dev etc lib opt mnt overlay proc rom root run sbin sys tmp usr www .reserved
         ln -sf lib/ lib64
         ln -sf tmp/ var
         echo "complete."

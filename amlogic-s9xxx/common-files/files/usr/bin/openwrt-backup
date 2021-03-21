@@ -69,11 +69,11 @@ fi
 
 backup() {
     cd /
-    echo -n "backup config files ... "
+    echo -n "Backup config files ... "
     [ -d "${BACKUP_DIR}" ] || mkdir -p "${BACKUP_DIR}"
     eval tar czf "${BACKUP_FILE}" "${BACKUP_LIST}" 2>/dev/null
     if [ -f "${BACKUP_FILE}" ];then
-        echo "Your configuration file has been backed up to [ ${BACKUP_FILE} ], please download and save."
+        echo "Your config files has been backed up to [ ${BACKUP_FILE} ], please download and save."
         exit 0
     else
         echo "Backup failed!"

@@ -235,6 +235,7 @@ utils() {
         op_packaged_date=$(date +%Y-%m-%d)
         echo " Amlogic SoC: ${build_op}" >> etc/banner
         echo " Kernel: ${op_version}" >> etc/banner
+        echo " Backup & Restore command: openwrt-backup" >> etc/banner
         if  [[ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" == "5.10" ]]; then
             echo " Support install to EMMC: No" >> etc/banner
         else

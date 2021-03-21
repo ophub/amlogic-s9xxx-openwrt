@@ -12,6 +12,7 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.03.21 | All | UPDATE | ✩✩✩✩✩ | [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup) | Added `flippy's` retention configuration upgrade strategy in the `openwrt-update` function. |
 | 2021.03.12 | All | UPDATE | ✩✩✩✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | Optimize the directory structure to increase the readability of the program. |
 | - | All | UPDATE | ✩✩✩ | [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program) | Optimize the `install/update` script. |
 | - | All | ADD | ✩✩✩ | [5.4.105](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.105) | Add New kernel. |

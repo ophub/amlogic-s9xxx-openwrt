@@ -1,6 +1,11 @@
 #!/bin/bash
-# /etc configuration files
-# Use flippy's retention configuration update strategy
+#======================================================================
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: Backup config files in the /etc directory
+# Function: Use Flippy's retention config update strategy
+# Copyright (C) 2020 Flippy
+# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
+#======================================================================
 
 BACKUP_DIR="/.reserved"
 BACKUP_FILE="${BACKUP_DIR}/openwrt_config.tar.gz"

@@ -23,14 +23,14 @@ This OpenWrt firmware is packaged using ***`Flippy's`*** Amlogic S9xxx Kernel fo
 
 Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the STB. Common for all `Amlogic S9xxx STB`.
 
-***`Install OpenWrt`***
+- ### Install OpenWrt
 
 - Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
 openwrt-install
 ```
-***`Update OpenWrt`***
+- ### Update OpenWrt
 
 - Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 

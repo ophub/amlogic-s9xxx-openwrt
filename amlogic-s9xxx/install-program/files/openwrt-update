@@ -97,7 +97,7 @@ if  [ "${BOOT_PART_MSG}" == "" ]; then
 fi
 
 BR_FLAG=1
-echo -ne "Whether to keep the current configuration information after the update? y/n [y]\b\b"
+echo -ne "Whether to backup and restore the current config files? y/n [y]\b\b"
 read yn
 case $yn in
      n*|N*) BR_FLAG=0;;

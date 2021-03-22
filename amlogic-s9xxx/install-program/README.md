@@ -19,7 +19,7 @@ Utilities  --->
 
 Choose the corresponding firmware according to your Amlogic S9xxx STB. Then write the IMG file to the USB hard disk through software such as [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the Amlogic S9xxx STB. Common for all `Amlogic S9xxx STB`.
 
-***`Install OpenWrt`***
+### Install OpenWrt
 
 - Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
@@ -31,7 +31,7 @@ When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogi
 
 For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic S9xxx STB you own.
 
-***`Update OpenWrt`***
+### Update OpenWrt
 
 - Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 
@@ -48,7 +48,7 @@ If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/u
 | ---- | ---- | ---- |
 | Oeder | `specified_update_file` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
 
-***`Backup & Restore`***
+### Backup & Restore
 
 You can backup and restore software config information at any time when you need it, and the software list can be adjusted according to your needs: [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup) . Please operate according to the prompts, if `b` is for `backup`, `r` is for `restore`.
 
@@ -60,7 +60,7 @@ openwrt-backup
 
 When `opemwrt-update` the software, you will also be asked whether to keep the current config. If you choose `y`, the current software config information will be automatically restored after the update is completed. If the config information of a certain software in the current version is different from the previous version, the restored config may not work normally. Please manually clear the config information of this software and reconfigure it.
 
-***`Write bootloader`***
+### Write bootloader
 
 If your box is X96-Max+, you must write the bootloader of HK1-Box included in the firmware to EMMC before it can be gigabit. This step is now integrated into the installation script and is automatically completed during installation:
 
@@ -77,6 +77,7 @@ dd if=/lib/u-boot/u-boot-2015-phicomm-n1.bin of=/dev/mmcblk1
 sync
 reboot
 ```
+
 ## Option description when installing into Amlogic S9xxx STB emmc
 
 | Serial | STB | Description | DTB |

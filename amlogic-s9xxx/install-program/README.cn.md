@@ -21,7 +21,7 @@ Utilities  --->
 
 选择和你的机顶盒型号相对应的 OpenWrt 固件，使用 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入USB里，然后把写好固件的USB插入机顶盒。此脚本通用于各型号的机顶盒，命令均相同。
 
-***`安装 OpenWrt`***
+### 安装 OpenWrt
 
 - 从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
 
@@ -33,7 +33,7 @@ openwrt-install
 
 除默认的13个型号的机顶盒是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)
 
-***`升级 OpenWrt`***
+### 升级 OpenWrt
 
 - 从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
 
@@ -51,7 +51,7 @@ openwrt-update
 | ---- | ---- | ---- |
 | 顺序 | `你指定使用的升级固件` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
 
-***`备份与恢复`***
+### 备份与恢复
 
 你可以在需要的时候随时备份和恢复软件配置信息，软件清单可以根据自己的需要调整: [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup) 。请根据提示进行选择，如选择 `b` 是备份，选择 `r` 是恢复。
 
@@ -63,7 +63,7 @@ openwrt-backup
 
 在使用 `openwrt-update` 命令进行软件更新时，也会咨问你是否保留当前的配置，如果选择了 `y` ，在更新完成后，将自动恢复当前软件的配置信息。如果当前版本中某个软件的配置信息和旧版有差异，可能恢复后的配置不能正常使用，请手动清空这个软件的配置信息并重新配置。
 
-***`安装 bootloader`***
+### 安装 bootloader
 
 如果你的机顶盒是 X96-Max+ ，你在 TF 卡中使用的 OpenWrt 固件，默认支持的是百兆的网卡的 .dtb 文件，当你写入 EMMC 后，安装/升级脚本将自动改为支持千兆的网卡的 .dtb 文件，同时自动安装 HK1 的 bootloader 文件，以便支持千兆网卡正常运行。
 

@@ -184,14 +184,16 @@ menu() {
         clear
         cat <<EOF
 
-        -----------------------------------
-        |        b. backup                |
-        |        r. restore               |
-        |        p. print backup list     |
-        |        g. generate fstab        |
-        |        h. help                  |
-        |        q. quit                  |
-        -----------------------------------
+        —————————[ openwrt-backup ]—————————
+	|                                  |
+        |        b. backup                 |
+        |        r. restore                |
+        |        p. print backup list      |
+        |        g. generate fstab         |
+        |        h. help                   |
+        |        q. quit                   |
+	|                                  |
+        ————————————————————————————————————
 	
 EOF
 echo -ne "please select: [ ]\b\b"

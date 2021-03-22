@@ -1,4 +1,4 @@
-# 可以安装在Amlogic S9xxx系列机顶盒中使用的OpenWrt系统
+# 可以安装在 Amlogic S9xxx 系列机顶盒中使用的 OpenWrt 系统
 
 查看英文说明 | [View English description](README.md)
 
@@ -8,7 +8,7 @@
 
 本仓库的 OpenWrt 固件打包使用了 ***`Flippy's`*** 的 Amlogic S9xxx 内核，以及安装/升级脚本等众多资源。欢迎你 `Fork` 并进行 [个性化软件包定制](router_config/README.cn.md) 。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
 
-## OpenWrt固件说明
+## OpenWrt 固件说明
 
 | 型号  | 机顶盒 | OpenWrt固件 |
 | ---- | ---- | ---- |
@@ -40,7 +40,7 @@ openwrt-update
 
 更多安装/升级说明详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program/README.cn.md)
 
-## OpenWrt固件编译及打包说明
+## OpenWrt 固件编译及打包说明
 
 支持多种方式进行固件编译和打包，你可以选择任意一种你喜欢的方式进行使用。
 
@@ -75,7 +75,7 @@ openwrt-update
     echo "::set-output name=status::success"
 ```
 
-- 上传固件到github.com的 Actions:
+- 上传固件到 github.com 的 Actions:
  
 ```yaml
 - name: Upload artifact to Actions
@@ -84,7 +84,7 @@ openwrt-update
     path: ${{ env.FILEPATH }}/
 ```
 
-- 上传固件到github.com的 Release:
+- 上传固件到 github.com 的 Release:
 
 ```yaml
 - name: Upload OpenWrt Firmware to Release

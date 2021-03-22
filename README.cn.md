@@ -19,20 +19,20 @@
 | s912 | octopus | openwrt_s912_v*.img |
 | s905d | n1 | openwrt_s905d_v*.img |
 
-## 写入EMMC及升级系统的相关说明
+## 安装及升级 OpenWrt 的相关说明
 
 选择和你的机顶盒型号对应的 OpenWrt 固件，使用 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入USB里，然后把写好固件的USB插入机顶盒。
 
-***`安装 OpenWrt`***
+- ### 安装 OpenWrt
 
-- 从浏览器访问OpenWrt的默认IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
+从浏览器访问OpenWrt的默认IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
 
 ```yaml
 openwrt-install
 ```
-***`升级 OpenWrt`***
+- ### 升级 OpenWrt
 
-- 从浏览器访问OpenWrt的IP如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令: 
+从浏览器访问OpenWrt的IP如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令: 
 
 ```yaml
 openwrt-update

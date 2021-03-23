@@ -206,7 +206,24 @@ fi
 MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
 VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m This Kernel [ ${MODULES_NOW} ] \033[0m"
-if  [[ "${VERSION_NOW}" == "5.10" ]]; then
+
+k510_ver=${VERSION_NOW%%.*}
+k510_maj=${VERSION_NOW##*.}
+if  [ ${k510_ver} -eq "5" ];then
+    if  [ "${k510_maj}" -ge "10" ];then
+        K510=1
+    else
+        K510=0
+    fi
+elif [ ${k510_ver} -gt "5" ];then
+    K510=1
+else
+    K510=0
+fi
+
+# Check 5.10 kernel
+# "${FDTFILE}" != *-sm1-*
+if  [[ "${K510}" -eq "1" ]]; then
     echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
     exit 1
 fi

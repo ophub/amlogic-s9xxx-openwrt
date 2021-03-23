@@ -6,4 +6,4 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================
 
-cat ../../lib/u-boot/support_emmc_startup
+cat ../../lib/u-boot/openwrt-version

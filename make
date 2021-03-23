@@ -235,15 +235,15 @@ utils() {
     [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > etc/modules.d/usb-net-rtl8152
     [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179
 
-    # Add firmware information to the support_emmc_startup
-    echo "FDTFILE=${FDTFILE}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "U_BOOT_EXT=${U_BOOT_EXT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "UBOOT_OVERLOAD=${UBOOT_OVERLOAD}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "MAINLINE_UBOOT=${MAINLINE_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "ANDROID_UBOOT=${ANDROID_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "AMLOGIC_SOC=${build_op}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "KERNEL_VERSION=${build_usekernel}" >> lib/u-boot/support_emmc_startup 2>/dev/null
-    echo "K510=${K510}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    # Add firmware information to the openwrt-version
+    echo "FDTFILE=${FDTFILE}" >> lib/u-boot/openwrt-version 2>/dev/null
+    echo "U_BOOT_EXT=${U_BOOT_EXT}" >> lib/u-boot/openwrt-version 2>/dev/null
+    echo "UBOOT_OVERLOAD=${UBOOT_OVERLOAD}" >> lib/u-boot/openwrt-version 2>/dev/null
+    echo "MAINLINE_UBOOT=${MAINLINE_UBOOT}" >> lib/u-boot/openwrt-version 2>/dev/null
+    echo "ANDROID_UBOOT=${ANDROID_UBOOT}" >> lib/u-boot/openwrt-version 2>/dev/null
+    echo "AMLOGIC_SOC=${build_op}" >> lib/u-boot/openwrt-version 2>/dev/null
+    echo "KERNEL_VERSION=${build_usekernel}" >> lib/u-boot/openwrt-version 2>/dev/null
+    echo "K510=${K510}" >> lib/u-boot/openwrt-version 2>/dev/null
 
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then

@@ -1,0 +1,9 @@
+#!/bin/bash
+#======================================================================
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: Record the version information of OpenWrt
+# Function: Output the version information of OpenWrt as needed
+# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
+#======================================================================
+
+cat ../../lib/u-boot/support_emmc_startup

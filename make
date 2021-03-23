@@ -138,6 +138,21 @@ utils() {
     build_op=${1}
     build_usekernel=${2}
 
+    kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')
+    k510_ver=${kernel_vermaj%%.*}
+    k510_maj=${kernel_vermaj##*.}
+    if  [ ${k510_ver} -eq "5" ];then
+        if  [ "${k510_maj}" -ge "10" ];then
+            K510=1
+        else
+            K510=0
+        fi
+    elif [ ${k510_ver} -gt "5" ];then
+        K510=1
+    else
+        K510=0
+    fi
+
     case "${build_op}" in
         s905x3 | x96 | hk1 | h96)
             FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
@@ -228,6 +243,7 @@ utils() {
     echo "ANDROID_UBOOT=${ANDROID_UBOOT}" >> lib/u-boot/support_emmc_startup 2>/dev/null
     echo "AMLOGIC_SOC=${build_op}" >> lib/u-boot/support_emmc_startup 2>/dev/null
     echo "KERNEL_VERSION=${build_usekernel}" >> lib/u-boot/support_emmc_startup 2>/dev/null
+    echo "K510=${K510}" >> lib/u-boot/support_emmc_startup 2>/dev/null
 
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then
@@ -235,14 +251,15 @@ utils() {
         op_packaged_date=$(date +%Y-%m-%d)
         echo " Amlogic SoC: ${build_op}" >> etc/banner
         echo " Kernel: ${op_version}" >> etc/banner
-        echo " Backup & Restore command: openwrt-backup" >> etc/banner
-        if  [[ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" == "5.10" ]]; then
+        if  [ "${K510}" -eq "1" ]; then
             echo " Support install to EMMC: No" >> etc/banner
         else
             echo " Support install to EMMC: Yes" >> etc/banner
-            echo " Install command: openwrt-install" >> etc/banner
-            echo " Update command: openwrt-update" >> etc/banner
         fi
+        echo " Install command: openwrt-install" >> etc/banner
+        echo " Update command: openwrt-update" >> etc/banner
+        echo " Backup & Restore command: openwrt-backup" >> etc/banner
+        echo " View version command: openwrt-version" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi
@@ -263,7 +280,7 @@ utils() {
     fi
 
     # Add u-boot.ext for 5.10 kernel
-    if [[ "$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')" == "5.10" && -n "${UBOOT_OVERLOAD}" ]]; then
+    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then
        if [ -f ${uboot_path}/${UBOOT_OVERLOAD} ]; then
           cp -f ${uboot_path}/${UBOOT_OVERLOAD} u-boot.ext
        else

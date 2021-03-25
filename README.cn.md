@@ -21,7 +21,7 @@
 
 ## 安装及升级 OpenWrt 的相关说明
 
-选择和你的机顶盒型号对应的 OpenWrt 固件，使用 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入USB里，然后把写好固件的USB插入机顶盒。
+选择和你的机顶盒型号对应的 OpenWrt 固件，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入USB里，然后把写好固件的USB插入机顶盒。
 
 - ### 安装 OpenWrt
 

@@ -25,8 +25,8 @@ env:
   REPO_BRANCH: openwrt-21.02
   FEEDS_CONF: router_config/feeds.conf.default
   CONFIG_FILE: router_config/.config-openwrt-21.02
-  DIY_P1_SH: router_config/diy-part1.sh
-  DIY_P2_SH: router_config/diy-part2.sh
+  DIY_P1_SH: router_config/no1.sh
+  DIY_P2_SH: router_config/no2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_ARMVIRT: false
   UPLOAD_FIRMWARE: true

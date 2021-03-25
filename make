@@ -264,6 +264,10 @@ utils() {
         echo " -----------------------------------------------------" >> etc/banner
     fi
 
+    # Patches For openssl
+    SSL_CNF_PATCH=${configfiles_path}/patches/openssl/openssl_engine.patch
+    [ -f ${SSL_CNF_PATCH} ] && patch -p1 < ${SSL_CNF_PATCH} >/dev/null 2>&1
+
     # Patches For cpustat
     cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
     cpustat_patch=${configfiles_path}/patches/cpustat/luci-admin-status-index-html.patch

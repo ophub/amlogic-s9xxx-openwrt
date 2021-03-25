@@ -12,6 +12,7 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.03.25 | All | UPDATE | ✩✩ | [openssl](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches/openssl) | Use Flippy's openssl files to increase related functions. |
 | 2021.03.24 | All | UPDATE | ✩✩ | [cpustat](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches/cpustat) | Use Flippy's cpustat files to increase related functions. |
 | 2021.03.23 | All | UPDATE | ✩✩ | [openwrt-version](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-version) | Add openwrt version information view command: `openwrt-version`. |
 | 2021.03.21 | All | UPDATE | ✩✩✩✩✩ | [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup) | Added `flippy's` retention configuration upgrade strategy in the `openwrt-update` function. |

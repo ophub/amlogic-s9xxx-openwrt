@@ -106,7 +106,14 @@ jobs:
 
     - name: Check space usage
       if: (!cancelled())
-      run: df -hT
+      run: |
+        df -hT
+        echo "dir--------"
+        echo $(ls . >/dev/null)
+        echo "tar--------"
+        echo $(ls openwrt/bin/targets/*/*/ >/dev/null)
+        echo "tar--------"
+        find openwrt/bin/targets/*/*/ -type f -name '*.tar.gz' -exec echo -e {} ./ \;
 
     - name: Upload OpenWrt bin directory to Actions
       uses: actions/upload-artifact@v2

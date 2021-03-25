@@ -19,7 +19,7 @@ Utilities  --->
 
 ## 在 Amlogic S9xxx 系列机顶盒的 EMMC 里进行安装/升级 OpenWrt 的相关说明
 
-选择和你的机顶盒型号相对应的 OpenWrt 固件，使用 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入USB里，然后把写好固件的USB插入机顶盒。此脚本通用于各型号的机顶盒，命令均相同。
+选择和你的机顶盒型号相对应的 OpenWrt 固件，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入USB里，然后把写好固件的USB插入机顶盒。此脚本通用于各型号的机顶盒，命令均相同。
 
 ### 安装 OpenWrt
 
@@ -31,7 +31,7 @@ openwrt-install
 
 同一个型号的机顶盒，固件通用，比如 `openwrt_s905x3_v*.img` 固件可以用于 `x96max plus, hk1, h96` 等 `s905x3` 型号的机顶盒。在安装脚本  [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install) 将 OpenWrt 写入 EMMC 时，会提示你选择自己的机顶盒，请根据提示正确选择安装。
 
-除默认的13个型号的机顶盒是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)
+除默认的 13 个型号的机顶盒是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)
 
 ### 升级 OpenWrt
 
@@ -99,6 +99,7 @@ reboot
 | 11 | UGOOS AM6 Plus | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-ugoos-am6.dtb |
 | 12 | Octopus-Planet | S912: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxm-octopus-planet.dtb |
 | 13 | Phicomm-n1 | S905d: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxl-s905d-phicomm-n1.dtb |
+| 14 | hg680p & b860h | S905x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxl-s905x-p212.dtb |
 | 0 | Other | - | Enter the dtb file name of your box |
 
  在自选 .dtb 文件进行安装时，你可以从 [dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) 库里查阅相关文件名并填写。

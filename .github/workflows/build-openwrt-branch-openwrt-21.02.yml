@@ -113,7 +113,7 @@ jobs:
         echo "tar--------"
         echo $(ls openwrt/bin/targets/*/*/ >/dev/null)
         echo "tar--------"
-        find openwrt/bin/targets/*/*/ -type f -name '*.tar.gz' -exec echo -e {} ./ \;
+        find openwrt/bin/targets/*/*/ -type f -name '*.tar.gz' -exec echo -e {} \;
 
     - name: Upload OpenWrt bin directory to Actions
       uses: actions/upload-artifact@v2

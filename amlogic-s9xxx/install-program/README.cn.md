@@ -6,7 +6,7 @@
 
 ## 在编译时集成安装/升级脚本的方法
 
-在 router_config/diy-part2.sh 文件中，添加 1. 的引入脚本，在 OpenWrt 编译界面的 `Utilities` 中选择 `install-program` 即可完成编译集成。
+在 router-config/diy-part2.sh 文件中，添加 1. 的引入脚本，在 OpenWrt 编译界面的 `Utilities` 中选择 `install-program` 即可完成编译集成。
 
 1. `svn co https://github.com/ophub/amlogic-s9xxx-openwrt/trunk/amlogic-s9xxx/install-program package/install-program`
 2. 在执行 `menuconfig` 后，可以在 `Utilities` 目录下选择 `install-program`

@@ -12,6 +12,7 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.03.27 | All | ADD | ✩✩✩ | [openwrt-21.02](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/openwrt-21.02) | Add openwrt official 21.02 branch compilation configuration. |
 | 2021.03.25 | All | UPDATE | ✩✩ | [openssl](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches/openssl) | Use Flippy's openssl files to increase related functions. |
 | 2021.03.24 | All | UPDATE | ✩✩ | [cpustat](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches/cpustat) | Use Flippy's cpustat files to increase related functions. |
 | 2021.03.23 | All | UPDATE | ✩✩ | [openwrt-version](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-version) | Add openwrt version information view command: `openwrt-version`. |
@@ -24,7 +25,7 @@ The version update instructions record each important update point for everyone 
 | - | All | ADD | ✩✩✩ | [5.10.19.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.19.TF) | Add New kernel. |
 | - | All | UPDATE | ✩✩✩ | [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program) | According to the latest kernel, adjusted the `install/update` script. |
 | - | All | UPDATE | ✩✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | According to the latest kernel, adjusted the `make` script. |
-| 2021.02.28 | All | ADD | ✩✩✩✩✩ | [Documentation.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router_config/Documentation.md) | Add detailed description of openwrt personalized compilation. |
+| 2021.02.28 | All | ADD | ✩✩✩✩✩ | [Documentation.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/Documentation.md) | Add detailed description of openwrt personalized compilation. |
 | 2021.02.19 | All | UPDATE | ✩✩✩✩✩ | [openwrt-update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-update) | Optimize online update method. |
 | 2021.02.17 | All | ADD | ✩✩✩ | [5.4.98](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.98) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.10.16.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.16.TF) | Add New kernel. |

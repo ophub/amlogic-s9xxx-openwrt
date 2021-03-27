@@ -31,10 +31,10 @@
 # sed -i "/DEFAULT_PACKAGES/ s/$/ pirania-app pirania ip6tables-mod-nat ipset shared-state-pirania uhttpd-mod-lua/" target/linux/armvirt/Makefile
 
 # Apply patch
-# git apply ../router_config/patches/{0001*,0002*}.patch --directory=feeds/luci
+# git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci
 
 # Modify some code adaptation
-sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
+# sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
 
 # Mydiy luci-app and luci-theme（use to /.config luci-app&theme）
 # ==========luci-app-url==========

@@ -74,7 +74,7 @@ Personal center: Settings > Developer settings > Personal access tokens > Genera
 
 ## 4. 个性化 OpenWrt 固件定制文件说明
 
-经过前面 3 步准备工作，现在开始进行个性化固件定制吧。在 /router_config 目录下，除了说明文件外，其他三个是进行 OpenWrt 固件个性化定制的文件。这个章节我们只做最简单的说明，让你一动手就能体验到个性化定制的快乐，比较复杂的定制化操作我放在了第 10 节里，这需要你有一点点基础。
+经过前面 3 步准备工作，现在开始进行个性化固件定制吧。在 /router-config 目录下，除了说明文件外，其他三个是进行 OpenWrt 固件个性化定制的文件。这个章节我们只做最简单的说明，让你一动手就能体验到个性化定制的快乐，比较复杂的定制化操作我放在了第 10 节里，这需要你有一点点基础。
 
 ### 4.1 .config 文件说明
 
@@ -164,7 +164,7 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 
 ## 5. 编译固件
 
-固件编译的流程在 .github/workflows/build-openwrt.yml 文件里控制，在 workflows 目录下还有其他 .yml 文件，实现其他不同的功能。固件编译的方式很多，可以设置定时编译，手动编译，或者设置一些特定事件来触发编译。我们先从简单的操作开始。
+固件编译的流程在 .github/workflows/build-openwrt-lede.yml 文件里控制，在 workflows 目录下还有其他 .yml 文件，实现其他不同的功能。固件编译的方式很多，可以设置定时编译，手动编译，或者设置一些特定事件来触发编译。我们先从简单的操作开始。
 
 ### 5.1 手动编译
 
@@ -178,7 +178,7 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 
 ### 5.2 定时编译
 
-在 .github/workflows/build-openwrt.yml 文件里，使用 Cron 设置定时编译，5 个不同位置分别代表的意思为 分钟 (0 - 59) / 小时 (0 - 23) / 日期 (1 - 31) / 月份 (1 - 12) / 星期几 (0 - 6)(星期日 - 星期六)。通过修改不同位置的数值来设定时间。系统默认使用 UTC 标准时间，请根据你所在国家时区的不同进行换算。
+在 .github/workflows/build-openwrt-lede.yml 文件里，使用 Cron 设置定时编译，5 个不同位置分别代表的意思为 分钟 (0 - 59) / 小时 (0 - 23) / 日期 (1 - 31) / 月份 (1 - 12) / 星期几 (0 - 6)(星期日 - 星期六)。通过修改不同位置的数值来设定时间。系统默认使用 UTC 标准时间，请根据你所在国家时区的不同进行换算。
 
 ```yaml
 schedule:
@@ -187,7 +187,7 @@ schedule:
 
 ## 6. 保存固件
 
-固件保存的设置也在 .github/workflows/build-openwrt.yml 文件里控制。我们将编译好的固件通过脚本自动上传到 github 官方提供的 Actions 和 Releases 里面，或者上传到第三方（ 如 WeTransfer ）。
+固件保存的设置也在 .github/workflows/build-openwrt-lede.yml 文件里控制。我们将编译好的固件通过脚本自动上传到 github 官方提供的 Actions 和 Releases 里面，或者上传到第三方（ 如 WeTransfer ）。
 
 现在 github 里 Actions 的最长保存期是 90 天，Releases 是永久，第三方如 WeTransfer 是 7 天。首先我们感谢这些服务商提供的免费支持，但是也请各位节约使用，我们提倡合理使用免费服务。
 
@@ -258,7 +258,7 @@ schedule:
 
 ### 7.3 从第三方下载
 
-在 .github/workflows/build-openwrt.yml 文件里，我们默认关闭了上传至第三方的选项，如果你需要，把 false 改为 ture ，下次编译完成就上传到第三方了。第三方的网址可以在固件编译流程的日志里看到，也可以输出到编译信息里。
+在 .github/workflows/build-openwrt-lede.yml 文件里，我们默认关闭了上传至第三方的选项，如果你需要，把 false 改为 ture ，下次编译完成就上传到第三方了。第三方的网址可以在固件编译流程的日志里看到，也可以输出到编译信息里。
 
 ```yaml
 UPLOAD_COWTRANSFER: false
@@ -287,13 +287,13 @@ UPLOAD_WETRANSFER: false
 
 使用 openwrt 的官方源码库，或者其他分支的源码库进行一次本地化编译，如选择 https://github.com/coolsnowwolf/lede 的源码库，根据它的编译说明，在本地安装 Ubuntu 系统，部署环境并完成一次本地编译。在本地编译配置界面中，你也可以看到很多丰富的说明，这将加强你对 openwrt 编译过程的理解。
 
-当你在本地完成 openwrt 个性化配置后，保存并退出配置界面，你可以在本地 openwrt 源码库的根目录下找到 .config 文件（ 在代码库的根目录下输入 `ls -a` 命令查看全部隐藏文件），你可以把这个文件直接上传到 github.com 里你的仓库里，替换 router_config/.config 这个文件。
+当你在本地完成 openwrt 个性化配置后，保存并退出配置界面，你可以在本地 openwrt 源码库的根目录下找到 .config 文件（ 在代码库的根目录下输入 `ls -a` 命令查看全部隐藏文件），你可以把这个文件直接上传到 github.com 里你的仓库里，替换 router-config/lede-master/.config 这个文件。
 
 ### 10.2 认识 workflow 文件
 
 GitHub官方给出了详细的说明，关于 GitHub Actions 的使用方法，你可以从这里开始认识它: [GitHub Actions 快速入门](https://docs.github.com/cn/actions/quickstart)
 
-让我们以现在仓库中正在使用的这个编译流程控制文件为例简单介绍下: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
+让我们以现在仓库中正在使用的这个编译流程控制文件为例简单介绍下: [build-openwrt-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml)
 
 #### 10.2.1 更换编译源码库的地址和分支
 
@@ -354,7 +354,7 @@ SSH操作时，复制 `ssh ...io` 这部分绿色的 SSH 远程连接命令。MA
 
 ### 10.5 自定义软件默认配置信息
 
-我们在使用的 openwrt 的时候，已经对很多软件进行了配置，这些软件的配置信息大部分都保存在了你的 openwrt 的 /etc/config/ 等相关目录下，把这些配置信息的存储文件复制到 GitHub 中仓库根目录下的 files 文件夹中，请保持目录结构和文件名称相同。在 openwrt 编译时，这些配置信息的存储文件将会被编译到你的固件中，具体做法在 .github/workflows/build-openwrt.yml 文件中，让我们在一起看看这段代码吧：
+我们在使用的 openwrt 的时候，已经对很多软件进行了配置，这些软件的配置信息大部分都保存在了你的 openwrt 的 /etc/config/ 等相关目录下，把这些配置信息的存储文件复制到 GitHub 中仓库根目录下的 files 文件夹中，请保持目录结构和文件名称相同。在 openwrt 编译时，这些配置信息的存储文件将会被编译到你的固件中，具体做法在 .github/workflows/build-openwrt-lede.yml 文件中，让我们在一起看看这段代码吧：
 
 ```yaml
 - name: Load custom configuration

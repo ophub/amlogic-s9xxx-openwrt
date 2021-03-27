@@ -74,7 +74,7 @@ Personal center: Settings > Developer settings > Personal access tokens > Genera
 
 ## 4. 个性化 OpenWrt 固件定制文件说明
 
-经过前面 3 步准备工作，现在开始进行个性化固件定制吧。在 /router-config 目录下，除了说明文件外，其他三个是进行 OpenWrt 固件个性化定制的文件。这个章节我们只做最简单的说明，让你一动手就能体验到个性化定制的快乐，比较复杂的定制化操作我放在了第 10 节里，这需要你有一点点基础。
+经过前面 3 步准备工作，现在开始进行个性化固件定制吧。在 [router-config/lede-master](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config/lede-master) 目录下，除了说明文件外，其他三个是进行 OpenWrt 固件个性化定制的文件。这个章节我们只做最简单的说明，让你一动手就能体验到个性化定制的快乐，比较复杂的定制化操作我放在了第 10 节里，这需要你有一点点基础。
 
 ### 4.1 .config 文件说明
 

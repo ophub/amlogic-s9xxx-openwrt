@@ -141,31 +141,31 @@ case  $boxtype in
       7) FDTFILE="meson-g12a-x96-max.dtb"
          U_BOOT_EXT=0
          UBOOT_OVERLOAD="u-boot-x96max.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       8) FDTFILE="meson-g12a-x96-max-rmii.dtb"
          U_BOOT_EXT=0
          UBOOT_OVERLOAD="u-boot-x96max.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       9) FDTFILE="meson-g12b-gtking.dtb"
          U_BOOT_EXT=1
-         UBOOT_OVERLOAD="u-boot-gtking.bin"
-         MAINLINE_UBOOT=""
+         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT="/lib/u-boot/gtking-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       10) FDTFILE="meson-g12b-gtking-pro.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       11) FDTFILE="meson-g12b-ugoos-am6.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-         MAINLINE_UBOOT=""
+         MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       12) FDTFILE="meson-gxm-octopus-planet.dtb"
@@ -229,7 +229,6 @@ else
 fi
 
 # Check 5.10 kernel
-# "${FDTFILE}" != *-sm1-*
 if  [[ "${K510}" -eq "1" ]]; then
     echo -e "\033[1;31m This 5.10 kernel only supports the use of TF/SD cards! \033[0m"
     exit 1

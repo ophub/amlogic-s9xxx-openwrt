@@ -165,7 +165,7 @@ utils() {
             FDTFILE="meson-g12a-x96-max.dtb"
             U_BOOT_EXT=0
             UBOOT_OVERLOAD="u-boot-x96max.bin"
-            MAINLINE_UBOOT=""
+            MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
             ANDROID_UBOOT=""
             ;;
         s905x | hg680p | b860h)
@@ -193,7 +193,7 @@ utils() {
             FDTFILE="meson-g12b-gtking-pro.dtb"
             U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-            MAINLINE_UBOOT=""
+            MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
             ANDROID_UBOOT=""
             ;;
         *)

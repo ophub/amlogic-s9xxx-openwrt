@@ -12,9 +12,13 @@ on:
   workflow_dispatch:
     inputs:
       ssh:
-        description: 'SSH connection to Actions'
+        description: 'SSH connection'
         required: false
         default: 'false'
+      branch:
+        description: 'Select Branch [ lede / 21.02 ]'
+        required: false
+        default: 'lede'
   #schedule:
     #- cron: '0 22 * * *'
 
@@ -47,13 +51,19 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
         echo "COMPILE_STARTINGTIME=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+        if [ -n ${{ github.event.inputs.branch }} ]; then
+           RELEASES_BRANCH=${{ github.event.inputs.branch }}
+        else
+           RELEASES_BRANCH=lede
+        fi
+        echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
 
-    - name: Build OpenWrt firmware
+    - name: Build OpenWrt firmware for ${{ env.RELEASES_BRANCH }}
       id: build
       if: (!cancelled())
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-        curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
+        curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
         [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
         sudo chmod +x make
         sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.26.TF_5.4.108
@@ -89,7 +99,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: openwrt_s9xxx_${{ env.FILE_DATE }}
+        tag_name: openwrt_s9xxx_${{ env.RELEASES_BRANCH }}_${{ env.FILE_DATE }}
         files: ${{ env.FILEPATH }}/*
         body: |
           This is OpenWrt firmware for Amlogic S9xxx STB

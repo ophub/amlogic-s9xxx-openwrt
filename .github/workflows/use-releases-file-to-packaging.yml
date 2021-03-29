@@ -16,7 +16,7 @@ on:
         required: false
         default: 'false'
       branch:
-        description: 'Select Branch [ lede / 21.02 ]'
+        description: 'Select Branch [ official / lede / immortalwrt ]'
         required: false
         default: 'lede'
   #schedule:

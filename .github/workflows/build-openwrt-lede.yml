@@ -38,9 +38,6 @@ env:
   UPLOAD_WETRANSFER: false
   DELETE_RELEASE: true
   DELETE_ARTIFACTS: true
-  KEEP_DAY: 3
-  KEEP_MININUM_RUNS: 0
-  KEEP_MININUM_RELEASE: 9
   RECENT_LASTEST: 3
   TZ: Asia/Shanghai
 
@@ -206,22 +203,4 @@ jobs:
           Default WIFI password: none
           Install command: openwrt-install
           Update command: openwrt-update
-
-    - name: Delete older releases
-      uses: dev-drprasad/delete-older-releases@master
-      if: env.DELETE_RELEASE == 'true'
-      with:
-        keep_latest: ${{ env.KEEP_MININUM_RELEASE }}
-        delete_tags: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Delete older workflow runs and artifacts
-      uses: Mattraks/delete-workflow-runs@main
-      if: env.DELETE_ARTIFACTS == 'true'
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        repository: ${{ github.repository }}
-        retain_days: ${{ env.KEEP_DAY }}
-        keep_minimum_runs: ${{ env.KEEP_MININUM_RUNS }}
 

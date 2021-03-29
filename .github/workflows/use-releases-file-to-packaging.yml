@@ -51,7 +51,9 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
         echo "COMPILE_STARTINGTIME=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
-        if [ -n ${{ github.event.inputs.branch }} ]; then
+        # Input value validation
+        ARR_BRANCH=("official" "lede" "immortalwrt")
+        if [[ -n ${{ github.event.inputs.branch }} && $(echo "${ARR_BRANCH[@]}" | grep -w "${{ github.event.inputs.branch }}" &>/dev/null) ]]; then
            RELEASES_BRANCH=${{ github.event.inputs.branch }}
         else
            RELEASES_BRANCH=lede

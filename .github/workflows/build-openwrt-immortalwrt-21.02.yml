@@ -3,14 +3,14 @@
 # Description: Automatically Build OpenWrt for Amlogic S9xxx STB
 # Function: Workflows for Build Amlogic S9xxx STB
 # Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
-# REPO_URL: https://github.com/coolsnowwolf/lede
-# REPO_BRANCH: master
-# Copyright (C) 2020 https://github.com/coolsnowwolf/lede
+# REPO_URL: https://github.com/immortalwrt/immortalwrt/
+# REPO_BRANCH: openwrt-21.02
+# Copyright (C) 2021 https://github.com/immortalwrt/immortalwrt/
 # Copyright (C) 2020 https://github.com/P3TERX/Actions-OpenWrt
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #========================================================================================================================
 
-name: Build OpenWrt lede
+name: Build OpenWrt immortalwrt
 
 on:
   repository_dispatch:
@@ -24,12 +24,12 @@ on:
     - cron: '0 17 * * *'
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
-  FEEDS_CONF: router-config/lede-master/feeds.conf.default
-  CONFIG_FILE: router-config/lede-master/.config
-  DIY_P1_SH: router-config/lede-master/diy-part1.sh
-  DIY_P2_SH: router-config/lede-master/diy-part2.sh
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: openwrt-21.02
+  FEEDS_CONF: router-config/immortalwrt-12.02/feeds.conf.default
+  CONFIG_FILE: router-config/immortalwrt-12.02/.config
+  DIY_P1_SH: router-config/immortalwrt-12.02/diy-part1.sh
+  DIY_P2_SH: router-config/immortalwrt-12.02/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_ARMVIRT: false
   UPLOAD_FIRMWARE: true
@@ -194,7 +194,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: openwrt_s9xxx_lede_${{ env.FILE_DATE }}
+        tag_name: openwrt_s9xxx_immortalwrt_${{ env.FILE_DATE }}
         files: ${{ env.FILEPATH }}/*
         body: |
           This is OpenWrt firmware for Amlogic S9xxx STB

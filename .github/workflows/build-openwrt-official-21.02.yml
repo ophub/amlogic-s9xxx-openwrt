@@ -10,7 +10,7 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #========================================================================================================================
 
-name: Build OpenWrt 21.02
+name: Build OpenWrt official
 
 on:
   repository_dispatch:
@@ -40,7 +40,7 @@ env:
   DELETE_ARTIFACTS: true
   KEEP_DAY: 3
   KEEP_MININUM_RUNS: 0
-  KEEP_MININUM_RELEASE: 6
+  KEEP_MININUM_RELEASE: 9
   RECENT_LASTEST: 3
   TZ: Asia/Shanghai
 
@@ -162,7 +162,7 @@ jobs:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.26.TF_5.4.108
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.23.TF_5.4.105
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
@@ -194,7 +194,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: openwrt_s9xxx_21.02_${{ env.FILE_DATE }}
+        tag_name: openwrt_s9xxx_official_${{ env.FILE_DATE }}
         files: ${{ env.FILEPATH }}/*
         body: |
           This is OpenWrt firmware for Amlogic S9xxx STB

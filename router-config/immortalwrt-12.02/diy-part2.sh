@@ -8,13 +8,16 @@
 #========================================================================================================================
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.31.4）
-# sed -i 's/192.168.1.1/192.168.31.4/g' package/base-files/files/bin/config_generate
+# sed -i 's/192.168.1.1/192.168.31.4/g' ./package/base-files/files/bin/config_generate
+
+# Modify the default hostname（FROM ImmortalWrt CHANGE TO OpenWrt）
+sed -i 's/ImmortalWrt/OpenWrt/g' ./package/base-files/files/bin/config_generate
 
 # Modify default theme（FROM uci-theme-bootstrap CHANGE TO luci-theme-material）
 # sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/luci/Makefile
 
 # Modify default root's password（FROM 'password'[$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.] CHANGE TO 'your password'）
-# sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7:::/g' /etc/shadow
+# sed -i 's/root::0:0:99999:7:::/root:$1$IdsfksW7$LoTjdTJSZz\/IhFyw.t9wj1:18713:0:99999:7:::/g' package/base-files/files/etc/shadow
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
@@ -34,7 +37,7 @@
 # git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci
 
 # Modify some code adaptation
-sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
+# sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
 
 # Mydiy luci-app and luci-theme（use to /.config luci-app&theme）
 # ==========luci-app-url==========

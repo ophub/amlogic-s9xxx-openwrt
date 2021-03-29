@@ -14,7 +14,7 @@
 # sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/luci/Makefile
 
 # Modify default root's password（FROM 'password'[$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.] CHANGE TO 'your password'）
-# sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7:::/g' /etc/shadow
+sed -i 's/root::0:0:99999:7:::/root:$1$IdsfksW7$LoTjdTJSZz\/IhFyw.t9wj1:18713:0:99999:7:::/g' package/base-files/files/etc/shadow
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
@@ -22,6 +22,13 @@
 # coolsnowwolf default software package replaced with Lienol related software package
 # rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}
 # svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils
+
+# Add branches package
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/lean/{luci-app-arpbind,luci-app-autoreboot,luci-app-cifs-mount,luci-app-syncdial,luci-app-usb-printer} package/lean
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/lean/{luci-app-adbyby-plus,adbyby} package/lean
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/lean/{luci-app-filetransfer,luci-lib-fs} package/lean
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/lean/{luci-app-vlmcsd,vlmcsd} package/lean
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/lean/{luci-app-vsftpd,vsftpd-alt} package/lean
 
 # Add third-party software packages (The entire repository)
 # git clone https://github.com/libremesh/lime-packages.git package/lime-packages

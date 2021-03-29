@@ -13,7 +13,7 @@
 # Modify default theme（FROM uci-theme-bootstrap CHANGE TO luci-theme-material）
 # sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/luci/Makefile
 
-# Modify default root's password（FROM 'password'[$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.] CHANGE TO 'your password'）
+# Add the default password for the 'root' user（Change the empty password to 'password'）
 sed -i 's/root::0:0:99999:7:::/root:$1$IdsfksW7$LoTjdTJSZz\/IhFyw.t9wj1:18713:0:99999:7:::/g' package/base-files/files/etc/shadow
 
 # Replace the default software source
@@ -23,7 +23,7 @@ sed -i 's/root::0:0:99999:7:::/root:$1$IdsfksW7$LoTjdTJSZz\/IhFyw.t9wj1:18713:0:
 # rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}
 # svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils
 
-# Add branches package
+# Add branches package from Lienol/openwrt/branches/21.02
 svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 
 # Add third-party software packages (The entire repository)

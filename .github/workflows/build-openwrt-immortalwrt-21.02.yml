@@ -26,10 +26,10 @@ on:
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-21.02
-  FEEDS_CONF: router-config/immortalwrt-12.02/feeds.conf.default
-  CONFIG_FILE: router-config/immortalwrt-12.02/.config
-  DIY_P1_SH: router-config/immortalwrt-12.02/diy-part1.sh
-  DIY_P2_SH: router-config/immortalwrt-12.02/diy-part2.sh
+  FEEDS_CONF: router-config/immortalwrt-21.02/feeds.conf.default
+  CONFIG_FILE: router-config/immortalwrt-21.02/.config
+  DIY_P1_SH: router-config/immortalwrt-21.02/diy-part1.sh
+  DIY_P2_SH: router-config/immortalwrt-21.02/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_ARMVIRT: false
   UPLOAD_FIRMWARE: true

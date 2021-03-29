@@ -10,15 +10,15 @@ name: Delete older releases and artifacts
 on:
   repository_dispatch:
   workflow_dispatch:
-  #schedule:
-    #- cron: '0 23 * * *'
+  schedule:
+    - cron: '0 23 * * *'
 
 env:
   DELETE_RELEASE: true
   DELETE_ARTIFACTS: true
   KEEP_DAY: 3
   KEEP_MININUM_RUNS: 0
-  KEEP_MININUM_RELEASE: 9
+  KEEP_MININUM_RELEASE: 4
 
 jobs:
   build:

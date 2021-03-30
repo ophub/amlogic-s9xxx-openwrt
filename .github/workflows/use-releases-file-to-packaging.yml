@@ -16,7 +16,7 @@ on:
         required: false
         default: 'false'
       branch:
-        description: 'Select Branch [ official/lede/lienol/immortalwrt ]'
+        description: 'Select Branch [ official / lede ]'
         required: false
         default: 'lede'
   #schedule:

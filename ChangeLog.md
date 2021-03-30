@@ -12,8 +12,6 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-| 2021.03.29 | All | ADD | ✩✩✩ | [immortalwrt-21.02](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config/immortalwrt-21.02) | Add ImmortalWrt-21.02 branch. |
-| - | All | ADD | ✩✩✩ | [Lienol-21.02](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config/lienol-21.02) | Add Lienol-21.02 branch. |
 | 2021.03.28 | All | ADD | ✩✩✩ | [5.4.108](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.10.26.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.26.TF) | Add New kernel. |
 | 2021.03.27 | All | ADD | ✩✩✩ | [openwrt-21.02](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/openwrt-21.02) | Add openwrt-21.02 branch. |

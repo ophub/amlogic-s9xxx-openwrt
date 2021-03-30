@@ -19,6 +19,7 @@ sed -i 's/root::0:0:99999:7:::/root:$1$IdsfksW7$LoTjdTJSZz\/IhFyw.t9wj1:18713:0:
 # Add branches package
 # svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/{lean,lienol,ctcgfw,ntlf9t} package
+svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings

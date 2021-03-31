@@ -20,6 +20,7 @@
 # svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/{lean,lienol,ctcgfw,ntlf9t} package
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
+sed -i '/banner/d' package/lean/default-settings/Makefile
 sed -i '/banner/d' package/lean/default-settings/files/zzz-default-settings
 
 # Replace the default software source

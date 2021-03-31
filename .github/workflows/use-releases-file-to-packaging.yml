@@ -53,7 +53,7 @@ jobs:
         echo "COMPILE_STARTINGTIME=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
         # Input value validation
         ARR_BRANCH=("official" "lede")
-        if [[ -n ${{ github.event.inputs.branch }} && $(echo "${ARR_BRANCH[@]}" | grep -w "${{ github.event.inputs.branch }}" &>/dev/null) ]]; then
+        if [[ -n "${{ github.event.inputs.branch }}" && $(echo "${ARR_BRANCH[@]}" | grep -w "${{ github.event.inputs.branch }}" &>/dev/null) ]]; then
            RELEASES_BRANCH=${{ github.event.inputs.branch }}
         else
            RELEASES_BRANCH=lede

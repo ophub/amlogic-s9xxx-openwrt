@@ -6,6 +6,7 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================
 
+cat ../../etc/openwrt_release
 cat ../../lib/u-boot/openwrt-version
 cat ../../proc/version
 

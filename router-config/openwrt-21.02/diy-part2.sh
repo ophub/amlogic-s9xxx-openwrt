@@ -19,6 +19,8 @@
 # Add branches package
 # svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/{lean,lienol} package
+svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/libs/libdouble-conversion feeds/packages/libs/libdouble-conversion
+svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/net/nps feeds/packages/net/nps
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
 sed -i '/banner/d' package/lean/default-settings/Makefile
 sed -i '/banner/d' package/lean/default-settings/files/zzz-default-settings

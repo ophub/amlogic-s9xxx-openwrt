@@ -24,6 +24,8 @@ svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/net/nps fe
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
 sed -i '/banner/d' package/lean/default-settings/Makefile
 sed -i '/banner/d' package/lean/default-settings/files/zzz-default-settings
+sed -i '/Source Code/d' package/lean/autocore/files/arm/rpcd_10_system.js
+sed -i 's/cpuusage.cpuusage,/cpuusage.cpuusage/g' package/lean/autocore/files/arm/rpcd_10_system.js
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings

@@ -14,18 +14,20 @@
 # sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/luci/Makefile
 
 # Add the default password for the 'root' user（Change the empty password to 'password'）
-# sed -i 's/root::0:0:99999:7:::/root:$1$IdsfksW7$LoTjdTJSZz\/IhFyw.t9wj1:18713:0:99999:7:::/g' package/base-files/files/etc/shadow
+sed -i 's/root::0:0:99999:7:::/root:$1$OuDXvtVj$kuiJ2eldOpPTeBEj9Ot.E0:18720:0:99999:7:::/g' package/base-files/files/etc/shadow
 
 # Add branches package
-# svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
-svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/{lean,lienol} package
-svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/libs/libdouble-conversion feeds/packages/libs/libdouble-conversion
-svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/net/nps feeds/packages/net/nps
+svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
-sed -i '/banner/d' package/lean/default-settings/Makefile
-sed -i '/banner/d' package/lean/default-settings/files/zzz-default-settings
-sed -i '/Source Code/d' package/lean/autocore/files/arm/rpcd_10_system.js
-sed -i 's/cpuusage.cpuusage,/cpuusage.cpuusage/g' package/lean/autocore/files/arm/rpcd_10_system.js
+
+# other branches package
+# svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/{lean,lienol} package
+# svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/libs/libdouble-conversion feeds/packages/libs/libdouble-conversion
+# svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/net/nps feeds/packages/net/nps
+# sed -i '/banner/d' package/lean/default-settings/Makefile
+# sed -i '/banner/d' package/lean/default-settings/files/zzz-default-settings
+# sed -i '/Source Code/d' package/lean/autocore/files/arm/rpcd_10_system.js
+# sed -i 's/cpuusage.cpuusage,/cpuusage.cpuusage/g' package/lean/autocore/files/arm/rpcd_10_system.js
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings

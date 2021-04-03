@@ -55,3 +55,4 @@ svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passw
 # ==========luci-theme-url==========
 # svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod
 
+../router-config/openwrt-21.02/zh-cn.sh

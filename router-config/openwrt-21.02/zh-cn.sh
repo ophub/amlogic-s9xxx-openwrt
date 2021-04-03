@@ -48,4 +48,6 @@ do
  [ -n "$(grep "zh-cn" "$f")" ] && sed -i "s/zh-cn/zh_Hans/g" "$f"
  [ -n "$(grep "zh_Hans.lmo" "$f")" ] && sed -i "s/zh_Hans.lmo/zh-cn.lmo/g" "$f"
 done
+
+echo -e "Convert the translation file zh-cn to zh_Hans to complete."
 exit 0

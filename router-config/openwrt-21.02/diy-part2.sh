@@ -20,15 +20,6 @@ sed -i 's/root::0:0:99999:7:::/root:$1$OuDXvtVj$kuiJ2eldOpPTeBEj9Ot.E0:18720:0:9
 svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
 
-# other branches package
-# svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/{lean,lienol} package
-# svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/libs/libdouble-conversion feeds/packages/libs/libdouble-conversion
-# svn co https://github.com/immortalwrt/packages/branches/openwrt-21.02/net/nps feeds/packages/net/nps
-# sed -i '/banner/d' package/lean/default-settings/Makefile
-# sed -i '/banner/d' package/lean/default-settings/files/zzz-default-settings
-# sed -i '/Source Code/d' package/lean/autocore/files/arm/rpcd_10_system.js
-# sed -i 's/cpuusage.cpuusage,/cpuusage.cpuusage/g' package/lean/autocore/files/arm/rpcd_10_system.js
-
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
 
@@ -57,10 +48,9 @@ svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passw
 
 # [CTCGFW]immortalwrt
 # Use it under GPLv3, please.
-# --------------------------------------------------------
 # Convert translation files zh-cn to zh_Hans
 # The script is still in testing, welcome to report bugs.
-
+# ------------------------------- Start Conversion -------------------------------
 convert_files=0
 po_file="$({ find |grep -E "[a-z0-9]+\.zh\-cn.+po"; } 2>"/dev/null")"
 for a in ${po_file}
@@ -113,4 +103,5 @@ do
 done
 
 echo -e "Convert translation files zh-cn to zh_Hans to complete. ${convert_files} in total."
+# ------------------------------- End conversion -------------------------------
 

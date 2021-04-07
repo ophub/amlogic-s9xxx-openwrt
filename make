@@ -122,9 +122,26 @@ extract_armbian() {
     mkdir -p ${root} ${boot}
 
     tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
-    tar -xJf "${kernel_dir}/kernel.tar.xz" -C ${boot}
     tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
-    tar -xJf "${kernel_dir}/modules.tar.xz" -C ${root}
+
+    if  [ -f "${kernel_dir}/kernel.tar.xz" ]; then
+        tar -xJf "${kernel_dir}/kernel.tar.xz" -C ${boot}
+        tar -xJf "${kernel_dir}/modules.tar.xz" -C ${root}
+    elif [ -f ${kernel_dir}/boot-*.tar.gz ]; then
+        mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
+        tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
+
+        tar -xzf ${kernel_dir}/boot-*.tar.gz -C ${boot}
+        mv -f ${boot}/uInitrd-* ${boot}/uInitrd && mv -f ${boot}/vmlinuz-* ${boot}/zImage
+
+        tar -xzf ${kernel_dir}/modules-*.tar.gz -C ${root}/lib/modules
+        cd ${root}/lib/modules/*/
+        rm -f *.ko
+        find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+        cd ${make_path} && sync
+    else
+        die "Have no kernel files in [ ${kernel_dir} ]"
+    fi
 
     cp -rf ${root_comm}/* ${root}
 

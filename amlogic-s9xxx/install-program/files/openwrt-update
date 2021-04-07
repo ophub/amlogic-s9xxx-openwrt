@@ -217,12 +217,12 @@ MODULES_NOW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "\033[1;32m update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ] \033[0m"
 
-# openwrt-version info
-if  [ ! -f ${P2}/lib/u-boot/openwrt-version ]; then
-    echo -e "\033[1;31m Missing update information record file: [ ${P2}/lib/u-boot/openwrt-version ] \033[0m"
+# openwrt-env info
+if  [ ! -f ${P2}/lib/u-boot/openwrt-env ]; then
+    echo -e "\033[1;31m Missing update information record file: [ ${P2}/lib/u-boot/openwrt-env ] \033[0m"
     exit 1
 else
-    source ${P2}/lib/u-boot/openwrt-version 2>/dev/null
+    source ${P2}/lib/u-boot/openwrt-env 2>/dev/null
     FDTFILE=${FDTFILE}
     U_BOOT_EXT=${U_BOOT_EXT}
     UBOOT_OVERLOAD=${UBOOT_OVERLOAD}

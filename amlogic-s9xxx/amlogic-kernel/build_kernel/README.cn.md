@@ -4,7 +4,7 @@
 
 ***`Flippy`*** 分享了他的众多内核包，让我们在 Amlogic S9xxx 机顶盒中使用 OpenWrt 变的如此简单。我们珍藏了很多内核包，你可以在 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 目录里查阅。如果你想构建内核目录里没有的其他内核，可以使用仓库提供的工具，从 Flippy 分享的 Armbian/OpenWrt/Kernel 等资源中进行自动提取和生成。相关工具见 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel) 。现将几种方法介绍如下：
 
-第一种方法: 
+## 第一种方法: 
 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
@@ -26,7 +26,7 @@ cd build-kernel/
 sudo ./make_use_img.sh
 ```
 
-第二种方法: 
+## 第二种方法: 
 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
@@ -48,7 +48,7 @@ cd build-kernel/
 sudo ./make_use_kernel.sh
 ```
 
-第三种方法: 
+## 第三种方法: 
 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/

@@ -1,0 +1,199 @@
+#!/bin/bash
+#======================================================================================
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: update openwrt kernel
+# Function: Update openwrt kernel to emmc for Amlogic S9xxx STB
+# Copyright (C) 2020-2021 Flippy
+# Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
+#======================================================================================
+
+EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
+P4_PATH="/mnt/${EMMC_NAME}p4"
+
+if  [ $( ls /tmp/upload/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
+    mv -f /tmp/upload/*.tar.gz ${P4_PATH}/
+elif  [ $( ls /tmp/upload/.tar.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 2 ]; then
+    mv -f /tmp/upload/.tar.xz ${P4_PATH}/
+fi
+
+if  [ $( ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
+
+    if  [ $( ls ${P4_PATH}/boot-*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+
+        kernel_type="flippy"
+        build_boot=$( ls ${P4_PATH}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
+        echo -e "Try to use the flippy kernel  [\033[1;32m ${build_boot} \033[0m] and other files to update. Please wait a moment ..."
+        flippy_version=${build_boot/boot-/} && flippy_version=${flippy_version/.tar.gz/}
+        kernel_version=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
+        kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,2}')
+        k510_ver=${kernel_vermaj%%.*}
+        k510_maj=${kernel_vermaj##*.}
+        if  [ ${k510_ver} -eq "5" ];then
+            if  [ "${k510_maj}" -ge "10" ];then
+                K510=1
+            else
+                K510=0
+            fi
+        elif [ ${k510_ver} -gt "5" ];then
+            K510=1
+        else
+            K510=0
+        fi
+    else
+        echo -e "Error: Have no boot-*.tar.gz file found in the ${P4_PATH} directory."
+    fi
+
+    if  [ -f ${P4_PATH}/dtb-amlogic-${flippy_version}.tar.gz ]; then
+        build_dtb="dtb-amlogic-${flippy_version}.tar.gz"
+    else
+        echo -e "Error: Have no dtb-amlogic-*.tar.gz file found in the ${P4_PATH} directory."
+    fi
+
+    if  [ -f ${P4_PATH}/modules-${flippy_version}.tar.gz ]; then
+        build_modules="modules-${flippy_version}.tar.gz"
+    else
+        echo -e "Error: Have no modules-*.tar.gz file found in the ${P4_PATH} directory."
+    fi
+
+    echo -e " \
+    Try to using this files to update the kernel: \n \
+    kernel_type: ${kernel_type} \n \
+    build_boot: ${build_boot} \n \
+    build_dtb: ${build_dtb} \n \
+    build_modules: ${build_modules} \n \
+    flippy_version: ${flippy_version} \n \
+    kernel_version: ${kernel_version} \n \
+    K510: ${K510}"
+
+elif  [ $( ls ${P4_PATH}/*.tar.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 2 ]; then
+
+    if  [ -f ${P4_PATH}/kernel.tar.xz ]; then
+        build_kernel=$( ls ${P4_PATH}/kernel.tar.xz | head -n 1 ) && build_kernel=${build_kernel##*/}
+        echo -e "Try to use the ophub kernel  [\033[1;32m ${build_kernel} \033[0m] and other files to update. Please wait a moment ..."
+        mkdir -p ${P4_PATH}/tmp_modules
+        tar -xJf "${P4_PATH}/kernel.tar.xz" -C ${P4_PATH}/tmp_modules
+        flippy_version=$( ls ${P4_PATH}/tmp_modules/config-* | head -n 1 ) && flippy_version=${flippy_version##*/}
+        flippy_version=${flippy_version/config-/}
+        kernel_version=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
+        kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,2}')
+        k510_ver=${kernel_vermaj%%.*}
+        k510_maj=${kernel_vermaj##*.}
+        if  [ ${k510_ver} -eq "5" ];then
+            if  [ "${k510_maj}" -ge "10" ];then
+                K510=1
+            else
+                K510=0
+            fi
+        elif [ ${k510_ver} -gt "5" ];then
+            K510=1
+        else
+            K510=0
+        fi
+    else
+        echo -e "Error: Have no kernel.tar.xz file found in the ${P4_PATH} directory."
+    fi
+
+    if  [ -f ${P4_PATH}/modules.tar.xz ]; then
+        kernel_type="ophub"
+        build_modules=$( ls ${P4_PATH}/modules.tar.xz | head -n 1 ) && build_modules=${build_modules##*/}
+    else
+        echo -e "Error: Have no modules.tar.xz file found in the ${P4_PATH} directory."
+    fi
+
+    echo -e " \
+    Try to using this files to update the kernel: \n \
+    kernel_type: ${kernel_type} \n \
+    build_kernel: ${build_kernel} \n \
+    build_modules: ${build_modules} \n \
+    flippy_version: ${flippy_version} \n \
+    kernel_version: ${kernel_version} \n \
+    K510: ${K510}"
+
+else
+    echo -e "\033[1;31m Please upload the kernel files. \033[0m"
+    echo -e "\033[1;35m - Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ] \033[0m"
+    echo -e "\033[1;35m - Specify method: Place the kernel file in [ /mnt/mmcblk*p4/ ] \033[0m"
+    echo -e "After choosing a method to upload the kernel file, run \033[1;32m openwrt-kernel \033[0m again."
+    exit 1
+fi
+
+MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
+VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+VERSION_ver=${VERSION_OLD%%.*}
+VERSION_maj=${VERSION_OLD##*.}
+if  [ ${VERSION_ver} -eq "5" ];then
+    if  [ "${VERSION_maj}" -ge "10" ];then
+        V510=1
+    else
+        V510=0
+    fi
+elif [ ${VERSION_ver} -gt "5" ];then
+    V510=1
+else
+    V510=0
+fi
+
+if  [ "${K510}" -eq "${V510}" ]; then
+    UP_FLAG=1
+    echo -ne "Do you want to update the kernel from [ ${MODULES_OLD} ] to [ ${flippy_version} ]? y/n [y]\b\b"
+    read yn
+    case $yn in
+         n*|N*) UP_FLAG=0;;
+    esac
+else
+    echo -e "\033[1;31m The kernel series are not the same, Distinguish whether it is 5.10 kernel! \033[0m"
+    exit 1
+fi
+
+if [[ ${UP_FLAG} -eq 0 ]];then
+    rm -rf ${P4_PATH}/tmp_modules && sync
+    echo -e "\033[1;31m You gave up the update and the operation is over. \033[0m"
+    exit 1
+fi
+
+if [ "${kernel_type}" == "flippy" ]; then
+
+    echo -e "Delete [ ${MODULES_OLD} ] related files ..."
+    rm -rf /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-*
+    rm -rf /lib/modules/*
+    sync
+
+    echo -e "Unzip [ ${flippy_version} ] related files ..."
+    tar -xzf ${P4_PATH}/dtb-amlogic-*.tar.gz -C /boot/dtb/amlogic
+    tar -xzf ${P4_PATH}/boot-*.tar.gz -C /boot
+    tar -xzf ${P4_PATH}/modules-*.tar.gz -C /lib/modules
+    sync
+
+    cd /boot
+    mv -f uInitrd-* uInitrd && mv -f vmlinuz-* zImage 2>/dev/null
+
+    cd /lib/modules/*/
+    rm -f *.ko
+    find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+    rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz && sync
+
+elif [ "${kernel_type}" == "ophub" ]; then
+
+    echo -e "Delete [ ${MODULES_OLD} ] related files ..."
+    rm -rf /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-*
+    rm -rf /lib/modules/*
+    sync
+
+    echo -e "Unzip [ ${flippy_version} ] related files ..."
+    tar -xJf ${P4_PATH}/kernel.tar.xz -C /boot
+    tar -xJf ${P4_PATH}/modules.tar.xz -C /
+    sync && sleep 3
+    cd /lib/modules/*/
+    rm -f *.ko
+    find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+    rm -rf ${P4_PATH}/tmp_modules ${P4_PATH}/kernel.tar.xz ${P4_PATH}/modules.tar.xz && sync
+
+else
+    echo -e "\033[1;31m Error: unknown type. \033[0m"
+    exit 1
+fi
+sync
+wait
+
+echo "The update is complete, please [ reboot ] the system!"
+

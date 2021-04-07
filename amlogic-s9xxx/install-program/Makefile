@@ -10,8 +10,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=install-program
-PKG_VERSION:=3.5
-PKG_RELEASE:=20210325
+PKG_VERSION:=3.6
+PKG_RELEASE:=20210407
 
 include $(INCLUDE_DIR)/package.mk
 

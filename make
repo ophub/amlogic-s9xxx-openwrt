@@ -275,6 +275,7 @@ utils() {
         fi
         echo " Install command: openwrt-install" >> etc/banner
         echo " Update command: openwrt-update" >> etc/banner
+        echo " Update kernel command: openwrt-kernel" >> etc/banner
         echo " Backup & Restore command: openwrt-backup" >> etc/banner
         echo " View version command: openwrt-version" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner

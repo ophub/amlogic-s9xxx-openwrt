@@ -31,7 +31,7 @@ openwrt-install
 
 除默认的 13 个型号的机顶盒是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)
 
-### 升级 OpenWrt
+### 升级 OpenWrt 固件
 
 - 从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
 
@@ -48,6 +48,24 @@ openwrt-update
 | 目录 | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
 | ---- | ---- | ---- |
 | 顺序 | `你指定使用的升级固件` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
+
+### 更换 OpenWrt 内核
+
+- 从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传内核包 ***`kernel.tar.xz & modules.tar.xz  (或者 Flippy 提供的原版内核 3 文件：boot-*，dtb-amlogic-*，modules-*)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
+
+```yaml
+openwrt-kernel
+```
+
+💡提示: 升级脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找内核文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将升级固件的压缩包上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
+
+
+- 升级脚本 `openwrt-update` 在 2 处目录中的查找顺序说明
+
+| 目录 | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
+| ---- | ---- | ---- |
+| 顺序 | `你指定使用的升级固件` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
+
 
 ### 备份与恢复
 

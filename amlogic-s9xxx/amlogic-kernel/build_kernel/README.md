@@ -38,6 +38,21 @@ sudo ./make_use_kernel.sh
 
 The generated files ***` kernel.tar.xz & modules.tar.xz `*** will be directly placed in the kernel directory of this github: ***` ~/amlogic-s9xxx/amlogic-kernel/kernel/${build_save_folder} `***
 
+The third method: 
+```shell script
+Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
+ └── 5.4.108 (The directory name is created based on the kernel version number)
+     ├── boot-5.4.108-flippy-56+o.tar.gz
+     ├── dtb-amlogic-5.4.108-flippy-56+o.tar.gz
+     └── modules-5.4.108-flippy-56+o.tar.gz
+```
+
+A set of Flippy's kernel package consists of 3 files: `boot-${flippy_version}.tar.gz`, `dtb-amlogic-${flippy_version}.tar.gz`, `modules-${flippy_version}.tar .gz`
+
+Put the 3 files of a set of kernel packages shared by `Flippy` directly into the `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (directory name is created according to the kernel version number)` directory, without other operations, you can directly use the packaging script for OpenWrt production, such as: `sudo ./make -d -b s905d_s905x3 -k 5.4.108`
+
+If you store 2 kernel packages (kernel.tar.xz and modules.tar.xz) reorganized using the repository kernel packaging script in the kernel directory, and at the same time store 3 original kernel files of Flippy (boot-*, dtb) -amlogic-*, modules-*), then when using `sudo ./make -d -b s905d_s905x3 -k 5.4.108` script packaging, `kernel.tar.xz` and `modules.tar.xz` will be used first. If you don't need to add or modify the 3 kernel files, such as add .dtb files, it is recommended that you directly use the 3 kernel files by Flippy. For example [5.4.108](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108)
+
 ## Update and supplement dtb file
 
 Thanks for the `Flippy's` continuous research, `OpenWrt` can be installed and used in more boxes, but these latest .dtb files are not in the old version of the kernel package, you can use the latest version of [the .dtb file library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) in the repository to update the previous kernel package. Update `kernel.tar.xz` files in the [kernel directory](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) with the latest .dtb file.

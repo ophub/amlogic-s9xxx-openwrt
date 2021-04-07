@@ -7,6 +7,6 @@
 #======================================================================
 
 cat ../../etc/openwrt_release
-cat ../../lib/u-boot/openwrt-version
+cat ../../lib/u-boot/openwrt-env
 cat ../../proc/version
 

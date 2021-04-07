@@ -48,6 +48,21 @@ cd build-kernel/
 sudo ./make_use_kernel.sh
 ```
 
+第三种方法: 
+
+```shell script
+Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
+ └── 5.4.108 (目录名根据内核版本号进行创建)
+     ├── boot-5.4.108-flippy-56+o.tar.gz
+     ├── dtb-amlogic-5.4.108-flippy-56+o.tar.gz
+     └── modules-5.4.108-flippy-56+o.tar.gz
+```
+Flippy 的一套内核包由 3 个文件共同组成： `boot-${flippy_version}.tar.gz`, `dtb-amlogic-${flippy_version}.tar.gz`, `modules-${flippy_version}.tar.gz`
+
+将 `Flippy` 分享的一套内核包的 3 个文件直接放入 `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (目录名根据内核版本号进行创建)` 目录下即可使用，无需其他操作，即可直接使用打包脚本进行 OpenWrt 制作，如：`sudo ./make -d -b s905d_s905x3 -k 5.4.108`
+
+如果你在内核目录下存放了使用仓库内核打包脚本重组的 2 个内核包（kernel.tar.xz 和 modules.tar.xz），同时又存放了 Flippy 的 3 个原版内核文件（boot-*，dtb-amlogic-*，modules-*），那么你在使用例如 `sudo ./make -d -b s905d_s905x3 -k 5.4.108` 脚本打包时，会优先使用重组后的 2 个内核包（kernel.tar.xz 和 modules.tar.xz）。如果你对 Flippy 提供的 3 个内核包没有如 .dtb 等更多内容需要添加或改动，推荐你直接使用 Flippy 提供的 3 个内核包即可。例如 [5.4.108](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108)
+
 ## 更新内核库中的已有文件
 
 随着 `Flippy` 的不断创新，更多的机顶盒纳入了可使用范围，当有新机型出现时，原内核包中可能缺少这款机顶盒的 [.dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) 文件，这时我们需要对已有的内核包进行批量更新了。运行 `update_dtb.sh` 命令可以对已有内核包统一批量更新。在执行更新命令时会提示你选择更新对象，可以单独升级 `kernel.tar.xz` 或 `modules.tar.xz` 文件，也可以一次全部进行更新。内核更新脚本同样适用于给现有的内核包统一添加 WIFI 驱动等其他更新操作。更新完成的内核包会自动覆盖回原路径 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel)

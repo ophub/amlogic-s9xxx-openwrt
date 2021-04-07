@@ -4,7 +4,7 @@ View Chinese description  |  [查看中文说明](README.cn.md)
 
 You can install `Flippy’s` OpenWrt firmware and use it. If you want to define some plug-ins and make your own dedicated OpenWrt firmware, you can use this script to generate a kernel package adapted to this github source code. You have two ways to get the kernel, one is to use the ***`Flippy’s *.img file`*** provided by him to extract. another way is to use the kernel files provided by Flippy to synthesize ***`(boot-${flippy_version}.tar.gz, dtb-amlogic-${flippy_version}.tar.gz & modules-${flippy_version}.tar.gz)`***. The operation of these two methods is as follows:
 
-The first method: 
+## The first method: 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
@@ -20,7 +20,7 @@ cd build-kernel/
 sudo ./make_use_img.sh
 ```
 
-The second method: 
+## The second method: 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
@@ -38,7 +38,7 @@ sudo ./make_use_kernel.sh
 
 The generated files ***` kernel.tar.xz & modules.tar.xz `*** will be directly placed in the kernel directory of this github: ***` ~/amlogic-s9xxx/amlogic-kernel/kernel/${build_save_folder} `***
 
-The third method: 
+## The third method: 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
  └── 5.4.108 (The directory name is created based on the kernel version number)

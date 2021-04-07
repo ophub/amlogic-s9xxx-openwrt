@@ -79,13 +79,17 @@ update_kernel_files() {
             for kernel_folder in $( ls -d */ | head -c-2 ); do
                 kernel_version=${kernel_folder%/*}
                 cd ${kernel_version}
+                if [ ! -f "kernel.tar.xz" ]; then
+                   echo_color "yellow" "(${current_kernel}/${total_kernel}) ${kernel_version}"  "The file is ignored."
+                   current_kernel=$(($current_kernel + 1)) && cd ../ && continue
+                fi
                 mkdir -p tmp_kernel && tar -xJf kernel.tar.xz -C tmp_kernel
                 cp -f ${amlogic_path}/amlogic-dtb/* tmp_kernel/dtb/amlogic/
                 sync && cd tmp_kernel
                 tar -cf kernel.tar *
                 xz -z kernel.tar
                 mv -f kernel.tar.xz ../kernel.tar.xz && sync && cd ../ && rm -rf tmp_kernel && cd ../
-                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version}"  "The files update complete."
+                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version}"  "The file update complete."
                 current_kernel=$(($current_kernel + 1))
             done
 
@@ -118,6 +122,10 @@ update_modules_files() {
             for kernel_folder in $( ls -d */ | head -c-2 ); do
                 kernel_version=${kernel_folder%/*}
                 cd ${kernel_version}
+                if [ ! -f "modules.tar.xz" ]; then
+                   echo_color "yellow" "(${current_kernel}/${total_kernel}) ${kernel_version}"  "The file is ignored."
+                   current_kernel=$(($current_kernel + 1)) && cd ../ && continue
+                fi
                 mkdir -p tmp_modules && tar -xJf modules.tar.xz -C tmp_modules
                 #Add drivers
                 cp -rf ${amlogic_path}/common-files/patches/wireless/* tmp_modules/lib/modules/*/kernel/drivers/net/wireless/
@@ -135,7 +143,7 @@ update_modules_files() {
                 tar -cf modules.tar *
                 xz -z modules.tar
                 mv -f modules.tar.xz ../modules.tar.xz && sync && cd ../ && rm -rf tmp_modules && cd ../
-                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version} "  "Have [ ${x} ] files make *.ko link. The files update complete."
+                echo_color "blue" "(${current_kernel}/${total_kernel}) ${kernel_version} "  "Have [ ${x} ] files make *.ko link. The file update complete."
                 current_kernel=$(($current_kernel + 1))
             done
 

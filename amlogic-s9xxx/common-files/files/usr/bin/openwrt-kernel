@@ -19,7 +19,6 @@ fi
 if  [ $( ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
 
     if  [ $( ls ${P4_PATH}/boot-*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-
         kernel_type="flippy"
         build_boot=$( ls ${P4_PATH}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
         echo -e "Try to use the flippy kernel  [\033[1;32m ${build_boot} \033[0m] and other files to update. Please wait a moment ..."
@@ -68,6 +67,7 @@ if  [ $( ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; th
 elif  [ $( ls ${P4_PATH}/*.tar.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 2 ]; then
 
     if  [ -f ${P4_PATH}/kernel.tar.xz ]; then
+        kernel_type="ophub"
         build_kernel=$( ls ${P4_PATH}/kernel.tar.xz | head -n 1 ) && build_kernel=${build_kernel##*/}
         echo -e "Try to use the ophub kernel  [\033[1;32m ${build_kernel} \033[0m] and other files to update. Please wait a moment ..."
         mkdir -p ${P4_PATH}/tmp_modules
@@ -94,7 +94,6 @@ elif  [ $( ls ${P4_PATH}/*.tar.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 2 ]; 
     fi
 
     if  [ -f ${P4_PATH}/modules.tar.xz ]; then
-        kernel_type="ophub"
         build_modules=$( ls ${P4_PATH}/modules.tar.xz | head -n 1 ) && build_modules=${build_modules##*/}
     else
         echo -e "Error: Have no modules.tar.xz file found in the ${P4_PATH} directory."

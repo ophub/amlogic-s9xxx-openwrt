@@ -25,17 +25,24 @@
 
 - ### 安装 OpenWrt
 
-从浏览器访问OpenWrt的默认IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
+从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
 
 ```yaml
 openwrt-install
 ```
-- ### 升级 OpenWrt
+- ### 升级 OpenWrt 固件
 
-从浏览器访问OpenWrt的IP如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令: 
+从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令: 
 
 ```yaml
 openwrt-update
+```
+- ### 更换 OpenWrt 内核
+
+从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传内核包 ***`kernel.tar.xz & modules.tar.xz  (或者 Flippy 提供的原版内核 3 文件：boot-*，dtb-amlogic-*，modules-*)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
+
+```yaml
+openwrt-kernel
 ```
 
 更多安装/升级说明详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program/README.cn.md)

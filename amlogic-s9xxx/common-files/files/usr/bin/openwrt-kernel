@@ -194,10 +194,10 @@ fi
 sync
 wait
 
-sed -i '/KERNEL_VERSION/d' lib/u-boot/openwrt-env 2>/dev/null
-sed -i '/K510/d' lib/u-boot/openwrt-env 2>/dev/null
-echo "KERNEL_VERSION='${kernel_version}'" >> lib/u-boot/openwrt-env 2>/dev/null
-echo "K510='${K510}'" >> lib/u-boot/openwrt-env 2>/dev/null
+sed -i '/KERNEL_VERSION/d' /lib/u-boot/openwrt-env 2>/dev/null
+sed -i '/K510/d' /lib/u-boot/openwrt-env 2>/dev/null
+echo "KERNEL_VERSION='${kernel_version}'" >> /lib/u-boot/openwrt-env 2>/dev/null
+echo "K510='${K510}'" >> /lib/u-boot/openwrt-env 2>/dev/null
 
 echo "The update is complete, please [ reboot ] the system!"
 

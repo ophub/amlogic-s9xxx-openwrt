@@ -61,7 +61,7 @@ openwrt-kernel
 
 更换 OpenWrt 内核仅做了内核替换，固件原本的各种个性化配置均保持不变。是一种最简单的升级方法。支持内核高/低版本自由更换。
 
-此脚本同样适用于对 Flippy 制作分享的 OpenWrt 系列固件进行内核更换。将 [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel) 文件放于 `/usr/bin/` 目录下并赋予执行权限 `chmod 777 /usr/bin/openwrt-kernel` ，即可在任意目录输入内核更换命令进行操作。由于使用中的 OpenWrt 可能选择了不同的 U-BOOT （主线/安卓），为了安全起见，脚本进行了是否 5.10 内核的判断，支持同系列进行替换（如 5.10 内核的只可以替换 5.10 系列内核，非5.10内核的只能替换为非 5.10 相关内核）。
+此脚本同样适用于对 Flippy 制作分享的 OpenWrt 系列固件进行内核更换。将 [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel) 文件放于 `/usr/bin/` 目录下并赋予执行权限 `chmod +x /usr/bin/openwrt-kernel` ，即可在任意目录输入内核更换命令进行操作。由于使用中的 OpenWrt 可能选择了不同的 U-BOOT （主线/安卓），为了安全起见，脚本进行了是否 5.10 内核的判断，支持同系列进行替换（如 5.10 内核的只可以替换 5.10 系列内核，非5.10内核的只能替换为非 5.10 相关内核）。
 
 ### 备份与恢复
 

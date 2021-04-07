@@ -132,7 +132,7 @@ extract_armbian() {
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
 
         tar -xzf ${kernel_dir}/boot-*.tar.gz -C ${boot}
-        mv -f ${boot}/uInitrd-* ${boot}/uInitrd && mv -f ${boot}/vmlinuz-* ${boot}/zImage
+        mv -f ${boot}/uInitrd-* ${boot}/uInitrd && mv -f ${boot}/vmlinuz-* ${boot}/zImage 2>/dev/null
 
         tar -xzf ${kernel_dir}/modules-*.tar.gz -C ${root}/lib/modules
         cd ${root}/lib/modules/*/

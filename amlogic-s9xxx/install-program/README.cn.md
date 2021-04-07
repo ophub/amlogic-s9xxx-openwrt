@@ -39,11 +39,11 @@ openwrt-install
 openwrt-update
 ```
 
-💡提示: 升级脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找各种后缀的升级文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将升级固件的压缩包上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
+💡提示: 脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找各种后缀的升级文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将升级固件的压缩包上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
 如果在 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update` 进行升级，无需输入固件名称的参数。如果这 2 个目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update  openwrt_s905x3_v5.4.105_2021.03.17.0412.img.gz` ）。升级脚本优先查找 `/mnt/mmcblk*p4/` 目录，如果该目录下没有符合要求的升级固件，将去 `/tmp/upload/` 下继续查找。这 2 个目录中的相关压缩文件，升级脚本会自动匹配进行解压，升级完成后会自动删除此升级固件文件。
 
-- 升级脚本 `openwrt-update` 在 2 处目录中的查找顺序说明
+- 脚本 `openwrt-update` 在 2 处目录中的查找顺序说明
 
 | 目录 | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
 | ---- | ---- | ---- |
@@ -57,7 +57,7 @@ openwrt-update
 openwrt-kernel
 ```
 
-💡提示: 升级脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找内核文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将内核文件上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将内核文件手动上传至 `/mnt/mmcblk*p4/` 目录下。当两处目录中同时存在本仓库重组的内核文件和 Flippy 的原版内核时，优先使用 Flippy 的 3 文件进行内核更换。
+💡提示: 脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找内核文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将内核文件上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将内核文件手动上传至 `/mnt/mmcblk*p4/` 目录下。当两处目录中同时存在本仓库重组的内核文件和 Flippy 的原版内核时，优先使用 Flippy 的 3 文件进行内核更换。
 
 更换 OpenWrt 内核仅做了内核替换，固件原本的各种个性化配置均保持不变。是一种最简单的升级方法。支持内核高/低版本自由更换。
 

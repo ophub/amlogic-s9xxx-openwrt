@@ -1,43 +1,28 @@
-# Build kernel for Amlogic S9xxx STB
+# Add more kernel for Amlogic S9xxx OpenWrt
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
-You can install `Flippy’s` OpenWrt firmware and use it. If you want to define some plug-ins and make your own dedicated OpenWrt firmware, you can use this script to generate a kernel package adapted to this github source code. You have two ways to get the kernel, one is to use the ***`Flippy’s *.img file`*** provided by him to extract. another way is to use the kernel files provided by Flippy to synthesize ***`(boot-${flippy_version}.tar.gz, dtb-amlogic-${flippy_version}.tar.gz & modules-${flippy_version}.tar.gz)`***. The operation of these two methods is as follows:
+***`Flippy`*** shared many of his kernel packages, let us use OpenWrt in Amlogic S9xxx STB so simple. We have collected a lot of kernel packages, you can check them in the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) directory. If you want to build other kernels that are not in the kernel directory, you can use the [openwrt-kernel](openwrt-kernel) script in the repository to automatically extract and generate them from the Armbian/OpenWrt firmware shared by Flippy. Or put Flippy's original kernel directly into the repository for use.
 
-## The first method: 
+This repository uses the 3 kernel files provided by Flippy to package the OpenWrt firmware. You can freely choose the kernel you like to use.
+
+## Extract the kernel from Armbian or OpenWrt firmware
+
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
  │   ├── S9***_Openwrt*.img            #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
  │   └── OR: Armbian*Aml-s9xxx*.img    #Support suffix: .img/.7z/.img.xz, Use Flippy's Armbian*.img files
- └── make_use_img.sh
+ └── sudo ./openwrt-kernel -e
 ```
+When you only have Flippy's `Armbian` or `OpenWrt` firmware and no `kernel` file, you can put the firmware shared by `Flippy` into the `~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/flippy` directory and run it directly. Run `sudo ./openwrt-kernel -e` command can automatically complete the kernel extraction and generation, and the generated 3 kernel files (boot-${flippy_version}.tar.gz, dtb-amlogic-${flippy_version}.tar.gz & modules-${flippy_version}.tar.gz) fully implement Flippy's file structure standard, which is exactly the same as its original kernel.
 
-Put the ***`Flippy’s *.img file`*** E.g: ***`N1_Openwrt*.img`*** file into the ***`${flippy_folder}`*** folder, Modify ${flippy_file} to kernel file name. E.g: ***`flippy_file="N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img"`***. ( If the file of ${flippy_file} is not found, Will search for other *.img and *.img.xz files in the ${flippy_folder} directory. ) then run the script:
-```shell script
-cd build-kernel/
-sudo ./make_use_img.sh
-```
+When this script is used in the default path of this repository, the generated files will be automatically saved to the kernel fixed storage directory `~/*/amlogic-s9xxx/amlogic-kernel/kernel`. This script also supports separate copying to any repository, and independent use at any location. The generated folder is named after the kernel version number (for example: 5.4.105) and stored in the same directory of the script.
 
-## The second method: 
-```shell script
-Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
- ├── flippy
- │   ├── boot-5.9.5-flippy-48+.tar.gz
- │   ├── dtb-amlogic-5.9.5-flippy-48+.tar.gz
- │   └── modules-5.9.5-flippy-48+.tar.gz
- └── make_use_kernel.sh
-```
+For the firmware with the same kernel version number, you can select one of them to extract the kernel. The kernels extracted from Armbian and OpenWrt are the same, and the kernels extracted from the OpenWrt firmware used by different Amlogic S9xxx STB are also the same (for example, whether you choose `Armbian_20.10_Aml-s9xxx_buster_5.4.105-flippy-55+o.img.xz`, still choose `openwrt_s905x3_multi_R21.2.1_k5.4.105-flippy-55+o.7z`, or you choose `openwrt_s905d_n1_R21.2.1_k5 4.105-flippy-55+o.7z` Because the kernels of these firmwares are all `5.4.105`, the final extracted kernel is the same).
 
-put ***`boot-${flippy_version}.tar.gz, dtb-amlogic-${flippy_version}.tar.gz & modules-${flippy_version}.tar.gz`*** the three files into the ***`${flippy_folder}`*** folder, Modify ${flippy_version} to kernel version. E.g: ***`flippy_version="5.9.5-flippy-48+"`***. ( If the files of ${flippy_version} is not found, Will search for other files in the ${flippy_folder} directory. ) then run the script:
-```shell script
-cd build-kernel/
-sudo ./make_use_kernel.sh
-```
+## Use the original kernel provided by Flippy directly
 
-The generated files ***` kernel.tar.xz & modules.tar.xz `*** will be directly placed in the kernel directory of this github: ***` ~/amlogic-s9xxx/amlogic-kernel/kernel/${build_save_folder} `***
-
-## The third method: 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
  └── 5.4.108 (The directory name is created based on the kernel version number)
@@ -48,23 +33,11 @@ Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
 
 A set of Flippy's kernel package consists of 3 files: `boot-${flippy_version}.tar.gz`, `dtb-amlogic-${flippy_version}.tar.gz`, `modules-${flippy_version}.tar .gz`
 
-Put the 3 files of a set of kernel packages shared by `Flippy` directly into the `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (directory name is created according to the kernel version number)` directory, without other operations, you can directly use the packaging script for OpenWrt production, such as: `sudo ./make -d -b s905d_s905x3 -k 5.4.108`
-
-If you only have `Armbian*Aml-s9xxx*.img` or `S9***_Openwrt*.img` shared by Flippy and want to make its standard kernel 3 files, you can use the [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel)  script to make it.
-
-In `Ubuntu` and other systems, create a kernel extraction directory at any location, create a `flippy` folder in the same directory of the `openwrt-kernel` script, put the Armbian or OpenWrt firmware into the flippy folder, and run `sudo chmod +x openwrt-kernel` command gives the script execution permission, and then runs the `sudo ./openwrt-kernel -e` command to extract the kernel. The generated kernel is saved in the same directory, named after the kernel version number (Eg: 5.4.108), and the file structure is executed Flippy kernel 3 file standard.
-
-```shell script
-Example:
- ├── flippy
- │   ├── S9***_Openwrt*.img            #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
- │   └── OR: Armbian*Aml-s9xxx*.img    #Support suffix: .img/.7z/.img.xz, Use Flippy's Armbian*.img files
- └── sudo ./openwrt-kernel -e
-```
+Put the 3 files of a set of kernel packages shared by `Flippy` directly into the `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (directory name is created according to the kernel version number)` directory, without other operations.
 
 ## Update and supplement dtb file
 
-Thanks for the `Flippy's` continuous research, `OpenWrt` can be installed and used in more boxes, but these latest .dtb files are not in the old version of the kernel package, you can use the latest version of [the .dtb file library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) in the repository to update the previous kernel package. Update `kernel.tar.xz` files in the [kernel directory](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) with the latest .dtb file.
+Thanks for the `Flippy's` continuous research, `OpenWrt` can be installed and used in more boxes, but these latest .dtb files are not in the old version of the kernel package, you can use the latest version of [the .dtb file library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) in the repository to update the previous kernel package. Update `dtb-amlogic-${flippy_version}.tar.gz` files in the [kernel directory](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) with the latest .dtb file.
 
 ```shell script
 Example: ~/*/amlogic-s9xxx/
@@ -72,7 +45,7 @@ Example: ~/*/amlogic-s9xxx/
  │   └── *.dtb
  └── amlogic-kernel
      └── build_kernel
-         └── update_dtb.sh
+         └── sudo ./update_dtb.sh
 ```
 
 ```shell script

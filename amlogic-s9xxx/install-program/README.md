@@ -38,7 +38,7 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 ```yaml
 openwrt-update
 ```
-💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the `openwrt-update` script will automatically find the `update file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories.
+💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the [openwrt-update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-update) script will automatically find the `update file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories.
     
 If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/upload/`***  directory, you can just enter the ***`openwrt-update`*** command without specifying a specific `update file`. The `openwrt-update` will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update specified_update_file`*** command to specify the `update file`. When the `update file` is not found in the `/mnt/mmcblk*p4/` directory, the `openwrt-update` will search for the `update file` in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the update operation. 
 
@@ -50,17 +50,17 @@ If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/u
 
 ### Replace OpenWrt kernel
 
-- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → upload ***`kernel.tar.xz & modules.tar.xz  (Or the original kernel 3 file provided by Flippy：boot-*，dtb-amlogic-*，modules-*)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input the Kernel replacement command: 
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → Upload kernel package ***`There are 3 files：boot-*，dtb-amlogic-*，modules-*)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input the Kernel replacement command: 
 
 ```yaml
 openwrt-kernel
 ```
 
-💡Tips: You can also put the `kernel files` in the `/mnt/mmcblk*p4/` directory, the `openwrt-kernel` script will automatically find the `kernel file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories. When there are both the reorganized kernel files of this repository and the original kernel of `Flippy` in two directories, the 3 files of `Flippy` are first used for kernel replacement.
+💡Tips: You can also put the `kernel files` in the `/mnt/mmcblk*p4/` directory, the `openwrt-kernel` script will automatically find the `kernel file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories.
 
 Replacing the OpenWrt kernel is only a kernel replacement, and the various personalized configurations of the firmware remain unchanged. It is the easiest way to update. Support replacement of kernel high/low version.
 
-This script is also suitable for kernel replacement of the `OpenWrt` series firmware produced and shared by `Flippy`. Put the [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel) file in the `/usr/bin/` directory and grant the execution permission `chmod +x /usr/bin/openwrt-kernel`, you can enter the kernel replacement command in any directory to operate. Since the `OpenWrt` in use may choose a different `U-BOOT (Mainline/Android)`. For the sake of safety, the script judged whether the 5.10 kernel is. The OpenWrt that is currently using the 5.10 kernel can be replaced with any kernel, but the current OpenWrt that is not the 5.10 kernel is not allowed to be replaced with the 5.10 kernel, and can only be replaced with other versions of the kernel lower than 5.10.
+This script is also suitable for kernel replacement of the `OpenWrt` series firmware produced and shared by `Flippy`. Put the [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/openwrt-kernel) file in the `/usr/bin/` directory and grant the execution permission `chmod +x /usr/bin/openwrt-kernel`, you can enter the kernel replacement command in any directory to operate. Since the `OpenWrt` in use may choose a different `U-BOOT (Mainline/Android)`. For the sake of safety, the script judged whether the 5.10 kernel is. The OpenWrt that is currently using the 5.10 kernel can be replaced with any kernel, but the current OpenWrt that is not the 5.10 kernel is not allowed to be replaced with the 5.10 kernel, and can only be replaced with other versions of the kernel lower than 5.10.
 
 The script `openwrt-kernel` can also be used to extract the standard kernel 3 file that generates Flippy. For more instructions please see [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.md)
 

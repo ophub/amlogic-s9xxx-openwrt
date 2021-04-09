@@ -10,14 +10,14 @@
 #
 # example: ~/*/amlogic-s9xxx/amlogic-kernel/build_kernel/
 # ├── flippy
-# │   └── N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img
+# │   └── S9***_Openwrt*.img
 # └── make_use_img.sh
 #
 # Usage: Use Ubuntu 18 LTS 64-bit
 # 01. Log in to the home directory of the local Ubuntu system.
 # 02. git clone https://github.com/ophub/amlogic-s9xxx-openwrt.git
 # 03. cd ~/*/amlogic-s9xxx/amlogic-kernel/build_kernel/
-# 04. Prepare Flippy's ${flippy_file}, support: N1_Openwrt*.img, S9***_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img
+# 04. Prepare Flippy's ${flippy_file}, support: S9***_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img
 #     Support to put the original .7z/.img.xz file into the directory and use it directly.
 # 05. Put Flippy's ${flippy_file} file into ${flippy_folder}
 # 06. Modify ${flippy_file} to kernel file name. E.g: flippy_file="N1_Openwrt_R20.10.20_k5.9.5-flippy-48+.img"
@@ -138,7 +138,7 @@ copy_boot_root() {
 
    #Check core files
    if [ ! -f ${kernel_tmp}/config* -o ! -f ${kernel_tmp}/initrd.img* -o ! -f ${kernel_tmp}/System.map* -o ! -f ${kernel_tmp}/uInitrd -o ! -f ${kernel_tmp}/zImage ]; then
-      echo_color "red" "(3/7) The five boot core files is Missing!" "..."
+      echo_color "red" "(3/7) The five boot kernel files is Missing!" "..."
    fi
 
    if [ ! -f ${kernel_tmp}/dtb/amlogic/meson-gxl-s905d-phicomm-n1.dtb ]; then

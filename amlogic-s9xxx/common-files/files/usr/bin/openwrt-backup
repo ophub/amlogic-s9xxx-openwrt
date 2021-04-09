@@ -185,32 +185,32 @@ menu() {
         cat <<EOF
 
         —————————[ openwrt-backup ]—————————
-	|                                  |
+        |                                  |
         |        b. backup                 |
         |        r. restore                |
         |        p. print backup list      |
         |        g. generate fstab         |
         |        h. help                   |
         |        q. quit                   |
-	|                                  |
+        |                                  |
         ————————————————————————————————————
 	
 EOF
-echo -ne "please select: [ ]\b\b"
-      read select
-	case $select in 
-	    b | backup)      backup;;
-	    r | restore)     restore
-		             gen_fstab;;
-	    p | print_list)  print_list;;
+        echo -ne "please select: [ ]\b\b"
+        read select
+            case $select in
+            b | backup)      backup;;
+            r | restore)     restore
+                             gen_fstab;;
+            p | print_list)  print_list;;
             g | gen_fstab)   gen_fstab;;
-	    h | help)        print_help;;
-	    q | quit)        exit 0;;
-	esac
+            h | help)        print_help;;
+            q | quit)        exit 0;;
+            esac
     done
 }
 
-getopts 'brpgh' opts
+getopts 'brpghq' opts
 case $opts in 
     b | backup)      backup;;
     r | restore)     restore

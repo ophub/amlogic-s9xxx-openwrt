@@ -8,8 +8,7 @@ You can install `Flippy’s` OpenWrt firmware and use it. If you want to define 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
- │   ├── N1_Openwrt*.img               #Support suffix: .img/.7z/.img.xz, Use Flippy's N1_Openwrt.img files
- │   ├── OR: S9***_Openwrt*.img        #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
+ │   ├── S9***_Openwrt*.img            #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
  │   └── OR: Armbian*Aml-s9xxx*.img    #Support suffix: .img/.7z/.img.xz, Use Flippy's Armbian*.img files
  └── make_use_img.sh
 ```
@@ -51,7 +50,17 @@ A set of Flippy's kernel package consists of 3 files: `boot-${flippy_version}.ta
 
 Put the 3 files of a set of kernel packages shared by `Flippy` directly into the `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (directory name is created according to the kernel version number)` directory, without other operations, you can directly use the packaging script for OpenWrt production, such as: `sudo ./make -d -b s905d_s905x3 -k 5.4.108`
 
-If you store 2 kernel packages (kernel.tar.xz and modules.tar.xz) reorganized using the repository kernel packaging script in the kernel directory, and at the same time store 3 original kernel files of Flippy (boot-*, dtb) -amlogic-*, modules-*), then when using `sudo ./make -d -b s905d_s905x3 -k 5.4.108` script packaging, `kernel.tar.xz` and `modules.tar.xz` will be used first. If you don't need to add or modify the 3 kernel files, such as add .dtb files, it is recommended that you directly use the 3 kernel files by Flippy. For example [5.4.108](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108)
+If you only have `Armbian*Aml-s9xxx*.img` or `S9***_Openwrt*.img` shared by Flippy and want to make its standard kernel 3 files, you can use the [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel)  script to make it.
+
+In `Ubuntu` and other systems, create a kernel extraction directory at any location, create a `flippy` folder in the same directory of the `openwrt-kernel` script, put the Armbian or OpenWrt firmware into the flippy folder, and run `sudo chmod +x openwrt-kernel` command gives the script execution permission, and then runs the `sudo ./openwrt-kernel -e` command to extract the kernel. The generated kernel is saved in the same directory, named after the kernel version number (Eg: 5.4.108), and the file structure is executed Flippy kernel 3 file standard.
+
+```shell script
+Example:
+ ├── flippy
+ │   ├── S9***_Openwrt*.img            #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
+ │   └── OR: Armbian*Aml-s9xxx*.img    #Support suffix: .img/.7z/.img.xz, Use Flippy's Armbian*.img files
+ └── sudo ./openwrt-kernel -e
+```
 
 ## Update and supplement dtb file
 

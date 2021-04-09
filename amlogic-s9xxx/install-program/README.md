@@ -62,6 +62,8 @@ Replacing the OpenWrt kernel is only a kernel replacement, and the various perso
 
 This script is also suitable for kernel replacement of the `OpenWrt` series firmware produced and shared by `Flippy`. Put the [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel) file in the `/usr/bin/` directory and grant the execution permission `chmod +x /usr/bin/openwrt-kernel`, you can enter the kernel replacement command in any directory to operate. Since the `OpenWrt` in use may choose a different `U-BOOT (Mainline/Android)`. For the sake of safety, the script judged whether the 5.10 kernel is. The OpenWrt that is currently using the 5.10 kernel can be replaced with any kernel, but the current OpenWrt that is not the 5.10 kernel is not allowed to be replaced with the 5.10 kernel, and can only be replaced with other versions of the kernel lower than 5.10.
 
+The script `openwrt-kernel` can also be used to extract the standard kernel 3 file that generates Flippy. For more instructions please see [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.md)
+
 ### Backup & Restore
 
 You can backup and restore software config information at any time when you need it, and the software list can be adjusted according to your needs: [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup) . Please operate according to the prompts, if `b` is for `backup`, `r` is for `restore`.

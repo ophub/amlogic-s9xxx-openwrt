@@ -63,6 +63,8 @@ openwrt-kernel
 
 此脚本同样适用于对 Flippy 制作分享的 OpenWrt 系列固件进行内核更换。将 [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel) 文件放于 `/usr/bin/` 目录下并赋予执行权限 `chmod +x /usr/bin/openwrt-kernel` ，即可在任意目录输入内核更换命令进行操作。由于使用中的 OpenWrt 可能选择了不同的 U-BOOT （主线/安卓），为了稳妥起见，脚本进行了是否 5.10 内核的判断，支持当前正在使用 5.10 内核的 OpenWrt 更换任意内核，但当前非 5.10 内核的不允许替换为 5.10 内核，只能替换为低于 5.10 的其他版本的内核。
 
+脚本 openwrt-kernel 也可以用于提取生成 Flippy 的标准内核 3 文件，使用方法详见 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.cn.md)
+
 ### 备份与恢复
 
 你可以在需要的时候随时备份和恢复软件配置信息，软件清单可以根据自己的需要调整: [openwrt-backup](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-backup) 。请根据提示进行选择，如选择 `b` 是备份，选择 `r` 是恢复。

@@ -9,8 +9,7 @@
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  ├── flippy
- │   ├── N1_Openwrt*.img               #Support suffix: .img/.7z/.img.xz, Use Flippy's N1_Openwrt.img files
- │   ├── OR: S9***_Openwrt*.img        #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
+ │   ├── S9***_Openwrt*.img            #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
  │   └── OR: Armbian*Aml-s9xxx*.img    #Support suffix: .img/.7z/.img.xz, Use Flippy's Armbian*.img files
  └── make_use_img.sh
 ```
@@ -61,7 +60,17 @@ Flippy 的一套内核包由 3 个文件共同组成： `boot-${flippy_version}.
 
 将 `Flippy` 分享的一套内核包的 3 个文件直接放入 `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (目录名根据内核版本号进行创建)` 目录下即可使用，无需其他操作，即可直接使用打包脚本进行 OpenWrt 制作，如：`sudo ./make -d -b s905d_s905x3 -k 5.4.108`
 
-如果你在内核目录下存放了使用仓库内核打包脚本重组的 2 个内核包（kernel.tar.xz 和 modules.tar.xz），同时又存放了 Flippy 的 3 个原版内核文件（boot-*，dtb-amlogic-*，modules-*），那么你在使用例如 `sudo ./make -d -b s905d_s905x3 -k 5.4.108` 脚本打包时，会优先使用重组后的 2 个内核包（kernel.tar.xz 和 modules.tar.xz）。如果你对 Flippy 提供的 3 个内核包没有如 .dtb 等更多内容需要添加或改动，推荐你直接使用 Flippy 提供的 3 个内核包即可。例如 [5.4.108](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108)
+如果你只有 Flippy 分享的 `Armbian*Aml-s9xxx*.img` 或者 `S9***_Openwrt*.img` ，想制作其标准内核 3 文件，可以使用 [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel) 脚本进行制作。
+
+在 `Ubuntu` 等系统中，在任意位置创建内核提取目录，在 `openwrt-kernel` 脚本的同目录下创建名称为 `flippy` 的文件夹，将 Armbian 或 OpenWrt 固件放进 flippy 文件夹，运行 `sudo chmod +x openwrt-kernel` 命令赋予脚本执行权限，然后运行 `sudo ./openwrt-kernel -e` 命令即可进行内核提取，生成的内核保存在同目录下，以内核版本号进行命名（如: 5.4.108），文件结构执行 Flippy 内核 3 文件的标准。
+
+```shell script
+Example:
+ ├── flippy
+ │   ├── S9***_Openwrt*.img            #Support suffix: .img/.7z/.img.xz, Use Flippy's S9***_Openwrt*.img files
+ │   └── OR: Armbian*Aml-s9xxx*.img    #Support suffix: .img/.7z/.img.xz, Use Flippy's Armbian*.img files
+ └── sudo ./openwrt-kernel -e
+```
 
 ## 更新内核库中的已有文件
 

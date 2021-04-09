@@ -235,9 +235,10 @@ utils() {
     mkdir -p boot run opt
     chown -R 0:0 ./
 
-    # Complete file: openwrt-install openwrt-update
+    # Complete file: openwrt-install, openwrt-update, openwrt-kernel
     [ -f usr/bin/openwrt-install ] || cp -f ${installfiles_path}/openwrt-install usr/bin/
     [ -f usr/bin/openwrt-update ] || cp -f ${installfiles_path}/openwrt-update usr/bin/
+    [ -f usr/bin/openwrt-kernel ] || cp -f ${kernel_path}/build_kernel/openwrt-kernel usr/bin/
 
     #Edit fstab
     ROOTFS_UUID=$(uuidgen)
@@ -245,7 +246,7 @@ utils() {
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 
-    # Add drivers from {kernel_path}/build_kernel/patches/root/wireless/
+    # Add drivers
     [ -f etc/modules.d/rtl8189fs ] || echo "8189fs" > etc/modules.d/rtl8189fs
     [ -f etc/modules.d/rtl8188fu ] || echo "rtl8188fu" > etc/modules.d/rtl8188fu
     [ -f etc/modules.d/usb-net-rtl8150 ] || echo "rtl8150" > etc/modules.d/usb-net-rtl8150

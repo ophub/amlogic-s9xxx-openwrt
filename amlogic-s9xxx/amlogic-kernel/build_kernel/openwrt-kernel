@@ -33,8 +33,9 @@ extract_kernel() {
     build_path=${PWD}
     flippy_folder=${build_path}/"flippy"
     build_tmp_folder=${build_path}/"build_tmp"
-    boot_tmp=${build_tmp_folder}/boot
-    root_tmp=${build_tmp_folder}/root
+    amlogic_path=${build_path%/amlogic-kernel*}
+    boot_tmp=${build_tmp_folder}/boot_tmp
+    root_tmp=${build_tmp_folder}/root_tmp
     kernel_tmp=${build_tmp_folder}/kernel_tmp
     dtb_tmp=${build_tmp_folder}/dtb_tmp
     modules_tmp=${build_tmp_folder}/modules_tmp
@@ -127,6 +128,11 @@ extract_kernel() {
        cd ../
        tar -czf modules-${flippy_version}.tar.gz *
        mv -f modules-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
+
+    cd ${build_path}
+       # When used in this repository, it will be automatically saved to the kernel directory
+       # When using this script alone, the kernel will be placed in the same directory as the script
+       [ -d ${amlogic_path}/amlogic-kernel/kernel ] && mv -f ${build_save_folder} ../kernel/ && sync
 
     # umount & del losetup
     echo -e "Unmount and delete temporary folder"

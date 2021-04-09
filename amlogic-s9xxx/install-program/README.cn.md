@@ -39,11 +39,11 @@ openwrt-install
 openwrt-update
 ```
 
-💡提示: 脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找各种后缀的升级文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将升级固件的压缩包上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
+💡提示: 脚本 [openwrt-update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-update) 会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找各种后缀的升级文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将升级固件的压缩包上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
 如果在 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update` 进行升级，无需输入固件名称的参数。如果这 2 个目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update  openwrt_s905x3_v5.4.105_2021.03.17.0412.img.gz` ）。升级脚本优先查找 `/mnt/mmcblk*p4/` 目录，如果该目录下没有符合要求的升级固件，将去 `/tmp/upload/` 下继续查找。这 2 个目录中的相关压缩文件，升级脚本会自动匹配进行解压，升级完成后会自动删除此升级固件文件。
 
-- 脚本 `openwrt-update` 在 2 处目录中的查找顺序说明
+- 脚本  `openwrt-update` 在 2 处目录中的查找顺序说明
 
 | 目录 | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
 | ---- | ---- | ---- |
@@ -51,17 +51,17 @@ openwrt-update
 
 ### 更换 OpenWrt 内核
 
-- 从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传内核包 ***`kernel.tar.xz & modules.tar.xz  (或者 Flippy 提供的原版内核 3 文件：boot-*，dtb-amlogic-*，modules-*)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
+- 从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传内核包 ***`（共有 3 文件：boot-*，dtb-amlogic-*，modules-*）`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
 
 ```yaml
 openwrt-kernel
 ```
 
-💡提示: 脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找内核文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将内核文件上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将内核文件手动上传至 `/mnt/mmcblk*p4/` 目录下。当两处目录中同时存在本仓库重组的内核文件和 Flippy 的原版内核时，优先使用 Flippy 的 3 文件进行内核更换。
+💡提示: 脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找内核文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将内核文件上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将内核文件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
 更换 OpenWrt 内核仅做了内核替换，固件原本的各种个性化配置均保持不变。是一种最简单的升级方法。支持内核高/低版本自由更换。
 
-此脚本同样适用于对 Flippy 制作分享的 OpenWrt 系列固件进行内核更换。将 [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel) 文件放于 `/usr/bin/` 目录下并赋予执行权限 `chmod +x /usr/bin/openwrt-kernel` ，即可在任意目录输入内核更换命令进行操作。由于使用中的 OpenWrt 可能选择了不同的 U-BOOT （主线/安卓），为了稳妥起见，脚本进行了是否 5.10 内核的判断，支持当前正在使用 5.10 内核的 OpenWrt 更换任意内核，但当前非 5.10 内核的不允许替换为 5.10 内核，只能替换为低于 5.10 的其他版本的内核。
+此脚本同样适用于对 Flippy 制作分享的 OpenWrt 系列固件进行内核更换。将 [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/openwrt-kernel) 文件放于 `/usr/bin/` 目录下并赋予执行权限 `chmod +x /usr/bin/openwrt-kernel` ，即可在任意目录输入内核更换命令进行操作。由于使用中的 OpenWrt 可能选择了不同的 U-BOOT （主线/安卓），为了稳妥起见，脚本进行了是否 5.10 内核的判断，支持当前正在使用 5.10 内核的 OpenWrt 更换任意内核，但当前非 5.10 内核的不允许替换为 5.10 内核，只能替换为低于 5.10 的其他版本的内核。
 
 脚本 openwrt-kernel 也可以用于提取生成 Flippy 的标准内核 3 文件，使用方法详见 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.cn.md)
 

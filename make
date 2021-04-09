@@ -302,7 +302,7 @@ utils() {
 
     # Edit the uEnv.txt
     if [  ! -f "uEnv.txt" ]; then
-       die "Error: uEnv.txt Files does not exist"
+       die "The uEnv.txt File does not exist"
     else
        old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
        sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt

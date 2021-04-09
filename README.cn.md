@@ -39,13 +39,13 @@ openwrt-update
 ```
 - ### 更换 OpenWrt 内核
 
-从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传内核包 ***`kernel.tar.xz & modules.tar.xz  (或者 Flippy 提供的原版内核 3 文件：boot-*，dtb-amlogic-*，modules-*)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
+从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 openwrt` → `系统菜单` → `文件传输` → 上传内核包 ***`（共有 3 文件：boot-*，dtb-amlogic-*，modules-*）`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令:  
 
 ```yaml
 openwrt-kernel
 ```
 
-更多安装/升级说明详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program/README.cn.md)
+更多说明详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program/README.cn.md)
 
 ## OpenWrt 固件编译及打包说明
 

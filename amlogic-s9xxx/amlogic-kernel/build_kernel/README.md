@@ -48,7 +48,3 @@ Example: ~/*/amlogic-s9xxx/
          └── sudo ./update_dtb.sh
 ```
 
-```shell script
-cd build-kernel/
-sudo ./update_dtb.sh
-```

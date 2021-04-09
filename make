@@ -526,7 +526,6 @@ while [ "${1}" ]; do
         rm -rf ${out_path}
         echo "Clean up ok!" && exit
         ;;
-
     -d | --default)
         : ${rootsize:=${ROOT_MB}}
         : ${firmware:="${firmwares[0]}"}
@@ -545,10 +544,10 @@ while [ "${1}" ]; do
              IFS=$oldIFS
              unset build
              : ${build:="all"}
+             shift
         else
              die "Invalid build [ ${2} ]!"
         fi
-        shift
         ;;
     -k)
         kernel=${2}

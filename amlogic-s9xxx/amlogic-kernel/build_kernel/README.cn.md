@@ -35,16 +35,3 @@ Flippy 的一套内核包由 3 个文件共同组成： `boot-${flippy_version}.
 
 将 `Flippy` 分享的一套内核包的 3 个文件直接放入 `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (目录名根据内核版本号进行创建)` 目录下即可使用，无需其他操作。
 
-## 更新内核库中的已有文件
-
-随着 `Flippy` 的不断创新，更多的机顶盒纳入了可使用范围，当有新机型出现时，原内核包中可能缺少这款机顶盒的 [.dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) 文件，这时我们需要对已有的内核包进行批量更新了。运行 `update_dtb.sh` 命令可以对已有内核包中的 `dtb-amlogic-${flippy_version}.tar.gz` 文件进行批量更新。更新完成的内核包会自动覆盖回原路径 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel)
-
-```shell script
-Example: ~/*/amlogic-s9xxx/
- ├── amlogic-dtb
- │   └── *.dtb
- └── amlogic-kernel
-     └── build_kernel
-         └── sudo ./update_dtb.sh
-```
-

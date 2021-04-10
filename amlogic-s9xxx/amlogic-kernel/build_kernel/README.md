@@ -35,16 +35,3 @@ A set of Flippy's kernel package consists of 3 files: `boot-${flippy_version}.ta
 
 Put the 3 files of a set of kernel packages shared by `Flippy` directly into the `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (directory name is created according to the kernel version number)` directory, without other operations.
 
-## Update and supplement dtb file
-
-Thanks for the `Flippy's` continuous research, `OpenWrt` can be installed and used in more boxes, but these latest .dtb files are not in the old version of the kernel package, you can use the latest version of [the .dtb file library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) in the repository to update the previous kernel package. Update `dtb-amlogic-${flippy_version}.tar.gz` files in the [kernel directory](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) with the latest .dtb file.
-
-```shell script
-Example: ~/*/amlogic-s9xxx/
- ├── amlogic-dtb
- │   └── *.dtb
- └── amlogic-kernel
-     └── build_kernel
-         └── sudo ./update_dtb.sh
-```
-

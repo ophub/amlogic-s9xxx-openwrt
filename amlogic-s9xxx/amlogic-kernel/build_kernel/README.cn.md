@@ -26,12 +26,12 @@ Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
- └── 5.4.108 (目录名根据内核版本号进行创建)
+ └── ${kernel_version} (文件夹名称根据内核版本号进行创建)
      ├── boot-5.4.108-flippy-56+o.tar.gz
      ├── dtb-amlogic-5.4.108-flippy-56+o.tar.gz
      └── modules-5.4.108-flippy-56+o.tar.gz
 ```
 Flippy 的一套内核包由 3 个文件共同组成： `boot-${flippy_version}.tar.gz`, `dtb-amlogic-${flippy_version}.tar.gz`, `modules-${flippy_version}.tar.gz`
 
-将 `Flippy` 分享的一套内核包的 3 个文件直接放入 `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (目录名根据内核版本号进行创建)` 目录下即可使用，无需其他操作。
+将 `Flippy` 分享的一套内核包的 3 个文件直接放入 `~/*/amlogic-s9xxx/amlogic-kernel/kernel/` 目录下 `相应的版本号文件夹内` 即可使用，无需其他操作。
 

@@ -25,7 +25,7 @@ For the firmware with the same kernel version number, you can select one of them
 
 ```shell script
 Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
- └── 5.4.108 (The directory name is created based on the kernel version number)
+ └── ${kernel_version} (The folder name is created based on the kernel version number)
      ├── boot-5.4.108-flippy-56+o.tar.gz
      ├── dtb-amlogic-5.4.108-flippy-56+o.tar.gz
      └── modules-5.4.108-flippy-56+o.tar.gz
@@ -33,5 +33,5 @@ Example: ~/*/amlogic-s9xxx/amlogic-kernel/kernel/
 
 A set of Flippy's kernel package consists of 3 files: `boot-${flippy_version}.tar.gz`, `dtb-amlogic-${flippy_version}.tar.gz`, `modules-${flippy_version}.tar .gz`
 
-Put the 3 files of a set of kernel packages shared by `Flippy` directly into the `~/*/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108 (directory name is created according to the kernel version number)` directory, without other operations.
+Put the 3 files of a set of kernel packages shared by `Flippy` directly into the `~/*/amlogic-s9xxx/amlogic-kernel/kernel/` corresponding folder under the directory, without other operations.
 

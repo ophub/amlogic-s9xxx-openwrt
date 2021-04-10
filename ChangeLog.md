@@ -31,7 +31,7 @@ The version update instructions record each important update point for everyone 
 | - | All | ADD | ✩✩✩ | [5.10.19.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.19.TF) | Add New kernel. |
 | - | All | UPDATE | ✩✩✩ | [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program) | According to the latest kernel, adjusted the `install/update` script. |
 | - | All | UPDATE | ✩✩✩ | [make](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make) | According to the latest kernel, adjusted the `make` script. |
-| 2021.02.28 | All | ADD | ✩✩✩✩✩ | [Documentation.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/Documentation.md) | Add detailed description of openwrt personalized compilation. |
+| 2021.02.28 | All | ADD | ✩✩✩✩✩ | [README.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md) | Add detailed description of openwrt personalized compilation. |
 | 2021.02.19 | All | UPDATE | ✩✩✩✩✩ | [openwrt-update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-update) | Optimize online update method. |
 | 2021.02.17 | All | ADD | ✩✩✩ | [5.4.98](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.98) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.10.16.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.16.TF) | Add New kernel. |
@@ -43,7 +43,7 @@ The version update instructions record each important update point for everyone 
 | - | All | ADD | ✩✩ | [5.4.93](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.93) | Add New kernel. |
 | 2020.12.31 | All | ADD | ✩✩✩ | [5.9.16](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.9.16) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.4.86](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.86) | Add New kernel. |
-| 2020.12.13 | All | ADD | ✩✩✩✩✩ | [packaging.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-rootfs-file-to-packaging-openwrt.yml) | Added the `Use github.com Releases rootfs file to packaging`. |
+| 2020.12.13 | All | ADD | ✩✩✩✩✩ | [packaging.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-file-to-packaging.yml) | Added the `Use github.com Releases rootfs file to packaging`. |
 | 2020.12.12 | S9xxx | UPDATE | ✩✩ | [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install) | Added the shared partition formatting type selection, which can be changed in `$TARGET_SHARED_FSTYPE`. |
 | - | N1 | UPDATE | ✩✩ | [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install) | Added the shared partition formatting type selection, which can be changed in `$TARGET_SHARED_FSTYPE`. |
 | - | All | ADD | ✩✩ | [5.9.14](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.9.14) | Add New kernel. |

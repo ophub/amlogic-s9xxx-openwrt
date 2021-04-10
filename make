@@ -136,7 +136,7 @@ extract_armbian() {
 
         tar -xzf ${kernel_dir}/modules-*.tar.gz -C ${root}/lib/modules
         cd ${root}/lib/modules/*/
-        rm -f *.ko
+        rm -rf *.ko
         find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
         cd ${make_path} && sync
     else

@@ -64,82 +64,84 @@ extract_kernel() {
         die "Please put the compiled files in the [ ${flippy_folder} ] directory."
     fi
 
-    # losetup & mount ${flippy_file}
-    echo -e "Losetup ${flippy_file} and mount"
+    cd  ${build_path}
+        # losetup & mount ${flippy_file}
+        echo -e "Losetup and mount ..."
 
-    [ -d ${build_tmp_folder} ] && rm -rf ${build_tmp_folder} 2>/dev/null
-    mkdir -p ${boot_tmp} ${root_tmp} ${kernel_tmp} ${dtb_tmp} ${modules_tmp}
+        [ -d ${build_tmp_folder} ] && rm -rf ${build_tmp_folder} 2>/dev/null
+        mkdir -p ${boot_tmp} ${root_tmp} ${kernel_tmp} ${dtb_tmp} ${modules_tmp}
 
-    lodev=$(losetup -P -f --show ${flippy_folder}/${flippy_file})
-    [ $? = 0 ] || die "losetup ${flippy_file} failed!"
-    mount ${lodev}p1 ${boot_tmp}
-    [ $? = 0 ] || die "mount ${lodev}p1 failed!"
-    mount ${lodev}p2 ${root_tmp}
-    [ $? = 0 ] || die "mount ${lodev}p2 failed!"
-    echo -e "Losetup and mount successfully: ${lodev}"
+        lodev=$(losetup -P -f --show ${flippy_folder}/${flippy_file})
+        [ $? = 0 ] || die "losetup ${flippy_file} failed!"
+        mount ${lodev}p1 ${boot_tmp}
+        [ $? = 0 ] || die "mount ${lodev}p1 failed!"
+        mount ${lodev}p2 ${root_tmp}
+        [ $? = 0 ] || die "mount ${lodev}p2 failed!"
+        echo -e "Losetup and mount successfully: ${lodev}"
 
 
-    # copy ${boot_tmp} & ${root_tmp} Related files to ${kernel_tmp}, ${dtb_tmp} & ${modules_tmp}
-    echo -e "Copy modules files"
-    cp -rf ${root_tmp}/lib/modules/* ${modules_tmp} && sync
-    if [ $( ls ${modules_tmp}/ -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
-      die "The modules files is Missing!"
-    fi
-    flippy_version=$(ls ${modules_tmp}/)
-    build_save_folder=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
-    mkdir -p ${build_save_folder}
-    echo -e "flippy_version: ${flippy_version}"
+        # copy ${boot_tmp} & ${root_tmp} Related files to ${kernel_tmp}, ${dtb_tmp} & ${modules_tmp}
+        echo -e "Copy modules files"
+        cp -rf ${root_tmp}/lib/modules/* ${modules_tmp} && sync
+        if [ $( ls ${modules_tmp}/ -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
+           die "The modules files is Missing!"
+        fi
+        flippy_version=$(ls ${modules_tmp}/)
+        build_save_folder=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
+        mkdir -p ${build_save_folder}
+        echo -e "flippy_version: ${flippy_version}"
+        # When running in the original location of the repository, Add related patches
+        if [ -d ${amlogic_path}/common-files/patches ]; then
+           cp -rf ${amlogic_path}/common-files/patches/wireless/* ${modules_tmp}/*/kernel/drivers/net/wireless/
+        fi
 
-    echo -e "Copy 5 kernrl files"
-    cp -rf ${boot_tmp}/{config*,initrd.img*,System.map*} ${kernel_tmp} && sync
-    cp -rf ${boot_tmp}/uInitrd ${kernel_tmp}/uInitrd-${flippy_version} && sync
-    cp -rf ${boot_tmp}/zImage ${kernel_tmp}/vmlinuz-${flippy_version} && sync
-    if [ ! -f ${kernel_tmp}/config* -o ! -f ${kernel_tmp}/initrd.img* -o ! -f ${kernel_tmp}/System.map* -o ! -f ${kernel_tmp}/uInitrd-* -o ! -f ${kernel_tmp}/vmlinuz-* ]; then
-      die "The five boot kernel files is Missing!"
-    fi
+        echo -e "Copy 5 kernrl files"
+        cp -rf ${boot_tmp}/{config*,initrd.img*,System.map*} ${kernel_tmp} && sync
+        cp -rf ${boot_tmp}/uInitrd ${kernel_tmp}/uInitrd-${flippy_version} && sync
+        cp -rf ${boot_tmp}/zImage ${kernel_tmp}/vmlinuz-${flippy_version} && sync
+        if [ ! -f ${kernel_tmp}/config* -o ! -f ${kernel_tmp}/initrd.img* -o ! -f ${kernel_tmp}/System.map* -o ! -f ${kernel_tmp}/uInitrd-* -o ! -f ${kernel_tmp}/vmlinuz-* ]; then
+           die "The five boot kernel files is Missing!"
+        fi
 
-    echo -e "Copy .dtb files"
-    cp -rf ${boot_tmp}/dtb/amlogic/* ${dtb_tmp} && sync
-    if [ $( ls ${dtb_tmp}/*.dtb -l 2>/dev/null | grep "^-" | wc -l ) -eq 0 ]; then
-      die "The .dtb files is Missing!"
-    fi
+        echo -e "Copy .dtb files"
+        # When running in the original location of the repository, first use the full library .dtb files as a basis.
+        [ -d ${amlogic_path}/amlogic-dtb ] && cp -rf ${amlogic_path}/amlogic-dtb/* ${dtb_tmp} && sync
+        # Copy the latest .dtb files in the current firmware
+        cp -rf ${boot_tmp}/dtb/amlogic/* ${dtb_tmp} && sync
+        if [ $( ls ${dtb_tmp}/*.dtb -l 2>/dev/null | grep "^-" | wc -l ) -eq 0 ]; then
+           die "The .dtb files is Missing!"
+        fi
 
     # Package 3 files
     echo -e "Package boot-${flippy_version}.tar.gz"
-    cd ${kernel_tmp}
-       tar -czf boot-${flippy_version}.tar.gz *
-       mv -f boot-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
+    cd  ${kernel_tmp}
+        tar -czf boot-${flippy_version}.tar.gz *
+        mv -f boot-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
 
     echo -e "Package dtb-amlogic-${flippy_version}.tar.gz"
-    cd ${dtb_tmp}
-       tar -czf dtb-amlogic-${flippy_version}.tar.gz *
-       mv -f dtb-amlogic-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
+    cd  ${dtb_tmp}
+        tar -czf dtb-amlogic-${flippy_version}.tar.gz *
+        mv -f dtb-amlogic-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
 
     echo -e "Package modules-${flippy_version}.tar.gz"
-    cd ${modules_tmp}/${flippy_version}/
-       rm -f *.ko
-       x=0
-       find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-       sync && sleep 3
-       x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
-       if [ $x -eq 0 ]; then
-          die "The .ko files not found."
-       fi
-       cd ../
-       tar -czf modules-${flippy_version}.tar.gz *
-       mv -f modules-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
+    cd  ${modules_tmp}/${flippy_version}/
+        rm -rf *.ko
+        # find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+        cd ../ && sync
+        tar -czf modules-${flippy_version}.tar.gz *
+        mv -f modules-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
 
-    cd ${build_path}
-       # When used in this repository, it will be automatically saved to the kernel directory
-       # When using this script alone, the kernel will be placed in the same directory as the script
-       [ -d ${amlogic_path}/amlogic-kernel/kernel ] && mv -f ${build_save_folder} ../kernel/ && sync
+    cd  ${build_path}
+        # When running in the original location of the repository, it will be automatically saved to the kernel directory
+        # When using this script alone, the kernel will be placed in the same directory as the script
+        [ -d ${amlogic_path}/amlogic-kernel/kernel ] && mv -f ${build_save_folder} ../kernel/ && sync
 
-    # umount & del losetup
-    echo -e "Unmount and delete temporary folder"
-    umount -f ${boot_tmp} 2>/dev/null
-    umount -f ${root_tmp} 2>/dev/null
-    losetup -d ${lodev} 2>/dev/null
-    rm -rf ${build_tmp_folder} 2>/dev/null
+        # umount & del losetup
+        echo -e "Unmount and delete temporary folder"
+        umount -f ${boot_tmp} 2>/dev/null
+        umount -f ${root_tmp} 2>/dev/null
+        losetup -d ${lodev} 2>/dev/null
+        rm -rf ${build_tmp_folder} ${flippy_folder}/* 2>/dev/null
 
     sync
     wait

@@ -283,15 +283,19 @@ utils() {
         echo " -----------------------------------------------------" >> etc/banner
     fi
 
-    # Patches For openssl
-    SSL_CNF_PATCH=${configfiles_path}/patches/openssl/openssl_engine.patch
-    [ -f ${SSL_CNF_PATCH} ] && patch -p1 < ${SSL_CNF_PATCH} >/dev/null 2>&1
+    source etc/openwrt_release 2>/dev/null
+    DISTRIB_RELEASE=${DISTRIB_RELEASE}
+    if  [[ "${DISTRIB_RELEASE}" != "21.02-SNAPSHOT" ]]; then
+        # Patches For openssl
+        SSL_CNF_PATCH=${configfiles_path}/patches/openssl/openssl_engine.patch
+        [ -f ${SSL_CNF_PATCH} ] && patch -p1 < ${SSL_CNF_PATCH} >/dev/null 2>&1
 
-    # Patches For cpustat
-    # cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
-    # cpustat_patch=${configfiles_path}/patches/cpustat/luci-admin-status-index-html.patch
-    # [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod 755 usr/bin/cpustat >/dev/null 2>&1
-    # [ -f ${cpustat_patch} ] && cd usr/lib/lua/luci/view/admin_status && patch -p0 < ${cpustat_patch} >/dev/null 2>&1
+        # Patches For cpustat
+        cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
+        cpustat_patch=${configfiles_path}/patches/cpustat/luci-admin-status-index-html.patch
+        [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod 755 usr/bin/cpustat >/dev/null 2>&1
+        [ -f ${cpustat_patch} ] && cd usr/lib/lua/luci/view/admin_status && patch -p0 < ${cpustat_patch} >/dev/null 2>&1
+    fi
 
     sync
     # Edit ${root}/* files ========== End ==========

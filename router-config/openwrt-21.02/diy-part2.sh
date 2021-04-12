@@ -20,6 +20,10 @@ sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999
 svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
 
+# Fix the libnfnetlink: quote $(FPIC) on command line
+sed -i 's/PKG_RELEASE.*/PKG_RELEASE:=4/g' package/libs/libnfnetlink/Makefile
+sed -i 's/lt_prog_compiler_pic.*/lt_prog_compiler_pic=\"\$\(FPIC\)\"/g' package/libs/libnfnetlink/Makefile
+
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
 

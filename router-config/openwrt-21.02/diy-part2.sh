@@ -19,6 +19,8 @@ sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999
 # Add branches package
 svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
+svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
+pushd package/luci-app-openclash/tools/po2lmo && make && sudo make install && popd
 
 # Fix the libnfnetlink: quote $(FPIC) on command line
 sed -i 's/PKG_RELEASE.*/PKG_RELEASE:=4/g' package/libs/libnfnetlink/Makefile

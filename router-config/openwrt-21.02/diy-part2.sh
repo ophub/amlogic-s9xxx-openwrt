@@ -50,3 +50,7 @@ sed -i 's/lt_prog_compiler_pic.*/lt_prog_compiler_pic=\"\$\(FPIC\)\"/g' package/
 # ==========luci-theme-url==========
 # svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod
 
+# Convert translation files zh-cn to zh_Hans
+convert_translation=$GITHUB_WORKSPACE/router-config/openwrt-21.02/convert_translation.sh
+chmod +x ${convert_translation} && ${convert_translation}
+

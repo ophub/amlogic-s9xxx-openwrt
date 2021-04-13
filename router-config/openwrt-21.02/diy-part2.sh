@@ -22,10 +22,6 @@ svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passw
 svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
 pushd package/luci-app-openclash/tools/po2lmo && make && sudo make install && popd
 
-# Fix the libnfnetlink: quote $(FPIC) on command line
-sed -i 's/PKG_RELEASE.*/PKG_RELEASE:=4/g' package/libs/libnfnetlink/Makefile
-sed -i 's/lt_prog_compiler_pic.*/lt_prog_compiler_pic=\"\$\(FPIC\)\"/g' package/libs/libnfnetlink/Makefile
-
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
 

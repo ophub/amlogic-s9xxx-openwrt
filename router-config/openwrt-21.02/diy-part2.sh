@@ -22,6 +22,7 @@ svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passw
 svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
 pushd package/luci-app-openclash/tools/po2lmo && make && sudo make install && popd
 svn co https://github.com/fw876/helloworld/trunk/luci-app-ssr-plus package/lean/luci-app-ssr-plus
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/{luci-app-rclone,rclone,rclone-ng,rclone-webui-react} package/lean
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings

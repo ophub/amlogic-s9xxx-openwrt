@@ -153,7 +153,6 @@ extract_kernel() {
 
 # Replace the kernel for Amlogic S9xxx OpenWrt
 # Support the original 3 cores using Flippy: boot-*.tar.gz, dtb-amlogic-*.tar.gz, modules-*.tar .gz
-# Support the use of 2 cores after the reorganization of this warehouse: kernel.tar.xz, modules.tar.xz
 replace_kernel() {
 
     # Operation environment check
@@ -164,15 +163,12 @@ replace_kernel() {
     P4_PATH="/mnt/${EMMC_NAME}p4"
 
     if  [ $( ls /tmp/upload/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
-        mv -f /tmp/upload/*.tar.gz ${P4_PATH}/
-    elif  [ $( ls /tmp/upload/.tar.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 2 ]; then
-        mv -f /tmp/upload/.tar.xz ${P4_PATH}/
+        mv -f /tmp/upload/*.tar.gz ${P4_PATH}/ && sync
     fi
 
     if  [ $( ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
 
         if  [ $( ls ${P4_PATH}/boot-*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-            kernel_type="flippy"
             build_boot=$( ls ${P4_PATH}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
             echo -e "Try to use the flippy kernel  [\033[1;32m ${build_boot} \033[0m] and other files to update. Please wait a moment ..."
             flippy_version=${build_boot/boot-/} && flippy_version=${flippy_version/.tar.gz/}
@@ -209,53 +205,8 @@ replace_kernel() {
 
         echo -e " \
         Try to using this files to update the kernel: \n \
-        kernel_type: ${kernel_type} \n \
         build_boot: ${build_boot} \n \
         build_dtb: ${build_dtb} \n \
-        build_modules: ${build_modules} \n \
-        flippy_version: ${flippy_version} \n \
-        kernel_version: ${kernel_version} \n \
-        K510: ${K510}"
-
-    elif  [ $( ls ${P4_PATH}/*.tar.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 2 ]; then
-
-        if  [ -f ${P4_PATH}/kernel.tar.xz ]; then
-            kernel_type="ophub"
-            build_kernel=$( ls ${P4_PATH}/kernel.tar.xz | head -n 1 ) && build_kernel=${build_kernel##*/}
-            echo -e "Try to use the ophub kernel  [\033[1;32m ${build_kernel} \033[0m] and other files to update. Please wait a moment ..."
-            mkdir -p ${P4_PATH}/tmp_modules
-            tar -xJf "${P4_PATH}/kernel.tar.xz" -C ${P4_PATH}/tmp_modules
-            flippy_version=$( ls ${P4_PATH}/tmp_modules/config-* | head -n 1 ) && flippy_version=${flippy_version##*/}
-            flippy_version=${flippy_version/config-/}
-            kernel_version=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
-            kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,2}')
-            k510_ver=${kernel_vermaj%%.*}
-            k510_maj=${kernel_vermaj##*.}
-            if  [ ${k510_ver} -eq "5" ];then
-                if  [ "${k510_maj}" -ge "10" ];then
-                    K510=1
-                else
-                    K510=0
-                fi
-            elif [ ${k510_ver} -gt "5" ];then
-                K510=1
-            else
-                K510=0
-            fi
-        else
-            die "Have no kernel.tar.xz file found in the ${P4_PATH} directory."
-        fi
-
-        if  [ -f ${P4_PATH}/modules.tar.xz ]; then
-            build_modules=$( ls ${P4_PATH}/modules.tar.xz | head -n 1 ) && build_modules=${build_modules##*/}
-        else
-            die "Have no modules.tar.xz file found in the ${P4_PATH} directory."
-        fi
-
-        echo -e " \
-        Try to using this files to update the kernel: \n \
-        kernel_type: ${kernel_type} \n \
-        build_kernel: ${build_kernel} \n \
         build_modules: ${build_modules} \n \
         flippy_version: ${flippy_version} \n \
         kernel_version: ${kernel_version} \n \
@@ -301,46 +252,24 @@ replace_kernel() {
         die "You gave up the update and the operation is over."
     fi
 
-    if [ "${kernel_type}" == "flippy" ]; then
+    echo -e "Delete [ ${MODULES_OLD} ] related files ..."
+    rm -rf /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-*
+    rm -rf /lib/modules/*
+    sync
 
-        echo -e "Delete [ ${MODULES_OLD} ] related files ..."
-        rm -rf /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-*
-        rm -rf /lib/modules/*
-        sync
+    echo -e "Package [ ${flippy_version} ] related files ..."
+    tar -xzf ${P4_PATH}/dtb-amlogic-*.tar.gz -C /boot/dtb/amlogic
+    tar -xzf ${P4_PATH}/boot-*.tar.gz -C /boot
+    tar -xzf ${P4_PATH}/modules-*.tar.gz -C /lib/modules
+    sync
 
-        echo -e "Package [ ${flippy_version} ] related files ..."
-        tar -xzf ${P4_PATH}/dtb-amlogic-*.tar.gz -C /boot/dtb/amlogic
-        tar -xzf ${P4_PATH}/boot-*.tar.gz -C /boot
-        tar -xzf ${P4_PATH}/modules-*.tar.gz -C /lib/modules
-        sync
+    cd /boot
+    mv -f uInitrd-* uInitrd && mv -f vmlinuz-* zImage 2>/dev/null
 
-        cd /boot
-        mv -f uInitrd-* uInitrd && mv -f vmlinuz-* zImage 2>/dev/null
-
-        cd /lib/modules/*/
-        rm -f *.ko
-        find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-        rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz && sync
-
-    elif [ "${kernel_type}" == "ophub" ]; then
-
-        echo -e "Delete [ ${MODULES_OLD} ] related files ..."
-        rm -rf /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-*
-        rm -rf /lib/modules/*
-        sync
-
-        echo -e "Package [ ${flippy_version} ] related files ..."
-        tar -xJf ${P4_PATH}/kernel.tar.xz -C /boot
-        tar -xJf ${P4_PATH}/modules.tar.xz -C /
-        sync && sleep 3
-        cd /lib/modules/*/
-        rm -f *.ko
-        find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-        rm -rf ${P4_PATH}/tmp_modules ${P4_PATH}/kernel.tar.xz ${P4_PATH}/modules.tar.xz && sync
-
-    else
-        die "unknown type."
-    fi
+    cd /lib/modules/*/
+    rm -f *.ko
+    find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+    rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz && sync
 
     sed -i '/KERNEL_VERSION/d' /lib/u-boot/openwrt-env 2>/dev/null
     sed -i '/K510/d' /lib/u-boot/openwrt-env 2>/dev/null

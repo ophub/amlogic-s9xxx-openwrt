@@ -2,8 +2,8 @@
 sync
 umount -f /boot 2>/dev/null
 cd /mnt
-DIRS=$(ls)
-for dir in ${DIRS}; do
+for dir in $(ls)
+do
     umount -f ${dir} 2>/dev/null
 done
 sync

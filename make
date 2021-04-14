@@ -402,7 +402,7 @@ get_kernels() {
         work=$(pwd)
         cd ${kernel_root}
         for x in $(ls ./); do
-            [[ -f "${x}/kernel.tar.xz" && -f "${x}/modules.tar.xz" ]] && kernels[i++]=${x}
+            [[ -f ${x}/boot-*.tar.gz && -f ${x}/dtb-amlogic-*.tar.gz && -f ${x}/modules-*.tar.gz ]] && kernels[i++]=${x}
         done
         cd ${work}
     }

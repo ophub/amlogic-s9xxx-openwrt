@@ -124,7 +124,7 @@ extract_armbian() {
     tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
 
-    if [ -f ${kernel_dir}/boot-*.tar.gz -a -f ${kernel_dir}/dtb-amlogic-*.tar.gz -a -f ${kernel_dir}/modules-*.tar.gz ]; then
+    if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
         mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
 
@@ -402,7 +402,8 @@ get_kernels() {
         work=$(pwd)
         cd ${kernel_root}
         for x in $(ls ./); do
-            [[ -f ${x}/boot-*.tar.gz && -f ${x}/dtb-amlogic-*.tar.gz && -f ${x}/modules-*.tar.gz ]] && kernels[i++]=${x}
+            [ $( ls ${x}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ] && kernels[i++]=${x}
+            #[[ -f ${x}/boot-* && -f ${x}/dtb-amlogic-* && -f ${x}/modules-* ]] && kernels[i++]=${x}
         done
         cd ${work}
     }
@@ -446,7 +447,7 @@ choose_files() {
     else
         i=0
         while true; do
-            echo && read -p " select ${2} above, and press Enter to select the first one: " ${opt}
+            echo && read -p " select ${2} above, and press Enter to select the first one: " opt
             [ ${opt} ] || opt=1
             if [[ "${opt}" -ge 1 && "${opt}" -le "${len}" ]]; then
                 ((opt--))

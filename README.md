@@ -150,7 +150,7 @@ sudo apt-get install -y build-essential asciidoc binutils bzip2 gawk gettext git
 
 - `sudo ./make -d -b s905x3 -k 5.9.5`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
 - `sudo ./make -d -b s905x3_s905d -k 5.4.75_5.9.5`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
-- `sudo ./make -d`: Compile all kernel versions of openwrt with the default configuration.
+- `sudo ./make -d`: Compile latest kernel versions of openwrt for all SoC with the default configuration.
 - `sudo ./make -d -b s905x3 -k 5.9.2 -s 1024`: Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation.
 - `sudo ./make -d -b s905x3_s905d`: Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels.
 - `sudo ./make -d -k 5.4.73_5.9.2`: Use the default configuration. Specify multiple cores, use `_` to connect.

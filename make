@@ -467,7 +467,6 @@ choose_build() {
         let i++
     done
     echo && read -p " Please select the Amlogic SoC: " pause
-    #read  pause
     case  $pause in
           s905x3 | 1) build="s905x3" ;;
           s905x2 | 2) build="s905x2" ;;
@@ -507,7 +506,7 @@ Usage:
 Options:
     -c, --clean            clean up the output and temporary directories
 
-    -d, --default          the kernel version is "all", and the rootfs partition size is "1024m"
+    -d, --default          the kernel version is "latest", and the rootfs partition size is "1024m"
 
     -b, --build=BUILD      Specify multiple cores, use "_" to connect
        , -b all            Compile all types of openwrt
@@ -529,7 +528,6 @@ Options:
 EOF
 }
 
-##
 [ $(id -u) = 0 ] || die "please run this script as root: [ sudo ./make ]"
 echo -e "Welcome to use the OpenWrt packaging tool!\n"
 echo -e "\n $(df -hT) \n"
@@ -551,7 +549,7 @@ while [ "${1}" ]; do
     -d | --default)
         : ${rootsize:=${ROOT_MB}}
         : ${firmware:="${firmwares[0]}"}
-        : ${kernel:="all"}
+        : ${kernel:="${kernels[-1]}"}
         : ${build:="all"}
         ;;
     -b | --build)

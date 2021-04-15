@@ -272,9 +272,10 @@ replace_kernel() {
     rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz && sync
 
     sed -i '/KERNEL_VERSION/d' /lib/u-boot/openwrt-env 2>/dev/null
-    sed -i '/K510/d' /lib/u-boot/openwrt-env 2>/dev/null
     echo "KERNEL_VERSION='${kernel_version}'" >> /lib/u-boot/openwrt-env 2>/dev/null
+    sed -i '/K510/d' /lib/u-boot/openwrt-env 2>/dev/null
     echo "K510='${K510}'" >> /lib/u-boot/openwrt-env 2>/dev/null
+    sed -i "s/ Kernel.*/ Kernel: ${flippy_version}/g" /etc/banner 2>/dev/null
 
     sync
     wait

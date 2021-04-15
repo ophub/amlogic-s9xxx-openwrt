@@ -143,7 +143,7 @@ extract_armbian() {
     cp -rf ${root_comm}/* ${root}
 
     # Complete file for ${root}: [ /etc ], [ /lib/u-boot ] etc.
-    [ $(ls ${configfiles_path}/files 2>/dev/null | wc -w) != 0 ] && cp -rf ${configfiles_path}/files/* ${root}
+    [ "$(ls ${configfiles_path}/files 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/files/* ${root}
     sync
 }
 
@@ -402,8 +402,7 @@ get_kernels() {
         work=$(pwd)
         cd ${kernel_root}
         for x in $(ls ./); do
-            [ $( ls ${x}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ] && kernels[i++]=${x}
-            #[[ -f ${x}/boot-* && -f ${x}/dtb-amlogic-* && -f ${x}/modules-* ]] && kernels[i++]=${x}
+            [ "$( ls ${x}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l )" -eq "3" ] && kernels[i++]=${x}
         done
         cd ${work}
     }
@@ -449,7 +448,7 @@ choose_files() {
         while true; do
             echo && read -p " select ${2} above, and press Enter to select the first one: " opt
             [ ${opt} ] || opt=1
-            if [[ "${opt}" -ge 1 && "${opt}" -le "${len}" ]]; then
+            if [[ "${opt}" -ge "1" && "${opt}" -le "${len}" ]]; then
                 ((opt--))
                 break
             else
@@ -461,20 +460,40 @@ choose_files() {
     fi
 }
 
+choose_build() {
+    i=1
+    for var in  ${build_openwrt[*]}; do
+        echo " (${i}) ${var}"
+        let i++
+    done
+    echo && read -p " Please select the Amlogic SoC: " pause
+    #read  pause
+    case  $pause in
+          s905x3 | 1) build="s905x3" ;;
+          s905x2 | 2) build="s905x2" ;;
+          s905x | 3) build="s905x" ;;
+          s905d | 4) build="s905d" ;;
+          s912 | 5) build="s912" ;;
+          s922x | 6) build="s922x" ;;
+          *) die "Have no this Amlogic SoC" ;;
+    esac
+    tag ${build}
+}
+
 set_rootsize() {
     i=0
     rootsize=
 
     while true; do
-        read -p " input the rootfs partition size, defaults to 1024m, do not less than 256m
- if you don't know what this means, press Enter to keep default: " ${rootsize}
+        echo && read -p " input the rootfs partition size(mb) numerical value, defaults to 1024, do not less than 256
+ if you don't know what this means, press Enter to keep default: " rootsize
         [ ${rootsize} ] || rootsize=${ROOT_MB}
-        if [[ "${rootsize}" -ge 256 ]]; then
+        if [[ "${rootsize}" -ge "256" ]]; then
             tag ${rootsize} && echo
             break
         else
             ((i++ >= 2)) && exit 1
-            error "wrong type, try again!\n"
+            error "Numerical value input error, try again!\n"
             sleep 1s
         fi
     done
@@ -605,10 +624,11 @@ fi
 
 [ ${firmware} ] || choose_firmware
 [ ${kernel} ] || choose_kernel
+[ ${build} ] || choose_build
 [ ${rootsize} ] || set_rootsize
 
-[ ${kernel} != "all" ] && kernels=("${kernel}")
-[ ${build} != "all" ] && build_openwrt=("${build}")
+[ ${kernel} != "all" ] && unset kernels && kernels=("${kernel}")
+[ ${build} != "all" ] && unset build_openwrt && build_openwrt=("${build}")
 
 extract_openwrt
 

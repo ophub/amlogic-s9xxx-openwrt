@@ -53,6 +53,13 @@ extract_kernel() {
         flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
         flippy_file=${flippy_file##*/}
         echo -e "Try to extract the kernel using this file [ ${flippy_file} ]"
+    elif [ $( ls ${flippy_folder}/*.img.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+        xz_file=$( ls ${flippy_folder}/*.img.gz | head -n 1 )
+        xz_file=${xz_file##*/}
+        cd ${flippy_folder} && gzip -df ${xz_file} && cd ../
+        flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
+        flippy_file=${flippy_file##*/}
+        echo -e "Try to extract the kernel using this file [ ${flippy_file} ]"
     elif [ $( ls ${flippy_folder}/*.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
         xz_file=$( ls ${flippy_folder}/*.7z | head -n 1 )
         xz_file=${xz_file##*/}
@@ -272,8 +279,8 @@ replace_kernel() {
     rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz && sync
 
     sed -i '/KERNEL_VERSION/d' /lib/u-boot/openwrt-env 2>/dev/null
-    echo "KERNEL_VERSION='${kernel_version}'" >> /lib/u-boot/openwrt-env 2>/dev/null
     sed -i '/K510/d' /lib/u-boot/openwrt-env 2>/dev/null
+    echo "KERNEL_VERSION='${kernel_version}'" >> /lib/u-boot/openwrt-env 2>/dev/null
     echo "K510='${K510}'" >> /lib/u-boot/openwrt-env 2>/dev/null
     sed -i "s/ Kernel.*/ Kernel: ${flippy_version}/g" /etc/banner 2>/dev/null
 

@@ -27,7 +27,7 @@ BOOT_MB=256
 ROOT_MB=1024
 
 tag() {
-    echo -e " [ \033[1;36m ${1} \033[0m ]"
+    echo -e " [ \033[1;32m ${1} \033[0m ]"
 }
 
 process() {
@@ -625,8 +625,8 @@ fi
 [ ${build} ] || choose_build
 [ ${rootsize} ] || set_rootsize
 
-[ ${kernel} != "all" ] && unset kernels && kernels=("${kernel}")
-[ ${build} != "all" ] && unset build_openwrt && build_openwrt=("${build}")
+[ ${kernel} != "all" ] && unset kernels && kernels=(${kernel})
+[ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
 extract_openwrt
 

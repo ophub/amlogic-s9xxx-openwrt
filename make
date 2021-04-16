@@ -244,8 +244,8 @@ utils() {
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 
     # Add drivers
-    [ -f etc/modules.d/rtl8189fs ] || echo "8189fs" > etc/modules.d/rtl8189fs
-    [ -f etc/modules.d/rtl8188fu ] || echo "rtl8188fu" > etc/modules.d/rtl8188fu
+    [ -f etc/modules.d/8189fs ] || echo "8189fs" > etc/modules.d/8189fs
+    [ -f etc/modules.d/8188fu ] || echo "8188fu" > etc/modules.d/8188fu
     [ -f etc/modules.d/usb-net-rtl8150 ] || echo "rtl8150" > etc/modules.d/usb-net-rtl8150
     [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > etc/modules.d/usb-net-rtl8152
     [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179

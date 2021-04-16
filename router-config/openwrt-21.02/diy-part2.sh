@@ -24,6 +24,12 @@ pushd package/luci-app-openclash/tools/po2lmo && make && sudo make install && po
 svn co https://github.com/fw876/helloworld/trunk/luci-app-ssr-plus package/lean/luci-app-ssr-plus
 svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/{luci-app-rclone,rclone,rclone-ng,rclone-webui-react} package/lean
 
+# Correct translation for Transmission
+sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/po/zh_Hans/transmission.po
+
+# Add support
+sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/autocore/Makefile
+
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
 

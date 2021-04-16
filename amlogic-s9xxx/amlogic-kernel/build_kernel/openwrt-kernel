@@ -99,7 +99,7 @@ extract_kernel() {
         echo -e "flippy_version: ${flippy_version}"
         # When running in the original location of the repository, Add related patches
         if [ -d ${amlogic_path}/common-files/patches ]; then
-           cp -rf ${amlogic_path}/common-files/patches/wireless/drivers/ ${modules_tmp}/*/kernel/drivers/
+           cp -rf ${amlogic_path}/common-files/patches/wireless/drivers/* ${modules_tmp}/*/kernel/drivers/
         fi
 
         echo -e "Copy 5 kernrl files"

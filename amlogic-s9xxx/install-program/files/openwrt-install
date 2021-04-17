@@ -229,7 +229,7 @@ else
 fi
 
 # Check 5.10 kernel
-if  [[ "${K510}" -eq "1" && ${IFSHOW_MAINLINE_UBOOT} -eq "0" ]]; then
+if  [[ "${K510}" -eq "1" && "${IFSHOW_MAINLINE_UBOOT}" -eq "0" ]]; then
     echo -e "\033[1;31m This 5.10 kernel is recommended to be used in TF/SD cards! \033[0m"
     exit 1
 fi

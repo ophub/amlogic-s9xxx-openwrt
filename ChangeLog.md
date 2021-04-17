@@ -12,6 +12,8 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.04.17 | All | ADD | ✩✩✩ | [5.10.31.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.31.TF) | Support directly using the 3 kernel files provided by Flippy for OpenWrt packaging. |
+| - | All | ADD | ✩✩✩ | [5.4.113](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.113) | Support directly using the 3 kernel files provided by Flippy for OpenWrt packaging. |
 | 2021.04.10 | All | ADD | ✩✩✩ | [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) | Replace all kernels with Flippy's standard kernel. |
 | 2021.04.09 | All | ADD | ✩✩✩✩✩ | [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/openwrt-kernel) | Extend the script function, on the basis of kernel replace, Added the function of making Flippy's standard kernel 3 files. |
 | 2021.04.07 | All | ADD | ✩✩✩✩✩ | [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/openwrt-kernel) | Add kernel replace function, support the use of `Flippy` kernel or the reorganized kernel of this repository for `openwrt` kernel upgrade (different from `openwrt-update`, this operation only replaces the kernel). |

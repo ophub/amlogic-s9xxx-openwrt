@@ -6,15 +6,15 @@ Support `github.com One-stop compilation`, `github.com clone packaging`, `Use gi
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
-This OpenWrt firmware is packaged using ***`Flippy's`*** [Amlogic S9xxx Kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) for OpenWrt, and the [Install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install) and [update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-update) scripts, etc. Welcome to use `Fork` for [personalized OpenWrt firmware configuration](router-config/README.md). If you like it, Please click the `Star`.
+This OpenWrt firmware is packaged using ***`Flippy's`*** [Amlogic S9xxx Kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) for OpenWrt, and the [Install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install) and [update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-update) scripts, etc. Welcome to use `Fork` for [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md). If you like it, Please click the `Star`.
 
 ## OpenWrt Firmware instructions
 
 | Model  | STB | OpenWrt Firmware |
 | ---- | ---- | ---- |
-| s905x3 | [x96](https://tokopedia.link/uMaH09s41db), [hk1](https://tokopedia.link/pNHf5AE41db), [h96](https://tokopedia.link/wRh6SVI41db) | openwrt_s905x3_v*.img |
+| s905x3 | [x96](https://tokopedia.link/uMaH09s41db), [hk1](https://tokopedia.link/xhWeQgTuwfb), [h96](https://tokopedia.link/KuWvwoYuwfb) | openwrt_s905x3_v*.img |
 | s905x2 | [x96max4g](https://tokopedia.link/HcfLaRzjqeb), [x96max2g](https://tokopedia.link/ro207Hsjqeb) | openwrt_s905x2_v*.img |
-| s905x | [hg680p](https://tokopedia.link/NWF1Skg21db), [b860h](https://tokopedia.link/fp8wG3711db) | openwrt_s905x_v*.img |
+| s905x | [hg680p](https://tokopedia.link/NWF1Skg21db), [b860h](https://tokopedia.link/hnXvHn5uwfb) | openwrt_s905x_v*.img |
 | s922x | [belink](https://tokopedia.link/RAgZmOM41db), [belinkpro](https://tokopedia.link/sfTHlfS41db), [ugoos](https://tokopedia.link/pHGKXuV41db) | openwrt_s922x_v*.img |
 | s912 | octopus | openwrt_s912_v*.img |
 | s905d | n1 | openwrt_s905d_v*.img |
@@ -206,10 +206,9 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 - [OpenWrt](https://github.com/openwrt/openwrt)
 - [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
 - [Lienol/openwrt](https://github.com/Lienol/openwrt)
-- Flippy: The maker of Amlogic s9xxx Kernel for openwrt
-- [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
+- [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit)
 - [tuanqing/mknop](https://github.com/tuanqing/mknop)
-- [Mikubill/transfer](https://github.com/Mikubill/transfer)
+- [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
 
 ## License
 

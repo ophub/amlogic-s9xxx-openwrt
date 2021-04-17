@@ -103,11 +103,11 @@ extract_kernel() {
         fi
 
         echo -e "Copy 5 kernrl files"
-        cp -rf ${boot_tmp}/{config*,initrd.img*,System.map*} ${kernel_tmp} && sync
-        cp -rf ${boot_tmp}/uInitrd ${kernel_tmp}/uInitrd-${flippy_version} && sync
-        cp -rf ${boot_tmp}/zImage ${kernel_tmp}/vmlinuz-${flippy_version} && sync
-        if [ ! -f ${kernel_tmp}/config* -o ! -f ${kernel_tmp}/initrd.img* -o ! -f ${kernel_tmp}/System.map* -o ! -f ${kernel_tmp}/uInitrd-* -o ! -f ${kernel_tmp}/vmlinuz-* ]; then
-           die "The five boot kernel files is Missing!"
+        cp -rf ${boot_tmp}/{config*,initrd.img*,System.map*} ${kernel_tmp} 2>/dev/null && sync
+        cp -rf ${boot_tmp}/uInitrd ${kernel_tmp}/uInitrd-${flippy_version} 2>/dev/null && sync
+        cp -rf ${boot_tmp}/zImage ${kernel_tmp}/vmlinuz-${flippy_version} 2>/dev/null && sync
+        if [ ! -f ${kernel_tmp}/config* -o ! -f ${kernel_tmp}/System.map* -o ! -f ${kernel_tmp}/uInitrd-* -o ! -f ${kernel_tmp}/vmlinuz-* ]; then
+           die "The four/five boot kernel files is Missing!"
         fi
 
         echo -e "Copy .dtb files"
@@ -141,7 +141,7 @@ extract_kernel() {
     cd  ${build_path}
         # When running in the original location of the repository, it will be automatically saved to the kernel directory
         # When using this script alone, the kernel will be placed in the same directory as the script
-        [ -d ${amlogic_path}/amlogic-kernel/kernel ] && mv -f ${build_save_folder} ../kernel/ && sync
+        [ -d ${amlogic_path}/amlogic-kernel/kernel ] && mv -f ${build_save_folder} ../kernel/ 2>/dev/null && sync
 
         # umount & del losetup
         echo -e "Unmount and delete temporary folder"
@@ -255,13 +255,13 @@ replace_kernel() {
     fi
 
     if [[ "${UP_FLAG}" -eq "0" ]];then
-        rm -rf ${P4_PATH}/tmp_modules && sync
+        rm -rf ${P4_PATH}/tmp_modules 2>/dev/null && sync
         die "You gave up the update and the operation is over."
     fi
 
     echo -e "Delete [ ${MODULES_OLD} ] related files ..."
-    rm -rf /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-*
-    rm -rf /lib/modules/*
+    rm -rf /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null
+    rm -rf /lib/modules/* 2>/dev/null
     sync
 
     echo -e "Package [ ${flippy_version} ] related files ..."
@@ -274,9 +274,9 @@ replace_kernel() {
     mv -f uInitrd-* uInitrd && mv -f vmlinuz-* zImage 2>/dev/null
 
     cd /lib/modules/*/
-    rm -f *.ko
+    rm -f *.ko 2>/dev/null
     find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-    rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz && sync
+    rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz 2>/dev/null && sync
 
     sed -i '/KERNEL_VERSION/d' /lib/u-boot/openwrt-env 2>/dev/null
     sed -i '/K510/d' /lib/u-boot/openwrt-env 2>/dev/null

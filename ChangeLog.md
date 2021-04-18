@@ -20,7 +20,7 @@ The version update instructions record each important update point for everyone 
 | - | All | ADD | ✩✩✩ | [5.4.108](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108) | Support directly using the 3 kernel files provided by Flippy for OpenWrt packaging. |
 | 2021.03.28 | All | ADD | ✩✩✩ | [5.4.108](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.108) | Add New kernel. |
 | - | All | ADD | ✩✩✩ | [5.10.26.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.26.TF) | Add New kernel. |
-| 2021.03.27 | All | ADD | ✩✩✩ | [openwrt-21.02](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/openwrt-21.02) | Add openwrt-21.02 branch. |
+| 2021.03.27 | All | ADD | ✩✩✩ | [openwrt-master](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/openwrt-master) | Add openwrt-master branch. |
 | 2021.03.25 | All | UPDATE | ✩✩ | [openssl](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches/openssl) | Use Flippy's openssl files to increase related functions. |
 | 2021.03.24 | All | UPDATE | ✩✩ | [cpustat](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches/cpustat) | Use Flippy's cpustat files to increase related functions. |
 | 2021.03.23 | All | UPDATE | ✩✩ | [openwrt-version](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-version) | Add openwrt version information view command: `openwrt-version`. |

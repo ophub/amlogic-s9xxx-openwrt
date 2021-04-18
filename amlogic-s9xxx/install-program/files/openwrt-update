@@ -356,6 +356,8 @@ LABEL=EMMC_BOOT /boot vfat defaults 0 2
 #tmpfs /tmp tmpfs defaults,nosuid 0 0
 EOF
 
+chattr -ia ./etc/config/fstab 2>/dev/null
+
 cat > ./etc/config/fstab <<EOF
 config  global
         option anon_swap '0'

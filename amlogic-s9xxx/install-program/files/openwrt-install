@@ -573,6 +573,8 @@ config  mount
         option fstype 'vfat'
 
 EOF
+        chattr +ia fstab >/dev/null
+        
         cd /
         umount -f /mnt/${EMMC_NAME}p2
         break

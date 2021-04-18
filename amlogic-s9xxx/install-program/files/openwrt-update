@@ -382,7 +382,7 @@ config  mount
                 
 EOF
 
-chattr +ia ./etc/config/fstab
+chattr +ia ./etc/config/fstab 2>/dev/null
 
 rm -f ./etc/bench.log
 cat >> ./etc/crontabs/root << EOF

@@ -55,6 +55,6 @@ sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/p
 # svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod
 
 # Convert translation files zh-cn to zh_Hans
-convert_translation=${GITHUB_WORKSPACE}/router-config/openwrt-21.02/convert_translation.sh
+convert_translation=${GITHUB_WORKSPACE}/router-config/openwrt-master/convert_translation.sh
 chmod +x ${convert_translation} && ${convert_translation}
 

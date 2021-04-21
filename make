@@ -529,8 +529,8 @@ EOF
 }
 
 [ $(id -u) = 0 ] || die "please run this script as root: [ sudo ./make ]"
-echo -e "Welcome to use the OpenWrt packaging tool!\n"
-echo -e "\n $(df -hT) \n"
+echo -e "Welcome to use the OpenWrt packaging tool! \n"
+echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
 cleanup
 get_firmwares
@@ -648,7 +648,7 @@ for b in ${build_openwrt[*]}; do
 done
 
 wait
-echo -e "\n $(df -hT) \n"
+echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
 cleanup
 chmod -R 777 ${out_path}

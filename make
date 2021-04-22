@@ -402,7 +402,7 @@ get_kernels() {
         work=$(pwd)
         cd ${kernel_root}
         for x in $(ls ./); do
-            [ "$( ls ${x}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l )" -eq "3" ] && kernels[i++]=${x}
+            [ "$( ls ${x}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l )" -ge "3" ] && kernels[i++]=${x}
         done
         cd ${work}
     }

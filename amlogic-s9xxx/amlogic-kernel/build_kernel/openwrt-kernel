@@ -95,7 +95,7 @@ extract_kernel() {
         fi
         flippy_version=$(ls ${modules_tmp}/)
         build_save_folder=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
-        mkdir -p ${build_save_folder}
+        mkdir -p ${build_save_folder} && chmod 777 ${build_save_folder}
         echo -e "flippy_version: ${flippy_version}"
         # When running in the original location of the repository, Add related patches
         if [ -d ${amlogic_path}/common-files/patches ]; then

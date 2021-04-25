@@ -215,7 +215,7 @@ utils() {
             ;;
     esac
 
-    #Edit ${root}/* files ========== Begin ==========
+    # Edit ${root}/* files ========== Begin ==========
     cd ${root}
 
     # Add other operations below
@@ -237,11 +237,14 @@ utils() {
     [ -f usr/bin/openwrt-update ] || cp -f ${installfiles_path}/openwrt-update usr/bin/
     [ -f usr/bin/openwrt-kernel ] || cp -f ${kernel_path}/build_kernel/openwrt-kernel usr/bin/
 
-    #Edit fstab
+    # Edit fstab
     ROOTFS_UUID=$(uuidgen)
     #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
+    
+    # Turn off speed limit by default
+    [ -f etc/config/nft-qos ] && sed -i 's/option limit_enable.*/option limit_enable 0/g' etc/config/nft-qos
 
     # Add drivers
     [ -f etc/modules.d/8189fs ] || echo "8189fs" > etc/modules.d/8189fs
@@ -319,7 +322,7 @@ utils() {
     fi
 
     sync
-    #Edit ${boot}/* files ========== End ==========
+    # Edit ${boot}/* files ========== End ==========
 }
 
 make_image() {

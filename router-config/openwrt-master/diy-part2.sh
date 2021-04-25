@@ -36,7 +36,7 @@ sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/p
 
 # Add luci-app-passwall
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
-pushd package/openwrt-passwall && rm -rf kcptun xray-core 2>/dev/null && popd
+rm -rf package/openwrt-passwall/{kcptun,xray-core} 2>/dev/null
 
 # Add luci-app-openclash
 svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/openwrt-openclash
@@ -45,10 +45,10 @@ pushd package/openwrt-openclash/tools/po2lmo && make && sudo make install 2>/dev
 # # Add luci-app-ssr-plus
 svn co https://github.com/fw876/helloworld/trunk/luci-app-ssr-plus package/openwrt-ssrplus
 
-# Add luci-app-ssr-rclone
+# Add luci-app-rclone
 svn co https://github.com/ElonH/Rclone-OpenWrt/trunk package/openWrt-rclone
 
-# Add luci-app-ssr-diskman
+# Add luci-app-diskman
 svn co https://github.com/lisaac/luci-app-diskman/trunk/applications/luci-app-diskman package/openwrt-diskman/luci-app-diskman
 wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -q -P package/openwrt-diskman/parted
 pushd package/openwrt-diskman/parted && mv -f Parted.Makefile Makefile 2>/dev/null && popd

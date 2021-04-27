@@ -54,7 +54,7 @@ cleanup() {
         losetup -d /dev/${x} 2>/dev/null
     done
     losetup -D
-    rm -rf ${tmp_path}
+    rm -rf ${tmp_path} 2>/dev/null
 }
 
 extract_openwrt() {
@@ -634,7 +634,7 @@ fi
 [ ${kernel} != "all" ] && unset kernels && kernels=(${kernel})
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
-extract_openwrt
+
 
 k=1
 for b in ${build_openwrt[*]}; do
@@ -642,28 +642,32 @@ for b in ${build_openwrt[*]}; do
     i=1
     for x in ${kernels[*]}; do
         {
-            echo -e "(${k}.${i}) Start packaging OpenWrt, SoC is [ ${b} ], Kernel is [ ${x} ]"
+            echo -n "(${k}.${i}) Start packaging OpenWrt [ ${b} - ${x} ]. "
 
             now_remaining_space=$(df -hT ${PWD} | grep '/dev/' | awk '{print $5}' | sed 's/.$//')
             if  [[ "${now_remaining_space}" -le "2" ]]; then
-                echo -e "If the remaining space is less than 2G, exit this packaging. \n"
+                echo "Remaining space is less than 2G, exit this packaging. \n"
                 break
             else
-                echo -e "Remaining space is ${now_remaining_space}G."
+                echo "Remaining space is ${now_remaining_space}G."
             fi
             
             kernel=${x}
             build=${b}
-            process " (1/4) extract armbian files."
+            process " (1/6) extract armvirt files."
+            extract_openwrt
+            process " (2/6) extract armbian files."
             extract_armbian ${b}
-            process " (2/4) refactor related files."
+            process " (3/6) refactor related files."
             refactor_files ${b} ${x}
-            process " (3/4) make openwrt image."
+            process " (4/6) make openwrt image."
             make_image ${b}
-            process " (4/4) copy files to image."
+            process " (5/6) copy files to image."
             copy2image ${b}
+            process " (6/6) cleanup tmp files."
+            cleanup
             
-            echo -e "(${k}.${i}) Package openwrt completed."
+            echo -e "(${k}.${i}) OpenWrt packaged successfully. \n"
             
             let i++
         }
@@ -673,9 +677,8 @@ for b in ${build_openwrt[*]}; do
 done
 
 cp -f ${openwrt_path}/*.tar.gz ${out_path} 2>/dev/null && sync
-wait
-echo -e "\n Server space usage after compilation: \n$(df -hT ${PWD}) \n"
+echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
-cleanup
+wait
 chmod -R 777 ${out_path}
 

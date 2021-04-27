@@ -47,7 +47,7 @@ runs:
         echo -e "PACKAGED_OUTPUTDATE: $(date +"%Y.%m.%d.%H%M")"
         echo -e "PACKAGED_STATUS: success"
         echo -e "PACKAGED_OUTPUTPATH files list:"
-        echo -e "$(ls . 2>/dev/null) \n"
+        echo -e "$(ls ${PWD}/out 2>/dev/null) \n"
 
 branding:
   icon: 'terminal'

@@ -147,7 +147,7 @@ extract_armbian() {
     sync
 }
 
-utils() {
+refactor_files() {
     cd ${make_path}
     build_op=${1}
     build_usekernel=${2}
@@ -294,7 +294,7 @@ utils() {
         cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
         cpustat_patch=${configfiles_path}/patches/cpustat/luci-admin-status-index-html.patch
         [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod 755 usr/bin/cpustat >/dev/null 2>&1
-        [ -f ${cpustat_patch} ] && cd usr/lib/lua/luci/view/admin_status && patch -p0 < ${cpustat_patch} >/dev/null 2>&1
+        [ -f ${cpustat_patch} ] && cd usr/lib/lua/luci/view/admin_status && patch -p0 < ${cpustat_patch} >/dev/null 2>&1 && cd ${root}
     fi
 
     sync
@@ -381,6 +381,9 @@ copy2image() {
     umount -f ${bootfs} 2>/dev/null
     umount -f ${rootfs} 2>/dev/null
     losetup -d ${loop} 2>/dev/null
+    sync
+
+    cd ${out_path} && gzip *.img && sync && cd ${make_path}
 }
 
 get_firmwares() {
@@ -638,18 +641,19 @@ for b in ${build_openwrt[*]}; do
         {
             kernel=${x}
             build=${b}
-            process " extract armbian files."
+            process " (1/4) extract armbian files."
             extract_armbian ${b}
-            utils ${b} ${x}
-            process " make openwrt image."
+            process " (2/4) refactor related files."
+            refactor_files ${b} ${x}
+            process " (3/4) make openwrt image."
             make_image ${b}
-            process " copy files to image."
+            process " (4/4) copy files to image."
             copy2image ${b}
-            process " generate success."
-        } &
+        }
     done
 done
 
+cp -f ${openwrt_path}/*.tar.gz ${out_path} 2>/dev/null && sync
 wait
 echo -e "\n Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 

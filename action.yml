@@ -1,0 +1,56 @@
+name: 'Package Armvirt as OpenWrt'
+author: 'ophub'
+description: 'Package Armvirt as OpenWrt. Support Amlogic S9xxx STB.'
+inputs:
+  mode:
+    description: 'Choose script.'
+    required: false
+    default: 'ophub'
+  amlogic_openwrt:
+    description: 'Choose Amlogic SoC.'
+    required: false
+    default: 's905d_s905x3'
+  amlogic_kernel:
+    description: 'Choose kernel.'
+    required: false
+    default: '5.10.31.TF_5.4.113'
+  amlogic_size:
+    description: 'Choose root size.'
+    required: false
+    default: '1024'
+  armvirt64_path:
+    description: 'Choose armvirt path.'
+    required: false
+    default: 'openwrt/bin/targets/*/*/*.tar.gz'
+
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        cd ${GITHUB_ACTION_PATH}
+        [ -z "${{ inputs.armvirt64_path }}" ] && echo -e "The [ armvirt64_path ] variable must be specified." && exit 1
+        [ -d openwrt-armvirt ] || sudo mkdir -p openwrt-armvirt
+        sudo cp -f ${GITHUB_WORKSPACE}/${{ inputs.armvirt64_path }} openwrt-armvirt && sync
+        make_command=" -d"
+        [ -n ${{ inputs.amlogic_openwrt }} ] && make_command="${make_command} -b ${{ inputs.amlogic_openwrt }}"
+        [ -n ${{ inputs.amlogic_kernel }} ] && make_command="${make_command} -k ${{ inputs.amlogic_kernel }}"
+        [ -n ${{ inputs.amlogic_size }} ] && make_command="${make_command} -s ${{ inputs.amlogic_size }}"
+        echo -e "ophub package actions path: ${PWD}"
+        sudo ./make ${make_command}
+        echo -e "Gzip the openwrt*.img files in the out folder. \n"
+        cd out/ && sudo gzip *.img && sync
+        cp -f ../openwrt-armvirt/*.tar.gz . && sync
+        echo -e "Output environment variables."
+        echo "PACKAGED_OUTPUTPATH=${PWD}" >> $GITHUB_ENV
+        echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+        echo "PACKAGED_STATUS=success" >> $GITHUB_ENV
+        echo -e "PACKAGED_OUTPUTPATH: ${PWD}"
+        echo -e "PACKAGED_OUTPUTDATE: $(date +"%Y.%m.%d.%H%M")"
+        echo -e "PACKAGED_STATUS: success"
+        echo -e "PACKAGED_OUTPUTPATH files list:"
+        echo -e "$(ls . 2>/dev/null) \n"
+
+branding:
+  icon: 'terminal'
+  color: 'gray-dark'

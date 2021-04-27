@@ -2,7 +2,7 @@
 
 查看英文说明 | [View English description](README.md)
 
-支持github.com一站式完整编译（从自定义软件包进行编译，到打包固件，完全在giuhub.com一站式完成）；支持在自己的仓库进行个性化软件包选择编译，仅单独跨仓库引入打包脚本进行固件打包；支持从 github.com 的 `Releases` 中使用已有的 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件直接进行固件打包；支持本地化打包（在本地Ubuntu等环境中进行固件打包）。支持的Amlogic S9xxx系列型号有 ***`S905x3, S905x2, S922x, S905x, S905d, s912`*** 等，例如 ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`*** 等机顶盒。
+支持github.com一站式完整编译（从自定义软件包进行编译，到打包固件，完全在giuhub.com一站式完成）；支持在自己的仓库进行个性化软件包选择编译，仅单独引入 Actions 进行固件打包；支持从 github.com 的 `Releases` 中使用已有的 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件直接进行固件打包；支持本地化打包（在本地Ubuntu等环境中进行固件打包）。支持的Amlogic S9xxx系列型号有 ***`S905x3, S905x2, S922x, S905x, S905d, s912`*** 等，例如 ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`*** 等机顶盒。
 
 最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。一些重要的更新内容可以在 [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) 中查阅。
 
@@ -58,29 +58,55 @@ openwrt-kernel
 1. 你可以在 [router-config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config/README.cn.md) 中查看个性化固件配置说明。编译流程控制文件是 [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml) 
 2. 在 github.com 的 [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) 选择 ***`Build OpenWrt`*** . 点击 ***`Run workflow`*** 按钮进行固件一站式编译和打包。
 
-- ### 仅单独跨仓库引入打包脚本进行固件打包
+```yaml
+- name: Build OpenWrt firmware
+  id: build
+  run: |
+    [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
+    cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+    sudo rm -rf openwrt && sync
+    sudo rm -rf /workdir && sync
+    sudo chmod +x make
+    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.31.TF_5.4.113
+    cd out/ && sudo gzip *.img
+    cp -f ../openwrt-armvirt/*.tar.gz . && sync
+    echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
+    echo "::set-output name=status::success"
+```
+
+输出的变量 ${{ env.PACKAGED_OUTPUTPATH }} 即打包文件所在路径。
+
+- ### Github.com 引入 Actions 打包方法
 
 相关代码可以查看 [.yml](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
 
 在你的仓库里，当你完成 ARMv8 类型的 OpenWrt 固件包编译时，可以在流程控制文件 .github/workflows/.yml 中单独引入本仓库的打包脚本进行打包，代码如下:
 
 ```yaml
-- name: Build OpenWrt for Amlogic S9xxx STB
-  id: build
-  run: |
-    git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
-    cd amlogic-s9xxx-openwrt/
-    [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-    cp -f ../openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
-    sudo rm -rf ../openwrt && sync
-    sudo rm -rf /workdir && sync
-    sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.9.14_5.4.83
-    cd out/ && sudo gzip *.img
-    cp -f ../openwrt-armvirt/*.tar.gz . && sync
-    echo "FILEPATH=$PWD" >> $GITHUB_ENV
-    echo "::set-output name=status::success"
+- name: Package Armvirt as OpenWrt
+  uses: ophub/amlogic-s9xxx-openwrt@main
+  with:
+    armvirt64_path: openwrt/bin/targets/*/*/*.tar.gz
+    amlogic_openwrt: s905x3_s905x2_s905x_s905d_s922x_s912
+    amlogic_kernel: 5.10.31.TF_5.4.113
+    amlogic_size: 1024
 ```
+- Actions 输入参数说明
+
+| 参数                   | 默认值                  | 说明                                            |
+|------------------------|------------------------|------------------------------------------------|
+| armvirt64_path         | no                     | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，使用文件在当前工作流中的路径如 `openwrt/bin/targets/*/*/*.tar.gz` |
+| amlogic_openwrt        | s905d_s905x3           | 设置打包盒子的 `SOC` ，默认 `all` 打包全部盒子，可指定单个盒子如 `s905x3` ，可选择多个盒子用_连接如 `s905x3_s905d` 。各盒子的SoC代码为：`s905` `s905d` `s905x2` `s905x3` `s912` `s922x` |
+| amlogic_kernel         | 5.4.108_5.10.26.TF     | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
+| amlogic_size           | 1024                   | 设置固件 ROOT 分区的大小                         |
+
+- Actions 输出变量说明
+
+| 参数                                      | 默认值                  | 说明                       |
+|------------------------------------------|-------------------------|---------------------------|
+| ${{ env.PACKAGED_OUTPUTPATH }}           | out                     | 打包后的固件所在文件夹的路径  |
+| ${{ env.PACKAGED_OUTPUTDATE }}           | 2021.04.21.1058         | 打包日期                   |
+| ${{ env.PACKAGED_STATUS }}               | success / failure       | 打包状态。成功 / 失败       |
 
 - 上传固件到 github.com 的 Actions:
  
@@ -88,7 +114,7 @@ openwrt-kernel
 - name: Upload artifact to Actions
   uses: kittaakos/upload-artifact-as-is@master
   with:
-    path: ${{ env.FILEPATH }}/
+    path: ${{ env.PACKAGED_OUTPUTPATH }}/
 ```
 
 - 上传固件到 github.com 的 Release:
@@ -100,13 +126,13 @@ openwrt-kernel
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   with:
     tag_name: openwrt_s9xxx
-    files: ${{ env.FILEPATH }}/*
+    files: ${{ env.PACKAGED_OUTPUTPATH }}/*
     body: |
       This is OpenWrt firmware for Amlogic S9xxx STB.
       More information ...
 ```
 
-- ### 使用 github.com 的 Releases 中已有的 rootfs 文件直接进行固件打包
+- ### 使用 Github.com 的 Releases 中已有的 rootfs 文件直接进行固件打包
 
 如果你仓库的 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中已经有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你可以直接进行打包.
 
@@ -126,7 +152,7 @@ openwrt-kernel
     sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.9.14_5.4.83
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
-    echo "FILEPATH=$PWD" >> $GITHUB_ENV
+    echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
     echo "FILE_DATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
 ```

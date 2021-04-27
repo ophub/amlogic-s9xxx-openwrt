@@ -636,9 +636,22 @@ fi
 
 extract_openwrt
 
+k=1
 for b in ${build_openwrt[*]}; do
+
+    i=1
     for x in ${kernels[*]}; do
         {
+            echo -e "(${k}.${i}) Start packaging OpenWrt, SoC is [ ${b} ], Kernel is [ ${x} ]"
+
+            now_remaining_space=$(df -hT ${PWD} | grep '/dev/' | awk '{print $5}' | sed 's/.$//')
+            if  [[ "${now_remaining_space}" -le "2" ]]; then
+                echo -e "If the remaining space is less than 2G, exit this packaging. \n"
+                break
+            else
+                echo -e "Remaining space is ${now_remaining_space}G."
+            fi
+            
             kernel=${x}
             build=${b}
             process " (1/4) extract armbian files."
@@ -649,8 +662,14 @@ for b in ${build_openwrt[*]}; do
             make_image ${b}
             process " (4/4) copy files to image."
             copy2image ${b}
+            
+            echo -e "(${k}.${i}) Package openwrt completed."
+            
+            let i++
         }
     done
+    
+    let k++
 done
 
 cp -f ${openwrt_path}/*.tar.gz ${out_path} 2>/dev/null && sync

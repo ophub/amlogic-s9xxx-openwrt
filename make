@@ -634,8 +634,6 @@ fi
 [ ${kernel} != "all" ] && unset kernels && kernels=(${kernel})
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
-
-
 k=1
 for b in ${build_openwrt[*]}; do
 

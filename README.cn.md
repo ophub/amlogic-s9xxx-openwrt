@@ -16,7 +16,7 @@
 | s905x2 | [x96max4g](https://tokopedia.link/HcfLaRzjqeb), [x96max2g](https://tokopedia.link/ro207Hsjqeb) | openwrt_s905x2_v*.img |
 | s905x | [hg680p](https://tokopedia.link/NWF1Skg21db), [b860h](https://tokopedia.link/hnXvHn5uwfb) | openwrt_s905x_v*.img |
 | s922x | [belink](https://tokopedia.link/RAgZmOM41db), [belinkpro](https://tokopedia.link/sfTHlfS41db), [ugoos](https://tokopedia.link/pHGKXuV41db) | openwrt_s922x_v*.img |
-| s912 | octopus | openwrt_s912_v*.img |
+| s912 | [H96Pro+](https://www.gearbest.com/tv-box-mini-pc/pp_503486.html), octopus | openwrt_s912_v*.img |
 | s905d | n1 | openwrt_s905d_v*.img |
 
 ## 安装及升级 OpenWrt 的相关说明

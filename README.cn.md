@@ -71,6 +71,7 @@ openwrt-kernel
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
+    echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
 ```
 
@@ -153,7 +154,7 @@ openwrt-kernel
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
-    echo "FILE_DATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+    echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
 ```
 

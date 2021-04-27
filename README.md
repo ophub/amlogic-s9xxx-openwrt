@@ -2,7 +2,7 @@
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
-Support `github.com One-stop compilation`, `Use this GitHub Action to packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and update related functions. Support Amlogic S9xxx STB are ***`S905x3, S905x2, S922x, S905x, S905d, s912`***, etc. such as ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`***, etc.
+Support `github.com One-stop compilation`, `Use GitHub Action to packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and update related functions. Support Amlogic S9xxx STB are ***`S905x3, S905x2, S922x, S905x, S905d, s912`***, etc. such as ***`Phicomm-N1, Octopus-Planet, X96-Max+, HK1-Box, H96-Max-X3, Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, Fiberhome HG680P, ZTE B860H`***, etc.
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
@@ -78,7 +78,7 @@ You can modify the configuration file in the `router-config` directory and `.yml
 
 The output variable ${{ env.PACKAGED_OUTPUTPATH }} is the path where the packaged file is located.
 
-- ### Use this GitHub Action to packaging instructions
+- ### Use GitHub Action to packaging instructions
 
 [For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
 
@@ -94,7 +94,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
     amlogic_size: 1024
 ```
 
-- Actions Input parameter description
+- GitHub Action Input parameter description
 
 | parameter              | Defaults               | Description                                                   |
 |------------------------|------------------------|---------------------------------------------------------------|
@@ -103,7 +103,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 | amlogic_kernel         | 5.4.108_5.10.26.TF     | Set the kernel version，Ophub's [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) library contains many original kernels of `Flippy`, you can view and choose to specify. |
 | amlogic_size           | 1024                   | Set the size of the firmware ROOT partition |
 
-- Actions Output variable description
+- GitHub Action Output variable description
 
 | parameter                                | For example             | Description                   |
 |------------------------------------------|-------------------------|-------------------------------|

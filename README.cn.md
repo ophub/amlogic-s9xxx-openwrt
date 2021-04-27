@@ -64,8 +64,6 @@ openwrt-kernel
   run: |
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
-    sudo rm -rf openwrt && sync
-    sudo rm -rf /workdir && sync
     sudo chmod +x make
     sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.31.TF_5.4.113
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV

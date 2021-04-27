@@ -68,9 +68,7 @@ openwrt-kernel
     sudo rm -rf /workdir && sync
     sudo chmod +x make
     sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.31.TF_5.4.113
-    cd out/ && sudo gzip *.img
-    cp -f ../openwrt-armvirt/*.tar.gz . && sync
-    echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
+    echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
 ```
@@ -105,7 +103,7 @@ openwrt-kernel
 
 | 参数                                      | 默认值                  | 说明                       |
 |------------------------------------------|-------------------------|---------------------------|
-| ${{ env.PACKAGED_OUTPUTPATH }}           | out                     | 打包后的固件所在文件夹的路径  |
+| ${{ env.PACKAGED_OUTPUTPATH }}           | ${PWD}/out              | 打包后的固件所在文件夹的路径  |
 | ${{ env.PACKAGED_OUTPUTDATE }}           | 2021.04.21.1058         | 打包日期                   |
 | ${{ env.PACKAGED_STATUS }}               | success / failure       | 打包状态。成功 / 失败       |
 
@@ -151,9 +149,7 @@ openwrt-kernel
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
     sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.9.14_5.4.83
-    cd out/ && sudo gzip *.img
-    cp -f ../openwrt-armvirt/*.tar.gz . && sync
-    echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
+    echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
 ```

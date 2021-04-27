@@ -651,7 +651,7 @@ for b in ${build_openwrt[*]}; do
 done
 
 wait
-echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
+echo -e "\n Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
 cleanup
 chmod -R 777 ${out_path}

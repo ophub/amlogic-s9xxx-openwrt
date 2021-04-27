@@ -43,7 +43,7 @@ runs:
         echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
         echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
         echo "PACKAGED_STATUS=success" >> $GITHUB_ENV
-        echo -e "PACKAGED_OUTPUTPATH: ${PWD}"
+        echo -e "PACKAGED_OUTPUTPATH: ${PWD}/out"
         echo -e "PACKAGED_OUTPUTDATE: $(date +"%Y.%m.%d.%H%M")"
         echo -e "PACKAGED_STATUS: success"
         echo -e "PACKAGED_OUTPUTPATH files list:"

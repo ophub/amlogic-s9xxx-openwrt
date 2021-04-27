@@ -158,9 +158,7 @@ jobs:
         sudo rm -rf /workdir && sync
         sudo chmod +x make
         sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.31.TF_5.4.113
-        cd out/ && sudo gzip *.img
-        cp -f ../openwrt-armvirt/*.tar.gz . && sync
-        echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
+        echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
         echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 

@@ -72,6 +72,7 @@ You can modify the configuration file in the `router-config` directory and `.yml
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
+    echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
 ```
 
@@ -156,7 +157,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     cd out/ && sudo gzip *.img
     cp -f ../openwrt-armvirt/*.tar.gz . && sync
     echo "PACKAGED_OUTPUTPATH=$PWD" >> $GITHUB_ENV
-    echo "FILE_DATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+    echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
 ```
 

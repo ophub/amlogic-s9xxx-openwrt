@@ -6,7 +6,7 @@
 # Note: Please grant execution permission before using the script: chmod +x openwrt-kernel
 # Kernel extraction command: sudo ./openwrt-kernel -e
 # Kernel replace command: openwrt-kernel -r
-# dtb-amlogic-*.tar.gz change command: openwrt-kernel -d
+# dtb-amlogic-*.tar.gz update command: openwrt-kernel -d
 # View help commands: sudo ./openwrt-kernel -h
 #
 # Copyright (C) 2020-2021 Flippy
@@ -293,7 +293,7 @@ replace_kernel() {
 }
 
 # Update the dtb file in the kernel component file dtb-amlogic-*.tar.gz
-dtb_change() {
+dtb_update() {
 
     # Default setting ( Don't modify )
     build_path=${PWD}
@@ -358,7 +358,7 @@ menu() {
         |                                  |
         |   e. Extract the kernel          |
         |   r. Replace the kernel          |
-        |   d. dtb-amlogic-* file change   |
+        |   d. dtb-amlogic-* files update  |
         |   h. help                        |
         |   q. quit                        |
         |                                  |
@@ -370,7 +370,7 @@ EOF
             case $select in
             e | extract)     extract_kernel;;
             r | replace)     replace_kernel;;
-            d | dtb)         dtb_change;;
+            d | dtb)         dtb_update;;
             h | help)        print_help;;
             q | quit)        exit 0;;
             esac
@@ -381,7 +381,7 @@ getopts 'erdhq' opts
 case $opts in
     e | extract)     extract_kernel;;
     r | replace)     replace_kernel;;
-    d | dtb)         dtb_change;;
+    d | dtb)         dtb_update;;
     h | help)        print_help;;
     q | quit)        exit 0;;
     *)               menu;;

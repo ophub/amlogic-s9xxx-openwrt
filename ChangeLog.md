@@ -12,6 +12,7 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
+| 2021.04.29 | All | ADD | ✩✩✩ | [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/openwrt-kernel) | Add the function of updating `dtb-amlogic-*.tar.gz` files. |
 | 2021.04.27 | All | ADD | ✩✩✩ | [Actions](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml) | Add use Actions packaging instructions. |
 | 2021.04.17 | All | ADD | ✩✩✩ | [5.10.31.TF](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.10.31.TF) | Support directly using the 3 kernel files provided by Flippy for OpenWrt packaging. |
 | - | All | ADD | ✩✩✩ | [5.4.113](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel/5.4.113) | Support directly using the 3 kernel files provided by Flippy for OpenWrt packaging. |

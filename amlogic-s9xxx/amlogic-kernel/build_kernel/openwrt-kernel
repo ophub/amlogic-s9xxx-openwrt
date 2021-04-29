@@ -342,7 +342,7 @@ dtb_update() {
 print_help() {
     echo "Usage: $0  -e  (Extract the kernel)"
     echo "       $0  -r  (Replace the kernel)"
-    echo "       $0  -d  (dtb-amlogic-* file change)"
+    echo "       $0  -d  (dtb-amlogic-*.tar.gz files update)"
     echo "       $0  -h  (help)"
     echo "       $0  -q  (quit)"
     exit 0
@@ -354,15 +354,15 @@ menu() {
         clear
         cat <<EOF
 
-        —————————[ openwrt-kernel ]—————————
-        |                                  |
-        |   e. Extract the kernel          |
-        |   r. Replace the kernel          |
-        |   d. dtb-amlogic-* files update  |
-        |   h. help                        |
-        |   q. quit                        |
-        |                                  |
-        ————————————————————————————————————
+        —————————————[ openwrt-kernel ]————————————
+        |                                         |
+        |   e. Extract the kernel                 |
+        |   r. Replace the kernel                 |
+        |   d. dtb-amlogic-*.tar.gz files update  |
+        |   h. help                               |
+        |   q. quit                               |
+        |                                         |
+        ———————————————————————————————————————————
 
 EOF
         echo -ne "please select: [ ]\b\b"

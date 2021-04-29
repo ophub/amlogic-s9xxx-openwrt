@@ -309,8 +309,7 @@ dtb_change() {
     echo -e "Copy .dtb files"
     [ -d ${amlogic_path}/amlogic-dtb ] && cp -rf ${amlogic_path}/amlogic-dtb/* . && sync
     if  [ $( ls *.dtb -l 2>/dev/null | grep "^-" | wc -l ) -eq 0 ]; then
-        echo "The .dtb files is Missing!"
-        exit 1
+        die "The .dtb files is Missing!"
     else
         echo -e "Package dtb-amlogic-new.tar.gz"
         tar -czf dtb-amlogic-new.tar.gz *

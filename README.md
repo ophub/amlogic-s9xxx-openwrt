@@ -12,11 +12,11 @@ This OpenWrt firmware is packaged using ***`Flippy's`*** [Amlogic S9xxx Kernel](
 
 | Model  | STB | OpenWrt Firmware |
 | ---- | ---- | ---- |
-| s905x3 | [x96](https://tokopedia.link/uMaH09s41db), [hk1](https://tokopedia.link/xhWeQgTuwfb), [h96](https://tokopedia.link/KuWvwoYuwfb) | openwrt_s905x3_v*.img |
+| s905x3 | [x96](https://tokopedia.link/uMaH09s41db), [hk1](https://tokopedia.link/xhWeQgTuwfb), [h96](https://tokopedia.link/KuWvwoYuwfb), [ugoosx3](https://www.tokopedia.com/prodakjaya/ugoos-x3-pro-x3-cube-amlogic-s905x3-android-9-0-tv-box-4gb-ddr4-32gb) | openwrt_s905x3_v*.img |
 | s905x2 | [x96max4g](https://tokopedia.link/HcfLaRzjqeb), [x96max2g](https://tokopedia.link/ro207Hsjqeb) | openwrt_s905x2_v*.img |
 | s905x | [hg680p](https://tokopedia.link/NWF1Skg21db), [b860h](https://tokopedia.link/hnXvHn5uwfb) | openwrt_s905x_v*.img |
 | s922x | [belink](https://tokopedia.link/RAgZmOM41db), [belinkpro](https://tokopedia.link/sfTHlfS41db), [ugoos](https://tokopedia.link/pHGKXuV41db) | openwrt_s922x_v*.img |
-| s912 | [H96Pro+](https://www.gearbest.com/tv-box-mini-pc/pp_503486.html), octopus | openwrt_s912_v*.img |
+| s912 | [h96proplus](https://www.gearbest.com/tv-box-mini-pc/pp_503486.html), octopus | openwrt_s912_v*.img |
 | s905d | n1 | openwrt_s905d_v*.img |
 
 ## Install to EMMC and update instructions

@@ -35,3 +35,17 @@ Flippy 的一套内核包由 3 个文件共同组成： `boot-${flippy_version}.
 
 将 `Flippy` 分享的一套内核包的 3 个文件直接放入 `~/*/amlogic-s9xxx/amlogic-kernel/kernel/` 目录下 `相应的版本号文件夹内` 即可使用，无需其他操作。
 
+## 更新 dtb-amlogic-*.tar.gz 文件
+
+```shell script
+Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
+ ├── flippy
+ └── sudo ./openwrt-kernel -d
+```
+
+当 dtb 文件库 `~/*/amlogic-s9xxx/amlogic-dtb` 中的文件有更新时，可以运行 `sudo ./openwrt-kernel -d` 命令，对 kernel 目录下的全部内核软件包中的 `dtb-amlogic-*.tar.gz` 文件进行更新。
+
+## 更换 OpenWrt 内核
+
+在 `OpenWrt` 系统中，可以使用 `openwrt-kernel -r` 命令对正在使用的内核进行替换，具体使用方法见 [更换 openwrt 内核](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.cn.md#更换-openwrt-内核)
+

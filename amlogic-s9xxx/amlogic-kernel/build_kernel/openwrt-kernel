@@ -6,6 +6,7 @@
 # Note: Please grant execution permission before using the script: chmod +x openwrt-kernel
 # Kernel extraction command: sudo ./openwrt-kernel -e
 # Kernel replace command: openwrt-kernel -r
+# dtb-amlogic-*.tar.gz change command: openwrt-kernel -d
 # View help commands: sudo ./openwrt-kernel -h
 #
 # Copyright (C) 2020-2021 Flippy
@@ -291,6 +292,53 @@ replace_kernel() {
     exit 0
 }
 
+# Update the dtb file in the kernel component file dtb-amlogic-*.tar.gz
+dtb_change() {
+
+    # Default setting ( Don't modify )
+    build_path=${PWD}
+    build_tmp_folder=${build_path}/"flippy/build_tmp"
+    amlogic_path=${build_path%/amlogic-kernel*}
+
+    echo "update dtb-amlogic-*.tar.gz ..."
+    [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
+    cd  ${build_tmp_folder}
+    echo "amlogic_path: ${amlogic_path}, build_tmp_folder: ${build_tmp_folder}"
+
+    # Generate temp file: dtb-amlogic-new.tar.gz
+    echo -e "Copy .dtb files"
+    [ -d ${amlogic_path}/amlogic-dtb ] && cp -rf ${amlogic_path}/amlogic-dtb/* . && sync
+    if  [ $( ls *.dtb -l 2>/dev/null | grep "^-" | wc -l ) -eq 0 ]; then
+        echo "The .dtb files is Missing!"
+        exit 1
+    else
+        echo -e "Package dtb-amlogic-new.tar.gz"
+        tar -czf dtb-amlogic-new.tar.gz *
+    fi
+
+    # Replace existing files in a loop
+    cd ${amlogic_path}/amlogic-kernel/kernel/
+    total_kernel=$( ls . -l 2>/dev/null | grep "^d" | wc -l )
+    current_kernel=1
+    for kernel_folder in $( ls -d */ | head -c-2 ); do
+        kernel_version=${kernel_folder%/*}
+        cd  ${kernel_version}
+            if [ -f dtb-amlogic-*.tar.gz ]; then
+               dtb_file_name=$( ls dtb-amlogic-*.tar.gz | head -n 1 )
+               cp -f ${build_tmp_folder}/dtb-amlogic-new.tar.gz ${dtb_file_name}
+               echo "(${current_kernel}/${total_kernel}) ${kernel_version}/${dtb_file_name} is change"
+            else
+               echo "(${current_kernel}/${total_kernel}) There is no dtb-amlogic-*.tar.gz file in the ${kernel_version} directory"
+            fi
+        cd ../
+        let current_kernel++
+    done
+
+    rm -rf ${build_tmp_folder} 2>/dev/null
+    exit 0
+
+}
+
 # print help info
 print_help() {
     echo "Usage: $0  -e  (Extract the kernel)"
@@ -308,10 +356,11 @@ menu() {
 
         —————————[ openwrt-kernel ]—————————
         |                                  |
-        |        e. Extract the kernel     |
-        |        r. Replace the kernel     |
-        |        h. help                   |
-        |        q. quit                   |
+        |   e. Extract the kernel          |
+        |   r. Replace the kernel          |
+        |   d. dtb-amlogic-* file change   |
+        |   h. help                        |
+        |   q. quit                        |
         |                                  |
         ————————————————————————————————————
 
@@ -321,16 +370,18 @@ EOF
             case $select in
             e | extract)     extract_kernel;;
             r | replace)     replace_kernel;;
+            d | dtb)         dtb_change;;
             h | help)        print_help;;
             q | quit)        exit 0;;
             esac
     done
 }
 
-getopts 'erhq' opts
+getopts 'erdhq' opts
 case $opts in
     e | extract)     extract_kernel;;
     r | replace)     replace_kernel;;
+    d | dtb)         dtb_change;;
     h | help)        print_help;;
     q | quit)        exit 0;;
     *)               menu;;

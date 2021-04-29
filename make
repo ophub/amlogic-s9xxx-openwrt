@@ -168,7 +168,7 @@ refactor_files() {
     fi
 
     case "${build_op}" in
-        s905x3 | x96 | hk1 | h96)
+        s905x3 | x96 | hk1 | h96 | ugoosx3)
             FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
             U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
@@ -196,7 +196,7 @@ refactor_files() {
             MAINLINE_UBOOT=""
             ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
             ;;
-        s912 | octopus)
+        s912 | h96proplus | octopus)
             FDTFILE="meson-gxm-octopus-planet.dtb"
             U_BOOT_EXT=0
             UBOOT_OVERLOAD="u-boot-zyxq.bin"

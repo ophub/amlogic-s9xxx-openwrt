@@ -343,6 +343,7 @@ dtb_change() {
 print_help() {
     echo "Usage: $0  -e  (Extract the kernel)"
     echo "       $0  -r  (Replace the kernel)"
+    echo "       $0  -d  (dtb-amlogic-* file change)"
     echo "       $0  -h  (help)"
     echo "       $0  -q  (quit)"
     exit 0

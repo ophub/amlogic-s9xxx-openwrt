@@ -35,3 +35,18 @@ A set of Flippy's kernel package consists of 3 files: `boot-${flippy_version}.ta
 
 Put the 3 files of a set of kernel packages shared by `Flippy` directly into the `~/*/amlogic-s9xxx/amlogic-kernel/kernel/` corresponding folder under the directory, without other operations.
 
+## Update dtb-amlogic-*.tar.gz files
+
+```shell script
+Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
+ ├── flippy
+ └── sudo ./openwrt-kernel -d
+```
+
+When the files in the dtb file library `~/*/amlogic-s9xxx/amlogic-dtb` have been updated, you can run the `sudo ./openwrt-kernel -d` command to correct the ` dtb-amlogic-*.tar.gz` files are updated.
+
+
+## Replace OpenWrt kernel
+
+In the `OpenWrt` system, you can use the `openwrt-kernel -r` command to replace the kernel being used. For details, see [Replace OpenWrt kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.md#replace-openwrt-kernel)
+

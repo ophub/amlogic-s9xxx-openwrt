@@ -100,20 +100,22 @@ reboot
 
 | 序号 | 型号 | 说明 | DTB |
 | ---- | ---- | ---- | ---- |
-| 1 | X96-Max+ | S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-sm1-x96-max-plus.dtb |
-| 2 | X96-Max+ | 905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2208Mtz | meson-sm1-x96-max-plus-oc.dtb |
-| 3 | HK1-Box | S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2124Mtz | meson-sm1-hk1box-vontar-x3.dtb |
-| 4 | HK1-Box | S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2184Mtz | meson-sm1-hk1box-vontar-x3-oc.dtb |
-| 5 | H96-Max-X3 | S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2124Mtz | meson-sm1-h96-max-x3.dtb |
-| 6 | H96-Max-X3 | S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz | meson-sm1-h96-max-x3-oc.dtb |
-| 7 | X96-Max-4G | S905x2: NETWORK: 1000M / TF: 50Mtz / CPU: 1944Mtz | meson-g12a-x96-max.dtb |
-| 8 | X96-Max-2G | S905x2: NETWORK: 100M  / TF: 50Mtz / CPU: 1944Mtz | meson-g12a-x96-max-rmii.dtb |
-| 9 | Belink GT-King | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-gtking.dtb |
-| 10 | Belink GT-King Pro | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-gtking-pro.dtb |
-| 11 | UGOOS AM6 Plus | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-ugoos-am6.dtb |
-| 12 | Octopus-Planet | S912: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxm-octopus-planet.dtb |
-| 13 | Phicomm-n1 | S905d: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxl-s905d-phicomm-n1.dtb |
-| 14 | hg680p & b860h | S905x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxl-s905x-p212.dtb |
+| 1 | X96-Max+ (4G DDR) | S905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-sm1-x96-max-plus.dtb |
+| 2 | X96-Max+ (4G DDR) | 905x3: NETWORK: 1000M / TF: 30Mtz / CPU: 2208Mtz | meson-sm1-x96-max-plus-oc.dtb |
+| 3 | HK1-Box (4G DDR) | S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2124Mtz | meson-sm1-hk1box-vontar-x3.dtb |
+| 4 | HK1-Box (4G DDR) | S905x3: NETWORK: 1000M / TF: 25Mtz / CPU: 2184Mtz | meson-sm1-hk1box-vontar-x3-oc.dtb |
+| 5 | H96-Max-X3 (4G DDR) | S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2124Mtz | meson-sm1-h96-max-x3.dtb |
+| 6 | H96-Max-X3 (4G DDR) | S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz | meson-sm1-h96-max-x3-oc.dtb |
+| 7 | Ugoos-X3 (Cube/Pro/Plus) | S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2124Mtz | meson-sm1-ugoos-x3.dtb |
+| 8 | Ugoos-X3 (Cube/Pro/Plus) | S905x3: NETWORK: 1000M / TF: 50Mtz / CPU: 2208Mtz | meson-sm1-ugoos-x3-oc.dtb |
+| 9 | X96-Max-4G | S905x2: NETWORK: 1000M / TF: 50Mtz / CPU: 1944Mtz | meson-g12a-x96-max.dtb |
+| 10 | X96-Max-2G | S905x2: NETWORK: 100M  / TF: 50Mtz / CPU: 1944Mtz | meson-g12a-x96-max-rmii.dtb |
+| 11 | Belink GT-King | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-gtking.dtb |
+| 12 | Belink GT-King Pro | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-gtking-pro.dtb |
+| 13 | UGOOS AM6 Plus | S922x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-g12b-ugoos-am6.dtb |
+| 14 | Octopus-Planet | S912: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxm-octopus-planet.dtb |
+| 15 | Phicomm-n1 | S905d: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxl-s905d-phicomm-n1.dtb |
+| 16 | hg680p & b860h | S905x: NETWORK: 1000M / TF: 30Mtz / CPU: 2124Mtz | meson-gxl-s905x-p212.dtb |
 | 0 | Other | - | Enter the dtb file name of your box |
 
  在自选 .dtb 文件进行安装时，你可以从 [dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) 库里查阅相关文件名并填写。
@@ -165,7 +167,7 @@ reboot
 ## 在安装了主线 u-boot 后无法启动
 
 - 有的 Amlogic S905x3 在安装 5.10 内核时，如果选择写入主线 `u-boot` 后，可能会无法启动，在显示器中看到的提示为 `=>` 符号结尾的一段代码。这时你需要在 TTL 上焊接一个 5-10 K 的上拉或下拉电阻，解决机顶盒容易受周围电磁信号干扰而导致无法启动的问题，焊接电阻后就可以从 EMMC 启动了。
-- 鉴于主线 `u-boot` 当前可能会造成无法从 EMMC 启动的问题，在安装脚本中已经默认关闭了对选择主线 `u-boot` 的提示。
+- 鉴于主线 `u-boot` 当前可能会造成无法从 EMMC 启动的问题，在安装脚本中已经默认关闭了对选择主线 `u-boot` 的提示，等 Flippy 后续升级稳定后再启用。
 - 如果你想尝鲜体验主线 `u-boot` ，可以使用 `openwrt-install TEST-UBOOT` 安装命令，脚本将会在已经添加主线 `u-boot` 的相关盒子安装时出现选择提示。但是我们不推荐你这样做，除非你已经了解焊接电阻的方法，或者愿意做版本测试的志愿者。
 
 如果你选择安装了主线 `u-boot` 并且无法启动，请将机顶盒接入屏幕，查看是否为这样的提示：

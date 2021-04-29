@@ -142,13 +142,13 @@ case  $boxtype in
          ;;
       7) FDTFILE="meson-sm1-ugoos-x3.dtb"
          U_BOOT_EXT=1
-         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         UBOOT_OVERLOAD="u-boot-ugoos-x3.bin"
          MAINLINE_UBOOT="/lib/u-boot/ugoos-x3-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
-      8) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
+      8) FDTFILE="meson-sm1-ugoos-x3-oc.dtb"
          U_BOOT_EXT=1
-         UBOOT_OVERLOAD="meson-sm1-ugoos-x3-oc.dtb"
+         UBOOT_OVERLOAD="u-boot-ugoos-x3.bin"
          MAINLINE_UBOOT="/lib/u-boot/ugoos-x3-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;

@@ -583,7 +583,7 @@ config  mount
         option target '/boot'
         option label 'EMMC_BOOT'
         option enabled '1'
-        option enabled_fsck '0'
+        option enabled_fsck '1'
         option fstype 'vfat'
 
 EOF

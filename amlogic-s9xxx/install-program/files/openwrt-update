@@ -321,7 +321,7 @@ sync
 echo "Copy data complete ..."
 
 BACKUP_LIST=$(${P2}/usr/bin/openwrt-backup -p)
-if [[ ${BR_FLAG} -eq 1 && -n ${BACKUP_LIST} ]];then
+if [[ "${BR_FLAG}" -eq "1" && -n "${BACKUP_LIST}" ]];then
     # restore old config files
     OLD_RELEASE=$(grep "DISTRIB_REVISION=" /etc/openwrt_release | awk -F "'" '{print $2}'|awk -F 'R' '{print $2}' | awk -F '.' '{printf("%02d%02d%02d\n", $1,$2,$3)}')
     NEW_RELEASE=$(grep "DISTRIB_REVISION=" ./etc/uci-defaults/99-default-settings | awk -F "'" '{print $2}'|awk -F 'R' '{print $2}' | awk -F '.' '{printf("%02d%02d%02d\n", $1,$2,$3)}')

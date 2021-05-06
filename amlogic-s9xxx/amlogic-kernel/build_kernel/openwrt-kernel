@@ -246,11 +246,11 @@ replace_kernel() {
 
     if  [ "${V510}" -ge "${K510}" ]; then
         UP_FLAG=1
-        echo -ne "Do you want to update the kernel from [ ${MODULES_OLD} ] to [ ${flippy_version} ]? y/n [y]\b\b"
-        read yn
-        case $yn in
-             n*|N*) UP_FLAG=0;;
-        esac
+        #echo -ne "Do you want to update the kernel from [ ${MODULES_OLD} ] to [ ${flippy_version} ]? y/n [y]\b\b"
+        #read yn
+        #case $yn in
+        #     n*|N*) UP_FLAG=0;;
+        #esac
     else
         die "The kernel series are not the same, Distinguish whether it is 5.10 kernel!"
     fi
@@ -288,7 +288,9 @@ replace_kernel() {
     sync
     wait
 
-    echo "The update is complete, please [ reboot ] the system!"
+    echo "The update is complete, Will start automatically, please refresh later!"
+    sleep 3
+    echo 'b' > /proc/sysrq-trigger
     exit 0
 }
 

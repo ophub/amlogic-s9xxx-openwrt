@@ -43,7 +43,7 @@ Example: ~/*/amlogic-s9xxx/amlogic-kernel/build-kernel/
  └── sudo ./openwrt-kernel -d
 ```
 
-When the files in the dtb file library [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) have been updated, you can run the `sudo ./openwrt-kernel -d` command to update the ` dtb-amlogic-*.tar.gz` files in [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) directory.
+When the files in the dtb file library `~/*/amlogic-s9xxx/amlogic-dtb` have been updated, you can run the `sudo ./openwrt-kernel -d` command to correct the ` dtb-amlogic-*.tar.gz` files are updated.
 
 
 ## Replace OpenWrt kernel

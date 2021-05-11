@@ -7,12 +7,45 @@
 # Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================
 
+# The script supports directly setting parameters for installation, skipping interactive selection
+# openwrt-install ${IFSHOW_MAINLINE_UBOOT} ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME}
+# E.g: openwrt-install TEST-UBOOT YES 1
+# E.g: openwrt-install NO-TEST-UBOOT NO 99 meson-gxl-s905x-p212.dtb
+# Tip: When custom dtb file, set ${SOC_ID} to 99, and parameter ${DTB_FILENAME} must be set
+
+# You can also execute the script directly, and interactively select related functions
+# E.g: openwrt-install
+
 # The MAINLINE_UBOOT is not perfect yet, and the installation is not prompted by default.
 if  [[ "${1}" == "TEST-UBOOT" ]]; then
     IFSHOW_MAINLINE_UBOOT=1
 else
     IFSHOW_MAINLINE_UBOOT=0
 fi
+
+AUTO_MAINLINE_UBOOT=${2}
+
+# For [luci-app-amlogic] input parameter: SOC & DTB
+# When there is no input parameter, select manually
+SPECIFY_SOC=""
+SPECIFY_DTB=""
+if  [[ -n "$(echo ${3} | sed -n "/^[0-9]\+$/p")" ]]; then
+    SPECIFY_SOC=${3}
+    if  [[ "${3}" -eq "99" ]]; then
+        if  [[ -n "${4}" ]]; then
+            SPECIFY_DTB=${4}
+        else
+            echo "Please enter the DTB file name!"
+            exit 1
+        fi
+
+    fi
+fi
+
+echo "IFSHOW_MAINLINE_UBOOT: ${IFSHOW_MAINLINE_UBOOT}"
+echo "AUTO_MAINLINE_UBOOT: ${AUTO_MAINLINE_UBOOT}"
+echo "SPECIFY_SOC: ${SPECIFY_SOC}"
+echo "SPECIFY_DTB: ${SPECIFY_DTB}"
 
 # you can change BOOT size >= 128
 BOOT=256
@@ -62,6 +95,7 @@ if [ "$(echo $emmc | grep mmcblk)" = "" ]; then
     exit 1
 fi
 
+echo "==================[ 10% ]=================="
 # EMMC DEVICE NAME
 EMMC_NAME="$emmc"
 EMMC_DEVPATH="/dev/$EMMC_NAME"
@@ -101,8 +135,14 @@ Please select s9xxx box model:
 0. Other ---------------- [ Enter the dtb file name of your box ]
 ---------------------------------------------------------------------
 EOF
-echo  "Please choose:"
-read  boxtype
+# For [luci-app-amlogic] input parameter: SOC & DTB
+# When there is no input parameter, select manually
+if [[ -n "${SPECIFY_SOC}" ]]; then
+    boxtype=${SPECIFY_SOC}
+else
+    echo  "Please choose:"
+    read  boxtype
+fi
 case  $boxtype in
       1) FDTFILE="meson-sm1-x96-max-plus.dtb"
          U_BOOT_EXT=1
@@ -200,6 +240,12 @@ case  $boxtype in
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
+      99) FDTFILE=${SPECIFY_DTB}
+         U_BOOT_EXT=0
+         UBOOT_OVERLOAD=""
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         ;;
       0) cat <<EOF
 Please enter the .dtb file name of your box, do not include the path.
 For example: $FDTFILE
@@ -207,6 +253,10 @@ EOF
          echo  "Enter the .dtb File name:"
          read  CUST_FDTFILE
          FDTFILE=$CUST_FDTFILE
+         U_BOOT_EXT=0
+         UBOOT_OVERLOAD=""
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
          ;;
       *) echo "Input error, exit!"
          exit 1
@@ -299,6 +349,7 @@ for mnt in $MOUNTS; do
     fi
 done
 
+echo "==================[ 30% ]=================="
 # Delete old partition if exists
 p=$(lsblk -l | grep -e "${EMMC_NAME}p" | wc -l)
 echo "A total of [ $p ] old partitions on EMMC will be deleted"
@@ -404,7 +455,17 @@ Disadvantage: If you want to restore to Android firmware after flashing in,
 ----------------------------------------------------------------------------------
 EOF
     while :; do
-        read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
+        # For [luci-app-amlogic] input parameter: SOC & DTB
+        # When there is no input parameter, select manually
+        if [[ "${AUTO_MAINLINE_UBOOT}" == "YES" ]]; then
+            if  [[ "${K510}" -eq "1" ]]; then
+                yn="y"
+            else
+                yn="n"
+            fi
+        else
+            read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
+        fi
         case $yn in
             y|Y) FLASH_MAINLINE_UBOOT=1
                 break
@@ -434,6 +495,7 @@ if [ -x /usr/bin/fix_wifi_macaddr.sh ]; then
 fi
 
 # mkfs
+echo "==================[ 50% ]=================="
 echo "Start creating file system ... "
 echo "Create a boot file system ... "
 
@@ -513,6 +575,7 @@ EOF
 done
 echo "complete."
 
+echo "==================[ 90% ]=================="
 echo "Wait for the rootfs file system to mount ... "
 i=1
 while [ $i -le $max_try ]; do
@@ -543,12 +606,11 @@ while [ $i -le $max_try ]; do
             (cd / && tar cf - $src) | tar xf -
             sync
         done
-        wait
+        echo "Copy complete."
 
         rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker >/dev/null
         rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/ >/dev/null
-        echo "Copy complete."
-		
+
         echo "Edit configuration file ..."
         #cd /mnt/${EMMC_NAME}p2/usr/bin/
         #rm -f openwrt-install openwrt-update
@@ -617,8 +679,8 @@ case $TARGET_SHARED_FSTYPE in
 esac
 mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
 sync
-wait
 
-echo "The original bootloader has been exported to [ /root/BackupOldBootloader.img ], please download and save!"
-echo "Install completed, please [ reboot ] the system!"
+echo "==================[ 100% ]=================="
+echo "The original bootloader has been exported to [ /root/BackupOldBootloader.img ]"
+echo "Install completed, Please unplug the USB disk and [ reboot ] the system!"
 

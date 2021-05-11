@@ -23,7 +23,7 @@ on:
     #- cron: '0 22 * * *'
 
 env:
-  UPLOAD_FIRMWARE: true
+  UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   UPLOAD_WETRANSFER: false
   RECENT_LASTEST: 3

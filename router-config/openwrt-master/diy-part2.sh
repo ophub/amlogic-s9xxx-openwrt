@@ -44,6 +44,7 @@ pushd package/openwrt-openclash/tools/po2lmo && make && sudo make install 2>/dev
 
 # Add luci-app-ssr-plus
 svn co https://github.com/fw876/helloworld/trunk/{luci-app-ssr-plus,shadowsocksr-libev} package/openwrt-ssrplus
+rm -rf package/openwrt-ssrplus/luci-app-ssr-plus/po/zh_Hans 2>/dev/null
 
 # Add luci-app-rclone
 svn co https://github.com/ElonH/Rclone-OpenWrt/trunk package/openWrt-rclone

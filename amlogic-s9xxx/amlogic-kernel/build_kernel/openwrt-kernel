@@ -272,7 +272,9 @@ replace_kernel() {
     sync
 
     cd /boot
-    mv -f uInitrd-* uInitrd && mv -f vmlinuz-* zImage 2>/dev/null
+    chmod 777 uInitrd-* vmlinuz-* 2>/dev/null
+    [[ -f uInitrd-* ]] && mv -f uInitrd-* uInitrd 2>/dev/null && sync
+    [[ -f vmlinuz-* ]] && mv -f vmlinuz-* zImage 2>/dev/null && sync
 
     cd /lib/modules/*/
     rm -f *.ko 2>/dev/null

@@ -184,13 +184,13 @@ replace_kernel() {
             kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,2}')
             k510_ver=${kernel_vermaj%%.*}
             k510_maj=${kernel_vermaj##*.}
-            if  [ ${k510_ver} -eq "5" ];then
-                if  [ "${k510_maj}" -ge "10" ];then
+            if  [ ${k510_ver} -eq "5" ]; then
+                if  [ "${k510_maj}" -ge "10" ]; then
                     K510=1
                 else
                     K510=0
                 fi
-            elif [ ${k510_ver} -gt "5" ];then
+            elif [ ${k510_ver} -gt "5" ]; then
                 K510=1
             else
                 K510=0
@@ -232,13 +232,13 @@ replace_kernel() {
     VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
     VERSION_ver=${VERSION_OLD%%.*}
     VERSION_maj=${VERSION_OLD##*.}
-    if  [ ${VERSION_ver} -eq "5" ];then
-        if  [ "${VERSION_maj}" -ge "10" ];then
+    if  [ ${VERSION_ver} -eq "5" ]; then
+        if  [ "${VERSION_maj}" -ge "10" ]; then
             V510=1
         else
             V510=0
         fi
-    elif [ ${VERSION_ver} -gt "5" ];then
+    elif [ ${VERSION_ver} -gt "5" ]; then
         V510=1
     else
         V510=0
@@ -261,25 +261,50 @@ replace_kernel() {
     fi
 
     echo -e "Delete [ ${MODULES_OLD} ] related files ..."
-    rm -rf /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null
-    rm -rf /lib/modules/* 2>/dev/null
-    sync
+    rm -f /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null && sync
+    rm -rf /lib/modules/* 2>/dev/null && sync
+    sleep 3
 
     echo -e "Package [ ${flippy_version} ] related files ..."
-    tar -xzf ${P4_PATH}/dtb-amlogic-*.tar.gz -C /boot/dtb/amlogic
-    tar -xzf ${P4_PATH}/boot-*.tar.gz -C /boot
-    tar -xzf ${P4_PATH}/modules-*.tar.gz -C /lib/modules
-    sync
 
-    cd /boot
-    chmod 777 uInitrd-* vmlinuz-* 2>/dev/null
-    [[ -f uInitrd-* ]] && mv -f uInitrd-* uInitrd 2>/dev/null && sync
-    [[ -f vmlinuz-* ]] && mv -f vmlinuz-* zImage 2>/dev/null && sync
+    tar -xzf ${P4_PATH}/${build_dtb} -C /boot/dtb/amlogic && sync
+    echo -e "Package [ ${P4_PATH}/${build_dtb} ] complete."
+
+    tar -xzf ${P4_PATH}/${build_boot} -C /boot && sync
+    echo -e "Package [ ${P4_PATH}/${build_boot} ] complete."
+
+    tar -xzf ${P4_PATH}/${build_modules} -C /lib/modules && sync
+    echo -e "Package [ ${P4_PATH}/${build_modules} ] complete."
+
+    sleep 3
+
+    chmod 777 /boot/uInitrd-* 2>/dev/null
+    [ -f /boot/uInitrd ] && rm -f /boot/uInitrd 2>/dev/null && sync
+    if [ -f /boot/uInitrd-* ]; then
+        mv -f /boot/uInitrd-* /boot/uInitrd 2>/dev/null && sync
+        if [ ! -f /boot/uInitrd ]; then
+            die "/boot/uInitrd file is missing."
+        fi
+    else
+        die "/boot/uInitrd-* file is missing."
+    fi
+
+    chmod 777 /boot/vmlinuz-* 2>/dev/null
+    [ -f /boot/zImage ] && rm -f /boot/zImage 2>/dev/null && sync
+    if [ -f /boot/vmlinuz-* ]; then
+        mv -f /boot/vmlinuz-* /boot/zImage 2>/dev/null && sync
+        if [ ! -f /boot/zImage ]; then
+            die "/boot/zImage file is missing."
+        fi
+    else
+        die "/boot/vmlinuz-* file is missing."
+    fi
 
     cd /lib/modules/*/
     rm -f *.ko 2>/dev/null
     find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-    rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz 2>/dev/null && sync
+    rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz 2>/dev/null
+    sync
 
     sed -i '/KERNEL_VERSION/d' /lib/u-boot/openwrt-env 2>/dev/null
     sed -i '/K510/d' /lib/u-boot/openwrt-env 2>/dev/null

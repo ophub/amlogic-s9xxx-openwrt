@@ -27,7 +27,7 @@ Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system men
 
 ## Instructions for using scripts in Amlogic S9xxx
 
-If you don't like the visual installation/upgrade operation through Luci described above, and are keen on using script commands, the relevant instructions are as follows:
+If you don't like the visual install/update operation through Luci described above, and are keen on using script commands, the relevant instructions are as follows:
 
 Choose the corresponding firmware according to your Amlogic S9xxx STB. Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the Amlogic S9xxx STB. Common for all `Amlogic S9xxx STB`.
 

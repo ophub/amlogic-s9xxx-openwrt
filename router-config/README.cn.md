@@ -273,11 +273,11 @@ UPLOAD_WETRANSFER: false
 
 ## 8. 安装固件
 
-在浏览器中输入 `192.168.1.1` 访问 openwrt ，默认的用户名是 `root` ，默认的密码是 `password` ，登录后，在系统菜单下，选择 `TTYD 终端` ，进来直接输入 `openwrt-install` 命令进行安装。更多的详细操作，可以在仓库的安装详细说明中查看： [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.cn.md)
+在浏览器中输入 `192.168.1.1` 访问 openwrt ，默认的用户名是 `root` ，默认的密码是 `password` ，登录后，在 `系统` 菜单下，选择 `晶晨宝盒` ，选择 `安装 OpenWrt` 进行安装。更多的详细操作，可以在仓库的安装详细说明中查看： [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.cn.md)
 
 ## 9. 升级固件
 
-登录你的 openwrt 系统，在 `系统` 菜单下，选择 `文件传输` 功能上传固件，稍等片刻，看到系统提示上传完成后，选择 `TTYD 终端` 菜单，输入 `openwrt-update` 命令升级。（你可以从高版本如 5.40 升级到低版本如 5.30 ，也可以从低版本如 5.91 升级到高版本如 5.96 。内核版本号的高低不影响升级，可自由升级/降级）。更多的详细操作，可以在仓库的升级详细说明中查看： [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.cn.md)
+登录你的 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 内核` 功能进行升级。（你可以从高版本如 5.40 升级到低版本如 5.30 ，也可以从低版本如 5.91 升级到高版本如 5.96 。内核版本号的高低不影响升级，可自由升级/降级）。更多的详细操作，可以在仓库的升级详细说明中查看： [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.cn.md)
 
 ## 10. 个性化固件定制晋级教程
 

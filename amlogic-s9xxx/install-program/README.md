@@ -4,7 +4,7 @@ View Chinese description  |  [查看中文说明](README.cn.md)
 
 Install and Update openwrt to emmc for Amlogic S9xxx STB.
 
-## Method of integrating luci-app-amlogic including installation/upgrade functions at compile time
+## Method of integrating luci-app-amlogic at compile time
 
 1. svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 2. Execute make `menuconfig` and select `luci-app-amlogic` under `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`

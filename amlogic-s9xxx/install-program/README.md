@@ -6,14 +6,12 @@ Install and Update openwrt to emmc for Amlogic S9xxx STB.
 
 ## Instructions
 
-1. `svn co https://github.com/ophub/amlogic-s9xxx-openwrt/trunk/amlogic-s9xxx/install-program package/install-program`
-2. Execute make `menuconfig` and select `install-program` under `Utilities`
+1. svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
+2. Execute make `menuconfig` and select `luci-app-amlogic` under `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
 
-```shell script
-Utilities  --->  
-   <*> install-program
-```
-💡Tips: This installation and update script can be introduced and used separately during github.com online compilation. If the firmware in the `openwrt-armvirt` directory you provided does not integrate this installation and update script, ***`Will auto add`*** this function to you through the `./make` script when packaging.
+For more instructions on the plug-in, see：[https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)
+
+💡Tips: Scripts such as install/update have been included in `luci-app-amlogic`. When you use the script `./make` of this repository to package, the script will automatically detect whether the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the `openwrt-armvirt` directory contains install/update scripts. If it detects that no related scripts will be added automatically, You can use script commands to perform related operations. The `luci-app-amlogic` plug-in operation has better visual operation, and integration is recommended.
 
 ## Install to Amlogic S9xxx STB EMMC and update instructions
 

@@ -13,7 +13,21 @@
 
 💡提示: 安装/升级等脚本已经在 `luci-app-amlogic` 中包含。当你使用本仓库的脚本 `./make` 打包时，脚本会自动检测 `openwrt-armvirt` 目录中的 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件是否含有安装/升级脚本，如果检测到没有会自动添加相关脚本，你可以使用脚本命令进行安装/升级等相关操作。`luci-app-amlogic` 插件可以对脚本的全部功能实现可视化操作，可以免去学习和使用复杂的脚本命令，推荐集成使用。
 
-## 在 Amlogic S9xxx 系列机顶盒的 EMMC 里进行安装/升级 OpenWrt 的相关说明
+## 安装及升级 OpenWrt 的相关说明
+
+选择和你的机顶盒型号对应的 OpenWrt 固件，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入USB里，然后把写好固件的USB插入机顶盒。
+
+- ### 安装 OpenWrt
+
+从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt`
+
+- ### 升级 OpenWrt 内核
+
+从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `升级 OpenWrt 内核`
+
+## 在 Amlogic S9xxx 系列机顶盒中使用脚本进行操作的相关说明
+
+如果你不喜欢上面介绍的通过 Luci 进行可视化安装/升级操作，热衷于使用脚本命令，相关说明见如下：
 
 选择和你的机顶盒型号相对应的 OpenWrt 固件，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入USB里，然后把写好固件的USB插入机顶盒。此脚本通用于各型号的机顶盒，命令均相同。
 

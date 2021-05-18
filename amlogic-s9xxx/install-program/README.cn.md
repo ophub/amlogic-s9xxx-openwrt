@@ -11,7 +11,7 @@
 
 插件的更多说明详见：[https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)
 
-💡提示: 安装/升级等脚本已经在 `luci-app-amlogic` 中包含。当你使用本仓库的脚本 `./make` 打包时，脚本会自动检测 `openwrt-armvirt` 目录中的 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件是否含有安装/升级脚本，如果检测到没有会自动添加相关脚本，你可以使用脚本命令进行安装/升级等相关操作。`luci-app-amlogic` 插件具有更佳的可视化操作，推荐集成。
+💡提示: 安装/升级等脚本已经在 `luci-app-amlogic` 中包含。当你使用本仓库的脚本 `./make` 打包时，脚本会自动检测 `openwrt-armvirt` 目录中的 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件是否含有安装/升级脚本，如果检测到没有会自动添加相关脚本，你可以使用脚本命令进行安装/升级等相关操作。`luci-app-amlogic` 插件可以对脚本的全部功能实现可视化操作，可以免去学习和使用复杂的脚本命令，推荐集成使用。
 
 ## 在 Amlogic S9xxx 系列机顶盒的 EMMC 里进行安装/升级 OpenWrt 的相关说明
 

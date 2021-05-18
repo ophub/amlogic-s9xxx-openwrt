@@ -12,6 +12,7 @@
 # E.g: openwrt-install TEST-UBOOT YES 1
 # E.g: openwrt-install NO-TEST-UBOOT NO 99 meson-gxl-s905x-p212.dtb
 # Tip: When custom dtb file, set ${SOC_ID} to 99, and parameter ${DTB_FILENAME} must be set
+# return 0
 
 # You can also execute the script directly, and interactively select related functions
 # E.g: openwrt-install
@@ -683,4 +684,4 @@ sync
 echo "==================[ 100% ]=================="
 echo "The original bootloader has been exported to [ /root/BackupOldBootloader.img ]"
 echo "Install completed, Please unplug the USB disk and [ reboot ] the system!"
-
+return 0

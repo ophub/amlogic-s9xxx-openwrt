@@ -281,13 +281,13 @@ After downloading the compiled firmware, `decompress it` to get the `OpenWrt.img
 
 In the wired network settings of `your computer`, change the IPV4 `IP` to manual settings, fill in the IP `192.168.1.2`, fill in the subnet mask `255.255.255.0`, and leave the other blanks blank.
 
-Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is `root` and the default password is `password`. After logging in, under the `System` menu, select the `TTYD terminal`, enter `openwrt-install` directly, and `press Enter`. Automatic installation. During the process, let you choose the type of your `Amlogic S9xxx STB`, fill in the serial number correctly, such as `13`, `enter and press Enter` to continue the installation. The firmware will be written into the `EMMC` of the `Amlogic S9xxx STB`. After the prompt is complete, `unplug the USB hard drive`, `unplug the power supply`, and `reinsert the power supply`. OpenWrt will boot from the `EMMC` partition of the `Amlogic S9xxx STB`. Wait `1 minute` to log in. The IP is still `192.168.1.1`, and the account password is still the `default`. (If you don’t like to write to the `EMMC` of the `Amlogic S9xxx STB`, you can `always plug in the USB hard disk and use OpenWrt in the USB`. The EMMC system responds `faster` to the USB hard disk.)
+Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is `root` and the default password is `password`. After logging in, under the `System` menu, select the `Amlogic Service`, select the `Install OpenWrt`
 
 More detailed operations can be viewed in the detailed installation instructions of the repository: [amlogic-s9xxx/install-program](https://github.com/ophub/amlogic-s9xxx-OpenWrt/tree/main/amlogic-s9xxx/install-program)
 
 ## 9. Update firmware
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `File Transfer` function to `upload the OpenWrt.img.gz firmware`, and `wait a while`, and see the system prompts that the `upload is complete`, select the `System menu` > `TTYD terminal` , and enter the `openwrt-update` command to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Replace OpenWrt Kernel` to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
 ## 10. Personalized firmware customization update tutorial
 

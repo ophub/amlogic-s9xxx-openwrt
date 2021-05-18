@@ -4,7 +4,7 @@
 
 将 OpenWrt 安装在 Amlogic S9xxx 系列机顶盒中的安装/升级说明文档。
 
-## 在编译时集成包含安装/升级等功能的 luci-app-amlogic 的方法
+## 在编译时集成 luci-app-amlogic 的方法
 
 1. `svn co https://github.com/ophub/amlogic-s9xxx-openwrt/trunk/amlogic-s9xxx/install-program package/install-program`
 2. 在执行 `menuconfig` 后，可以选择插件 `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`

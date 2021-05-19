@@ -30,6 +30,7 @@ env:
   DIY_P1_SH: router-config/openwrt-master/diy-part1.sh
   DIY_P2_SH: router-config/openwrt-master/diy-part2.sh
   UPLOAD_BIN_DIR: false
+  UPLOAD_IPK: true
   UPLOAD_ARMVIRT: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
@@ -120,7 +121,19 @@ jobs:
 
     - name: Check space usage
       if: (!cancelled())
-      run: df -hT
+      run: |
+        df -hT
+        mkdir -p openwrt/artifact/ipk
+        cp -rf $(find openwrt/bin/packages/ -type f -name "*.ipk") openwrt/artifact/ipk/ && sync
+
+    - name: Upload OpenWrt ipk to Actions
+      uses: actions/upload-artifact@v2
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_IPK == 'true'
+      with:
+        name: openwrt_ipk_${{ env.FILE_DATE }}
+        path: openwrt/artifact/ipk
+        retention-days: ${{ env.RECENT_LASTEST }}
+        if-no-files-found: ignore
 
     - name: Upload OpenWrt bin directory to Actions
       uses: actions/upload-artifact@v2

@@ -31,9 +31,7 @@ lib/u-boot
 
 ## install-program
 
-Install openwrt to emmc for Amlogic S9xxx STB. Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
-
-- Install command: `openwrt-install`
+Install openwrt to emmc for Amlogic S9xxx STB. Insert the `USB hard disk` with the written `OpenWrt` firmware. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
 
 [For more instructions please see: install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
 

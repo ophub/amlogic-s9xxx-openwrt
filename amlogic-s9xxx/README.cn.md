@@ -31,9 +31,7 @@ lib/u-boot
 
 ## install-program
 
-选择和你的机顶盒型号对应的 OpenWrt 固件，然后把写好固件的 USB 插入机顶盒。从浏览器访问 OpenWrt 的默认 IP : 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入 EMMC 的命令:  
-
-- Install command: `openwrt-install`
+选择和你的机顶盒型号对应的 OpenWrt 固件，然后把写好固件的 USB 插入机顶盒。从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt`
 
 更多安装/升级功能介绍详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.cn.md)
 

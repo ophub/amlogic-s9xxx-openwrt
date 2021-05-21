@@ -57,6 +57,9 @@ pushd package/openwrt-diskman/parted && mv -f Parted.Makefile Makefile 2>/dev/nu
 # Add luci-app-amlogic
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 
+# Fix nginx-util
+sed -i 's/\[\[fallthrough\]\]\;/\/\* fallthrough \*\//g' feeds/packages/net/nginx-util/src/nginx-ssl-util.hpp
+
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
 

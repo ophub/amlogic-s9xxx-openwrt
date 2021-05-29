@@ -177,28 +177,28 @@ refactor_files() {
             ;;
         s905x2 | x96max4g | x96max2g)
             FDTFILE="meson-g12a-x96-max.dtb"
-            U_BOOT_EXT=0
+            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-x96max.bin"
             MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
             ANDROID_UBOOT=""
             ;;
         s905x | hg680p | b860h)
             FDTFILE="meson-gxl-s905x-p212.dtb"
-            U_BOOT_EXT=0
+            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-p212.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
             ;;
         s905d | n1)
             FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
-            U_BOOT_EXT=0
+            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-n1.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
             ;;
         s912 | h96proplus | octopus)
             FDTFILE="meson-gxm-octopus-planet.dtb"
-            U_BOOT_EXT=0
+            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-zyxq.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""

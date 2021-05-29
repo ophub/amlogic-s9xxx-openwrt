@@ -194,13 +194,13 @@ case  $boxtype in
          ANDROID_UBOOT=""
          ;;
       9) FDTFILE="meson-g12a-x96-max.dtb"
-         U_BOOT_EXT=0
+         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96max.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          ;;
       10) FDTFILE="meson-g12a-x96-max-rmii.dtb"
-         U_BOOT_EXT=0
+         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96max.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
@@ -224,19 +224,19 @@ case  $boxtype in
          ANDROID_UBOOT=""
          ;;
       14) FDTFILE="meson-gxm-octopus-planet.dtb"
-         U_BOOT_EXT=0
+         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-zyxq.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          ;;
       15) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
-         U_BOOT_EXT=0
+         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-n1.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
          ;;
       16) FDTFILE="meson-gxl-s905x-p212.dtb"
-         U_BOOT_EXT=0
+         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-p212.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
@@ -555,7 +555,7 @@ EOF
 
         rm -f s905_autoscript* aml_autoscript*
 
-        if  [ ${U_BOOT_EXT} -eq 1 ]; then
+        if  [ "${U_BOOT_EXT}" -eq "1" ]; then
             if  [ -f u-boot.ext ]; then
                 cp -f -v u-boot.ext u-boot.emmc
             else

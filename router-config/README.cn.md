@@ -275,16 +275,20 @@ UPLOAD_WETRANSFER: false
 
 ## 8. 安装固件
 
-在编译时集成 luci-app-amlogic 可提供直观的操作面板。
+### 8.1 在编译时集成 luci-app-amlogic 可提供直观的操作面板。
 
 1. `svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic`
 2. 在执行 `menuconfig` 后，可以选择插件 `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
 
 插件的更多说明详见：[https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)
 
-- 使用操作面板安装：从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` 。
+### 8.2 使用操作面板安装
 
-- 使用脚本命令安装：从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
+从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` 。
+
+### 8.3 使用脚本命令安装
+
+从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
 
 ```yaml
 openwrt-install
@@ -296,9 +300,13 @@ openwrt-install
 
 ## 9. 升级固件
 
-- 使用操作面板安装：从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.40 升级到低版本如 5.30 ，也可以从低版本如 5.91 升级到高版本如 5.96 。内核版本号的高低不影响升级，可自由升级/降级）。
+### 9.1 使用操作面板安装
 
-- 使用升级固件脚本命令安装：从浏览器访问 OpenWrt 系统，在 `系统` 菜单下 → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
+从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.40 升级到低版本如 5.30 ，也可以从低版本如 5.91 升级到高版本如 5.96 。内核版本号的高低不影响升级，可自由升级/降级）。
+
+### 9.2 使用升级固件脚本命令安装
+
+从浏览器访问 OpenWrt 系统，在 `系统` 菜单下 → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
 
 ```yaml
 openwrt-update
@@ -314,7 +322,9 @@ openwrt-update
 | ---- | ---- | ---- |
 | 顺序 | `你指定使用的升级固件` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
 
-- 通过更换 OpenWrt 内核进行升级：从浏览器访问 openwrt 系统，在 `系统` 菜单下 → `文件传输` → 上传内核包 ***`（共有 3 文件：boot-*，dtb-amlogic-*，modules-*）`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
+### 9.3 通过升级 OpenWrt 内核进行升级
+
+从浏览器访问 openwrt 系统，在 `系统` 菜单下 → `文件传输` → 上传内核包 ***`（共有 3 文件：boot-*，dtb-amlogic-*，modules-*）`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
 
 ```yaml
 openwrt-kernel

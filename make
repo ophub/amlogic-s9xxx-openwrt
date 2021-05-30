@@ -287,8 +287,8 @@ refactor_files() {
         # Patches For cpustat
         cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
         cpustat_patch=${configfiles_path}/patches/cpustat/luci-admin-status-index-html.patch
-        [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod 755 usr/bin/cpustat >/dev/null 2>&1
-        [ -f ${cpustat_patch} ] && cd usr/lib/lua/luci/view/admin_status && patch -p0 < ${cpustat_patch} >/dev/null 2>&1 && cd ${root}
+        [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
+        #[ -f ${cpustat_patch} ] && cd usr/lib/lua/luci/view/admin_status && patch -p0 < ${cpustat_patch} >/dev/null 2>&1 && cd ${root}
     fi
 
     sync

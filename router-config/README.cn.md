@@ -275,7 +275,7 @@ UPLOAD_WETRANSFER: false
 
 ## 8. 安装固件
 
-### 8.1 在编译时集成 luci-app-amlogic 可提供直观的操作面板。
+### 8.1 在编译时集成 luci-app-amlogic 操作面板
 
 1. `svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic`
 2. 在执行 `menuconfig` 后，可以选择插件 `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`

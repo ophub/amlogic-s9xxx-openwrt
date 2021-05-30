@@ -43,6 +43,8 @@ The method of Use GitHub Actions to compile OpenWrt, as well as many contents in
     - 10.6 [Opkg Package Manager](#106-opkg-package-manager)
     - 10.7 [Manage packages using web interface](#107-manage-packages-using-web-interface)
     - 10.8 [How to recover if the install fails and cannot be started](#108-how-to-recover-if-the-install-fails-and-cannot-be-started)
+    - 10.9 [If you can’t startup after using the Mainline u-boot](#109-if-you-cant-startup-after-using-the-mainline-u-boot)
+    - 10.10 [Turn on the USB disk boot mode of the Amlogic S9xxx STB](#1010-turn-on-the-usb-disk-boot-mode-of-the-amlogic-s9xxx-stb)
 
 ## 1. Register your own GitHub account
 
@@ -277,17 +279,45 @@ The support for uploading to a third party comes from [Mikubill/transfer](https:
 
 ## 8. Install the firmware
 
-After downloading the compiled firmware, `decompress it` to get the `OpenWrt.img` file (the file name varies according to the `Amlogic S9xxx STB`), use a mirror writing tool such as `balenaEtcher` to write the `OpenWrt.img` file to the `USB hard disk`, and then insert the USB hard disk In the USB port of your `Amlogic S9xxx STB`, plug in the power and turn on the computer. Wait about `1 minute` to complete the `OpenWrt system startup`. Connect the `Amlogic S9xxx STB` to your computer directly with a network cable.
+Method of integrating luci-app-amlogic at compile time
 
-In the wired network settings of `your computer`, change the IPV4 `IP` to manual settings, fill in the IP `192.168.1.2`, fill in the subnet mask `255.255.255.0`, and leave the other blanks blank.
+1. `svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic`
+2. Execute make `menuconfig` and select `luci-app-amlogic` under `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
 
-Enter `192.168.1.1` in the browser to access `OpenWrt`. The default user name is `root` and the default password is `password`. After logging in, under the `System` menu, select the `Amlogic Service`, select the `Install OpenWrt`
+For more instructions on the plug-in, see：[https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)
 
-More detailed operations can be viewed in the detailed installation instructions of the repository: [amlogic-s9xxx/install-program](https://github.com/ophub/amlogic-s9xxx-OpenWrt/tree/main/amlogic-s9xxx/install-program)
+Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the STB. Common for all `Amlogic S9xxx STB`.
+
+- Install using the operation panel: Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
+
+- Install using script commands: Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+
+```yaml
+openwrt-install
+```
+
+When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-install), `select the name` of the Amlogic S9xxx STB you own in the menu.
+
+For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-install), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic S9xxx STB you own.
 
 ## 9. Update firmware
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Replace OpenWrt Kernel` to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+- Install using the operation panel: `Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Replace OpenWrt Kernel` to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+
+- Install using script commands: `Log in to your OpenWrt system` →  under the `System` menu → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+
+```yaml
+openwrt-update
+```
+💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the [openwrt-update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-update) script will automatically find the `update file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories.
+    
+If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/upload/`***  directory, you can just enter the ***`openwrt-update`*** command without specifying a specific `update file`. The `openwrt-update` will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update specified_update_file`*** command to specify the `update file`. When the `update file` is not found in the `/mnt/mmcblk*p4/` directory, the `openwrt-update` will search for the `update file` in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the update operation. 
+
+- The `openwrt-update` update file search order
+
+| Directory | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
+| ---- | ---- | ---- |
+| Oeder | `specified_update_file` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
 
 ## 10. Personalized firmware customization update tutorial
 
@@ -428,8 +458,74 @@ Search and install `luci-app-*` packages if you want to configure services using
 
 ### 10.8 How to recover if the install fails and cannot be started
 
-Under normal circumstances, re-insert the USB hard disk and install it again.
+- Under normal circumstances, re-insert the USB hard disk and install it again.
 
-- [If you cannot start the OpenWrt system from the USB hard disk again](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program#how-to-recover-if-the-install-fails-and-cannot-be-started)
-- [If you can’t startup after using the Mainline u-boot](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program#if-you-cant-startup-after-using-the-mainline-u-boot)
+- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic S9xxx STB to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic S9xxx STB to factory settings first, and then reinstall it.
+
+```
+Take x96max+ as an example.
+
+Prepare materials:
+
+1. [ A USB male-to-male data cable ]: https://www.ebay.com/itm/152516378334
+2. [ A paper clip ]: https://www.ebay.com/itm/133577738858
+3. Install the software and Download the Android TV firmware
+   [ Install the USB_Burning_Tool ]: https://androidmtk.com/download-amlogic-usb-burning-tool
+   [ Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
+4. [ Find the two short-circuit points on the motherboard ]:
+   https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
+
+Operation method:
+
+1. Connect the [ Amlogic S9xxx STB ] to the [ computer ] with a [ USB male-to-male data cable ].
+2. Open the USB Burning Tool:
+   [ File → Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
+   [ Check ]：Erase flash
+   [ Check ]：Erase bootloader
+   Click the [ Start ] button
+3. Use a [ paper clip ] to [ connect the two short-circuit points ] on the motherboard at the same time.
+   If the progress bar does not respond after the short-circuit, plug in the [ power ] supply after the short-circuit.
+   Generally, there is no need to plug in the power supply.
+4. Loosen the short contact after seeing the [ progress bar moving ].
+5. After the [ progress bar is 100% ], the restoration of the original Android TV system is completed.
+   Click [ stop ], unplug the [ USB male-to-male data cable ] and [ power ].
+6. If the progress bar is interrupted, repeat the above steps until it succeeds.
+```
+After restoring the factory settings, the operation method is the same as when you install openwrt on the Amlogic S9xxx STB for the first time:
+
+- Make an openwrt mirrored usb hard disk and insert it into the USB port of the Amlogic S9xxx STB. Use a paper clip or other objects to press and hold the reset button in the AV hole, plug in the power, wait 5 seconds and then release the reset button, the system will boot from the USB hard disk, enter the openwrt system, enter The installation command can reinstall openwrt.
+
+### 10.9 If you can’t startup after using the Mainline u-boot
+
+- Some Amlogic S905x3 STB sometimes fail to boot after use the `mainline u-boot`. The fault phenomenon is usually the `=>` prompt of u-boot automatically. The reason is that TTL lacks a pull-up resistor or pull-down resistor and is easily interfered by surrounding electromagnetic signals. The solution is to solder a 5K-10K resistor (pull-down) between TTL RX and GND, or solder a resistor between RX and 3.3V. A resistance of 5K-10K (pull-up).
+- The `mainline u-boot` is not perfect yet, and the install is not prompted by default. The relatively stable BootLoader is currently installed by default.
+- If you are willing to try it, you can use the `openwrt-install TEST-UBOOT` command to install and choose. But I strongly recommend that you don't try it. When it is stable, I will enable the recommendation prompt in the install and update script. It is still in the testing period.
+
+If you choose to use the `mainline u-boot` during installation and it fails to start, please connect the Amlogic S905x3 STB to the monitor. If the screen shows the following prompt:
+```
+Net: eth0: ethernet0ff3f0000
+Hit any key to stop autoboot: 0
+=>
+```
+
+You need to install a resistor on the TTL: [X96 Max Plus's V4.0 Motherboard](https://user-images.githubusercontent.com/68696949/110910162-ec967000-834b-11eb-8fa6-64727ccbe4af.jpg)
+
+```
+#######################################################            #####################################################
+#                                                     #            #                                                   # 
+#   Resistor (pull-down): between TTL's RX and GND    #            #   Resistor (pull-up): between TTL's 3.3V and RX   #
+#                                                     #            #                                                   #
+#            3.3V   RX       TX       GND             #     OR     #        3.3V               RX     TX     GND       #
+#                    ┖————█████████————┚              #            #         ┖————█████████————┚                       #
+#                      Resistor (5~10K)               #            #           Resistor (5~10K)                        #
+#                                                     #            #                                                   #
+#######################################################            #####################################################
+```
+
+### 10.10 Turn on the USB disk boot mode of the Amlogic S9xxx STB
+
+- Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 7 times in quick succession, and you will see that the developer mode is turned on.
+- Turn on USB debugging: After restarting, enter Settings → System → Advanced options → Developer options again (after entering, confirm that the status is on, and the USB debugging status in the list is also on)
+- Boot from USB hard disk: Unplug the power → insert the USB hard disk → insert the thimble into the AV port (top reset button) → insert the power → release the thimble of the av port → the system will boot from the USB hard disk.
+- Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
 

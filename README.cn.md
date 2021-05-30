@@ -6,7 +6,7 @@
 
 最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。一些重要的更新内容可以在 [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) 中查阅。
 
-本仓库的 OpenWrt 固件打包使用了 ***`Flippy's`*** 的 [Amlogic S9xxx 纯内核包](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 以及 [安装](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install) 和 [升级](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-update) 脚本等众多资源。欢迎你 `Fork` 并进行 [个性化软件包定制](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.cn.md) 。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
+本仓库的 OpenWrt 固件打包使用了 ***`Flippy's`*** 的 [Amlogic S9xxx 纯内核包](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 以及 [安装](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-install) 和 [升级](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-update) 脚本等众多资源。欢迎你 `Fork` 并进行 [个性化软件包定制](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.cn.md) 。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
 
 ## OpenWrt 固件说明
 
@@ -31,7 +31,7 @@
 
 从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `升级 OpenWrt 内核`
 
-提示：安装/升级等功能由 [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 提供可视化操作支持。也支持脚本操作 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program/README.cn.md)
+提示：安装/升级等功能由 [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 提供可视化操作支持。也支持 [脚本操作](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.cn.md#8-安装固件)
 
 ## OpenWrt 固件编译及打包说明
 
@@ -80,7 +80,7 @@
 |------------------------|------------------------|------------------------------------------------|
 | armvirt64_path         | no                     | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，使用文件在当前工作流中的路径如 `openwrt/bin/targets/*/*/*.tar.gz` |
 | amlogic_openwrt        | s905d_s905x3           | 设置打包盒子的 `SOC` ，默认 `all` 打包全部盒子，可指定单个盒子如 `s905x3` ，可选择多个盒子用_连接如 `s905x3_s905d` 。各盒子的SoC代码为：`s905` `s905d` `s905x2` `s905x3` `s912` `s922x` |
-| amlogic_kernel         | 5.4.108_5.10.26.TF     | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
+| amlogic_kernel         | 5.4.108_5.10.26.TF     | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
 | amlogic_size           | 1024                   | 设置固件 ROOT 分区的大小                         |
 
 - GitHub Action 输出变量说明
@@ -138,7 +138,7 @@
     echo "::set-output name=status::success"
 ```
 
-这个功能一般用于更换内核快速打包，如果你的仓库中有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你想使用其他内核版本的 OpenWrt 时，就可以直接指定相关内核进行快速打包了，而不用再进行漫长的固件编译等待。仓库里收藏了 `Flippy` 的很多内核 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 和 Amlogic 的 dtb 文件 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) ，你可以随时调用进行编译。
+这个功能一般用于更换内核快速打包，如果你的仓库中有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你想使用其他内核版本的 OpenWrt 时，就可以直接指定相关内核进行快速打包了，而不用再进行漫长的固件编译等待。仓库里收藏了 `Flippy` 的很多内核 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 和 Amlogic 的 dtb 文件 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) ，你可以随时调用进行编译。
 
 - ### 本地化打包
 1. 安装必要的软件包（如 Ubuntu 18.04 LTS 用户）
@@ -168,13 +168,9 @@ sudo apt-get install -y build-essential tar xz-utils unzip bzip2 p7zip p7zip-ful
 | ---- | ---- | ---- |
 | -d | Defaults | 使用默认配置 |
 | -b | Build | 指定机顶盒型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 可以指定的型号有: `s905x3`, `s905x2`, `s905x`, `s905d`, `s922x`, `s912` |
-| -k | Kernel | 指定内核，如 `-k 5.4.50` . 多个内核使用 `_` 进行连接，如 `-k 5.4.50_5.9.5` 内核库请查阅 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) |
+| -k | Kernel | 指定内核，如 `-k 5.4.50` . 多个内核使用 `_` 进行连接，如 `-k 5.4.50_5.9.5` [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) |
 | -s | Size | 对固件的大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
 | -h | help | 展示帮助文档. |
-
-## 添加更多的内核包
-
-***`Flippy`*** 分享了他的众多内核包，让我们在 Amlogic S9xxx 机顶盒中使用 OpenWrt 变的如此简单。我们珍藏了很多内核包，你可以在 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 目录里查阅。如果你想构建内核目录里没有的其他内核，可以使用仓库提供的 [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/openwrt-kernel) 脚本，从 Flippy 分享的 Armbian/OpenWrt 固件中进行自动提取和生成。或者直接使用 Flippy 提供的 3 个内核包文件。使用方法详见 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.cn.md)
 
 ## ~/openwrt-armvirt/*-rootfs.tar.gz 用于打包的文件编译选项
 

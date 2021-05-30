@@ -34,7 +34,7 @@ extract_kernel() {
     build_path=${PWD}
     flippy_folder=${build_path}/"flippy"
     build_tmp_folder=${build_path}/"build_tmp"
-    amlogic_path=${build_path%/amlogic-kernel*}
+    amlogic_path=${build_path%/common-files*}
     boot_tmp=${build_tmp_folder}/boot_tmp
     root_tmp=${build_tmp_folder}/root_tmp
     kernel_tmp=${build_tmp_folder}/kernel_tmp
@@ -142,14 +142,14 @@ extract_kernel() {
     cd  ${build_path}
         # When running in the original location of the repository, it will be automatically saved to the kernel directory
         # When using this script alone, the kernel will be placed in the same directory as the script
-        [ -d ${amlogic_path}/amlogic-kernel/kernel ] && mv -f ${build_save_folder} ../kernel/ 2>/dev/null && sync
+        [ -d ${amlogic_path}/amlogic-kernel ] && mv -f ${build_save_folder} ${amlogic_path}/amlogic-kernel/ 2>/dev/null && sync
 
         # umount & del losetup
         echo -e "Unmount and delete temporary folder"
         umount -f ${boot_tmp} 2>/dev/null
         umount -f ${root_tmp} 2>/dev/null
         losetup -d ${lodev} 2>/dev/null
-        rm -rf ${build_tmp_folder} ${flippy_folder}/* 2>/dev/null
+        rm -rf ${build_tmp_folder} ${flippy_folder} 2>/dev/null
 
     sync
     wait
@@ -345,8 +345,8 @@ dtb_update() {
 
     # Default setting ( Don't modify )
     build_path=${PWD}
-    build_tmp_folder=${build_path}/"flippy/build_tmp"
-    amlogic_path=${build_path%/amlogic-kernel*}
+    build_tmp_folder=${build_path}/"build_tmp"
+    amlogic_path=${build_path%/common-files*}
 
     echo "update dtb-amlogic-*.tar.gz ..."
     [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
@@ -364,7 +364,7 @@ dtb_update() {
     fi
 
     # Replace existing files in a loop
-    cd ${amlogic_path}/amlogic-kernel/kernel/
+    cd ${amlogic_path}/amlogic-kernel/
     total_kernel=$( ls . -l 2>/dev/null | grep "^d" | wc -l )
     current_kernel=1
     for kernel_folder in $( ls -d */ | head -c-2 ); do

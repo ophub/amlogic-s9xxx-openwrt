@@ -279,7 +279,7 @@ The support for uploading to a third party comes from [Mikubill/transfer](https:
 
 ## 8. Install the firmware
 
-Method of integrating luci-app-amlogic at compile time
+### 8.1 Method of integrating luci-app-amlogic at compile time
 
 1. `svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic`
 2. Execute make `menuconfig` and select `luci-app-amlogic` under `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
@@ -288,7 +288,9 @@ For more instructions on the plug-in, see：[https://github.com/ophub/luci-app-a
 
 Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the STB. Common for all `Amlogic S9xxx STB`.
 
-- Install using the operation panel: Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
+### 8.2 Install using the operation panel
+
+Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
 
 - Install using script commands: Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
@@ -302,9 +304,13 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ## 9. Update firmware
 
-- Install using the operation panel: `Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Replace OpenWrt Kernel` to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+### 9.1 Install using the operation panel
 
-- Install using script commands: `Log in to your OpenWrt system` →  under the `System` menu → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Replace OpenWrt Kernel` to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+
+### 9.2 Install using script commands
+
+`Log in to your OpenWrt system` →  under the `System` menu → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
 openwrt-update
@@ -318,6 +324,19 @@ If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/u
 | Directory | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
 | ---- | ---- | ---- |
 | Oeder | `specified_update_file` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
+
+
+### 9.3 Replace the kernel to update
+
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `file transfer` → Upload kernel package ***`(There are 3 files：boot-*，dtb-amlogic-*，modules-*)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input the Kernel replacement command: 
+
+```yaml
+openwrt-kernel
+```
+
+💡Tips: You can also put the `kernel files` in the `/mnt/mmcblk*p4/` directory, the `openwrt-kernel` script will automatically find the `kernel file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories.
+
+Replacing the OpenWrt kernel is only a kernel replacement, and the various personalized configurations of the firmware remain unchanged. It is the easiest way to update. Support replacement of kernel high/low version.
 
 ## 10. Personalized firmware customization update tutorial
 

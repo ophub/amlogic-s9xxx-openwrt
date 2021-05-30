@@ -12,7 +12,7 @@
 
 | 型号  | 机顶盒 | OpenWrt固件 |
 | ---- | ---- | ---- |
-| s905x3 | [x96](https://tokopedia.link/uMaH09s41db), [hk1](https://tokopedia.link/xhWeQgTuwfb), [h96](https://tokopedia.link/KuWvwoYuwfb), [ugoosx3](https://www.tokopedia.com/prodakjaya/ugoos-x3-pro-x3-cube-amlogic-s905x3-android-9-0-tv-box-4gb-ddr4-32gb) | openwrt_s905x3_v*.img |
+| s905x3 | [x96](https://tokopedia.link/uMaH09s41db), [hk1](https://tokopedia.link/xhWeQgTuwfb), [h96](https://tokopedia.link/KuWvwoYuwfb), [ugoosx3](https://tokopedia.link/duoIXZpdGgb), [x96air](https://tokopedia.link/5WHiETbdGgb), [a95xf3air](https://tokopedia.link/ByBL45jdGgb) | openwrt_s905x3_v*.img |
 | s905x2 | [x96max4g](https://tokopedia.link/HcfLaRzjqeb), [x96max2g](https://tokopedia.link/ro207Hsjqeb) | openwrt_s905x2_v*.img |
 | s905x | [hg680p](https://tokopedia.link/HbrIbqQcGgb), [b860h](https://tokopedia.link/hnXvHn5uwfb) | openwrt_s905x_v*.img |
 | s922x | [belink](https://tokopedia.link/RAgZmOM41db), [belinkpro](https://tokopedia.link/sfTHlfS41db), [ugoos](https://tokopedia.link/pHGKXuV41db) | openwrt_s922x_v*.img |

@@ -18,7 +18,6 @@ amlogic_path=${make_path}/amlogic-s9xxx
 kernel_path=${amlogic_path}/amlogic-kernel
 armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
-installfiles_path=${amlogic_path}/install-program/files
 configfiles_path=${amlogic_path}/common-files
 #===== Do not modify the following parameter settings, End =======
 
@@ -115,7 +114,7 @@ extract_openwrt() {
 extract_armbian() {
     cd ${make_path}
     build_op=${1}
-    kernel_dir="${kernel_path}/kernel/${kernel}"
+    kernel_dir="${kernel_path}/${kernel}"
     root="${tmp_path}/${kernel}/${build_op}/root"
     boot="${tmp_path}/${kernel}/${build_op}/boot"
 
@@ -231,11 +230,6 @@ refactor_files() {
 
     mkdir -p boot run opt
     chown -R 0:0 ./
-
-    # Complete file: openwrt-install, openwrt-update, openwrt-kernel
-    [ -f usr/bin/openwrt-install ] || cp -f ${installfiles_path}/openwrt-install usr/bin/
-    [ -f usr/bin/openwrt-update ] || cp -f ${installfiles_path}/openwrt-update usr/bin/
-    [ -f usr/bin/openwrt-kernel ] || cp -f ${kernel_path}/build_kernel/openwrt-kernel usr/bin/
 
     # Edit fstab
     ROOTFS_UUID=$(uuidgen)
@@ -403,7 +397,7 @@ get_kernels() {
     i=0
     IFS=$'\n'
 
-    local kernel_root="${kernel_path}/kernel"
+    local kernel_root="${kernel_path}"
     [ -d ${kernel_root} ] && {
         work=$(pwd)
         cd ${kernel_root}
@@ -416,7 +410,7 @@ get_kernels() {
 
 show_kernels() {
     if [ ${#kernels[*]} = 0 ]; then
-        die "No kernel files in [ ${kernel_path}/kernel ] directory!"
+        die "No kernel files in [ ${kernel_path} ] directory!"
     else
         show_list "${kernels[*]}" "kernel"
     fi
@@ -617,7 +611,7 @@ if [ ${#firmwares[*]} = 0 ]; then
 fi
 
 if [ ${#kernels[*]} = 0 ]; then
-    die "No this kernel files in [ ${kernel_path}/kernel ] directory!"
+    die "No this kernel files in [ ${kernel_path} ] directory!"
 fi
 
 [ ${firmware} ] && echo " firmware   ==>   ${firmware}"

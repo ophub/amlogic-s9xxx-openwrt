@@ -491,7 +491,7 @@ sync
 
 rm -f s905_autoscript* aml_autoscript*
 
-if  [ "${U_BOOT_EXT}" -eq "1" ]; then
+if  [[ "${U_BOOT_EXT}" -eq "1" && "${K510}" -eq "1" ]]; then
     if  [ -f u-boot.ext ]; then
         cp -f -v u-boot.ext u-boot.emmc
     else

@@ -6,7 +6,7 @@ Support `github.com One-stop compilation`, `Use GitHub Action to packaging`, `Us
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Some important update instructions can be found in [ChangeLog.md](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/ChangeLog.md) documents.
 
-This OpenWrt firmware is packaged using ***`Flippy's`*** [Amlogic S9xxx Kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) for OpenWrt, and the [Install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install) and [update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-update) scripts, etc. Welcome to use `Fork` for [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md). If you like it, Please click the `Star`.
+This OpenWrt firmware is packaged using ***`Flippy's`*** [Amlogic S9xxx Kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) for OpenWrt, and the [Install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-install) and [update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-update) scripts, etc. Welcome to use `Fork` for [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md). If you like it, Please click the `Star`.
 
 ## OpenWrt Firmware instructions
 
@@ -31,7 +31,7 @@ Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu
 
 Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `Amlogic Service` → `Replace OpenWrt Kernel`
 
-Tip: Functions such as install/update are provided by [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) to provide visual operation support. Also supports script operations [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/install-program)
+Tip: Functions such as install/update are provided by [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) to provide visual operation support. Also supports [script operations](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md#8-install-the-firmware)
 
 ## Compilation and packaging method
 
@@ -81,7 +81,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 |------------------------|------------------------|---------------------------------------------------------------|
 | armvirt64_path         | no                     | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*.tar.gz` . |
 | amlogic_openwrt        | s905d_s905x3           | Set the `SoC` of the packaging box, the default `all` packs all boxes, you can specify a single box such as `s905x3`, you can choose multiple boxes to use `_` connection such as `s905x3_s905d` . SOC code of each box is: `s905` `s905d` `s905x2` `s905x3` `s912` `s922x` |
-| amlogic_kernel         | 5.4.108_5.10.26.TF     | Set the kernel version，Ophub's [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) library contains many original kernels of `Flippy`, you can view and choose to specify. |
+| amlogic_kernel         | 5.4.108_5.10.26.TF     | Set the kernel version，Ophub's [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) library contains many original kernels of `Flippy`, you can view and choose to specify. |
 | amlogic_size           | 1024                   | Set the size of the firmware ROOT partition |
 
 - GitHub Action Output variable description
@@ -140,7 +140,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     echo "::set-output name=status::success"
 ```
 
-This function is suitable for the needs of replacing the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) packaging and packaging the OpenWrt firmware of the specified [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) separately. As long as you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) of your repository, you can package the OpenWrt firmware you want at any time, which is efficient and convenient.
+This function is suitable for the needs of replacing the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) packaging and packaging the OpenWrt firmware of the specified [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) separately. As long as you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) of your repository, you can package the OpenWrt firmware you want at any time, which is efficient and convenient.
 
 - ### Local packaging instructions
 
@@ -171,13 +171,9 @@ sudo apt-get install -y build-essential tar xz-utils unzip bzip2 p7zip p7zip-ful
 | ---- | ---- | ---- |
 | -d | Defaults | Compile all cores and all firmware types. |
 | -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . You can use these codes: `s905x3`, `s905x2`, `s905x`, `s905d`, `s922x`, `s912` |
-| -k | Kernel | Specify the kernel type. Write the kernel name individually such as `-k 5.4.50` . Multiple cores use `_` connection such as `-k 5.4.50_5.9.5` [View the kernel library](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel). |
+| -k | Kernel | Specify the kernel type. Write the kernel name individually such as `-k 5.4.50` . Multiple cores use `_` connection such as `-k 5.4.50_5.9.5` [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel). |
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
-
-## Add more kernel packages
-
-***`Flippy`*** has shared with us dozens of versions of firmware, Brings unlimited freedom to Amlogic S9xxx STB. We have stored some of the latest kernels in the [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) directory. If you think it’s not enough, or you don’t find the version you miss, you can use the [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/openwrt-kernel) script in the repository to automatically extract and generate them from the Armbian/OpenWrt firmware shared by Flippy. Or put Flippy's original kernel directly into the repository for use. Instructions: [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.md)
 
 ## ~/openwrt-armvirt/*-rootfs.tar.gz Firmware compilation parameters
 

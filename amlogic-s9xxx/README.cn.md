@@ -10,11 +10,11 @@ Armbian 相关文件存储目录。这里存放的文件是打包 OpenWrt 时使
 
 ## amlogic-dtb
 
-这里收录了各种型号机顶盒使用的 .dtb 文件，当你在使用安装脚本 [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/files/openwrt-install) 将 OpenWrt 写入 EMMC 时，除默认的13个型号的机顶盒是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)  
+这里收录了各种型号机顶盒使用的 .dtb 文件，当你在使用安装脚本 [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-install) 将 OpenWrt 写入 EMMC 时，除默认的13个型号的机顶盒是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)  
 
 ## amlogic-kernel
 
-这是各版本内核的存放目录，集中珍藏了 Flippy 分享的众多内核。具体详见 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel/kernel) 。 如果目录中没有你要的内核，你可以通过内核提取工具从 Flippy 的Armbian/OpenWrt/kernel 等文件中提取生成，相关工具及使用方法查阅 [build_kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/amlogic-kernel/build_kernel/README.cn.md) 
+这是各版本内核的存放目录，集中珍藏了 Flippy 分享的众多内核。具体详见 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 。 
 
 ## amlogic-u-boot
 
@@ -28,10 +28,4 @@ etc/config/network
 lib/u-boot
 ```
 - patches: 这是补丁文件存放目录，你可以将扩展文件，魔改补丁等放置在该目录。具有详见 [patches](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches)
-
-## install-program
-
-选择和你的机顶盒型号对应的 OpenWrt 固件，然后把写好固件的 USB 插入机顶盒。从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt`
-
-更多安装/升级功能介绍详见 [install-program](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/install-program/README.cn.md)
 

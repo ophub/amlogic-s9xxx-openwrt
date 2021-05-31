@@ -154,7 +154,7 @@ extract_kernel() {
     sync
     wait
 
-    echo -e "Kernel extraction is complete, Save in \033[1;32m ${build_save_folder} \033[0m folder."
+    echo -e "Kernel extraction is complete, Save in [ ${build_save_folder} ] folder."
     exit 0
 
 }
@@ -178,7 +178,7 @@ replace_kernel() {
 
         if  [ $( ls ${P4_PATH}/boot-*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
             build_boot=$( ls ${P4_PATH}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
-            echo -e "Try to use the flippy kernel  [\033[1;32m ${build_boot} \033[0m] and other files to update. Please wait a moment ..."
+            echo -e "Upgrade using [ ${build_boot} ] files. Please wait a moment ..."
             flippy_version=${build_boot/boot-/} && flippy_version=${flippy_version/.tar.gz/}
             kernel_version=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
             kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,2}')
@@ -221,10 +221,10 @@ replace_kernel() {
         K510: ${K510}"
 
     else
-        echo -e "\033[1;31m Please upload the kernel files. \033[0m"
-        echo -e "\033[1;35m - Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ] \033[0m"
-        echo -e "\033[1;35m - Specify method: Place the kernel file in [ /mnt/mmcblk*p4/ ] \033[0m"
-        echo -e "After choosing a method to upload the kernel file, run \033[1;32m openwrt-kernel -r \033[0m again."
+        echo -e "Please upload the kernel files."
+        echo -e "Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ]"
+        echo -e "Specify method: Place the kernel file in [ /mnt/mmcblk*p4/ ]"
+        echo -e "After upload the kernel file, run [ openwrt-kernel -r ] again."
         exit 1
     fi
 

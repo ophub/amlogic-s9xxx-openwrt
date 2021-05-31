@@ -31,64 +31,64 @@ EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 cd /mnt/${EMMC_NAME}p4/
 
 if [[ "${IMG_NAME}" == *.img ]]; then
-    echo -e "Try to using this specified file [\033[1;32m ${IMG_NAME} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${IMG_NAME} ] file. Please wait a moment ..."
 elif [ $( ls *.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     IMG_NAME=$( ls *.img | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${IMG_NAME} \033[0m] ] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${IMG_NAME} ] ] file. Please wait a moment ..."
 elif [ $( ls *.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     xz_file=$( ls *.img.xz | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${xz_file} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${xz_file} ] file. Please wait a moment ..."
     xz -d ${xz_file}
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls *.img.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     gz_file=$( ls *.img.gz | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${gz_file} ] file. Please wait a moment ..."
     gzip -df ${gz_file}
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls *.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     gz_file=$( ls *.7z | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${gz_file} ] file. Please wait a moment ..."
     7z x ${gz_file} -aoa -y
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls *.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     zip_file=$( ls *.zip | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${zip_file} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${zip_file} ] file. Please wait a moment ..."
     unzip -o ${zip_file}
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls /tmp/upload/*.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     xz_file=$( ls /tmp/upload/*.img.xz | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${xz_file} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${xz_file} ] file. Please wait a moment ..."
     mv -f ${xz_file} .
     xz_file=${xz_file##*/}
     xz -d ${xz_file}
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls /tmp/upload/*.img.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     gz_file=$( ls /tmp/upload/*.img.gz | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${gz_file} ] file. Please wait a moment ..."
     mv -f ${gz_file} .
     gz_file=${gz_file##*/}
     gzip -df ${gz_file}
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls /tmp/upload/*.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     gz_file=$( ls /tmp/upload/*.7z | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${gz_file} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${gz_file} ] file. Please wait a moment ..."
     mv -f ${gz_file} .
     gz_file=${gz_file##*/}
     7z x ${gz_file} -aoa -y
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls /tmp/upload/*.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     zip_file=$( ls /tmp/upload/*.zip | head -n 1 )
-    echo -e "Try to using the found file [\033[1;32m ${zip_file} \033[0m] to Update. Please wait a moment ..."
+    echo -e "Update using [ ${zip_file} ] file. Please wait a moment ..."
     mv -f ${zip_file} .
     zip_file=${zip_file##*/}
     unzip -o  ${zip_file}
     IMG_NAME=$( ls *.img | head -n 1 )
 else
-    echo -e "\033[1;31m Please upload or specify the update file. \033[0m"
-    echo -e "\033[1;35m - Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ] \033[0m"
-    echo -e "\033[1;35m - Specify method: Place the update file in [ /mnt/mmcblk*p4/ ] \033[0m"
-    echo -e "The supported file suffixes are: \033[1;33m *.img, *.img.xz, *.img.gz, *.7z, *.zip \033[0m"
-    echo -e "After choosing a method to upload the update file, run \033[1;32m openwrt-update \033[0m again."
+    echo -e "Please upload or specify the update file."
+    echo -e "Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ]"
+    echo -e "Specify method: Place the update file in [ /mnt/mmcblk*p4/ ]"
+    echo -e "The supported file suffixes are: \033[1;33m *.img, *.img.xz, *.img.gz, *.7z, *.zip"
+    echo -e "After upload the update file, run [ openwrt-update ] again."
     exit 1
 fi
 
@@ -103,7 +103,7 @@ fi
 # find boot partition 
 BOOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | awk '$3~/^part$/ && $5 ~ /^\/boot$/ {print $0}')
 if  [ "${BOOT_PART_MSG}" == "" ]; then
-    echo "Boot The partition does not exist or is not mounted correctly, so the update cannot be continued!"
+    echo "Boot The partition does not exist, so the update cannot be continued!"
     exit 1
 fi
 
@@ -236,7 +236,7 @@ echo -e "\033[1;32m update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ] \033[0m
 
 # openwrt-env info
 if  [ ! -f ${P2}/lib/u-boot/openwrt-env ]; then
-    echo -e "\033[1;31m Missing update information record file: [ ${P2}/lib/u-boot/openwrt-env ] \033[0m"
+    echo -e "Missing update information record file: [ ${P2}/lib/u-boot/openwrt-env ]"
     exit 1
 else
     source ${P2}/lib/u-boot/openwrt-env 2>/dev/null
@@ -466,11 +466,11 @@ EOF
 fi
 
 if  [[ "${FLASH_MAINLINE_UBOOT}" -eq "1" ]]; then
-    echo -e "Write Mainline bootloader: [\033[1;32m ${MAINLINE_UBOOT} \033[0m]"
+    echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ]"
     dd if=${P2}${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${P2}${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 elif [[ -n "${ANDROID_UBOOT}" && -f "${P2}${ANDROID_UBOOT}" ]]; then
-    echo -e "Write Android bootloader: [\033[1;32m ${ANDROID_UBOOT} \033[0m]"
+    echo -e "Write Android bootloader: [ ${ANDROID_UBOOT} ]"
     dd if=${P2}${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${P2}${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 else

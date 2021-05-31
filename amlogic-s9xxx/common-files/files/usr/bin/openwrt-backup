@@ -55,12 +55,10 @@ BACKUP_LIST='./etc/AdGuardHome.yaml \
 ./etc/shadow \
 ./etc/smartdns/ \
 ./etc/sqm/ \
-./etc/ssh/*key*  \
 ./etc/ssl/private/  \
 ./etc/ssrplus/ \
 ./etc/transmission/ \
-./etc/urandom.seed \
-./root/.ssh/'
+./etc/urandom.seed'
 
 if dmesg | grep 'meson' >/dev/null 2>&1; then
     PLATFORM="amlogic"
@@ -69,8 +67,8 @@ elif dmesg | grep 'rockchip' >/dev/null 2>&1; then
 elif dmesg | grep 'sun50i-h6' >/dev/null 2>&1; then
     PLATFORM="allwinner"
 else
-   echo "Unknown platform, only support amlogic or rockchip or allwinner h6!"
-   exit 1
+    echo "Unknown platform, only support amlogic or rockchip or allwinner h6!"
+    exit 1
 fi
 
 backup() {

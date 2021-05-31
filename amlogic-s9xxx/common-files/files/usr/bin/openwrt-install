@@ -77,7 +77,7 @@ fi
 
 emmc=$(echo $avail | sed "s/$runfrom//" | sed "s/sd[a-z][0-9]//g" | sed "s/ //g")
 if [ "$emmc" = "" ]; then
-    echo "No idle EMMC equipment is found, or the system is already running on EMMC equipment!!!"
+    echo "No idle EMMC equipment is found, or the system is already running on EMMC equipment!"
     exit 1
 fi
 
@@ -114,7 +114,7 @@ echo "BOOT: $BOOT_NAME"
 FDTFILE="meson-sm1-x96-max-plus.dtb"
 U_BOOT_EXT=0
 cat <<EOF
----------------------------------------------------------------------
+------------------------------------------------------------------------
 Please select s9xxx box model:
 1. X96-Max+ (4G DDR) -------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
 2. X96-Max+ (4G DDR) -------- [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
@@ -134,7 +134,7 @@ Please select s9xxx box model:
 16. hg680p & b860h ---------- [ S905x  / CPU: 2124Mtz / NETWORK: 1000M ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
----------------------------------------------------------------------
+------------------------------------------------------------------------
 EOF
 # For [luci-app-amlogic] input parameter: SOC & DTB
 # When there is no input parameter, select manually
@@ -479,11 +479,11 @@ EOF
 fi
 
 if  [[ "${FLASH_MAINLINE_UBOOT}" -eq "1" ]]; then
-    echo -e "Write Mainline bootloader: [\033[1;32m ${MAINLINE_UBOOT} \033[0m]"
+    echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ]"
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 elif [[ -n "${ANDROID_UBOOT}" && -f "${ANDROID_UBOOT}" ]]; then
-    echo -e "Write Android bootloader: [\033[1;32m ${ANDROID_UBOOT} \033[0m]"
+    echo -e "Write Android bootloader: [ ${ANDROID_UBOOT} ]"
     dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
     dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 else
@@ -682,6 +682,5 @@ mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
 sync
 
 echo "==================[ 100% ]=================="
-echo "The original bootloader has been exported to [ /root/BackupOldBootloader.img ]"
 echo "Install completed, Please unplug the USB disk and [ reboot ] the system!"
 return 0

@@ -16,28 +16,54 @@
 # Add the default password for the 'root' user（Change the empty password to 'password'）
 sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7:::/g' package/base-files/files/etc/shadow
 
-# Add branches package from Lienol/openwrt/branches/21.02/package
+# Correct translation for Transmission
+sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/po/zh_Hans/transmission.po
+
+# Uniform name for network openwrt-official-master-docker
+sed -i 's/ifname/device/g' feeds/luci/applications/luci-app-dockerman/luasrc/model/docker.lua
+
+#
+###### [ Lienol started ] ######
+#
+
+# Add branches package from Lienol/openwrt/branches/21.02/package and Remove duplicate packages
 svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
-# Remove duplicate packages
 rm -rf package/lean/{luci-app-frpc,luci-app-frps,libtorrent-rasterbar} 2>/dev/null
+
 # Add firewall rules
 zzz_iptables_row=$(sed -n '/iptables/=' package/default-settings/files/zzz-default-settings | head -n 1)
 zzz_iptables_tcp=$(sed -n ${zzz_iptables_row}p  package/default-settings/files/zzz-default-settings | sed 's/udp/tcp/g')
 sed -i "${zzz_iptables_row}a ${zzz_iptables_tcp}" package/default-settings/files/zzz-default-settings
 sed -i 's/# iptables/iptables/g' package/default-settings/files/zzz-default-settings
-# Uniform name for network openwrt-official-master-21.02-docker
-sed -i 's/ifname/device/g' feeds/luci/applications/luci-app-dockerman/luasrc/model/docker.lua
+
 # Insert related init script for zzz-default-settings
 #tmp_row=$(sed -n '/tmp/=' package/default-settings/files/zzz-default-settings | head -n 1)
 #sed -i "${tmp_row}i sed -i 's/ifname/device/g' /etc/config/network" package/default-settings/files/zzz-default-settings
+
 # Set default language and time zone
 sed -i 's/luci.main.lang=zh_cn/luci.main.lang=auto/g' package/default-settings/files/zzz-default-settings
 #sed -i 's/zonename=Asia\/Shanghai/zonename=Asia\/Jayapura/g' package/default-settings/files/zzz-default-settings
 #sed -i 's/timezone=CST-8/timezone=CST-9/g' package/default-settings/files/zzz-default-settings
+
 # Add autocore support for armvirt
 sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/autocore/Makefile
-# Correct translation for Transmission
-sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/po/zh_Hans/transmission.po
+
+# Replace the default software source
+# sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
+
+# Default software package replaced with Lienol related software package
+# rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini} 2>/dev/null
+# svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils
+
+# Modify some code adaptation
+# sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
+
+# Add luci-theme
+# svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod
+
+#
+###### [ Lienol ends ] ######
+#
 
 # Add luci-app-passwall
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
@@ -62,22 +88,8 @@ pushd package/openwrt-diskman/parted && mv -f Parted.Makefile Makefile 2>/dev/nu
 # Add luci-app-amlogic
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 
-# Replace the default software source
-# sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
-
-# Default software package replaced with Lienol related software package
-# rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini} 2>/dev/null
-# svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils
-
 # Apply patch
 # git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci
-
-# Modify some code adaptation
-# sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
-
-# Add luci-theme
-# svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod
-
 
 # ------------------------------- Start Conversion -------------------------------
 # Convert translation files zh-cn to zh_Hans

@@ -226,13 +226,13 @@ fi
 #update version prompt
 source /boot/uEnv.txt 2>/dev/null
 CUR_FDTFILE=${FDT}
-echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
+echo -e "FDT Value [ ${CUR_FDTFILE} ]"
 
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
 VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 MODULES_NOW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
-echo -e "\033[1;32m update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ] \033[0m"
+echo -e "Update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ]"
 
 # openwrt-env info
 if  [ ! -f ${P2}/lib/u-boot/openwrt-env ]; then

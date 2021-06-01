@@ -25,9 +25,11 @@ zzz_iptables_row=$(sed -n '/iptables/=' package/default-settings/files/zzz-defau
 zzz_iptables_tcp=$(sed -n ${zzz_iptables_row}p  package/default-settings/files/zzz-default-settings | sed 's/udp/tcp/g')
 sed -i "${zzz_iptables_row}a ${zzz_iptables_tcp}" package/default-settings/files/zzz-default-settings
 sed -i 's/# iptables/iptables/g' package/default-settings/files/zzz-default-settings
-# Uniform name for network openwrt-official-master-21.02
-tmp_row=$(sed -n '/tmp/=' package/default-settings/files/zzz-default-settings | head -n 1)
-sed -i "${tmp_row}i sed -i 's/ifname/device/g' /etc/config/network" package/default-settings/files/zzz-default-settings
+# Uniform name for network openwrt-official-master-21.02-docker
+sed -i 's/ifname/device/g' feeds/luci/applications/luci-app-dockerman/luasrc/model/docker.lua
+# Insert related init script for zzz-default-settings
+#tmp_row=$(sed -n '/tmp/=' package/default-settings/files/zzz-default-settings | head -n 1)
+#sed -i "${tmp_row}i sed -i 's/ifname/device/g' /etc/config/network" package/default-settings/files/zzz-default-settings
 # Set default language and time zone
 sed -i 's/luci.main.lang=zh_cn/luci.main.lang=auto/g' package/default-settings/files/zzz-default-settings
 #sed -i 's/zonename=Asia\/Shanghai/zonename=Asia\/Jayapura/g' package/default-settings/files/zzz-default-settings

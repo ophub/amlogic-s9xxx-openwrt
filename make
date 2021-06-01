@@ -281,8 +281,8 @@ refactor_files() {
     DISTRIB_RELEASE=${DISTRIB_RELEASE}
     if  [[ "${DISTRIB_RELEASE}" != "21.02-SNAPSHOT" ]]; then
         # Uniform name for network openwrt-official-master-21.02
-        sed -i 's/ifname/device/g' etc/config/network 2>/dev/null
-        
+        sed -i 's/ifname/device/g' etc/config/network
+
         # Patches For openssl
         SSL_CNF_PATCH=${configfiles_path}/patches/openssl/openssl_engine.patch
         [ -f ${SSL_CNF_PATCH} ] && patch -p1 < ${SSL_CNF_PATCH} >/dev/null 2>&1

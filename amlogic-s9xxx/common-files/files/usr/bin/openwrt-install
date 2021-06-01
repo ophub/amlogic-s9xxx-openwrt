@@ -464,6 +464,8 @@ EOF
             else
                 yn="n"
             fi
+        elif [[ "${AUTO_MAINLINE_UBOOT}" == "NO" ]]; then
+                yn="n"
         else
             read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
         fi

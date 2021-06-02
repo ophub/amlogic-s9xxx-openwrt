@@ -7,6 +7,8 @@
 # Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #========================================================================================================================
 
+# ------------------------------- Main source started -------------------------------
+#
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.31.4）
 # sed -i 's/192.168.1.1/192.168.31.4/g' package/base-files/files/bin/config_generate
 
@@ -21,6 +23,9 @@ sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/p
 
 # Uniform name for network
 sed -i "1i sed -i 's/ifname/device/g' /etc/config/network" package/base-files/files/etc/rc.local
+#
+# ------------------------------- Main source ends -------------------------------
+
 
 # ------------------------------- Lienol started -------------------------------
 #
@@ -61,6 +66,9 @@ sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/auto
 #
 # ------------------------------- Lienol ends -------------------------------
 
+
+# ------------------------------- Other started -------------------------------
+#
 # Add luci-app-passwall
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
 rm -rf package/openwrt-passwall/{kcptun,xray-core} 2>/dev/null
@@ -86,8 +94,11 @@ svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/
 
 # Apply patch
 # git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci
+#
+# ------------------------------- Other ends -------------------------------
 
-# ------------------------------- Start Conversion -------------------------------
+
+# ------------------------------- Conversion started -------------------------------
 #
 # Convert translation files zh-cn to zh_Hans
 # [CTCGFW]immortalwrt
@@ -148,5 +159,5 @@ done
 
 echo -e "Convert translation files zh-cn to zh_Hans to complete. ${convert_files} in total."
 #
-# ------------------------------- End conversion -------------------------------
+# ------------------------------- Conversion ends -------------------------------
 

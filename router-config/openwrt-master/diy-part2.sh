@@ -22,10 +22,8 @@ sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/p
 # Uniform name for network
 sed -i "1i sed -i 's/ifname/device/g' /etc/config/network" package/base-files/files/etc/rc.local
 
+# ------------------------------- Lienol started -------------------------------
 #
-###### [ Lienol started ] ######
-#
-
 # Add branches package from Lienol/openwrt/branches/21.02/package and Remove duplicate packages
 svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
 rm -rf package/lean/{luci-app-frpc,luci-app-frps,libtorrent-rasterbar} 2>/dev/null
@@ -60,10 +58,8 @@ sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/auto
 
 # Add luci-theme
 # svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-theme-bootstrap-mod package/luci-theme-bootstrap-mod
-
 #
-###### [ Lienol ends ] ######
-#
+# ------------------------------- Lienol ends -------------------------------
 
 # Add luci-app-passwall
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
@@ -92,6 +88,7 @@ svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/
 # git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci
 
 # ------------------------------- Start Conversion -------------------------------
+#
 # Convert translation files zh-cn to zh_Hans
 # [CTCGFW]immortalwrt
 # Use it under GPLv3, please.
@@ -150,6 +147,6 @@ do
 done
 
 echo -e "Convert translation files zh-cn to zh_Hans to complete. ${convert_files} in total."
-
+#
 # ------------------------------- End conversion -------------------------------
 

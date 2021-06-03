@@ -1,11 +1,6 @@
 #!/bin/bash
+
 sync
-umount -f /boot 2>/dev/null
-cd /mnt
-for dir in $(ls)
-do
-    umount -f ${dir} 2>/dev/null
-done
-sync
+sleep 3
 echo 'b' > /proc/sysrq-trigger
 

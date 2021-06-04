@@ -226,13 +226,13 @@ fi
 #update version prompt
 source /boot/uEnv.txt 2>/dev/null
 CUR_FDTFILE=${FDT}
-echo -e "FDT Value [ ${CUR_FDTFILE} ]"
+echo -e "\033[1;32m FDT Value [ ${CUR_FDTFILE} ] \033[0m"
 
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
 VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 MODULES_NOW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
-echo -e "Update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ]"
+echo -e "\033[1;32m update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ] \033[0m"
 
 # openwrt-env info
 if  [ ! -f ${P2}/lib/u-boot/openwrt-env ]; then
@@ -480,6 +480,47 @@ rm -rf *
 echo "Copy the new boot file ... "
 (cd ${P1} && tar cf - . ) | tar xf -
 sync
+
+if [ -f ${P1}/uInitrd ]; then
+    i=1
+    max_try=10
+    while [ "${i}" -le "${max_try}" ]; do
+        uInitrd_original=$(md5sum ${P1}/uInitrd | awk '{print $1}')
+        uInitrd_new=$(md5sum uInitrd | awk '{print $1}')
+        if [ "${uInitrd_original}" = "${uInitrd_new}" ]; then
+            break
+        else
+            rm -f uInitrd && sync
+            cp -f ${P1}/uInitrd uInitrd 2>/dev/null && sync
+            let i++
+            continue
+        fi
+    done
+    [ "${i}" -eq "10" ] && echo "uInitrd file copy failed." && exit 1
+else
+    echo "uInitrd file is missing."
+fi
+
+if [ -f ${P1}/zImage ]; then
+    i=1
+    max_try=10
+    while [ "${i}" -le "${max_try}" ]; do
+        zImage_original=$(md5sum ${P1}/zImage | awk '{print $1}')
+        zImage_new=$(md5sum zImage | awk '{print $1}')
+        if [ "${zImage_original}" = "${zImage_new}" ]; then
+            break
+        else
+            rm -f zImage && sync
+            cp -f ${P1}/zImage zImage 2>/dev/null && sync
+            let i++
+            continue
+        fi
+    done
+    [ "${i}" -eq "10" ] && echo "zImage file copy failed." && exit 1
+else
+    echo "zImage file is missing."
+    exit 1
+fi
 
 rm -f s905_autoscript* aml_autoscript*
 

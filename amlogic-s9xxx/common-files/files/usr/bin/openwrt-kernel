@@ -244,82 +244,79 @@ replace_kernel() {
         V510=0
     fi
 
-    if  [ "${V510}" -ge "${K510}" ]; then
-        UP_FLAG=1
-        #echo -ne "Do you want to update the kernel from [ ${MODULES_OLD} ] to [ ${flippy_version} ]? y/n [y]\b\b"
-        #read yn
-        #case $yn in
-        #     n*|N*) UP_FLAG=0;;
-        #esac
-    else
-        die "The kernel series are not the same, Distinguish whether it is 5.10 kernel!"
-    fi
-
-    if [[ "${UP_FLAG}" -eq "0" ]];then
-        rm -rf ${P4_PATH}/tmp_modules 2>/dev/null && sync
-        die "You gave up the update and the operation is over."
-    fi
-
-    echo -e "Delete [ ${MODULES_OLD} ] related files ..."
-    rm -f /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null && sync
-    rm -rf /lib/modules/* 2>/dev/null && sync
-    sleep 3
-
+    [ "${V510}" -ge "${K510}" ] || die "Update from 5.4 kernel to 5.10 and above is not supported, please install."
     echo -e "Package [ ${flippy_version} ] related files ..."
 
-    tar -xzf ${P4_PATH}/${build_dtb} -C /boot/dtb/amlogic && sync
-    echo -e "Package [ ${build_dtb} ] complete."
-
+    # 01. for /boot five files
+    rm -f /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null && sync
     tar -xzf ${P4_PATH}/${build_boot} -C /boot && sync
-    echo -e "Package [ ${build_boot} ] complete."
 
-    tar -xzf ${P4_PATH}/${build_modules} -C /lib/modules && sync
-    echo -e "Package [ ${build_modules} ] complete."
-    
-    sleep 3
-
-    if [ "$( ls /boot/dtb/amlogic -l 2>/dev/null | grep "^-" | wc -l )" -ge "10" ]; then
-        echo -e "01. /boot/dtb/amlogic files complete."
-    fi
-    sleep 3
-
-    chmod 777 /boot/uInitrd-${flippy_version} 2>/dev/null
-    [ -f /boot/uInitrd ] && rm -f /boot/uInitrd 2>/dev/null && sync
     if [ -f /boot/uInitrd-${flippy_version} ]; then
-        mv -f /boot/uInitrd-${flippy_version} /boot/uInitrd 2>/dev/null && sync
-        if [ ! -f /boot/uInitrd ]; then
-            die "/boot/uInitrd file is missing."
-        fi
+        i=1
+        max_try=10
+        while [ "${i}" -le "${max_try}" ]; do
+            cp -f /boot/uInitrd-${flippy_version} /boot/uInitrd 2>/dev/null && sync
+            uInitrd_original=$(md5sum /boot/uInitrd-${flippy_version} | awk '{print $1}')
+            uInitrd_new=$(md5sum /boot/uInitrd | awk '{print $1}')
+            if [ "${uInitrd_original}" = "${uInitrd_new}" ]; then
+                echo -e "Package [ /boot/uInitrd ] complete."
+                rm -f /boot/uInitrd-${flippy_version} && sync
+                break
+            else
+                let i++
+                continue
+            fi
+        done
+        [ "${i}" -eq "10" ] && die "/boot/uInitrd-${flippy_version} file copy failed."
     else
         die "/boot/uInitrd-${flippy_version} file is missing."
     fi
 
-    chmod 777 /boot/vmlinuz-${flippy_version} 2>/dev/null
-    [ -f /boot/zImage ] && rm -f /boot/zImage 2>/dev/null && sync
     if [ -f /boot/vmlinuz-${flippy_version} ]; then
-        mv -f /boot/vmlinuz-${flippy_version} /boot/zImage 2>/dev/null && sync
-        if [ ! -f /boot/zImage ]; then
-            die "/boot/zImage file is missing."
-        fi
+        i=1
+        max_try=10
+        while [ "${i}" -le "${max_try}" ]; do
+            cp -f /boot/vmlinuz-${flippy_version} /boot/zImage 2>/dev/null && sync
+            vmlinuz_original=$(md5sum /boot/vmlinuz-${flippy_version} | awk '{print $1}')
+            vmlinuz_new=$(md5sum /boot/zImage | awk '{print $1}')
+            if [ "${vmlinuz_original}" = "${vmlinuz_new}" ]; then
+                echo -e "Package [ /boot/zImage ] complete."
+                rm -f /boot/vmlinuz-${flippy_version} && sync
+                break
+            else
+                let i++
+                continue
+            fi
+        done
+        [ "${i}" -eq "10" ] && die "/boot/vmlinuz-${flippy_version} file copy failed."
     else
         die "/boot/vmlinuz-${flippy_version} file is missing."
     fi
 
     [ -f /boot/config-${flippy_version} ] || die "/boot/config-${flippy_version} file is missing."
     [ -f /boot/System.map-${flippy_version} ] || die "/boot/System.map-${flippy_version} file is missing."
-    echo -e "02. /boot five files complete."
+
+    echo -e "01. Package [ ${build_boot} ] complete."
     sleep 3
 
-    cd /lib/modules/${flippy_version}/
-    rm -f *.ko 2>/dev/null
-    find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-    sync && sleep 3
-    x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
-    if [ "${x}" -eq "0" ]; then
-        die "Error *.ko Files not found."
-    else
-        echo -e "03. /lib/modules/ files complete."
-    fi
+    # 02 for /boot/dtb/amlogic/*
+    tar -xzf ${P4_PATH}/${build_dtb} -C /boot/dtb/amlogic && sync
+    [ "$( ls /boot/dtb/amlogic -l 2>/dev/null | grep "^-" | wc -l )" -ge "10" ] || die "/boot/dtb/amlogic file is missing."
+    echo -e "02. Package [ ${build_dtb} ] complete."
+    sleep 3
+
+    # 03 for /lib/modules/*
+    rm -rf /lib/modules/* 2>/dev/null && sync
+    tar -xzf ${P4_PATH}/${build_modules} -C /lib/modules && sync
+        cd /lib/modules/${flippy_version}/
+        rm -f *.ko 2>/dev/null
+        find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+        sync && sleep 3
+            x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
+            if [ "${x}" -eq "0" ]; then
+                die "Error *.ko Files not found."
+            fi
+    echo -e "03. Package [ ${build_modules} ] complete."
     sleep 3
 
     rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz 2>/dev/null

@@ -685,4 +685,4 @@ sync
 
 echo "==================[ 100% ]=================="
 echo "Install completed, Please unplug the USB disk and [ reboot ] the system!"
-return 0
+exit 0

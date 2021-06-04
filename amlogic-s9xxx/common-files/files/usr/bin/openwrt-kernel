@@ -263,6 +263,7 @@ replace_kernel() {
                 rm -f /boot/uInitrd-${flippy_version} && sync
                 break
             else
+                rm -f /boot/uInitrd && sync
                 let i++
                 continue
             fi
@@ -284,6 +285,7 @@ replace_kernel() {
                 rm -f /boot/vmlinuz-${flippy_version} && sync
                 break
             else
+                rm -f /boot/zImage && sync
                 let i++
                 continue
             fi

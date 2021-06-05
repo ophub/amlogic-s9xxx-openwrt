@@ -48,12 +48,6 @@ echo "AUTO_MAINLINE_UBOOT: ${AUTO_MAINLINE_UBOOT}"
 echo "SPECIFY_SOC: ${SPECIFY_SOC}"
 echo "SPECIFY_DTB: ${SPECIFY_DTB}"
 
-# you can change BOOT size >= 128
-BOOT=256
-# you can change ROOT1 size >= 320
-ROOT1=1024
-# you can change ROOT2 size >= 320
-ROOT2=1024
 # shared partition can be ext4, xfs, btrfs, f2fs
 TARGET_SHARED_FSTYPE=btrfs
 
@@ -351,7 +345,7 @@ for mnt in $MOUNTS; do
     if [ "$mnt" == "/opt" ]; then
         continue
     fi
-    
+
     if [ "$mnt" == "[SWAP]" ]; then
         echo "swapoff -a"
         swapoff -a
@@ -381,17 +375,23 @@ while [ $p -ge 1 ]; do
     p=$((p-1))
 done
 
+# you can change ROOT size(MB) >= 320
+ROOT1=1024
+ROOT2=1024
 if [[ "${AMLOGIC_SOC}" = "s912" || "${AMLOGIC_SOC}" = "s905d" ]]; then
+    BOOT=512
     BLANK1=68
     BLANK2=184
     BLANK3=0
     BLANK4=0
 elif [[ "${AMLOGIC_SOC}" = "s905x" ]]; then
+    BOOT=160
     BLANK1=700
     BLANK2=0
     BLANK3=0
     BLANK4=0
 else
+    BOOT=160
     BLANK1=68
     BLANK2=0
     BLANK3=162
@@ -627,7 +627,7 @@ while [ $i -le $max_try ]; do
         ln -sf lib/ lib64
         ln -sf tmp/ var
         echo "complete."
-		
+
         COPY_SRC="root etc bin sbin lib opt usr www"
         echo "Copy data ... "
         for src in $COPY_SRC; do
@@ -678,7 +678,7 @@ config  mount
         option fstype 'vfat'
 
 EOF
-        
+
         cd /
         umount -f /mnt/${EMMC_NAME}p2
         break

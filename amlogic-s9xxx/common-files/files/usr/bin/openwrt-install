@@ -150,102 +150,119 @@ case  $boxtype in
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
          ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+         AMLOGIC_SOC="s905x3"
          ;;
       2) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
          ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+         AMLOGIC_SOC="s905x3"
          ;;
       3) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
          ;;
       4) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
          ;;
       5) FDTFILE="meson-sm1-h96-max-x3.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
          ;;
       6) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
          ;;
       7) FDTFILE="meson-sm1-ugoos-x3.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-ugoos-x3.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
          ;;
       8) FDTFILE="meson-sm1-ugoos-x3-oc.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-ugoos-x3.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
          ;;
       9) FDTFILE="meson-g12a-x96-max.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96max.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x2"
          ;;
       10) FDTFILE="meson-g12a-x96-max-rmii.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96max.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x2"
          ;;
       11) FDTFILE="meson-g12b-gtking.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
          MAINLINE_UBOOT="/lib/u-boot/gtking-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s922x"
          ;;
       12) FDTFILE="meson-g12b-gtking-pro.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
          MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s922x"
          ;;
       13) FDTFILE="meson-g12b-ugoos-am6.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
          MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s922x"
          ;;
       14) FDTFILE="meson-gxm-octopus-planet.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-zyxq.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s912"
          ;;
       15) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-n1.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
+         AMLOGIC_SOC="s905d"
          ;;
       16) FDTFILE="meson-gxl-s905x-p212.dtb"
          U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-p212.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x"
          ;;
       99) FDTFILE=${SPECIFY_DTB}
          U_BOOT_EXT=0
          UBOOT_OVERLOAD=""
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
+         AMLOGIC_SOC=""
          ;;
       0) cat <<EOF
 Please enter the .dtb file name of your box, do not include the path.
@@ -258,6 +275,7 @@ EOF
          UBOOT_OVERLOAD=""
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
+         AMLOGIC_SOC=""
          ;;
       *) echo "Input error, exit!"
          exit 1
@@ -363,27 +381,35 @@ while [ $p -ge 1 ]; do
     p=$((p-1))
 done
 
-# Create new partition
-if [[ "${FDTFILE}" == *phicomm-n1* || "${FDTFILE}" == *octopus-planet* ]]; then
-    SKIP1=700
-    SKIP2=0
+if [[ "${AMLOGIC_SOC}" = "s912" || "${AMLOGIC_SOC}" = "s905d" ]]; then
+    BLANK1=68
+    BLANK2=184
+    BLANK3=0
+    BLANK4=0
+elif [[ "${AMLOGIC_SOC}" = "s905x" ]]; then
+    BLANK1=700
+    BLANK2=0
+    BLANK3=0
+    BLANK4=0
 else
-    SKIP1=68
-    SKIP2=162
+    BLANK1=68
+    BLANK2=0
+    BLANK3=162
+    BLANK4=0
 fi
 
 DST_TOTAL_MB=$((EMMC_SIZE/1024/1024))
 
-start1=$(( SKIP1 * 2048 ))
+start1=$(( BLANK1 * 2048 ))
 end1=$(( start1 + (BOOT * 2048) - 1 ))
 
-start2=$(( end1 + 1 ))
+start2=$(( (BLANK2 * 2048) + end1 + 1 ))
 end2=$(( start2 + (ROOT1 * 2048) -1 ))
 
-start3=$(( (SKIP2 * 2048) + end2 + 1 ))
+start3=$(( (BLANK3 * 2048) + end2 + 1 ))
 end3=$(( start3 + (ROOT2 * 2048) -1 ))
 
-start4=$((end3 + 1 ))
+start4=$(( (BLANK4 * 2048) + end3 + 1 ))
 end4=$(( DST_TOTAL_MB * 2048 -1 ))
 
 cat >> /tmp/fdisk.script <<EOF

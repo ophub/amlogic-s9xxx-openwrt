@@ -267,18 +267,12 @@ refactor_files() {
     if  [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/ 2>/dev/null ))
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " Amlogic SoC: ${build_op}" >> etc/banner
-        echo " Kernel: ${op_version}" >> etc/banner
-        if  [ "${K510}" -eq "1" ]; then
-            echo " Support install to EMMC: No" >> etc/banner
-        else
-            echo " Support install to EMMC: Yes" >> etc/banner
-        fi
         echo " Install command: openwrt-install" >> etc/banner
         echo " Update command: openwrt-update" >> etc/banner
         echo " Replace kernel command: openwrt-kernel" >> etc/banner
         echo " Backup & Restore command: openwrt-backup" >> etc/banner
-        echo " View version command: openwrt-version" >> etc/banner
+        echo " OpenWrt Kernel: ${op_version}" >> etc/banner
+        echo " Amlogic SoC: ${build_op}" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi

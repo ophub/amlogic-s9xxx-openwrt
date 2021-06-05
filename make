@@ -173,6 +173,7 @@ refactor_files() {
             UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
             MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
             ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+            AMLOGIC_SOC="s905x3"
             ;;
         s905x2 | x96max4g | x96max2g)
             FDTFILE="meson-g12a-x96-max.dtb"
@@ -180,6 +181,7 @@ refactor_files() {
             UBOOT_OVERLOAD="u-boot-x96max.bin"
             MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
             ANDROID_UBOOT=""
+            AMLOGIC_SOC="s905x2"
             ;;
         s905x | hg680p | b860h)
             FDTFILE="meson-gxl-s905x-p212.dtb"
@@ -187,6 +189,7 @@ refactor_files() {
             UBOOT_OVERLOAD="u-boot-p212.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
+            AMLOGIC_SOC="s905x"
             ;;
         s905d | n1)
             FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
@@ -194,6 +197,7 @@ refactor_files() {
             UBOOT_OVERLOAD="u-boot-n1.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
+            AMLOGIC_SOC="s905d"
             ;;
         s912 | h96proplus | octopus)
             FDTFILE="meson-gxm-octopus-planet.dtb"
@@ -201,6 +205,7 @@ refactor_files() {
             UBOOT_OVERLOAD="u-boot-zyxq.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
+            AMLOGIC_SOC="s912"
             ;;
         s922x | belink | belinkpro | ugoos)
             FDTFILE="meson-g12b-gtking-pro.dtb"
@@ -208,6 +213,7 @@ refactor_files() {
             UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
             MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
             ANDROID_UBOOT=""
+            AMLOGIC_SOC="s922x"
             ;;
         *)
             die "Have no this firmware: [ ${build_op} - ${kernel} ]"
@@ -253,7 +259,7 @@ refactor_files() {
     echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >> lib/u-boot/openwrt-env 2>/dev/null
     echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >> lib/u-boot/openwrt-env 2>/dev/null
     echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >> lib/u-boot/openwrt-env 2>/dev/null
-    echo "AMLOGIC_SOC='${build_op}'" >> lib/u-boot/openwrt-env 2>/dev/null
+    echo "AMLOGIC_SOC='${AMLOGIC_SOC}'" >> lib/u-boot/openwrt-env 2>/dev/null
     echo "KERNEL_VERSION='${build_usekernel}'" >> lib/u-boot/openwrt-env 2>/dev/null
     echo "K510='${K510}'" >> lib/u-boot/openwrt-env 2>/dev/null
 

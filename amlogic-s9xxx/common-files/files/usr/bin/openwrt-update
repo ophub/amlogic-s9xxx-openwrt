@@ -87,7 +87,7 @@ else
     echo -e "Please upload or specify the update file."
     echo -e "Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ]"
     echo -e "Specify method: Place the update file in [ /mnt/mmcblk*p4/ ]"
-    echo -e "The supported file suffixes are: \033[1;33m *.img, *.img.xz, *.img.gz, *.7z, *.zip"
+    echo -e "The supported file suffixes are: *.img, *.img.xz, *.img.gz, *.7z, *.zip"
     echo -e "After upload the update file, run [ openwrt-update ] again."
     exit 1
 fi
@@ -227,6 +227,7 @@ fi
 source /boot/uEnv.txt 2>/dev/null
 CUR_FDTFILE=${FDT}
 echo -e "FDT Value [ ${CUR_FDTFILE} ]"
+cp /boot/uEnv.txt /tmp/uEnv.txt && sync
 
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
 VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
@@ -474,8 +475,7 @@ cd ${WORK_DIR}
 echo "Start copying data， from [ ${P1} ] to [ /boot ] ..."
 cd /boot
 echo "Delete the old boot file ..."
-cp uEnv.txt /tmp/uEnv.txt
-rm -rf *
+rm -rf * && sync
 
 echo "Copy the new boot file ... "
 (cd ${P1} && tar cf - . ) | tar xf -

@@ -235,22 +235,38 @@ MODULES_NOW=$(ls ${P2}/lib/modules/ 2>/dev/null)
 VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "Update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ]"
 
-# openwrt-env info
-if [ ! -f ${P2}/etc/flippy-openwrt-release ]; then
-    echo -e "Missing update information record file: [ ${P2}/etc/flippy-openwrt-release ]"
-    exit 1
+k510_ver=${VERSION_NOW%%.*}
+k510_maj=${VERSION_NOW##*.}
+if  [ ${k510_ver} -eq "5" ];then
+    if  [ "${k510_maj}" -ge "10" ];then
+        K510=1
+    else
+        K510=0
+    fi
+elif [ ${k510_ver} -gt "5" ];then
+    K510=1
 else
+    K510=0
+fi
+
+# flippy-openwrt-release info
+MAINLINE_UBOOT=""
+ANDROID_UBOOT=""
+if [ -f ${P2}/etc/flippy-openwrt-release ]; then
     source ${P2}/etc/flippy-openwrt-release 2>/dev/null
     # Update the parameters used
     MAINLINE_UBOOT=${MAINLINE_UBOOT}
     ANDROID_UBOOT=${ANDROID_UBOOT}
-    K510=${K510}
+
     # Unused parameters
     FDTFILE=${FDTFILE}
     U_BOOT_EXT=${U_BOOT_EXT}
     UBOOT_OVERLOAD=${UBOOT_OVERLOAD}
     KERNEL_VERSION=${KERNEL_VERSION}
     SOC=${SOC}
+
+    # With assigned parameters
+    #K510=${K510}
 fi
 
 # Check 5.10 kernel

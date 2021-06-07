@@ -7,6 +7,6 @@
 #======================================================================
 
 cat ../../etc/openwrt_release
-cat ../../lib/u-boot/openwrt-env
+cat ../../etc/flippy-openwrt-release
 cat ../../proc/version
 

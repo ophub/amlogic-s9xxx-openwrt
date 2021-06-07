@@ -236,19 +236,21 @@ VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
 echo -e "Update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ]"
 
 # openwrt-env info
-if  [ ! -f ${P2}/lib/u-boot/openwrt-env ]; then
-    echo -e "Missing update information record file: [ ${P2}/lib/u-boot/openwrt-env ]"
+if [ ! -f ${P2}/etc/flippy-openwrt-release ]; then
+    echo -e "Missing update information record file: [ ${P2}/etc/flippy-openwrt-release ]"
     exit 1
 else
-    source ${P2}/lib/u-boot/openwrt-env 2>/dev/null
+    source ${P2}/etc/flippy-openwrt-release 2>/dev/null
+    # Update the parameters used
+    MAINLINE_UBOOT=${MAINLINE_UBOOT}
+    ANDROID_UBOOT=${ANDROID_UBOOT}
+    K510=${K510}
+    # Unused parameters
     FDTFILE=${FDTFILE}
     U_BOOT_EXT=${U_BOOT_EXT}
     UBOOT_OVERLOAD=${UBOOT_OVERLOAD}
-    MAINLINE_UBOOT=${MAINLINE_UBOOT}
-    ANDROID_UBOOT=${ANDROID_UBOOT}
-    AMLOGIC_SOC=${AMLOGIC_SOC}
     KERNEL_VERSION=${KERNEL_VERSION}
-    K510=${K510}
+    SOC=${SOC}
 fi
 
 # Check 5.10 kernel
@@ -524,7 +526,7 @@ fi
 
 rm -f s905_autoscript* aml_autoscript*
 
-if  [[ "${U_BOOT_EXT}" -eq "1" && "${K510}" -eq "1" ]]; then
+if  [[ "${K510}" -eq "1" ]]; then
     if  [ -f u-boot.ext ]; then
         cp -f -v u-boot.ext u-boot.emmc
     else

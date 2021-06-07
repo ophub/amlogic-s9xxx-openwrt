@@ -292,13 +292,13 @@ echo -e "\033[1;32m This Kernel [ ${MODULES_NOW} ] \033[0m"
 
 k510_ver=${VERSION_NOW%%.*}
 k510_maj=${VERSION_NOW##*.}
-if  [ ${k510_ver} -eq "5" ];then
+if  [ "${k510_ver}" -eq "5" ];then
     if  [ "${k510_maj}" -ge "10" ];then
         K510="1"
     else
         K510="0"
     fi
-elif [ ${k510_ver} -gt "5" ];then
+elif [ "${k510_ver}" -gt "5" ];then
     K510="1"
 else
     K510="0"

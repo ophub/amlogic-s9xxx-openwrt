@@ -154,16 +154,16 @@ refactor_files() {
     kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')
     k510_ver=${kernel_vermaj%%.*}
     k510_maj=${kernel_vermaj##*.}
-    if  [ ${k510_ver} -eq "5" ];then
+    if  [ "${k510_ver}" -eq "5" ];then
         if  [ "${k510_maj}" -ge "10" ];then
-            K510=1
+            K510="1"
         else
-            K510=0
+            K510="0"
         fi
-    elif [ ${k510_ver} -gt "5" ];then
-        K510=1
+    elif [ "${k510_ver}" -gt "5" ];then
+        K510="1"
     else
-        K510=0
+        K510="0"
     fi
 
     case "${build_op}" in

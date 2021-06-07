@@ -12,7 +12,7 @@ The version update instructions record each important update point for everyone 
 
 | Date | Firmware | Types | Importance | Path | description |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-| 2021.06.07 | All | UPDATE | ✩✩✩✩✩ | [openwrt-update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-update) | In order for `luci-app-amlogic` to be compatible with the OpenWrt firmware packaged by `flippy`, modify the env storage path to be consistent with `flippy`. |
+| 2021.06.07 | All | UPDATE | ✩✩✩✩✩ | [openwrt-update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-update) | In order for [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) to be compatible with the OpenWrt firmware packaged by `flippy`, modify the env storage path to be consistent with `flippy`. |
 | 2021.04.29 | All | ADD | ✩✩✩ | [openwrt-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-kernel) | Add the function of updating `dtb-amlogic-*.tar.gz` files. |
 | 2021.04.27 | All | ADD | ✩✩✩ | [Actions](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml) | Add use Actions packaging instructions. |
 | 2021.04.10 | All | ADD | ✩✩✩ | [amlogic-kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) | Replace all kernels with Flippy's standard kernel. |

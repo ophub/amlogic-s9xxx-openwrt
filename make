@@ -253,30 +253,31 @@ refactor_files() {
     [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > etc/modules.d/usb-net-rtl8152
     [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179
 
-    # Add firmware information to the openwrt-env
-    echo "FDTFILE='${FDTFILE}'" >> lib/u-boot/openwrt-env 2>/dev/null
-    echo "U_BOOT_EXT='${U_BOOT_EXT}'" >> lib/u-boot/openwrt-env 2>/dev/null
-    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >> lib/u-boot/openwrt-env 2>/dev/null
-    echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >> lib/u-boot/openwrt-env 2>/dev/null
-    echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >> lib/u-boot/openwrt-env 2>/dev/null
-    echo "AMLOGIC_SOC='${AMLOGIC_SOC}'" >> lib/u-boot/openwrt-env 2>/dev/null
-    echo "KERNEL_VERSION='${build_usekernel}'" >> lib/u-boot/openwrt-env 2>/dev/null
-    echo "K510='${K510}'" >> lib/u-boot/openwrt-env 2>/dev/null
+    # Add firmware information to the etc/flippy-openwrt-release
+    echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "U_BOOT_EXT='${U_BOOT_EXT}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "KERNEL_VERSION='${build_usekernel}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "SOC='${AMLOGIC_SOC}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "K510='${K510}'" >> etc/flippy-openwrt-release 2>/dev/null
+    # Compatible with the old version
+    ln -sf etc/flippy-openwrt-release lib/u-boot/openwrt-env 2>/dev/null
 
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/ 2>/dev/null ))
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " Amlogic SoC: ${build_op}" >> etc/banner
-        echo " OpenWrt Kernel: ${op_version}" >> etc/banner
-        echo " Packaged Date: ${op_packaged_date}" >> etc/banner
-        echo " -----------------------------------------------------" >> etc/banner
         echo " Install command: openwrt-install" >> etc/banner
         echo " Update command: openwrt-update" >> etc/banner
         echo " Replace kernel command: openwrt-kernel" >> etc/banner
         echo " Backup & Restore command: openwrt-backup" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
-
+        echo " Amlogic SoC: ${build_op}" >> etc/banner
+        echo " OpenWrt Kernel: ${op_version}" >> etc/banner
+        echo " Packaged Date: ${op_packaged_date}" >> etc/banner
+        echo " -----------------------------------------------------" >> etc/banner
     fi
 
     source etc/openwrt_release 2>/dev/null

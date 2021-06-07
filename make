@@ -263,7 +263,7 @@ refactor_files() {
     echo "SOC='${AMLOGIC_SOC}'" >> etc/flippy-openwrt-release 2>/dev/null
     echo "K510='${K510}'" >> etc/flippy-openwrt-release 2>/dev/null
     # Compatible with the old version
-    ln -sf etc/flippy-openwrt-release lib/u-boot/openwrt-env 2>/dev/null
+    ln -sf /etc/flippy-openwrt-release lib/u-boot/openwrt-env 2>/dev/null
 
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then

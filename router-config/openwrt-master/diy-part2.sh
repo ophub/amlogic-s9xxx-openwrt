@@ -21,6 +21,9 @@ sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999
 # Correct translation for Transmission
 sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/po/zh_Hans/transmission.po
 
+# Modify ifname to device for dockerd
+sed -i 's/ifname/device/g' feeds/packages/utils/dockerd/files/dockerd.init
+
 # Uniform name for network
 sed -i "1i sed -i 's/ifname/device/g' /etc/config/network" package/base-files/files/etc/rc.local
 #

@@ -237,13 +237,13 @@ echo -e "Update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ]"
 
 k510_ver=${VERSION_NOW%%.*}
 k510_maj=${VERSION_NOW##*.}
-if  [ ${k510_ver} -eq "5" ];then
+if  [ "${k510_ver}" -eq "5" ];then
     if  [ "${k510_maj}" -ge "10" ];then
         K510="1"
     else
         K510="0"
     fi
-elif [ ${k510_ver} -gt "5" ];then
+elif [ "${k510_ver}" -gt "5" ];then
     K510="1"
 else
     K510="0"

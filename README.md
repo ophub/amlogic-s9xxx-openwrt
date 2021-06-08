@@ -51,7 +51,7 @@ You can modify the configuration file in the `router-config` directory and `.yml
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.31.TF_5.4.113
+    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.12.9_5.4.124
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -71,7 +71,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
   with:
     armvirt64_path: openwrt/bin/targets/*/*/*.tar.gz
     amlogic_openwrt: s905x3_s905x2_s905x_s905d_s922x_s912
-    amlogic_kernel: 5.10.31.TF_5.4.113
+    amlogic_kernel: 5.12.9_5.4.124
     amlogic_size: 1024
 ```
 
@@ -81,7 +81,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 |------------------------|------------------------|---------------------------------------------------------------|
 | armvirt64_path         | no                     | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*.tar.gz` . |
 | amlogic_openwrt        | s905d_s905x3           | Set the `SoC` of the packaging box, the default `all` packs all boxes, you can specify a single box such as `s905x3`, you can choose multiple boxes to use `_` connection such as `s905x3_s905d` . SOC code of each box is: `s905` `s905d` `s905x2` `s905x3` `s912` `s922x` |
-| amlogic_kernel         | 5.4.108_5.10.26.TF     | Set the kernel version，Ophub's [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) library contains many original kernels of `Flippy`, you can view and choose to specify. |
+| amlogic_kernel         | 5.12.9_5.4.124         | Set the kernel version，Ophub's [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) library contains many original kernels of `Flippy`, you can view and choose to specify. |
 | amlogic_size           | 1024                   | Set the size of the firmware ROOT partition |
 
 - GitHub Action Output variable description

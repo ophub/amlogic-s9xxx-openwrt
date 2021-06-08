@@ -379,7 +379,7 @@ REPO_BRANCH: openwrt-19.07
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.23.TF_5.4.105
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.12.9_5.4.124
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV

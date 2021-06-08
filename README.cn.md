@@ -51,7 +51,7 @@
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.31.TF_5.4.113
+    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.12.9_5.4.124
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -71,7 +71,7 @@
   with:
     armvirt64_path: openwrt/bin/targets/*/*/*.tar.gz
     amlogic_openwrt: s905x3_s905x2_s905x_s905d_s922x_s912
-    amlogic_kernel: 5.10.31.TF_5.4.113
+    amlogic_kernel: 5.12.9_5.4.124
     amlogic_size: 1024
 ```
 - GitHub Action 输入参数说明
@@ -80,7 +80,7 @@
 |------------------------|------------------------|------------------------------------------------|
 | armvirt64_path         | no                     | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，使用文件在当前工作流中的路径如 `openwrt/bin/targets/*/*/*.tar.gz` |
 | amlogic_openwrt        | s905d_s905x3           | 设置打包盒子的 `SOC` ，默认 `all` 打包全部盒子，可指定单个盒子如 `s905x3` ，可选择多个盒子用_连接如 `s905x3_s905d` 。各盒子的SoC代码为：`s905` `s905d` `s905x2` `s905x3` `s912` `s922x` |
-| amlogic_kernel         | 5.4.108_5.10.26.TF     | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
+| amlogic_kernel         | 5.12.9_5.4.124         | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
 | amlogic_size           | 1024                   | 设置固件 ROOT 分区的大小                         |
 
 - GitHub Action 输出变量说明

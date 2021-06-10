@@ -304,11 +304,11 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ## 9. Update firmware
 
-### 9.1 Install using the operation panel
+### 9.1 Update using the operation panel
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Replace OpenWrt Kernel` to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
-### 9.2 Install using script commands
+### 9.2 Update using script commands
 
 `Log in to your OpenWrt system` →  under the `System` menu → `file transfer` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/tmp/upload/`***, enter the `system menu` → `TTYD terminal` → input command: 
 

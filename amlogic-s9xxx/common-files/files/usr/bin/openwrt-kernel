@@ -15,7 +15,7 @@
 
 # Encountered a serious error, abort the script execution
 die() {
-    echo -e " [ \033[1;31m Error \033[0m ] ${1}"
+    echo -e " [Error] ${1}"
     exit 1
 }
 
@@ -160,7 +160,7 @@ extract_kernel() {
 }
 
 # Replace the kernel for Amlogic S9xxx OpenWrt
-# Support the original 3 cores using Flippy: boot-*.tar.gz, dtb-amlogic-*.tar.gz, modules-*.tar .gz
+# Support the kernel: boot-*.tar.gz, dtb-amlogic-*.tar.gz, modules-*.tar .gz
 replace_kernel() {
 
     # Operation environment check

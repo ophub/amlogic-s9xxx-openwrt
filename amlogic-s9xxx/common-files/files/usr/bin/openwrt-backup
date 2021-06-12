@@ -78,7 +78,7 @@ backup() {
     eval tar czf "${BACKUP_FILE}" "${BACKUP_LIST}" 2>/dev/null
     sync
     if [ -f "${BACKUP_FILE}" ];then
-        echo "Your config files has been backed up to [ ${BACKUP_FILE} ], please download and save."
+        echo "Has been backed up to [ ${BACKUP_FILE} ], please download and save."
         exit 0
     else
         echo "Backup failed!"
@@ -96,7 +96,7 @@ restore() {
         cd /
         tar xzf "${BACKUP_FILE}" 2>/dev/null && sync
 
-        echo "Recovery has been completed using the [ ${BACKUP_FILE} ] file. Will start automatically, please refresh later!"
+        echo "Successful recovery. Will start automatically, please refresh later!"
         sleep 3
         echo 'b' > /proc/sysrq-trigger
         exit 0
@@ -163,7 +163,7 @@ EOF
 
     cat >> /etc/config/fstab <<EOF
 	option enabled '1'
-	option enabled_fsck '0'
+	option enabled_fsck '1'
 	option fstype '${BOOT_FSTYPE}'
            
 EOF

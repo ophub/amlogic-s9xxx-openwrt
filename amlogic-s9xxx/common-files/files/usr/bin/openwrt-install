@@ -8,33 +8,26 @@
 #======================================================================================
 
 # The script supports directly setting parameters for installation, skipping interactive selection
-# openwrt-install ${IFSHOW_MAINLINE_UBOOT} ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME}
-# E.g: openwrt-install TEST-UBOOT YES 1
-# E.g: openwrt-install NO-TEST-UBOOT NO 99 meson-gxl-s905x-p212.dtb
+# openwrt-install ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME}
+# E.g: openwrt-install YES 1
+# E.g: openwrt-install NO 99 meson-gxl-s905x-p212.dtb
 # Tip: When custom dtb file, set ${SOC_ID} to 99, and parameter ${DTB_FILENAME} must be set
 # return 0
 
 # You can also execute the script directly, and interactively select related functions
 # E.g: openwrt-install
 
-# The MAINLINE_UBOOT is not perfect yet, and the installation is not prompted by default.
-if  [[ "${1}" == "TEST-UBOOT" ]]; then
-    IFSHOW_MAINLINE_UBOOT=1
-else
-    IFSHOW_MAINLINE_UBOOT=0
-fi
-
-AUTO_MAINLINE_UBOOT=${2}
+AUTO_MAINLINE_UBOOT=${1}
 
 # For [luci-app-amlogic] input parameter: SOC & DTB
 # When there is no input parameter, select manually
 SPECIFY_SOC=""
 SPECIFY_DTB=""
-if  [[ -n "$(echo ${3} | sed -n "/^[0-9]\+$/p")" ]]; then
-    SPECIFY_SOC=${3}
-    if  [[ "${3}" -eq "99" ]]; then
-        if  [[ -n "${4}" ]]; then
-            SPECIFY_DTB=${4}
+if  [[ -n "$(echo ${2} | sed -n "/^[0-9]\+$/p")" ]]; then
+    SPECIFY_SOC=${2}
+    if  [[ "${2}" -eq "99" ]]; then
+        if  [[ -n "${3}" ]]; then
+            SPECIFY_DTB=${3}
         else
             echo "Please enter the DTB file name!"
             exit 1
@@ -43,7 +36,6 @@ if  [[ -n "$(echo ${3} | sed -n "/^[0-9]\+$/p")" ]]; then
     fi
 fi
 
-echo "IFSHOW_MAINLINE_UBOOT: ${IFSHOW_MAINLINE_UBOOT}"
 echo "AUTO_MAINLINE_UBOOT: ${AUTO_MAINLINE_UBOOT}"
 echo "SPECIFY_SOC: ${SPECIFY_SOC}"
 echo "SPECIFY_DTB: ${SPECIFY_DTB}"
@@ -139,119 +131,102 @@ else
 fi
 case  $boxtype in
       1) FDTFILE="meson-sm1-x96-max-plus.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
          ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          AMLOGIC_SOC="s905x3"
          ;;
       2) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
          ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
          AMLOGIC_SOC="s905x3"
          ;;
       3) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x3"
          ;;
       4) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x3"
          ;;
       5) FDTFILE="meson-sm1-h96-max-x3.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x3"
          ;;
       6) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
          MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x3"
          ;;
       7) FDTFILE="meson-sm1-ugoos-x3.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-ugoos-x3.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x3"
          ;;
       8) FDTFILE="meson-sm1-ugoos-x3-oc.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-ugoos-x3.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x3"
          ;;
       9) FDTFILE="meson-g12a-x96-max.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96max.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x2"
          ;;
       10) FDTFILE="meson-g12a-x96-max-rmii.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-x96max.bin"
          MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x2"
          ;;
       11) FDTFILE="meson-g12b-gtking.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
          MAINLINE_UBOOT="/lib/u-boot/gtking-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s922x"
          ;;
       12) FDTFILE="meson-g12b-gtking-pro.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
          MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s922x"
          ;;
       13) FDTFILE="meson-g12b-ugoos-am6.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
          MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s922x"
          ;;
       14) FDTFILE="meson-gxm-octopus-planet.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-zyxq.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s912"
          ;;
       15) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-n1.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
          AMLOGIC_SOC="s905d"
          ;;
       16) FDTFILE="meson-gxl-s905x-p212.dtb"
-         U_BOOT_EXT=1
          UBOOT_OVERLOAD="u-boot-p212.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x"
          ;;
       99) FDTFILE=${SPECIFY_DTB}
-         U_BOOT_EXT=0
          UBOOT_OVERLOAD=""
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
@@ -264,7 +239,6 @@ EOF
          echo  "Enter the .dtb File name:"
          read  CUST_FDTFILE
          FDTFILE=$CUST_FDTFILE
-         U_BOOT_EXT=0
          UBOOT_OVERLOAD=""
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
@@ -275,7 +249,7 @@ EOF
          ;;
 esac
 
-echo -e "\033[1;32m FDT Value [ ${FDTFILE} ] \033[0m"
+echo -e "FDT Value [ ${FDTFILE} ]"
 
 if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
     echo "/boot/dtb/amlogic/${FDTFILE} does not exist!"
@@ -288,7 +262,7 @@ fi
 #Check if writing to EMMC is supported
 MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
 VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
-echo -e "\033[1;32m This Kernel [ ${MODULES_NOW} ] \033[0m"
+echo -e "This Kernel [ ${MODULES_NOW} ]"
 
 k510_ver=${VERSION_NOW%%.*}
 k510_maj=${VERSION_NOW##*.}
@@ -305,11 +279,9 @@ else
 fi
 
 # Check 5.10 kernel
-#if  [[ "${K510}" -eq "1" ]]; then
-#    if  [[ -z "${MAINLINE_UBOOT}" || "${IFSHOW_MAINLINE_UBOOT}" -eq "0" ]]; then
-#        echo -e "\033[1;31m This 5.10 kernel is recommended to be used in TF/SD cards! \033[0m"
-#        exit 1
-#    fi
+#if  [[ "${K510}" -eq "1" && -z "${MAINLINE_UBOOT}" ]]; then
+#    echo -e "This 5.10 kernel can used in TF/SD cards!"
+#    exit 1
 #fi
 
 # backup old bootloader
@@ -468,7 +440,7 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
 #Mainline U-BOOT detection
 FLASH_MAINLINE_UBOOT=0
-if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" && "${IFSHOW_MAINLINE_UBOOT}" -eq "1" ]]; then
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.

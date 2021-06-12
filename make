@@ -169,7 +169,6 @@ refactor_files() {
     case "${build_op}" in
         s905x3 | x96 | hk1 | h96 | ugoosx3)
             FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
-            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
             MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
             ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
@@ -177,7 +176,6 @@ refactor_files() {
             ;;
         s905x2 | x96max4g | x96max2g)
             FDTFILE="meson-g12a-x96-max.dtb"
-            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-x96max.bin"
             MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
             ANDROID_UBOOT=""
@@ -185,7 +183,6 @@ refactor_files() {
             ;;
         s905x | hg680p | b860h)
             FDTFILE="meson-gxl-s905x-p212.dtb"
-            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-p212.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
@@ -193,7 +190,6 @@ refactor_files() {
             ;;
         s905d | n1)
             FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
-            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-n1.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
@@ -201,7 +197,6 @@ refactor_files() {
             ;;
         s912 | h96proplus | octopus)
             FDTFILE="meson-gxm-octopus-planet.dtb"
-            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-zyxq.bin"
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
@@ -209,7 +204,6 @@ refactor_files() {
             ;;
         s922x | belink | belinkpro | ugoos)
             FDTFILE="meson-g12b-gtking-pro.dtb"
-            U_BOOT_EXT=1
             UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
             MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
             ANDROID_UBOOT=""
@@ -255,7 +249,7 @@ refactor_files() {
 
     # Add firmware information to the etc/flippy-openwrt-release
     echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
-    echo "U_BOOT_EXT='${U_BOOT_EXT}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "U_BOOT_EXT='${K510}'" >> etc/flippy-openwrt-release 2>/dev/null
     echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >> etc/flippy-openwrt-release 2>/dev/null
     echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
     echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null

@@ -8,24 +8,17 @@
 #======================================================================================
 
 # The script supports directly setting parameters for installation, skipping interactive selection
-# openwrt-update ${OPENWRT_FILE} ${IFSHOW_MAINLINE_UBOOT} ${AUTO_MAINLINE_UBOOT} ${RESTORE_CONFIG}
-# E.g: openwrt-update openwrt_s905d.img.gz TEST-UBOOT YES RESTORE
-# E.g: openwrt-update openwrt_s905d.img.gz NO-TEST-UBOOT NO NO-RESTORE
+# openwrt-update ${OPENWRT_FILE} ${AUTO_MAINLINE_UBOOT} ${RESTORE_CONFIG}
+# E.g: openwrt-update openwrt_s905d.img.gz YES RESTORE
+# E.g: openwrt-update openwrt_s905d.img.gz NO NO-RESTORE
 
 # You can also execute the script directly, and interactively select related functions
 # E.g: openwrt-update
 
 IMG_NAME=${1}
 
-# The MAINLINE_UBOOT is not perfect yet, and the installation is not prompted by default.
-if  [[ "${2}" == "TEST-UBOOT" ]]; then
-    IFSHOW_MAINLINE_UBOOT=1
-else
-    IFSHOW_MAINLINE_UBOOT=0
-fi
-
-AUTO_MAINLINE_UBOOT=${3}
-BACKUP_RESTORE_CONFIG=${4}
+AUTO_MAINLINE_UBOOT=${2}
+BACKUP_RESTORE_CONFIG=${3}
 
 EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 cd /mnt/${EMMC_NAME}p4/
@@ -270,11 +263,9 @@ if [ -f ${P2}/etc/flippy-openwrt-release ]; then
 fi
 
 # Check 5.10 kernel
-#if  [[ "${K510}" -eq "1" ]]; then
-#    if  [[ -z "${MAINLINE_UBOOT}" || "${IFSHOW_MAINLINE_UBOOT}" -eq "0" ]]; then
-#        echo -e "\033[1;31m This 5.10 kernel is recommended to be used in TF/SD cards! \033[0m"
-#        exit 1
-#    fi
+#if  [[ "${K510}" -eq "1" && -z "${MAINLINE_UBOOT}" ]]; then
+#    echo -e "This 5.10 kernel can used in TF/SD cards!"
+#    exit 1
 #fi
 
 #format NEW_ROOT
@@ -441,7 +432,7 @@ chmod 755 ./etc/rc.local*
 
 #Mainline U-BOOT detection
 FLASH_MAINLINE_UBOOT=0
-if  [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" && "${IFSHOW_MAINLINE_UBOOT}" -eq "1" ]]; then
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.

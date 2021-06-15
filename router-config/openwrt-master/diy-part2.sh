@@ -89,8 +89,8 @@ svn co https://github.com/ElonH/Rclone-OpenWrt/trunk package/openWrt-rclone
 
 # Add luci-app-diskman
 svn co https://github.com/lisaac/luci-app-diskman/trunk/applications/luci-app-diskman package/openwrt-diskman/luci-app-diskman
-wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -q -P package/openwrt-diskman/parted
-pushd package/openwrt-diskman/parted && mv -f Parted.Makefile Makefile 2>/dev/null && popd
+#wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -q -P package/openwrt-diskman/parted
+#pushd package/openwrt-diskman/parted && mv -f Parted.Makefile Makefile 2>/dev/null && popd
 
 # Add luci-app-amlogic
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic

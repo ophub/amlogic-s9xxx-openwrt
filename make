@@ -247,6 +247,10 @@ refactor_files() {
     [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > etc/modules.d/usb-net-rtl8152
     [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179
 
+    # Add cpustat
+    cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
+    [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
+    
     # Add firmware information to the etc/flippy-openwrt-release
     echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
     echo "U_BOOT_EXT='${K510}'" >> etc/flippy-openwrt-release 2>/dev/null
@@ -272,20 +276,6 @@ refactor_files() {
         echo " OpenWrt Kernel: ${op_version}" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
-    fi
-
-    source etc/openwrt_release 2>/dev/null
-    DISTRIB_RELEASE=${DISTRIB_RELEASE}
-    if  [[ "${DISTRIB_RELEASE}" != "21.02-SNAPSHOT" ]]; then
-        # Patches For openssl
-        SSL_CNF_PATCH=${configfiles_path}/patches/openssl/openssl_engine.patch
-        [ -f ${SSL_CNF_PATCH} ] && patch -p1 < ${SSL_CNF_PATCH} >/dev/null 2>&1
-
-        # Patches For cpustat
-        cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
-        cpustat_patch=${configfiles_path}/patches/cpustat/luci-admin-status-index-html.patch
-        [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
-        #[ -f ${cpustat_patch} ] && cd usr/lib/lua/luci/view/admin_status && patch -p0 < ${cpustat_patch} >/dev/null 2>&1 && cd ${root}
     fi
 
     sync

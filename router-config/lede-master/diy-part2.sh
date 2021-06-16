@@ -3,8 +3,6 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Build OpenWrt for Amlogic S9xxx STB
 # Function: Diy script (After Update feeds, Modify the default IP, hostname, theme, add/remove software packages, etc.)
-# Copyright (C) 2020 https://github.com/P3TERX/Actions-OpenWrt
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
 #========================================================================================================================
 
 # ------------------------------- Main source started -------------------------------
@@ -17,9 +15,6 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 
 # Add autocore support for armvirt
 sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/autocore/Makefile
-
-# build: ensure that dash isn't prepended twice to abi version suffix
-sed -i 's/$(call FormatABISuffix,$(1),$(if $(ABIV_$(1)),$(ABIV_$(1))/$(if $(ABIV_$(1)),$(ABIV_$(1)),$(call FormatABISuffix,$(1)/g' include/feeds.mk
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.31.4）
 # sed -i 's/192.168.1.1/192.168.31.4/g' package/base-files/files/bin/config_generate
@@ -56,3 +51,4 @@ rm -rf package/openwrt-ssrplus/luci-app-ssr-plus/po/zh_Hans 2>/dev/null
 # git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci
 #
 # ------------------------------- Other ends -------------------------------
+

@@ -15,8 +15,8 @@ sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/l
 # Modify some code adaptation
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
 
-# Add autocore
-sed -i 's/TARGET_rockchip/TARGET_armvirt/g' package/lean/autocore/Makefile
+# Add autocore support for armvirt
+sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/autocore/Makefile
 
 # build: ensure that dash isn't prepended twice to abi version suffix
 sed -i 's/$(call FormatABISuffix,$(1),$(if $(ABIV_$(1)),$(ABIV_$(1))/$(if $(ABIV_$(1)),$(ABIV_$(1)),$(call FormatABISuffix,$(1)/g' include/feeds.mk

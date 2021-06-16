@@ -39,6 +39,7 @@ svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/
 # Modify some code adaptation
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
 
+# build: ensure that dash isn't prepended twice to abi version suffix
 sed -i 's/$(call FormatABISuffix,$(1),$(if $(ABIV_$(1)),$(ABIV_$(1))/$(if $(ABIV_$(1)),$(ABIV_$(1)),$(call FormatABISuffix,$(1)/g' include/feeds.mk
 
 # Mydiy luci-app and luci-theme（use to /.config luci-app&theme）

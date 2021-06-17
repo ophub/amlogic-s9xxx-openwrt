@@ -165,7 +165,7 @@ replace_kernel() {
 
     # Operation environment check
     [ -x /usr/bin/openwrt-kernel ] || die "Please grant execution permission: chmod +x /usr/bin/openwrt-kernel"
-    #[ -n "$(uname -a | grep "OpenWrt")" ] || die "Please run openwrt-kernel script in the OpenWrt system."
+    [ -n "$( dmesg | grep 'meson' )" ] || die "Please run openwrt-kernel script in the Amlogic STB."
 
     EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
     P4_PATH="/mnt/${EMMC_NAME}p4"
@@ -387,11 +387,11 @@ dtb_update() {
 
 # print help info
 print_help() {
-    echo "Usage: $0  -e  (Extract the kernel)"
-    echo "       $0  -r  (Replace the kernel)"
-    echo "       $0  -d  (dtb-amlogic-*.tar.gz files update)"
-    echo "       $0  -h  (help)"
-    echo "       $0  -q  (quit)"
+    echo "Usage: $0  -e  [ extract the kernel ]"
+    echo "       $0  -r  [ replace the kernel ]"
+    echo "       $0  -d  [ dtb-amlogic-*.tar.gz files update ]"
+    echo "       $0  -h  [ help ]"
+    echo "       $0  -q  [ quit ]"
     exit 0
 }
 
@@ -401,15 +401,18 @@ menu() {
         clear
         cat <<EOF
 
-        —————————————[ openwrt-kernel ]————————————
-        |                                         |
-        |   e. Extract the kernel                 |
-        |   r. Replace the kernel                 |
-        |   d. dtb-amlogic-*.tar.gz files update  |
-        |   h. help                               |
-        |   q. quit                               |
-        |                                         |
-        ———————————————————————————————————————————
+        ┌─────────────[ openwrt-kernel ]─────────────┐
+        │                                            │
+        │    e. Extract the kernel                   │
+        │    r. Replace the kernel                   │
+        │    d. dtb-amlogic-*.tar.gz files update    │
+        │                                            │
+        ╞════════════════════════════════════════════╡
+        │                                            │
+        │    h. help                                 │
+        │    q. quit                                 │
+        │                                            │
+        └────────────────────────────────────────────┘
 
 EOF
         echo -ne "please select: [ ]\b\b"

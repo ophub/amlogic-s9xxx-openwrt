@@ -28,7 +28,7 @@ extract_kernel() {
     # Operation environment check
     [ -x openwrt-kernel ] || die "Please grant execution permission: sudo chmod +x openwrt-kernel"
     [ $(id -u) = 0 ] || die "Please run this script as root: sudo ./openwrt-kernel -e"
-    [ -n "$(uname -a | grep "OpenWrt")" ] && die "Please run openwrt-kernel script in Ubuntu and other systems."
+    #[ -n "$(uname -a | grep "OpenWrt")" ] && die "Please run openwrt-kernel script in Ubuntu and other systems."
 
     # Default setting ( Don't modify )
     build_path=${PWD}
@@ -165,7 +165,7 @@ replace_kernel() {
 
     # Operation environment check
     [ -x /usr/bin/openwrt-kernel ] || die "Please grant execution permission: chmod +x /usr/bin/openwrt-kernel"
-    [ -n "$(uname -a | grep "OpenWrt")" ] || die "Please run openwrt-kernel script in the OpenWrt system."
+    #[ -n "$(uname -a | grep "OpenWrt")" ] || die "Please run openwrt-kernel script in the OpenWrt system."
 
     EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
     P4_PATH="/mnt/${EMMC_NAME}p4"

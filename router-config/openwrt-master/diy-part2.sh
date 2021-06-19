@@ -3,6 +3,7 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Build OpenWrt for Amlogic S9xxx STB
 # Function: Diy script (After Update feeds, Modify the default IP, hostname, theme, add/remove software packages, etc.)
+# Source code repository: https://github.com/Lienol/openwrt / Branch: openwrt-21.02
 #========================================================================================================================
 
 # ------------------------------- Main source started -------------------------------

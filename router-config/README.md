@@ -286,13 +286,15 @@ The support for uploading to a third party comes from [Mikubill/transfer](https:
 
 For more instructions on the plug-in, see：[https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)
 
-Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the STB. Common for all `Amlogic S9xxx STB`.
+Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the STB.
 
 ### 8.2 Install using the operation panel
 
-Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
+`Log in to the default IP: 192.168.1.1` → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
 
-- Install using script commands: Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+### 8.3 Install using script commands
+
+`Log in to the default IP: 192.168.1.1` → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
 
 ```yaml
 openwrt-install

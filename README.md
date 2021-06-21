@@ -182,7 +182,7 @@ sudo apt-get install -y build-essential tar xz-utils unzip bzip2 p7zip p7zip-ful
 | Target System | QEMU ARM Virtual Machine |
 | Subtarget | QEMU ARMv8 Virtual Machine(cortex-a53) |
 | Target Profile | Default |
-| Target Images | squashfs |
+| Target Images | tar.gz |
 
 [For more instructions please see: router-config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config)
 

@@ -31,8 +31,8 @@ sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/p
 
 # ------------------------------- Lienol started -------------------------------
 #
-# Add branches package from Lienol/openwrt/branches/21.02/package and Remove duplicate packages
-svn co https://github.com/Lienol/openwrt/branches/21.02/package/{lean,default-settings} package
+# Add branches package from Lienol/openwrt/branches/main/package and Remove duplicate packages
+svn co https://github.com/Lienol/openwrt/branches/main/package/{lean,default-settings} package
 rm -rf package/lean/{luci-app-frpc,luci-app-frps,libtorrent-rasterbar} 2>/dev/null
 
 # Add firewall rules

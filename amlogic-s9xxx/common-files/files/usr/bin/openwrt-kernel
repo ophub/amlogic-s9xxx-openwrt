@@ -165,7 +165,7 @@ replace_kernel() {
 
     # Operation environment check
     [ -x /usr/bin/openwrt-kernel ] || die "Please grant execution permission: chmod +x /usr/bin/openwrt-kernel"
-    [ -n "$( dmesg | grep 'meson' )" ] || die "Please run openwrt-kernel script in the Amlogic STB."
+    #[ -n "$( dmesg | grep 'meson' )" ] || die "Please run openwrt-kernel script in the Amlogic STB."
 
     EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
     P4_PATH="/mnt/${EMMC_NAME}p4"

@@ -152,7 +152,7 @@ jobs:
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
         cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.12.12_5.4.127
+        sudo ./make -d -b s905d -k 5.12.12_5.4.127
         [ -d ipk ] || mkdir -p ipk
         cp -rf $(find openwrt/bin/packages/ -type f -name "*.ipk") ipk/ && sync
         sudo tar -czf ipk.tar.gz ipk && mv -f ipk.tar.gz out/ && sync
@@ -166,30 +166,16 @@ jobs:
       with:
         path: ${{ env.PACKAGED_OUTPUTPATH }}/
 
-    - name: Upload OpenWrt Firmware to cowtransfer
-      if: steps.build.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${{ env.PACKAGED_OUTPUTPATH }}/{openwrt_s9xxx_*,openwrt_n1_*} 2>&1 | tee cowtransfer.log
-        echo "COW_URL=$(cat cowtransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV
-
-    - name: Upload OpenWrt Firmware to WeTransfer
-      if: steps.build.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${{ env.PACKAGED_OUTPUTPATH }}/{openwrt_s9xxx_*,openwrt_n1_*} 2>&1 | tee wetransfer.log
-        echo "WET_URL=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV
-
     - name: Upload OpenWrt Firmware to Release
       uses: softprops/action-gh-release@v1
       if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: openwrt_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
+        tag_name: openwrt_N1_lede_${{ env.PACKAGED_OUTPUTDATE }}
         files: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
-          This is OpenWrt firmware for Amlogic S9xxx STB
+          This is OpenWrt firmware for N1
           * Firmware information
           Default IP: 192.168.1.1
           Default username: root

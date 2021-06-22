@@ -435,15 +435,16 @@ SSH操作时，复制 `ssh ...io` 这部分绿色的 SSH 远程连接命令。MA
 
 Common commands:
 ```
-opkg update                     #更新可用的软件包列表  
-opkg upgrade <pkgs>             #升级软件包  
-opkg install <pkgs>             #安装软件包  
-opkg configure <pkgs>           #配置未打包的软件包  
-opkg remove <pkgs | regexp>     #移除软件包
-opkg list                       #列出可用的软件包  
-opkg list-installed             #列出已经安装的软件包  
-opkg list-upgradable            #列出已安装和可升级的软件包
-opkg list | grep <pkgs>         #查找与关键字匹配的软件包
+opkg update                                       #更新可用的软件包列表
+opkg upgrade <pkgs>                               #升级软件包
+opkg install <pkgs>                               #安装软件包
+opkg install --force-reinstall <pkgs>             #强制重新安装软件包
+opkg configure <pkgs>                             #配置未打包的软件包
+opkg remove <pkgs | regexp>                       #移除软件包
+opkg list                                         #列出可用的软件包
+opkg list-installed                               #列出已经安装的软件包
+opkg list-upgradable                              #列出已安装和可升级的软件包
+opkg list | grep <pkgs>                           #查找与关键字匹配的软件包
 ```
 更多帮助请查阅 [opkg](https://openwrt.org/docs/guide-user/additional-software/opkg)
 

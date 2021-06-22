@@ -32,8 +32,8 @@ sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/p
 # ------------------------------- Lienol started -------------------------------
 #
 # Add branches package from Lienol/openwrt/branches/main/package and Remove duplicate packages
-svn co https://github.com/Lienol/openwrt/branches/main/package/{lean,default-settings} package
-rm -rf package/lean/{luci-app-frpc,luci-app-frps,libtorrent-rasterbar,luci-lib-fs} 2>/dev/null
+svn co https://github.com/Lienol/openwrt/trunk/package/{lean,default-settings} package
+rm -rf package/lean/{luci-app-frpc,luci-app-frps,libtorrent-rasterbar} 2>/dev/null
 
 # Add firewall rules
 zzz_iptables_row=$(sed -n '/iptables/=' package/default-settings/files/zzz-default-settings | head -n 1)
@@ -92,7 +92,7 @@ svn co https://github.com/lisaac/luci-app-diskman/trunk/applications/luci-app-di
 #pushd package/openwrt-diskman/parted && mv -f Parted.Makefile Makefile 2>/dev/null && popd
 
 # Add luci-app-amlogic
-svn co https://github.com/ophub/luci-app-amlogic/trunk package/luci-app-amlogic
+svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 
 # Apply patch
 # git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci

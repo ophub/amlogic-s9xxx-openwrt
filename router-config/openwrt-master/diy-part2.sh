@@ -33,7 +33,7 @@ sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/p
 #
 # Add branches package from Lienol/openwrt/branches/main/package and Remove duplicate packages
 svn co https://github.com/Lienol/openwrt/branches/main/package/{lean,default-settings} package
-rm -rf package/lean/{luci-app-frpc,luci-app-frps,libtorrent-rasterbar} 2>/dev/null
+rm -rf package/lean/{luci-app-frpc,luci-app-frps,libtorrent-rasterbar,luci-lib-fs} 2>/dev/null
 
 # Add firewall rules
 zzz_iptables_row=$(sed -n '/iptables/=' package/default-settings/files/zzz-default-settings | head -n 1)

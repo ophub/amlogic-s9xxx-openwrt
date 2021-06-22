@@ -451,15 +451,16 @@ For such usage of OpenWrt firmware, **`it's warmly recommended to use the Image 
 
 Common commands:
 ```
-opkg update                     #Update list of available packages  
-opkg upgrade <pkgs>             #Upgrade packages  
-opkg install <pkgs>             #Install package(s)  
-opkg configure <pkgs>           #Configure unpacked package(s)  
-opkg remove <pkgs | regexp>     #Remove package(s)
-opkg list                       #List available packages  
-opkg list-installed             #List installed packages  
-opkg list-upgradable            #List installed and upgradable packages
-opkg list | grep <pkgs>         #Find similar packages names
+opkg update                                   #Update list of available packages  
+opkg upgrade <pkgs>                           #Upgrade packages  
+opkg install <pkgs>                           #Install package(s)
+opkg install --force-reinstall <pkgs>         #Force reinstall package(s)
+opkg configure <pkgs>                         #Configure unpacked package(s)  
+opkg remove <pkgs | regexp>                   #Remove package(s)
+opkg list                                     #List available packages  
+opkg list-installed                           #List installed packages  
+opkg list-upgradable                          #List installed and upgradable packages
+opkg list | grep <pkgs>                       #Find similar packages names
 ```
 [For more instructions please see: opkg](https://openwrt.org/docs/guide-user/additional-software/opkg)
 

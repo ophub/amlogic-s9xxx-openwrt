@@ -92,7 +92,7 @@ svn co https://github.com/lisaac/luci-app-diskman/trunk/applications/luci-app-di
 #pushd package/openwrt-diskman/parted && mv -f Parted.Makefile Makefile 2>/dev/null && popd
 
 # Add luci-app-amlogic
-svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
+svn co https://github.com/ophub/luci-app-amlogic/trunk package/luci-app-amlogic
 
 # Apply patch
 # git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci

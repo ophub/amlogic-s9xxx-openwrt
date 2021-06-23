@@ -293,10 +293,11 @@ refactor_files() {
        sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt
     fi
 
+    [[ -n "${UBOOT_OVERLOAD}" ]] && cp -f ${uboot_path}/${UBOOT_OVERLOAD} . && sync && chmod +x ${UBOOT_OVERLOAD}
     # Add u-boot.ext for 5.10 kernel
     if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then
        if [ -f ${uboot_path}/${UBOOT_OVERLOAD} ]; then
-          cp -f ${uboot_path}/${UBOOT_OVERLOAD} u-boot.ext
+          cp -f ${uboot_path}/${UBOOT_OVERLOAD} u-boot.ext && sync && chmod +x u-boot.ext
        else
           die "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
        fi

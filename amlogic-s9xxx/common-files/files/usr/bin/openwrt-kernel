@@ -419,7 +419,6 @@ replace_kernel() {
     sleep 3
 
     rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz 2>/dev/null
-    rm -f ${P4_PATH}/u-boot* 2>/dev/null
     sync
 
     sed -i '/KERNEL_VERSION/d' /etc/flippy-openwrt-release 2>/dev/null

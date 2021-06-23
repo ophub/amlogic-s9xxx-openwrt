@@ -254,7 +254,7 @@ replace_kernel() {
 
     # Check version consistency
     if [ "${V510}" -lt "${K510}" ]; then
-        echo -e "Update to kernel 5.10 or higher, U-BOOT will be installed."
+        echo -e "Update to kernel 5.10 or higher and install U-BOOT."
         if [ -f "/etc/flippy-openwrt-release" ]; then
             # U-BOOT adaptation
             source /etc/flippy-openwrt-release 2>/dev/null
@@ -291,7 +291,7 @@ replace_kernel() {
                         die "The ${UBOOT_OVERLOAD} file download failed. please try again."
                     fi
                 else
-                    echo -e "The ${UBOOT_OVERLOAD} files has been found."
+                    echo -e "The ${UBOOT_OVERLOAD} file has been found."
                 fi
             else
                 die "The 5.10 kernel cannot be used without UBOOT_OVERLOAD."
@@ -313,20 +313,16 @@ replace_kernel() {
                 fi
             fi
         else
-            die "The /etc/flippy-openwrt-release file is missing and cannot be upgraded."
+            die "The /etc/flippy-openwrt-release file is missing and cannot be update."
         fi
 
         # Copy u-boot.ext and u-boot.emmc
         if [ -f "/boot/${UBOOT_OVERLOAD}" ]; then
             cp -f "/boot/${UBOOT_OVERLOAD}" /boot/u-boot.ext && sync && chmod +x /boot/u-boot.ext
             cp -f "/boot/${UBOOT_OVERLOAD}" /boot/u-boot.emmc && sync && chmod +x /boot/u-boot.emmc
-
-            sed -i '/UBOOT_OVERLOAD/d' /etc/flippy-openwrt-release 2>/dev/null
-            echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >> /etc/flippy-openwrt-release 2>/dev/null
-
             echo -e "The ${UBOOT_OVERLOAD} file copy is complete."
         else
-            die "The UBOOT_OVERLOAD file is missing and cannot be upgraded."
+            die "The UBOOT_OVERLOAD file is missing and cannot be update."
         fi
 
         # Write Mainline bootloader
@@ -334,10 +330,6 @@ replace_kernel() {
             echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ] to [ /dev/${EMMC_NAME} ]"
             dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
             dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-
-            sed -i '/MAINLINE_UBOOT/d' /etc/flippy-openwrt-release 2>/dev/null
-            echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >> /etc/flippy-openwrt-release 2>/dev/null
-
             echo -e "The MAINLINE_UBOOT file write is complete."
         fi
     fi

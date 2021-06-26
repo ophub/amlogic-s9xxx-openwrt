@@ -21,7 +21,7 @@ sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999
 sed -i 's/发送/Transmission/g' feeds/luci/applications/luci-app-transmission/po/zh_Hans/transmission.po
 
 # Delete CONFLICTS
-sed -i '/CONFLICTS/d' package/libs/ustream-ssl/Makefile 2>/dev/null
+# sed -i '/CONFLICTS/d' package/libs/ustream-ssl/Makefile 2>/dev/null
 
 # Modify ifname to device for dockerd
 # sed -i 's/ifname/device/g' feeds/packages/utils/dockerd/files/dockerd.init

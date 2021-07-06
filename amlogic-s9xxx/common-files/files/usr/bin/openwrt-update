@@ -248,13 +248,13 @@ ANDROID_UBOOT=""
 if [ -f ${P2}/etc/flippy-openwrt-release ]; then
     source ${P2}/etc/flippy-openwrt-release 2>/dev/null
     # Update the parameters used
+    UBOOT_OVERLOAD=${UBOOT_OVERLOAD}
     MAINLINE_UBOOT=${MAINLINE_UBOOT}
     ANDROID_UBOOT=${ANDROID_UBOOT}
 
     # Unused parameters
     FDTFILE=${FDTFILE}
     U_BOOT_EXT=${U_BOOT_EXT}
-    UBOOT_OVERLOAD=${UBOOT_OVERLOAD}
     KERNEL_VERSION=${KERNEL_VERSION}
     SOC=${SOC}
 
@@ -535,9 +535,14 @@ rm -f s905_autoscript* aml_autoscript*
 
 if  [[ "${K510}" -eq "1" ]]; then
     if  [ -f u-boot.ext ]; then
-        cp -f -v u-boot.ext u-boot.emmc
+        cp -vf u-boot.ext u-boot.emmc
+    elif [ -f ${P1}/${UBOOT_OVERLOAD} ]; then
+        cp -vf ${P1}/${UBOOT_OVERLOAD} ${UBOOT_OVERLOAD}
+        cp -vf ${P1}/${UBOOT_OVERLOAD} u-boot.ext
+        cp -vf ${P1}/${UBOOT_OVERLOAD} u-boot.emmc
+        chmod +x u-boot*
     else
-        cp -f -v u-boot.sd u-boot.emmc
+        cp -vf u-boot.sd u-boot.emmc
     fi
 fi
 

@@ -243,10 +243,21 @@ else
 fi
 
 # flippy-openwrt-release info
+UBOOT_OVERLOAD=""
 MAINLINE_UBOOT=""
 ANDROID_UBOOT=""
-if [ -f ${P2}/etc/flippy-openwrt-release ]; then
-    source ${P2}/etc/flippy-openwrt-release 2>/dev/null
+env_openwrt_file=""
+
+if  [ -f "${P2}/etc/flippy-openwrt-release" ]; then
+    env_openwrt_file="${P2}/etc/flippy-openwrt-release"
+elif [ -f "/etc/flippy-openwrt-release" ]; then
+    env_openwrt_file="/etc/flippy-openwrt-release"
+else
+    env_openwrt_file=""
+fi
+
+if [ -n "${env_openwrt_file}" ]; then
+    source "${env_openwrt_file}" 2>/dev/null
     # Update the parameters used
     UBOOT_OVERLOAD=${UBOOT_OVERLOAD}
     MAINLINE_UBOOT=${MAINLINE_UBOOT}

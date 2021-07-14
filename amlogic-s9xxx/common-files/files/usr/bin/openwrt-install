@@ -44,56 +44,59 @@ echo "SPECIFY_DTB: ${SPECIFY_DTB}"
 TARGET_SHARED_FSTYPE=btrfs
 
 hasdrives=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
-if [ "$hasdrives" = "" ]; then
+if [ "${hasdrives}" = "" ]; then
     echo "No EMMC or SD devices were found in this system!!! "
     exit 1
 fi
 
 avail=$(lsblk | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])' | sort | uniq)
-if [ "$avail" = "" ]; then
+if [ "${avail}" == "" ]; then
     echo "The system did not find any available disk devices!!!"
+    exit 1
+elif [[ "$(echo "${avail}" | awk -F'mmcblk' '{print NF-1}')" -ne "1" ]]; then
+    echo "Please remove the more SD-card and try again."
     exit 1
 fi
 
 runfrom=$(lsblk | grep -e '/$' | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])')
-if [ "$runfrom" = "" ]; then
+if [ "${runfrom}" == "" ]; then
     echo "Root file system not found!!! "
     exit 1
 fi
 
-emmc=$(echo $avail | sed "s/$runfrom//" | sed "s/sd[a-z][0-9]//g" | sed "s/ //g")
-if [ "$emmc" = "" ]; then
+emmc=$(echo ${avail} | sed "s/${runfrom}//" | sed "s/sd[a-z][0-9]//g" | sed "s/ //g")
+if [ "${emmc}" == "" ]; then
     echo "No idle EMMC equipment is found, or the system is already running on EMMC equipment!"
     exit 1
 fi
 
-if [ "$runfrom" = "$avail" ]; then
+if [ "${runfrom}" == "${avail}" ]; then
     echo "Your system is already running on the EMMC device!!! "
     exit 1
 fi
 
-if [ $runfrom = $emmc ]; then
+if [ "$runfrom" == "${emmc}" ]; then
     echo "Your system is already running on the EMMC device!!! "
     exit 1
 fi
 
-if [ "$(echo $emmc | grep mmcblk)" = "" ]; then
+if [ "$(echo ${emmc} | grep mmcblk)" = "" ]; then
     echo "There seems to be no EMMC device on your system!!! "
     exit 1
 fi
 
 # EMMC DEVICE NAME
-EMMC_NAME="$emmc"
-EMMC_DEVPATH="/dev/$EMMC_NAME"
-echo $EMMC_DEVPATH
+EMMC_NAME="${emmc}"
+EMMC_DEVPATH="/dev/${EMMC_NAME}"
+echo ${EMMC_DEVPATH}
 EMMC_SIZE=$(lsblk -l -b -o NAME,SIZE | grep ${EMMC_NAME} | sort | uniq | head -n1 | awk '{print $2}')
-echo "$EMMC_NAME : $EMMC_SIZE bytes"
+echo "${EMMC_NAME} : ${EMMC_SIZE} bytes"
 
 ROOT_NAME=$(lsblk -l -o NAME,MAJ:MIN,MOUNTPOINT | grep -e '/$' | awk '{print $1}')
-echo "ROOTFS: $ROOT_NAME"
+echo "ROOTFS: ${ROOT_NAME}"
 
 BOOT_NAME=$(lsblk -l -o NAME,MAJ:MIN,MOUNTPOINT | grep -e '/boot$' | awk '{print $1}')
-echo "BOOT: $BOOT_NAME"
+echo "BOOT: ${BOOT_NAME}"
 
 #Choose the type of installation box
 FDTFILE="meson-sm1-x96-max-plus.dtb"

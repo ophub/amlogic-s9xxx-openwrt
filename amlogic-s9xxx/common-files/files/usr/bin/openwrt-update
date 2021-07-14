@@ -20,7 +20,14 @@ IMG_NAME=${1}
 AUTO_MAINLINE_UBOOT=${2}
 BACKUP_RESTORE_CONFIG=${3}
 
-EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
+EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])' | sort | uniq)
+if [ "${EMMC_NAME}" == "" ]; then
+    echo "The system did not find any available disk devices!!!"
+    exit 1
+elif [[ "$(echo "${EMMC_NAME}" | awk -F'mmcblk' '{print NF-1}')" -ne "1" ]]; then
+    echo "Please remove the more SD-card and try again."
+    exit 1
+fi
 cd /mnt/${EMMC_NAME}p4/
 
 if [[ "${IMG_NAME}" == *.img ]]; then
@@ -86,7 +93,7 @@ else
 fi
 
 # check file
-if  [ ! -f "$IMG_NAME" ]; then
+if  [ ! -f "${IMG_NAME}" ]; then
     echo "No update file found."
     exit 1
 else

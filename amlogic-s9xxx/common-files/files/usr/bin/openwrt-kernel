@@ -334,7 +334,7 @@ replace_kernel() {
         fi
     fi
 
-    echo -e "Package [ ${flippy_version} ] related files ..."
+    echo -e "Unpacking [ ${flippy_version} ] related files ..."
 
     # 01. for /boot five files
     rm -f /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null && sync
@@ -387,13 +387,13 @@ replace_kernel() {
     [ -f "/boot/config-${flippy_version}" ] || die "/boot/config-${flippy_version} file is missing."
     [ -f "/boot/System.map-${flippy_version}" ] || die "/boot/System.map-${flippy_version} file is missing."
 
-    echo -e "01. Package [ ${build_boot} ] complete."
+    echo -e "01. Unpacking [ ${build_boot} ] complete."
     sleep 3
 
     # 02 for /boot/dtb/amlogic/*
     tar -xzf ${P4_PATH}/${build_dtb} -C /boot/dtb/amlogic && sync
     [ "$( ls /boot/dtb/amlogic -l 2>/dev/null | grep "^-" | wc -l )" -ge "10" ] || die "/boot/dtb/amlogic file is missing."
-    echo -e "02. Package [ ${build_dtb} ] complete."
+    echo -e "02. Unpacking [ ${build_dtb} ] complete."
     sleep 3
 
     # 03 for /lib/modules/*
@@ -407,7 +407,7 @@ replace_kernel() {
             if [ "${x}" -eq "0" ]; then
                 die "Error *.ko Files not found."
             fi
-    echo -e "03. Package [ ${build_modules} ] complete."
+    echo -e "03. Unpacking [ ${build_modules} ] complete."
     sleep 3
 
     rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz 2>/dev/null

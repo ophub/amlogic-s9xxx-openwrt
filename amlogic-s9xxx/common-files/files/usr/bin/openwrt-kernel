@@ -166,7 +166,7 @@ extract_kernel() {
 # When there is no U-BOOT file in related directory, the script will auto try to download the file from the server for completion:
 # UBOOT_OVERLOAD: https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-u-boot"
 # MAINLINE_UBOOT: https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files/lib/u-boot
-
+#
 replace_kernel() {
 
     echo -e "Start update the openwrt kernel."
@@ -348,7 +348,7 @@ replace_kernel() {
             uInitrd_original=$(md5sum /boot/uInitrd-${flippy_version} | awk '{print $1}')
             uInitrd_new=$(md5sum /boot/uInitrd | awk '{print $1}')
             if [ "${uInitrd_original}" = "${uInitrd_new}" ]; then
-                echo -e "Package [ /boot/uInitrd ] complete."
+                echo -e "Unpack [ /boot/uInitrd ] complete."
                 rm -f /boot/uInitrd-${flippy_version} && sync
                 break
             else
@@ -370,7 +370,7 @@ replace_kernel() {
             vmlinuz_original=$(md5sum /boot/vmlinuz-${flippy_version} | awk '{print $1}')
             vmlinuz_new=$(md5sum /boot/zImage | awk '{print $1}')
             if [ "${vmlinuz_original}" = "${vmlinuz_new}" ]; then
-                echo -e "Package [ /boot/zImage ] complete."
+                echo -e "Unpack [ /boot/zImage ] complete."
                 rm -f /boot/vmlinuz-${flippy_version} && sync
                 break
             else

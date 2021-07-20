@@ -260,18 +260,12 @@ refactor_files() {
     echo "KERNEL_VERSION='${build_usekernel}'" >> etc/flippy-openwrt-release 2>/dev/null
     echo "SOC='${AMLOGIC_SOC}'" >> etc/flippy-openwrt-release 2>/dev/null
     echo "K510='${K510}'" >> etc/flippy-openwrt-release 2>/dev/null
-    # Compatible with the old version
-    ln -sf /etc/flippy-openwrt-release lib/u-boot/openwrt-env 2>/dev/null
 
     # Add firmware version information to the terminal page
     if  [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/ 2>/dev/null ))
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " Install command: openwrt-install" >> etc/banner
-        echo " Update command: openwrt-update" >> etc/banner
-        echo " Replace kernel command: openwrt-kernel" >> etc/banner
-        echo " Backup & Restore command: openwrt-backup" >> etc/banner
-        echo " -----------------------------------------------------" >> etc/banner
+        echo " Install: System → Amlogic Service → Install OpenWrt" >> etc/banner
         echo " Amlogic SoC: ${build_op}" >> etc/banner
         echo " OpenWrt Kernel: ${op_version}" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner

@@ -226,8 +226,7 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
       Default password: password
       Default WIFI name: OpenWrt
       Default WIFI password: none
-      Install command: openwrt-install
-      Update command: openwrt-update
+      Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
 ```
 ### 6.3 Save to a third party
 
@@ -300,9 +299,9 @@ Choose the corresponding firmware according to your STB. Then write the IMG file
 openwrt-install
 ```
 
-When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-install), `select the name` of the Amlogic S9xxx STB you own in the menu.
+When writing into EMMC through `openwrt-install`, `select the name` of the Amlogic S9xxx STB you own in the menu.
 
-For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-install), [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic S9xxx STB you own.
+For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through `openwrt-install`, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic S9xxx STB you own.
 
 ## 9. Update firmware
 
@@ -317,9 +316,9 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 ```yaml
 openwrt-update
 ```
-💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the [openwrt-update](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-update) script will automatically find the `update file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories.
+💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the `openwrt-update` script will automatically find the `update file` from the `/mnt/mmcblk*p4/` and `/tmp/upload/` directories.
     
-If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/upload/`***  directory, you can just enter the ***`openwrt-update`*** command without specifying a specific `update file`. The `openwrt-update` will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update specified_update_file`*** command to specify the `update file`. When the `update file` is not found in the `/mnt/mmcblk*p4/` directory, the `openwrt-update` will search for the `update file` in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the update operation. 
+If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** and ***`/tmp/upload/`***  directory, you can just enter the ***`openwrt-update`*** command without specifying a specific `update file`. The `openwrt-update` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update specified_update_file`*** command to specify the `update file`. When the `update file` is not found in the `/mnt/mmcblk*p4/` directory, the `openwrt-update` script will search for the `update file` in the `/tmp/upload/` directory and move it to the `/mnt/mmcblk*p4/` directory to perform the update operation. 
 
 - The `openwrt-update` update file search order
 

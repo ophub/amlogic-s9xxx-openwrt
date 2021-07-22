@@ -43,45 +43,25 @@ echo "SPECIFY_DTB: ${SPECIFY_DTB}"
 # shared partition can be ext4, xfs, btrfs, f2fs
 TARGET_SHARED_FSTYPE=btrfs
 
-hasdrives=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
-if [ "${hasdrives}" = "" ]; then
-    echo "No EMMC or SD devices were found in this system!!! "
-    exit 1
-fi
-
-avail=$(lsblk | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])' | sort | uniq)
-if [ "${avail}" == "" ]; then
-    echo "The system did not find any available disk devices!!!"
-    exit 1
-elif [[ "$(echo "${avail}" | awk -F 'mmcblk' '{print NF-1}')" -ne "1" ]]; then
-    echo "Please remove the more SD-card and try again."
-    exit 1
-fi
-
-runfrom=$(lsblk | grep -e '/$' | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])')
-if [ "${runfrom}" == "" ]; then
-    echo "Root file system not found!!! "
-    exit 1
-fi
-
-emmc=$(echo ${avail} | sed "s/${runfrom}//" | sed "s/sd[a-z][0-9]//g" | sed "s/ //g")
+emmc=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 if [ "${emmc}" == "" ]; then
-    echo "No idle EMMC equipment is found, or the system is already running on EMMC equipment!"
+    echo "No EMMC or SD devices were found in this system!"
     exit 1
 fi
 
-if [ "${runfrom}" == "${avail}" ]; then
-    echo "Your system is already running on the EMMC device!!! "
+if [ "$(echo ${emmc} | grep mmcblk)" == "" ]; then
+    echo "There seems to be no EMMC device on your system!"
     exit 1
 fi
 
-if [ "$runfrom" == "${emmc}" ]; then
-    echo "Your system is already running on the EMMC device!!! "
+if [[ "$(echo "${emmc}" | awk -F 'mmcblk' '{print NF-1}' | head -n 1)" -ne "1" ]]; then
+    echo "There seems to be no EMMC device on your system!"
     exit 1
 fi
 
-if [ "$(echo ${emmc} | grep mmcblk)" = "" ]; then
-    echo "There seems to be no EMMC device on your system!!! "
+sd=$(grep -wE '/|/overlay' /proc/mounts | grep -oE 'sd[a-z][0-9]')
+if [ "${sd}" == "" ]; then
+    echo "you are running in emmc mode, please boot system with usb!"
     exit 1
 fi
 

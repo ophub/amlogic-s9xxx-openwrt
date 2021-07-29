@@ -13,7 +13,7 @@ inputs:
   amlogic_kernel:
     description: 'Choose kernel.'
     required: false
-    default: '5.10.31.TF_5.4.113'
+    default: '5.13.2_5.4.132'
   amlogic_size:
     description: 'Choose root size.'
     required: false

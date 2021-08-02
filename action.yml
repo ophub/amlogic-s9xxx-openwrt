@@ -40,7 +40,7 @@ runs:
         make_command=" -d"
         [ -n ${{ inputs.amlogic_openwrt }} ] && make_command="${make_command} -b ${{ inputs.amlogic_openwrt }}"
         [ -n ${{ inputs.amlogic_kernel }} ] && make_command="${make_command} -k ${{ inputs.amlogic_kernel }}"
-        [ -n ${{ inputs.auto_kernel }} ] && make_command="${make_command} -u ${{ inputs.auto_kernel }}"
+        [ -n ${{ inputs.auto_kernel }} ] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [ -n ${{ inputs.amlogic_size }} ] && make_command="${make_command} -s ${{ inputs.amlogic_size }}"
         sudo chmod +x make
         sudo ./make ${make_command}

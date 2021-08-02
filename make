@@ -668,10 +668,10 @@ if [[ -n "${update_kernel}" && "${update_kernel}" == "true" ]]; then
         echo -e "(${i}) [ ${TMP_ARR_KERNELS[$i]} ] is latest kernel."
 
         # Auto download from kernel library
-        if [ ! -d "${kernel_path}/${KERNEL_VAR}" ]; then
-            echo -e "(${i}) ${KERNEL_VAR} Kernel loading from [ ${kernel_library}/${KERNEL_VAR} ]"
-            svn checkout ${kernel_library}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR}
-            rm -rf ${kernel_path}/${KERNEL_VAR}/.svn >/dev/null && sync
+        if [ ! -d "${kernel_path}/${TMP_ARR_KERNELS[$i]}" ]; then
+            echo -e "(${i}) ${TMP_ARR_KERNELS[$i]} Kernel loading from [ ${kernel_library}/${TMP_ARR_KERNELS[$i]} ]"
+            svn checkout ${kernel_library}/${TMP_ARR_KERNELS[$i]} ${kernel_path}/${TMP_ARR_KERNELS[$i]}
+            rm -rf ${kernel_path}/${TMP_ARR_KERNELS[$i]}/.svn >/dev/null && sync
             let i++
         fi
 

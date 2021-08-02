@@ -51,7 +51,7 @@
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.13.2_5.4.132 -u true
+    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.13.2_5.4.132
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -82,7 +82,7 @@
 | armvirt64_path         | no                     | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，使用文件在当前工作流中的路径如 `openwrt/bin/targets/*/*/*.tar.gz` |
 | amlogic_openwrt        | s905d_s905x3           | 设置打包盒子的 `SOC` ，默认 `all` 打包全部盒子，可指定单个盒子如 `s905x3` ，可选择多个盒子用_连接如 `s905x3_s905d` 。各盒子的SoC代码为：`s905` `s905d` `s905x2` `s905x3` `s912` `s922x` |
 | amlogic_kernel         | 5.13.2_5.4.132         | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
-| update_kernel          | true                   | 设置是否自动升级到同系列最新内核，如 `5.4.132` 的 `5.4` 系列有有最新版本内核 `5.4.133`，则自动替换为编译最新版。默认值 `true`。 |
+| update_kernel          | true                   | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `amlogic_kernel` 中指定的内核如 5.13.2 的 5.13 同系列是否有更新的版本，如有 5.13.3 及之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | amlogic_size           | 1024                   | 设置固件 ROOT 分区的大小                         |
 
 - GitHub Action 输出变量说明
@@ -134,7 +134,7 @@
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.13.2_5.4.132 -u true
+    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.13.2_5.4.132
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -152,7 +152,7 @@ sudo apt-get install -y build-essential tar xz-utils unzip bzip2 p7zip p7zip-ful
 2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。
 4. 将内核包按对应的版本号命名如 `5.13.2` 放入 `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` 目录下。
-5. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3_s905d -k 5.13.2_5.4.132` ，打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
+5. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make` 进行选择设置，打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
 
 ## 打包命令的相关参数说明
 
@@ -173,7 +173,7 @@ sudo apt-get install -y build-essential tar xz-utils unzip bzip2 p7zip p7zip-ful
 | -d | Defaults | 使用默认配置 |
 | -b | Build | 指定机顶盒型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 可以指定的型号有: `s905x3`, `s905x2`, `s905x`, `s905d`, `s922x`, `s912` |
 | -k | Kernel | 指定内核，如 `-k 5.4.132` . 多个内核使用 `_` 进行连接，如 `-k 5.13.2_5.4.132` [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) |
-| -u | update | 设置是否自动升级到同系列最新内核，如 `5.4.132` 的 `5.4` 系列有有最新版本内核 `5.4.133`，则自动替换为编译最新版。默认值 `true` |
+| -u | update | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.13.2 的 5.13 同系列是否有更新的版本，如有 5.13.3 及之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -s | Size | 对固件的大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
 | -h | help | 展示帮助文档. |
 

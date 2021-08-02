@@ -547,7 +547,7 @@ while [ "${1}" ]; do
             : ${firmware:="${firmwares[0]}"}
             : ${kernel:="${kernels[-1]}"}
             : ${build:="all"}
-            : ${update_kernel:="true"}
+            : ${auto_kernel:="true"}
             ;;
         -b | --build)
             build=${2}
@@ -585,9 +585,9 @@ while [ "${1}" ]; do
                  die "Invalid kernel [ ${2} ]!"
             fi
             ;;
-        -u | --update)
-            update_kernel=${2}
-            if [ -n "${update_kernel}" ]; then
+        -a | --autokernel)
+            auto_kernel=${2}
+            if [ -n "${auto_kernel}" ]; then
                 shift
             else
                 die "Invalid size [ ${2} ]!"
@@ -634,7 +634,7 @@ fi
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
 # Check the new version on the kernel library
-if [[ -n "${update_kernel}" && "${update_kernel}" == "true" ]]; then
+if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then
 
     TMP_ARR_KERNELS=()
     SERVER_KERNEL_URL=${kernel_library#*com\/}

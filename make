@@ -20,6 +20,7 @@ armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 configfiles_path=${amlogic_path}/common-files
 kernel_library="https://github.com/ophub/flippy-kernel/tree/main/library"
+command_file="https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic/root/usr/bin"
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -251,6 +252,10 @@ refactor_files() {
     # Add cpustat
     cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
     [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
+
+    # Synchronous installation of update and other command scripts
+    svn checkout ${command_file} usr/bin && sync && chmod +x usr/bin/openwrt-*
+    rm -rf usr/bin/.svn >/dev/null
     
     # Add firmware information to the etc/flippy-openwrt-release
     echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
@@ -666,7 +671,7 @@ if [[ -n "${update_kernel}" && "${update_kernel}" == "true" ]]; then
         if [ ! -d "${kernel_path}/${KERNEL_VAR}" ]; then
             echo -e "(${i}) ${KERNEL_VAR} Kernel loading from [ ${kernel_library}/${KERNEL_VAR} ]"
             svn checkout ${kernel_library}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR}
-            pushd ${kernel_path}/${KERNEL_VAR} && sudo rm -rf .svn && popd && sync
+            rm -rf ${kernel_path}/${KERNEL_VAR}/.svn >/dev/null && sync
             let i++
         fi
 

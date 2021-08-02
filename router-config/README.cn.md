@@ -384,7 +384,7 @@ REPO_BRANCH: openwrt-19.07
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
-修改 `-d` 后面的参数为你的机顶盒的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.7.2` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/codesnas/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
+修改 `-d` 后面的参数为你的机顶盒的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.7.2` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
 
 ### 10.3 使用 SSH 远程连接 GitHub Actions 进行个性化配置
 

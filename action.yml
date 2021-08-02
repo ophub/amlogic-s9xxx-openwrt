@@ -14,6 +14,10 @@ inputs:
     description: 'Choose kernel.'
     required: false
     default: '5.13.2_5.4.132'
+  update_kernel:
+    description: 'Auto update the latest kernel.'
+    required: false
+    default: 'true'
   amlogic_size:
     description: 'Choose root size.'
     required: false
@@ -36,6 +40,7 @@ runs:
         make_command=" -d"
         [ -n ${{ inputs.amlogic_openwrt }} ] && make_command="${make_command} -b ${{ inputs.amlogic_openwrt }}"
         [ -n ${{ inputs.amlogic_kernel }} ] && make_command="${make_command} -k ${{ inputs.amlogic_kernel }}"
+        [ -n ${{ inputs.update_kernel }} ] && make_command="${make_command} -u ${{ inputs.update_kernel }}"
         [ -n ${{ inputs.amlogic_size }} ] && make_command="${make_command} -s ${{ inputs.amlogic_size }}"
         sudo chmod +x make
         sudo ./make ${make_command}

@@ -51,7 +51,7 @@ You can modify the configuration file in the `router-config` directory and `.yml
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.13.2_5.4.132 -u true
+    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.13.2_5.4.132
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -83,7 +83,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 | armvirt64_path         | no                     | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*.tar.gz` . |
 | amlogic_openwrt        | s905d_s905x3           | Set the `SoC` of the packaging box, the default `all` packs all boxes, you can specify a single box such as `s905x3`, you can choose multiple boxes to use `_` connection such as `s905x3_s905d` . SOC code of each box is: `s905` `s905d` `s905x2` `s905x3` `s912` `s922x` |
 | amlogic_kernel         | 5.13.2_5.4.132         | Set the kernel version，Ophub's [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) library contains many original kernels of `Flippy`, you can view and choose to specify. |
-| update_kernel          | true                   | Set whether to auto update to the latest kernel of the same series. If there is the latest version of the kernel `5.4.133` in the `5.4.` series of `5.4.132`, it will auto be replaced with the latest compiled version. Default value `true` |
+| update_kernel          | true                   | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `amlogic_kernel` such as 5.13.2. If there is the latest version of 5.13 same series, such as 5.13.3 and later, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | amlogic_size           | 1024                   | Set the size of the firmware ROOT partition |
 
 - GitHub Action Output variable description
@@ -136,7 +136,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.13.2_5.4.132 -u true
+    sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.13.2_5.4.132
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -155,7 +155,7 @@ sudo apt-get install -y build-essential tar xz-utils unzip bzip2 p7zip p7zip-ful
 2. Clone the warehouse to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
 4. Name the kernel package according to the corresponding version number, such as `5.13.2`, and put it into the `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` directory.
-5. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b s905x3_s905d -k 5.13.2_5.4.132` to complete the compilation. The generated OpenWrt firmware is in the `out` directory under the root directory.
+5. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make` to make selection settings. The generated OpenWrt firmware is in the `out` directory under the root directory.
 
 ## Detailed make compile command
 
@@ -176,7 +176,7 @@ sudo apt-get install -y build-essential tar xz-utils unzip bzip2 p7zip p7zip-ful
 | -d | Defaults | Compile all cores and all firmware types. |
 | -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . You can use these codes: `s905x3`, `s905x2`, `s905x`, `s905d`, `s922x`, `s912` |
 | -k | Kernel | Specify the kernel type. Write the kernel name individually such as `-k 5.4.132` . Multiple cores use `_` connection such as `-k 5.13.2_5.4.132` [kernel](https://github.com/ophub/flippy-kernel/tree/main/library). |
-| -u | update | Whether to auto update to the latest kernel of the same series. If there is the latest version of the kernel `5.4.133` in the `5.4.` series of `5.4.132`, it will auto be replaced with the latest compiled version. Default value `true` |
+| -u | update | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 5.13.2. If there is the latest version of 5.13 same series, such as 5.13.3 and later, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
 

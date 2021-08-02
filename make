@@ -669,10 +669,9 @@ if [[ -n "${update_kernel}" && "${update_kernel}" == "true" ]]; then
 
         # Auto download from kernel library
         if [ ! -d "${kernel_path}/${TMP_ARR_KERNELS[$i]}" ]; then
-            echo -e "(${i}) ${TMP_ARR_KERNELS[$i]} Kernel loading from [ ${kernel_library}/${TMP_ARR_KERNELS[$i]} ]"
+            echo -e "(${i}) ${TMP_ARR_KERNELS[$i]} Kernel loading from [ ${kernel_library}/${TMP_ARR_KERNELS[$i]} ] \n"
             svn checkout ${kernel_library}/${TMP_ARR_KERNELS[$i]} ${kernel_path}/${TMP_ARR_KERNELS[$i]} >/dev/null
             rm -rf ${kernel_path}/${TMP_ARR_KERNELS[$i]}/.svn >/dev/null && sync
-            let i++
         fi
 
         let i++

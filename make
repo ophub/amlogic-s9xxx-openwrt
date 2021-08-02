@@ -667,13 +667,17 @@ fi
 i=1
 for KERNEL_VAR in ${kernels[*]}; do
     if [ ! -d "${kernel_path}/${KERNEL_VAR}" ]; then
-        echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_library}/${KERNEL_VAR} ] \n"
+        echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_library}/${KERNEL_VAR} ]"
         svn checkout ${kernel_library}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} >/dev/null
         rm -rf ${kernel_path}/${KERNEL_VAR}/.svn >/dev/null && sync
+    else
+        echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
     fi
 
     let i++
 done
+
+echo -e "Ready, start packaging... \n"
 
 # Start loop compilation
 k=1

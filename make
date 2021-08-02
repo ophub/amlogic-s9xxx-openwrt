@@ -19,7 +19,7 @@ kernel_path=${amlogic_path}/amlogic-kernel
 armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 configfiles_path=${amlogic_path}/common-files
-kernel_library="https://github.com/ophub/flippy-kernel/tree/main/library"
+kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
 command_file="https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic/root/usr/bin"
 #===== Do not modify the following parameter settings, End =======
 
@@ -506,10 +506,10 @@ Options:
       , -b s905x3_s905d    Specify multiple openwrt, use "_" to connect
 
     -k=VERSION             set the kernel version, which must be in the "kernel" directory
-       , -k all            build all the kernel version
-       , -k latest         build the latest kernel version
-       , -k 5.4.6          Specify a single kernel for compilation
-       , -k 5.4.6_5.9.0    Specify multiple cores, use "_" to connect
+      , -k all             build all the kernel version
+      , -k latest          build the latest kernel version
+      , -k 5.4.6           Specify a single kernel for compilation
+      , -k 5.4.6_5.9.0     Specify multiple cores, use "_" to connect
 
     -u, --update           Whether to auto update to the latest kernel of the same series
       , -u ture            Auto update to the latest kernel
@@ -632,16 +632,6 @@ fi
 
 [ ${kernel} != "all" ] && unset kernels && kernels=(${kernel})
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
-
-# kernel_library URL format conversion to support svn co
-if [[ ${kernel_library} == http* && $(echo ${kernel_library} | grep "tree") != "" ]]; then
-    # Left part
-    kernel_library_left=${kernel_library%\/tree*}
-    # Right part
-    kernel_library_right=${kernel_library#*tree\/}
-    kernel_library_right=${kernel_library_right#*\/}
-    kernel_library="${kernel_library_left}/trunk/${kernel_library_right}"
-fi
 
 # Check the new version on the kernel library
 if [[ -n "${update_kernel}" && "${update_kernel}" == "true" ]]; then

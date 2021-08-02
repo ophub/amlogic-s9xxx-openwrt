@@ -254,7 +254,7 @@ refactor_files() {
     [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
 
     # Synchronous installation of update and other command scripts
-    svn checkout ${command_file} usr/bin && sync && chmod +x usr/bin/openwrt-*
+    svn checkout ${command_file} usr/bin >/dev/null && sync && chmod +x usr/bin/openwrt-*
     rm -rf usr/bin/.svn >/dev/null
     
     # Add firmware information to the etc/flippy-openwrt-release
@@ -670,7 +670,7 @@ if [[ -n "${update_kernel}" && "${update_kernel}" == "true" ]]; then
         # Auto download from kernel library
         if [ ! -d "${kernel_path}/${TMP_ARR_KERNELS[$i]}" ]; then
             echo -e "(${i}) ${TMP_ARR_KERNELS[$i]} Kernel loading from [ ${kernel_library}/${TMP_ARR_KERNELS[$i]} ]"
-            svn checkout ${kernel_library}/${TMP_ARR_KERNELS[$i]} ${kernel_path}/${TMP_ARR_KERNELS[$i]}
+            svn checkout ${kernel_library}/${TMP_ARR_KERNELS[$i]} ${kernel_path}/${TMP_ARR_KERNELS[$i]} >/dev/null
             rm -rf ${kernel_path}/${TMP_ARR_KERNELS[$i]}/.svn >/dev/null && sync
             let i++
         fi

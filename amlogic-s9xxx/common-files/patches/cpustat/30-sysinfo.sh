@@ -113,15 +113,15 @@ else
     load="$(awk -F"average: " '{print $2}'<<<"${UptimeString}")"
     case ${time} in
 	1:*) # 1-2 hours
-		time=$(awk -F" " '{print $3" 小时"}' <<<"${UptimeString}")
+		time=$(awk -F" " '{print $3" h"}' <<<"${UptimeString}")
 		;;
 	*:*) # 2-24 hours
-		time=$(awk -F" " '{print $3" 小时"}' <<<"${UptimeString}")
+		time=$(awk -F" " '{print $3" h"}' <<<"${UptimeString}")
 		;;
 	*day) # days
-		days=$(awk -F" " '{print $3"天"}' <<<"${UptimeString}")
+		days=$(awk -F" " '{print $3"d"}' <<<"${UptimeString}")
 		time=$(awk -F" " '{print $5}' <<<"${UptimeString}")
-		time="$days "$(awk -F":" '{print $1"小时 "$2"分钟"}' <<<"${time}")
+		time="$days "$(awk -F":" '{print $1"h "$2"m"}' <<<"${time}")
 		;;
     esac
 fi
@@ -169,7 +169,7 @@ echo ""
 
 display " Memory Usage" "$memory_usage" "70" "0" "%" " of ${memory_total}MB"
 printf "IP Address:  \x1B[92m%s\x1B[0m" "$ip_address"
-#display "交换内存" "$swap_usage" "10" "0" "%" " of $swap_total""Mb"
+#display "Swap Usage" "$swap_usage" "10" "0" "%" " of $swap_total""Mb"
 echo ""
 
 #echo "" # fixed newline

@@ -265,6 +265,15 @@ refactor_files() {
         sed -i "s/ondemand/schedutil/" etc/config/cpufreq
     fi
 
+    # Add balethirq
+    balethirq_file=${configfiles_path}/patches/balethirq
+    if [ -d "${balethirq_file}" ];then
+        cp -f ${balethirq_file}/balethirq.pl usr/sbin/balethirq.pl && chmod +x usr/sbin/balethirq.pl >/dev/null 2>&1
+        sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
+        cp -f ${balethirq_file}/balance_irq etc/config/balance_irq >/dev/null 2>&1
+        sync
+    fi
+
     # Synchronous installation of update and other command scripts
     svn checkout ${command_file} usr/bin >/dev/null && sync && chmod +x usr/bin/openwrt-*
     rm -rf usr/bin/.svn >/dev/null

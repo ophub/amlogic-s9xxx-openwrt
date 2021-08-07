@@ -150,7 +150,7 @@ This function is suitable for the needs of replacing the [kernel](https://github
 ```yaml
 sudo apt-get update -y
 sudo apt-get full-upgrade -y
-sudo apt-get install -y build-essential tar xz-utils unzip bzip2 p7zip p7zip-full btrfs-progs dosfstools uuid-runtime mount util-linux parted git curl wget vim
+sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 ```
 2. Clone the warehouse to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.

@@ -81,12 +81,12 @@ jobs:
         echo "WET_URL=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV
 
     - name: Upload OpenWrt Firmware to Release
-      uses: svenstaro/upload-release-action@v2
+      uses: ncipollo/release-action@v1
       if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         tag: openwrt_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
-        file: ${{ env.PACKAGED_OUTPUTPATH }}/*
+        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
           This is OpenWrt firmware for Amlogic S9xxx STB
           * Firmware information

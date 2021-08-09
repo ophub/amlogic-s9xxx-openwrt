@@ -81,7 +81,7 @@ jobs:
         echo "WET_URL=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV
 
     - name: Upload OpenWrt Firmware to Release
-      uses: softprops/action-gh-release@v1
+      uses: svenstaro/upload-release-action@v2
       if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}

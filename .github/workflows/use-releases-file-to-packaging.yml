@@ -83,11 +83,10 @@ jobs:
     - name: Upload OpenWrt Firmware to Release
       uses: softprops/action-gh-release@v1
       if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: openwrt_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
-        files: ${{ env.PACKAGED_OUTPUTPATH }}/*
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: openwrt_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
+        file: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
           This is OpenWrt firmware for Amlogic S9xxx STB
           * Firmware information

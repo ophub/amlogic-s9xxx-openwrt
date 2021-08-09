@@ -44,6 +44,9 @@ pushd package/openwrt-openclash/tools/po2lmo && make && sudo make install 2>/dev
 svn co https://github.com/fw876/helloworld/trunk/luci-app-ssr-plus package/openwrt-ssrplus
 rm -rf package/openwrt-ssrplus/luci-app-ssr-plus/po/zh_Hans 2>/dev/null
 
+# Add p7zip
+svn co https://github.com/hubutui/p7zip-lede/trunk package/p7zip
+
 # coolsnowwolf default software package replaced with Lienol related software package
 # rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}
 # svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils

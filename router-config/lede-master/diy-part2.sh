@@ -18,7 +18,7 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/autocore/Makefile
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.31.4）
-# sed -i 's/192.168.1.1/192.168.31.4/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.8.1/g' package/base-files/files/bin/config_generate
 
 # Modify default root's password（FROM 'password'[$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.] CHANGE TO 'your password'）
 # sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7:::/g' /etc/shadow
@@ -43,6 +43,9 @@ pushd package/openwrt-openclash/tools/po2lmo && make && sudo make install 2>/dev
 # Add luci-app-ssr-plus
 svn co https://github.com/fw876/helloworld/trunk/luci-app-ssr-plus package/openwrt-ssrplus
 rm -rf package/openwrt-ssrplus/luci-app-ssr-plus/po/zh_Hans 2>/dev/null
+
+rm -rf package/lean/luci-theme-argon
+git clone https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
 
 # coolsnowwolf default software package replaced with Lienol related software package
 # rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}

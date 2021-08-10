@@ -20,7 +20,6 @@ armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 configfiles_path=${amlogic_path}/common-files
 kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
-command_file="https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic/root/usr/bin"
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -273,10 +272,6 @@ refactor_files() {
         cp -f ${balethirq_file}/balance_irq etc/config/balance_irq >/dev/null 2>&1
         sync
     fi
-
-    # Synchronous installation of update and other command scripts
-    svn checkout ${command_file} usr/bin >/dev/null && sync && chmod +x usr/bin/openwrt-*
-    rm -rf usr/bin/.svn >/dev/null
     
     # Add firmware information to the etc/flippy-openwrt-release
     echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null

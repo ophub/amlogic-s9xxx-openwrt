@@ -19,7 +19,8 @@ kernel_path=${amlogic_path}/amlogic-kernel
 armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 configfiles_path=${amlogic_path}/common-files
-kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
+kernel_library="https://github.com/ophub/flippy-kernel/tree/main/library"
+#kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -649,13 +650,23 @@ fi
 [ ${kernel} != "all" ] && unset kernels && kernels=(${kernel})
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
-# Check the new version on the kernel library
+# Convert kernel library address to svn format
+if [[ ${kernel_library} == http* && $(echo ${kernel_library} | grep "tree/main") != "" ]]; then
+    kernel_library=${kernel_library//tree\/main/trunk}
+fi
+
+# Check the new version on the kernel library, when auto_kernel=true
 if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then
+
+    # Set empty array
     TMP_ARR_KERNELS=()
+
+    # Convert kernel library address to API format
     SERVER_KERNEL_URL=${kernel_library#*com\/}
     SERVER_KERNEL_URL=${SERVER_KERNEL_URL//trunk/contents}
     SERVER_KERNEL_URL="https://api.github.com/repos/${SERVER_KERNEL_URL}"
 
+    # Query the latest kernel in a loop
     i=1
     for KERNEL_VAR in ${kernels[*]}; do
         echo -e "(${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
@@ -675,8 +686,10 @@ if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then
         let i++
     done
 
+    # Reset the kernel array to the latest kernel version
     unset kernels
     kernels=${TMP_ARR_KERNELS[*]}
+
 fi
 
 # Synchronization related kernel

@@ -243,7 +243,7 @@ fi
 
 #Check if writing to EMMC is supported
 MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
-VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,3}' 2>/dev/null)
 echo -e "This Kernel [ ${MODULES_NOW} ]"
 
 k510_ver=${VERSION_NOW%%.*}
@@ -259,12 +259,6 @@ elif [ "${k510_ver}" -gt "5" ];then
 else
     K510="0"
 fi
-
-# Check 5.10 kernel
-#if  [[ "${K510}" -eq "1" && -z "${MAINLINE_UBOOT}" ]]; then
-#    echo -e "This 5.10 kernel can used in TF/SD cards!"
-#    exit 1
-#fi
 
 # backup old bootloader
 if [ ! -f "/root/BackupOldBootloader.img" ]; then
@@ -427,11 +421,6 @@ if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
-Advantage: Gigabit network card is normal, HDMI color is normal,
-    fast startup speed, and compatible with all versions of linux kernel.
-Disadvantage: If you want to restore to Android firmware after flashing in,
-    you must restore the Android bootloader first.
-    Or you can only use the short-circuit method to restore the Android firmware.
 ----------------------------------------------------------------------------------
 EOF
     while :; do
@@ -461,11 +450,11 @@ fi
 
 if  [[ "${FLASH_MAINLINE_UBOOT}" -eq "1" ]]; then
     echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ]"
-    dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=444 conv=fsync
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 elif [[ -n "${ANDROID_UBOOT}" && -f "${ANDROID_UBOOT}" ]]; then
     echo -e "Write Android bootloader: [ ${ANDROID_UBOOT} ]"
-    dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+    dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=444 conv=fsync
     dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
 else
     echo "Did not change the original bootloader."

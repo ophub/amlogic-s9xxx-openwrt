@@ -153,7 +153,7 @@ refactor_files() {
     build_op=${1}
     build_usekernel=${2}
 
-    kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')
+    kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,3}')
     k510_ver=${kernel_vermaj%%.*}
     k510_maj=${kernel_vermaj##*.}
     if  [ "${k510_ver}" -eq "5" ];then
@@ -232,6 +232,19 @@ refactor_files() {
 
     mkdir -p boot run opt
     chown -R 0:0 ./
+
+    mkdir -p etc/modprobe.d
+    cat > etc/modprobe.d/99-local.conf <<EOF
+blacklist snd_soc_meson_aiu_i2s
+alias brnf br_netfilter
+alias pwm pwm_meson
+alias wifi brcmfmac
+EOF
+
+    # echo br_netfilter > etc/modules.d/br_netfilter
+    echo pwm_meson > etc/modules.d/pwm_meson 2>/dev/null
+    echo panfrost > etc/modules.d/panfrost 2>/dev/null
+    echo meson_gxbb_wdt > etc/modules.d/watchdog 2>/dev/null
 
     # Edit fstab
     ROOTFS_UUID=$(uuidgen)
@@ -349,11 +362,11 @@ make_image() {
 
     # Write the specified bootloader
     if  [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
-        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
         dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${build_op}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
     elif [[ "${ANDROID_UBOOT}" != ""  && -f "${root}${ANDROID_UBOOT}" ]]; then
-        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
         dd if=${root}${ANDROID_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${build_op}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi

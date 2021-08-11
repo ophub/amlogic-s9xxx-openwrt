@@ -14,5 +14,5 @@
 # sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
 
 # other
-# rm -rf package/lean/{samba4,luci-app-samba4,luci-app-ttyd}
+rm -rf package/lean/{samba4,luci-app-samba4,luci-app-ttyd,luci-app-accesscontrol,luci-app-adbyby-plus,luci-app-ddns,luci-app-docker,luci-app-openvpn,luci-app-netdata,luci-app-turboacc,luci-app-vlmcsd}
 

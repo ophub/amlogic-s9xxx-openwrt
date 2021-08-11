@@ -95,7 +95,7 @@ extract_kernel() {
            die "The modules files is Missing!"
         fi
         flippy_version=$(ls ${modules_tmp}/)
-        build_save_folder=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
+        build_save_folder=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,3}.[0-9]+')
         mkdir -p ${build_save_folder} && chmod 777 ${build_save_folder}
         echo -e "flippy_version: ${flippy_version}"
         # When running in the original location of the repository, Add related patches
@@ -188,8 +188,8 @@ replace_kernel() {
             build_boot=$( ls ${P4_PATH}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
             echo -e "Update using [ ${build_boot} ] files. Please wait a moment ..."
             flippy_version=${build_boot/boot-/} && flippy_version=${flippy_version/.tar.gz/}
-            kernel_version=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,2}.[0-9]+')
-            kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,2}')
+            kernel_version=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,3}.[0-9]+')
+            kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,3}')
             k510_ver=${kernel_vermaj%%.*}
             k510_maj=${kernel_vermaj##*.}
             if  [ ${k510_ver} -eq "5" ]; then
@@ -237,7 +237,7 @@ replace_kernel() {
     fi
 
     MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
-    VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,2}' 2>/dev/null)
+    VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,3}' 2>/dev/null)
     VERSION_ver=${VERSION_OLD%%.*}
     VERSION_maj=${VERSION_OLD##*.}
     if  [ ${VERSION_ver} -eq "5" ]; then

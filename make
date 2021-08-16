@@ -19,8 +19,8 @@ kernel_path=${amlogic_path}/amlogic-kernel
 armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 configfiles_path=${amlogic_path}/common-files
-kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
-command_file="https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic/root/usr/bin"
+kernel_library="https://github.com/ophub/flippy-kernel/tree/main/library"
+#kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -153,7 +153,7 @@ refactor_files() {
     build_op=${1}
     build_usekernel=${2}
 
-    kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')
+    kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,3}')
     k510_ver=${kernel_vermaj%%.*}
     k510_maj=${kernel_vermaj##*.}
     if  [ "${k510_ver}" -eq "5" ];then
@@ -233,6 +233,19 @@ refactor_files() {
     mkdir -p boot run opt
     chown -R 0:0 ./
 
+    mkdir -p etc/modprobe.d
+    cat > etc/modprobe.d/99-local.conf <<EOF
+blacklist snd_soc_meson_aiu_i2s
+alias brnf br_netfilter
+alias pwm pwm_meson
+alias wifi brcmfmac
+EOF
+
+    # echo br_netfilter > etc/modules.d/br_netfilter
+    echo pwm_meson > etc/modules.d/pwm_meson 2>/dev/null
+    echo panfrost > etc/modules.d/panfrost 2>/dev/null
+    echo meson_gxbb_wdt > etc/modules.d/watchdog 2>/dev/null
+
     # Edit fstab
     ROOTFS_UUID=$(uuidgen)
     #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
@@ -250,12 +263,29 @@ refactor_files() {
     [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179
 
     # Add cpustat
-    cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
-    [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
+    cpustat_file=${configfiles_path}/patches/cpustat
+    if [[ -d "${cpustat_file}" && -x "bin/bash" ]]; then
+        cp -f ${cpustat_file}/cpustat usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
+        cp -f ${cpustat_file}/getcpu bin/getcpu && chmod +x bin/getcpu >/dev/null 2>&1
+        cp -f ${cpustat_file}/30-sysinfo.sh etc/profile.d/30-sysinfo.sh >/dev/null 2>&1
+        sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd >/dev/null 2>&1
+        sed -i "s/\/bin\/ash/\/bin\/bash/" usr/libexec/login.sh >/dev/null 2>&1
+        sync
+    fi
 
-    # Synchronous installation of update and other command scripts
-    svn checkout ${command_file} usr/bin >/dev/null && sync && chmod +x usr/bin/openwrt-*
-    rm -rf usr/bin/.svn >/dev/null
+    # Modify the cpu mode to schedutil
+    if [[ -f "etc/config/cpufreq" ]];then
+        sed -i "s/ondemand/schedutil/" etc/config/cpufreq
+    fi
+
+    # Add balethirq
+    balethirq_file=${configfiles_path}/patches/balethirq
+    if [ -d "${balethirq_file}" ];then
+        cp -f ${balethirq_file}/balethirq.pl usr/sbin/balethirq.pl && chmod +x usr/sbin/balethirq.pl >/dev/null 2>&1
+        sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
+        cp -f ${balethirq_file}/balance_irq etc/config/balance_irq >/dev/null 2>&1
+        sync
+    fi
     
     # Add firmware information to the etc/flippy-openwrt-release
     echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
@@ -332,11 +362,11 @@ make_image() {
 
     # Write the specified bootloader
     if  [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
-        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
         dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${build_op}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
     elif [[ "${ANDROID_UBOOT}" != ""  && -f "${root}${ANDROID_UBOOT}" ]]; then
-        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
         dd if=${root}${ANDROID_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${build_op}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
@@ -633,13 +663,23 @@ fi
 [ ${kernel} != "all" ] && unset kernels && kernels=(${kernel})
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
-# Check the new version on the kernel library
+# Convert kernel library address to svn format
+if [[ ${kernel_library} == http* && $(echo ${kernel_library} | grep "tree/main") != "" ]]; then
+    kernel_library=${kernel_library//tree\/main/trunk}
+fi
+
+# Check the new version on the kernel library, when auto_kernel=true
 if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then
+
+    # Set empty array
     TMP_ARR_KERNELS=()
+
+    # Convert kernel library address to API format
     SERVER_KERNEL_URL=${kernel_library#*com\/}
     SERVER_KERNEL_URL=${SERVER_KERNEL_URL//trunk/contents}
     SERVER_KERNEL_URL="https://api.github.com/repos/${SERVER_KERNEL_URL}"
 
+    # Query the latest kernel in a loop
     i=1
     for KERNEL_VAR in ${kernels[*]}; do
         echo -e "(${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
@@ -659,8 +699,10 @@ if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then
         let i++
     done
 
+    # Reset the kernel array to the latest kernel version
     unset kernels
     kernels=${TMP_ARR_KERNELS[*]}
+
 fi
 
 # Synchronization related kernel

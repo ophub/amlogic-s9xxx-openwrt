@@ -253,7 +253,10 @@ EOF
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
     
     # Turn off speed limit by default
-    [ -f etc/config/nft-qos ] && sed -i 's/option limit_enable.*/option limit_enable 0/g' etc/config/nft-qos
+    [ -f etc/config/nft-qos ] && sed -i "s|option limit_enable.*|option limit_enable '0'|g" etc/config/nft-qos
+
+    # Turn off hw_flow by default
+    [ -f etc/config/turboacc ] && sed -i "s|option hw_flow.*|option hw_flow '0'|g" etc/config/turboacc
 
     # Add drivers
     [ -f etc/modules.d/8189fs ] || echo "8189fs" > etc/modules.d/8189fs

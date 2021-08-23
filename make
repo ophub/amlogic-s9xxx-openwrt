@@ -9,7 +9,7 @@
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
-build_openwrt=("s905x3" "s905x2" "s905x" "s905d" "s912" "s922x")
+build_openwrt=("s905x3" "s905x2" "s905x" "s905w" "s905d" "s912" "s922x")
 make_path=${PWD}
 tmp_path=${make_path}/tmp
 out_path=${make_path}/out

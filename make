@@ -190,6 +190,13 @@ refactor_files() {
             ANDROID_UBOOT=""
             AMLOGIC_SOC="s905x"
             ;;
+        s905w | x96mini | tx3mini)
+            FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
+            UBOOT_OVERLOAD="u-boot-p212.bin"
+            MAINLINE_UBOOT=""
+            ANDROID_UBOOT=""
+            AMLOGIC_SOC="s905w"
+            ;;
         s905d | n1)
             FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
             UBOOT_OVERLOAD="u-boot-n1.bin"

@@ -267,7 +267,7 @@ replace_kernel() {
                         MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin" ;;
                 s905x)  UBOOT_OVERLOAD="u-boot-p212.bin"
                         MAINLINE_UBOOT="" ;;
-                s905w)  UBOOT_OVERLOAD="u-boot-p212.bin"
+                s905w)  UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
                         MAINLINE_UBOOT="" ;;
                 s905d)  UBOOT_OVERLOAD="u-boot-n1.bin"
                         MAINLINE_UBOOT="" ;;

@@ -210,10 +210,10 @@ case  $boxtype in
          AMLOGIC_SOC="s905x"
          ;;
       17) FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
-         UBOOT_OVERLOAD="u-boot-p212.bin"
+         UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
-         AMLOGIC_SOC="s905x"
+         AMLOGIC_SOC="s905w"
          ;;
       99) FDTFILE=${SPECIFY_DTB}
          UBOOT_OVERLOAD=""

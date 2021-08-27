@@ -1,17 +1,15 @@
 #!/bin/bash
 #===========================================================================================
-# https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Extract/Replace the kernel for Amlogic S9xxx OpenWrt
-#
-# Note: Please grant execution permission before using the script: chmod +x openwrt-kernel
-# Kernel extraction command: sudo ./openwrt-kernel -e
-# Kernel replace command: openwrt-kernel -r
-# dtb-amlogic-*.tar.gz update command: openwrt-kernel -d
-# View help commands: sudo ./openwrt-kernel -h
-#
-# Copyright (C) 2020-2021 Flippy
-# Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
+# Function: Update the kernel for OpenWrt (Amlogic s9xxx, Allwinner, Rockchip)
+# Copyright (C) 2020-- https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
 #===========================================================================================
+
+# Support the kernel: boot-*.tar.gz, dtb-*.tar.gz, modules-*.tar .gz
+# When the kernel version is upgraded from 5.10 or lower to 5.10 or higher, Amlogic s9xxx need to install U-BOOT.
+# When there is no U-BOOT file in related directory, the script will auto try to download the file from the server:
+# UBOOT_OVERLOAD: https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-u-boot"
+# MAINLINE_UBOOT: https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files/lib/u-boot
 
 # Encountered a serious error, abort the script execution
 die() {
@@ -19,514 +17,293 @@ die() {
     exit 1
 }
 
-# Extract the kernel from the firmware of Flippy
-# Support: N1_Openwrt*.img, S9***_Openwrt*.img, Armbian_*_Aml-s9xxx_buster*.img
-# Support: .7z/.img.xz/.img
-extract_kernel() {
-  
-    echo -e "Start extract the kernel ..."
-    # Operation environment check
-    [ -x openwrt-kernel ] || die "Please grant execution permission: sudo chmod +x openwrt-kernel"
-    [ $(id -u) = 0 ] || die "Please run this script as root: sudo ./openwrt-kernel -e"
-    #[ -n "$(uname -a | grep "OpenWrt")" ] && die "Please run openwrt-kernel script in Ubuntu and other systems."
+echo -e "Start update the openwrt kernel."
+# Operation environment check
+[ -x /usr/bin/openwrt-kernel ] || die "Please grant execution permission: chmod +x /usr/bin/openwrt-kernel"
 
-    # Default setting ( Don't modify )
-    build_path=${PWD}
-    flippy_folder=${build_path}/"flippy"
-    build_tmp_folder=${build_path}/"build_tmp"
-    amlogic_path=${build_path%/common-files*}
-    boot_tmp=${build_tmp_folder}/boot_tmp
-    root_tmp=${build_tmp_folder}/root_tmp
-    kernel_tmp=${build_tmp_folder}/kernel_tmp
-    dtb_tmp=${build_tmp_folder}/dtb_tmp
-    modules_tmp=${build_tmp_folder}/modules_tmp
+# Current device model
+MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
+if [ -z "${MYDEVICE_NAME}" ]; then
+    die "Unknown device"
+#elif [ "${MYDEVICE_NAME}" == "Phicomm N1" ]; then
+#    echo -e "Test current device: ${MYDEVICE_NAME}"
+#    exit 1
+elif [ "${MYDEVICE_NAME}" == "Chainedbox L1 Pro" ]; then
+    MYDTB_FILE="rockchip"
+    MYBOOT_VMLINUZ="Image"
+elif [ "${MYDEVICE_NAME}" == "BeikeYun" ]; then
+    MYDTB_FILE="rockchip"
+    MYBOOT_VMLINUZ="Image"
+elif [ "${MYDEVICE_NAME}" == "V-Plus Cloud" ]; then
+    MYDTB_FILE="allwinner"
+    MYBOOT_VMLINUZ="zImage"
+else
+    MYDTB_FILE="amlogic"
+    MYBOOT_VMLINUZ="zImage"
+fi
+echo -e "Current device: ${MYDEVICE_NAME}"
+sleep 3
 
-    # Check files
-    echo -e "Check files ..."
-    if [ $( ls ${flippy_folder}/*.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-        flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
-        flippy_file=${flippy_file##*/}
-        echo -e "Try to extract the kernel using this file [ ${flippy_file} ]"
-    elif [ $( ls ${flippy_folder}/*.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-        xz_file=$( ls ${flippy_folder}/*.img.xz | head -n 1 )
-        xz_file=${xz_file##*/}
-        cd ${flippy_folder} && xz -d ${xz_file} && cd ../
-        flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
-        flippy_file=${flippy_file##*/}
-        echo -e "Try to extract the kernel using this file [ ${flippy_file} ]"
-    elif [ $( ls ${flippy_folder}/*.img.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-        xz_file=$( ls ${flippy_folder}/*.img.gz | head -n 1 )
-        xz_file=${xz_file##*/}
-        cd ${flippy_folder} && gzip -df ${xz_file} && cd ../
-        flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
-        flippy_file=${flippy_file##*/}
-        echo -e "Try to extract the kernel using this file [ ${flippy_file} ]"
-    elif [ $( ls ${flippy_folder}/*.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-        xz_file=$( ls ${flippy_folder}/*.7z | head -n 1 )
-        xz_file=${xz_file##*/}
-        cd ${flippy_folder} && 7z x ${xz_file} -aoa -y && cd ../
-        flippy_file=$( ls ${flippy_folder}/*.img | head -n 1 )
-        flippy_file=${flippy_file##*/}
-        echo -e "Try to extract the kernel using this file [ ${flippy_file} ]"
-    else
-        die "Please put the compiled files in the [ ${flippy_folder} ] directory."
-    fi
+EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
+P4_PATH="/mnt/${EMMC_NAME}p4"
 
-    cd  ${build_path}
-        # losetup & mount ${flippy_file}
-        echo -e "Losetup and mount ..."
+# Move kernel related files to the ${P4_PATH} directory
+if  [ $( ls /tmp/upload/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
+    mv -f /tmp/upload/*.tar.gz ${P4_PATH}/ && sync
+fi
 
-        [ -d ${build_tmp_folder} ] && rm -rf ${build_tmp_folder} 2>/dev/null
-        mkdir -p ${boot_tmp} ${root_tmp} ${kernel_tmp} ${dtb_tmp} ${modules_tmp}
+if  [ $( ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
 
-        lodev=$(losetup -P -f --show ${flippy_folder}/${flippy_file})
-        [ $? = 0 ] || die "losetup ${flippy_file} failed!"
-        mount ${lodev}p1 ${boot_tmp}
-        [ $? = 0 ] || die "mount ${lodev}p1 failed!"
-        mount ${lodev}p2 ${root_tmp}
-        [ $? = 0 ] || die "mount ${lodev}p2 failed!"
-        echo -e "Losetup and mount successfully: ${lodev}"
-
-
-        # copy ${boot_tmp} & ${root_tmp} Related files to ${kernel_tmp}, ${dtb_tmp} & ${modules_tmp}
-        echo -e "Copy modules files"
-        cp -rf ${root_tmp}/lib/modules/* ${modules_tmp} && sync
-        if [ $( ls ${modules_tmp}/ -l 2>/dev/null | grep "^d" | wc -l ) -eq 0 ]; then
-           die "The modules files is Missing!"
-        fi
-        flippy_version=$(ls ${modules_tmp}/)
-        build_save_folder=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,3}.[0-9]+')
-        mkdir -p ${build_save_folder} && chmod 777 ${build_save_folder}
-        echo -e "flippy_version: ${flippy_version}"
-        # When running in the original location of the repository, Add related patches
-        if [ -d ${amlogic_path}/common-files/patches ]; then
-           cp -rf ${amlogic_path}/common-files/patches/wireless/drivers/* ${modules_tmp}/*/kernel/drivers
-        fi
-
-        echo -e "Copy 5 kernrl files"
-        cp -rf ${boot_tmp}/{config*,initrd.img*,System.map*} ${kernel_tmp} 2>/dev/null && sync
-        cp -rf ${boot_tmp}/uInitrd ${kernel_tmp}/uInitrd-${flippy_version} 2>/dev/null && sync
-        cp -rf ${boot_tmp}/zImage ${kernel_tmp}/vmlinuz-${flippy_version} 2>/dev/null && sync
-        if [ ! -f ${kernel_tmp}/config* -o ! -f ${kernel_tmp}/System.map* -o ! -f ${kernel_tmp}/uInitrd-* -o ! -f ${kernel_tmp}/vmlinuz-* ]; then
-           die "The four/five boot kernel files is Missing!"
-        fi
-
-        echo -e "Copy .dtb files"
-        # When running in the original location of the repository, first use the full library .dtb files as a basis.
-        [ -d ${amlogic_path}/amlogic-dtb ] && cp -rf ${amlogic_path}/amlogic-dtb/* ${dtb_tmp} && sync
-        # Copy the latest .dtb files in the current firmware
-        cp -rf ${boot_tmp}/dtb/amlogic/* ${dtb_tmp} && sync
-        if [ $( ls ${dtb_tmp}/*.dtb -l 2>/dev/null | grep "^-" | wc -l ) -eq 0 ]; then
-           die "The .dtb files is Missing!"
-        fi
-
-    # Package 3 files
-    echo -e "Package boot-${flippy_version}.tar.gz"
-    cd  ${kernel_tmp}
-        tar -czf boot-${flippy_version}.tar.gz *
-        mv -f boot-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
-
-    echo -e "Package dtb-amlogic-${flippy_version}.tar.gz"
-    cd  ${dtb_tmp}
-        tar -czf dtb-amlogic-${flippy_version}.tar.gz *
-        mv -f dtb-amlogic-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
-
-    echo -e "Package modules-${flippy_version}.tar.gz"
-    cd  ${modules_tmp}/${flippy_version}/
-        rm -rf *.ko
-        # find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-        cd ../ && sync
-        tar -czf modules-${flippy_version}.tar.gz *
-        mv -f modules-${flippy_version}.tar.gz ${build_path}/${build_save_folder} && sync
-
-    cd  ${build_path}
-        # When running in the original location of the repository, it will be automatically saved to the kernel directory
-        # When using this script alone, the kernel will be placed in the same directory as the script
-        [ -d ${amlogic_path}/amlogic-kernel ] && mv -f ${build_save_folder} ${amlogic_path}/amlogic-kernel/ 2>/dev/null && sync
-
-        # umount & del losetup
-        echo -e "Unmount and delete temporary folder"
-        umount -f ${boot_tmp} 2>/dev/null
-        umount -f ${root_tmp} 2>/dev/null
-        losetup -d ${lodev} 2>/dev/null
-        rm -rf ${build_tmp_folder} ${flippy_folder} 2>/dev/null
-
-    sync
-    wait
-
-    echo -e "Kernel extraction is complete, Save in [ ${build_save_folder} ] folder."
-    exit 0
-
-}
-
-# Replace the kernel for Amlogic S9xxx OpenWrt
-# Support the kernel: boot-*.tar.gz, dtb-amlogic-*.tar.gz, modules-*.tar .gz
-#
-# When the kernel version is upgraded from 5.10 or lower to 5.10 or higher, need to install U-BOOT.
-# When there is no U-BOOT file in related directory, the script will auto try to download the file from the server for completion:
-# UBOOT_OVERLOAD: https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-u-boot"
-# MAINLINE_UBOOT: https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files/lib/u-boot
-#
-replace_kernel() {
-
-    echo -e "Start update the openwrt kernel."
-    # Operation environment check
-    [ -x /usr/bin/openwrt-kernel ] || die "Please grant execution permission: chmod +x /usr/bin/openwrt-kernel"
-    #[ -n "$( dmesg | grep 'meson' )" ] || die "Please run openwrt-kernel script in the Amlogic STB."
-
-    EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
-    P4_PATH="/mnt/${EMMC_NAME}p4"
-
-    # Move kernel related files to the ${P4_PATH} directory
-    if  [ $( ls /tmp/upload/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
-        mv -f /tmp/upload/*.tar.gz ${P4_PATH}/ && sync
-    fi
-
-    if  [ $( ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
-
-        if  [ $( ls ${P4_PATH}/boot-*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-            build_boot=$( ls ${P4_PATH}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
-            echo -e "Update using [ ${build_boot} ] files. Please wait a moment ..."
-            flippy_version=${build_boot/boot-/} && flippy_version=${flippy_version/.tar.gz/}
-            kernel_version=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,3}.[0-9]+')
-            kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,3}')
-            k510_ver=${kernel_vermaj%%.*}
-            k510_maj=${kernel_vermaj##*.}
-            if  [ ${k510_ver} -eq "5" ]; then
-                if  [ "${k510_maj}" -ge "10" ]; then
-                    K510=1
-                else
-                    K510=0
-                fi
-            elif [ ${k510_ver} -gt "5" ]; then
+    if  [ $( ls ${P4_PATH}/boot-*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
+        build_boot=$( ls ${P4_PATH}/boot-*.tar.gz | head -n 1 ) && build_boot=${build_boot##*/}
+        echo -e "Update using [ ${build_boot} ] files. Please wait a moment ..."
+        flippy_version=${build_boot/boot-/} && flippy_version=${flippy_version/.tar.gz/}
+        kernel_version=$(echo ${flippy_version} | grep -oE '^[1-9].[0-9]{1,3}.[0-9]+')
+        kernel_vermaj=$(echo ${kernel_version} | grep -oE '^[1-9].[0-9]{1,3}')
+        k510_ver=${kernel_vermaj%%.*}
+        k510_maj=${kernel_vermaj##*.}
+        if  [ ${k510_ver} -eq "5" ]; then
+            if  [ "${k510_maj}" -ge "10" ]; then
                 K510=1
             else
                 K510=0
             fi
+        elif [ ${k510_ver} -gt "5" ]; then
+            K510=1
         else
-            die "Have no boot-*.tar.gz file found in the ${P4_PATH} directory."
+            K510=0
         fi
-
-        if  [ -f ${P4_PATH}/dtb-amlogic-${flippy_version}.tar.gz ]; then
-            build_dtb="dtb-amlogic-${flippy_version}.tar.gz"
-        else
-            die "Have no dtb-amlogic-*.tar.gz file found in the ${P4_PATH} directory."
-        fi
-
-        if  [ -f ${P4_PATH}/modules-${flippy_version}.tar.gz ]; then
-            build_modules="modules-${flippy_version}.tar.gz"
-        else
-            die "Have no modules-*.tar.gz file found in the ${P4_PATH} directory."
-        fi
-
-        echo -e " \
-        Try to using this files to update the kernel: \n \
-        build_boot: ${build_boot} \n \
-        build_dtb: ${build_dtb} \n \
-        build_modules: ${build_modules} \n \
-        flippy_version: ${flippy_version} \n \
-        kernel_version: ${kernel_version} \n \
-        K510: ${K510}"
-
     else
-        echo -e "Please upload the kernel files."
-        echo -e "Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ]"
-        echo -e "Specify method: Place the kernel file in [ /mnt/mmcblk*p4/ ]"
-        echo -e "After upload the kernel file, run [ openwrt-kernel -r ] again."
-        exit 1
+        die "Have no boot-*.tar.gz file found in the ${P4_PATH} directory."
     fi
 
-    MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
-    VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,3}' 2>/dev/null)
-    VERSION_ver=${VERSION_OLD%%.*}
-    VERSION_maj=${VERSION_OLD##*.}
-    if  [ ${VERSION_ver} -eq "5" ]; then
-        if  [ "${VERSION_maj}" -ge "10" ]; then
-            V510=1
-        else
-            V510=0
-        fi
-    elif [ ${VERSION_ver} -gt "5" ]; then
+    if  [[ -f ${P4_PATH}/dtb-${MYDTB_FILE}-${flippy_version}.tar.gz ]]; then
+        build_dtb="dtb-${MYDTB_FILE}-${flippy_version}.tar.gz"
+    else
+        die "Have no dtb-${MYDTB_FILE}-${flippy_version}.tar.gz file."
+    fi
+
+    if  [ -f ${P4_PATH}/modules-${flippy_version}.tar.gz ]; then
+        build_modules="modules-${flippy_version}.tar.gz"
+    else
+        die "Have no modules-*.tar.gz file found in the ${P4_PATH} directory."
+    fi
+
+    echo -e " \
+    Try to using this files to update the kernel: \n \
+    build_boot: ${build_boot} \n \
+    build_dtb: ${build_dtb} \n \
+    build_modules: ${build_modules} \n \
+    flippy_version: ${flippy_version} \n \
+    kernel_version: ${kernel_version} \n \
+    K510: ${K510}"
+
+else
+    echo -e "Please upload the kernel files."
+    echo -e "Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ]"
+    echo -e "Specify method: Place the kernel file in [ /mnt/mmcblk*p4/ ]"
+    echo -e "After upload the kernel file, run [ openwrt-kernel ] again."
+    exit 1
+fi
+
+MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
+VERSION_OLD=$(echo ${MODULES_OLD} | grep -oE '^[1-9].[0-9]{1,3}' 2>/dev/null)
+VERSION_ver=${VERSION_OLD%%.*}
+VERSION_maj=${VERSION_OLD##*.}
+if  [ ${VERSION_ver} -eq "5" ]; then
+    if  [ "${VERSION_maj}" -ge "10" ]; then
         V510=1
     else
         V510=0
     fi
+elif [ ${VERSION_ver} -gt "5" ]; then
+    V510=1
+else
+    V510=0
+fi
 
-    # Check version consistency
-    if [ "${V510}" -lt "${K510}" ]; then
-        echo -e "Update to kernel 5.10 or higher and install U-BOOT."
-        if [ -f "/etc/flippy-openwrt-release" ]; then
-            # U-BOOT adaptation
-            source /etc/flippy-openwrt-release 2>/dev/null
-            SOC=${SOC}
-            [ -n "${SOC}" ] || die "Unknown SOC, unable to update."
-            case ${SOC} in
-                s905x3) UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-                        MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin" ;;
-                s905x2) UBOOT_OVERLOAD="u-boot-x96max.bin"
-                        MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin" ;;
-                s905x)  UBOOT_OVERLOAD="u-boot-p212.bin"
-                        MAINLINE_UBOOT="" ;;
-                s905w)  UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
-                        MAINLINE_UBOOT="" ;;
-                s905d)  UBOOT_OVERLOAD="u-boot-n1.bin"
-                        MAINLINE_UBOOT="" ;;
-                s912)   UBOOT_OVERLOAD="u-boot-zyxq.bin"
-                        MAINLINE_UBOOT="" ;;
-                s922x)  UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-                        MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin" ;;
-                *)      die "Unknown SOC, unable to update to kernel 5.10 and above." ;;
-            esac
+# Check version consistency from amlogic s9xxx
+if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
+    echo -e "Update to kernel 5.10 or higher and install U-BOOT."
+    if [ -f "/etc/flippy-openwrt-release" ]; then
+        # U-BOOT adaptation
+        source /etc/flippy-openwrt-release 2>/dev/null
+        SOC=${SOC}
+        [ -n "${SOC}" ] || die "Unknown SOC, unable to update."
+        case ${SOC} in
+            s905x3) UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+                    MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin" ;;
+            s905x2) UBOOT_OVERLOAD="u-boot-x96max.bin"
+                    MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin" ;;
+            s905x)  UBOOT_OVERLOAD="u-boot-p212.bin"
+                    MAINLINE_UBOOT="" ;;
+            s905w)  UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
+                    MAINLINE_UBOOT="" ;;
+            s905d)  UBOOT_OVERLOAD="u-boot-n1.bin"
+                    MAINLINE_UBOOT="" ;;
+            s912)   UBOOT_OVERLOAD="u-boot-zyxq.bin"
+                    MAINLINE_UBOOT="" ;;
+            s922x)  UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+                    MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin" ;;
+            *)      die "Unknown SOC, unable to update to kernel 5.10 and above." ;;
+        esac
 
-            GITHUB_RAW="https://raw.githubusercontent.com/ophub/amlogic-s9xxx-openwrt/main/amlogic-s9xxx"
+        GITHUB_RAW="https://raw.githubusercontent.com/ophub/amlogic-s9xxx-openwrt/main/amlogic-s9xxx"
 
-            # Check ${UBOOT_OVERLOAD}
-            if [[ -n "${UBOOT_OVERLOAD}" ]]; then
-                if [[ ! -s "/boot/${UBOOT_OVERLOAD}" ]]; then
-                    echo -e "Try to download the ${UBOOT_OVERLOAD} file from the server."
-                    GITHUB_UBOOT_OVERLOAD="${GITHUB_RAW}/amlogic-u-boot/${UBOOT_OVERLOAD}"
-                    #echo -e "UBOOT_OVERLOAD: ${GITHUB_UBOOT_OVERLOAD}"
-                    wget -c "${GITHUB_UBOOT_OVERLOAD}" -O "/boot/${UBOOT_OVERLOAD}" >/dev/null 2>&1 && sync
-                    if [[ "$?" -eq "0" && -s "/boot/${UBOOT_OVERLOAD}" ]]; then
-                        echo -e "The ${UBOOT_OVERLOAD} file download is complete."
-                    else
-                        die "The ${UBOOT_OVERLOAD} file download failed. please try again."
-                    fi
+        # Check ${UBOOT_OVERLOAD}
+        if [[ -n "${UBOOT_OVERLOAD}" ]]; then
+            if [[ ! -s "/boot/${UBOOT_OVERLOAD}" ]]; then
+                echo -e "Try to download the ${UBOOT_OVERLOAD} file from the server."
+                GITHUB_UBOOT_OVERLOAD="${GITHUB_RAW}/amlogic-u-boot/${UBOOT_OVERLOAD}"
+                #echo -e "UBOOT_OVERLOAD: ${GITHUB_UBOOT_OVERLOAD}"
+                wget -c "${GITHUB_UBOOT_OVERLOAD}" -O "/boot/${UBOOT_OVERLOAD}" >/dev/null 2>&1 && sync
+                if [[ "$?" -eq "0" && -s "/boot/${UBOOT_OVERLOAD}" ]]; then
+                    echo -e "The ${UBOOT_OVERLOAD} file download is complete."
                 else
-                    echo -e "The ${UBOOT_OVERLOAD} file has been found."
+                    die "The ${UBOOT_OVERLOAD} file download failed. please try again."
                 fi
             else
-                die "The 5.10 kernel cannot be used without UBOOT_OVERLOAD."
+                echo -e "The ${UBOOT_OVERLOAD} file has been found."
             fi
+        else
+            die "The 5.10 kernel cannot be used without UBOOT_OVERLOAD."
+        fi
 
-            # Check ${MAINLINE_UBOOT}
-            if [[ -n "${MAINLINE_UBOOT}" ]]; then
-                if [[ ! -s "${MAINLINE_UBOOT}" ]]; then
-                    echo -e "Try to download the MAINLINE_UBOOT file from the server."
-                    GITHUB_MAINLINE_UBOOT="${GITHUB_RAW}/common-files/files${MAINLINE_UBOOT}"
-                    #echo -e "MAINLINE_UBOOT: ${GITHUB_MAINLINE_UBOOT}"
-                    [ -d "/lib/u-boot" ] || mkdir -p /lib/u-boot
-                    wget -c "${GITHUB_MAINLINE_UBOOT}" -O "${MAINLINE_UBOOT}" >/dev/null 2>&1 && sync
-                    if [[ "$?" -eq "0" && -s "${MAINLINE_UBOOT}" ]]; then
-                        echo -e "The MAINLINE_UBOOT file download is complete."
-                    else
-                        die "The MAINLINE_UBOOT file download failed. please try again."
-                    fi
+        # Check ${MAINLINE_UBOOT}
+        if [[ -n "${MAINLINE_UBOOT}" ]]; then
+            if [[ ! -s "${MAINLINE_UBOOT}" ]]; then
+                echo -e "Try to download the MAINLINE_UBOOT file from the server."
+                GITHUB_MAINLINE_UBOOT="${GITHUB_RAW}/common-files/files${MAINLINE_UBOOT}"
+                #echo -e "MAINLINE_UBOOT: ${GITHUB_MAINLINE_UBOOT}"
+                [ -d "/lib/u-boot" ] || mkdir -p /lib/u-boot
+                wget -c "${GITHUB_MAINLINE_UBOOT}" -O "${MAINLINE_UBOOT}" >/dev/null 2>&1 && sync
+                if [[ "$?" -eq "0" && -s "${MAINLINE_UBOOT}" ]]; then
+                    echo -e "The MAINLINE_UBOOT file download is complete."
+                else
+                    die "The MAINLINE_UBOOT file download failed. please try again."
                 fi
             fi
+        fi
+    else
+        die "The /etc/flippy-openwrt-release file is missing and cannot be update."
+    fi
+
+    # Copy u-boot.ext and u-boot.emmc
+    if [ -f "/boot/${UBOOT_OVERLOAD}" ]; then
+        cp -f "/boot/${UBOOT_OVERLOAD}" /boot/u-boot.ext && sync && chmod +x /boot/u-boot.ext
+        cp -f "/boot/${UBOOT_OVERLOAD}" /boot/u-boot.emmc && sync && chmod +x /boot/u-boot.emmc
+        echo -e "The ${UBOOT_OVERLOAD} file copy is complete."
+    else
+        die "The UBOOT_OVERLOAD file is missing and cannot be update."
+    fi
+
+    # Write Mainline bootloader
+    if [ -f "${MAINLINE_UBOOT}" ]; then
+        echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ] to [ /dev/${EMMC_NAME} ]"
+        dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+        dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+        echo -e "The MAINLINE_UBOOT file write is complete."
+    fi
+fi
+
+echo -e "Unpack [ ${flippy_version} ] related files ..."
+
+# 01. for /boot five files
+rm -f /boot/uInitrd /boot/zImage /boot/Image /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null && sync
+tar -xzf ${P4_PATH}/${build_boot} -C /boot && sync
+
+if [[ -f "/boot/uInitrd-${flippy_version}" ]]; then
+    i=1
+    max_try=10
+    while [ "${i}" -le "${max_try}" ]; do
+        cp -f /boot/uInitrd-${flippy_version} /boot/uInitrd 2>/dev/null && sync
+        uInitrd_original=$(md5sum /boot/uInitrd-${flippy_version} | awk '{print $1}')
+        uInitrd_new=$(md5sum /boot/uInitrd | awk '{print $1}')
+        if [[ "${uInitrd_original}" == "${uInitrd_new}" ]]; then
+            echo -e "Unpack [ /boot/uInitrd ] complete."
+            rm -f /boot/uInitrd-${flippy_version} && sync
+            break
         else
-            die "The /etc/flippy-openwrt-release file is missing and cannot be update."
+            rm -f /boot/uInitrd && sync
+            let i++
+            continue
         fi
+    done
+    [ "${i}" -eq "10" ] && die "/boot/uInitrd-${flippy_version} file copy failed."
+else
+    die "/boot/uInitrd-${flippy_version} file is missing."
+fi
 
-        # Copy u-boot.ext and u-boot.emmc
-        if [ -f "/boot/${UBOOT_OVERLOAD}" ]; then
-            cp -f "/boot/${UBOOT_OVERLOAD}" /boot/u-boot.ext && sync && chmod +x /boot/u-boot.ext
-            cp -f "/boot/${UBOOT_OVERLOAD}" /boot/u-boot.emmc && sync && chmod +x /boot/u-boot.emmc
-            echo -e "The ${UBOOT_OVERLOAD} file copy is complete."
+if [[ -f "/boot/vmlinuz-${flippy_version}" ]]; then
+    i=1
+    max_try=10
+    while [ "${i}" -le "${max_try}" ]; do
+        cp -f /boot/vmlinuz-${flippy_version} /boot/${MYBOOT_VMLINUZ} 2>/dev/null && sync
+        vmlinuz_original=$(md5sum /boot/vmlinuz-${flippy_version} | awk '{print $1}')
+        vmlinuz_new=$(md5sum /boot/${MYBOOT_VMLINUZ} | awk '{print $1}')
+        if [[ "${vmlinuz_original}" == "${vmlinuz_new}" ]]; then
+            echo -e "Unpack [ /boot/${MYBOOT_VMLINUZ} ] complete."
+            rm -f /boot/vmlinuz-${flippy_version} && sync
+            break
         else
-            die "The UBOOT_OVERLOAD file is missing and cannot be update."
+            rm -f /boot/${MYBOOT_VMLINUZ} && sync
+            let i++
+            continue
         fi
+    done
+    [ "${i}" -eq "10" ] && die "/boot/vmlinuz-${flippy_version} file copy failed."
+else
+    die "/boot/vmlinuz-${flippy_version} file is missing."
+fi
 
-        # Write Mainline bootloader
-        if [ -f "${MAINLINE_UBOOT}" ]; then
-            echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ] to [ /dev/${EMMC_NAME} ]"
-            dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-            dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
-            echo -e "The MAINLINE_UBOOT file write is complete."
+[ -f "/boot/config-${flippy_version}" ] || die "/boot/config-${flippy_version} file is missing."
+[ -f "/boot/System.map-${flippy_version}" ] || die "/boot/System.map-${flippy_version} file is missing."
+
+echo -e "01. Unpack [ ${build_boot} ] complete."
+sleep 3
+
+# 02 for /boot/dtb/${MYDTB_FILE}/*
+[ -d /boot/dtb/${MYDTB_FILE} ] || mkdir -p /boot/dtb/${MYDTB_FILE}
+if [[ "${MYDTB_FILE}" == "rockchip" ]]; then
+    mkdir -p /boot/dtb-${flippy_version}/${MYDTB_FILE}
+    ln -sf /boot/dtb-${flippy_version} /boot/dtb
+fi
+tar -xzf ${P4_PATH}/${build_dtb} -C /boot/dtb/${MYDTB_FILE} && sync
+[ "$( ls /boot/dtb/${MYDTB_FILE} -l 2>/dev/null | grep "^-" | wc -l )" -ge "1" ] || die "/boot/dtb/${MYDTB_FILE} file is missing."
+echo -e "02. Unpack [ ${build_dtb} ] complete."
+sleep 3
+
+# 03 for /lib/modules/*
+rm -rf /lib/modules/* 2>/dev/null && sync
+tar -xzf ${P4_PATH}/${build_modules} -C /lib/modules && sync
+    cd /lib/modules/${flippy_version}/
+    rm -f *.ko 2>/dev/null
+    find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
+    sync && sleep 3
+        x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
+        if [ "${x}" -eq "0" ]; then
+            die "Error *.ko Files not found."
         fi
-    fi
+echo -e "03. Unpack [ ${build_modules} ] complete."
+sleep 3
 
-    echo -e "Unpack [ ${flippy_version} ] related files ..."
+rm -rf ${P4_PATH}/dtb-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz 2>/dev/null
+sync
 
-    # 01. for /boot five files
-    rm -f /boot/uInitrd /boot/zImage /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null && sync
-    tar -xzf ${P4_PATH}/${build_boot} -C /boot && sync
+sed -i '/KERNEL_VERSION/d' /etc/flippy-openwrt-release 2>/dev/null
+echo "KERNEL_VERSION='${kernel_version}'" >> /etc/flippy-openwrt-release 2>/dev/null
 
-    if [[ -f "/boot/uInitrd-${flippy_version}" ]]; then
-        i=1
-        max_try=10
-        while [ "${i}" -le "${max_try}" ]; do
-            cp -f /boot/uInitrd-${flippy_version} /boot/uInitrd 2>/dev/null && sync
-            uInitrd_original=$(md5sum /boot/uInitrd-${flippy_version} | awk '{print $1}')
-            uInitrd_new=$(md5sum /boot/uInitrd | awk '{print $1}')
-            if [ "${uInitrd_original}" = "${uInitrd_new}" ]; then
-                echo -e "Unpack [ /boot/uInitrd ] complete."
-                rm -f /boot/uInitrd-${flippy_version} && sync
-                break
-            else
-                rm -f /boot/uInitrd && sync
-                let i++
-                continue
-            fi
-        done
-        [ "${i}" -eq "10" ] && die "/boot/uInitrd-${flippy_version} file copy failed."
-    else
-        die "/boot/uInitrd-${flippy_version} file is missing."
-    fi
+sed -i '/K510/d' /etc/flippy-openwrt-release 2>/dev/null
+echo "K510='${K510}'" >> /etc/flippy-openwrt-release 2>/dev/null
 
-    if [[ -f "/boot/vmlinuz-${flippy_version}" ]]; then
-        i=1
-        max_try=10
-        while [ "${i}" -le "${max_try}" ]; do
-            cp -f /boot/vmlinuz-${flippy_version} /boot/zImage 2>/dev/null && sync
-            vmlinuz_original=$(md5sum /boot/vmlinuz-${flippy_version} | awk '{print $1}')
-            vmlinuz_new=$(md5sum /boot/zImage | awk '{print $1}')
-            if [ "${vmlinuz_original}" = "${vmlinuz_new}" ]; then
-                echo -e "Unpack [ /boot/zImage ] complete."
-                rm -f /boot/vmlinuz-${flippy_version} && sync
-                break
-            else
-                rm -f /boot/zImage && sync
-                let i++
-                continue
-            fi
-        done
-        [ "${i}" -eq "10" ] && die "/boot/vmlinuz-${flippy_version} file copy failed."
-    else
-        die "/boot/vmlinuz-${flippy_version} file is missing."
-    fi
+sed -i "s/ Kernel.*/ Kernel: ${flippy_version}/g" /etc/banner 2>/dev/null
 
-    [ -f "/boot/config-${flippy_version}" ] || die "/boot/config-${flippy_version} file is missing."
-    [ -f "/boot/System.map-${flippy_version}" ] || die "/boot/System.map-${flippy_version} file is missing."
+sync
+wait
 
-    echo -e "01. Unpack [ ${build_boot} ] complete."
-    sleep 3
+echo "Successfully updated, automatic restarting..."
+sleep 3
+echo 'b' > /proc/sysrq-trigger
+exit 0
 
-    # 02 for /boot/dtb/amlogic/*
-    tar -xzf ${P4_PATH}/${build_dtb} -C /boot/dtb/amlogic && sync
-    [ "$( ls /boot/dtb/amlogic -l 2>/dev/null | grep "^-" | wc -l )" -ge "10" ] || die "/boot/dtb/amlogic file is missing."
-    echo -e "02. Unpack [ ${build_dtb} ] complete."
-    sleep 3
-
-    # 03 for /lib/modules/*
-    rm -rf /lib/modules/* 2>/dev/null && sync
-    tar -xzf ${P4_PATH}/${build_modules} -C /lib/modules && sync
-        cd /lib/modules/${flippy_version}/
-        rm -f *.ko 2>/dev/null
-        find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-        sync && sleep 3
-            x=$( ls *.ko -l 2>/dev/null | grep "^l" | wc -l )
-            if [ "${x}" -eq "0" ]; then
-                die "Error *.ko Files not found."
-            fi
-    echo -e "03. Unpack [ ${build_modules} ] complete."
-    sleep 3
-
-    rm -rf ${P4_PATH}/dtb-amlogic-*.tar.gz ${P4_PATH}/boot-*.tar.gz ${P4_PATH}/modules-*.tar.gz 2>/dev/null
-    sync
-
-    sed -i '/KERNEL_VERSION/d' /etc/flippy-openwrt-release 2>/dev/null
-    echo "KERNEL_VERSION='${kernel_version}'" >> /etc/flippy-openwrt-release 2>/dev/null
-
-    sed -i '/K510/d' /etc/flippy-openwrt-release 2>/dev/null
-    echo "K510='${K510}'" >> /etc/flippy-openwrt-release 2>/dev/null
-
-    sed -i "s/ Kernel.*/ Kernel: ${flippy_version}/g" /etc/banner 2>/dev/null
-
-    sync
-    wait
-
-    echo "Successfully updated, automatic restarting..."
-    sleep 3
-    echo 'b' > /proc/sysrq-trigger
-    exit 0
-}
-
-# Update the dtb file in the kernel component file dtb-amlogic-*.tar.gz
-dtb_update() {
-
-    # Default setting ( Don't modify )
-    build_path=${PWD}
-    build_tmp_folder=${build_path}/"build_tmp"
-    amlogic_path=${build_path%/common-files*}
-
-    echo "update dtb-amlogic-*.tar.gz ..."
-    [ -d ${build_tmp_folder} ] || mkdir -p ${build_tmp_folder}
-    cd  ${build_tmp_folder}
-    echo "amlogic_path: ${amlogic_path}, build_tmp_folder: ${build_tmp_folder}"
-
-    # Generate temp file: dtb-amlogic-new.tar.gz
-    echo -e "Copy .dtb files"
-    [ -d ${amlogic_path}/amlogic-dtb ] && cp -rf ${amlogic_path}/amlogic-dtb/* . && sync
-    if  [ $( ls *.dtb -l 2>/dev/null | grep "^-" | wc -l ) -eq 0 ]; then
-        die "The .dtb files is Missing!"
-    else
-        echo -e "Package dtb-amlogic-new.tar.gz"
-        tar -czf dtb-amlogic-new.tar.gz *
-    fi
-
-    # Replace existing files in a loop
-    cd ${amlogic_path}/amlogic-kernel/
-    total_kernel=$( ls . -l 2>/dev/null | grep "^d" | wc -l )
-    current_kernel=1
-    for kernel_folder in $( ls -d */ | head -c-2 ); do
-        kernel_version=${kernel_folder%/*}
-        cd  ${kernel_version}
-            if [ -f dtb-amlogic-*.tar.gz ]; then
-               dtb_file_name=$( ls dtb-amlogic-*.tar.gz | head -n 1 )
-               cp -f ${build_tmp_folder}/dtb-amlogic-new.tar.gz ${dtb_file_name}
-               echo "(${current_kernel}/${total_kernel}) ${kernel_version}/${dtb_file_name} is change"
-            else
-               echo "(${current_kernel}/${total_kernel}) There is no dtb-amlogic-*.tar.gz file in the ${kernel_version} directory"
-            fi
-        cd ../
-        let current_kernel++
-    done
-
-    rm -rf ${build_tmp_folder} 2>/dev/null
-    exit 0
-
-}
-
-# print help info
-print_help() {
-    echo "Usage: $0  -e  [ extract the kernel ]"
-    echo "       $0  -r  [ replace the kernel ]"
-    echo "       $0  -d  [ dtb-amlogic-*.tar.gz files update ]"
-    echo "       $0  -h  [ help ]"
-    echo "       $0  -q  [ quit ]"
-    exit 0
-}
-
-# Show selection menu
-menu() {
-    while :;do
-        clear
-        cat <<EOF
-
-        ┌─────────────[ openwrt-kernel ]─────────────┐
-        │                                            │
-        │    e. Extract the kernel                   │
-        │    r. Replace the kernel                   │
-        │    d. dtb-amlogic-*.tar.gz files update    │
-        │                                            │
-        ╞════════════════════════════════════════════╡
-        │                                            │
-        │    h. help                                 │
-        │    q. quit                                 │
-        │                                            │
-        └────────────────────────────────────────────┘
-
-EOF
-        echo -ne "please select: [ ]\b\b"
-        read select
-            case $select in
-                e | extract)     extract_kernel;;
-                r | replace)     replace_kernel;;
-                d | dtb)         dtb_update;;
-                h | help)        print_help;;
-                q | quit)        exit 0;;
-            esac
-    done
-}
-
-getopts 'erdhq' opts
-case $opts in
-    e | extract)     extract_kernel;;
-    r | replace)     replace_kernel;;
-    d | dtb)         dtb_update;;
-    h | help)        print_help;;
-    q | quit)        exit 0;;
-    *)               menu;;
-esac
 

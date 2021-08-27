@@ -1,21 +1,19 @@
 #!/bin/bash
 #======================================================================================
-# https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Install and Update openwrt to emmc for Amlogic S9xxx STB
 # Function: Install openwrt to emmc for Amlogic S9xxx STB
-# Copyright (C) 2020-2021 Flippy
-# Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
+# Copyright (C) 2020-- https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
 #======================================================================================
 
 # The script supports directly setting parameters for installation, skipping interactive selection
-# openwrt-install ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME}
-# E.g: openwrt-install YES 1
-# E.g: openwrt-install NO 99 meson-gxl-s905x-p212.dtb
+# openwrt-install-amlogic ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME}
+# E.g: openwrt-install-amlogic YES 1
+# E.g: openwrt-install-amlogic NO 99 meson-gxl-s905x-p212.dtb
 # Tip: When custom dtb file, set ${SOC_ID} to 99, and parameter ${DTB_FILENAME} must be set
 # return 0
 
 # You can also execute the script directly, and interactively select related functions
-# E.g: openwrt-install
+# E.g: openwrt-install-amlogic
 
 AUTO_MAINLINE_UBOOT=${1}
 
@@ -591,7 +589,7 @@ while [ $i -le $max_try ]; do
 
         echo "Edit configuration file ..."
         #cd /mnt/${EMMC_NAME}p2/usr/bin/
-        #rm -f openwrt-install openwrt-update
+        #rm -f openwrt-install-amlogic openwrt-update-amlogic
         cd /mnt/${EMMC_NAME}p2/etc/rc.d
         ln -sf ../init.d/dockerd S99dockerd
         cd /mnt/${EMMC_NAME}p2/etc

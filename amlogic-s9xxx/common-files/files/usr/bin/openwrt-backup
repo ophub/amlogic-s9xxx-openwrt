@@ -1,10 +1,8 @@
 #!/bin/bash
 #======================================================================
-# https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Backup and restore config files in the /etc directory
-# Function: Use Flippy's retention config update strategy
-# Copyright (C) 2020 Flippy
-# Copyright (C) 2020 https://github.com/ophub/amlogic-s9xxx-openwrt
+# Function: Backup and restore config files in the /etc directory
+# Copyright (C) 2020-- https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
 #======================================================================
 
 SNAPSHOT_PRESTR=".snapshots/"

@@ -1,22 +1,19 @@
 #!/bin/bash
 #======================================================================================
-# https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Install and update openwrt to emmc for Amlogic S9xxx STB
 # Function: Update openwrt to emmc for Amlogic S9xxx STB
-# Copyright (C) 2020-2021 Flippy
-# Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
+# Copyright (C) 2020-- https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
 #======================================================================================
 
-# The script supports directly setting parameters for installation, skipping interactive selection
-# openwrt-update ${OPENWRT_FILE} ${AUTO_MAINLINE_UBOOT} ${RESTORE_CONFIG}
-# E.g: openwrt-update openwrt_s905d.img.gz YES RESTORE
-# E.g: openwrt-update openwrt_s905d.img.gz NO NO-RESTORE
+# The script supports directly setting parameters for update, skipping interactive selection
+# openwrt-update-amlogic ${OPENWRT_FILE} ${AUTO_MAINLINE_UBOOT} ${RESTORE_CONFIG}
+# E.g: openwrt-update-amlogic openwrt_s905d.img.gz yes restore
+# E.g: openwrt-update-amlogic openwrt_s905d.img.gz no no-restore
 
 # You can also execute the script directly, and interactively select related functions
-# E.g: openwrt-update
+# E.g: openwrt-update-amlogic
 
 IMG_NAME=${1}
-
 AUTO_MAINLINE_UBOOT=${2}
 BACKUP_RESTORE_CONFIG=${3}
 
@@ -88,7 +85,7 @@ else
     echo -e "Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ]"
     echo -e "Specify method: Place the update file in [ /mnt/mmcblk*p4/ ]"
     echo -e "The supported file suffixes are: *.img, *.img.xz, *.img.gz, *.7z, *.zip"
-    echo -e "After upload the update file, run [ openwrt-update ] again."
+    echo -e "After upload the update file, run [ openwrt-update-amlogic ] again."
     exit 1
 fi
 
@@ -109,9 +106,9 @@ fi
 
 BR_FLAG=1
 echo -ne "Whether to backup and restore the current config files? y/n [y]\b\b"
-if [[ ${BACKUP_RESTORE_CONFIG} == "RESTORE" ]]; then
+if [[ ${BACKUP_RESTORE_CONFIG} == "restore" ]]; then
     yn="y"
-elif [[ ${BACKUP_RESTORE_CONFIG} == "NO-RESTORE" ]]; then
+elif [[ ${BACKUP_RESTORE_CONFIG} == "no-restore" ]]; then
     yn="n"
 else
     read yn
@@ -393,8 +390,8 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/openwrt-install
-#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/openwrt-update
+#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/openwrt-install-amlogic
+#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/openwrt-update-amlogic
 sync
 echo "Copy data complete ..."
 
@@ -462,13 +459,13 @@ Found an available mainline bootloader (Mainline u-boot), you can flash into EMM
 ----------------------------------------------------------------------------------
 EOF
     while :; do
-        if [[ "${AUTO_MAINLINE_UBOOT}" == "YES" ]]; then
+        if [[ "${AUTO_MAINLINE_UBOOT}" == "yes" ]]; then
             if  [[ "${K510}" -eq "1" ]]; then
                 yn="y"
             else
                 yn="n"
             fi
-        elif [[ "${AUTO_MAINLINE_UBOOT}" == "NO" ]]; then
+        elif [[ "${AUTO_MAINLINE_UBOOT}" == "no" ]]; then
                 yn="n"
         else
             read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn

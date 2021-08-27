@@ -290,7 +290,7 @@ UPLOAD_WETRANSFER: false
 从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令: 
 
 ```yaml
-openwrt-install
+openwrt-install-amlogic
 ```
 
 同一个型号的机顶盒，固件通用，比如 `openwrt_s905x3_v*.img` 固件可以用于 `x96max plus, hk1, h96` 等 `s905x3` 型号的机顶盒。在安装脚本将 OpenWrt 写入 EMMC 时，会提示你选择自己的机顶盒，请根据提示正确选择安装。
@@ -308,14 +308,14 @@ openwrt-install
 从浏览器访问 OpenWrt 系统，在 `系统` 菜单下 → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
 
 ```yaml
-openwrt-update
+openwrt-update-amlogic
 ```
 
-💡提示: 脚本 `openwrt-update` 会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找各种后缀的升级文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将升级固件的压缩包上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
+💡提示: 脚本 `openwrt-update-amlogic` 会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找各种后缀的升级文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将升级固件的压缩包上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
-如果在 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update` 进行升级，无需输入固件名称的参数。如果这 2 个目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update  openwrt_s905x3_v5.4.105_2021.03.17.0412.img.gz` ）。升级脚本优先查找 `/mnt/mmcblk*p4/` 目录，如果该目录下没有符合要求的升级固件，将去 `/tmp/upload/` 下继续查找。这 2 个目录中的相关压缩文件，升级脚本会自动匹配进行解压，升级完成后会自动删除此升级固件文件。
+如果在 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果这 2 个目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic  openwrt_s905x3_v5.4.105_2021.03.17.0412.img.gz` ）。升级脚本优先查找 `/mnt/mmcblk*p4/` 目录，如果该目录下没有符合要求的升级固件，将去 `/tmp/upload/` 下继续查找。这 2 个目录中的相关压缩文件，升级脚本会自动匹配进行解压，升级完成后会自动删除此升级固件文件。
 
-- 脚本  `openwrt-update` 在 2 处目录中的查找顺序说明
+- 脚本  `openwrt-update-amlogic` 在 2 处目录中的查找顺序说明
 
 | 目录 | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
 | ---- | ---- | ---- |

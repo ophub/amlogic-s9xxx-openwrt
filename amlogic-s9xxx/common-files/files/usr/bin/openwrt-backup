@@ -97,7 +97,7 @@ restore() {
 
         echo "Successful recovery. Will start automatically, please refresh later!"
         sleep 3
-        echo 'b' > /proc/sysrq-trigger
+        reboot
         exit 0
     else
         echo "The backup file [ ${BACKUP_FILE} ] not found!"

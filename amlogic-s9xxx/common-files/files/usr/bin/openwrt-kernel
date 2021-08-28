@@ -24,10 +24,8 @@ echo -e "Start update the openwrt kernel."
 # Current device model
 MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
 if [ -z "${MYDEVICE_NAME}" ]; then
-    die "Unknown device"
-#elif [ "${MYDEVICE_NAME}" == "Phicomm N1" ]; then
-#    echo -e "Test current device: ${MYDEVICE_NAME}"
-#    exit 1
+    echo "Unknown device"
+    exit 1
 elif [ "${MYDEVICE_NAME}" == "Chainedbox L1 Pro" ]; then
     MYDTB_FILE="rockchip"
     MYBOOT_VMLINUZ="Image"
@@ -41,7 +39,7 @@ else
     MYDTB_FILE="amlogic"
     MYBOOT_VMLINUZ="zImage"
 fi
-echo -e "Current device: ${MYDEVICE_NAME}"
+echo -e "Current device: ${MYDEVICE_NAME} [${MYDTB_FILE}]"
 sleep 3
 
 EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)

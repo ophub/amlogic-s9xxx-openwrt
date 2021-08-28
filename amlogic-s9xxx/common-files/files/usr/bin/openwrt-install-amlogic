@@ -15,6 +15,7 @@
 # You can also execute the script directly, and interactively select related functions
 # E.g: openwrt-install-amlogic
 
+# Receive one-key command related parameters
 AUTO_MAINLINE_UBOOT=${1}
 
 # For [luci-app-amlogic] input parameter: SOC & DTB
@@ -37,6 +38,16 @@ fi
 echo "AUTO_MAINLINE_UBOOT: ${AUTO_MAINLINE_UBOOT}"
 echo "SPECIFY_SOC: ${SPECIFY_SOC}"
 echo "SPECIFY_DTB: ${SPECIFY_DTB}"
+
+# Current device model
+MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
+if [[ -z "${MYDEVICE_NAME}" ]]; then
+    echo "Unknown device"
+    exit 1
+else
+    echo -e "Current device: ${MYDEVICE_NAME} [ amlogic ]"
+    sleep 3
+fi
 
 # shared partition can be ext4, xfs, btrfs, f2fs
 TARGET_SHARED_FSTYPE=btrfs

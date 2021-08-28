@@ -34,7 +34,7 @@ sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/auto
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 
 # Add p7zip
-svn co https://github.com/hubutui/p7zip-lede/trunk package/p7zip
+# svn co https://github.com/hubutui/p7zip-lede/trunk package/p7zip
 
 # coolsnowwolf default software package replaced with Lienol related software package
 # rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}

@@ -45,7 +45,8 @@ elif [ $( ls *.img.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
 elif [ $( ls *.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     gz_file=$( ls *.7z | head -n 1 )
     echo -e "Update using [ ${gz_file} ] file. Please wait a moment ..."
-    7z x ${gz_file} -aoa -y
+    bsdtar -xmf ${gz_file}
+    #7z x ${gz_file} -aoa -y
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls *.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     zip_file=$( ls *.zip | head -n 1 )
@@ -71,7 +72,8 @@ elif [ $( ls /tmp/upload/*.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     echo -e "Update using [ ${gz_file} ] file. Please wait a moment ..."
     mv -f ${gz_file} .
     gz_file=${gz_file##*/}
-    7z x ${gz_file} -aoa -y
+    bsdtar -xmf ${gz_file}
+    #7z x ${gz_file} -aoa -y
     IMG_NAME=$( ls *.img | head -n 1 )
 elif [ $( ls /tmp/upload/*.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
     zip_file=$( ls /tmp/upload/*.zip | head -n 1 )

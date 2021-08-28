@@ -301,7 +301,7 @@ wait
 
 echo "Successfully updated, automatic restarting..."
 sleep 3
-echo 'b' > /proc/sysrq-trigger
+reboot
 exit 0
 
 

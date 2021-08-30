@@ -22,7 +22,7 @@ env:
   UPLOAD_RELEASE: true
   UPLOAD_WETRANSFER: false
   RECENT_LASTEST: 3
-  TZ: Asia/Shanghai
+  TZ: Asia/Jakarta
 
 jobs:
   build:

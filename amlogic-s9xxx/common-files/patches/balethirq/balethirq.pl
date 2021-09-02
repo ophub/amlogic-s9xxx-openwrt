@@ -130,7 +130,12 @@ sub enable_eth_rps_rfs {
         if(-d "/sys/class/net/${eth}/queues/rx-0") {
 	    my $value = 4096;
             $rps_sock_flow_entries += $value;
-	    my $eth_cpu_mask_hex = sprintf("%0x", $all_cpu_mask - $uniq_eth_cpu_map{$eth});
+            my $eth_cpu_mask_hex;
+ 	    if($eth eq "eth0") {
+ 	        $eth_cpu_mask_hex = sprintf("%0x", $all_cpu_mask - $uniq_eth_cpu_map{$eth} - $uniq_eth_cpu_map{eth1});
+ 	    } else {
+ 	        $eth_cpu_mask_hex = sprintf("%0x", $all_cpu_mask - $uniq_eth_cpu_map{$eth});
+ 	    }
 	    print "Set the rps cpu mask for $eth to 0x$eth_cpu_mask_hex\n";
 	    open my $fh, ">", "/sys/class/net/${eth}/queues/rx-0/rps_cpus" or die;
 	    print $fh $eth_cpu_mask_hex;

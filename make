@@ -9,7 +9,7 @@
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
-build_openwrt=("s905x3" "s905x2" "s905x" "s905d" "s912" "s922x")
+build_openwrt=("s905x3" "s905x2" "s905x" "s905w" "s905d" "s912" "s922x")
 make_path=${PWD}
 tmp_path=${make_path}/tmp
 out_path=${make_path}/out
@@ -190,6 +190,13 @@ refactor_files() {
             ANDROID_UBOOT=""
             AMLOGIC_SOC="s905x"
             ;;
+        s905w | x96mini | tx3mini)
+            FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
+            UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
+            MAINLINE_UBOOT=""
+            ANDROID_UBOOT=""
+            AMLOGIC_SOC="s905w"
+            ;;
         s905d | n1)
             FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
             UBOOT_OVERLOAD="u-boot-n1.bin"
@@ -253,7 +260,10 @@ EOF
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
     
     # Turn off speed limit by default
-    [ -f etc/config/nft-qos ] && sed -i 's/option limit_enable.*/option limit_enable 0/g' etc/config/nft-qos
+    [ -f etc/config/nft-qos ] && sed -i "s|option limit_enable.*|option limit_enable '0'|g" etc/config/nft-qos
+
+    # Turn off hw_flow by default
+    [ -f etc/config/turboacc ] && sed -i "s|option hw_flow.*|option hw_flow '0'|g" etc/config/turboacc
 
     # Add drivers
     [ -f etc/modules.d/8189fs ] || echo "8189fs" > etc/modules.d/8189fs
@@ -350,11 +360,15 @@ make_image() {
 
     [ -d ${out_path} ] || mkdir -p ${out_path}
     SKIP_MB=16
-    fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M ${build_image_file}
+    IMG_SIZE=$((SKIP_MB + BOOT_MB + rootsize))
+
+    #fallocate -l ${IMG_SIZE}M ${build_image_file}
+    dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} 2>/dev/null
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
     parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
     parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
+    #parted -s ${build_image_file} print 2>/dev/null
 
     loop_setup ${build_image_file}
     mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1

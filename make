@@ -318,6 +318,10 @@ EOF
         echo " -----------------------------------------------------" >> etc/banner
     fi
 
+    # Add some package and script connection
+    ln -sf /usr/bin/openwrt-install-amlogic usr/bin/openwrt-install 2>/dev/null
+    ln -sf /usr/bin/openwrt-update-amlogic usr/bin/openwrt-update 2>/dev/null
+
     sync
     # Edit ${root}/* files ========== End ==========
 

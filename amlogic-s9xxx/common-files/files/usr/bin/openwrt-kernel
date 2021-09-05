@@ -98,9 +98,9 @@ if  [ $( ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; th
 
 else
     echo -e "Please upload the kernel files."
-    echo -e "Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ]"
-    echo -e "Specify method: Place the kernel file in [ /mnt/mmcblk*p4/ ]"
-    echo -e "After upload the kernel file, run [ openwrt-kernel ] again."
+    echo -e "Upload method: system menu → Amlogic Service → Manually Upload Update"
+    echo -e "Specify method: Place the kernel file in [ /mnt/${EMMC_NAME}p4/ ]"
+    echo -e "After upload the kernel file, run again."
     exit 1
 fi
 
@@ -207,7 +207,8 @@ fi
 echo -e "Unpack [ ${flippy_version} ] related files ..."
 
 # 01. for /boot five files
-rm -f /boot/uInitrd /boot/zImage /boot/Image /boot/config-* /boot/initrd.img-* /boot/System.map-* 2>/dev/null && sync
+rm -f /boot/config-* /boot/initrd.img-* /boot/System.map-* /boot/uInitrd-* /boot/vmlinuz-* 2>/dev/null && sync
+rm -f /boot/uInitrd /boot/zImage /boot/Image 2>/dev/null && sync
 tar -xzf ${P4_PATH}/${build_boot} -C /boot && sync
 
 if [[ -f "/boot/uInitrd-${flippy_version}" ]]; then
@@ -219,7 +220,6 @@ if [[ -f "/boot/uInitrd-${flippy_version}" ]]; then
         uInitrd_new=$(md5sum /boot/uInitrd | awk '{print $1}')
         if [[ "${uInitrd_original}" == "${uInitrd_new}" ]]; then
             echo -e "Unpack [ /boot/uInitrd ] complete."
-            rm -f /boot/uInitrd-${flippy_version} && sync
             break
         else
             rm -f /boot/uInitrd && sync
@@ -241,7 +241,6 @@ if [[ -f "/boot/vmlinuz-${flippy_version}" ]]; then
         vmlinuz_new=$(md5sum /boot/${MYBOOT_VMLINUZ} | awk '{print $1}')
         if [[ "${vmlinuz_original}" == "${vmlinuz_new}" ]]; then
             echo -e "Unpack [ /boot/${MYBOOT_VMLINUZ} ] complete."
-            rm -f /boot/vmlinuz-${flippy_version} && sync
             break
         else
             rm -f /boot/${MYBOOT_VMLINUZ} && sync
@@ -303,5 +302,4 @@ echo "Successfully updated, automatic restarting..."
 sleep 3
 reboot
 exit 0
-
 

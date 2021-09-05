@@ -94,11 +94,11 @@ elif [ $( ls /tmp/upload/*.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; the
     unzip -o  ${zip_file}
     IMG_NAME=$( ls *.img | head -n 1 )
 else
-    echo -e "Please upload or specify the update file."
-    echo -e "Upload method: system menu → file transfer → upload the update file to [ /tmp/upload/ ]"
-    echo -e "Specify method: Place the update file in [ /mnt/mmcblk*p4/ ]"
+    echo -e "Please upload or specify the update openwrt firmware file."
+    echo -e "Upload method: system menu → Amlogic Service → Manually Upload Update"
+    echo -e "Specify method: Place the openwrt firmware file in [ /mnt/${EMMC_NAME}p4/ ]"
     echo -e "The supported file suffixes are: *.img, *.img.xz, *.img.gz, *.7z, *.zip"
-    echo -e "After upload the update file, run [ openwrt-update-amlogic ] again."
+    echo -e "After upload the openwrt firmware file, run again."
     exit 1
 fi
 

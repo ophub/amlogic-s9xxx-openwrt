@@ -305,31 +305,31 @@ openwrt-install-amlogic
 
 ### 9.2 使用升级固件脚本命令安装
 
-从浏览器访问 OpenWrt 系统，在 `系统` 菜单下 → `文件传输` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
+从浏览器访问 OpenWrt 系统，在 `系统` 菜单下 → `晶晨宝盒` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/mnt/mmcblk*p4/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
 
 ```yaml
 openwrt-update-amlogic
 ```
 
-💡提示: 脚本 `openwrt-update-amlogic` 会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找各种后缀的升级文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将升级固件的压缩包上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
+💡提示: 脚本 `openwrt-update-amlogic` 会自动从 `/mnt/mmcblk*p4/` 目录中寻找各种后缀的升级文件，你可以通过晶晨宝盒插件或其他软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
-如果在 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果这 2 个目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic  openwrt_s905x3_v5.4.105_2021.03.17.0412.img.gz` ）。升级脚本优先查找 `/mnt/mmcblk*p4/` 目录，如果该目录下没有符合要求的升级固件，将去 `/tmp/upload/` 下继续查找。这 2 个目录中的相关压缩文件，升级脚本会自动匹配进行解压，升级完成后会自动删除此升级固件文件。
+如果在 `/mnt/mmcblk*p4/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic  openwrt_s905x3_v5.4.105_2021.03.17.0412.img.gz` ）。
 
-- 脚本  `openwrt-update-amlogic` 在 2 处目录中的查找顺序说明
+- 脚本  `openwrt-update-amlogic` 在目录中的查找顺序说明
 
-| 目录 | `/mnt/mmcblk*p4/` 1-6 | `/tmp/upload/` 7-10 |
-| ---- | ---- | ---- |
-| 顺序 | `你指定使用的升级固件` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → | `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` |
+| 目录 | `/mnt/mmcblk*p4/` 1-6 |
+| ---- | ---- |
+| 顺序 | `你指定使用的升级固件` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → |
 
 ### 9.3 通过升级 OpenWrt 内核进行升级
 
-从浏览器访问 openwrt 系统，在 `系统` 菜单下 → `文件传输` → 上传内核包 ***`（共有 3 文件：boot-*，dtb-amlogic-*，modules-*）`*** 到默认的上传路径 ***`/tmp/upload/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
+从浏览器访问 openwrt 系统，在 `系统` 菜单下 → `晶晨宝盒` → 上传内核包 ***`（共有 3 文件：boot-*，dtb-amlogic-*，modules-*）`*** 到默认的上传路径 ***`/mnt/mmcblk*p4/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令: 
 
 ```yaml
 openwrt-kernel
 ```
 
-💡提示: 脚本会自动从 `/mnt/mmcblk*p4/` 和 `/tmp/upload/` 两个目录中寻找内核文件，你可以通过 `openwrt` → `系统菜单` → `文件传输` 将内核文件上传到默认的上传路径 `/tmp/upload/` ，也可以借助 WinSCP 等软件将内核文件手动上传至 `/mnt/mmcblk*p4/` 目录下。
+💡提示: 脚本会自动从 `/mnt/mmcblk*p4/` 目录中寻找内核文件，你可以通过 `openwrt` → `系统菜单` → `晶晨宝盒` 将内核文件上传到默认的上传路径 `/mnt/mmcblk*p4/` ，也可以借助 WinSCP 等软件将内核文件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
 更换 OpenWrt 内核仅做了内核替换，固件原本的各种个性化配置均保持不变。是一种最简单的升级方法。支持内核高/低版本自由更换。
 

@@ -34,7 +34,7 @@ env:
   DELETE_RELEASE: true
   DELETE_ARTIFACTS: true
   RECENT_LASTEST: 3
-  TZ: Asia/Shanghai
+  TZ: Asia/Jakarta
 
 jobs:
   build:
@@ -193,7 +193,7 @@ jobs:
           * Firmware information
           Default IP: 192.168.1.1
           Default username: root
-          Default password: password
+          Default password: root
           Default WIFI name: OpenWrt
           Default WIFI password: none
           Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt

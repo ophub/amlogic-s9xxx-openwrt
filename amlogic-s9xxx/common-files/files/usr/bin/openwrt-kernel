@@ -46,9 +46,8 @@ EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 P4_PATH="/mnt/${EMMC_NAME}p4"
 
 # Move kernel related files to the ${P4_PATH} directory
-if  [ $( ls /tmp/upload/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
-    mv -f /tmp/upload/*.tar.gz ${P4_PATH}/ && sync
-fi
+mv -f /tmp/upload/* ${P4_PATH}/ 2>/dev/null && sync
+mv -f ${P4_PATH}/.tmp_upload/* ${P4_PATH}/ 2>/dev/null && sync
 
 if  [ $( ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 3 ]; then
 

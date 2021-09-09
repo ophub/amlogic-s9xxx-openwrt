@@ -38,7 +38,8 @@ elif [[ "$(echo "${EMMC_NAME}" | awk -F 'mmcblk' '{print NF-1}')" -ne "1" ]]; th
 fi
 
 cd /mnt/${EMMC_NAME}p4/
-mv -f /tmp/upload/* . && sync
+mv -f /tmp/upload/* . 2>/dev/null && sync
+mv -f .tmp_upload/* . 2>/dev/null && sync
 
 if [[ "${IMG_NAME}" == *.img ]]; then
     echo -e "Update using [ ${IMG_NAME} ] file. Please wait a moment ..."

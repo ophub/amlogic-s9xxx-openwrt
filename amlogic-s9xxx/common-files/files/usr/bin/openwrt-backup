@@ -86,9 +86,10 @@ backup() {
 }
 
 restore() {
+    EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
     [ -d "${BACKUP_DIR}" ] || mkdir -p "${BACKUP_DIR}"
     [ -f "/tmp/upload/${BACKUP_NAME}" ] && mv -f "/tmp/upload/${BACKUP_NAME}" ${BACKUP_FILE} && sync
-    [ -f "/mnt/mmcblk*p4/${BACKUP_NAME}" ] && mv -f "/mnt/mmcblk*p4/${BACKUP_NAME}" ${BACKUP_FILE} && sync
+    [ -f "/mnt/${EMMC_NAME}p4/${BACKUP_NAME}" ] && mv -f "/mnt/${EMMC_NAME}p4/${BACKUP_NAME}" ${BACKUP_FILE} && sync
 
     if [ -f "${BACKUP_FILE}" ]; then
         echo -n "restore config files ... "

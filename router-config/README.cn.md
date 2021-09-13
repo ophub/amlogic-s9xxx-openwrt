@@ -301,7 +301,7 @@ openwrt-install-amlogic
 
 ### 9.1 使用操作面板安装
 
-从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.40 升级到低版本如 5.30 ，也可以从低版本如 5.91 升级到高版本如 5.96 。内核版本号的高低不影响升级，可自由升级/降级）。
+从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.10.64 升级到低版本如 5.4.145 ，也可以从低版本如 5.4.145 升级到高版本如 5.10.64 。内核版本号的高低不影响升级，可自由升级/降级）。
 
 ### 9.2 使用升级固件脚本命令安装
 
@@ -313,7 +313,7 @@ openwrt-update-amlogic
 
 💡提示: 脚本 `openwrt-update-amlogic` 会自动从 `/mnt/mmcblk*p4/` 目录中寻找各种后缀的升级文件，你可以通过晶晨宝盒插件或其他软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
-如果在 `/mnt/mmcblk*p4/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic  openwrt_s905x3_v5.4.105_2021.03.17.0412.img.gz` ）。
+如果在 `/mnt/mmcblk*p4/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic openwrt_s905x3_v5.4.145_2021.03.17.0412.img.gz` ）。
 
 - 脚本  `openwrt-update-amlogic` 在目录中的查找顺序说明
 
@@ -378,13 +378,13 @@ REPO_BRANCH: openwrt-19.07
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.14.1_5.4.144
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.64_5.4.145
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
-修改 `-d` 后面的参数为你的机顶盒的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.7.2` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
+修改 `-d` 后面的参数为你的机顶盒的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.4.145` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
 
 ### 10.3 使用 SSH 远程连接 GitHub Actions 进行个性化配置
 

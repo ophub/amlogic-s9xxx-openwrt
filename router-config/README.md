@@ -307,7 +307,7 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ### 9.1 Update using the operation panel
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.40 to a lower version such as 5.30, or from a lower version such as 5.91 to a higher version such as 5.96. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.10.64 to a lower version such as 5.4.145, or from a lower version such as 5.4.145 to a higher version such as 5.10.64. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
 ### 9.2 Update using script commands
 
@@ -318,7 +318,7 @@ openwrt-update-amlogic
 ```
 💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the `openwrt-update-amlogic` script will automatically find the `update file` from the `/mnt/mmcblk*p4/` directories.
     
-If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic specified_update_file`*** command to specify the `update file`.
+If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.4.145_2021.03.17.0412.img.gz`*** command to specify the `update file`.
 
 - The `openwrt-update-amlogic` update file search order
 
@@ -384,14 +384,14 @@ Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.14.1_5.4.144
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.64_5.4.145
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
 Modify the -d parameter to the model of your STB, and modify the value after the -k parameter to the version number of the kernel you want to compile:
-`sudo ./make -d -b s905x -k 5.7.2`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
+`sudo ./make -d -b s905x -k 5.4.145`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
 
 ### 10.3 Use SSH to remotely connect to GitHub Actions
 

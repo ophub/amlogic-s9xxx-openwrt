@@ -53,7 +53,7 @@ jobs:
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_lede.*/openwrt-armvirt-.*.tar.gz" | head -n 1 > DOWNLOAD_ARMVIRT
         [ -s DOWNLOAD_ARMVIRT ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.14.1_5.4.144
+        sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.64_5.4.145
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_lede.*/ipk.tar.gz" | head -n 1 > DOWNLOAD_IPK
         [ -s DOWNLOAD_IPK ] && wget -q -P out https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_IPK)
         echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV

@@ -53,7 +53,7 @@
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.14.1_5.4.144
+    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.64_5.4.145
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -73,7 +73,7 @@
   with:
     armvirt64_path: openwrt/bin/targets/*/*/*.tar.gz
     amlogic_openwrt: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    amlogic_kernel: 5.14.1_5.4.144
+    amlogic_kernel: 5.10.64_5.4.145
     auto_kernel: true
     amlogic_size: 1024
 ```
@@ -83,7 +83,7 @@
 |------------------------|------------------------|------------------------------------------------|
 | armvirt64_path         | no                     | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，使用文件在当前工作流中的路径如 `openwrt/bin/targets/*/*/*.tar.gz` |
 | amlogic_openwrt        | s905d_s905x3           | 设置打包盒子的 `SOC` ，默认 `all` 打包全部盒子，可指定单个盒子如 `s905x3` ，可选择多个盒子用_连接如 `s905x3_s905d` 。各盒子的SoC代码为：`s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s922x`, `s912` |
-| amlogic_kernel         | 5.14.1_5.4.144         | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
+| amlogic_kernel         | 5.10.64_5.4.145         | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
 | auto_kernel            | true                   | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `amlogic_kernel` 中指定的内核如 5.13.2 的 5.13 同系列是否有更新的版本，如有 5.13.3 及之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | amlogic_size           | 1024                   | 设置固件 ROOT 分区的大小                         |
 
@@ -136,7 +136,7 @@
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.14.1_5.4.144
+    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.64_5.4.145
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -158,15 +158,15 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 
 ## 打包命令的相关参数说明
 
-- `sudo ./make -d -b s905x3 -k 5.4.144` : 推荐使用. 使用默认配置进行相关内核打包。
-- `sudo ./make -d -b s905x3_s905d -k 5.14.1_5.4.144` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
+- `sudo ./make -d -b s905x3 -k 5.4.145` : 推荐使用. 使用默认配置进行相关内核打包。
+- `sudo ./make -d -b s905x3_s905d -k 5.10.64_5.4.145` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
 - `sudo ./make -d` : 使用默认配置，使用内核库中的最新内核包，对全部型号的机顶盒进行打包。
-- `sudo ./make -d -b s905x3 -k 5.4.144 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为1024M。
+- `sudo ./make -d -b s905x3 -k 5.4.145 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为1024M。
 - `sudo ./make -d -b s905x3_s905d`  使用默认配置，对多个型号的机顶盒进行全部内核打包, 使用 `_` 进行多型号连接。
-- `sudo ./make -d -k 5.14.1_5.4.144` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。
-- `sudo ./make -d -k 5.14.1_5.4.144 -a true` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
+- `sudo ./make -d -k 5.10.64_5.4.145` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。
+- `sudo ./make -d -k 5.10.64_5.4.145 -a true` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
 - `sudo ./make -d -k latest` : 使用默认配置，最新的内核包，对全部型号的机顶盒进行打包。
-- `sudo ./make -d -s 1024 -k 5.4.144` : 使用默认配置，设置固件大小为 1024M, 并指定内核为 5.4.144 ，对全部型号机顶盒进行打包。
+- `sudo ./make -d -s 1024 -k 5.4.145` : 使用默认配置，设置固件大小为 1024M, 并指定内核为 5.4.145 ，对全部型号机顶盒进行打包。
 - `sudo ./make -h` : 显示帮助文档。
 - `sudo ./make` : 如果你对脚本很熟悉，可以在本地编译时，这样进行问答式参数配置。
 
@@ -174,7 +174,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 | ---- | ---- | ---- |
 | -d | Defaults | 使用默认配置 |
 | -b | Build | 指定机顶盒型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 可以指定的型号有: `s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s922x`, `s912` |
-| -k | Kernel | 指定内核，如 `-k 5.4.144` . 多个内核使用 `_` 进行连接，如 `-k 5.14.1_5.4.144` [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) |
+| -k | Kernel | 指定内核，如 `-k 5.4.145` . 多个内核使用 `_` 进行连接，如 `-k 5.10.64_5.4.145` [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) |
 | -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.13.2 的 5.13 同系列是否有更新的版本，如有 5.13.3 及之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -s | Size | 对固件的大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
 | -h | help | 展示帮助文档. |

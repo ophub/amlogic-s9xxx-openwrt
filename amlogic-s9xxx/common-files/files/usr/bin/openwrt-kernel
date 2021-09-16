@@ -23,21 +23,22 @@ echo -e "Start update the openwrt kernel."
 
 # Current device model
 MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
-if [ -z "${MYDEVICE_NAME}" ]; then
-    echo "Unknown device"
-    exit 1
-elif [ "${MYDEVICE_NAME}" == "Chainedbox L1 Pro" ]; then
+if [[ -z "${MYDEVICE_NAME}" ]]; then
+    die "The device name is empty and cannot be recognized."
+elif [[ "$(echo ${MYDEVICE_NAME} | grep "Chainedbox L1 Pro")" != "" ]]; then
     MYDTB_FILE="rockchip"
     MYBOOT_VMLINUZ="Image"
-elif [ "${MYDEVICE_NAME}" == "BeikeYun" ]; then
+elif [[ "$(echo ${MYDEVICE_NAME} | grep "BeikeYun")" != "" ]]; then
     MYDTB_FILE="rockchip"
     MYBOOT_VMLINUZ="Image"
-elif [ "${MYDEVICE_NAME}" == "V-Plus Cloud" ]; then
+elif [[ "$(echo ${MYDEVICE_NAME} | grep "V-Plus Cloud")" != "" ]]; then
     MYDTB_FILE="allwinner"
     MYBOOT_VMLINUZ="zImage"
-else
+elif [[ -f "/etc/flippy-openwrt-release" ]]; then
     MYDTB_FILE="amlogic"
     MYBOOT_VMLINUZ="zImage"
+else
+    die "Unknown device: [ ${MYDEVICE_NAME} ], Not supported."
 fi
 echo -e "Current device: ${MYDEVICE_NAME} [${MYDTB_FILE}]"
 sleep 3

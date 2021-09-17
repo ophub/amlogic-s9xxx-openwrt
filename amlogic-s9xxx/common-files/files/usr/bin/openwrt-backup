@@ -1,0 +1,376 @@
+#!/bin/bash
+#======================================================================
+# Function: Backup and restore config files in the /etc directory
+# Copyright (C) 2020-- https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
+#======================================================================
+
+SNAPSHOT_PRESTR=".snapshots/"
+BACKUP_DIR="/.reserved"
+BACKUP_NAME="openwrt_config.tar.gz"
+BACKUP_FILE="${BACKUP_DIR}/${BACKUP_NAME}"
+BACKUP_LIST='./etc/AdGuardHome.yaml \
+./etc/adblocklist/ \
+./etc/amule/ \
+./etc/china_ssr.txt \
+./etc/cifs/cifsdpwd.db \
+./etc/smbd/smbdpwd.db \
+./etc/ksmbd/ksmbdpwd.db \
+./etc/config/ \
+./etc/openclash/backup/ \
+./etc/openclash/core/ \
+./etc/openclash/config/ \
+./etc/openclash/custom/ \
+./etc/openclash/game_rules/ \
+./etc/openclash/rule_provider/ \
+./etc/openclash/proxy_provider/ \
+./etc/dnsforwarder/ \
+./etc/dnsmasq.conf \
+./etc/dnsmasq.d/ \
+./etc/dnsmasq.oversea/ \
+./etc/dnsmasq.ssr/ \
+./etc/docker/key.json \
+./etc/dropbear/dropbear_rsa_host_key \
+./etc/easy-rsa/ \
+./etc/environment \
+./etc/exports \
+./etc/firewall.user \
+./etc/gfwlist/ \
+./etc/haproxy.cfg \
+./etc/hosts \
+./etc/ipsec.conf \
+./etc/ipsec.d/ \
+./etc/ipsec.secrets \
+./etc/ipsec.user \
+./etc/ipset/ \
+./etc/mwan3.user \
+./etc/nginx/nginx.conf \
+./etc/ocserv/ \
+./etc/openvpn/ \
+./etc/pptpd.conf \
+./etc/qBittorrent/ \
+./etc/rc.local \
+./etc/samba/smbpasswd \
+./etc/shadow \
+./etc/smartdns/ \
+./etc/sqm/ \
+./etc/ssl/private/  \
+./etc/ssrplus/ \
+./etc/transmission/ \
+./etc/urandom.seed'
+
+if dmesg | grep 'meson' >/dev/null 2>&1; then
+    PLATFORM="amlogic"
+elif dmesg | grep 'rockchip' >/dev/null 2>&1; then
+    PLATFORM="rockchip"
+elif dmesg | grep 'sun50i-h6' >/dev/null 2>&1; then
+    PLATFORM="allwinner"
+else
+    echo "Unknown platform, only support amlogic or rockchip or allwinner h6!"
+    exit 1
+fi
+
+backup() {
+    cd /
+    echo -n "Backup config files ... "
+    [ -d "${BACKUP_DIR}" ] || mkdir -p "${BACKUP_DIR}"
+    eval tar czf "${BACKUP_FILE}" "${BACKUP_LIST}" 2>/dev/null
+    sync
+    if [ -f "${BACKUP_FILE}" ];then
+        echo "Has been backed up to [ ${BACKUP_FILE} ], please download and save."
+        exit 0
+    else
+        echo "Backup failed!"
+        exit 1
+    fi
+}
+
+restore() {
+    EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
+    [ -d "${BACKUP_DIR}" ] || mkdir -p "${BACKUP_DIR}"
+    [ -f "/tmp/upload/${BACKUP_NAME}" ] && mv -f "/tmp/upload/${BACKUP_NAME}" ${BACKUP_FILE} && sync
+    [ -f "/mnt/${EMMC_NAME}p4/${BACKUP_NAME}" ] && mv -f "/mnt/${EMMC_NAME}p4/${BACKUP_NAME}" ${BACKUP_FILE} && sync
+
+    if [ -f "${BACKUP_FILE}" ]; then
+        echo -n "restore config files ... "
+        cd /
+        tar xzf "${BACKUP_FILE}" 2>/dev/null && sync
+
+        echo "Successful recovery. Will start automatically, please refresh later!"
+        sleep 3
+        reboot
+        exit 0
+    else
+        echo "The backup file [ ${BACKUP_FILE} ] not found!"
+        exit 1
+    fi
+}
+
+gen_fstab() {
+    ROOT_MSG=$(lsblk -l -o NAME,PATH,MOUNTPOINT,UUID,FSTYPE,LABEL | awk '$3 ~ /^\/$/ {print $0}')
+    if [ "$ROOT_MSG" == "" ];then
+        echo "Get rootfs message failed!"
+        exit 1
+    fi
+
+    ROOT_NAME=$(echo $ROOT_MSG | awk '{print $1}')
+    ROOT_DEV=$(echo $ROOT_MSG | awk '{print $2}')
+    ROOT_UUID=$(echo $ROOT_MSG | awk '{print $4}')
+    ROOT_FSTYPE=$(echo $ROOT_MSG | awk '{print $5}')
+    ROOT_LABEL=$(echo $ROOT_MSG | awk '{print $6}')
+
+    EMMC_NAME=$(echo $ROOT_NAME | cut -c 1-7)
+
+    BOOT_NAME="${EMMC_NAME}p1"
+    BOOT_MSG=$(lsblk -l -o NAME,UUID,FSTYPE,LABEL | grep "${BOOT_NAME}")
+    BOOT_DEV="/dev/${BOOT_NAME}"
+    BOOT_UUID=$(echo $BOOT_MSG | awk '{print $2}')
+    BOOT_FSTYPE=$(echo $BOOT_MSG | awk '{print $3}')
+    BOOT_LABEL=$(echo $BOOT_MSG | awk '{print $4}')
+
+    cat > /etc/config/fstab <<EOF
+config global
+	option anon_swap '0'
+	option anon_mount '1'
+	option auto_swap '0'
+	option auto_mount '1'
+	option delay_root '5'
+	option check_fs '0'
+
+config mount
+	option target '/overlay'
+	option uuid '${ROOT_UUID}'
+	option enabled '1'
+	option enabled_fsck '1'
+	option fstype '${ROOT_FSTYPE}'
+EOF
+
+    if [ "${ROOT_FSTYPE}" == "btrfs" ];then
+        echo "	option options 'compress=zstd'" >> /etc/config/fstab
+    fi
+
+    cat >> /etc/config/fstab <<EOF
+
+config mount
+	option target '/boot'
+EOF
+    
+    if [ "${BOOT_FSTYPE}" == "vfat" ];then
+        echo "	option label '${BOOT_LABEL}'" >> /etc/config/fstab
+    else
+        echo "	option uuid '${BOOT_UUID}'" >> /etc/config/fstab
+    fi
+
+    cat >> /etc/config/fstab <<EOF
+	option enabled '1'
+	option enabled_fsck '1'
+	option fstype '${BOOT_FSTYPE}'
+           
+EOF
+    echo "/etc/config/fstab generated."
+    echo "please reboot"
+    exit 0
+}
+
+print_list() {
+    echo "${BACKUP_LIST}"
+    exit 0
+}
+
+list_snapshot() {
+    echo "----------------------------------------------------------------"
+    btrfs subvolume list -rt /
+    echo "----------------------------------------------------------------"
+    read -p "Press [ enter ] to return." q
+}
+
+create_snapshot() {
+    default_snap_name="etc-$(date +"%m.%d.%H%M%S")"
+    echo "The default snapshot name is: ${default_snap_name}"
+    echo "If you want to modify the snapshot name, please enter it below. Cannot contain spaces."
+    echo "If you do not want to modify it, just press [ Enter ]. Or press the [ q ] key to go back directly."
+    while :; do
+        read -p "[${default_snap_name}] : " nname
+        if [ "${nname}" == "" ]; then
+            snap_name="${default_snap_name}"
+            break
+        elif echo "${nname}" | grep -E "\s+" > /dev/null; then
+            echo "The name [${nname}] contains spaces, please re-enter!"
+            continue
+        elif [ "${nname}" == "q" ] || [ "${nname}" == "Q" ]; then
+            return
+        else
+            if btrfs subvolume list -rt / | awk '{print $4}' | grep "^\\${SNAPSHOT_PRESTR}${nname}$" >/dev/null; then
+                echo "Name: [ ${nname} ] has been used, please re-enter!"
+                continue
+            else
+                snap_name="${nname}"
+                break
+            fi
+        fi
+    done
+
+    (  cd /
+    chattr -ia etc/config/fstab
+    btrfs subvolume snapshot -r /etc "${SNAPSHOT_PRESTR}${snap_name}"
+    if [[ "$?" -eq "0" ]]; then
+        echo "The snapshot is created successfully: ${snap_name}"
+    else
+        echo "Snapshot creation failed!"
+    fi
+    )
+    read -p "Press [ enter ] to return." q
+}
+
+restore_snapshot() {
+    echo "Below are the existing etc snapshots, please enter the name of one of them."
+    echo "Tip: [ etc-000 ] This is the factory initial configuration."
+    echo "     [ etc-001 ] if it exists, it is the initial configuration after upgrading from the previous version."
+    echo "----------------------------------------------------------------"
+    btrfs subvolume list -rt /
+    echo "----------------------------------------------------------------"
+    read -p "Please enter the name of the snapshot to be restored (only the part after ${SNAPSHOT_PRESTR} needs to be entered): " snap_name
+    if btrfs subvolume list -rt / | grep "${SNAPSHOT_PRESTR}${snap_name}" > /dev/null; then
+        while :; do
+            echo "Once the snapshot is restored, the current [ /etc ] will be overwritten!"
+            read -p "Are you sure you want to restore the snapshot: [$snap_name]? y/n [n] " yn
+            case $yn in
+                y|Y)
+                    (
+                        cd /
+                        chattr -ia etc/config/fstab
+                        mv etc etc.backup
+                        btrfs subvolume snapshot "${SNAPSHOT_PRESTR}${snap_name}" etc
+                        if [[ "$?" -eq "0" ]]; then
+                            btrfs subvolume delete -c etc.backup
+                            echo "Successfully restored, please enter [ reboot ] to restart the openwrt."
+                        else
+                            rm -rf etc
+                            mv etc.backup etc
+                            echo "Recovery failed, [ etc ] has not changed!"
+                        fi
+                    )
+                    read -p "Press [ enter ] to return." q
+                    break
+                    ;;
+                *)  break
+                    ;;
+            esac
+        done
+    else
+        read -p "The snapshot name is incorrect, please run the program again! Press [ Enter ] to go back." q
+    fi
+}
+
+delete_snapshot() {
+    echo "Below are the existing [ etc ] snapshots, please enter the name of one of them."
+    echo "Tip: [ etc-000 ] This is the factory initial configuration (cannot be deleted)"
+    echo "     [ etc-001 ] if it exists, it is the initial configuration after upgrading from the previous version (cannot be deleted)"
+    echo "----------------------------------------------------------------"
+    btrfs subvolume list -rt /
+    echo "----------------------------------------------------------------"
+    read -p "Please enter the name of the snapshot to be deleted (only the part after ${SNAPSHOT_PRESTR} needs to be entered): " snap_name
+    if [ "${snap_name}" == "etc-000" ] || [ "${snap_name}" == "etc-001" ]; then
+        read -p "The key snapshot cannot be deleted! Press [ enter ] to return." q
+    elif [ "${snap_name}" == "" ]; then
+        read -p "Name is empty! Press [ enter ] to return." q
+    else
+        if btrfs subvolume list -rt / | grep "${SNAPSHOT_PRESTR}${snap_name}" > /dev/null; then
+            read -p "Are you sure you want to delete ${snap_name}? y/n [n] " yn
+            case $yn in
+                y|Y)
+                    (
+                        cd /
+                        btrfs subvolume delete -c "${SNAPSHOT_PRESTR}${snap_name}"
+                        if [[ "$?" -eq "0" ]]; then
+                            echo "Snapshot [ ${snap_name} ] has been deleted."
+                        else
+                            echo "Snapshot [ ${snap_name} ] failed to delete!"
+                        fi
+                    )
+                    read -p "Press [ Enter ] to return." q
+                    ;;
+                *)  break
+                    ;;
+            esac
+        else
+            read -p "The name of the snapshot is incorrect, press [ Enter ] to return." q
+        fi
+    fi
+}
+
+print_help() {
+    echo "Usage: $0  -b    [ backup ]"
+    echo "       $0  -r    [ restore ]"
+    echo "       $0  -g    [ generate fstab ]"
+    echo "       $0  -p    [ print backup list ]"
+    echo "       $0  -l    [ list snapshots ]"
+    echo "       $0  -c    [ create snapshot ]"
+    echo "       $0  -s    [ restore snapshot ]"
+    echo "       $0  -d    [ delete snapshot ]"
+    echo "       $0  -h    [ help ]"
+    echo "       $0  -q    [ quit ]"
+    exit 0
+}
+
+menu() {
+    while :;do
+        clear
+        cat <<EOF
+
+        ┌────────[ backup config ]────────┐
+        │                                 │
+        │       b. backup config          │
+        │       r. restore config         │
+        │       g. generate fstab         │
+        │       p. print backup list      │
+        │                                 │
+        ├─────[ Snapshot management ]─────┤
+        │                                 │
+        │       l. list snapshots         │
+        │       c. create snapshot        │
+        │       s. restore snapshot       │
+        │       d. delete snapshot        │
+        │                                 │
+        ╞═════════════════════════════════╡
+        │                                 │
+        │       h. help                   │
+        │       q. quit                   │
+        │                                 │
+        └─────────────────────────────────┘
+	
+EOF
+        echo -ne "please select: [ ]\b\b"
+        read select
+        case $select in
+            b | backup)            backup;;
+            r | restore)           restore
+                                   gen_fstab;;
+            g | gen_fstab)         gen_fstab;;
+            p | print_list)        print_list;;
+            l | list_snapshot)     list_snapshot;;
+            c | create_snapshot)   create_snapshot;;
+            s | restore_snapshot)  restore_snapshot;;
+            d | delete_snapshot)   delete_snapshot;;
+            h | help)              print_help;;
+            q | quit)              exit 0;;
+        esac
+    done
+}
+
+getopts 'brgplcsdhq' opts
+case $opts in 
+    b | backup)            backup;;
+    r | restore)           restore
+                           gen_fstab;;
+    g | gen_fstab)         gen_fstab;;
+    p | print_list)        print_list;;
+    l | list_snapshot)     list_snapshot;;
+    c | create_snapshot)   create_snapshot;;
+    s | restore_snapshot)  restore_snapshot;;
+    d | delete_snapshot)   delete_snapshot;;
+    h | help)              print_help;;
+    q | quit)              exit 0;;
+    *)                     menu;;
+esac
+

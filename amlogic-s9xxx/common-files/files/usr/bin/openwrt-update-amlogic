@@ -21,7 +21,10 @@ BACKUP_RESTORE_CONFIG=${3}
 # Current device model
 MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
 if [[ -z "${MYDEVICE_NAME}" ]]; then
-    echo "Unknown device"
+    echo "The device name is empty and cannot be recognized."
+    exit 1
+elif [[ ! -f "/etc/flippy-openwrt-release" ]]; then
+    echo "The [ /etc/flippy-openwrt-release ] file is missing."
     exit 1
 else
     echo -e "Current device: ${MYDEVICE_NAME} [ amlogic ]"

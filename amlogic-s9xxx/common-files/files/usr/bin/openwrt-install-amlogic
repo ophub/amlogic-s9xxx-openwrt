@@ -1,0 +1,679 @@
+#!/bin/bash
+#======================================================================================
+# Function: Install openwrt to emmc for Amlogic S9xxx STB
+# Copyright (C) 2020-- https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
+#======================================================================================
+
+# The script supports directly setting parameters for installation, skipping interactive selection
+# openwrt-install-amlogic ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME}
+# E.g: openwrt-install-amlogic YES 1
+# E.g: openwrt-install-amlogic NO 99 meson-gxl-s905x-p212.dtb
+# Tip: When custom dtb file, set ${SOC_ID} to 99, and parameter ${DTB_FILENAME} must be set
+# return 0
+
+# You can also execute the script directly, and interactively select related functions
+# E.g: openwrt-install-amlogic
+
+# Receive one-key command related parameters
+AUTO_MAINLINE_UBOOT=${1}
+
+# For [luci-app-amlogic] input parameter: SOC & DTB
+# When there is no input parameter, select manually
+SPECIFY_SOC=""
+SPECIFY_DTB=""
+if  [[ -n "$(echo ${2} | sed -n "/^[0-9]\+$/p")" ]]; then
+    SPECIFY_SOC=${2}
+    if  [[ "${2}" -eq "99" ]]; then
+        if  [[ -n "${3}" ]]; then
+            SPECIFY_DTB=${3}
+        else
+            echo "Please enter the DTB file name!"
+            exit 1
+        fi
+
+    fi
+fi
+
+echo "AUTO_MAINLINE_UBOOT: ${AUTO_MAINLINE_UBOOT}"
+echo "SPECIFY_SOC: ${SPECIFY_SOC}"
+echo "SPECIFY_DTB: ${SPECIFY_DTB}"
+
+# Current device model
+MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
+if [[ -z "${MYDEVICE_NAME}" ]]; then
+    echo "The device name is empty and cannot be recognized."
+    exit 1
+elif [[ ! -f "/etc/flippy-openwrt-release" ]]; then
+    echo "The [ /etc/flippy-openwrt-release ] file is missing."
+    exit 1
+else
+    echo -e "Current device: ${MYDEVICE_NAME} [ amlogic ]"
+    sleep 3
+fi
+
+# shared partition can be ext4, xfs, btrfs, f2fs
+TARGET_SHARED_FSTYPE=btrfs
+
+emmc=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
+if [[ "${emmc}" == "" ]]; then
+    echo "No EMMC or SD devices were found in this system!"
+    exit 1
+fi
+
+if [[ "$(echo ${emmc} | grep mmcblk)" == "" ]]; then
+    echo "There seems to be no EMMC device on your system!"
+    exit 1
+fi
+
+if [[ "$(echo "${emmc}" | awk -F 'mmcblk' '{print NF-1}' | head -n 1)" -ne "1" ]]; then
+    echo "Please remove the more SD-card and try again!"
+    exit 1
+fi
+
+if [[ "$(lsblk | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])' | sort | uniq)" == "$(lsblk | grep -e '/$' | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])')" ]]; then
+    echo "you are running in emmc mode, please boot system with usb!"
+    exit 1
+fi
+
+# EMMC DEVICE NAME
+EMMC_NAME="${emmc}"
+EMMC_DEVPATH="/dev/${EMMC_NAME}"
+echo ${EMMC_DEVPATH}
+EMMC_SIZE=$(lsblk -l -b -o NAME,SIZE | grep ${EMMC_NAME} | sort | uniq | head -n1 | awk '{print $2}')
+echo "${EMMC_NAME} : ${EMMC_SIZE} bytes"
+
+ROOT_NAME=$(lsblk -l -o NAME,MAJ:MIN,MOUNTPOINT | grep -e '/$' | awk '{print $1}')
+echo "ROOTFS: ${ROOT_NAME}"
+
+BOOT_NAME=$(lsblk -l -o NAME,MAJ:MIN,MOUNTPOINT | grep -e '/boot$' | awk '{print $1}')
+echo "BOOT: ${BOOT_NAME}"
+
+#Choose the type of installation box
+FDTFILE="meson-sm1-x96-max-plus.dtb"
+U_BOOT_EXT=0
+cat <<EOF
+------------------------------------------------------------------------
+Please select s9xxx box model:
+1. X96-Max+ (4G DDR) -------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+2. X96-Max+ (4G DDR) -------- [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
+3. HK1-Box (4G DDR) --------- [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+4. HK1-Box (4G DDR) --------- [ S905x3 / CPU: 2184Mtz / NETWORK: 1000M ]
+5. H96-Max-X3 (4G DDR) ------ [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+6. H96-Max-X3 (4G DDR) ------ [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
+7. Ugoos-X3 (Cube/Pro/Plus) - [ S905x3 / CPU: 2124Mtz / NETWORK: 1000M ]
+8. Ugoos-X3 (Cube/Pro/Plus) - [ S905x3 / CPU: 2208Mtz / NETWORK: 1000M ]
+9. X96-Max-4G --------------- [ S905x2 / CPU: 1944Mtz / NETWORK: 1000M ]
+10. X96-Max-2G -------------- [ S905x2 / CPU: 1944Mtz / NETWORK: 100M  ]
+11. Belink-GT-King ---------- [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+12. Belink-GT-King-Pro ------ [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+13. UGOOS-AM6-Plus ---------- [ S922x  / CPU: 2124Mtz / NETWORK: 1000M ]
+14. Octopus-Planet ---------- [ S912   / CPU: 2124Mtz / NETWORK: 1000M ]
+15. Phicomm-n1 -------------- [ S905d  / CPU: 2124Mtz / NETWORK: 1000M ]
+16. hg680p & b860h ---------- [ S905x  / CPU: 2124Mtz / NETWORK: 1000M ]
+17. X96-Mini & TX3-Mini ----- [ S905w  / CPU: 1944Mtz / NETWORK: 100M  ]
+
+0. Other ---------------- [ Enter the dtb file name of your box ]
+------------------------------------------------------------------------
+EOF
+# For [luci-app-amlogic] input parameter: SOC & DTB
+# When there is no input parameter, select manually
+if [[ -n "${SPECIFY_SOC}" ]]; then
+    boxtype=${SPECIFY_SOC}
+else
+    echo  "Please choose:"
+    read  boxtype
+fi
+case  $boxtype in
+      1) FDTFILE="meson-sm1-x96-max-plus.dtb"
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+         ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+         AMLOGIC_SOC="s905x3"
+         ;;
+      2) FDTFILE="meson-sm1-x96-max-plus-oc.dtb"
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+         ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+         AMLOGIC_SOC="s905x3"
+         ;;
+      3) FDTFILE="meson-sm1-hk1box-vontar-x3.dtb"
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
+         ;;
+      4) FDTFILE="meson-sm1-hk1box-vontar-x3-oc.dtb"
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/hk1box-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
+         ;;
+      5) FDTFILE="meson-sm1-h96-max-x3.dtb"
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
+         ;;
+      6) FDTFILE="meson-sm1-h96-max-x3-oc.dtb"
+         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+         MAINLINE_UBOOT="/lib/u-boot/h96maxx3-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
+         ;;
+      7) FDTFILE="meson-sm1-ugoos-x3.dtb"
+         UBOOT_OVERLOAD="u-boot-ugoos-x3.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
+         ;;
+      8) FDTFILE="meson-sm1-ugoos-x3-oc.dtb"
+         UBOOT_OVERLOAD="u-boot-ugoos-x3.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x3"
+         ;;
+      9) FDTFILE="meson-g12a-x96-max.dtb"
+         UBOOT_OVERLOAD="u-boot-x96max.bin"
+         MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x2"
+         ;;
+      10) FDTFILE="meson-g12a-x96-max-rmii.dtb"
+         UBOOT_OVERLOAD="u-boot-x96max.bin"
+         MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x2"
+         ;;
+      11) FDTFILE="meson-g12b-gtking.dtb"
+         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT="/lib/u-boot/gtking-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s922x"
+         ;;
+      12) FDTFILE="meson-g12b-gtking-pro.dtb"
+         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s922x"
+         ;;
+      13) FDTFILE="meson-g12b-ugoos-am6.dtb"
+         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+         MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s922x"
+         ;;
+      14) FDTFILE="meson-gxm-octopus-planet.dtb"
+         UBOOT_OVERLOAD="u-boot-zyxq.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s912"
+         ;;
+      15) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
+         UBOOT_OVERLOAD="u-boot-n1.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
+         AMLOGIC_SOC="s905d"
+         ;;
+      16) FDTFILE="meson-gxl-s905x-p212.dtb"
+         UBOOT_OVERLOAD="u-boot-p212.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905x"
+         ;;
+      17) FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
+         UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s905w"
+         ;;
+      99) FDTFILE=${SPECIFY_DTB}
+         UBOOT_OVERLOAD=""
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC=""
+         ;;
+      0) cat <<EOF
+Please enter the .dtb file name of your box, do not include the path.
+For example: $FDTFILE
+EOF
+         echo  "Enter the .dtb File name:"
+         read  CUST_FDTFILE
+         FDTFILE=$CUST_FDTFILE
+         UBOOT_OVERLOAD=""
+         MAINLINE_UBOOT=""
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC=""
+         ;;
+      *) echo "Input error, exit!"
+         exit 1
+         ;;
+esac
+
+echo -e "FDT Value [ ${FDTFILE} ]"
+
+if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
+    echo "/boot/dtb/amlogic/${FDTFILE} does not exist!"
+    echo "You can download the .dtb file from [ https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb ]"
+    echo "Copy it to [ /boot/dtb/amlogic/ ]."
+    echo "Then execute this Install command."
+    exit 1
+fi
+
+#Check if writing to EMMC is supported
+MODULES_NOW=$(ls /lib/modules/ 2>/dev/null)
+VERSION_NOW=$(echo ${MODULES_NOW} | grep -oE '^[1-9].[0-9]{1,3}' 2>/dev/null)
+echo -e "This Kernel [ ${MODULES_NOW} ]"
+
+k510_ver=${VERSION_NOW%%.*}
+k510_maj=${VERSION_NOW##*.}
+if  [ "${k510_ver}" -eq "5" ];then
+    if  [ "${k510_maj}" -ge "10" ];then
+        K510="1"
+    else
+        K510="0"
+    fi
+elif [ "${k510_ver}" -gt "5" ];then
+    K510="1"
+else
+    K510="0"
+fi
+
+# backup old bootloader
+if [ ! -f "/root/BackupOldBootloader.img" ]; then
+    echo "Backup bootloader -> [ BackupOldBootloader.img ] ... "
+    dd if=/dev/$EMMC_NAME of=/root/BackupOldBootloader.img bs=1M count=4 conv=fsync
+    echo "Backup bootloader complete."
+    echo
+fi
+
+swapoff -a
+
+# umount all other mount points
+MOUNTS=$(lsblk -l -o MOUNTPOINT)
+for mnt in $MOUNTS; do
+    if [ "$mnt" == "MOUNTPOINT" ]; then
+        continue
+    fi
+
+    if [ "$mnt" == "" ]; then
+        continue
+    fi
+
+    if [ "$mnt" == "/" ]; then
+        continue
+    fi
+
+    if [ "$mnt" == "/boot" ]; then
+        continue
+    fi
+
+    if [ "$mnt" == "/opt" ]; then
+        continue
+    fi
+
+    if [ "$mnt" == "[SWAP]" ]; then
+        echo "swapoff -a"
+        swapoff -a
+        continue
+    fi
+
+    if echo $mnt | grep $EMMC_NAME; then
+        echo "umount -f $mnt"
+        umount -f $mnt
+        if [ $? -ne 0 ]; then
+            echo "$mnt Cannot be uninstalled, the installation process is aborted."
+            exit 1
+        fi
+    fi
+done
+
+# Delete old partition if exists
+p=$(lsblk -l | grep -e "${EMMC_NAME}p" | wc -l)
+echo "A total of [ $p ] old partitions on EMMC will be deleted"
+>/tmp/fdisk.script
+while [ $p -ge 1 ]; do
+    echo "d" >> /tmp/fdisk.script
+    if [ $p -gt 1 ]; then
+      echo "$p" >> /tmp/fdisk.script
+    fi
+    p=$((p-1))
+done
+
+# you can change ROOT size(MB) >= 320
+ROOT1=1024
+ROOT2=1024
+if [[ "${AMLOGIC_SOC}" == "s912" || "${AMLOGIC_SOC}" == "s905d" ]]; then
+    BOOT=512
+    BLANK1=68
+    BLANK2=184
+    BLANK3=0
+    BLANK4=0
+elif [[ "${AMLOGIC_SOC}" == "s905x" ]]; then
+    BOOT=160
+    BLANK1=700
+    BLANK2=0
+    BLANK3=0
+    BLANK4=0
+else
+    BOOT=160
+    BLANK1=68
+    BLANK2=0
+    BLANK3=162
+    BLANK4=0
+fi
+
+DST_TOTAL_MB=$((EMMC_SIZE/1024/1024))
+
+start1=$(( BLANK1 * 2048 ))
+end1=$(( start1 + (BOOT * 2048) - 1 ))
+
+start2=$(( (BLANK2 * 2048) + end1 + 1 ))
+end2=$(( start2 + (ROOT1 * 2048) -1 ))
+
+start3=$(( (BLANK3 * 2048) + end2 + 1 ))
+end3=$(( start3 + (ROOT2 * 2048) -1 ))
+
+start4=$(( (BLANK4 * 2048) + end3 + 1 ))
+end4=$(( DST_TOTAL_MB * 2048 -1 ))
+
+cat >> /tmp/fdisk.script <<EOF
+n
+p
+1
+$start1
+$end1
+n
+p
+2
+$start2
+$end2
+n
+p
+3
+$start3
+$end3
+n
+p
+$start4
+$end4
+t
+1
+c
+t
+2
+83
+t
+3
+83
+t
+4
+83
+w
+EOF
+
+fdisk /dev/${EMMC_NAME} < /tmp/fdisk.script 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo "The fdisk partition fails, Please try again."
+    dd if=/root/BackupOldBootloader.img of=/dev/${EMMC_NAME} conf=fsync && sync
+    dd if=/dev/zero of=/dev/${EMMC_NAME} bs=512 count=1 && sync
+    exit 1
+fi
+echo "Partition complete."
+
+# write some zero data to part begin
+seek=$((start1 / 2048))
+dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
+
+seek=$((start2 / 2048))
+dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
+
+seek=$((start3 / 2048))
+dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
+
+seek=$((start4 / 2048))
+dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
+
+#Mainline U-BOOT detection
+FLASH_MAINLINE_UBOOT=0
+if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
+    cat <<EOF
+----------------------------------------------------------------------------------
+Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
+----------------------------------------------------------------------------------
+EOF
+    while :; do
+        # For [luci-app-amlogic] input parameter: SOC & DTB
+        # When there is no input parameter, select manually
+        if [[ "${AUTO_MAINLINE_UBOOT}" == "YES" ]]; then
+            if  [[ "${K510}" -eq "1" ]]; then
+                yn="y"
+            else
+                yn="n"
+            fi
+        elif [[ "${AUTO_MAINLINE_UBOOT}" == "NO" ]]; then
+                yn="n"
+        else
+            read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
+        fi
+        case $yn in
+            y|Y) FLASH_MAINLINE_UBOOT=1
+                break
+                ;;
+            n|N) FLASH_MAINLINE_UBOOT=0
+                break
+                ;;
+        esac
+    done
+fi
+
+if  [[ "${FLASH_MAINLINE_UBOOT}" -eq "1" ]]; then
+    echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ]"
+    dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=444 conv=fsync
+    dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+elif [[ -n "${ANDROID_UBOOT}" && -f "${ANDROID_UBOOT}" ]]; then
+    echo -e "Write Android bootloader: [ ${ANDROID_UBOOT} ]"
+    dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=444 conv=fsync
+    dd if=${ANDROID_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+else
+    echo "Did not change the original bootloader."
+fi
+
+# fix wifi macaddr
+if [ -x /usr/bin/fix_wifi_macaddr.sh ]; then
+    /usr/bin/fix_wifi_macaddr.sh
+fi
+
+# mkfs
+echo "Start creating file system ... "
+echo "Create a boot file system ... "
+
+echo "format boot partiton..."
+mkfs.fat -n EMMC_BOOT -F 32 /dev/${EMMC_NAME}p1
+mkdir -p /mnt/${EMMC_NAME}p1
+sleep 2
+umount -f /mnt/${EMMC_NAME}p1 2>/dev/null
+
+echo "format rootfs1 partiton..."
+ROOTFS1_UUID=$(/usr/bin/uuidgen)
+mkfs.btrfs -f -U ${ROOTFS1_UUID} -L EMMC_ROOTFS1 -m single /dev/${EMMC_NAME}p2
+mkdir -p /mnt/${EMMC_NAME}p2
+sleep 2
+umount -f /mnt/${EMMC_NAME}p2 2>/dev/null
+
+echo "format rootfs2 partiton..."
+ROOTFS2_UUID=$(/usr/bin/uuidgen)
+mkfs.btrfs -f -U ${ROOTFS2_UUID} -L EMMC_ROOTFS2 -m single /dev/${EMMC_NAME}p3
+mkdir -p /mnt/${EMMC_NAME}p3
+sleep 2
+umount -f /mnt/${EMMC_NAME}p3 2>/dev/null
+
+# mount and copy
+echo "Wait for the boot file system to mount ... "
+i=1
+max_try=10
+while [ $i -le $max_try ]; do
+    mount -t vfat /dev/${EMMC_NAME}p1 /mnt/${EMMC_NAME}p1 2>/dev/null
+    sleep 2
+    mnt=$(lsblk -l -o MOUNTPOINT | grep /mnt/${EMMC_NAME}p1)
+
+    if [ "$mnt" == "" ]; then
+        if [ $i -lt $max_try ]; then
+            echo "Not mounted successfully, try again ..."
+            i=$((i+1))
+        else
+            echo "Cannot mount the boot file system, give up!"
+            exit 1
+        fi
+    else
+        echo "Successfully mounted."
+        echo "copy boot ..."
+        cd /mnt/${EMMC_NAME}p1
+        rm -rf /boot/'System Volume Information/'
+        (cd /boot && tar cf - .) | tar xf -
+        sync
+
+        echo "Edit uEnv.txt ..."
+        cat > uEnv.txt <<EOF
+LINUX=/zImage
+INITRD=/uInitrd
+FDT=/dtb/amlogic/${FDTFILE}
+APPEND=root=UUID=${ROOTFS1_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
+EOF
+
+        rm -f s905_autoscript* aml_autoscript*
+
+        if  [[ "${K510}" -eq "1" ]]; then
+            if  [ -f u-boot.ext ]; then
+                cp -f -v u-boot.ext u-boot.emmc
+            else
+                cp -f -v u-boot.sd u-boot.emmc
+            fi
+        fi
+
+        mv -f boot-emmc.ini boot.ini
+        mv -f boot-emmc.cmd boot.cmd
+        mv -f boot-emmc.scr boot.scr
+
+        sync
+        echo "complete."
+        cd /
+        umount -f /mnt/${EMMC_NAME}p1
+        break
+    fi
+done
+echo "complete."
+
+echo "Wait for the rootfs file system to mount ... "
+i=1
+while [ $i -le $max_try ]; do
+    mount -t btrfs -o compress=zstd /dev/${EMMC_NAME}p2 /mnt/${EMMC_NAME}p2 2>/dev/null
+    sleep 2
+    mnt=$(lsblk -l -o MOUNTPOINT | grep /mnt/${EMMC_NAME}p2)
+    if [ "$mnt" == "" ]; then
+        if [ $i -lt $max_try ]; then
+            echo "Not mounted successfully, try again ..."
+            i=$((i+1))
+        else
+            echo "Cannot mount rootfs file system, give up!"
+            exit 1
+        fi
+    else
+        echo "Successfully mounted"
+        echo "Create folder ... "
+        cd /mnt/${EMMC_NAME}p2
+        btrfs subvolume create etc
+        mkdir -p bin boot dev lib opt mnt overlay proc rom root run sbin sys tmp usr www .reserved .snapshots
+        ln -sf lib/ lib64
+        ln -sf tmp/ var
+        sync
+        echo "complete."
+
+        COPY_SRC="root etc bin sbin lib opt usr www"
+        echo "Copy data ... "
+        for src in $COPY_SRC; do
+            echo "copy [ $src ] ..."
+            (cd / && tar cf - $src) | tar xf -
+            sync
+        done
+        echo "Copy complete."
+
+        rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker >/dev/null
+        rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/ >/dev/null
+
+        echo "Edit configuration file ..."
+        #cd /mnt/${EMMC_NAME}p2/usr/bin/
+        #rm -f openwrt-install-amlogic openwrt-update-amlogic
+        cd /mnt/${EMMC_NAME}p2/etc/rc.d
+        ln -sf ../init.d/dockerd S99dockerd
+        cd /mnt/${EMMC_NAME}p2/etc
+        cat > fstab <<EOF
+UUID=${ROOTFS1_UUID} / btrfs compress=zstd 0 1
+LABEL=EMMC_BOOT /boot vfat defaults 0 2
+#tmpfs /tmp tmpfs defaults,nosuid 0 0
+EOF
+
+        cd /mnt/${EMMC_NAME}p2/etc/config
+        cat > fstab <<EOF
+config  global
+        option anon_swap '0'
+        option anon_mount '1'
+        option auto_swap '0'
+        option auto_mount '1'
+        option delay_root '5'
+        option check_fs '0'
+
+config  mount
+        option target '/overlay'
+        option uuid '${ROOTFS1_UUID}'
+        option enabled '1'
+        option enabled_fsck '1'
+        option fstype 'btrfs'
+        option options 'compress=zstd'
+
+config  mount
+        option target '/boot'
+        option label 'EMMC_BOOT'
+        option enabled '1'
+        option enabled_fsck '1'
+        option fstype 'vfat'
+
+EOF
+
+        echo -n "Create initial etc snapshot -> .snapshots/etc-000"
+        cd /mnt/${EMMC_NAME}p2 && \
+        btrfs subvolume snapshot -r etc .snapshots/etc-000
+        sync
+
+        cd /
+        umount -f /mnt/${EMMC_NAME}p2
+        break
+    fi
+done
+echo "complete."
+
+echo "Create a shared file system."
+mkdir -p /mnt/${EMMC_NAME}p4
+case $TARGET_SHARED_FSTYPE in
+    xfs)
+        mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    btrfs)
+        mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    f2fs)
+        mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    *)
+        mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+esac
+mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
+sync
+
+echo "Successful installed, please unplug the USB, re-insert the power supply to start the openwrt."
+exit 0

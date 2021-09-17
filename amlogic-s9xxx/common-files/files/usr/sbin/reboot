@@ -1,6 +1,0 @@
-#!/bin/bash
-
-sync
-sleep 3
-echo 'b' > /proc/sysrq-trigger
-

@@ -9,7 +9,7 @@
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
-build_openwrt=("s905x3" "s905x2" "s905x" "s905d" "s912" "s922x")
+build_openwrt=("s905x3" "s905x2" "s905x" "s905w" "s905d" "s912" "s922x")
 make_path=${PWD}
 tmp_path=${make_path}/tmp
 out_path=${make_path}/out
@@ -19,8 +19,8 @@ kernel_path=${amlogic_path}/amlogic-kernel
 armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 configfiles_path=${amlogic_path}/common-files
-kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
-command_file="https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic/root/usr/bin"
+kernel_library="https://github.com/ophub/flippy-kernel/tree/main/library"
+#kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -153,7 +153,7 @@ refactor_files() {
     build_op=${1}
     build_usekernel=${2}
 
-    kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,2}')
+    kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,3}')
     k510_ver=${kernel_vermaj%%.*}
     k510_maj=${kernel_vermaj##*.}
     if  [ "${k510_ver}" -eq "5" ];then
@@ -189,6 +189,13 @@ refactor_files() {
             MAINLINE_UBOOT=""
             ANDROID_UBOOT=""
             AMLOGIC_SOC="s905x"
+            ;;
+        s905w | x96mini | tx3mini)
+            FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
+            UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
+            MAINLINE_UBOOT=""
+            ANDROID_UBOOT=""
+            AMLOGIC_SOC="s905w"
             ;;
         s905d | n1)
             FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
@@ -233,6 +240,19 @@ refactor_files() {
     mkdir -p boot run opt
     chown -R 0:0 ./
 
+    mkdir -p etc/modprobe.d
+    cat > etc/modprobe.d/99-local.conf <<EOF
+blacklist snd_soc_meson_aiu_i2s
+alias brnf br_netfilter
+alias pwm pwm_meson
+alias wifi brcmfmac
+EOF
+
+    # echo br_netfilter > etc/modules.d/br_netfilter
+    echo pwm_meson > etc/modules.d/pwm_meson 2>/dev/null
+    echo panfrost > etc/modules.d/panfrost 2>/dev/null
+    echo meson_gxbb_wdt > etc/modules.d/watchdog 2>/dev/null
+
     # Edit fstab
     ROOTFS_UUID=$(uuidgen)
     #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
@@ -240,7 +260,11 @@ refactor_files() {
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
     
     # Turn off speed limit by default
-    [ -f etc/config/nft-qos ] && sed -i 's/option limit_enable.*/option limit_enable 0/g' etc/config/nft-qos
+    [ -f etc/config/nft-qos ] && sed -i "s|option limit_enable.*|option limit_enable '0'|g" etc/config/nft-qos
+
+    # Turn off hw_flow by default
+    [ -f etc/config/turboacc ] && sed -i "s|option hw_flow.*|option hw_flow '0'|g" etc/config/turboacc
+    [ -f etc/config/turboacc ] && sed -i "s|option sfe_flow.*|option sfe_flow '0'|g" etc/config/turboacc
 
     # Add drivers
     [ -f etc/modules.d/8189fs ] || echo "8189fs" > etc/modules.d/8189fs
@@ -250,12 +274,29 @@ refactor_files() {
     [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179
 
     # Add cpustat
-    cpustat_file=${configfiles_path}/patches/cpustat/cpustat.py
-    [ -f ${cpustat_file} ] && cp -f ${cpustat_file} usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
+    cpustat_file=${configfiles_path}/patches/cpustat
+    if [[ -d "${cpustat_file}" && -x "bin/bash" ]]; then
+        cp -f ${cpustat_file}/cpustat usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
+        cp -f ${cpustat_file}/getcpu bin/getcpu && chmod +x bin/getcpu >/dev/null 2>&1
+        cp -f ${cpustat_file}/30-sysinfo.sh etc/profile.d/30-sysinfo.sh >/dev/null 2>&1
+        sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd >/dev/null 2>&1
+        sed -i "s/\/bin\/ash/\/bin\/bash/" usr/libexec/login.sh >/dev/null 2>&1
+        sync
+    fi
 
-    # Synchronous installation of update and other command scripts
-    svn checkout ${command_file} usr/bin >/dev/null && sync && chmod +x usr/bin/openwrt-*
-    rm -rf usr/bin/.svn >/dev/null
+    # Modify the cpu mode to schedutil
+    if [[ -f "etc/config/cpufreq" ]];then
+        sed -i "s/ondemand/schedutil/" etc/config/cpufreq
+    fi
+
+    # Add balethirq
+    balethirq_file=${configfiles_path}/patches/balethirq
+    if [ -d "${balethirq_file}" ];then
+        cp -f ${balethirq_file}/balethirq.pl usr/sbin/balethirq.pl && chmod +x usr/sbin/balethirq.pl >/dev/null 2>&1
+        sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
+        cp -f ${balethirq_file}/balance_irq etc/config/balance_irq >/dev/null 2>&1
+        sync
+    fi
     
     # Add firmware information to the etc/flippy-openwrt-release
     echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
@@ -277,6 +318,10 @@ refactor_files() {
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
         echo " -----------------------------------------------------" >> etc/banner
     fi
+
+    # Add some package and script connection
+    ln -sf /usr/bin/openwrt-install-amlogic usr/bin/openwrt-install 2>/dev/null
+    ln -sf /usr/bin/openwrt-update-amlogic usr/bin/openwrt-update 2>/dev/null
 
     sync
     # Edit ${root}/* files ========== End ==========
@@ -320,26 +365,32 @@ make_image() {
 
     [ -d ${out_path} ] || mkdir -p ${out_path}
     SKIP_MB=16
-    fallocate -l $((SKIP_MB + BOOT_MB + rootsize))M ${build_image_file}
+    IMG_SIZE=$((SKIP_MB + BOOT_MB + rootsize))
+
+    #fallocate -l ${IMG_SIZE}M ${build_image_file}
+    dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} 2>/dev/null && sync
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
     parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
     parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
+    #parted -s ${build_image_file} print 2>/dev/null
 
     loop_setup ${build_image_file}
     mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
     mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
+    sync
 
     # Write the specified bootloader
     if  [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
-        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
         dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${build_op}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
     elif [[ "${ANDROID_UBOOT}" != ""  && -f "${root}${ANDROID_UBOOT}" ]]; then
-        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=442 conv=fsync 2>/dev/null
+        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
         dd if=${root}${ANDROID_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${build_op}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
+    sync
 }
 
 copy2image() {
@@ -351,7 +402,7 @@ copy2image() {
     local bootfs="${mount}/${kernel}/${build_op}/bootfs"
     local rootfs="${mount}/${kernel}/${build_op}/rootfs"
 
-    mkdir -p ${bootfs} ${rootfs}
+    mkdir -p ${bootfs} ${rootfs} && sync
     if ! mount ${loop}p1 ${bootfs}; then
         die "mount ${loop}p1 failed!"
     fi
@@ -633,13 +684,23 @@ fi
 [ ${kernel} != "all" ] && unset kernels && kernels=(${kernel})
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
-# Check the new version on the kernel library
+# Convert kernel library address to svn format
+if [[ ${kernel_library} == http* && $(echo ${kernel_library} | grep "tree/main") != "" ]]; then
+    kernel_library=${kernel_library//tree\/main/trunk}
+fi
+
+# Check the new version on the kernel library, when auto_kernel=true
 if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then
+
+    # Set empty array
     TMP_ARR_KERNELS=()
+
+    # Convert kernel library address to API format
     SERVER_KERNEL_URL=${kernel_library#*com\/}
     SERVER_KERNEL_URL=${SERVER_KERNEL_URL//trunk/contents}
     SERVER_KERNEL_URL="https://api.github.com/repos/${SERVER_KERNEL_URL}"
 
+    # Query the latest kernel in a loop
     i=1
     for KERNEL_VAR in ${kernels[*]}; do
         echo -e "(${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
@@ -659,8 +720,10 @@ if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then
         let i++
     done
 
+    # Reset the kernel array to the latest kernel version
     unset kernels
     kernels=${TMP_ARR_KERNELS[*]}
+
 fi
 
 # Synchronization related kernel

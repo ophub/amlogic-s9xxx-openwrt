@@ -53,5 +53,12 @@ svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/
 # Apply patch
 # git apply ../router-config/patches/{0001*,0002*}.patch --directory=feeds/luci
 #
+
+echo 'src-git small https://github.com/kenzok8/small' >> feeds.conf.default
+echo 'src-git others https://github.com/kenzok8/openwrt-packages' >> feeds.conf.default
+
+# Add luci-app-openclash
+svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/openwrt-openclash
+pushd package/openwrt-openclash/tools/po2lmo && make && sudo make install 2>/dev/null && popd
 # ------------------------------- Other ends -------------------------------
 

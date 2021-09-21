@@ -19,7 +19,7 @@ AUTO_MAINLINE_UBOOT=${2}
 BACKUP_RESTORE_CONFIG=${3}
 
 # Current device model
-MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
+MYDEVICE_NAME=$(cat /proc/device-tree/model | tr -d '\000')
 if [[ -z "${MYDEVICE_NAME}" ]]; then
     echo "The device name is empty and cannot be recognized."
     exit 1
@@ -88,12 +88,29 @@ else
     echo "Start update from [ ${IMG_NAME} ]"
 fi
 
+# Check the necessary dependencies
+DEPENDS="lsblk uuidgen grep awk btrfs mkfs.fat mkfs.btrfs perl md5sum"
+echo "Check the necessary dependencies..."
+for dep in ${DEPENDS};do
+    WITCH=$(which ${dep})
+    if [ "${WITCH}" == "" ];then
+        echo "Dependent command: ${dep} does not exist, upgrade cannot be performed, only flash through U disk/TF card!"
+        exit 1
+    else
+        echo "${dep} path: ${WITCH}"
+    fi
+done
+echo "Check passed"
+
 # find boot partition 
 BOOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | awk '$3~/^part$/ && $5 ~ /^\/boot$/ {print $0}')
 if  [ "${BOOT_PART_MSG}" == "" ]; then
     echo "Boot The partition does not exist, so the update cannot be continued!"
     exit 1
 fi
+BOOT_NAME=$(echo $BOOT_PART_MSG | awk '{print $1}')
+BOOT_PATH=$(echo $BOOT_PART_MSG | awk '{print $2}')
+BOOT_UUID=$(echo $BOOT_PART_MSG | awk '{print $4}')
 
 BR_FLAG=1
 echo -ne "Whether to backup and restore the current config files? y/n [y]\b\b"
@@ -107,10 +124,6 @@ fi
 case $yn in
      n*|N*) BR_FLAG=0;;
 esac
-
-BOOT_NAME=$(echo $BOOT_PART_MSG | awk '{print $1}')
-BOOT_PATH=$(echo $BOOT_PART_MSG | awk '{print $2}')
-BOOT_UUID=$(echo $BOOT_PART_MSG | awk '{print $4}')
 
 # find root partition 
 ROOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | awk '$3~/^part$/ && $5 ~ /^\/$/ {print $0}')
@@ -137,7 +150,6 @@ if  [ "${NEW_ROOT_PART_MSG}" == "" ]; then
     echo "The new ROOTFS partition does not exist, so the update cannot continue!"
     exit 1
 fi
-
 NEW_ROOT_NAME=$(echo $NEW_ROOT_PART_MSG | awk '{print $1}')
 NEW_ROOT_PATH=$(echo $NEW_ROOT_PART_MSG | awk '{print $2}')
 NEW_ROOT_UUID=$(echo $NEW_ROOT_PART_MSG | awk '{print $4}')
@@ -330,7 +342,6 @@ for src in $COPY_SRC; do
     (cd ${P2} && tar cf - $src) | tar xf -
     sync
 done
-wait
 
 cat > ./etc/fstab <<EOF
 UUID=${NEW_ROOT_UUID} / btrfs compress=zstd 0 1
@@ -409,14 +420,30 @@ fi
 echo "Modify the configuration file ... "
 rm -f "./etc/rc.local.orig" "./usr/bin/mk_newpart.sh" "./etc/part_size"
 rm -rf "./opt/docker" && ln -sf "/mnt/${EMMC_NAME}p4/docker" "./opt/docker"
-
 rm -f ./etc/bench.log
 cat >> ./etc/crontabs/root << EOF
-17 3 * * * /etc/coremark.sh
+37 5 * * * /etc/coremark.sh
 EOF
 
 sed -e 's/ttyAMA0/ttyAML0/' -i ./etc/inittab
 sed -e 's/ttyS0/tty0/' -i ./etc/inittab
+
+# Fix the problem of repeatedly adding sshd entries after each upgrade of dropbear
+sed -e "/sshd:x:/d" -i ./etc/shadow
+if [ `grep "sshd:x:22:22" ./etc/passwd | wc -l` -eq 0 ]; then
+    echo "sshd:x:22:22:sshd:/var/run/sshd:/bin/false" >> ./etc/passwd
+    echo "sshd:x:22:sshd" >> ./etc/group
+    echo "sshd:x:${ddd}:0:99999:7:::" >> ./etc/shadow
+fi
+
+if [ "${BR_FLAG}" -eq "1" ]; then
+    if [ -x ./bin/bash ] && [ -f ./etc/profile.d/30-sysinfo.sh ]; then
+        sed -e 's/\/bin\/ash/\/bin\/bash/' -i ./etc/passwd
+    fi
+    sync
+fi
+sed -e "s/option hw_flow '1'/option hw_flow '0'/" -i ./etc/config/turboacc
+eval tar czf .reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
 
 rm -f ./etc/part_size ./usr/bin/mk_newpart.sh
 if  [ -x ./usr/sbin/balethirq.pl ]; then
@@ -496,7 +523,7 @@ echo "Delete the old boot file ..."
 rm -rf * && sync
 
 echo "Copy the new boot file ... "
-(cd ${P1} && tar cf - . ) | tar xf -
+(cd ${P1} && tar cf - . ) | tar xf - 2>/dev/null
 sync
 
 if [ -f ${P1}/uInitrd ]; then

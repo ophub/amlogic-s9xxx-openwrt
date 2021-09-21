@@ -7,8 +7,8 @@
 
 # The script supports directly setting parameters for installation, skipping interactive selection
 # openwrt-install-amlogic ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME}
-# E.g: openwrt-install-amlogic YES 1
-# E.g: openwrt-install-amlogic NO 99 meson-gxl-s905x-p212.dtb
+# E.g: openwrt-install-amlogic yes 1
+# E.g: openwrt-install-amlogic no 99 meson-gxl-s905x-p212.dtb
 # Tip: When custom dtb file, set ${SOC_ID} to 99, and parameter ${DTB_FILENAME} must be set
 # return 0
 
@@ -40,7 +40,7 @@ echo "SPECIFY_SOC: ${SPECIFY_SOC}"
 echo "SPECIFY_DTB: ${SPECIFY_DTB}"
 
 # Current device model
-MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
+MYDEVICE_NAME=$(cat /proc/device-tree/model | tr -d '\000')
 if [[ -z "${MYDEVICE_NAME}" ]]; then
     echo "The device name is empty and cannot be recognized."
     exit 1
@@ -445,13 +445,13 @@ EOF
     while :; do
         # For [luci-app-amlogic] input parameter: SOC & DTB
         # When there is no input parameter, select manually
-        if [[ "${AUTO_MAINLINE_UBOOT}" == "YES" ]]; then
+        if [[ "${AUTO_MAINLINE_UBOOT}" == "yes" ]]; then
             if  [[ "${K510}" -eq "1" ]]; then
                 yn="y"
             else
                 yn="n"
             fi
-        elif [[ "${AUTO_MAINLINE_UBOOT}" == "NO" ]]; then
+        elif [[ "${AUTO_MAINLINE_UBOOT}" == "no" ]]; then
                 yn="n"
         else
             read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn

@@ -22,7 +22,7 @@ echo -e "Start update the openwrt kernel."
 [ -x /usr/bin/openwrt-kernel ] || die "Please grant execution permission: chmod +x /usr/bin/openwrt-kernel"
 
 # Current device model
-MYDEVICE_NAME=$(cat /proc/device-tree/model 2>/dev/null)
+MYDEVICE_NAME=$(cat /proc/device-tree/model | tr -d '\000')
 if [[ -z "${MYDEVICE_NAME}" ]]; then
     die "The device name is empty and cannot be recognized."
 elif [[ "$(echo ${MYDEVICE_NAME} | grep "Chainedbox L1 Pro")" != "" ]]; then

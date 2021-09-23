@@ -1,0 +1,11 @@
+#!/bin/bash
+#======================================================================
+# Function: View the version information of OpenWrt
+# Copyright (C) 2020-- https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
+#======================================================================
+
+cat ../../etc/openwrt_release
+cat ../../etc/flippy-openwrt-release
+cat ../../proc/version
+

@@ -336,7 +336,7 @@ ln -sf tmp/ var
 sync
 
 COPY_SRC="root etc bin sbin lib opt usr www"
-echo "Copy data brgin ... "
+echo "Copy data begin ... "
 for src in $COPY_SRC; do
     echo "Copy [ $src ] ... "
     (cd ${P2} && tar cf - $src) | tar xf -
@@ -374,6 +374,15 @@ config  mount
         option fstype 'vfat'
 
 EOF
+(
+    cd etc/rc.d 
+    rm -f S??shortcut-fe
+    if grep "sfe_flow '1'" ../config/turboacc >/dev/null;then
+        if find ../../lib/modules -name 'shortcut-fe-cm.ko';then
+            ln -sf ../init.d/shortcut-fe S99shortcut-fe
+        fi
+    fi
+)
 sync
 
 echo "Create initial etc snapshot -> .snapshots/etc-000"
@@ -392,12 +401,13 @@ if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
-#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/openwrt-install-amlogic
-#rm -f /mnt/${NEW_ROOT_NAME}/usr/bin/openwrt-update-amlogic
+#rm -f /mnt/${NEW_ROOT_NAME}/usr/sbin/openwrt-install-amlogic
+#rm -f /mnt/${NEW_ROOT_NAME}/usr/sbin/openwrt-update-amlogic
+rm -f /mnt/${NEW_ROOT_NAME}/root/install-to-emmc.sh
 sync
 echo "Copy data complete ..."
 
-BACKUP_LIST=$(${P2}/usr/bin/openwrt-backup -p)
+BACKUP_LIST=$(${P2}/usr/sbin/openwrt-backup -p)
 if [[ "${BR_FLAG}" -eq "1" && -n "${BACKUP_LIST}" ]];then
     echo -n "Start restoring configuration files ... "
     (
@@ -443,6 +453,15 @@ if [ "${BR_FLAG}" -eq "1" ]; then
     sync
 fi
 sed -e "s/option hw_flow '1'/option hw_flow '0'/" -i ./etc/config/turboacc
+(
+    cd etc/rc.d 
+    rm -f S??shortcut-fe
+    if grep "sfe_flow '1'" ../config/turboacc >/dev/null;then
+        if find ../../lib/modules -name 'shortcut-fe-cm.ko';then
+            ln -sf ../init.d/shortcut-fe S99shortcut-fe
+        fi
+    fi
+)
 eval tar czf .reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
 
 rm -f ./etc/part_size ./usr/bin/mk_newpart.sh

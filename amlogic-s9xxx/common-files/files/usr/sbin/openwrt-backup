@@ -5,6 +5,7 @@
 # Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
 #======================================================================
 
+VERSION="v1.1"
 SNAPSHOT_PRESTR=".snapshots/"
 BACKUP_DIR="/.reserved"
 BACKUP_NAME="openwrt_config.tar.gz"
@@ -17,8 +18,8 @@ BACKUP_LIST='./etc/AdGuardHome.yaml \
 ./etc/smbd/smbdpwd.db \
 ./etc/ksmbd/ksmbdpwd.db \
 ./etc/config/ \
+./usr/share/openclash/core/ \
 ./etc/openclash/backup/ \
-./etc/openclash/core/ \
 ./etc/openclash/config/ \
 ./etc/openclash/custom/ \
 ./etc/openclash/game_rules/ \
@@ -30,7 +31,7 @@ BACKUP_LIST='./etc/AdGuardHome.yaml \
 ./etc/dnsmasq.oversea/ \
 ./etc/dnsmasq.ssr/ \
 ./etc/docker/key.json \
-./etc/dropbear/dropbear_rsa_host_key \
+./etc/dropbear/ \
 ./etc/easy-rsa/ \
 ./etc/environment \
 ./etc/exports \
@@ -54,10 +55,14 @@ BACKUP_LIST='./etc/AdGuardHome.yaml \
 ./etc/shadow \
 ./etc/smartdns/ \
 ./etc/sqm/ \
+./etc/ssh/*key*  \
 ./etc/ssl/private/  \
 ./etc/ssrplus/ \
 ./etc/transmission/ \
-./etc/urandom.seed'
+./etc/uhttpd.crt \
+./etc/uhttpd.key \
+./etc/urandom.seed \
+./root/.ssh/'
 
 if dmesg | grep 'meson' >/dev/null 2>&1; then
     PLATFORM="amlogic"
@@ -88,8 +93,10 @@ backup() {
 restore() {
     EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
     [ -d "${BACKUP_DIR}" ] || mkdir -p "${BACKUP_DIR}"
-    [ -f "/tmp/upload/${BACKUP_NAME}" ] && mv -f "/tmp/upload/${BACKUP_NAME}" ${BACKUP_FILE} && sync
-    [ -f "/mnt/${EMMC_NAME}p4/${BACKUP_NAME}" ] && mv -f "/mnt/${EMMC_NAME}p4/${BACKUP_NAME}" ${BACKUP_FILE} && sync
+    [ -f "/tmp/upload/${BACKUP_NAME}" ] && mv -f "/tmp/upload/${BACKUP_NAME}" ${BACKUP_FILE}
+    [ -f "/mnt/${EMMC_NAME}p4/${BACKUP_NAME}" ] && mv -f "/mnt/${EMMC_NAME}p4/${BACKUP_NAME}" ${BACKUP_FILE}
+    [ -f "/mnt/${EMMC_NAME}p4/.tmp_upload/${BACKUP_NAME}" ] && mv -f "/mnt/${EMMC_NAME}p4/.tmp_upload/${BACKUP_NAME}" ${BACKUP_FILE}
+    sync
 
     if [ -f "${BACKUP_FILE}" ]; then
         echo -n "restore config files ... "
@@ -299,6 +306,123 @@ delete_snapshot() {
     fi
 }
 
+migrate_snapshot() {
+    cur_rootdev=$(lsblk -l -o NAME,MOUNTPOINT |awk '$2~/^\/$/ {print $1}')
+    if [ "$cur_rootdev" == "" ];then
+        echo "无法找到当前的 rootfs 对应的磁盘设备！"
+        read -p "按回车键返回" q
+        return
+    fi
+    dev_pre=$(echo "$cur_rootdev" | awk '{print substr($1, 1, length($1)-1);}')
+    rootdev_idx=$(echo "$cur_rootdev" | awk '{print substr($1, length($1),1);}')
+    case $rootdev_idx in
+        2)  old_rootpath="/mnt/${dev_pre}3";;
+        3)  old_rootpath="/mnt/${dev_pre}2";;
+        *)  echo "判断旧版 rootfs 路径失败!"
+            read -p "按回车键返回" q
+            return
+            ;;
+    esac
+    echo "下面是从旧版 rootfs 中找到的 etc 快照，请输入其中一个的名字"
+    echo "提示： 自动排除 etc-000 和 etc-001"
+    echo "-----------------------------------------------------------------------------------"
+    btrfs subvolume list -rt "$old_rootpath" | grep -v "${SNAPSHOT_PRESTR}etc-000" | grep -v "${SNAPSHOT_PRESTR}etc-001"
+    echo "-----------------------------------------------------------------------------------"
+    read -p "请输入要迁移的快照名字(只需要输入 ${SNAPSHOT_PRESTR} 之后的部分): " old_snap_name
+    if [ "$old_snap_name" == "" ];then
+        read -p "名称为空, 按回车键返回" q
+        return
+    elif ! btrfs subvolume list -rt "$old_rootpath" | awk '{print $4}' | grep "^${SNAPSHOT_PRESTR}${old_snap_name}$" >/dev/null;then
+        echo "名称输入错误, 未找到对应的快照!"
+        read -p "按回车键返回" q
+        return
+    elif [ "$old_snap_name" == "etc-000" ] || [ "$old_snap_name" == "etc-001" ];then
+        echo "关键快照不允许迁移!"
+        read -p "按回车键返回" q
+        return
+    fi
+
+    # 查找当前 rootfs下有无重名快照
+    if btrfs subvolume list -rt / | awk '{print $4}' | grep "^\\${SNAPSHOT_PRESTR}${old_snap_name}$" >/dev/null;then
+        echo "当前已存在名称为 [$old_snap_name] 的快照, 无法进行迁移! (但可以删除现有同名快照后再迁移)"
+        read -p "按回车键返回" q
+        return
+    fi
+
+    need_size=$(du -h -d0 ${old_rootpath}/${SNAPSHOT_PRESTR}${old_snap_name} | tail -n1 | awk '{print $1}')
+    echo "----------------------------------------------------------------------------------------------"
+    df -h
+    echo "----------------------------------------------------------------------------------------------"
+    echo -e "\033[1m注意：迁移 [${old_rootpath}] 的快照 [$old_snap_name] 到当前 rootfs, 需占用大约 $need_size 空间,"
+    echo -e "      请确认 [/] 所在的分区 [/dev/${cur_rootdev}] 可用空间(Available)是否充足?\033[0m"
+    read -p "是否确定迁移？ y/n [n] " yn
+    if [ "$yn" == "y" ] ||  [ "$yn" == "Y" ];then
+        (
+            cd /
+            btrfs send ${old_rootpath}/${SNAPSHOT_PRESTR}${old_snap_name} | btrfs receive ${SNAPSHOT_PRESTR}
+            if [ $? -eq 0 ];then
+                btrfs property set -ts ${SNAPSHOT_PRESTR}${old_snap_name} ro false
+                cp ${SNAPSHOT_PRESTR}etc-000/config/fstab ${SNAPSHOT_PRESTR}${old_snap_name}/config/
+                cp ${SNAPSHOT_PRESTR}etc-000/fstab ${SNAPSHOT_PRESTR}${old_snap_name}/
+                cp ${SNAPSHOT_PRESTR}etc-000/openwrt_release ${SNAPSHOT_PRESTR}${old_snap_name}/
+                cp ${SNAPSHOT_PRESTR}etc-000/openwrt_version ${SNAPSHOT_PRESTR}${old_snap_name}/
+                cp ${SNAPSHOT_PRESTR}etc-000/flippy-openwrt-release ${SNAPSHOT_PRESTR}${old_snap_name}/
+                cp ${SNAPSHOT_PRESTR}etc-000/banner ${SNAPSHOT_PRESTR}${old_snap_name}/banner
+                btrfs property set -ts ${SNAPSHOT_PRESTR}${old_snap_name} ro true
+                echo "迁移完成，如果想应用快照 [$old_snap_name], 请使用恢复快照功能."
+            else
+                echo "迁移失败!"
+            fi
+            read -p "按回车键返回" q
+            return
+        )
+    fi
+}
+
+snapshot_help() {
+    clear
+    cat <<EOF
+============================================================================================================
+1.  什么是快照？
+    快照就是某一子卷(subvolume)在某一时点的状态记录, 快照是一种特殊的子卷；
+    本地快照刚生成时，与原始子卷共享磁盘空间，所以不占用额外空间，后续发生过变化的文件才占空间；
+    从其它地方迁移过来的快照，实质上不是快照，而只是普通子卷，所以要占用空间。
+2.  如何显示已有的快照？
+    输入命令： btrfs subvolume list -rt /
+---------------------------------------------------------------------------------------------
+EOF
+    btrfs subvolume list -rt /
+    cat <<EOF
+---------------------------------------------------------------------------------------------
+2.  如何创建快照？
+    btrfs subvolume snapshot -r /etc /.snapshots/快照1  # -r 是生成只读快照的意思
+3.  如何删除快照？
+    btrfs subvolume delete -c /.snapshots/快照1  # -c 是 commit 的意思
+4.  快照如何改名？
+    用操作系统的 mv 命令即可，例如：
+    mv /.snapshots/快照1 /.snapshots/快照2
+5.  如何还原快照？
+    mv /etc /etc.backup  # 备份 etc 到 etc.backup,也就是子卷改名
+    btrfs subvolume snapshot /.snapshots/etc-001  /etc   # 用快照 etc-001 生成快照 etc,注意没带 -r 参数
+    # (是的,快照也可以再生成快照)
+    btrfs delete -c /etc.backup # 上一步骤成功后，可以删除刚才的etc备份
+6.  如何从快照中还原某个文件?
+    实例A: 从快照 etc-000 还原挂载点配置文件： /etc/config/fstab
+        cp /.snapshots/etc-000/config/fstab /etc/config/
+    实例B: 从快照 etc-001 还原网络配置：
+        cp /.snapshots/etc-001/config/network  /etc/config/
+    实例C: 从快照 etc-001 还原 ssr 的配置文件：
+        cp /.snapshots/etc-001/config/shadowsocksr /etc/config/
+    # (是的，就是操作系统的复制命令)
+7.  如何从远程迁移快照？
+    btrfs 支持 ssh 远程迁移快照, 例如：
+    ssh 192.168.1.1 btrfs send /.snapshots/快照x  |  btrfs receive /.snapshots
+    命令完成后，远程的 快照x 就复制到本地的 /.snapshots/快照x 了(如上所述，迁移过来的是子卷，要占用空间的)
+============================================================================================================
+EOF
+    exit 0
+}
+
 print_help() {
     echo "Usage: $0  -b    [ backup ]"
     echo "       $0  -r    [ restore ]"
@@ -329,8 +453,10 @@ menu() {
         │                                 │
         │       l. list snapshots         │
         │       c. create snapshot        │
-        │       s. restore snapshot       │
         │       d. delete snapshot        │
+        │       R. restore snapshot       │
+        │       m. migrate snapshot       │
+        │       s. snapshot help          │
         │                                 │
         ╞═════════════════════════════════╡
         │                                 │
@@ -350,15 +476,17 @@ EOF
             p | print_list)        print_list;;
             l | list_snapshot)     list_snapshot;;
             c | create_snapshot)   create_snapshot;;
-            s | restore_snapshot)  restore_snapshot;;
             d | delete_snapshot)   delete_snapshot;;
+            R | restore_snapshot)  restore_snapshot;;
+            m | migrate_snapshot)  migrate_snapshot;;
+            s | snapshot_help)     snapshot_help;;
             h | help)              print_help;;
             q | quit)              exit 0;;
         esac
     done
 }
 
-getopts 'brgplcsdhq' opts
+getopts 'brgplcRmsdhq' opts
 case $opts in 
     b | backup)            backup;;
     r | restore)           restore
@@ -367,8 +495,10 @@ case $opts in
     p | print_list)        print_list;;
     l | list_snapshot)     list_snapshot;;
     c | create_snapshot)   create_snapshot;;
-    s | restore_snapshot)  restore_snapshot;;
     d | delete_snapshot)   delete_snapshot;;
+    R | restore_snapshot)  restore_snapshot;;
+    m | migrate_snapshot)  migrate_snapshot;;
+    s | snapshot_help)     snapshot_help;;
     h | help)              print_help;;
     q | quit)              exit 0;;
     *)                     menu;;

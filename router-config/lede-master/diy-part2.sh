@@ -9,7 +9,8 @@
 # ------------------------------- Main source started -------------------------------
 #
 # Modify default theme（FROM uci-theme-bootstrap CHANGE TO luci-theme-material）
-sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/luci/Makefile
+# sed -i 's/luci-theme-bootstrap/luci-theme-bootstrap/g' ./feeds/luci/collections/luci/Makefile
+sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' ./feeds/luci/collections/luci/Makefile
 
 # Modify some code adaptation
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
@@ -24,7 +25,7 @@ sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package
 # sed -i 's/192.168.1.1/192.168.31.4/g' package/base-files/files/bin/config_generate
 
 # Modify default root's password（FROM 'password'[$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.] CHANGE TO 'your password'）
-# sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7:::/g' /etc/shadow
+sed -i 's/root::0:0:99999:7:::/root:$1$tE.TSiJh$I7W1QPlS3Dg3GNjuSUpMK0:0:0:99999:7:::/g' /etc/shadow
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
@@ -35,7 +36,16 @@ sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package
 #
 # Add luci-app-amlogic
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
-
+# Add luci-app-adguardhome
+git clone https://github.com/rufengsuixing/luci-app-adguardhome.git package/luci-app-adguardhome
+# Add luci-theme-infinityfreedom
+# git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom.git package/luci-theme-infinityfreedom
+# Add Dockerman
+git clone https://github.com/lisaac/luci-app-dockerman.git package/luci-app-dockerman
+git clone https://github.com/lisaac/luci-lib-docker.git package/luci-lib-docker
+# Add luci-theme-argon
+rm -rf package/lean/luci-theme-argon
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
 # Add p7zip
 # svn co https://github.com/hubutui/p7zip-lede/trunk package/p7zip
 

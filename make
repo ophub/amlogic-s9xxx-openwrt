@@ -25,7 +25,7 @@ kernel_library="https://github.com/ophub/flippy-kernel/tree/main/library"
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
 BOOT_MB=256
-ROOT_MB=1024
+ROOT_MB=960
 
 tag() {
     echo -e " [ \033[1;32m ${1} \033[0m ]"
@@ -313,6 +313,7 @@ EOF
         op_version=$(echo $(ls lib/modules/ 2>/dev/null ))
         op_packaged_date=$(date +%Y-%m-%d)
         echo " Install: OpenWrt → System → Amlogic Service → Install" >> etc/banner
+        echo " Update: OpenWrt → System → Amlogic Service → Update" >> etc/banner
         echo " Amlogic SoC: ${build_op}" >> etc/banner
         echo " OpenWrt Kernel: ${op_version}" >> etc/banner
         echo " Packaged Date: ${op_packaged_date}" >> etc/banner
@@ -320,8 +321,7 @@ EOF
     fi
 
     # Add some package and script connection
-    ln -sf /usr/bin/openwrt-install-amlogic usr/bin/openwrt-install 2>/dev/null
-    ln -sf /usr/bin/openwrt-update-amlogic usr/bin/openwrt-update 2>/dev/null
+    ln -sf /usr/sbin/openwrt-backup usr/sbin/flippy 2>/dev/null
 
     sync
     # Edit ${root}/* files ========== End ==========

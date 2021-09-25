@@ -8,4 +8,5 @@ config amlogic 'config'
 	option amlogic_kernel_branch ''
 	option amlogic_firmware_config '1'
 	option amlogic_write_bootloader '1'
+	option amlogic_shared_fstype 'ext4'
 	

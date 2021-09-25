@@ -25,7 +25,7 @@ kernel_library="https://github.com/ophub/flippy-kernel/tree/main/library"
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
 BOOT_MB=256
-ROOT_MB=1024
+ROOT_MB=960
 
 tag() {
     echo -e " [ \033[1;32m ${1} \033[0m ]"

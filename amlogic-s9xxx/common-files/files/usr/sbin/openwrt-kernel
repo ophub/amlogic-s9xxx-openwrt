@@ -8,8 +8,11 @@
 # Support the kernel: boot-*.tar.gz, dtb-*.tar.gz, modules-*.tar .gz
 # When the kernel version is upgraded from 5.10 or lower to 5.10 or higher, Amlogic s9xxx need to install U-BOOT.
 # When there is no U-BOOT file in related directory, the script will auto try to download the file from the server:
-# UBOOT_OVERLOAD: https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-u-boot"
-# MAINLINE_UBOOT: https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files/lib/u-boot
+# UBOOT_OVERLOAD: https://github.com/ophub/luci-app-amlogic/tree/main/depends/meson_btld/without_fip
+# MAINLINE_UBOOT: https://github.com/ophub/luci-app-amlogic/tree/main/depends/meson_btld/with_fip
+
+# The UBOOT_OVERLOAD and MAINLINE_UBOOT files download path
+GITHUB_RAW="https://raw.githubusercontent.com/ophub/luci-app-amlogic/main/depends/meson_btld"
 
 # Encountered a serious error, abort the script execution
 die() {
@@ -130,9 +133,9 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
         [ -n "${SOC}" ] || die "Unknown SOC, unable to update."
         case ${SOC} in
             s905x3) UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-                    MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin" ;;
+                    MAINLINE_UBOOT="x96maxplus-u-boot.bin.sd.bin" ;;
             s905x2) UBOOT_OVERLOAD="u-boot-x96max.bin"
-                    MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin" ;;
+                    MAINLINE_UBOOT="x96max-u-boot.bin.sd.bin" ;;
             s905x)  UBOOT_OVERLOAD="u-boot-p212.bin"
                     MAINLINE_UBOOT="" ;;
             s905w)  UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
@@ -142,20 +145,18 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
             s912)   UBOOT_OVERLOAD="u-boot-zyxq.bin"
                     MAINLINE_UBOOT="" ;;
             s922x)  UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-                    MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin" ;;
+                    MAINLINE_UBOOT="gtkingpro-u-boot.bin.sd.bin" ;;
             *)      die "Unknown SOC, unable to update to kernel 5.10 and above." ;;
         esac
 
-        GITHUB_RAW="https://raw.githubusercontent.com/ophub/amlogic-s9xxx-openwrt/main/amlogic-s9xxx"
-
         # Check ${UBOOT_OVERLOAD}
         if [[ -n "${UBOOT_OVERLOAD}" ]]; then
-            if [[ ! -s "/boot/${UBOOT_OVERLOAD}" ]]; then
+            if [[ ! -f "/boot/${UBOOT_OVERLOAD}" ]]; then
                 echo -e "Try to download the ${UBOOT_OVERLOAD} file from the server."
-                GITHUB_UBOOT_OVERLOAD="${GITHUB_RAW}/amlogic-u-boot/${UBOOT_OVERLOAD}"
+                GITHUB_UBOOT_OVERLOAD="${GITHUB_RAW}/without_fip/${UBOOT_OVERLOAD}"
                 #echo -e "UBOOT_OVERLOAD: ${GITHUB_UBOOT_OVERLOAD}"
                 wget -c "${GITHUB_UBOOT_OVERLOAD}" -O "/boot/${UBOOT_OVERLOAD}" >/dev/null 2>&1 && sync
-                if [[ "$?" -eq "0" && -s "/boot/${UBOOT_OVERLOAD}" ]]; then
+                if [[ "$?" -eq "0" && -f "/boot/${UBOOT_OVERLOAD}" ]]; then
                     echo -e "The ${UBOOT_OVERLOAD} file download is complete."
                 else
                     die "The ${UBOOT_OVERLOAD} file download failed. please try again."
@@ -169,13 +170,13 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
 
         # Check ${MAINLINE_UBOOT}
         if [[ -n "${MAINLINE_UBOOT}" ]]; then
-            if [[ ! -s "${MAINLINE_UBOOT}" ]]; then
+            if [[ ! -f "/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
                 echo -e "Try to download the MAINLINE_UBOOT file from the server."
-                GITHUB_MAINLINE_UBOOT="${GITHUB_RAW}/common-files/files${MAINLINE_UBOOT}"
+                GITHUB_MAINLINE_UBOOT="${GITHUB_RAW}/with_fip/${MAINLINE_UBOOT}"
                 #echo -e "MAINLINE_UBOOT: ${GITHUB_MAINLINE_UBOOT}"
                 [ -d "/lib/u-boot" ] || mkdir -p /lib/u-boot
-                wget -c "${GITHUB_MAINLINE_UBOOT}" -O "${MAINLINE_UBOOT}" >/dev/null 2>&1 && sync
-                if [[ "$?" -eq "0" && -s "${MAINLINE_UBOOT}" ]]; then
+                wget -c "${GITHUB_MAINLINE_UBOOT}" -O "/lib/u-boot/${MAINLINE_UBOOT}" >/dev/null 2>&1 && sync
+                if [[ "$?" -eq "0" && -f "/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
                     echo -e "The MAINLINE_UBOOT file download is complete."
                 else
                     die "The MAINLINE_UBOOT file download failed. please try again."
@@ -196,10 +197,10 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
     fi
 
     # Write Mainline bootloader
-    if [ -f "${MAINLINE_UBOOT}" ]; then
+    if [ -f "/lib/u-boot/${MAINLINE_UBOOT}" ]; then
         echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ] to [ /dev/${EMMC_NAME} ]"
-        dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
-        dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
+        dd if=/lib/u-boot/${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
+        dd if=/lib/u-boot/${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
         echo -e "The MAINLINE_UBOOT file write is complete."
     fi
 fi

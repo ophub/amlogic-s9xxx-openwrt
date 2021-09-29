@@ -6,10 +6,11 @@
 #======================================================================================
 
 # The script supports directly setting parameters for installation, skipping interactive selection
-# openwrt-install-amlogic ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME}
-# E.g: openwrt-install-amlogic yes 1
-# E.g: openwrt-install-amlogic no 99 meson-gxl-s905x-p212.dtb
+# openwrt-install-amlogic ${AUTO_MAINLINE_UBOOT} ${SOC_ID} ${DTB_FILENAME} ${SHARED_FSTYPE}
+# E.g: openwrt-install-amlogic yes 1 auto_dtb ext4
+# E.g: openwrt-install-amlogic no 99 meson-gxl-s905x-p212.dtb ext4
 # Tip: When custom dtb file, set ${SOC_ID} to 99, and parameter ${DTB_FILENAME} must be set
+# Tip: ${SHARED_FSTYPE}: Shared partition can be ext4, xfs, btrfs, f2fs
 # return 0
 
 # You can also execute the script directly, and interactively select related functions
@@ -31,13 +32,18 @@ if  [[ -n "$(echo ${2} | sed -n "/^[0-9]\+$/p")" ]]; then
             echo "Please enter the DTB file name!"
             exit 1
         fi
-
+    else
+        SPECIFY_DTB="auto_dtb"
     fi
 fi
+
+# shared partition can be ext4, xfs, btrfs, f2fs
+SHARED_FSTYPE=${4}
 
 echo "AUTO_MAINLINE_UBOOT: ${AUTO_MAINLINE_UBOOT}"
 echo "SPECIFY_SOC: ${SPECIFY_SOC}"
 echo "SPECIFY_DTB: ${SPECIFY_DTB}"
+echo "SHARED_FSTYPE: ${SHARED_FSTYPE}"
 
 # Current device model
 MYDEVICE_NAME=$(cat /proc/device-tree/model | tr -d '\000')
@@ -52,8 +58,7 @@ else
     sleep 3
 fi
 
-# shared partition can be ext4, xfs, btrfs, f2fs
-TARGET_SHARED_FSTYPE=btrfs
+
 
 emmc=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 if [[ "${emmc}" == "" ]]; then
@@ -660,18 +665,34 @@ echo "complete."
 
 echo "Create a shared file system."
 mkdir -p /mnt/${EMMC_NAME}p4
+
+# When there is no input parameter, select manually
+if [[ -n "${SHARED_FSTYPE}" ]]; then
+    TARGET_SHARED_FSTYPE=${SHARED_FSTYPE}
+else
+    cat <<EOF
+---------------------------------------------------------------------------------
+Please select the type of shared file system:
+1. ext4:  [Default options] suitable for general use.
+2. btrfs: Which can extend the service life of ssd/mmc.
+3. f2fs:  Fast reading and writing speed, but the compatibility is slightly poor.
+4. xfs:   Very good file system, alternative to ext4.
+---------------------------------------------------------------------------------
+EOF
+    read TARGET_SHARED_FSTYPE
+fi
 case $TARGET_SHARED_FSTYPE in
-    xfs)
-        mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
-        mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-        ;;
-    btrfs)
+    2 | btrfs)
         mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
         mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
         ;;
-    f2fs)
+    3 | f2fs)
         mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
         mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+        ;;
+    4 | xfs)
+        mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+        mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
         ;;
     *)
         mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
@@ -683,3 +704,4 @@ sync
 
 echo "Successful installed, please unplug the USB, re-insert the power supply to start the openwrt."
 exit 0
+

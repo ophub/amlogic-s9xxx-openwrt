@@ -191,10 +191,10 @@ jobs:
         body: |
           This is OpenWrt firmware for Amlogic S9xxx STB
           * Firmware information
-          Default IP: 192.168.1.1
-          Default username: root
-          Default password: password
-          Default WIFI name: OpenWrt
-          Default WIFI password: none
+          Default IP: 192.168.88.1
+          Default username: wings
+          Default password: lee8305
+          Default WIFI name: family_N1
+          Default WIFI password: jmyqhy25zz2502
           Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
 

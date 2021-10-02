@@ -9,11 +9,6 @@ name: Use Releases file to Packaging
 on:
   repository_dispatch:
   workflow_dispatch:
-    inputs:
-      ssh:
-        description: 'SSH connection'
-        required: false
-        default: 'false'
   #schedule:
     #- cron: '0 22 * * *'
 
@@ -53,19 +48,12 @@ jobs:
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_lede.*/openwrt-armvirt-.*.tar.gz" | head -n 1 > DOWNLOAD_ARMVIRT
         [ -s DOWNLOAD_ARMVIRT ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.66_5.4.147
+        sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.70_5.4.150
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_lede.*/ipk.tar.gz" | head -n 1 > DOWNLOAD_IPK
         [ -s DOWNLOAD_IPK ] && wget -q -P out https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_IPK)
         echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
         echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
         echo "::set-output name=status::success"
-        
-    - name: SSH connection to Actions @ Ctrl+C to enter, Ctrl+D to exit
-      uses: P3TERX/ssh2actions@main
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     - name: Upload artifact to Actions
       uses: kittaakos/upload-artifact-as-is@master

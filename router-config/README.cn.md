@@ -37,7 +37,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
     - 10.2 [认识 workflow 文件](#102-认识-workflow-文件)
         - 10.2.1 [更换编译源码库的地址和分支](#1021-更换编译源码库的地址和分支)
         - 10.2.2 [更改盒子的型号和内核版本号](#1022-更改盒子的型号和内核版本号)
-    - 10.3 [使用 SSH 远程连接 GitHub Actions 进行个性化配置](#103-使用-ssh-远程连接-github-actions-进行个性化配置)
+    - 10.3 [自定义 banner 信息](#103-自定义-banner-信息)
     - 10.4 [自定义 feeds 配置文件](#104-自定义-feeds-配置文件)
     - 10.5 [自定义软件默认配置信息](#105-自定义软件默认配置信息)
     - 10.6 [Opkg 软件包管理](#106-opkg-软件包管理)
@@ -301,7 +301,7 @@ openwrt-install-amlogic
 
 ### 9.1 使用操作面板安装
 
-从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.10.66 升级到低版本如 5.4.147 ，也可以从低版本如 5.4.147 升级到高版本如 5.10.66 。内核版本号的高低不影响升级，可自由升级/降级）。
+从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.10.70 升级到低版本如 5.4.150 ，也可以从低版本如 5.4.150 升级到高版本如 5.10.70 。内核版本号的高低不影响升级，可自由升级/降级）。
 
 ### 9.2 使用升级固件脚本命令安装
 
@@ -313,7 +313,7 @@ openwrt-update-amlogic
 
 💡提示: 脚本 `openwrt-update-amlogic` 会自动从 `/mnt/mmcblk*p4/` 目录中寻找各种后缀的升级文件，你可以通过晶晨宝盒插件或其他软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
-如果在 `/mnt/mmcblk*p4/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic openwrt_s905x3_v5.4.147_2021.03.17.0412.img.gz` ）。
+如果在 `/mnt/mmcblk*p4/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic openwrt_s905x3_v5.4.150_2021.03.17.0412.img.gz` ）。
 
 - 脚本  `openwrt-update-amlogic` 在目录中的查找顺序说明
 
@@ -378,29 +378,28 @@ REPO_BRANCH: openwrt-19.07
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.66_5.4.147
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.70_5.4.150
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
-修改 `-d` 后面的参数为你的机顶盒的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.4.147` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
+修改 `-d` 后面的参数为你的机顶盒的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.4.150` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
 
-### 10.3 使用 SSH 远程连接 GitHub Actions 进行个性化配置
+### 10.3 自定义 banner 信息
 
-你在 10.1 中进行了本地化编译，对相关的交互界面有了一定的认识，这个经验非常有用，以后你可以在 GitHub Actions 的云编译中实现和本地化一样的操作。
+默认的 [banner](https://github.com/coolsnowwolf/lede/blob/master/package/base-files/files/etc/banner) 信息如下，你可以修改这个文件来定制专属自己的个性化 banner 信息。将你做好的 banner 文件放入 [etc/banner](../amlogic-s9xxx/common-files/files/etc) 目录，即可在编译时自动替换。
 
-在手动启动 GitHub Actions 固件编译时，把 `SSH connection to Actions` 的值由默认的 `false` 改为 `true` ，然后在工作流中等待大约 10 分钟，当编译进程完成前面几步到达 `SSH connection to Actions` 这个步骤时，从运行日志中可以看到绿色的 SSH 远程连接命令和浏览器访问网址，推荐复制绿色的 SSH 远程连接命令，在 SSH 运行终端里黏贴命令并回车，根据提示按 `q` 键进入控制面板，输入 `cd openwrt && make menuconfig` 命令进入 openwrt 个性化配置选项面板，完成各种操作后保存退出，按 `ctrl + d` 退出 SSH 远程连接进程，让GitHub Actions继续编译。
-
-SSH操作时，复制 `ssh ...io` 这部分绿色的 SSH 远程连接命令。MAC 电脑可以直接使用系统自带的终端。如果你有正在运行状态的 openwrt ，可以使用它系统菜单下的 `TTYD 终端` 。如果你的电脑安装了 SecureCRT 或者 PuTTY 等软件，可以使用任意一款支持 SSH 协议的软件。
-
-如果你没有任何 SSH 终端，你可以复制绿色网址下面的 `https://tma...` 的网址，在浏览器中打开，根据提示输入的命令和在终端中一样。在浏览器中操作时响应速度可能比在支持 SSH 协议的软件里使用要慢一点。图示如下：
-
-<div style="width:100%;margin-top:40px;margin:5px;">
-<img src=https://user-images.githubusercontent.com/68696949/109418960-e1ffe080-7a05-11eb-94f6-2c9bd8f5481c.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418962-e4fad100-7a05-11eb-87af-e924d4ff3da6.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418965-e926ee80-7a05-11eb-8f25-4443b9f845f7.jpg width="300" />
-</div>
+```yaml
+  _______                     ________        __
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |_______||   __|_____|__|__||________||__|  |____|
+          |__| W I R E L E S S   F R E E D O M
+ -----------------------------------------------------
+ %D %V, %C
+ -----------------------------------------------------
+ ```
 
 ### 10.4 自定义 feeds 配置文件
 

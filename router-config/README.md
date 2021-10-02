@@ -37,7 +37,7 @@ The method of Use GitHub Actions to compile OpenWrt, as well as many contents in
     - 10.2 [Know the workflow file](#102-know-the-workflow-file)
         - 10.2.1 [Replacing source code repositories and branches](#1021-replacing-source-code-repositories-and-branches)
         - 10.2.2 [Change STB model and kernel version](#1022-change-stb-model-and-kernel-version)
-    - 10.3 [Use SSH to remotely connect to GitHub Actions](#103-use-ssh-to-remotely-connect-to-github-actions)
+    - 10.3 [Custom banner information](#103-custom-banner-information)
     - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
     - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)
     - 10.6 [Opkg Package Manager](#106-opkg-package-manager)
@@ -307,7 +307,7 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ### 9.1 Update using the operation panel
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.10.66 to a lower version such as 5.4.147, or from a lower version such as 5.4.147 to a higher version such as 5.10.66. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.10.70 to a lower version such as 5.4.150, or from a lower version such as 5.4.150 to a higher version such as 5.10.70. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
 ### 9.2 Update using script commands
 
@@ -318,7 +318,7 @@ openwrt-update-amlogic
 ```
 💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the `openwrt-update-amlogic` script will automatically find the `update file` from the `/mnt/mmcblk*p4/` directories.
     
-If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.4.147_2021.03.17.0412.img.gz`*** command to specify the `update file`.
+If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.4.150_2021.03.17.0412.img.gz`*** command to specify the `update file`.
 
 - The `openwrt-update-amlogic` update file search order
 
@@ -384,30 +384,29 @@ Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.66_5.4.147
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.70_5.4.150
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
 Modify the -d parameter to the model of your STB, and modify the value after the -k parameter to the version number of the kernel you want to compile:
-`sudo ./make -d -b s905x -k 5.4.147`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
+`sudo ./make -d -b s905x -k 5.4.150`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
 
-### 10.3 Use SSH to remotely connect to GitHub Actions
+### 10.3 Custom banner information
 
-You have performed `localization compilation` in 10.1 and have a certain understanding of related interactive interfaces. This experience is very useful. In the future, you can implement the same operations as localization in the cloud compilation of `GitHub Actions`.
+The default [banner](https://github.com/coolsnowwolf/lede/blob/master/package/base-files/files/etc/banner) information is as follows, You can modify this file to customize your own personalized banner information. Put your finished banner file into the [etc/banner](../amlogic-s9xxx/common-files/files/etc) directory and it will be automatically replaced during compilation.
 
-When `manually starting the GitHub Actions` firmware compilation, change the value of `SSH connection to Actions` from the default `false` to `true`, and then wait about `10 minutes` in the `workflow`. When the compilation process completes the previous steps and arrives at the step of `SSH connection to Actions`, You can see the green `SSH remote connection command` and `browser access URL` from the `running log`. It is recommended to copy the green `SSH remote connection command`, `paste` the command in the SSH running terminal and press `Enter`, press the `q` key to enter the control panel according to the prompt, and enter `cd OpenWrt && make menuconfig` command to enter the OpenWrt personalized configuration options panel, `save` and exit after completing various operations, press `ctrl + d` to `exit` the SSH remote connection process, and let GitHub Actions continue to compile.
-
-During SSH operation, copy the green SSH remote connection command in `ssh...io`. Apple MAC computers can directly use the `terminal` that comes with the system. If you have `OpenWrt` running, you can use the `TTYD terminal` under its system menu. If your computer has software such as `SecureCRT` or `PuTTY` installed, you can use any software that supports the SSH protocol.
-
-If you don't have any SSH terminal, you can copy the `https://tma...` URL under the green URL, open it in a `browser`, and enter the same command as in the terminal according to the prompt. The browser's response speed may be slower than SSH, so be patient. The icons are as follows:
-
-<div style="width:100%;margin-top:40px;margin:5px;">
-<img src=https://user-images.githubusercontent.com/68696949/109418960-e1ffe080-7a05-11eb-94f6-2c9bd8f5481c.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418962-e4fad100-7a05-11eb-87af-e924d4ff3da6.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418965-e926ee80-7a05-11eb-8f25-4443b9f845f7.jpg width="300" />
-</div>
+```yaml
+  _______                     ________        __
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |_______||   __|_____|__|__||________||__|  |____|
+          |__| W I R E L E S S   F R E E D O M
+ -----------------------------------------------------
+ %D %V, %C
+ -----------------------------------------------------
+ ```
 
 ### 10.4 Custom feeds configuration file
 

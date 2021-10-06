@@ -48,9 +48,6 @@ rm -rf package/lean/luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
 # Add p7zip
 # svn co https://github.com/hubutui/p7zip-lede/trunk package/p7zip
-# Add luci-app-syncdial
-rm -rf package/lean/luci-app-syncdial
-git clone https://github.com/rufengsuixing/luci-app-syncdial.git package/lean/luci-app-syncdial
 
 # coolsnowwolf default software package replaced with Lienol related software package
 # rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}

@@ -14,6 +14,9 @@
 # sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
 # sed -i '$a src-git liuran001_packages https://github.com/onwingslnz/openwrt-packages' feeds.conf.default
 
+# Add dockerman
+sed -i '$a src-git lienol https://github.com/lisaac/luci-app-dockerman/trunk/applications/luci-app-dockerman' feeds.conf.default
+sed -i '$a src-git lienol https://github.com/lisaac/luci-lib-docker/trunk/collections/luci-lib-docker' feeds.conf.default
 
 # other
 # rm -rf package/lean/{samba4,luci-app-samba4,luci-app-ttyd}

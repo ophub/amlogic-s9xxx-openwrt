@@ -35,7 +35,7 @@ sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package
 #
 # Add luci-app-amlogic
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
-svn co https://github.com/liuran001/openwrt-packages/branches/packages
+# svn co https://github.com/liuran001/openwrt-packages/branches/packages
 
 
 

@@ -194,7 +194,7 @@ jobs:
           Default IP: 192.168.88.1
           Default username: wings
           Default password: lee8305
-          Default WIFI name: fimily_N1
+          Default WIFI name: family_N1
           Default WIFI password: NanYuanLi8Hao305
           Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
 

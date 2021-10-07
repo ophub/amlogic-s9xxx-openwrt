@@ -38,7 +38,7 @@ svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/
 # svn co https://github.com/liuran001/openwrt-packages/branches/packages package/
 
 # Add luci-app-passwall
-# svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
+svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
 
 # Add luci-app-openclash
 # svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/openwrt-openclash

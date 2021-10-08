@@ -10,7 +10,7 @@ name: Build OpenWrt lede
 on:
   repository_dispatch:
   workflow_dispatch:
-      inputs:
+    inputs:
       ssh:
         description: 'SSH connection to Actions'
         required: false

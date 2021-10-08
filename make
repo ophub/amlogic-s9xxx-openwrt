@@ -559,8 +559,8 @@ Options:
     -k=VERSION             set the kernel version, which must be in the "kernel" directory
       , -k all             build all the kernel version
       , -k latest          build the latest kernel version
-      , -k 5.4.6           Specify a single kernel for compilation
-      , -k 5.4.6_5.9.0     Specify multiple cores, use "_" to connect
+      , -k 5.4.150         Specify a single kernel for compilation
+      , -k 5.4.150_5.10.70 Specify multiple cores, use "_" to connect
 
     -u, --update           Whether to auto update to the latest kernel of the same series
       , -u ture            Auto update to the latest kernel

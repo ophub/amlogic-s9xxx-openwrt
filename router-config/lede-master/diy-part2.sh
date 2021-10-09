@@ -43,6 +43,8 @@ git clone https://github.com/rufengsuixing/luci-app-adguardhome.git package/luci
 # Add Dockerman
 git clone https://github.com/lisaac/luci-app-dockerman.git package/luci-app-dockerman
 git clone https://github.com/lisaac/luci-lib-docker.git package/luci-lib-docker
+# Add kuci-app-ser2net
+git clone https://github.com/JiapengLi/OpenWrt-luci-app-ser2net.git package/luci-app-ser2net
 # Add luci-theme-argon
 rm -rf package/lean/luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon

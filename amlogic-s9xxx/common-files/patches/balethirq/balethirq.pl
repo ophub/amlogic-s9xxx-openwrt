@@ -7,6 +7,11 @@ our %min_cpu_map;
 our %uniq_eth_cpu_map;
 our $all_cpu_mask = 0;
 
+# rpscpu掩码是否要排除eth0占用的核(0:否 1:是)
+our $rpscpu_exclude_eth0_core=1;
+# rpscpu掩码是否要排除eth1占用的核(0:否 1:是)
+our $rpscpu_exclude_eth1_core=1;
+
 &read_config();
 &read_irq_data();
 &update_smp_affinity();
@@ -14,6 +19,7 @@ our $all_cpu_mask = 0;
 exit(0);
 
 ############################## sub functions #########################
+# 读取 /etc/config/balance_irq 配置文件
 sub read_config {
     my $cpu_count = &get_cpu_count();
     my $fh;
@@ -24,6 +30,7 @@ sub read_config {
                 chomp;
                 my($name, $value) = split;
                 my @cpus = split(',', $value);
+		# ARMV8 当前最多CPU核数是8核
                 my $min_cpu = 9;
 
                 foreach my $cpu (@cpus) {
@@ -44,6 +51,7 @@ sub read_config {
     } 
 }
 
+# 计算cpu核数
 sub get_cpu_count {
     my $fh;
     open $fh, "<", "/proc/cpuinfo" or die $!;
@@ -73,8 +81,10 @@ sub read_irq_data {
         if(exists $cpu_map{$name}) {
             $irq_map{$name} = $irq;
             if($name =~ m/\Aeth[0-9]\Z/) {
+		# 原生的 ethX 
                 $uniq_eth_cpu_map{$name} = 1 << ($min_cpu_map{$name} - 1);
             } elsif($name =~ m/\Axhci-hcd:usb[1-9]\Z/) { # usb extend eth1
+		# USB外接网卡: 等同于eth1
                 $uniq_eth_cpu_map{eth1} =  1 << ($min_cpu_map{$name} - 1);
             }
         }
@@ -129,13 +139,15 @@ sub enable_eth_rps_rfs {
             my $value = 32768;
             $rps_sock_flow_entries += $value;
             my $eth_cpu_mask_hex;
-            #if($eth eq "eth0") {
-            #    $eth_cpu_mask_hex = sprintf("%0x", $all_cpu_mask - $uniq_eth_cpu_map{$eth} - $uniq_eth_cpu_map{eth1});
-            #} else {
-	    #    $eth_cpu_mask_hex = sprintf("%0x", $all_cpu_mask - $uniq_eth_cpu_map{$eth});
-            #}
+	    my $cpu_mask = $all_cpu_mask;
+            if($rpscpu_exclude_eth0_core == 1) {
+	        $cpu_mask -= $uniq_eth_cpu_map{eth0}; 
+	    }
+            if($rpscpu_exclude_eth1_core == 1) {
+	        $cpu_mask -= $uniq_eth_cpu_map{eth1}; 
+	    }
 	    
-            $eth_cpu_mask_hex = sprintf("%0x", $all_cpu_mask - $uniq_eth_cpu_map{$eth});
+            $eth_cpu_mask_hex = sprintf("%0x", $cpu_mask);
             print "Set the rps cpu mask of $eth to 0x$eth_cpu_mask_hex\n";
             open my $fh, ">", "/sys/class/net/${eth}/queues/rx-0/rps_cpus" or die;
             print $fh $eth_cpu_mask_hex;
@@ -149,6 +161,7 @@ sub enable_eth_rps_rfs {
             print $fh $eth_cpu_mask_hex;
             close $fh;
 
+            # USB外接网卡：eth1(RTL8153)，经实测最佳的rx_ring在 100-500范围, 默认值是100，超过500之后， 多CPU负载会失衡
             &tunning_eth_ring($eth, 256, 0) if ($eth ne "eth0");
         }
     }

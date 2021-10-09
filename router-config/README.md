@@ -211,13 +211,13 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
 
 ```yaml
 - name: Upload OpenWrt Firmware to Release
-  uses: softprops/action-gh-release@v1
+  uses: ncipollo/release-action@v1
   if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   with:
-    tag_name: openwrt_s9xxx_${{ env.FILE_DATE }}
-    files: ${{ env.FILEPATH }}/*
+    tag: openwrt_s9xxx_${{ env.FILE_DATE }}
+    artifacts: ${{ env.FILEPATH }}/*
+    allowUpdates: true
+    token: ${{ secrets.GITHUB_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic S9xxx STB
       * Firmware information

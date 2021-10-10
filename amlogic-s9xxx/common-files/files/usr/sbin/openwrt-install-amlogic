@@ -58,8 +58,6 @@ else
     sleep 3
 fi
 
-
-
 emmc=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
 if [[ "${emmc}" == "" ]]; then
     echo "No EMMC or SD devices were found in this system!"
@@ -71,18 +69,21 @@ if [[ "$(echo ${emmc} | grep mmcblk)" == "" ]]; then
     exit 1
 fi
 
-if [[ "$(echo "${emmc}" | awk -F 'mmcblk' '{print NF-1}' | head -n 1)" -ne "1" ]]; then
-    echo "Please remove the more SD-card and try again!"
+# Find the device name of /
+root_devname=$(lsblk -l -o NAME,MOUNTPOINTS | awk '$2 ~ /^\/$/ {print substr($1,1,length($1)-2)}')
+if lsblk -l | grep "${root_devname}boot0" >/dev/null; then
+    echo "you are running in emmc mode, please boot system with usb or tf card!"
     exit 1
 fi
 
-if [[ "$(lsblk | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])' | sort | uniq)" == "$(lsblk | grep -e '/$' | grep -oE '(mmcblk[0-9]|sd[a-z][0-9])')" ]]; then
-    echo "you are running in emmc mode, please boot system with usb!"
+install_emmc="$(lsblk -l -o NAME | grep -oE '(mmcblk[0-9]?boot0)' | sed "s/boot0//g")"
+if [[ "${install_emmc}" == "" ]]; then
+    echo "No emmc can be found to install the openwrt system!"
     exit 1
 fi
 
 # EMMC DEVICE NAME
-EMMC_NAME="${emmc}"
+EMMC_NAME="${install_emmc}"
 EMMC_DEVPATH="/dev/${EMMC_NAME}"
 echo ${EMMC_DEVPATH}
 EMMC_SIZE=$(lsblk -l -b -o NAME,SIZE | grep ${EMMC_NAME} | sort | uniq | head -n1 | awk '{print $2}')

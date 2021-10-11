@@ -46,7 +46,7 @@ fi
 echo -e "Current device: ${MYDEVICE_NAME} [${MYDTB_FILE}]"
 sleep 3
 
-EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
+EMMC_NAME=$(lsblk -l -o NAME | grep -oE '(mmcblk[0-9]?boot0)' | sed "s/boot0//g")
 P4_PATH="/mnt/${EMMC_NAME}p4"
 
 # Move kernel related files to the ${P4_PATH} directory

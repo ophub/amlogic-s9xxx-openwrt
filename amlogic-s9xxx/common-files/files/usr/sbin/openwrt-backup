@@ -308,44 +308,44 @@ delete_snapshot() {
 
 migrate_snapshot() {
     cur_rootdev=$(lsblk -l -o NAME,MOUNTPOINT |awk '$2~/^\/$/ {print $1}')
-    if [ "$cur_rootdev" == "" ];then
-        echo "无法找到当前的 rootfs 对应的磁盘设备！"
-        read -p "按回车键返回" q
+    if [ "${cur_rootdev}" == "" ];then
+        echo "The disk device corresponding to the current rootfs cannot be found!"
+        read -p "Press [ enter ] to return." q
         return
     fi
-    dev_pre=$(echo "$cur_rootdev" | awk '{print substr($1, 1, length($1)-1);}')
-    rootdev_idx=$(echo "$cur_rootdev" | awk '{print substr($1, length($1),1);}')
+    dev_pre=$(echo "${cur_rootdev}" | awk '{print substr($1, 1, length($1)-1);}')
+    rootdev_idx=$(echo "${cur_rootdev}" | awk '{print substr($1, length($1),1);}')
     case $rootdev_idx in
         2)  old_rootpath="/mnt/${dev_pre}3";;
         3)  old_rootpath="/mnt/${dev_pre}2";;
-        *)  echo "判断旧版 rootfs 路径失败!"
-            read -p "按回车键返回" q
+        *)  echo "Judge the old version of rootfs path failed!"
+            read -p "Press [ enter ] to return." q
             return
             ;;
     esac
-    echo "下面是从旧版 rootfs 中找到的 etc 快照，请输入其中一个的名字"
-    echo "提示： 自动排除 etc-000 和 etc-001"
+    echo "The following are snapshots of etc found from the old version of rootfs, please enter the name of one of them."
+    echo "Tip: Automatically exclude etc-000 and etc-001"
     echo "-----------------------------------------------------------------------------------"
-    btrfs subvolume list -rt "$old_rootpath" | grep -v "${SNAPSHOT_PRESTR}etc-000" | grep -v "${SNAPSHOT_PRESTR}etc-001"
+    btrfs subvolume list -rt "${old_rootpath}" | grep -v "${SNAPSHOT_PRESTR}etc-000" | grep -v "${SNAPSHOT_PRESTR}etc-001"
     echo "-----------------------------------------------------------------------------------"
-    read -p "请输入要迁移的快照名字(只需要输入 ${SNAPSHOT_PRESTR} 之后的部分): " old_snap_name
-    if [ "$old_snap_name" == "" ];then
-        read -p "名称为空, 按回车键返回" q
+    read -p "Please enter the name of the snapshot to be migrated (only the part after $(SNAPSHOT_PRESTR) needs to be entered): " old_snap_name
+    if [ "${old_snap_name}" == "" ];then
+        read -p "The name is empty, Press [ enter ] to return." q
         return
-    elif ! btrfs subvolume list -rt "$old_rootpath" | awk '{print $4}' | grep "^${SNAPSHOT_PRESTR}${old_snap_name}$" >/dev/null;then
-        echo "名称输入错误, 未找到对应的快照!"
-        read -p "按回车键返回" q
+    elif ! btrfs subvolume list -rt "${old_rootpath}" | awk '{print $4}' | grep "^${SNAPSHOT_PRESTR}${old_snap_name}$" >/dev/null;then
+        echo "The name was entered incorrectly, and the corresponding snapshot was not found!"
+        read -p "Press [ enter ] to return." q
         return
-    elif [ "$old_snap_name" == "etc-000" ] || [ "$old_snap_name" == "etc-001" ];then
-        echo "关键快照不允许迁移!"
-        read -p "按回车键返回" q
+    elif [ "${old_snap_name}" == "etc-000" ] || [ "${old_snap_name}" == "etc-001" ];then
+        echo "Critical snapshots are not allowed to migrate!"
+        read -p "Press [ enter ] to return." q
         return
     fi
 
-    # 查找当前 rootfs下有无重名快照
+    # Find out if there is a snapshot with the same name under the current rootfs
     if btrfs subvolume list -rt / | awk '{print $4}' | grep "^\\${SNAPSHOT_PRESTR}${old_snap_name}$" >/dev/null;then
-        echo "当前已存在名称为 [$old_snap_name] 的快照, 无法进行迁移! (但可以删除现有同名快照后再迁移)"
-        read -p "按回车键返回" q
+        echo "A snapshot with the name [ ${old_snap_name} ] already exists and cannot be migrated! (But you can delete the existing snapshot with the same name and then migrate)"
+        read -p "Press [ enter ] to return." q
         return
     fi
 
@@ -353,9 +353,9 @@ migrate_snapshot() {
     echo "----------------------------------------------------------------------------------------------"
     df -h
     echo "----------------------------------------------------------------------------------------------"
-    echo -e "\033[1m注意：迁移 [${old_rootpath}] 的快照 [$old_snap_name] 到当前 rootfs, 需占用大约 $need_size 空间,"
-    echo -e "      请确认 [/] 所在的分区 [/dev/${cur_rootdev}] 可用空间(Available)是否充足?\033[0m"
-    read -p "是否确定迁移？ y/n [n] " yn
+    echo -e "Note: To migrate the snapshot [ ${old_snap_name} ] of [ ${old_rootpath} ] to the current rootfs, it takes about [ ${need_size} ] space,"
+    echo -e "      Please confirm whether the partition [/dev/${cur_rootdev}] where [/] is located has enough free space (Available)?"
+    read -p "Are you sure to migrate? y/n [n] " yn
     if [ "$yn" == "y" ] ||  [ "$yn" == "Y" ];then
         (
             cd /
@@ -369,11 +369,11 @@ migrate_snapshot() {
                 cp ${SNAPSHOT_PRESTR}etc-000/flippy-openwrt-release ${SNAPSHOT_PRESTR}${old_snap_name}/
                 cp ${SNAPSHOT_PRESTR}etc-000/banner ${SNAPSHOT_PRESTR}${old_snap_name}/banner
                 btrfs property set -ts ${SNAPSHOT_PRESTR}${old_snap_name} ro true
-                echo "迁移完成，如果想应用快照 [$old_snap_name], 请使用恢复快照功能."
+                echo "The migration is complete, if you want to apply the snapshot [ ${old_snap_name} ], please use the restore snapshot function."
             else
-                echo "迁移失败!"
+                echo "The migration failed!"
             fi
-            read -p "按回车键返回" q
+            read -p "Press [ enter ] to return." q
             return
         )
     fi
@@ -382,43 +382,45 @@ migrate_snapshot() {
 snapshot_help() {
     clear
     cat <<EOF
-============================================================================================================
-1.  什么是快照？
-    快照就是某一子卷(subvolume)在某一时点的状态记录, 快照是一种特殊的子卷；
-    本地快照刚生成时，与原始子卷共享磁盘空间，所以不占用额外空间，后续发生过变化的文件才占空间；
-    从其它地方迁移过来的快照，实质上不是快照，而只是普通子卷，所以要占用空间。
-2.  如何显示已有的快照？
-    输入命令： btrfs subvolume list -rt /
+============================================================================================================================
+1.  What is a snapshot?
+    A snapshot is the state record of a certain subvolume at a certain point in time, and a snapshot is a special subvolume;
+    When the local snapshot is first generated, it shares the disk space with the original subvolume,
+    so it does not occupy additional space, and only the files that have changed subsequently occupy space;
+    Snapshots migrated from other places are not snapshots in essence, but just ordinary subvolumes, so they take up space.
+2.  How to display existing snapshots?
+    input the command: btrfs subvolume list -rt /
 ---------------------------------------------------------------------------------------------
 EOF
     btrfs subvolume list -rt /
     cat <<EOF
 ---------------------------------------------------------------------------------------------
-2.  如何创建快照？
-    btrfs subvolume snapshot -r /etc /.snapshots/快照1  # -r 是生成只读快照的意思
-3.  如何删除快照？
-    btrfs subvolume delete -c /.snapshots/快照1  # -c 是 commit 的意思
-4.  快照如何改名？
-    用操作系统的 mv 命令即可，例如：
-    mv /.snapshots/快照1 /.snapshots/快照2
-5.  如何还原快照？
-    mv /etc /etc.backup  # 备份 etc 到 etc.backup,也就是子卷改名
-    btrfs subvolume snapshot /.snapshots/etc-001  /etc   # 用快照 etc-001 生成快照 etc,注意没带 -r 参数
-    # (是的,快照也可以再生成快照)
-    btrfs delete -c /etc.backup # 上一步骤成功后，可以删除刚才的etc备份
-6.  如何从快照中还原某个文件?
-    实例A: 从快照 etc-000 还原挂载点配置文件： /etc/config/fstab
+2.  How to create a snapshot?
+    btrfs subvolume snapshot -r /etc /.snapshots/snapshot_1  # -r It means to generate a read-only snapshot
+3.  How to delete a snapshot?
+    btrfs subvolume delete -c /.snapshots/snapshot_1  # -c 是 commit 的意思
+4.  How to rename a snapshot?
+    Just use the [ mv ] command of the operating system, for example:
+    mv /.snapshots/snapshot_1 /.snapshots/snapshot_2
+5.  How to restore the snapshot?
+    mv /etc /etc.backup  # Back up /etc to /etc.backup, that is, rename the subvolume
+    btrfs subvolume snapshot /.snapshots/etc-001  /etc   # Use snapshot etc-001 to generate snapshot etc, no -r parameter
+    # (Yes, snapshots can also be re-generated snapshots)
+    btrfs delete -c /etc.backup # After the previous step is successful, you can delete the etc backup just now
+6.  How to restore a certain file from the snapshot?
+    Example A: Restore the mount point configuration file from snapshot etc-000: /etc/config/fstab
         cp /.snapshots/etc-000/config/fstab /etc/config/
-    实例B: 从快照 etc-001 还原网络配置：
+    Example B: Restore network configuration from snapshot etc-001:
         cp /.snapshots/etc-001/config/network  /etc/config/
-    实例C: 从快照 etc-001 还原 ssr 的配置文件：
+    Example C: Restore the ssr configuration file from snapshot etc-001:
         cp /.snapshots/etc-001/config/shadowsocksr /etc/config/
-    # (是的，就是操作系统的复制命令)
-7.  如何从远程迁移快照？
-    btrfs 支持 ssh 远程迁移快照, 例如：
-    ssh 192.168.1.1 btrfs send /.snapshots/快照x  |  btrfs receive /.snapshots
-    命令完成后，远程的 快照x 就复制到本地的 /.snapshots/快照x 了(如上所述，迁移过来的是子卷，要占用空间的)
-============================================================================================================
+    # (Yes, it is the [ cp ] command of the operating system)
+7.  How to migrate snapshots from remote?
+    btrfs supports ssh remote migration snapshots, for example:
+    ssh 192.168.1.1 btrfs send /.snapshots/snapshot_x  |  btrfs receive /.snapshots
+    After the command is completed, the remote snapshot_x is copied to the local /.snapshots/snapshot_x
+    (as mentioned above, the migration is a subvolume, which takes up space)
+============================================================================================================================
 EOF
     exit 0
 }

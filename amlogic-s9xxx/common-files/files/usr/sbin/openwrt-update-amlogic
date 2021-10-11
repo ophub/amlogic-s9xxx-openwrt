@@ -31,12 +31,9 @@ else
     sleep 3
 fi
 
-EMMC_NAME=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
+EMMC_NAME=$(lsblk -l -o NAME | grep -oE '(mmcblk[0-9]?boot0)' | sed "s/boot0//g")
 if [ "${EMMC_NAME}" == "" ]; then
     echo "The system did not find any available disk devices!!!"
-    exit 1
-elif [[ "$(echo "${EMMC_NAME}" | awk -F 'mmcblk' '{print NF-1}')" -ne "1" ]]; then
-    echo "Please remove the more SD-card and try again."
     exit 1
 fi
 

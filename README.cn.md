@@ -107,12 +107,12 @@
 
 ```yaml
 - name: Upload OpenWrt Firmware to Release
-  uses: softprops/action-gh-release@v1
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  uses: ncipollo/release-action@v1
   with:
-    tag_name: openwrt_s9xxx
-    files: ${{ env.PACKAGED_OUTPUTPATH }}/*
+    tag: openwrt_s9xxx
+    artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+    allowUpdates: true
+    token: ${{ secrets.GITHUB_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic S9xxx STB.
       More information ...

@@ -81,13 +81,16 @@ extract_armbian() {
 
     tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
+    sync
 
     if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
         mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
+        sync
 
         tar -xzf ${kernel_dir}/boot-*.tar.gz -C ${boot}
         mv -f ${boot}/uInitrd-* ${boot}/uInitrd && mv -f ${boot}/vmlinuz-* ${boot}/zImage 2>/dev/null
+        sync
 
         tar -xzf ${kernel_dir}/modules-*.tar.gz -C ${root}/lib/modules
         cd ${root}/lib/modules/*/
@@ -239,7 +242,6 @@ EOF
         cp -f ${cpustat_file}/30-sysinfo.sh etc/profile.d/30-sysinfo.sh >/dev/null 2>&1
         sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd >/dev/null 2>&1
         sed -i "s/\/bin\/ash/\/bin\/bash/" usr/libexec/login.sh >/dev/null 2>&1
-        sync
     fi
 
     # Modify the cpu mode to schedutil
@@ -253,7 +255,6 @@ EOF
         cp -f ${balethirq_file}/balethirq.pl usr/sbin/balethirq.pl && chmod +x usr/sbin/balethirq.pl >/dev/null 2>&1
         sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
         cp -f ${balethirq_file}/balance_irq etc/config/balance_irq >/dev/null 2>&1
-        sync
     fi
     
     # Add firmware information to the etc/flippy-openwrt-release
@@ -326,12 +327,12 @@ make_image() {
     IMG_SIZE=$((SKIP_MB + BOOT_MB + rootsize))
 
     #fallocate -l ${IMG_SIZE}M ${build_image_file}
-    dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} 2>/dev/null && sync
+    dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} conv=fsync 2>/dev/null && sync
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
     parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
     parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
-    #parted -s ${build_image_file} print 2>/dev/null
+    sync
 
     loop_setup ${build_image_file}
     mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
@@ -698,6 +699,7 @@ for KERNEL_VAR in ${kernels[*]}; do
 
     let i++
 done
+sync
 
 echo -e "Ready, start packaging... \n"
 

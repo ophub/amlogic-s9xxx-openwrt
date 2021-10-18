@@ -58,17 +58,6 @@ else
     sleep 3
 fi
 
-emmc=$(lsblk | grep -oE '(mmcblk[0-9])' | sort | uniq)
-if [[ "${emmc}" == "" ]]; then
-    echo "No EMMC or SD devices were found in this system!"
-    exit 1
-fi
-
-if [[ "$(echo ${emmc} | grep mmcblk)" == "" ]]; then
-    echo "There seems to be no EMMC device on your system!"
-    exit 1
-fi
-
 # Find the device name of /
 root_devname=$(df / | tail -n1 | awk '{print $1}' | awk -F '\/' '{print substr($3, 1, length($3)-2)}')
 if lsblk -l | grep -E "^${root_devname}boot0" >/dev/null; then
@@ -549,11 +538,11 @@ EOF
 
         rm -f s905_autoscript* aml_autoscript*
 
-        if  [[ "${K510}" -eq "1" ]]; then
-            if  [ -f u-boot.ext ]; then
+        if  [ ${K510} -eq 1 ]; then
+            if  [ -f ${UBOOT_OVERLOAD} ]; then
+                cp -f -v ${UBOOT_OVERLOAD} u-boot.emmc
+	    elif [ -f "u-boot.ext" ];then
                 cp -f -v u-boot.ext u-boot.emmc
-            else
-                cp -f -v u-boot.sd u-boot.emmc
             fi
         fi
 

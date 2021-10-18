@@ -6,13 +6,19 @@
 #===========================================================================================
 
 # Support the kernel: boot-*.tar.gz, dtb-*.tar.gz, modules-*.tar .gz
-# When the kernel version is upgraded from 5.10 or lower to 5.10 or higher, Amlogic s9xxx need to install U-BOOT.
+# When the kernel version is upgraded from 5.10 or lower to 5.10 or higher, Can choose to install the MAINLINE_UBOOT.
+# openwrt-kernel ${AUTO_MAINLINE_UBOOT}
+# E.g: openwrt-kernel yes
+# E.g: openwrt-kernel no
 # When there is no U-BOOT file in related directory, the script will auto try to download the file from the server:
 # UBOOT_OVERLOAD: https://github.com/ophub/luci-app-amlogic/tree/main/depends/meson_btld/without_fip
 # MAINLINE_UBOOT: https://github.com/ophub/luci-app-amlogic/tree/main/depends/meson_btld/with_fip
 
 # The UBOOT_OVERLOAD and MAINLINE_UBOOT files download path
 GITHUB_RAW="https://raw.githubusercontent.com/ophub/luci-app-amlogic/main/depends/meson_btld"
+
+# Receive one-key command related parameters
+AUTO_MAINLINE_UBOOT="${1}"
 
 # Encountered a serious error, abort the script execution
 die() {
@@ -169,7 +175,7 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
         fi
 
         # Check ${MAINLINE_UBOOT}
-        if [[ -n "${MAINLINE_UBOOT}" ]]; then
+        if [[ -n "${MAINLINE_UBOOT}" && "${AUTO_MAINLINE_UBOOT}" == "yes" ]]; then
             if [[ ! -f "/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
                 echo -e "Try to download the MAINLINE_UBOOT file from the server."
                 GITHUB_MAINLINE_UBOOT="${GITHUB_RAW}/with_fip/${MAINLINE_UBOOT}"
@@ -197,7 +203,7 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
     fi
 
     # Write Mainline bootloader
-    if [ -f "/lib/u-boot/${MAINLINE_UBOOT}" ]; then
+    if [[ -f "/lib/u-boot/${MAINLINE_UBOOT}" && "${AUTO_MAINLINE_UBOOT}" == "yes" ]]; then
         echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ] to [ /dev/${EMMC_NAME} ]"
         dd if=/lib/u-boot/${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=442 conv=fsync
         dd if=/lib/u-boot/${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync

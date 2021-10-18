@@ -585,16 +585,14 @@ fi
 
 rm -f s905_autoscript* aml_autoscript*
 
-if  [[ "${K510}" -eq "1" ]]; then
-    if  [ -f u-boot.ext ]; then
+if  [ ${K510} -eq 1 ]; then
+    if [ -f "u-boot.ext" ]; then
         cp -vf u-boot.ext u-boot.emmc
     elif [ -f ${P1}/${UBOOT_OVERLOAD} ]; then
         cp -vf ${P1}/${UBOOT_OVERLOAD} ${UBOOT_OVERLOAD}
         cp -vf ${P1}/${UBOOT_OVERLOAD} u-boot.ext
         cp -vf ${P1}/${UBOOT_OVERLOAD} u-boot.emmc
         chmod +x u-boot*
-    else
-        cp -vf u-boot.sd u-boot.emmc
     fi
 fi
 

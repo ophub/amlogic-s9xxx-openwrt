@@ -425,7 +425,7 @@ if [[ "${BR_FLAG}" -eq "1" && -n "${BACKUP_LIST}" ]];then
 fi
 
 echo "Modify the configuration file ... "
-rm -f "./etc/rc.local.orig" "./usr/bin/mk_newpart.sh" "./etc/part_size"
+rm -f "./etc/rc.local.orig" "./etc/first_run.sh" "./etc/part_size"
 rm -rf "./opt/docker" && ln -sf "/mnt/${EMMC_NAME}p4/docker" "./opt/docker"
 rm -f ./etc/bench.log
 cat >> ./etc/crontabs/root << EOF
@@ -461,7 +461,7 @@ sed -e "s/option hw_flow '1'/option hw_flow '0'/" -i ./etc/config/turboacc
 )
 eval tar czf .reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
 
-rm -f ./etc/part_size ./usr/bin/mk_newpart.sh
+rm -f ./etc/part_size ./etc/first_run.sh
 if  [ -x ./usr/sbin/balethirq.pl ]; then
     if  grep "balethirq.pl" "./etc/rc.local"; then
         echo "balance irq is enabled"

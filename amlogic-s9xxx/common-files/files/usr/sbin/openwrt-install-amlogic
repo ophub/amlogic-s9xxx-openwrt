@@ -592,7 +592,24 @@ while [ $i -le $max_try ]; do
             sync
         done
         echo "Copy complete."
-
+        
+	cat > etc/docker/daemon.json <<EOF
+{
+  "bip": "172.31.0.1/24",
+  "data-root": "/mnt/${EMMC_NAME}p4/docker/",
+  "log-level": "warn",
+  "log-driver": "json-file",
+  "log-opts": {
+     "max-size": "10m",
+     "max-file": "5"
+   },
+  "registry-mirrors": [
+     "https://docker.mirrors.ustc.edu.cn",
+     "https://registry.cn-shanghai.aliyuncs.com",
+     "https://hub-mirror.c.163.com"
+   ]
+}
+EOF
         rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker >/dev/null
         rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/ >/dev/null
 
@@ -689,9 +706,8 @@ case $TARGET_SHARED_FSTYPE in
         mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
         ;;
 esac
-mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome
+mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome/data
 sync
 
 echo "Successful installed, please unplug the USB, re-insert the power supply to start the openwrt."
 exit 0
-

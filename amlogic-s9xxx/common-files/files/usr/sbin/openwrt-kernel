@@ -157,7 +157,7 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
         # U-BOOT adaptation
         source /etc/flippy-openwrt-release 2>/dev/null
         UBOOT_OVERLOAD="${UBOOT_OVERLOAD}"
-        MAINLINE_UBOOT="${MAINLINE_UBOOT}"
+        MAINLINE_UBOOT="${MAINLINE_UBOOT//\/lib\/u-boot\//}"
 
         # Check ${UBOOT_OVERLOAD}
         if [[ -n "${UBOOT_OVERLOAD}" ]]; then

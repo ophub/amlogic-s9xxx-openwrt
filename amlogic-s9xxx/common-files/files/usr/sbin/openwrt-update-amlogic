@@ -31,15 +31,30 @@ else
     sleep 3
 fi
 
-EMMC_NAME=$(lsblk -l -o NAME | grep -oE '(mmcblk[0-9]?boot0)' | sed "s/boot0//g")
-if [ "${EMMC_NAME}" == "" ]; then
-    echo "The system did not find any available disk devices!!!"
+# Find the partition where root is located
+ROOT_PTNAME=$(df / | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')
+if [ "${ROOT_PTNAME}" == "" ];then
+    echo "Cannot find the partition corresponding to the root file system!"
     exit 1
 fi
 
-cd /mnt/${EMMC_NAME}p4/
+# Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
+case ${ROOT_PTNAME} in
+       mmcblk?p[1-4]) EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-2)}')
+                      PARTITION_NAME="p"
+                      LB_PRE="EMMC_"
+                      ;;
+    [hsv]d[a-z][1-4]) EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-1)}')
+                      PARTITION_NAME=""
+                      LB_PRE=""
+                      ;;
+                   *) echo "Unable to recognize the disk type of ${ROOT_PTNAME}!"
+                      exit 1
+                      ;;
+esac
+
+cd /mnt/${EMMC_NAME}${PARTITION_NAME}4/
 mv -f /tmp/upload/* . 2>/dev/null && sync
-mv -f .tmp_upload/* . 2>/dev/null && sync
 
 if [[ "${IMG_NAME}" == *.img ]]; then
     echo -e "Update using [ ${IMG_NAME} ] file. Please wait a moment ..."
@@ -70,7 +85,7 @@ elif [ $( ls *.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
 else
     echo -e "Please upload or specify the update openwrt firmware file."
     echo -e "Upload method: system menu → Amlogic Service → Manually Upload Update"
-    echo -e "Specify method: Place the openwrt firmware file in [ /mnt/${EMMC_NAME}p4/ ]"
+    echo -e "Specify method: Place the openwrt firmware file in [ /mnt/${EMMC_NAME}${PARTITION_NAME}4/ ]"
     echo -e "The supported file suffixes are: *.img, *.img.xz, *.img.gz, *.7z, *.zip"
     echo -e "After upload the openwrt firmware file, run again."
     exit 1
@@ -129,11 +144,11 @@ ROOT_PATH=$(echo $ROOT_PART_MSG | awk '{print $2}')
 ROOT_UUID=$(echo $ROOT_PART_MSG | awk '{print $4}')
 
 case  $ROOT_NAME in
-      ${EMMC_NAME}p2) NEW_ROOT_NAME=${EMMC_NAME}p3
-                      NEW_ROOT_LABEL=EMMC_ROOTFS2
+      ${EMMC_NAME}${PARTITION_NAME}2) NEW_ROOT_NAME="${EMMC_NAME}${PARTITION_NAME}3"
+                      NEW_ROOT_LABEL="${LB_PRE}ROOTFS2"
                       ;;
-      ${EMMC_NAME}p3) NEW_ROOT_NAME=${EMMC_NAME}p2
-                      NEW_ROOT_LABEL=EMMC_ROOTFS1
+      ${EMMC_NAME}${PARTITION_NAME}3) NEW_ROOT_NAME="${EMMC_NAME}${PARTITION_NAME}2"
+                      NEW_ROOT_LABEL="${LB_PRE}ROOTFS1"
                       ;;
                    *) echo "ROOTFS The partition location is incorrect, so the update cannot continue!"
                       exit 1
@@ -342,7 +357,7 @@ done
 
 cat > ./etc/fstab <<EOF
 UUID=${NEW_ROOT_UUID} / btrfs compress=zstd 0 1
-LABEL=EMMC_BOOT /boot vfat defaults 0 2
+LABEL=${LB_PRE}BOOT /boot vfat defaults 0 2
 #tmpfs /tmp tmpfs defaults,nosuid 0 0
 EOF
 
@@ -365,7 +380,7 @@ config  mount
 
 config  mount
         option target '/boot'
-        option label 'EMMC_BOOT'
+        option label '${LB_PRE}BOOT'
         option enabled '1'
         option enabled_fsck '1'
         option fstype 'vfat'
@@ -386,16 +401,16 @@ echo "Create initial etc snapshot -> .snapshots/etc-000"
 btrfs subvolume snapshot -r etc .snapshots/etc-000
 sync
 
-[ -d /mnt/${EMMC_NAME}p4/docker ] || mkdir -p /mnt/${EMMC_NAME}p4/docker
-rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker
+[ -d /mnt/${EMMC_NAME}${PARTITION_NAME}4/docker ] || mkdir -p /mnt/${EMMC_NAME}${PARTITION_NAME}4/docker
+rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}${PARTITION_NAME}4/docker/ opt/docker
 
 if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
-    [ -d /mnt/${EMMC_NAME}p4/AdGuardHome/data ] || mkdir -p /mnt/${EMMC_NAME}p4/AdGuardHome/data
+    [ -d /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome/data ] || mkdir -p /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome/data
     if  [ ! -L /usr/bin/AdGuardHome ]; then
         [ -d /usr/bin/AdGuardHome ] && \
-        cp -a /usr/bin/AdGuardHome/* /mnt/${EMMC_NAME}p4/AdGuardHome/
+        cp -a /usr/bin/AdGuardHome/* /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome/
     fi
-    ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
+    ln -sf /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
 
 #rm -f /mnt/${NEW_ROOT_NAME}/usr/sbin/openwrt-install-amlogic
@@ -426,7 +441,7 @@ fi
 
 echo "Modify the configuration file ... "
 rm -f "./etc/rc.local.orig" "./etc/first_run.sh" "./etc/part_size"
-rm -rf "./opt/docker" && ln -sf "/mnt/${EMMC_NAME}p4/docker" "./opt/docker"
+rm -rf "./opt/docker" && ln -sf "/mnt/${EMMC_NAME}${PARTITION_NAME}4/docker" "./opt/docker"
 rm -f ./etc/bench.log
 cat >> ./etc/crontabs/root << EOF
 37 5 * * * /etc/coremark.sh

@@ -103,10 +103,11 @@ Please select s9xxx box model:
 11. Belink-GT-King ---------- [ S922x  / CPU: 2016Mhz / NETWORK: 1000M ]
 12. Belink-GT-King-Pro ------ [ S922x  / CPU: 2208Mhz / NETWORK: 1000M ]
 13. UGOOS-AM6-Plus ---------- [ S922x  / CPU: 2124Mhz / NETWORK: 1000M ]
-14. Octopus-Planet ---------- [ S912   / CPU: 1512Mhz / NETWORK: 1000M ]
-15. Phicomm-n1 -------------- [ S905d  / CPU: 1512Mhz / NETWORK: 1000M ]
-16. hg680p & b860h ---------- [ S905x  / CPU: 1512Mhz / NETWORK: 1000M ]
-17. X96-Mini & TX3-Mini ----- [ S905w  / CPU: 1512Mhz / NETWORK: 100M  ]
+14. ODROID-N2 --------------- [ S922x  / CPU: 2124Mhz / NETWORK: 1000M ]
+15. Octopus-Planet ---------- [ S912   / CPU: 1512Mhz / NETWORK: 1000M ]
+16. Phicomm-n1 -------------- [ S905d  / CPU: 1512Mhz / NETWORK: 1000M ]
+17. hg680p & b860h ---------- [ S905x  / CPU: 1512Mhz / NETWORK: 1000M ]
+18. X96-Mini & TX3-Mini ----- [ S905w  / CPU: 1512Mhz / NETWORK: 100M  ]
 
 0. Other ---------------- [ Enter the dtb file name of your box ]
 ------------------------------------------------------------------------
@@ -198,25 +199,31 @@ case  $boxtype in
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s922x"
          ;;
-      14) FDTFILE="meson-gxm-octopus-planet.dtb"
+      14) FDTFILE="meson-g12b-gtking-pro-rev_a.dtb"
+         UBOOT_OVERLOAD="u-boot-odroid-n2.bin"
+         MAINLINE_UBOOT="/lib/u-boot/odroid-n2-u-boot.bin.sd.bin"
+         ANDROID_UBOOT=""
+         AMLOGIC_SOC="s922x"
+         ;;
+      15) FDTFILE="meson-gxm-octopus-planet.dtb"
          UBOOT_OVERLOAD="u-boot-zyxq.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s912"
          ;;
-      15) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
+      16) FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
          UBOOT_OVERLOAD="u-boot-n1.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
          AMLOGIC_SOC="s905d"
          ;;
-      16) FDTFILE="meson-gxl-s905x-p212.dtb"
+      17) FDTFILE="meson-gxl-s905x-p212.dtb"
          UBOOT_OVERLOAD="u-boot-p212.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
          AMLOGIC_SOC="s905x"
          ;;
-      17) FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
+      18) FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
          UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
          MAINLINE_UBOOT=""
          ANDROID_UBOOT=""
@@ -592,6 +599,25 @@ while [ $i -le $max_try ]; do
             sync
         done
         echo "Copy complete."
+        sync
+
+        echo "Update the relevant parameters of flippy-openwrt-release"
+        sed -i '/FDTFILE/d' etc/flippy-openwrt-release 2>/dev/null
+        echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
+
+        sed -i '/UBOOT_OVERLOAD/d' etc/flippy-openwrt-release 2>/dev/null
+        echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >> etc/flippy-openwrt-release 2>/dev/null
+
+        sed -i '/MAINLINE_UBOOT/d' etc/flippy-openwrt-release 2>/dev/null
+        echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
+
+        sed -i '/ANDROID_UBOOT/d' etc/flippy-openwrt-release 2>/dev/null
+        echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
+
+        sed -i '/SOC/d' etc/flippy-openwrt-release 2>/dev/null
+        echo "SOC='${AMLOGIC_SOC}'" >> etc/flippy-openwrt-release 2>/dev/null
+        echo "Update complete."
+        sync
         
 	cat > etc/docker/daemon.json <<EOF
 {

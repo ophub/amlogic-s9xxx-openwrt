@@ -31,6 +31,7 @@ BACKUP_LIST='./etc/AdGuardHome.yaml \
 ./etc/dnsmasq.d/ \
 ./etc/dnsmasq.oversea/ \
 ./etc/dnsmasq.ssr/ \
+./etc/docker/daemon.json \
 ./etc/docker/key.json \
 ./etc/dropbear/ \
 ./etc/easy-rsa/ \

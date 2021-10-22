@@ -41,18 +41,25 @@ fi
 # Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
 case ${ROOT_PTNAME} in
        mmcblk?p[1-4]) EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-2)}')
+	              if lsblk -l -o NAME | grep "${EMMC_NAME}boot0" >/dev/null;then
+                          ROOT_DISK_TYPE="EMMC"
+		      else
+			  ROOT_DISK_TYPE="SD"
+	              fi
                       PARTITION_NAME="p"
-                      LB_PRE="EMMC_"
+                      LB_PRE="${ROOT_DISK_TYPE}_"
                       ;;
     [hsv]d[a-z][1-4]) EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-1)}')
+	              ROOT_DISK_TYPE="USB"
                       PARTITION_NAME=""
-                      LB_PRE=""
+                      LB_PRE="${ROOT_DISK_TYPE}_"
                       ;;
                    *) echo "Unable to recognize the disk type of ${ROOT_PTNAME}!"
                       exit 1
                       ;;
 esac
 
+DOCKER_ROOT="/mnt/${EMMC_NAME}${PARTITION_NAME}4/docker/"
 cd /mnt/${EMMC_NAME}${PARTITION_NAME}4/
 mv -f /tmp/upload/* . 2>/dev/null && sync
 
@@ -101,7 +108,7 @@ else
 fi
 
 # Check the necessary dependencies
-DEPENDS="lsblk uuidgen grep awk btrfs mkfs.fat mkfs.btrfs perl md5sum"
+DEPENDS="lsblk uuidgen grep awk btrfs mkfs.fat mkfs.btrfs perl md5sum fatlabel"
 echo "Check the necessary dependencies..."
 for dep in ${DEPENDS};do
     WITCH=$(which ${dep})
@@ -355,6 +362,27 @@ for src in $COPY_SRC; do
     sync
 done
 
+# if not backup, then force rewrite the etc/docker/daemon.json 
+if [ "${BR_FLAG}" -eq 0 ];then
+    cat > ./etc/docker/daemon.json <<EOF
+{
+  "bip": "172.31.0.1/24",
+  "data-root": "${DOCKER_ROOT}",
+  "log-level": "warn",
+  "log-driver": "json-file",
+  "log-opts": {
+     "max-size": "10m",
+     "max-file": "5"
+   },
+  "registry-mirrors": [
+     "https://docker.mirrors.ustc.edu.cn",
+     "https://registry.cn-shanghai.aliyuncs.com",
+     "https://hub-mirror.c.163.com"
+   ]
+}
+EOF
+fi
+
 cat > ./etc/fstab <<EOF
 UUID=${NEW_ROOT_UUID} / btrfs compress=zstd 0 1
 LABEL=${LB_PRE}BOOT /boot vfat defaults 0 2
@@ -548,6 +576,34 @@ btrfs subvolume snapshot -r etc .snapshots/etc-001
 
 cd ${WORK_DIR}
  
+#echo -n "umount /boot ... "
+#umount -f /boot
+#if [ $? -ne 0 ];then
+#    echo "failed! "
+#    umount ${P1}
+#    umount ${P2}
+#    losetup -D
+#    exit 1
+#else
+#    echo "ok"
+#fi
+#
+#echo "reformat ${BOOT_PATH} ..."
+#if mkfs.fat -n "${LB_PRE}BOOT" -F 32 ${BOOT_PATH} 2>/dev/null;then
+#    echo -n "mount /boot ..."
+#    mount -t vfat -o "errors=remount-ro" ${BOOT_PATH} /boot 
+#    if [ $? -eq 0 ];then
+#        echo "ok"
+#    else
+#        echo "mount failed! The system has been destroyed and must be refreshed!"
+#	exit 1
+#    fi
+#else
+#    echo "format failed! The system has been destroyed and must be refreshed!"
+#    exit 1
+#fi
+echo "Change the label of ${BOOT_PATH} ... "
+fatlabel ${BOOT_PATH} "${LB_PRE}BOOT"
 echo "Start copying data， from [ ${P1} ] to [ /boot ] ..."
 cd /boot
 echo "Delete the old boot file ..."
@@ -598,7 +654,12 @@ else
     exit 1
 fi
 
-rm -f s905_autoscript* aml_autoscript*
+if [ ${ROOT_DISK_TYPE} == "EMMC" ];then
+    rm -f s905_autoscript* aml_autoscript*
+    mv -f boot-emmc.ini boot.ini
+    mv -f boot-emmc.cmd boot.cmd
+    mv -f boot-emmc.scr boot.scr
+fi
 
 if  [ ${K510} -eq 1 ]; then
     if [ -f "u-boot.ext" ]; then
@@ -611,9 +672,6 @@ if  [ ${K510} -eq 1 ]; then
     fi
 fi
 
-mv -f boot-emmc.ini boot.ini
-mv -f boot-emmc.cmd boot.cmd
-mv -f boot-emmc.scr boot.scr
 sync
 
 echo "Update boot parameters ... "

@@ -34,6 +34,16 @@ Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system men
 
 Tip: Functions such as install/update are provided by [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) to provide visual operation support. Also supports [command operations](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md#8-install-the-firmware).
 
+- ### Use OpenWrt in TF/USB
+
+Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
+
+```yaml
+openwrt-tf
+```
+
+After activating the remaining space, the kernel and OpenWrt system can be upgraded in TF/USB.
+
 ## Compilation and packaging method
 
 Provide multiple ways to generate the OpenWrt firmware you need. Please choose one method you like. Each method can be used independently.

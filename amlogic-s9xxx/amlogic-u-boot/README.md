@@ -7,8 +7,9 @@ When using the 5.10 kernel version, you need to copy the corresponding `u-boot-*
 <table cellpadding="0" cellspacing="0">
 <tr><td>ID</td><td>Model Name</td><td>SOC</td><td>FDTFILE</td><td>UBOOT_OVERLOAD</td><td>MAINLINE_UBOOT</td><td>ANDROID_UBOOT</td><td>Brief Description</td></tr>
 <tr><td>11</td><td>Phicomm N1</td><td>s905d</td><td>meson-gxl-s905d-phicomm-n1.dtb</td><td>u-boot-n1.bin</td><td>NA</td><td>/lib/u-boot/u-boot-2015-phicomm-n1.bin</td><td>4C@1512Mhz,2GB Mem,1Gb Net,Wifi</td></tr>
-<tr><td>12</td><td>hg680p & b860h</td><td>s905x</td><td>s905x:meson-gxl-s905x-p212.dtb</td><td>u-boot-p212.bin</td><td>NA</td><td>NA</td><td>4C@1512Mhz,1Gb net</td></tr>
-<tr><td>13</td><td>X96-Mini & TX3-Mini</td><td>s905w</td><td>meson-gxl-s905w-tx3-mini.dtb</td><td>u-boot-s905x-s912.bin</td><td>NA</td><td>NA</td><td>4C@1512Mhz,100M Net</td></tr>
+<tr><td>12</td><td>Phicomm N1 (DMA thresh)</td><td>s905d</td><td> meson-gxl-s905d-phicomm-n1-thresh.dtb</td><td>u-boot-n1.bin</td><td>NA</td><td>/lib/u-boot/u-boot-2015-phicomm-n1.bin</td><td>Same as above, when ethmac flow control is off.</td></tr>
+<tr><td>13</td><td>hg680p & b860h</td><td>s905x</td><td>s905x:meson-gxl-s905x-p212.dtb</td><td>u-boot-p212.bin</td><td>NA</td><td>NA</td><td>4C@1512Mhz,1Gb net</td></tr>
+<tr><td>14</td><td>X96-Mini & TX3-Mini</td><td>s905w</td><td>meson-gxl-s905w-tx3-mini.dtb</td><td>u-boot-s905x-s912.bin</td><td>NA</td><td>NA</td><td>4C@1512Mhz,100M Net</td></tr>
 <tr><td>21</td><td>Octopus Planet</td><td>s912</td><td>meson-gxm-octopus-planet.dtb</td><td>u-boot-zyxq.bin</td><td>NA</td><td>NA</td><td>4C@1512Mhz+4C@1000Mhz,2GB Mem,1Gb Net</td></tr>
 <tr><td>31</td><td>X96 Max 4GB</td><td>s905x2</td><td>meson-g12a-x96-max.dtb</td><td>u-boot-x96max.bin</td><td>/lib/u-boot/x96max-u-boot.bin.sd.bin</td><td>NA</td><td>4C@1908Mhz,4GB Mem,1Gb Net</td></tr>
 <tr><td>32</td><td>X96 Max 2GB</td><td>s905x2</td><td>meson-g12a-x96-max-rmii.dtb</td><td>u-boot-x96max.bin</td><td>/lib/u-boot/x96max-u-boot.bin.sd.bin</td><td>NA</td><td>4C@1908Mhz,2GB Mem,100M Net</td></tr>

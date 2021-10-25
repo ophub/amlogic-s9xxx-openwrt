@@ -102,7 +102,11 @@ U_BOOT_EXT=0
 # 8.  brief description
 #
 
-model_database="
+# allow use external modal database
+if [ -f "/etc/model_database.txt" ];then
+    model_database=$(cat /etc/model_database.txt)
+else
+    model_database="
 # Amlogic GXL Family
 11:Phicomm N1:s905d:meson-gxl-s905d-phicomm-n1.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:4C@1512Mhz,2GB Mem,1Gb Net,Wifi
 12:Phicomm N1 (DMA thresh):s905d:meson-gxl-s905d-phicomm-n1-thresh.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:Same as above, when ethmac flow control is off 
@@ -137,6 +141,7 @@ model_database="
 # Other
 0:Other::NA:NA:NA:NA:Enter the dtb file name of your box
 "
+fi
 
 function display_database() {
     echo "${model_database}" | perl -ne 'chomp;if(m/^#/){s/#+\s+//;print "$_ >>>\n";}elsif($_){@f=split/:/;printf("%4s. %-30s%-8s%-s\n",$f[0],$f[1],$f[2],$f[7])}'

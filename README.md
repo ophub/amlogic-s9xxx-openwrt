@@ -44,6 +44,16 @@ openwrt-tf
 
 After activating the remaining space, the kernel and OpenWrt system can be upgraded in TF/USB.
 
+- ### Create swap for openwrt system
+
+If you feel that the memory of the current box is not enough when you are using applications with a large memory footprint such as `docker`, you can create a `swap` virtual memory partition, Change the disk space of `/mnt/[mmcblk?p|sd?]4` A certain capacity is virtualized into memory for use. The unit of the input parameter of the following command is `GB`, and the default is `1`.
+
+Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
+
+```yaml
+openwrt-swap 1
+```
+
 ## Compilation and packaging method
 
 Provide multiple ways to generate the OpenWrt firmware you need. Please choose one method you like. Each method can be used independently.

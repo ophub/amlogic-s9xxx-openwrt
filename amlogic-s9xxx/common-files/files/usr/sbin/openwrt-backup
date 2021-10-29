@@ -46,6 +46,7 @@ BACKUP_LIST='./etc/AdGuardHome.yaml \
 ./etc/ipsec.secrets \
 ./etc/ipsec.user \
 ./etc/ipset/ \
+./etc/mosdns/config.yaml \
 ./etc/mwan3.user \
 ./etc/nginx/nginx.conf \
 ./etc/ocserv/ \

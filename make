@@ -261,7 +261,7 @@ EOF
     if [ -d "${balethirq_file}" ];then
         cp -f ${balethirq_file}/balethirq.pl usr/sbin/balethirq.pl && chmod +x usr/sbin/balethirq.pl >/dev/null 2>&1
         sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
-        cp -f ${balethirq_file}/balance_irq etc/config/balance_irq >/dev/null 2>&1
+        cp -f ${balethirq_file}/balance_irq etc/balance_irq >/dev/null 2>&1
     fi
     
     # Add firmware information to the etc/flippy-openwrt-release

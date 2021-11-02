@@ -423,6 +423,8 @@ EOF
         fi
     fi
 )
+# move /etc/config/balance_irq to /etc/balance_irq
+[ -f  "./etc/config/balance_irq" ] && mv ./etc/config/balance_irq  ./etc/
 sync
 
 echo "Create initial etc snapshot -> .snapshots/etc-000"
@@ -570,6 +572,9 @@ elif [[ -n "${ANDROID_UBOOT}" && -f "${P2}${ANDROID_UBOOT}" ]]; then
 else
     echo "Did not change the original bootloader."
 fi
+
+# move /etc/config/balance_irq to /etc/balance_irq
+[ -f  "./etc/config/balance_irq" ] && mv ./etc/config/balance_irq  ./etc/
 
 echo "Create etc snapshot -> .snapshots/etc-001"
 btrfs subvolume snapshot -r etc .snapshots/etc-001

@@ -13,6 +13,7 @@ BACKUP_FILE="${BACKUP_DIR}/${BACKUP_NAME}"
 BACKUP_LIST='./etc/AdGuardHome.yaml \
 ./etc/adblocklist/ \
 ./etc/amule/ \
+./etc/balance_irq \
 ./etc/china_ssr.txt \
 ./etc/cifs/cifsdpwd.db \
 ./etc/smbd/smbdpwd.db \

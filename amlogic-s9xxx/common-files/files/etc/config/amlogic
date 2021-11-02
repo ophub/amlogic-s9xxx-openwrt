@@ -12,5 +12,5 @@ config amlogic 'config'
 
 config settings 'armcpu'
 	option governor0 'schedutil'
-	option minifreq0 '500000'
+	option minfreq0 '500000'
 	option maxfreq0 '1512000'

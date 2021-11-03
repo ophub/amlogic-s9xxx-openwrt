@@ -67,7 +67,15 @@ jobs:
         chmod +x $DIY_P1_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
+        
 
+    - name: 构建自定义文件结构
+      run: |
+        cd openwrt
+        mkdir openwrt-packages
+        cd openwrt-packages
+        git clone https://github.com/instal1/openwrt-packages.git
+        
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 

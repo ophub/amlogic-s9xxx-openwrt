@@ -26,9 +26,9 @@ sub read_config {
     my $config_file;
     if(-f "/etc/balance_irq") {
         $config_file = "/etc/balance_irq";
-    elsif(-f "/etc/config/balance_irq") {
+    } elsif(-f "/etc/config/balance_irq") {
         $config_file = "/etc/config/balance_irq";
-    else {
+    } else {
 	exit(0);
     }
 

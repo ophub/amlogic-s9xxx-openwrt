@@ -10,7 +10,7 @@
 
 ## OpenWrt 固件说明
 
-| 型号  | 机顶盒 | [可选内核](https://github.com/ophub/flippy-kernel/tree/main/library) | OpenWrt固件 |
+| 型号  | 机顶盒 | [可选内核](https://github.com/ophub/kernel/tree/main/pub/stable) | OpenWrt固件 |
 | ---- | ---- | ---- | ---- |
 | s922x | [Belink](https://tokopedia.link/RAgZmOM41db), [Belink-Pro](https://tokopedia.link/sfTHlfS41db), [Ugoos-AM6-Plus](https://tokopedia.link/pHGKXuV41db), [ODROID-N2](https://www.tokopedia.com/search?st=product&q=ODROID-N2) | 全部 | openwrt_s922x_k*.img |
 | s905x3 | [X96-Max+](https://tokopedia.link/uMaH09s41db), [HK1-Box](https://tokopedia.link/xhWeQgTuwfb), [H96-Max-X3](https://tokopedia.link/KuWvwoYuwfb), [Ugoos-X3](https://tokopedia.link/duoIXZpdGgb), [X96-Air](https://tokopedia.link/5WHiETbdGgb), [A95XF3-Air](https://tokopedia.link/ByBL45jdGgb) | 全部 | openwrt_s905x3_k*.img |
@@ -93,8 +93,6 @@ openwrt-swap 1
     armvirt64_path: openwrt/bin/targets/*/*/*.tar.gz
     amlogic_openwrt: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
     amlogic_kernel: 5.10.70_5.4.150
-    auto_kernel: true
-    amlogic_size: 1024
 ```
 - GitHub Action 输入参数说明
 
@@ -102,7 +100,8 @@ openwrt-swap 1
 |------------------------|------------------------|------------------------------------------------|
 | armvirt64_path         | no                     | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，使用文件在当前工作流中的路径如 `openwrt/bin/targets/*/*/*.tar.gz` |
 | amlogic_openwrt        | s905d_s905x3           | 设置打包盒子的 `SOC` ，默认 `all` 打包全部盒子，可指定单个盒子如 `s905x3` ，可选择多个盒子用_连接如 `s905x3_s905d` 。各盒子的SoC代码为：`s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s922x`, `s922x-n2`, `s912`。说明：`s922x-n2` 是 `s922x-odroid-n2` |
-| amlogic_kernel         | 5.10.70_5.4.150         | 设置内核版本，ophub 的 [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
+| amlogic_kernel         | 5.10.70_5.4.150        | 设置内核版本，[kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 库里收藏了众多 Flippy 的原版内核，可以查看并选择指定。 |
+| version_branch         | stable                 | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，如 `stable` 。指定的名称须与分支目录名称相同。默认使用 `stable` 分支版本。 |
 | auto_kernel            | true                   | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `amlogic_kernel` 中指定的内核如 5.4.150 的 5.4 同系列是否有更新的版本，如有 5.4.150 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | amlogic_size           | 1024                   | 设置固件 ROOT 分区的大小                         |
 
@@ -161,7 +160,7 @@ openwrt-swap 1
     echo "::set-output name=status::success"
 ```
 
-这个功能一般用于更换内核快速打包，如果你的仓库中有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你想使用其他内核版本的 OpenWrt 时，就可以直接指定相关内核进行快速打包了，而不用再进行漫长的固件编译等待。仓库里收藏了 `Flippy` 的很多内核 [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) 和 Amlogic 的 dtb 文件 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) ，你可以随时调用进行编译。
+这个功能一般用于更换内核快速打包，如果你的仓库中有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你想使用其他内核版本的 OpenWrt 时，就可以直接指定相关内核进行快速打包了，而不用再进行漫长的固件编译等待。仓库里收藏了 `Flippy` 的很多内核 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 和 Amlogic 的 dtb 文件 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) ，你可以随时调用进行编译。
 
 - ### 本地化打包
 1. 安装必要的软件包（如 Ubuntu 20.04 LTS 用户）
@@ -181,6 +180,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 - `sudo ./make -d -b s905x3_s905d -k 5.10.70_5.4.150` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
 - `sudo ./make -d` : 使用默认配置，使用内核库中的最新内核包，对全部型号的机顶盒进行打包。
 - `sudo ./make -d -b s905x3 -k 5.4.150 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为1024M。
+- `sudo ./make -d -b s905x3 -v beta -k 5.7.2` : 使用默认配置，指定型号，指定版本分支，指定内核进行打包。
 - `sudo ./make -d -b s905x3_s905d`  使用默认配置，对多个型号的机顶盒进行全部内核打包, 使用 `_` 进行多型号连接。
 - `sudo ./make -d -k 5.10.70_5.4.150` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。
 - `sudo ./make -d -k 5.10.70_5.4.150 -a true` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
@@ -193,7 +193,8 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 | ---- | ---- | ---- |
 | -d | Defaults | 使用默认配置 |
 | -b | Build | 指定机顶盒型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 可以指定的型号有: `s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s922x`, `s922x-n2`, `s912`。说明：`s922x-n2` 是 `s922x-odroid-n2` |
-| -k | Kernel | 指定内核，如 `-k 5.4.150` . 多个内核使用 `_` 进行连接，如 `-k 5.10.70_5.4.150` [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) |
+| -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.4.150` . 多个内核使用 `_` 进行连接，如 `-k 5.10.70_5.4.150` |
+| -v | Version | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，如 `-v stable` 。指定的名称须与分支目录名称相同。默认使用 `stable` 分支版本。 |
 | -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.4.150 的 5.4 同系列是否有更新的版本，如有 5.4.150 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -s | Size | 对固件的大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
 | -h | help | 展示帮助文档. |

@@ -10,7 +10,7 @@ Armbian 相关文件存储目录。这里存放的文件是打包 OpenWrt 时使
 
 ## amlogic-dtb
 
-这里收录了各种型号机顶盒使用的 .dtb 文件，当你在使用安装脚本 [openwrt-install](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/bin/openwrt-install) 将 OpenWrt 写入 EMMC 时，除默认的13个型号的机顶盒是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)  
+这里收录了各种型号机顶盒使用的 .dtb 文件，当你在使用安装脚本 [openwrt-install-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/sbin/openwrt-install-amlogic) 将 OpenWrt 写入 EMMC 时，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)  
 
 ## amlogic-kernel
 

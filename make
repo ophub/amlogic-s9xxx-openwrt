@@ -19,8 +19,9 @@ kernel_path=${amlogic_path}/amlogic-kernel
 armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 configfiles_path=${amlogic_path}/common-files
-kernel_library="https://github.com/ophub/flippy-kernel/tree/main/library"
-#kernel_library="https://github.com/ophub/flippy-kernel/trunk/library"
+kernel_library="https://github.com/ophub/kernel/tree/main/pub"
+#kernel_library="https://github.com/ophub/kernel/trunk/pub"
+version_branch="stable"
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
@@ -560,12 +561,16 @@ while [ "${1}" ]; do
             rm -rf ${out_path}
             echo "Clean up ok!" && exit
             ;;
+        --kernel)
+            show_kernels && exit
+            ;;
         -d | --default)
             : ${rootsize:=${ROOT_MB}}
             : ${firmware:="${firmwares[0]}"}
-            : ${kernel:="${kernels[-1]}"}
             : ${build:="all"}
+            : ${kernel:="${kernels[-1]}"}
             : ${auto_kernel:="true"}
+            : ${version_branch:="stable"}
             ;;
         -b | --build)
             build=${2}
@@ -611,8 +616,13 @@ while [ "${1}" ]; do
                 die "Invalid size [ ${2} ]!"
             fi
             ;;
-        --kernel)
-            show_kernels && exit
+        -v | --versionbranch)
+            version_branch=${2}
+            if [ -n "${version_branch}" ]; then
+                shift
+            else
+                die "Invalid size [ ${2} ]!"
+            fi
             ;;
         -s | --size)
             rootsize=${2}
@@ -653,8 +663,9 @@ fi
 
 # Convert kernel library address to svn format
 if [[ ${kernel_library} == http* && $(echo ${kernel_library} | grep "tree/main") != "" ]]; then
-    kernel_library=${kernel_library//tree\/main/trunk}
+    kernel_library="${kernel_library//tree\/main/trunk}"
 fi
+kernel_library="${kernel_library}/${version_branch}"
 
 # Check the new version on the kernel library, when auto_kernel=true
 if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then

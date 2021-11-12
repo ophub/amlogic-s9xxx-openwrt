@@ -10,7 +10,7 @@ This OpenWrt firmware is packaged using `Flippy's` Amlogic S9xxx Kernel for Open
 
 ## OpenWrt Firmware instructions
 
-| Model  | STB | [Optional kernel](https://github.com/ophub/flippy-kernel/tree/main/library) | OpenWrt Firmware |
+| Model  | STB | [Optional kernel](https://github.com/ophub/kernel/tree/main/pub/stable) | OpenWrt Firmware |
 | ---- | ---- | ---- | ---- |
 | s922x | [Belink](https://tokopedia.link/RAgZmOM41db), [Belink-Pro](https://tokopedia.link/sfTHlfS41db), [Ugoos-AM6-Plus](https://tokopedia.link/pHGKXuV41db), [ODROID-N2](https://www.tokopedia.com/search?st=product&q=ODROID-N2) | All | openwrt_s922x_k*.img |
 | s905x3 | [X96-Max+](https://tokopedia.link/uMaH09s41db), [HK1-Box](https://tokopedia.link/xhWeQgTuwfb), [H96-Max-X3](https://tokopedia.link/KuWvwoYuwfb), [Ugoos-X3](https://tokopedia.link/duoIXZpdGgb), [X96-Air](https://tokopedia.link/5WHiETbdGgb), [A95XF3-Air](https://tokopedia.link/ByBL45jdGgb) | All | openwrt_s905x3_k*.img |
@@ -93,8 +93,6 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
     armvirt64_path: openwrt/bin/targets/*/*/*.tar.gz
     amlogic_openwrt: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
     amlogic_kernel: 5.10.70_5.4.150
-    auto_kernel: true
-    amlogic_size: 1024
 ```
 
 - GitHub Action Input parameter description
@@ -103,7 +101,8 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 |------------------------|------------------------|---------------------------------------------------------------|
 | armvirt64_path         | no                     | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*.tar.gz` . |
 | amlogic_openwrt        | s905d_s905x3           | Set the `SoC` of the packaging box, the default `all` packs all boxes, you can specify a single box such as `s905x3`, you can choose multiple boxes to use `_` connection such as `s905x3_s905d` . SOC code of each box is: `s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s922x`, `s922x-n2`, `s912`. Note: `s922x-n2` is `s922x-odroid-n2`. |
-| amlogic_kernel         | 5.10.70_5.4.150         | Set the kernel version，Ophub's [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) library contains many original kernels of `Flippy`, you can view and choose to specify. |
+| amlogic_kernel         | 5.10.70_5.4.150        | Set the kernel version，The [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) library contains many original kernels of `Flippy`, you can view and choose to specify. |
+| version_branch         | stable                 | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `stable`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
 | auto_kernel            | true                   | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `amlogic_kernel`. such as 5.4.150 version. If there is the latest version of 5.4 same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | amlogic_size           | 1024                   | Set the size of the firmware ROOT partition |
 
@@ -163,7 +162,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     echo "::set-output name=status::success"
 ```
 
-This function is suitable for the needs of replacing the [kernel](https://github.com/ophub/flippy-kernel/tree/main/library) packaging and packaging the OpenWrt firmware of the specified [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) separately. As long as you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) of your repository, you can package the OpenWrt firmware you want at any time, which is efficient and convenient.
+This function is suitable for the needs of replacing the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) packaging and packaging the OpenWrt firmware of the specified [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) separately. As long as you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in the [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) of your repository, you can package the OpenWrt firmware you want at any time, which is efficient and convenient.
 
 - ### Local packaging instructions
 
@@ -184,6 +183,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 - `sudo ./make -d -b s905x3_s905d -k 5.10.70_5.4.150`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
 - `sudo ./make -d`: Compile latest kernel versions of openwrt for all SoC with the default configuration.
 - `sudo ./make -d -b s905x3 -k 5.4.150 -s 1024`: Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation.
+- `sudo ./make -d -b s905x3 -v beta -k 5.7.2`: Use the default configuration, specify the model, specify the version branch, and specify the kernel for packaging.
 - `sudo ./make -d -b s905x3_s905d`: Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels.
 - `sudo ./make -d -k 5.10.70_5.4.150`: Use the default configuration. Specify multiple cores, use `_` to connect.
 - `sudo ./make -d -k 5.10.70_5.4.150 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
@@ -196,7 +196,8 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 | ---- | ---- | ---- |
 | -d | Defaults | Compile all cores and all firmware types. |
 | -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . You can use these codes: `s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s922x`, `s922x-n2`, `s912`. Note: `s922x-n2` is `s922x-odroid-n2`. |
-| -k | Kernel | Specify the kernel type. Write the kernel name individually such as `-k 5.4.150` . Multiple cores use `_` connection such as `-k 5.10.70_5.4.150` [kernel](https://github.com/ophub/flippy-kernel/tree/main/library). |
+| -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 5.4.150` . Multiple kernel use `_` connection such as `-k 5.10.70_5.4.150` |
+| -v | Version | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
 | -a | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 5.4.150 version. If there is the latest version of 5.4 same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |

@@ -22,6 +22,7 @@ configfiles_path=${amlogic_path}/common-files
 kernel_library="https://github.com/ophub/kernel/tree/main/pub"
 #kernel_library="https://github.com/ophub/kernel/trunk/pub"
 version_branch="stable"
+auto_kernel="ture"
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 512 )
@@ -57,6 +58,62 @@ cleanup() {
     done
     losetup -D
     rm -rf ${tmp_path} 2>/dev/null
+}
+
+download_kernel() {
+    # Convert kernel library address to svn format
+    if [[ ${kernel_library} == http* && $(echo ${kernel_library} | grep "tree/main") != "" ]]; then
+        kernel_library="${kernel_library//tree\/main/trunk}"
+    fi
+    kernel_library="${kernel_library}/${version_branch}"
+
+    # Set empty array
+    tmp_arr_kernels=()
+
+    # Convert kernel library address to API format
+    server_kernel_url=${kernel_library#*com\/}
+    server_kernel_url=${server_kernel_url//trunk/contents}
+    server_kernel_url="https://api.github.com/repos/${server_kernel_url}"
+
+    # Query the latest kernel in a loop
+    i=1
+    for KERNEL_VAR in ${kernels[*]}; do
+        echo -e "(${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
+        MAIN_LINE_M=$(echo "${KERNEL_VAR}" | cut -d '.' -f1)
+        MAIN_LINE_V=$(echo "${KERNEL_VAR}" | cut -d '.' -f2)
+        MAIN_LINE_S=$(echo "${KERNEL_VAR}" | cut -d '.' -f3)
+        MAIN_LINE="${MAIN_LINE_M}.${MAIN_LINE_V}"
+        # Check the version on the server (e.g LATEST_VERSION="124")
+        LATEST_VERSION=$(curl -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}.[0-9]+"  | sed -e "s/${MAIN_LINE}.//g" | sort -n | sed -n '$p')
+        if [[ "$?" -eq "0" && ! -z "${LATEST_VERSION}" ]]; then
+            tmp_arr_kernels[${i}]="${MAIN_LINE}.${LATEST_VERSION}"
+        else
+            tmp_arr_kernels[${i}]="${KERNEL_VAR}"
+        fi
+        echo -e "(${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel. \n"
+
+        let i++
+    done
+
+    # Reset the kernel array to the latest kernel version
+    unset kernels
+    kernels=${tmp_arr_kernels[*]}
+
+    # Synchronization related kernel
+    i=1
+    for KERNEL_VAR in ${kernels[*]}; do
+        if [ ! -d "${kernel_path}/${KERNEL_VAR}" ]; then
+            echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_library}/${KERNEL_VAR} ]"
+            svn checkout ${kernel_library}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} >/dev/null
+            rm -rf ${kernel_path}/${KERNEL_VAR}/.svn >/dev/null && sync
+        else
+            echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
+        fi
+
+        let i++
+    done
+
+    sync
 }
 
 extract_openwrt() {
@@ -565,8 +622,8 @@ while [ "${1}" ]; do
             : ${firmware:="${firmwares[0]}"}
             : ${build:="all"}
             : ${kernel:="${kernels[-1]}"}
-            : ${auto_kernel:="true"}
-            : ${version_branch:="stable"}
+            : ${auto_kernel:=${auto_kernel}}
+            : ${version_branch:=${version_branch}}
             ;;
         -b | --build)
             build=${2}
@@ -668,63 +725,8 @@ fi
 [ ${kernel} != "all" ] && unset kernels && kernels=(${kernel})
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
-# Convert kernel library address to svn format
-if [[ ${kernel_library} == http* && $(echo ${kernel_library} | grep "tree/main") != "" ]]; then
-    kernel_library="${kernel_library//tree\/main/trunk}"
-fi
-kernel_library="${kernel_library}/${version_branch}"
-
-# Check the new version on the kernel library, when auto_kernel=true
-if [[ -n "${auto_kernel}" && "${auto_kernel}" == "true" ]]; then
-
-    # Set empty array
-    TMP_ARR_KERNELS=()
-
-    # Convert kernel library address to API format
-    SERVER_KERNEL_URL=${kernel_library#*com\/}
-    SERVER_KERNEL_URL=${SERVER_KERNEL_URL//trunk/contents}
-    SERVER_KERNEL_URL="https://api.github.com/repos/${SERVER_KERNEL_URL}"
-
-    # Query the latest kernel in a loop
-    i=1
-    for KERNEL_VAR in ${kernels[*]}; do
-        echo -e "(${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
-        MAIN_LINE_M=$(echo "${KERNEL_VAR}" | cut -d '.' -f1)
-        MAIN_LINE_V=$(echo "${KERNEL_VAR}" | cut -d '.' -f2)
-        MAIN_LINE_S=$(echo "${KERNEL_VAR}" | cut -d '.' -f3)
-        MAIN_LINE="${MAIN_LINE_M}.${MAIN_LINE_V}"
-        # Check the version on the server (e.g LATEST_VERSION="124")
-        LATEST_VERSION=$(curl -s "${SERVER_KERNEL_URL}" | grep "name" | grep -oE "${MAIN_LINE}.[0-9]+"  | sed -e "s/${MAIN_LINE}.//g" | sort -n | sed -n '$p')
-        if [[ "$?" -eq "0" && ! -z "${LATEST_VERSION}" ]]; then
-            TMP_ARR_KERNELS[${i}]="${MAIN_LINE}.${LATEST_VERSION}"
-        else
-            TMP_ARR_KERNELS[${i}]="${KERNEL_VAR}"
-        fi
-        echo -e "(${i}) [ ${TMP_ARR_KERNELS[$i]} ] is latest kernel. \n"
-
-        let i++
-    done
-
-    # Reset the kernel array to the latest kernel version
-    unset kernels
-    kernels=${TMP_ARR_KERNELS[*]}
-
-fi
-
-# Synchronization related kernel
-i=1
-for KERNEL_VAR in ${kernels[*]}; do
-    if [ ! -d "${kernel_path}/${KERNEL_VAR}" ]; then
-        echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_library}/${KERNEL_VAR} ]"
-        svn checkout ${kernel_library}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} >/dev/null
-        rm -rf ${kernel_path}/${KERNEL_VAR}/.svn >/dev/null && sync
-    else
-        echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
-    fi
-
-    let i++
-done
-sync
+# Set whether to replace the kernel
+[ "${auto_kernel}" == "ture" ] && download_kernel
 
 echo -e "Ready, start packaging... \n"
 

@@ -24,7 +24,7 @@ kernel_library="https://github.com/ophub/kernel/tree/main/pub"
 version_branch="stable"
 #===== Do not modify the following parameter settings, End =======
 
-# Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 320 )
+# Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 512 )
 BOOT_MB=256
 ROOT_MB=960
 
@@ -478,13 +478,14 @@ choose_build() {
     done
     echo && read -p " Please select the Amlogic SoC: " pause
     case  $pause in
-        1 | s922x)  build="s922x" ;;
-        2 | s905x3) build="s905x3" ;;
-        3 | s905x2) build="s905x2" ;;
-        4 | s912)   build="s912" ;;
-        5 | s905d)  build="s905d" ;;
-        6 | s905x)  build="s905x" ;;
-        7 | s905w)  build="s905w" ;;
+        1 | s922x)    build="s922x" ;;
+        2 | s922x-n2) build="s922x-n2" ;;
+        3 | s905x3)   build="s905x3" ;;
+        4 | s905x2)   build="s905x2" ;;
+        5 | s912)     build="s912" ;;
+        6 | s905d)    build="s905d" ;;
+        7 | s905x)    build="s905x" ;;
+        8 | s905w)    build="s905w" ;;
         *) die "Have no this Amlogic SoC" ;;
     esac
     tag ${build}
@@ -515,30 +516,36 @@ Usage:
     make [option]
 
 Options:
-    -c, --clean            clean up the output and temporary directories
 
-    -d, --default          the kernel version is "latest", and the rootfs partition size is "1024m"
+    -d, --default          The kernel version is "latest", and the rootfs partition size is "1024m"
 
     -b, --build=BUILD      Specify multiple cores, use "_" to connect
       , -b all             Compile all types of openwrt
       , -b s905x3          Specify a single openwrt for compilation
       , -b s905x3_s905d    Specify multiple openwrt, use "_" to connect
 
-    -k=VERSION             set the kernel version, which must be in the "kernel" directory
-      , -k all             build all the kernel version
-      , -k latest          build the latest kernel version
-      , -k 5.4.150         Specify a single kernel for compilation
-      , -k 5.4.150_5.10.70 Specify multiple cores, use "_" to connect
+    -k, --kernelversion    Set the kernel version, which must be in the "kernel" directory
+      , -k all             Build all the kernel version
+      , -k latest          Build the latest kernel version
+      , -k 5.4.80          Specify a single kernel for compilation
+      , -k 5.4.80_5.10.60  Specify multiple cores, use "_" to connect
 
-    -u, --update           Whether to auto update to the latest kernel of the same series
-      , -u ture            Auto update to the latest kernel
-      , -u false           Do not upgrade, compile the specified kernel
+    -a, --autokernel       Whether to auto update to the latest kernel of the same series
+      , -a ture            Auto update to the latest kernel
+      , -a false           Do not upgrade, compile the specified kernel
 
-    --kernel               show all kernel version in "kernel" directory
+    -v, --versionbranch    Set the kernel version branch, the default is stable
+      , -v stable          Use stable branch
+      , -v beta            Use beta branch
 
-    -s, --size=SIZE        set the rootfs partition size, do not less than 256m
+    -s, --size             Set the rootfs partition size, do not less than 256m
+      , -s 1024            Set the rootfs partition size is 1024MB
 
-    -h, --help             display this help
+    -h, --help             Display this help
+
+    -c, --clean            Clean up the output and temporary directories
+
+    --kernel               Show all kernel version in "kernel" directory
 
 EOF
 }
@@ -553,17 +560,6 @@ get_kernels
 
 while [ "${1}" ]; do
     case "${1}" in
-        -h | --help)
-            usage && exit
-            ;;
-        -c | --clean)
-            cleanup
-            rm -rf ${out_path}
-            echo "Clean up ok!" && exit
-            ;;
-        --kernel)
-            show_kernels && exit
-            ;;
         -d | --default)
             : ${rootsize:=${ROOT_MB}}
             : ${firmware:="${firmwares[0]}"}
@@ -575,62 +571,73 @@ while [ "${1}" ]; do
         -b | --build)
             build=${2}
             if   [ "${build}" = "all" ]; then
-                 shift
+                shift
             elif [ -n "${build}" ]; then
-                 unset build_openwrt
-                 oldIFS=$IFS
-                 IFS=_
-                 build_openwrt=(${build})
-                 IFS=$oldIFS
-                 unset build
-                 : ${build:="all"}
-                 shift
+                unset build_openwrt
+                oldIFS=$IFS
+                IFS=_
+                build_openwrt=(${build})
+                IFS=$oldIFS
+                unset build
+                : ${build:="all"}
+                shift
             else
-                 die "Invalid build [ ${2} ]!"
+                die "Invalid -b parameter [ ${2} ]!"
             fi
             ;;
-        -k)
+        -k | --kernelversion)
             kernel=${2}
             if   [ "${kernel}" = "all" ]; then
-                 shift
+                shift
             elif [ "${kernel}" = "latest" ]; then
-                 kernel="${kernels[-1]}"
-                 shift
+                kernel="${kernels[-1]}"
+                shift
             elif [ -n "${kernel}" ]; then
-                 oldIFS=$IFS
-                 IFS=_
-                 kernels=(${kernel})
-                 IFS=$oldIFS
-                 unset kernel
-                 : ${kernel:="all"}
-                 shift
+                oldIFS=$IFS
+                IFS=_
+                kernels=(${kernel})
+                IFS=$oldIFS
+                unset kernel
+                : ${kernel:="all"}
+                shift
             else
-                 die "Invalid kernel [ ${2} ]!"
+                die "Invalid -k parameter [ ${2} ]!"
             fi
             ;;
         -a | --autokernel)
-            auto_kernel=${2}
-            if [ -n "${auto_kernel}" ]; then
+            if [ -n "${2}" ]; then
+                auto_kernel="${2}"
                 shift
             else
-                die "Invalid size [ ${2} ]!"
+                die "Invalid -a parameter [ ${2} ]!"
             fi
             ;;
         -v | --versionbranch)
-            version_branch=${2}
-            if [ -n "${version_branch}" ]; then
+            if [ -n "${2}" ]; then
+                version_branch="${2}"
                 shift
             else
-                die "Invalid size [ ${2} ]!"
+                die "Invalid -v parameter [ ${2} ]!"
             fi
             ;;
         -s | --size)
-            rootsize=${2}
-            if [[ "${rootsize}" -ge 256 ]]; then
+            if [[ -n "${2}" && "${2}" -ge "512" ]]; then
+                rootsize="${2}"
                 shift
             else
-                die "Invalid size [ ${2} ]!"
+                die "Invalid -s parameter [ ${2} ]!"
             fi
+            ;;
+        -h | --help)
+            usage && exit 0
+            ;;
+        -c | --clean)
+            cleanup
+            rm -rf ${out_path} 2>/dev/null
+            echo "Clean up ok!" && exit 0
+            ;;
+        --kernel)
+            show_kernels && exit 0
             ;;
         *)
             die "Invalid option [ ${1} ]!"

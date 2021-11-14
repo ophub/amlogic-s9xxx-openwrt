@@ -22,7 +22,7 @@ configfiles_path=${amlogic_path}/common-files
 kernel_library="https://github.com/ophub/kernel/tree/main/pub"
 #kernel_library="https://github.com/ophub/kernel/trunk/pub"
 version_branch="stable"
-auto_kernel="ture"
+auto_kernel="true"
 #===== Do not modify the following parameter settings, End =======
 
 # Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 512 )
@@ -588,7 +588,7 @@ Options:
       , -k 5.4.80_5.10.60  Specify multiple cores, use "_" to connect
 
     -a, --autokernel       Whether to auto update to the latest kernel of the same series
-      , -a ture            Auto update to the latest kernel
+      , -a true            Auto update to the latest kernel
       , -a false           Do not upgrade, compile the specified kernel
 
     -v, --versionbranch    Set the kernel version branch, the default is stable
@@ -726,7 +726,7 @@ fi
 [ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
 
 # Set whether to replace the kernel
-[ "${auto_kernel}" == "ture" ] && download_kernel
+[ "${auto_kernel}" == "true" ] && download_kernel
 
 echo -e "OpenWrt SoC List: [ $( echo ${build_openwrt[*]} | tr "\n" " " ) ]"
 echo -e "Kernel List: [ $( echo ${build_kernel[*]} | tr "\n" " " ) ]"

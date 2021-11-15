@@ -87,13 +87,13 @@ function storage_info()
 
 function get_data_storage()
 {
-    if which lsblk >/dev/null;then
-	root_name=$(lsblk -l -o NAME,MOUNTPOINT | awk '$2~/^\/$/ {print $1'})
-	mmc_name=$(echo $root_name | awk '{print substr($1,1,length($1)-2);}')
-	if echo $mmc_name | grep mmcblk >/dev/null;then
-	    DATA_STORAGE="/mnt/${mmc_name}p4"
+	if which lsblk >/dev/null;then
+		root_name=$(lsblk -l -o NAME,MOUNTPOINT | awk '$2~/^\/$/ {print $1'})
+		mmc_name=$(echo $root_name | awk '{print substr($1,1,length($1)-2);}')
+		if echo $mmc_name | grep mmcblk >/dev/null;then
+			DATA_STORAGE="/mnt/${mmc_name}p4"
+		fi
 	fi
-    fi
 }
 
 # query various systems and send some stuff to the background for overall faster execution.
@@ -136,8 +136,12 @@ swap_total=$(awk '{print $(2)}' <<<${swap_info})
 
 if grep -q "ipq40xx" "/etc/openwrt_release"; then
 	cpu_temp="$(sensors | grep -Eo '\+[0-9]+.+C' | sed ':a;N;$!ba;s/\n/ /g;s/+//g')"
-else
+elif [ -f "/sys/class/thermal/thermal_zone0/temp" ]; then
 	cpu_temp="$(awk '{ printf("%.1f °C", $0 / 1000) }' /sys/class/thermal/thermal_zone0/temp)"
+elif [ -f "/sys/class/hwmon/hwmon0/temp1_input" ]; then
+	cpu_temp="$(awk '{ printf("%.1f °C", $0 / 1000) }' /sys/class/hwmon/hwmon0/temp1_input)"
+else
+	cpu_temp="50.0 °C"
 fi
 cpu_tempx=$(echo $cpu_temp | sed 's/°C//g')
 

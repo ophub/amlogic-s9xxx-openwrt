@@ -84,7 +84,7 @@ download_kernel() {
         MAIN_LINE_S=$(echo "${KERNEL_VAR}" | cut -d '.' -f3)
         MAIN_LINE="${MAIN_LINE_M}.${MAIN_LINE_V}"
         # Check the version on the server (e.g LATEST_VERSION="124")
-        LATEST_VERSION=$(curl -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}.[0-9]+"  | sed -e "s/${MAIN_LINE}.//g" | sort -n | sed -n '$p')
+        LATEST_VERSION=$(curl -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}.[0-9]+" | sed -e "s/${MAIN_LINE}.//g" | sort -n | sed -n '$p')
         if [[ "$?" -eq "0" && ! -z "${LATEST_VERSION}" ]]; then
             tmp_arr_kernels[${i}]="${MAIN_LINE}.${LATEST_VERSION}"
         else
@@ -175,85 +175,85 @@ refactor_files() {
     kernel_vermaj=$(echo ${build_usekernel} | grep -oE '^[1-9].[0-9]{1,3}')
     k510_ver=${kernel_vermaj%%.*}
     k510_maj=${kernel_vermaj##*.}
-    if  [ "${k510_ver}" -eq "5" ];then
-        if  [ "${k510_maj}" -ge "10" ];then
+    if [ "${k510_ver}" -eq "5" ]; then
+        if [ "${k510_maj}" -ge "10" ]; then
             K510="1"
         else
             K510="0"
         fi
-    elif [ "${k510_ver}" -gt "5" ];then
+    elif [ "${k510_ver}" -gt "5" ]; then
         K510="1"
     else
         K510="0"
     fi
 
     case "${build_op}" in
-        s922x | belink | belinkpro | ugoos)
-            FDTFILE="meson-g12b-gtking-pro.dtb"
-            UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-            MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
-            ANDROID_UBOOT=""
-            AMLOGIC_SOC="s922x"
-            ;;
-        s922x-n2 | odroid-n2)
-            FDTFILE="meson-g12b-gtking-pro-rev_a.dtb"
-            UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-            MAINLINE_UBOOT="/lib/u-boot/odroid-n2-u-boot.bin.sd.bin"
-            ANDROID_UBOOT=""
-            AMLOGIC_SOC="s922x"
-            ;;
-        s905x3 | x96 | hk1 | h96 | ugoosx3)
-            FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
-            UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-            MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
-            ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
-            AMLOGIC_SOC="s905x3"
-            ;;
-        s905x2 | x96max4g | x96max2g)
-            FDTFILE="meson-g12a-x96-max.dtb"
-            UBOOT_OVERLOAD="u-boot-x96max.bin"
-            MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
-            ANDROID_UBOOT=""
-            AMLOGIC_SOC="s905x2"
-            ;;
-        s912 | h96proplus | octopus)
-            FDTFILE="meson-gxm-octopus-planet.dtb"
-            UBOOT_OVERLOAD="u-boot-zyxq.bin"
-            MAINLINE_UBOOT=""
-            ANDROID_UBOOT=""
-            AMLOGIC_SOC="s912"
-            ;;
-        s905d | n1)
-            FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
-            UBOOT_OVERLOAD="u-boot-n1.bin"
-            MAINLINE_UBOOT=""
-            ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
-            AMLOGIC_SOC="s905d"
-            ;;
-        s905x | hg680p | b860h)
-            FDTFILE="meson-gxl-s905x-p212.dtb"
-            UBOOT_OVERLOAD="u-boot-p212.bin"
-            MAINLINE_UBOOT=""
-            ANDROID_UBOOT=""
-            AMLOGIC_SOC="s905x"
-            ;;
-        s905w | x96mini | tx3mini)
-            FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
-            UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
-            MAINLINE_UBOOT=""
-            ANDROID_UBOOT=""
-            AMLOGIC_SOC="s905w"
-            ;;
-        *)
-            die "Have no this firmware: [ ${build_op} - ${kernel} ]"
-            ;;
+    s922x | belink | belinkpro | ugoos)
+        FDTFILE="meson-g12b-gtking-pro.dtb"
+        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+        MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s922x"
+        ;;
+    s922x-n2 | odroid-n2)
+        FDTFILE="meson-g12b-gtking-pro-rev_a.dtb"
+        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+        MAINLINE_UBOOT="/lib/u-boot/odroid-n2-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s922x"
+        ;;
+    s905x3 | x96 | hk1 | h96 | ugoosx3)
+        FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
+        UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+        MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+        ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+        AMLOGIC_SOC="s905x3"
+        ;;
+    s905x2 | x96max4g | x96max2g)
+        FDTFILE="meson-g12a-x96-max.dtb"
+        UBOOT_OVERLOAD="u-boot-x96max.bin"
+        MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s905x2"
+        ;;
+    s912 | h96proplus | octopus)
+        FDTFILE="meson-gxm-octopus-planet.dtb"
+        UBOOT_OVERLOAD="u-boot-zyxq.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s912"
+        ;;
+    s905d | n1)
+        FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
+        UBOOT_OVERLOAD="u-boot-n1.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
+        AMLOGIC_SOC="s905d"
+        ;;
+    s905x | hg680p | b860h)
+        FDTFILE="meson-gxl-s905x-p212.dtb"
+        UBOOT_OVERLOAD="u-boot-p212.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s905x"
+        ;;
+    s905w | x96mini | tx3mini)
+        FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
+        UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s905w"
+        ;;
+    *)
+        die "Have no this firmware: [ ${build_op} - ${kernel} ]"
+        ;;
     esac
 
     # Edit ${root}/* files ========== Begin ==========
     cd ${root}
 
     # Add other operations below
-    echo 'pwm_meson' > etc/modules.d/pwm-meson
+    echo 'pwm_meson' >etc/modules.d/pwm-meson
     if ! grep -q 'ulimit -n' etc/init.d/boot; then
         sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
     fi
@@ -267,7 +267,7 @@ refactor_files() {
     chown -R 0:0 ./
 
     mkdir -p etc/modprobe.d
-    cat > etc/modprobe.d/99-local.conf <<EOF
+    cat >etc/modprobe.d/99-local.conf <<EOF
 blacklist snd_soc_meson_aiu_i2s
 alias brnf br_netfilter
 alias pwm pwm_meson
@@ -275,16 +275,16 @@ alias wifi brcmfmac
 EOF
 
     # echo br_netfilter > etc/modules.d/br_netfilter
-    echo pwm_meson > etc/modules.d/pwm_meson 2>/dev/null
-    echo panfrost > etc/modules.d/panfrost 2>/dev/null
-    echo meson_gxbb_wdt > etc/modules.d/watchdog 2>/dev/null
+    echo pwm_meson >etc/modules.d/pwm_meson 2>/dev/null
+    echo panfrost >etc/modules.d/panfrost 2>/dev/null
+    echo meson_gxbb_wdt >etc/modules.d/watchdog 2>/dev/null
 
     # Edit fstab
     ROOTFS_UUID=$(uuidgen)
     #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
-    
+
     # Turn off speed limit by default
     [ -f etc/config/nft-qos ] && sed -i "s|option limit_enable.*|option limit_enable '0'|g" etc/config/nft-qos
 
@@ -293,11 +293,11 @@ EOF
     [ -f etc/config/turboacc ] && sed -i "s|option sfe_flow.*|option sfe_flow '0'|g" etc/config/turboacc
 
     # Add drivers
-    [ -f etc/modules.d/8189fs ] || echo "8189fs" > etc/modules.d/8189fs
-    [ -f etc/modules.d/8188fu ] || echo "8188fu" > etc/modules.d/8188fu
-    [ -f etc/modules.d/usb-net-rtl8150 ] || echo "rtl8150" > etc/modules.d/usb-net-rtl8150
-    [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > etc/modules.d/usb-net-rtl8152
-    [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > etc/modules.d/usb-net-asix-ax88179
+    [ -f etc/modules.d/8189fs ] || echo "8189fs" >etc/modules.d/8189fs
+    [ -f etc/modules.d/8188fu ] || echo "8188fu" >etc/modules.d/8188fu
+    [ -f etc/modules.d/usb-net-rtl8150 ] || echo "rtl8150" >etc/modules.d/usb-net-rtl8150
+    [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" >etc/modules.d/usb-net-rtl8152
+    [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" >etc/modules.d/usb-net-asix-ax88179
 
     # Add cpustat
     cpustat_file=${configfiles_path}/patches/cpustat
@@ -310,38 +310,38 @@ EOF
     fi
 
     # Modify the cpu mode to schedutil
-    if [[ -f "etc/config/cpufreq" ]];then
+    if [[ -f "etc/config/cpufreq" ]]; then
         sed -i "s/ondemand/schedutil/" etc/config/cpufreq
     fi
 
     # Add balethirq
     balethirq_file=${configfiles_path}/patches/balethirq
-    if [ -d "${balethirq_file}" ];then
+    if [ -d "${balethirq_file}" ]; then
         cp -f ${balethirq_file}/balethirq.pl usr/sbin/balethirq.pl && chmod +x usr/sbin/balethirq.pl >/dev/null 2>&1
         sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
         cp -f ${balethirq_file}/balance_irq etc/balance_irq >/dev/null 2>&1
     fi
-    
+
     # Add firmware information to the etc/flippy-openwrt-release
-    echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
-    echo "U_BOOT_EXT='${K510}'" >> etc/flippy-openwrt-release 2>/dev/null
-    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >> etc/flippy-openwrt-release 2>/dev/null
-    echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
-    echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
-    echo "KERNEL_VERSION='${build_usekernel}'" >> etc/flippy-openwrt-release 2>/dev/null
-    echo "SOC='${AMLOGIC_SOC}'" >> etc/flippy-openwrt-release 2>/dev/null
-    echo "K510='${K510}'" >> etc/flippy-openwrt-release 2>/dev/null
+    echo "FDTFILE='${FDTFILE}'" >>etc/flippy-openwrt-release 2>/dev/null
+    echo "U_BOOT_EXT='${K510}'" >>etc/flippy-openwrt-release 2>/dev/null
+    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>etc/flippy-openwrt-release 2>/dev/null
+    echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >>etc/flippy-openwrt-release 2>/dev/null
+    echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >>etc/flippy-openwrt-release 2>/dev/null
+    echo "KERNEL_VERSION='${build_usekernel}'" >>etc/flippy-openwrt-release 2>/dev/null
+    echo "SOC='${AMLOGIC_SOC}'" >>etc/flippy-openwrt-release 2>/dev/null
+    echo "K510='${K510}'" >>etc/flippy-openwrt-release 2>/dev/null
 
     # Add firmware version information to the terminal page
-    if  [ -f etc/banner ]; then
-        op_version=$(echo $(ls lib/modules/ 2>/dev/null ))
+    if [ -f etc/banner ]; then
+        op_version=$(echo $(ls lib/modules/ 2>/dev/null))
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " Install: OpenWrt → System → Amlogic Service → Install" >> etc/banner
-        echo " Update: OpenWrt → System → Amlogic Service → Update" >> etc/banner
-        echo " Amlogic SoC: ${build_op}" >> etc/banner
-        echo " OpenWrt Kernel: ${op_version}" >> etc/banner
-        echo " Packaged Date: ${op_packaged_date}" >> etc/banner
-        echo " -----------------------------------------------------" >> etc/banner
+        echo " Install: OpenWrt → System → Amlogic Service → Install" >>etc/banner
+        echo " Update: OpenWrt → System → Amlogic Service → Update" >>etc/banner
+        echo " Amlogic SoC: ${build_op}" >>etc/banner
+        echo " OpenWrt Kernel: ${op_version}" >>etc/banner
+        echo " Packaged Date: ${op_packaged_date}" >>etc/banner
+        echo " -----------------------------------------------------" >>etc/banner
     fi
 
     # Add some package and script connection
@@ -350,25 +350,24 @@ EOF
     sync
     # Edit ${root}/* files ========== End ==========
 
-
     # Edit ${boot}/* files ========== Begin ==========
     cd ${boot}
 
     # Edit the uEnv.txt
-    if [  ! -f "uEnv.txt" ]; then
-       die "The uEnv.txt File does not exist"
+    if [ ! -f "uEnv.txt" ]; then
+        die "The uEnv.txt File does not exist"
     else
-       old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-       sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt
+        old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
+        sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt
     fi
 
     # Add u-boot.ext for 5.10 kernel
     if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then
-       if [ -f "${uboot_path}/${UBOOT_OVERLOAD}" ]; then
-          cp -f ${uboot_path}/${UBOOT_OVERLOAD} u-boot.ext && sync && chmod +x u-boot.ext
-       else
-          die "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
-       fi
+        if [ -f "${uboot_path}/${UBOOT_OVERLOAD}" ]; then
+            cp -f ${uboot_path}/${UBOOT_OVERLOAD} u-boot.ext && sync && chmod +x u-boot.ext
+        else
+            die "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
+        fi
     fi
 
     # Add ${UBOOT_OVERLOAD} to support kernel update to 5.10 and above
@@ -395,7 +394,7 @@ make_image() {
     dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} conv=fsync 2>/dev/null && sync
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
-    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB -1))M 2>/dev/null
+    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB - 1))M 2>/dev/null
     parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
     sync
 
@@ -405,11 +404,11 @@ make_image() {
     sync
 
     # Write the specified bootloader
-    if  [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
+    if [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
         dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
         dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${build_op}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
-    elif [[ "${ANDROID_UBOOT}" != ""  && -f "${root}${ANDROID_UBOOT}" ]]; then
+    elif [[ "${ANDROID_UBOOT}" != "" && -f "${root}${ANDROID_UBOOT}" ]]; then
         dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
         dd if=${root}${ANDROID_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${build_op}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
@@ -469,7 +468,7 @@ get_kernels() {
         work=$(pwd)
         cd ${kernel_root}
         for x in $(ls ./); do
-            [ "$( ls ${x}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l )" -ge "3" ] && build_kernel[i++]=${x}
+            [ "$(ls ${x}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l)" -ge "3" ] && build_kernel[i++]=${x}
         done
         cd ${work}
     }
@@ -529,21 +528,21 @@ choose_files() {
 
 choose_build() {
     i=1
-    for var in  ${build_openwrt[*]}; do
+    for var in ${build_openwrt[*]}; do
         echo " (${i}) ${var}"
         let i++
     done
     echo && read -p " Please select the Amlogic SoC: " pause
-    case  $pause in
-        1 | s922x)    build="s922x" ;;
-        2 | s922x-n2) build="s922x-n2" ;;
-        3 | s905x3)   build="s905x3" ;;
-        4 | s905x2)   build="s905x2" ;;
-        5 | s912)     build="s912" ;;
-        6 | s905d)    build="s905d" ;;
-        7 | s905x)    build="s905x" ;;
-        8 | s905w)    build="s905w" ;;
-        *) die "Have no this Amlogic SoC" ;;
+    case $pause in
+    1 | s922x) build="s922x" ;;
+    2 | s922x-n2) build="s922x-n2" ;;
+    3 | s905x3) build="s905x3" ;;
+    4 | s905x2) build="s905x2" ;;
+    5 | s912) build="s912" ;;
+    6 | s905d) build="s905d" ;;
+    7 | s905x) build="s905x" ;;
+    8 | s905w) build="s905w" ;;
+    *) die "Have no this Amlogic SoC" ;;
     esac
     tag ${build}
 }
@@ -617,88 +616,88 @@ get_kernels
 
 while [ "${1}" ]; do
     case "${1}" in
-        -d | --default)
-            : ${rootsize:=${ROOT_MB}}
-            : ${firmware:="${firmwares[0]}"}
+    -d | --default)
+        : ${rootsize:=${ROOT_MB}}
+        : ${firmware:="${firmwares[0]}"}
+        : ${build:="all"}
+        : ${kernel:="${build_kernel[-1]}"}
+        : ${auto_kernel:=${auto_kernel}}
+        : ${version_branch:=${version_branch}}
+        ;;
+    -b | --build)
+        build=${2}
+        if [ "${build}" = "all" ]; then
+            shift
+        elif [ -n "${build}" ]; then
+            unset build_openwrt
+            oldIFS=$IFS
+            IFS=_
+            build_openwrt=(${build})
+            IFS=$oldIFS
+            unset build
             : ${build:="all"}
-            : ${kernel:="${build_kernel[-1]}"}
-            : ${auto_kernel:=${auto_kernel}}
-            : ${version_branch:=${version_branch}}
-            ;;
-        -b | --build)
-            build=${2}
-            if   [ "${build}" = "all" ]; then
-                shift
-            elif [ -n "${build}" ]; then
-                unset build_openwrt
-                oldIFS=$IFS
-                IFS=_
-                build_openwrt=(${build})
-                IFS=$oldIFS
-                unset build
-                : ${build:="all"}
-                shift
-            else
-                die "Invalid -b parameter [ ${2} ]!"
-            fi
-            ;;
-        -k | --kernelversion)
-            kernel=${2}
-            if   [ "${kernel}" = "all" ]; then
-                shift
-            elif [ "${kernel}" = "latest" ]; then
-                kernel="${build_kernel[-1]}"
-                shift
-            elif [ -n "${kernel}" ]; then
-                oldIFS=$IFS
-                IFS=_
-                build_kernel=(${kernel})
-                IFS=$oldIFS
-                unset kernel
-                : ${kernel:="all"}
-                shift
-            else
-                die "Invalid -k parameter [ ${2} ]!"
-            fi
-            ;;
-        -a | --autokernel)
-            if [ -n "${2}" ]; then
-                auto_kernel="${2}"
-                shift
-            else
-                die "Invalid -a parameter [ ${2} ]!"
-            fi
-            ;;
-        -v | --versionbranch)
-            if [ -n "${2}" ]; then
-                version_branch="${2}"
-                shift
-            else
-                die "Invalid -v parameter [ ${2} ]!"
-            fi
-            ;;
-        -s | --size)
-            if [[ -n "${2}" && "${2}" -ge "512" ]]; then
-                rootsize="${2}"
-                shift
-            else
-                die "Invalid -s parameter [ ${2} ]!"
-            fi
-            ;;
-        -h | --help)
-            usage && exit 0
-            ;;
-        -c | --clean)
-            cleanup
-            rm -rf ${out_path} 2>/dev/null
-            echo "Clean up ok!" && exit 0
-            ;;
-        --kernel)
-            show_kernels && exit 0
-            ;;
-        *)
-            die "Invalid option [ ${1} ]!"
-            ;;
+            shift
+        else
+            die "Invalid -b parameter [ ${2} ]!"
+        fi
+        ;;
+    -k | --kernelversion)
+        kernel=${2}
+        if [ "${kernel}" = "all" ]; then
+            shift
+        elif [ "${kernel}" = "latest" ]; then
+            kernel="${build_kernel[-1]}"
+            shift
+        elif [ -n "${kernel}" ]; then
+            oldIFS=$IFS
+            IFS=_
+            build_kernel=(${kernel})
+            IFS=$oldIFS
+            unset kernel
+            : ${kernel:="all"}
+            shift
+        else
+            die "Invalid -k parameter [ ${2} ]!"
+        fi
+        ;;
+    -a | --autokernel)
+        if [ -n "${2}" ]; then
+            auto_kernel="${2}"
+            shift
+        else
+            die "Invalid -a parameter [ ${2} ]!"
+        fi
+        ;;
+    -v | --versionbranch)
+        if [ -n "${2}" ]; then
+            version_branch="${2}"
+            shift
+        else
+            die "Invalid -v parameter [ ${2} ]!"
+        fi
+        ;;
+    -s | --size)
+        if [[ -n "${2}" && "${2}" -ge "512" ]]; then
+            rootsize="${2}"
+            shift
+        else
+            die "Invalid -s parameter [ ${2} ]!"
+        fi
+        ;;
+    -h | --help)
+        usage && exit 0
+        ;;
+    -c | --clean)
+        cleanup
+        rm -rf ${out_path} 2>/dev/null
+        echo "Clean up ok!" && exit 0
+        ;;
+    --kernel)
+        show_kernels && exit 0
+        ;;
+    *)
+        die "Invalid option [ ${1} ]!"
+        ;;
     esac
     shift
 done
@@ -728,8 +727,8 @@ fi
 # Set whether to replace the kernel
 [ "${auto_kernel}" == "true" ] && download_kernel
 
-echo -e "OpenWrt SoC List: [ $( echo ${build_openwrt[*]} | tr "\n" " " ) ]"
-echo -e "Kernel List: [ $( echo ${build_kernel[*]} | tr "\n" " " ) ]"
+echo -e "OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
+echo -e "Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ]"
 echo -e "Ready, start packaging... \n"
 
 # Start loop compilation
@@ -742,13 +741,13 @@ for b in ${build_openwrt[*]}; do
             echo -n "(${k}.${i}) Start packaging OpenWrt [ ${b} - ${x} ]. "
 
             now_remaining_space=$(df -hT ${PWD} | grep '/dev/' | awk '{print $5}' | sed 's/.$//')
-            if  [[ "${now_remaining_space}" -le "2" ]]; then
+            if [[ "${now_remaining_space}" -le "2" ]]; then
                 echo "Remaining space is less than 2G, exit this packaging. \n"
                 break 2
             else
                 echo "Remaining space is ${now_remaining_space}G."
             fi
-            
+
             kernel=${x}
             build=${b}
             process " (1/6) extract armvirt files."
@@ -763,13 +762,13 @@ for b in ${build_openwrt[*]}; do
             copy2image ${b}
             process " (6/6) cleanup tmp files."
             cleanup
-            
+
             echo -e "(${k}.${i}) OpenWrt packaged successfully. \n"
-            
+
             let i++
         }
     done
-    
+
     let k++
 done
 
@@ -778,4 +777,3 @@ echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
 wait
 chmod -R 777 ${out_path}
-

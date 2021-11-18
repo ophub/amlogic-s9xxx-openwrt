@@ -202,6 +202,10 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 | -s | Size | Specify the size of the root partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 | -h | help | View full documentation. |
 
+## Compile a custom kernel
+
+For the compilation method of the custom kernel, see [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
+
 ## ~/openwrt-armvirt/*-rootfs.tar.gz Firmware compilation parameters
 
 | Option | Value |

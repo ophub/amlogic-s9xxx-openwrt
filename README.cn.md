@@ -199,6 +199,10 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 | -s | Size | 对固件的大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
 | -h | help | 展示帮助文档. |
 
+## 编译自定义内核
+
+自定义内核的编译方法详见 [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
+
 ## ~/openwrt-armvirt/*-rootfs.tar.gz 用于打包的文件编译选项
 
 | Option | Value |

@@ -33,30 +33,33 @@ fi
 
 # Find the partition where root is located
 ROOT_PTNAME=$(df / | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')
-if [ "${ROOT_PTNAME}" == "" ];then
+if [ "${ROOT_PTNAME}" == "" ]; then
     echo "Cannot find the partition corresponding to the root file system!"
     exit 1
 fi
 
 # Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
 case ${ROOT_PTNAME} in
-       mmcblk?p[1-4]) EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-2)}')
-	              if lsblk -l -o NAME | grep "${EMMC_NAME}boot0" >/dev/null;then
-                          ROOT_DISK_TYPE="EMMC"
-		      else
-			  ROOT_DISK_TYPE="SD"
-	              fi
-                      PARTITION_NAME="p"
-                      LB_PRE="${ROOT_DISK_TYPE}_"
-                      ;;
-    [hsv]d[a-z][1-4]) EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-1)}')
-	              ROOT_DISK_TYPE="USB"
-                      PARTITION_NAME=""
-                      LB_PRE="${ROOT_DISK_TYPE}_"
-                      ;;
-                   *) echo "Unable to recognize the disk type of ${ROOT_PTNAME}!"
-                      exit 1
-                      ;;
+mmcblk?p[1-4])
+    EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-2)}')
+    if lsblk -l -o NAME | grep "${EMMC_NAME}boot0" >/dev/null; then
+        ROOT_DISK_TYPE="EMMC"
+    else
+        ROOT_DISK_TYPE="SD"
+    fi
+    PARTITION_NAME="p"
+    LB_PRE="${ROOT_DISK_TYPE}_"
+    ;;
+[hsv]d[a-z][1-4])
+    EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-1)}')
+    ROOT_DISK_TYPE="USB"
+    PARTITION_NAME=""
+    LB_PRE="${ROOT_DISK_TYPE}_"
+    ;;
+*)
+    echo "Unable to recognize the disk type of ${ROOT_PTNAME}!"
+    exit 1
+    ;;
 esac
 
 DOCKER_ROOT="/mnt/${EMMC_NAME}${PARTITION_NAME}4/docker/"
@@ -65,30 +68,30 @@ mv -f /tmp/upload/* . 2>/dev/null && sync
 
 if [[ "${IMG_NAME}" == *.img ]]; then
     echo -e "Update using [ ${IMG_NAME} ] file. Please wait a moment ..."
-elif [ $( ls *.img -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    IMG_NAME=$( ls *.img | head -n 1 )
+elif [ $(ls *.img -l 2>/dev/null | grep "^-" | wc -l) -ge 1 ]; then
+    IMG_NAME=$(ls *.img | head -n 1)
     echo -e "Update using [ ${IMG_NAME} ] ] file. Please wait a moment ..."
-elif [ $( ls *.img.xz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    xz_file=$( ls *.img.xz | head -n 1 )
+elif [ $(ls *.img.xz -l 2>/dev/null | grep "^-" | wc -l) -ge 1 ]; then
+    xz_file=$(ls *.img.xz | head -n 1)
     echo -e "Update using [ ${xz_file} ] file. Please wait a moment ..."
     xz -d ${xz_file} 2>/dev/null
-    IMG_NAME=$( ls *.img | head -n 1 )
-elif [ $( ls *.img.gz -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    gz_file=$( ls *.img.gz | head -n 1 )
+    IMG_NAME=$(ls *.img | head -n 1)
+elif [ $(ls *.img.gz -l 2>/dev/null | grep "^-" | wc -l) -ge 1 ]; then
+    gz_file=$(ls *.img.gz | head -n 1)
     echo -e "Update using [ ${gz_file} ] file. Please wait a moment ..."
     gzip -df ${gz_file} 2>/dev/null
-    IMG_NAME=$( ls *.img | head -n 1 )
-elif [ $( ls *.7z -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    gz_file=$( ls *.7z | head -n 1 )
+    IMG_NAME=$(ls *.img | head -n 1)
+elif [ $(ls *.7z -l 2>/dev/null | grep "^-" | wc -l) -ge 1 ]; then
+    gz_file=$(ls *.7z | head -n 1)
     echo -e "Update using [ ${gz_file} ] file. Please wait a moment ..."
     bsdtar -xmf ${gz_file} 2>/dev/null
     [ $? -eq 0 ] || 7z x ${gz_file} -aoa -y 2>/dev/null
-    IMG_NAME=$( ls *.img | head -n 1 )
-elif [ $( ls *.zip -l 2>/dev/null | grep "^-" | wc -l ) -ge 1 ]; then
-    zip_file=$( ls *.zip | head -n 1 )
+    IMG_NAME=$(ls *.img | head -n 1)
+elif [ $(ls *.zip -l 2>/dev/null | grep "^-" | wc -l) -ge 1 ]; then
+    zip_file=$(ls *.zip | head -n 1)
     echo -e "Update using [ ${zip_file} ] file. Please wait a moment ..."
     unzip -o ${zip_file} 2>/dev/null
-    IMG_NAME=$( ls *.img | head -n 1 )
+    IMG_NAME=$(ls *.img | head -n 1)
 else
     echo -e "Please upload or specify the update openwrt firmware file."
     echo -e "Upload method: system menu → Amlogic Service → Manually Upload Update"
@@ -100,7 +103,7 @@ fi
 sync
 
 # check file
-if  [ ! -f "${IMG_NAME}" ]; then
+if [ ! -f "${IMG_NAME}" ]; then
     echo "No update file found."
     exit 1
 else
@@ -110,9 +113,9 @@ fi
 # Check the necessary dependencies
 DEPENDS="lsblk uuidgen grep awk btrfs mkfs.fat mkfs.btrfs perl md5sum fatlabel"
 echo "Check the necessary dependencies..."
-for dep in ${DEPENDS};do
+for dep in ${DEPENDS}; do
     WITCH=$(which ${dep})
-    if [ "${WITCH}" == "" ];then
+    if [ "${WITCH}" == "" ]; then
         echo "Dependent command: ${dep} does not exist, upgrade cannot be performed, only flash through U disk/TF card!"
         exit 1
     else
@@ -121,9 +124,9 @@ for dep in ${DEPENDS};do
 done
 echo "Check passed"
 
-# find boot partition 
+# find boot partition
 BOOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | awk '$3~/^part$/ && $5 ~ /^\/boot$/ {print $0}')
-if  [ "${BOOT_PART_MSG}" == "" ]; then
+if [ "${BOOT_PART_MSG}" == "" ]; then
     echo "Boot The partition does not exist, so the update cannot be continued!"
     exit 1
 fi
@@ -141,31 +144,36 @@ else
     read yn
 fi
 case $yn in
-     n*|N*) BR_FLAG=0;;
+n* | N*)
+    BR_FLAG=0
+    ;;
 esac
 
-# find root partition 
+# find root partition
 ROOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | awk '$3~/^part$/ && $5 ~ /^\/$/ {print $0}')
 ROOT_NAME=$(echo $ROOT_PART_MSG | awk '{print $1}')
 ROOT_PATH=$(echo $ROOT_PART_MSG | awk '{print $2}')
 ROOT_UUID=$(echo $ROOT_PART_MSG | awk '{print $4}')
 
-case  $ROOT_NAME in
-      ${EMMC_NAME}${PARTITION_NAME}2) NEW_ROOT_NAME="${EMMC_NAME}${PARTITION_NAME}3"
-                      NEW_ROOT_LABEL="${LB_PRE}ROOTFS2"
-                      ;;
-      ${EMMC_NAME}${PARTITION_NAME}3) NEW_ROOT_NAME="${EMMC_NAME}${PARTITION_NAME}2"
-                      NEW_ROOT_LABEL="${LB_PRE}ROOTFS1"
-                      ;;
-                   *) echo "ROOTFS The partition location is incorrect, so the update cannot continue!"
-                      exit 1
-                      ;;
+case $ROOT_NAME in
+${EMMC_NAME}${PARTITION_NAME}2)
+    NEW_ROOT_NAME="${EMMC_NAME}${PARTITION_NAME}3"
+    NEW_ROOT_LABEL="${LB_PRE}ROOTFS2"
+    ;;
+${EMMC_NAME}${PARTITION_NAME}3)
+    NEW_ROOT_NAME="${EMMC_NAME}${PARTITION_NAME}2"
+    NEW_ROOT_LABEL="${LB_PRE}ROOTFS1"
+    ;;
+*)
+    echo "ROOTFS The partition location is incorrect, so the update cannot continue!"
+    exit 1
+    ;;
 esac
 echo "NEW_ROOT_NAME: [ ${NEW_ROOT_NAME} ]"
 
 # find new root partition
 NEW_ROOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | grep "${NEW_ROOT_NAME}" | awk '$3 ~ /^part$/ && $5 !~ /^\/$/ && $5 !~ /^\/boot$/ {print $0}')
-if  [ "${NEW_ROOT_PART_MSG}" == "" ]; then
+if [ "${NEW_ROOT_PART_MSG}" == "" ]; then
     echo "The new ROOTFS partition does not exist, so the update cannot continue!"
     exit 1
 fi
@@ -176,7 +184,7 @@ NEW_ROOT_MP=$(echo $NEW_ROOT_PART_MSG | awk '{print $5}')
 echo "NEW_ROOT_MP: [ ${NEW_ROOT_MP} ]"
 
 # backup old bootloader
-if  [ ! -f /root/BackupOldBootloader.img ]; then
+if [ ! -f /root/BackupOldBootloader.img ]; then
     echo "Backup bootloader -> [ BackupOldBootloader.img ] ... "
     dd if=/dev/${EMMC_NAME} of=/root/BackupOldBootloader.img bs=1M count=4 conv=fsync
     echo "Backup bootloader complete."
@@ -185,9 +193,9 @@ fi
 
 # losetup
 losetup -f -P $IMG_NAME
-if  [ $? -eq 0 ]; then
+if [ $? -eq 0 ]; then
     LOOP_DEV=$(losetup | grep "$IMG_NAME" | awk '{print $1}')
-    if  [ "$LOOP_DEV" == "" ]; then
+    if [ "$LOOP_DEV" == "" ]; then
         echo "loop device not found!"
         exit 1
     fi
@@ -199,21 +207,21 @@ fi
 WAIT=3
 echo "The loopdev is [ $LOOP_DEV ], wait [ ${WAIT} ] seconds. "
 while [ $WAIT -ge 1 ]; do
-      sleep 1
-      WAIT=$(( WAIT - 1 ))
+    sleep 1
+    WAIT=$((WAIT - 1))
 done
 
 # umount loop devices (openwrt will auto mount some partition)
 MOUNTED_DEVS=$(lsblk -l -o NAME,PATH,MOUNTPOINT | grep "$LOOP_DEV" | awk '$3 !~ /^$/ {print $2}')
 for dev in $MOUNTED_DEVS; do
-    while : ; do
+    while :; do
         echo "umount [ $dev ] ... "
         umount -f $dev
         sleep 1
         mnt=$(lsblk -l -o NAME,PATH,MOUNTPOINT | grep "$dev" | awk '$3 !~ /^$/ {print $2}')
-        if  [ "$mnt" == "" ]; then
+        if [ "$mnt" == "" ]; then
             break
-        else 
+        else
             echo "Retry ..."
         fi
     done
@@ -227,7 +235,7 @@ mkdir -p $P1 $P2
 
 echo "Mount [ ${LOOP_DEV}p1 ] -> [ ${P1} ] ... "
 mount -t vfat -o ro ${LOOP_DEV}p1 ${P1}
-if  [ $? -ne 0 ]; then
+if [ $? -ne 0 ]; then
     echo "Mount p1 [ ${LOOP_DEV}p1 ] failed!"
     losetup -D
     exit 1
@@ -235,7 +243,7 @@ fi
 
 echo "Mount [ ${LOOP_DEV}p2 ] -> [ ${P2} ] ... "
 mount -t btrfs -o ro,compress=zstd ${LOOP_DEV}p2 ${P2}
-if  [ $? -ne 0 ]; then
+if [ $? -ne 0 ]; then
     echo "Mount p2 [ ${LOOP_DEV}p2 ] failed!"
     umount -f ${P1}
     losetup -D
@@ -256,13 +264,13 @@ echo -e "Update from [ ${MODULES_OLD} ] to [ ${MODULES_NOW} ]"
 
 k510_ver=${VERSION_NOW%%.*}
 k510_maj=${VERSION_NOW##*.}
-if  [ "${k510_ver}" -eq "5" ];then
-    if  [ "${k510_maj}" -ge "10" ];then
+if [ "${k510_ver}" -eq "5" ]; then
+    if [ "${k510_maj}" -ge "10" ]; then
         K510="1"
     else
         K510="0"
     fi
-elif [ "${k510_ver}" -gt "5" ];then
+elif [ "${k510_ver}" -gt "5" ]; then
     K510="1"
 else
     K510="0"
@@ -274,7 +282,7 @@ MAINLINE_UBOOT=""
 ANDROID_UBOOT=""
 env_openwrt_file=""
 
-if  [ -f "${P2}/etc/flippy-openwrt-release" ]; then
+if [ -f "${P2}/etc/flippy-openwrt-release" ]; then
     env_openwrt_file="${P2}/etc/flippy-openwrt-release"
 elif [ -f "/etc/flippy-openwrt-release" ]; then
     env_openwrt_file="/etc/flippy-openwrt-release"
@@ -302,7 +310,7 @@ fi
 #format NEW_ROOT
 echo "umount [ ${NEW_ROOT_MP} ]"
 umount -f "${NEW_ROOT_MP}"
-if  [ $? -ne 0 ]; then
+if [ $? -ne 0 ]; then
     echo "Mount [ ${NEW_ROOT_MP} ] failed, Please restart and try again!"
     umount -f ${P1}
     umount -f ${P2}
@@ -313,7 +321,7 @@ fi
 echo "Format [ ${NEW_ROOT_PATH} ]"
 NEW_ROOT_UUID=$(uuidgen)
 mkfs.btrfs -f -U ${NEW_ROOT_UUID} -L ${NEW_ROOT_LABEL} -m single ${NEW_ROOT_PATH}
-if  [ $? -ne 0 ]; then
+if [ $? -ne 0 ]; then
     echo "Format [ ${NEW_ROOT_PATH} ] failed!"
     umount -f ${P1}
     umount -f ${P2}
@@ -323,7 +331,7 @@ fi
 
 echo "Mount [ ${NEW_ROOT_PATH} ] -> [ ${NEW_ROOT_MP} ]"
 mount -t btrfs -o compress=zstd ${NEW_ROOT_PATH} ${NEW_ROOT_MP}
-if  [ $? -ne 0 ]; then
+if [ $? -ne 0 ]; then
     echo "Mount [ ${NEW_ROOT_PATH} ] -> [ ${NEW_ROOT_MP} ] failed!"
     umount -f ${P1}
     umount -f ${P2}
@@ -336,12 +344,12 @@ cd ${NEW_ROOT_MP}
 echo "Start copying data， From [ ${P2} ] TO [ ${NEW_ROOT_MP} ] ..."
 ENTRYS=$(ls)
 for entry in $ENTRYS; do
-    if  [ "$entry" == "lost+found" ]; then
+    if [ "$entry" == "lost+found" ]; then
         continue
     fi
     echo "Remove old [ $entry ] ... "
-    rm -rf $entry 
-    if  [ $? -ne 0 ]; then
+    rm -rf $entry
+    if [ $? -ne 0 ]; then
         echo "failed."
         exit 1
     fi
@@ -362,9 +370,9 @@ for src in $COPY_SRC; do
     sync
 done
 
-# if not backup, then force rewrite the etc/docker/daemon.json 
-if [ "${BR_FLAG}" -eq 0 ];then
-    cat > ./etc/docker/daemon.json <<EOF
+# if not backup, then force rewrite the etc/docker/daemon.json
+if [ "${BR_FLAG}" -eq 0 ]; then
+    cat >./etc/docker/daemon.json <<EOF
 {
   "bip": "172.31.0.1/24",
   "data-root": "${DOCKER_ROOT}",
@@ -383,13 +391,13 @@ if [ "${BR_FLAG}" -eq 0 ];then
 EOF
 fi
 
-cat > ./etc/fstab <<EOF
+cat >./etc/fstab <<EOF
 UUID=${NEW_ROOT_UUID} / btrfs compress=zstd 0 1
 LABEL=${LB_PRE}BOOT /boot vfat defaults 0 2
 #tmpfs /tmp tmpfs defaults,nosuid 0 0
 EOF
 
-cat > ./etc/config/fstab <<EOF
+cat >./etc/config/fstab <<EOF
 config  global
         option anon_swap '0'
         option anon_mount '1'
@@ -415,16 +423,16 @@ config  mount
 
 EOF
 (
-    cd etc/rc.d 
+    cd etc/rc.d
     rm -f S??shortcut-fe
-    if grep "sfe_flow '1'" ../config/turboacc >/dev/null;then
-        if find ../../lib/modules -name 'shortcut-fe-cm.ko';then
+    if grep "sfe_flow '1'" ../config/turboacc >/dev/null; then
+        if find ../../lib/modules -name 'shortcut-fe-cm.ko'; then
             ln -sf ../init.d/shortcut-fe S99shortcut-fe
         fi
     fi
 )
 # move /etc/config/balance_irq to /etc/balance_irq
-[ -f  "./etc/config/balance_irq" ] && mv ./etc/config/balance_irq  ./etc/
+[ -f "./etc/config/balance_irq" ] && mv ./etc/config/balance_irq ./etc/
 sync
 
 echo "Create initial etc snapshot -> .snapshots/etc-000"
@@ -434,11 +442,11 @@ sync
 [ -d /mnt/${EMMC_NAME}${PARTITION_NAME}4/docker ] || mkdir -p /mnt/${EMMC_NAME}${PARTITION_NAME}4/docker
 rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}${PARTITION_NAME}4/docker/ opt/docker
 
-if  [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
+if [ -f /mnt/${NEW_ROOT_NAME}/etc/config/AdGuardHome ]; then
     [ -d /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome/data ] || mkdir -p /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome/data
-    if  [ ! -L /usr/bin/AdGuardHome ]; then
-        [ -d /usr/bin/AdGuardHome ] && \
-        cp -a /usr/bin/AdGuardHome/* /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome/
+    if [ ! -L /usr/bin/AdGuardHome ]; then
+        [ -d /usr/bin/AdGuardHome ] &&
+            cp -a /usr/bin/AdGuardHome/* /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome/
     fi
     ln -sf /mnt/${EMMC_NAME}${PARTITION_NAME}4/AdGuardHome /mnt/${NEW_ROOT_NAME}/usr/bin/AdGuardHome
 fi
@@ -450,11 +458,11 @@ sync
 echo "Copy data complete ..."
 
 BACKUP_LIST=$(${P2}/usr/sbin/openwrt-backup -p)
-if [[ "${BR_FLAG}" -eq "1" && -n "${BACKUP_LIST}" ]];then
+if [[ "${BR_FLAG}" -eq "1" && -n "${BACKUP_LIST}" ]]; then
     echo -n "Start restoring configuration files ... "
     (
-      cd /
-      eval tar czf ${NEW_ROOT_MP}/.reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
+        cd /
+        eval tar czf ${NEW_ROOT_MP}/.reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
     )
     tar xzf ${NEW_ROOT_MP}/.reserved/openwrt_config.tar.gz
 
@@ -473,7 +481,7 @@ echo "Modify the configuration file ... "
 rm -f "./etc/rc.local.orig" "./etc/first_run.sh" "./etc/part_size"
 rm -rf "./opt/docker" && ln -sf "/mnt/${EMMC_NAME}${PARTITION_NAME}4/docker" "./opt/docker"
 rm -f ./etc/bench.log
-cat >> ./etc/crontabs/root << EOF
+cat >>./etc/crontabs/root <<EOF
 37 5 * * * /etc/coremark.sh
 EOF
 
@@ -482,10 +490,10 @@ sed -e 's/ttyS0/tty0/' -i ./etc/inittab
 
 # Fix the problem of repeatedly adding sshd entries after each upgrade of dropbear
 sed -e "/sshd:x:/d" -i ./etc/shadow
-if [ `grep "sshd:x:22:22" ./etc/passwd | wc -l` -eq 0 ]; then
-    echo "sshd:x:22:22:sshd:/var/run/sshd:/bin/false" >> ./etc/passwd
-    echo "sshd:x:22:sshd" >> ./etc/group
-    echo "sshd:x:${ddd}:0:99999:7:::" >> ./etc/shadow
+if [ $(grep "sshd:x:22:22" ./etc/passwd | wc -l) -eq 0 ]; then
+    echo "sshd:x:22:22:sshd:/var/run/sshd:/bin/false" >>./etc/passwd
+    echo "sshd:x:22:sshd" >>./etc/group
+    echo "sshd:x:${ddd}:0:99999:7:::" >>./etc/shadow
 fi
 
 if [ "${BR_FLAG}" -eq "1" ]; then
@@ -496,10 +504,10 @@ if [ "${BR_FLAG}" -eq "1" ]; then
 fi
 sed -e "s/option hw_flow '1'/option hw_flow '0'/" -i ./etc/config/turboacc
 (
-    cd etc/rc.d 
+    cd etc/rc.d
     rm -f S??shortcut-fe
-    if grep "sfe_flow '1'" ../config/turboacc >/dev/null;then
-        if find ../../lib/modules -name 'shortcut-fe-cm.ko';then
+    if grep "sfe_flow '1'" ../config/turboacc >/dev/null; then
+        if find ../../lib/modules -name 'shortcut-fe-cm.ko'; then
             ln -sf ../init.d/shortcut-fe S99shortcut-fe
         fi
     fi
@@ -507,8 +515,8 @@ sed -e "s/option hw_flow '1'/option hw_flow '0'/" -i ./etc/config/turboacc
 eval tar czf .reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
 
 rm -f ./etc/part_size ./etc/first_run.sh
-if  [ -x ./usr/sbin/balethirq.pl ]; then
-    if  grep "balethirq.pl" "./etc/rc.local"; then
+if [ -x ./usr/sbin/balethirq.pl ]; then
+    if grep "balethirq.pl" "./etc/rc.local"; then
         echo "balance irq is enabled"
     else
         echo "enable balance irq"
@@ -517,7 +525,7 @@ if  [ -x ./usr/sbin/balethirq.pl ]; then
 fi
 mv ./etc/rc.local ./etc/rc.local.orig
 
-cat > ./etc/rc.local <<EOF
+cat >./etc/rc.local <<EOF
 if [ ! -f /etc/rc.d/*dockerd ]; then
     /etc/init.d/dockerd enable
     /etc/init.d/dockerd start
@@ -531,7 +539,7 @@ chmod 755 ./etc/rc.local*
 
 #Mainline U-BOOT detection
 FLASH_MAINLINE_UBOOT=0
-if  [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
+if [[ -n "${MAINLINE_UBOOT}" && -f "${P2}${MAINLINE_UBOOT}" ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
@@ -539,29 +547,31 @@ Found an available mainline bootloader (Mainline u-boot), you can flash into EMM
 EOF
     while :; do
         if [[ "${AUTO_MAINLINE_UBOOT}" == "yes" ]]; then
-            if  [[ "${K510}" -eq "1" ]]; then
+            if [[ "${K510}" -eq "1" ]]; then
                 yn="y"
             else
                 yn="n"
             fi
         elif [[ "${AUTO_MAINLINE_UBOOT}" == "no" ]]; then
-                yn="n"
+            yn="n"
         else
             read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
         fi
 
         case $yn in
-            y|Y) FLASH_MAINLINE_UBOOT=1
-                break
-                ;;
-            n|N) FLASH_MAINLINE_UBOOT=0
-                break
-                ;;
+        y | Y)
+            FLASH_MAINLINE_UBOOT=1
+            break
+            ;;
+        n | N)
+            FLASH_MAINLINE_UBOOT=0
+            break
+            ;;
         esac
     done
 fi
 
-if  [[ "${FLASH_MAINLINE_UBOOT}" -eq "1" ]]; then
+if [[ "${FLASH_MAINLINE_UBOOT}" -eq "1" ]]; then
     echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ]"
     dd if=${P2}${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=444 conv=fsync
     dd if=${P2}${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
@@ -574,13 +584,13 @@ else
 fi
 
 # move /etc/config/balance_irq to /etc/balance_irq
-[ -f  "./etc/config/balance_irq" ] && mv ./etc/config/balance_irq  ./etc/
+[ -f "./etc/config/balance_irq" ] && mv ./etc/config/balance_irq ./etc/
 
 echo "Create etc snapshot -> .snapshots/etc-001"
 btrfs subvolume snapshot -r etc .snapshots/etc-001
 
 cd ${WORK_DIR}
- 
+
 #echo -n "umount /boot ... "
 #umount -f /boot
 #if [ $? -ne 0 ];then
@@ -596,7 +606,7 @@ cd ${WORK_DIR}
 #echo "reformat ${BOOT_PATH} ..."
 #if mkfs.fat -n "${LB_PRE}BOOT" -F 32 ${BOOT_PATH} 2>/dev/null;then
 #    echo -n "mount /boot ..."
-#    mount -t vfat -o "errors=remount-ro" ${BOOT_PATH} /boot 
+#    mount -t vfat -o "errors=remount-ro" ${BOOT_PATH} /boot
 #    if [ $? -eq 0 ];then
 #        echo "ok"
 #    else
@@ -615,7 +625,7 @@ echo "Delete the old boot file ..."
 rm -rf * && sync
 
 echo "Copy the new boot file ... "
-(cd ${P1} && tar cf - . ) | tar xf - 2>/dev/null
+(cd ${P1} && tar cf - .) | tar xf - 2>/dev/null
 sync
 
 if [ -f ${P1}/uInitrd ]; then
@@ -659,14 +669,14 @@ else
     exit 1
 fi
 
-if [ ${ROOT_DISK_TYPE} == "EMMC" ];then
+if [ ${ROOT_DISK_TYPE} == "EMMC" ]; then
     rm -f s905_autoscript* aml_autoscript*
     mv -f boot-emmc.ini boot.ini
     mv -f boot-emmc.cmd boot.cmd
     mv -f boot-emmc.scr boot.scr
 fi
 
-if  [ ${K510} -eq 1 ]; then
+if [ ${K510} -eq 1 ]; then
     if [ -f "u-boot.ext" ]; then
         cp -vf u-boot.ext u-boot.emmc
     elif [ -f ${P1}/${UBOOT_OVERLOAD} ]; then
@@ -680,15 +690,15 @@ fi
 sync
 
 echo "Update boot parameters ... "
-if  [ -f /tmp/uEnv.txt ]; then
-    lines=$(wc -l < /tmp/uEnv.txt)
-    lines=$(( lines - 1 ))
-    head -n $lines /tmp/uEnv.txt > uEnv.txt
-    cat >> uEnv.txt <<EOF
+if [ -f /tmp/uEnv.txt ]; then
+    lines=$(wc -l </tmp/uEnv.txt)
+    lines=$((lines - 1))
+    head -n $lines /tmp/uEnv.txt >uEnv.txt
+    cat >>uEnv.txt <<EOF
 APPEND=root=UUID=${NEW_ROOT_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 else
-    cat > uEnv.txt <<EOF
+    cat >uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
 FDT=${CUR_FDTFILE}
@@ -709,4 +719,3 @@ echo "Successfully updated, automatic restarting..."
 sleep 3
 reboot
 exit 0
-

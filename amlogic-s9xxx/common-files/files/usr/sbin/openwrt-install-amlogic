@@ -23,10 +23,10 @@ AUTO_MAINLINE_UBOOT=${1}
 # When there is no input parameter, select manually
 SPECIFY_SOC=""
 SPECIFY_DTB=""
-if  [[ -n "$(echo ${2} | sed -n "/^[0-9]\+$/p")" ]]; then
+if [[ -n "$(echo ${2} | sed -n "/^[0-9]\+$/p")" ]]; then
     SPECIFY_SOC=${2}
-    if  [[ "${2}" -eq "99" ]]; then
-        if  [[ -n "${3}" ]]; then
+    if [[ "${2}" -eq "99" ]]; then
+        if [[ -n "${3}" ]]; then
             SPECIFY_DTB=${3}
         else
             echo "Please enter the DTB file name!"
@@ -90,7 +90,7 @@ U_BOOT_EXT=0
 
 # box model database
 # The field separator is :
-# " " or "" or NA or NULL means this field is null 
+# " " or "" or NA or NULL means this field is null
 # The fields list:
 # 1.  id
 # 2.  model name
@@ -103,7 +103,7 @@ U_BOOT_EXT=0
 #
 
 # allow use external modal database
-if [ -f "/etc/model_database.txt" ];then
+if [ -f "/etc/model_database.txt" ]; then
     model_database=$(cat /etc/model_database.txt)
 else
     model_database="
@@ -150,7 +150,7 @@ function display_database() {
 function search_model() {
     local id=$1
     local ret_count=$(echo "${model_database}" | awk -F ':' "\$1~/^$id\$/ {print \$0}" | wc -l)
-    if [ $ret_count -eq 1 ];then
+    if [ $ret_count -eq 1 ]; then
         echo "${model_database}" | awk -F ':' "\$1~/^$id\$/ {print \$0}"
     fi
 }
@@ -165,19 +165,19 @@ echo "--------------------------------------------------------------------------
 if [[ -n "${SPECIFY_SOC}" ]]; then
     boxtype=${SPECIFY_SOC}
 else
-    echo  -n "Please choose: "
-    read  boxtype
+    echo -n "Please choose: "
+    read boxtype
 fi
 
-if [ "$boxtype" == "99" ];then
-     FDTFILE=${SPECIFY_DTB}
-     UBOOT_OVERLOAD=""
-     MAINLINE_UBOOT=""
-     ANDROID_UBOOT=""
-     AMLOGIC_SOC=""
+if [ "$boxtype" == "99" ]; then
+    FDTFILE=${SPECIFY_DTB}
+    UBOOT_OVERLOAD=""
+    MAINLINE_UBOOT=""
+    ANDROID_UBOOT=""
+    AMLOGIC_SOC=""
 else
     ret=$(search_model $boxtype)
-    if [ "$ret" == "" ];then
+    if [ "$ret" == "" ]; then
         echo "Input error, exit!"
         exit 1
     fi
@@ -187,19 +187,19 @@ else
     # 6.  MAINLINE_UBOOT
     # 7.  ANDROID_UBOOT
     AMLOGIC_SOC=$(echo "$ret" | awk -F ':' '{print $3}' | perl -pe 's/NA//;s/NULL//;s/\s+//g;')
-    FDTFILE=$(echo "$ret" | awk -F ':' '{print $4}' | perl -pe 's/NA//;s/NULL//;s/\s+//g;' )
+    FDTFILE=$(echo "$ret" | awk -F ':' '{print $4}' | perl -pe 's/NA//;s/NULL//;s/\s+//g;')
     UBOOT_OVERLOAD=$(echo "$ret" | awk -F ':' '{print $5}' | perl -pe 's/NA//;s/NULL//;s/\s+//g;')
-    MAINLINE_UBOOT=$(echo "$ret" | awk -F ':'  '{print $6}' | perl -pe 's/NA//;s/NULL//;s/\s+//g;')
+    MAINLINE_UBOOT=$(echo "$ret" | awk -F ':' '{print $6}' | perl -pe 's/NA//;s/NULL//;s/\s+//g;')
     ANDROID_UBOOT=$(echo "$ret" | awk -F ':' '{print $7}' | perl -pe 's/NA//;s/NULL//;s/\s+//g;')
 fi
 
-if [ "$FDTFILE" == "" ];then
+if [ "$FDTFILE" == "" ]; then
     cat <<EOF
 Please enter the .dtb file name of your box, do not include the path.
 For example: $DEFAULT_FDTFILE
 EOF
-    echo  "Enter the .dtb File name:"
-    read  CUST_FDTFILE
+    echo "Enter the .dtb File name:"
+    read CUST_FDTFILE
     FDTFILE=$CUST_FDTFILE
     UBOOT_OVERLOAD=""
     MAINLINE_UBOOT=""
@@ -209,7 +209,7 @@ fi
 
 echo -e "FDT Value [ ${FDTFILE} ]"
 
-if [  ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
+if [ ! -f "/boot/dtb/amlogic/${FDTFILE}" ]; then
     echo "/boot/dtb/amlogic/${FDTFILE} does not exist!"
     echo "You can download the .dtb file from [ https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb ]"
     echo "Copy it to [ /boot/dtb/amlogic/ ]."
@@ -224,13 +224,13 @@ echo -e "This Kernel [ ${MODULES_NOW} ]"
 
 k510_ver=${VERSION_NOW%%.*}
 k510_maj=${VERSION_NOW##*.}
-if  [ "${k510_ver}" -eq "5" ];then
-    if  [ "${k510_maj}" -ge "10" ];then
+if [ "${k510_ver}" -eq "5" ]; then
+    if [ "${k510_maj}" -ge "10" ]; then
         K510="1"
     else
         K510="0"
     fi
-elif [ "${k510_ver}" -gt "5" ];then
+elif [ "${k510_ver}" -gt "5" ]; then
     K510="1"
 else
     K510="0"
@@ -290,11 +290,11 @@ p=$(lsblk -l | grep -e "${EMMC_NAME}p" | wc -l)
 echo "A total of [ $p ] old partitions on EMMC will be deleted"
 >/tmp/fdisk.script
 while [ $p -ge 1 ]; do
-    echo "d" >> /tmp/fdisk.script
+    echo "d" >>/tmp/fdisk.script
     if [ $p -gt 1 ]; then
-      echo "$p" >> /tmp/fdisk.script
+        echo "$p" >>/tmp/fdisk.script
     fi
-    p=$((p-1))
+    p=$((p - 1))
 done
 
 # you can change ROOT size(MB) >= 320
@@ -320,21 +320,21 @@ else
     BLANK4=0
 fi
 
-DST_TOTAL_MB=$((EMMC_SIZE/1024/1024))
+DST_TOTAL_MB=$((EMMC_SIZE / 1024 / 1024))
 
-start1=$(( BLANK1 * 2048 ))
-end1=$(( start1 + (BOOT * 2048) - 1 ))
+start1=$((BLANK1 * 2048))
+end1=$((start1 + (BOOT * 2048) - 1))
 
-start2=$(( (BLANK2 * 2048) + end1 + 1 ))
-end2=$(( start2 + (ROOT1 * 2048) -1 ))
+start2=$(((BLANK2 * 2048) + end1 + 1))
+end2=$((start2 + (ROOT1 * 2048) - 1))
 
-start3=$(( (BLANK3 * 2048) + end2 + 1 ))
-end3=$(( start3 + (ROOT2 * 2048) -1 ))
+start3=$(((BLANK3 * 2048) + end2 + 1))
+end3=$((start3 + (ROOT2 * 2048) - 1))
 
-start4=$(( (BLANK4 * 2048) + end3 + 1 ))
-end4=$(( DST_TOTAL_MB * 2048 -1 ))
+start4=$(((BLANK4 * 2048) + end3 + 1))
+end4=$((DST_TOTAL_MB * 2048 - 1))
 
-cat >> /tmp/fdisk.script <<EOF
+cat >>/tmp/fdisk.script <<EOF
 n
 p
 1
@@ -369,7 +369,7 @@ t
 w
 EOF
 
-fdisk /dev/${EMMC_NAME} < /tmp/fdisk.script 2>/dev/null
+fdisk /dev/${EMMC_NAME} </tmp/fdisk.script 2>/dev/null
 if [ $? -ne 0 ]; then
     echo "The fdisk partition fails, Please try again."
     dd if=/root/BackupOldBootloader.img of=/dev/${EMMC_NAME} conf=fsync && sync
@@ -393,7 +393,7 @@ dd if=/dev/zero of=/dev/${EMMC_NAME} bs=1M count=1 seek=$seek conv=fsync
 
 #Mainline U-BOOT detection
 FLASH_MAINLINE_UBOOT=0
-if  [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
+if [[ -n "${MAINLINE_UBOOT}" && -f "${MAINLINE_UBOOT}" ]]; then
     cat <<EOF
 ----------------------------------------------------------------------------------
 Found an available mainline bootloader (Mainline u-boot), you can flash into EMMC.
@@ -403,28 +403,30 @@ EOF
         # For [luci-app-amlogic] input parameter: SOC & DTB
         # When there is no input parameter, select manually
         if [[ "${AUTO_MAINLINE_UBOOT}" == "yes" ]]; then
-            if  [[ "${K510}" -eq "1" ]]; then
+            if [[ "${K510}" -eq "1" ]]; then
                 yn="y"
             else
                 yn="n"
             fi
         elif [[ "${AUTO_MAINLINE_UBOOT}" == "no" ]]; then
-                yn="n"
+            yn="n"
         else
             read -p "Please choose whether to write the mainline bootloader to EMMC?  y/n " yn
         fi
         case $yn in
-            y|Y) FLASH_MAINLINE_UBOOT=1
-                break
-                ;;
-            n|N) FLASH_MAINLINE_UBOOT=0
-                break
-                ;;
+        y | Y)
+            FLASH_MAINLINE_UBOOT=1
+            break
+            ;;
+        n | N)
+            FLASH_MAINLINE_UBOOT=0
+            break
+            ;;
         esac
     done
 fi
 
-if  [[ "${FLASH_MAINLINE_UBOOT}" -eq "1" ]]; then
+if [[ "${FLASH_MAINLINE_UBOOT}" -eq "1" ]]; then
     echo -e "Write Mainline bootloader: [ ${MAINLINE_UBOOT} ]"
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=1 count=444 conv=fsync
     dd if=${MAINLINE_UBOOT} of=/dev/${EMMC_NAME} bs=512 skip=1 seek=1 conv=fsync
@@ -477,7 +479,7 @@ while [ $i -le $max_try ]; do
     if [ "$mnt" == "" ]; then
         if [ $i -lt $max_try ]; then
             echo "Not mounted successfully, try again ..."
-            i=$((i+1))
+            i=$((i + 1))
         else
             echo "Cannot mount the boot file system, give up!"
             exit 1
@@ -491,7 +493,7 @@ while [ $i -le $max_try ]; do
         sync
 
         echo "Edit uEnv.txt ..."
-        cat > uEnv.txt <<EOF
+        cat >uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
 FDT=/dtb/amlogic/${FDTFILE}
@@ -500,10 +502,10 @@ EOF
 
         rm -f s905_autoscript* aml_autoscript*
 
-        if  [ ${K510} -eq 1 ]; then
-            if  [ -f ${UBOOT_OVERLOAD} ]; then
+        if [ ${K510} -eq 1 ]; then
+            if [ -f ${UBOOT_OVERLOAD} ]; then
                 cp -f -v ${UBOOT_OVERLOAD} u-boot.emmc
-	    elif [ -f "u-boot.ext" ];then
+            elif [ -f "u-boot.ext" ]; then
                 cp -f -v u-boot.ext u-boot.emmc
             fi
         fi
@@ -530,7 +532,7 @@ while [ $i -le $max_try ]; do
     if [ "$mnt" == "" ]; then
         if [ $i -lt $max_try ]; then
             echo "Not mounted successfully, try again ..."
-            i=$((i+1))
+            i=$((i + 1))
         else
             echo "Cannot mount rootfs file system, give up!"
             exit 1
@@ -558,23 +560,23 @@ while [ $i -le $max_try ]; do
 
         echo "Update the relevant parameters of flippy-openwrt-release"
         sed -i '/FDTFILE/d' etc/flippy-openwrt-release 2>/dev/null
-        echo "FDTFILE='${FDTFILE}'" >> etc/flippy-openwrt-release 2>/dev/null
+        echo "FDTFILE='${FDTFILE}'" >>etc/flippy-openwrt-release 2>/dev/null
 
         sed -i '/UBOOT_OVERLOAD/d' etc/flippy-openwrt-release 2>/dev/null
-        echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >> etc/flippy-openwrt-release 2>/dev/null
+        echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>etc/flippy-openwrt-release 2>/dev/null
 
         sed -i '/MAINLINE_UBOOT/d' etc/flippy-openwrt-release 2>/dev/null
-        echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
+        echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >>etc/flippy-openwrt-release 2>/dev/null
 
         sed -i '/ANDROID_UBOOT/d' etc/flippy-openwrt-release 2>/dev/null
-        echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >> etc/flippy-openwrt-release 2>/dev/null
+        echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >>etc/flippy-openwrt-release 2>/dev/null
 
         sed -i '/SOC/d' etc/flippy-openwrt-release 2>/dev/null
-        echo "SOC='${AMLOGIC_SOC}'" >> etc/flippy-openwrt-release 2>/dev/null
+        echo "SOC='${AMLOGIC_SOC}'" >>etc/flippy-openwrt-release 2>/dev/null
         echo "Update complete."
         sync
-        
-	cat > etc/docker/daemon.json <<EOF
+
+        cat >etc/docker/daemon.json <<EOF
 {
   "bip": "172.31.0.1/24",
   "data-root": "/mnt/${EMMC_NAME}p4/docker/",
@@ -599,21 +601,21 @@ EOF
         #rm -f openwrt-install-amlogic openwrt-update-amlogic
         cd /mnt/${EMMC_NAME}p2/etc/rc.d
         ln -sf ../init.d/dockerd S99dockerd
-	rm -f S??shortcut-fe
-	if grep "sfe_flow '1'" ../config/turboacc >/dev/null;then
-	    if find ../../lib/modules -name 'shortcut-fe-cm.ko';then
+        rm -f S??shortcut-fe
+        if grep "sfe_flow '1'" ../config/turboacc >/dev/null; then
+            if find ../../lib/modules -name 'shortcut-fe-cm.ko'; then
                 ln -sf ../init.d/shortcut-fe S99shortcut-fe
-	    fi
-	fi
+            fi
+        fi
         cd /mnt/${EMMC_NAME}p2/etc
-        cat > fstab <<EOF
+        cat >fstab <<EOF
 UUID=${ROOTFS1_UUID} / btrfs compress=zstd 0 1
 LABEL=EMMC_BOOT /boot vfat defaults 0 2
 #tmpfs /tmp tmpfs defaults,nosuid 0 0
 EOF
 
         cd /mnt/${EMMC_NAME}p2/etc/config
-        cat > fstab <<EOF
+        cat >fstab <<EOF
 config  global
         option anon_swap '0'
         option anon_mount '1'
@@ -640,8 +642,8 @@ config  mount
 EOF
 
         echo -n "Create initial etc snapshot -> .snapshots/etc-000"
-        cd /mnt/${EMMC_NAME}p2 && \
-        btrfs subvolume snapshot -r etc .snapshots/etc-000
+        cd /mnt/${EMMC_NAME}p2 &&
+            btrfs subvolume snapshot -r etc .snapshots/etc-000
         sync
 
         cd /
@@ -670,22 +672,22 @@ EOF
     read TARGET_SHARED_FSTYPE
 fi
 case $TARGET_SHARED_FSTYPE in
-    2 | btrfs)
-        mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
-        mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-        ;;
-    3 | f2fs)
-        mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
-        mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-        ;;
-    4 | xfs)
-        mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
-        mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-        ;;
-    *)
-        mkfs.ext4 -F -L EMMC_SHARED  /dev/${EMMC_NAME}p4 >/dev/null
-        mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
-        ;;
+2 | btrfs)
+    mkfs.btrfs -f -L EMMC_SHARED -m single /dev/${EMMC_NAME}p4 >/dev/null
+    mount -t btrfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+    ;;
+3 | f2fs)
+    mkfs.f2fs -f -l EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+    mount -t f2fs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+    ;;
+4 | xfs)
+    mkfs.xfs -f -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+    mount -t xfs /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+    ;;
+*)
+    mkfs.ext4 -F -L EMMC_SHARED /dev/${EMMC_NAME}p4 >/dev/null
+    mount -t ext4 /dev/${EMMC_NAME}p4 /mnt/${EMMC_NAME}p4
+    ;;
 esac
 mkdir -p /mnt/${EMMC_NAME}p4/docker /mnt/${EMMC_NAME}p4/AdGuardHome/data
 sync

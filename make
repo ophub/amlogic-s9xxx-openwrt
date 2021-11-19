@@ -583,8 +583,8 @@ Options:
     -k, --kernelversion    Set the kernel version, which must be in the "kernel" directory
       , -k all             Build all the kernel version
       , -k latest          Build the latest kernel version
-      , -k 5.4.80          Specify a single kernel for compilation
-      , -k 5.4.80_5.10.60  Specify multiple cores, use "_" to connect
+      , -k 5.4.160         Specify a single kernel for compilation
+      , -k 5.4.160_5.10.80 Specify multiple cores, use "_" to connect
 
     -a, --autokernel       Whether to auto update to the latest kernel of the same series
       , -a true            Auto update to the latest kernel

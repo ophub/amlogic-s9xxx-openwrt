@@ -183,7 +183,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 - `sudo ./make -d -b s905x3_s905d -k 5.10.80_5.4.160`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
 - `sudo ./make -d`: Compile latest kernel versions of openwrt for all SoC with the default configuration.
 - `sudo ./make -d -b s905x3 -k 5.4.160 -s 1024`: Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation.
-- `sudo ./make -d -b s905x3 -v beta -k 5.7.2`: Use the default configuration, specify the model, specify the version branch, and specify the kernel for packaging.
+- `sudo ./make -d -b s905x3 -v beta -k 5.7.19`: Use the default configuration, specify the model, specify the version branch, and specify the kernel for packaging.
 - `sudo ./make -d -b s905x3_s905d`: Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels.
 - `sudo ./make -d -k 5.10.80_5.4.160`: Use the default configuration. Specify multiple cores, use `_` to connect.
 - `sudo ./make -d -k 5.10.80_5.4.160 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.

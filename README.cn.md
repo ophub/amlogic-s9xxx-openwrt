@@ -54,9 +54,46 @@ openwrt-tf
 openwrt-swap 1
 ```
 
+## 打包命令的相关参数说明
+
+| 参数 | 含义 | 说明 |
+| ---- | ---- | ---- |
+| -d | Defaults | 使用默认配置 |
+| -b | Build | 指定机顶盒型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 可以指定的型号有: `s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s922x`, `s922x-n2`, `s912`。说明：`s922x-n2` 是 `s922x-odroid-n2` |
+| -v | Version | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，如 `-v stable` 。指定的名称须与分支目录名称相同。默认使用 `stable` 分支版本。 |
+| -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.4.160` . 多个内核使用 `_` 进行连接，如 `-k 5.10.80_5.4.160` |
+| -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.4.160 的 5.4 同系列是否有更新的版本，如有 5.4.160 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
+| -s | Size | 对固件的大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
+| -h | help | 展示帮助文档. |
+
+- `sudo ./make -d -b s905x3 -k 5.4.160` : 推荐使用. 使用默认配置进行相关内核打包。
+- `sudo ./make -d -b s905x3_s905d -k 5.10.80_5.4.160` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
+- `sudo ./make -d` : 使用默认配置，使用内核库中的最新内核包，对全部型号的机顶盒进行打包。
+- `sudo ./make -d -b s905x3 -k 5.4.160 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为1024M。
+- `sudo ./make -d -b s905x3 -v beta -k 5.7.19` : 使用默认配置，指定型号，指定版本分支，指定内核进行打包。
+- `sudo ./make -d -b s905x3_s905d`  使用默认配置，对多个型号的机顶盒进行全部内核打包, 使用 `_` 进行多型号连接。
+- `sudo ./make -d -k 5.10.80_5.4.160` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。
+- `sudo ./make -d -k 5.10.80_5.4.160 -a true` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
+- `sudo ./make -d -k latest` : 使用默认配置，最新的内核包，对全部型号的机顶盒进行打包。
+- `sudo ./make -d -s 1024 -k 5.4.160` : 使用默认配置，设置固件大小为 1024M, 并指定内核为 5.4.160 ，对全部型号机顶盒进行打包。
+- `sudo ./make -h` : 显示帮助文档。
+- `sudo ./make` : 如果你对脚本很熟悉，可以在本地编译时，这样进行问答式参数配置。
+
 ## OpenWrt 固件编译及打包说明
 
 支持多种方式进行固件编译和打包，你可以选择任意一种你喜欢的方式进行使用。
+
+- ### 本地化打包
+1. 安装必要的软件包（如 Ubuntu 20.04 LTS 用户）
+```yaml
+sudo apt-get update -y
+sudo apt-get full-upgrade -y
+sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
+```
+2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
+3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。
+4. 将内核包按对应的版本号命名如 `5.4.160` 放入 `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` 目录下。
+5. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make` 进行选择设置，打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
 
 - ### Github.com 一站式编译和打包
 
@@ -79,6 +116,31 @@ openwrt-swap 1
 ```
 
 输出的变量 ${{ env.PACKAGED_OUTPUTPATH }} 即打包文件所在路径。
+
+- ### 使用 Github.com 的 Releases 中已有的 rootfs 文件直接进行固件打包
+
+如果你仓库的 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中已经有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你可以直接进行打包.
+
+- Releases中的 `tag_name` 标签必须以 `openwrt_s9xxx_.*` 的样式进行命名。
+- `openwrt-armvirt-64-default-rootfs.tar.gz` 是打包要使用的文件。
+
+相关代码可以查看 [use-releases-file-to-packaging.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-file-to-packaging.yml)
+
+```yaml
+- name: Build OpenWrt firmware
+  id: build
+  run: |
+    [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
+    curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
+    [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
+    sudo chmod +x make
+    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.80_5.4.160
+    echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
+    echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+    echo "::set-output name=status::success"
+```
+
+这个功能一般用于更换内核快速打包，如果你的仓库中有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你想使用其他内核版本的 OpenWrt 时，就可以直接指定相关内核进行快速打包了，而不用再进行漫长的固件编译等待。仓库里收藏了 `Flippy` 的很多内核 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 和 Amlogic 的 dtb 文件 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) ，你可以随时调用进行编译。
 
 - ### 仅单独引入 GitHub Action 进行固件打包
 
@@ -136,68 +198,6 @@ openwrt-swap 1
       This is OpenWrt firmware for Amlogic S9xxx STB.
       More information ...
 ```
-
-- ### 使用 Github.com 的 Releases 中已有的 rootfs 文件直接进行固件打包
-
-如果你仓库的 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中已经有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你可以直接进行打包.
-
-- Releases中的 `tag_name` 标签必须以 `openwrt_s9xxx_.*` 的样式进行命名。
-- `openwrt-armvirt-64-default-rootfs.tar.gz` 是打包要使用的文件。
-
-相关代码可以查看 [use-releases-file-to-packaging.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-file-to-packaging.yml)
-
-```yaml
-- name: Build OpenWrt firmware
-  id: build
-  run: |
-    [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-    curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
-    [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
-    sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.80_5.4.160
-    echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-    echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
-    echo "::set-output name=status::success"
-```
-
-这个功能一般用于更换内核快速打包，如果你的仓库中有 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件，你想使用其他内核版本的 OpenWrt 时，就可以直接指定相关内核进行快速打包了，而不用再进行漫长的固件编译等待。仓库里收藏了 `Flippy` 的很多内核 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 和 Amlogic 的 dtb 文件 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) ，你可以随时调用进行编译。
-
-- ### 本地化打包
-1. 安装必要的软件包（如 Ubuntu 20.04 LTS 用户）
-```yaml
-sudo apt-get update -y
-sudo apt-get full-upgrade -y
-sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
-```
-2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
-3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。
-4. 将内核包按对应的版本号命名如 `5.4.160` 放入 `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` 目录下。
-5. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make` 进行选择设置，打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
-
-## 打包命令的相关参数说明
-
-- `sudo ./make -d -b s905x3 -k 5.4.160` : 推荐使用. 使用默认配置进行相关内核打包。
-- `sudo ./make -d -b s905x3_s905d -k 5.10.80_5.4.160` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
-- `sudo ./make -d` : 使用默认配置，使用内核库中的最新内核包，对全部型号的机顶盒进行打包。
-- `sudo ./make -d -b s905x3 -k 5.4.160 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为1024M。
-- `sudo ./make -d -b s905x3 -v beta -k 5.7.19` : 使用默认配置，指定型号，指定版本分支，指定内核进行打包。
-- `sudo ./make -d -b s905x3_s905d`  使用默认配置，对多个型号的机顶盒进行全部内核打包, 使用 `_` 进行多型号连接。
-- `sudo ./make -d -k 5.10.80_5.4.160` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。
-- `sudo ./make -d -k 5.10.80_5.4.160 -a true` : 使用默认配置，指定多个内核，进行全部型号机顶盒进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
-- `sudo ./make -d -k latest` : 使用默认配置，最新的内核包，对全部型号的机顶盒进行打包。
-- `sudo ./make -d -s 1024 -k 5.4.160` : 使用默认配置，设置固件大小为 1024M, 并指定内核为 5.4.160 ，对全部型号机顶盒进行打包。
-- `sudo ./make -h` : 显示帮助文档。
-- `sudo ./make` : 如果你对脚本很熟悉，可以在本地编译时，这样进行问答式参数配置。
-
-| 参数 | 含义 | 说明 |
-| ---- | ---- | ---- |
-| -d | Defaults | 使用默认配置 |
-| -b | Build | 指定机顶盒型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 可以指定的型号有: `s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s922x`, `s922x-n2`, `s912`。说明：`s922x-n2` 是 `s922x-odroid-n2` |
-| -v | Version | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，如 `-v stable` 。指定的名称须与分支目录名称相同。默认使用 `stable` 分支版本。 |
-| -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.4.160` . 多个内核使用 `_` 进行连接，如 `-k 5.10.80_5.4.160` |
-| -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.4.160 的 5.4 同系列是否有更新的版本，如有 5.4.160 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
-| -s | Size | 对固件的大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
-| -h | help | 展示帮助文档. |
 
 ## 编译自定义内核
 

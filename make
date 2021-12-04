@@ -741,7 +741,7 @@ for b in ${build_openwrt[*]}; do
         {
             echo -n "(${k}.${i}) Start packaging OpenWrt [ ${b} - ${x} ]. "
 
-            now_remaining_space=$(df -hT ${PWD} | grep '/dev/' | awk '{print $5}' | sed 's/.$//')
+            now_remaining_space=$(df -hT ${PWD} | grep '/dev/' | awk '{print $5}' | sed 's/.$//' | awk -F "." '{print $1}')
             if [[ "${now_remaining_space}" -le "2" ]]; then
                 echo "Remaining space is less than 2G, exit this packaging. \n"
                 break 2

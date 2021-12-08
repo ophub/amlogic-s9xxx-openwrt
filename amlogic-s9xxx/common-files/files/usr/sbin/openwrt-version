@@ -8,3 +8,4 @@
 cat ../../etc/openwrt_release
 cat ../../etc/flippy-openwrt-release
 cat ../../proc/version
+

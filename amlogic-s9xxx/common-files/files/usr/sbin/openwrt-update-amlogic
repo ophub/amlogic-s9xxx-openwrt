@@ -473,6 +473,9 @@ if [[ "${BR_FLAG}" -eq "1" && -n "${BACKUP_LIST}" ]]; then
     # Restore fstab
     cp -f .snapshots/etc-000/fstab ./etc/fstab
     cp -f .snapshots/etc-000/config/fstab ./etc/config/fstab
+    # 还原 luci
+    cp -f .snapshots/etc-000/config/luci ./etc/config/luci
+
     sync
     echo "Restore configuration information complete."
 fi
@@ -487,13 +490,21 @@ EOF
 
 sed -e 's/ttyAMA0/ttyAML0/' -i ./etc/inittab
 sed -e 's/ttyS0/tty0/' -i ./etc/inittab
-
+sss=$(date +%s)
+ddd=$((sss / 86400))
+sed -e "s/:0:0:99999:7:::/:${ddd}:0:99999:7:::/" -i ./etc/shadow
+# Fix the problem of repeatedly adding amule entries after each upgrade
+sed -e "/amule:x:/d" -i ./etc/shadow
 # Fix the problem of repeatedly adding sshd entries after each upgrade of dropbear
 sed -e "/sshd:x:/d" -i ./etc/shadow
-if [ $(grep "sshd:x:22:22" ./etc/passwd | wc -l) -eq 0 ]; then
-    echo "sshd:x:22:22:sshd:/var/run/sshd:/bin/false" >>./etc/passwd
-    echo "sshd:x:22:sshd" >>./etc/group
-    echo "sshd:x:${ddd}:0:99999:7:::" >>./etc/shadow
+if ! grep "sshd:x:22:sshd" ./etc/group >/dev/null;then
+     echo "sshd:x:22:sshd" >> ./etc/group
+fi
+if ! grep "sshd:x:22:22:sshd:" ./etc/passwd >/dev/null;then
+     echo "sshd:x:22:22:sshd:/var/run/sshd:/bin/false" >> ./etc/passwd
+fi
+if ! grep "sshd:x:" ./etc/shadow >/dev/null;then
+     echo "sshd:x:${ddd}:0:99999:7:::" >> ./etc/shadow
 fi
 
 if [ "${BR_FLAG}" -eq "1" ]; then

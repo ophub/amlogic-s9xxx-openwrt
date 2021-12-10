@@ -254,19 +254,53 @@ fi
 if [ -f ${P2}/etc/init.d/dockerman ] && [ -f ${P2}/etc/config/dockerd ];then
 
     flg=0
-    if ! uci get dockerd.globals.alt_config_file >/dev/null 2>&1;then
-        flg=1
-    else
-        acf=$(uci get dockerd.globals.alt_config_file)
-	if [ "$acf" == "" ];then
-            flg=1
-        fi
+    # get current docker data root
+    data_root=$(uci get dockerd.globals.data_root 2>/dev/null)
+    if [ "$data_root" == "" ];then
+         flg=1
+	 # get current config from /etc/docker/daemon.json
+         if [ -f "/etc/docker/daemon.json" ] && [ -x "/usr/bin/jq" ];then
+	     data_root=$(jq -r '."data-root"' /etc/docker/daemon.json)
+
+	     bip=$(jq -r '."bip"' /etc/docker/daemon.json)
+	     [ "$bip" == "null" ] && bip="172.31.0.1/24"
+
+	     log_level=$(jq -r '."log-level"' /etc/docker/daemon.json)
+	     [ "$log_level" == "null" ] && log_level="warn"
+
+	     _iptables=$(jq -r '."iptables"' /etc/docker/daemon.json)
+	     [ "$_iptables" == "null" ] && _iptables="true"
+
+	     registry_mirrors=$(jq -r '."registry-mirrors"[]' /etc/docker/daemon.json 2>/dev/null)
+         fi
+    fi
+
+    if [ "$data_root" == "" ];then
+         data_root="/opt/docker/" # the default data root
+    fi
+
+    if ! uci get dockerd.globals >/dev/null 2>&1;then
+        uci set dockerd.globals='globals'
+        uci commit
+    fi
+
+    # delete alter config , use inner config
+    if uci get dockerd.globals.alt_config_file >/dev/null 2>&1;then
+        uci delete dockerd.globals.alt_config_file
+        uci commit
     fi
 
     if [ $flg -eq 1 ];then
-        uci set dockerd.globals='globals'
-        uci set dockerd.globals.alt_config_file='/etc/docker/daemon.json'
-	uci set dockerd.globals.auto_start='1'
+	uci set dockerd.globals.data_root=$data_root
+	[ "$bip" != "" ] && uci set dockerd.globals.bip=$bip
+	[ "$log_level" != "" ] && uci set dockerd.globals.log_level=$log_level
+	[ "$_iptables" != "" ] && uci set dockerd.globals.iptables=$_iptables
+	if [ "$registry_mirrors" != "" ];then
+            for reg in $registry_mirrors;do
+                uci add_list dockerd.globals.registry_mirrors=$reg
+	    done
+        fi
+        uci set dockerd.globals.auto_start='1'
         uci commit
     fi
 fi
@@ -558,18 +592,22 @@ if [ -x ./usr/sbin/balethirq.pl ]; then
         sed -e "/exit/i\/usr/sbin/balethirq.pl" -i ./etc/rc.local
     fi
 fi
-mv ./etc/rc.local ./etc/rc.local.orig
 
-cat >./etc/rc.local <<EOF
-if [ ! -f /etc/rc.d/*dockerd ]; then
+mv ./etc/rc.local ./etc/rc.local.orig
+cat > "./etc/rc.local" <<EOF
+if ! ls /etc/rc.d/S??dockerd >/dev/null 2>&1;then
     /etc/init.d/dockerd enable
     /etc/init.d/dockerd start
 fi
+if ! ls /etc/rc.d/S??dockerman >/dev/null 2>&1 && [ -f /etc/init.d/dockerman ];then
+    /etc/init.d/dockerman enable
+    /etc/init.d/dockerman start
+fi
 mv /etc/rc.local.orig /etc/rc.local
+chmod 755 /etc/rc.local
 exec /etc/rc.local
 exit
 EOF
-
 chmod 755 ./etc/rc.local*
 
 #Mainline U-BOOT detection

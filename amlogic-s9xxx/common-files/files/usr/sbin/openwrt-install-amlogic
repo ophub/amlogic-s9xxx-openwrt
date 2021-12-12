@@ -469,6 +469,7 @@ umount -f /mnt/${EMMC_NAME}p3 2>/dev/null
 
 # mount and copy
 echo "Wait for the boot file system to mount ... "
+ZSTD_LEVEL=6
 i=1
 max_try=10
 while [ $i -le $max_try ]; do
@@ -497,7 +498,7 @@ while [ $i -le $max_try ]; do
 LINUX=/zImage
 INITRD=/uInitrd
 FDT=/dtb/amlogic/${FDTFILE}
-APPEND=root=UUID=${ROOTFS1_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
+APPEND=root=UUID=${ROOTFS1_UUID} rootfstype=btrfs rootflags=compress=zstd:${ZSTD_LEVEL} console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 
         rm -f s905_autoscript* aml_autoscript*
@@ -526,7 +527,7 @@ echo "complete."
 echo "Wait for the rootfs file system to mount ... "
 i=1
 while [ $i -le $max_try ]; do
-    mount -t btrfs -o compress=zstd /dev/${EMMC_NAME}p2 /mnt/${EMMC_NAME}p2 2>/dev/null
+    mount -t btrfs -o compress=zstd:${ZSTD_LEVEL} /dev/${EMMC_NAME}p2 /mnt/${EMMC_NAME}p2 2>/dev/null
     sleep 2
     mnt=$(lsblk -l -o MOUNTPOINT | grep /mnt/${EMMC_NAME}p2)
     if [ "$mnt" == "" ]; then
@@ -610,7 +611,7 @@ EOF
         fi
         cd /mnt/${EMMC_NAME}p2/etc
         cat >fstab <<EOF
-UUID=${ROOTFS1_UUID} / btrfs compress=zstd 0 1
+UUID=${ROOTFS1_UUID} / btrfs compress=zstd:${ZSTD_LEVEL} 0 1
 LABEL=EMMC_BOOT /boot vfat defaults 0 2
 #tmpfs /tmp tmpfs defaults,nosuid 0 0
 EOF
@@ -631,7 +632,7 @@ config  mount
         option enabled '1'
         option enabled_fsck '1'
         option fstype 'btrfs'
-        option options 'compress=zstd'
+        option options 'compress=zstd:${ZSTD_LEVEL}'
 
 config  mount
         option target '/boot'

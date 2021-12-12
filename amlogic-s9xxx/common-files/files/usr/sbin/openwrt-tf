@@ -97,7 +97,7 @@ echo -e "${STEPS} Create extended partition ..."
 # Create the third partition
 mkdir -p /mnt/${PT_PRE}3 && sync
 mkfs.btrfs -f -L "${LB_PRE}ROOTFS2" "/dev/${PT_PRE}3"
-mount -t btrfs "/dev/${PT_PRE}3" "/mnt/${PT_PRE}3"
+mount -t btrfs -o compress=zstd:6 "/dev/${PT_PRE}3" "/mnt/${PT_PRE}3"
 # Create the fourth partition
 mkdir -p /mnt/${PT_PRE}4 && sync
 mkfs.ext4 -F -L "${LB_PRE}SHARED" "/dev/${PT_PRE}4"

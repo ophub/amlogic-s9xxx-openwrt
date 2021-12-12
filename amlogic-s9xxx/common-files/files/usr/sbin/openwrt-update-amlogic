@@ -242,7 +242,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Mount [ ${LOOP_DEV}p2 ] -> [ ${P2} ] ... "
-mount -t btrfs -o ro,compress=zstd ${LOOP_DEV}p2 ${P2}
+ZSTD_LEVEL=6
+mount -t btrfs -o ro,compress=zstd:${ZSTD_LEVEL} ${LOOP_DEV}p2 ${P2}
 if [ $? -ne 0 ]; then
     echo "Mount p2 [ ${LOOP_DEV}p2 ] failed!"
     umount -f ${P1}
@@ -385,7 +386,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Mount [ ${NEW_ROOT_PATH} ] -> [ ${NEW_ROOT_MP} ]"
-mount -t btrfs -o compress=zstd ${NEW_ROOT_PATH} ${NEW_ROOT_MP}
+mount -t btrfs -o compress=zstd:${ZSTD_LEVEL} ${NEW_ROOT_PATH} ${NEW_ROOT_MP}
 if [ $? -ne 0 ]; then
     echo "Mount [ ${NEW_ROOT_PATH} ] -> [ ${NEW_ROOT_MP} ] failed!"
     umount -f ${P1}
@@ -448,7 +449,7 @@ EOF
 fi
 
 cat >./etc/fstab <<EOF
-UUID=${NEW_ROOT_UUID} / btrfs compress=zstd 0 1
+UUID=${NEW_ROOT_UUID} / btrfs compress=zstd:${ZSTD_LEVEL} 0 1
 LABEL=${LB_PRE}BOOT /boot vfat defaults 0 2
 #tmpfs /tmp tmpfs defaults,nosuid 0 0
 EOF
@@ -468,7 +469,7 @@ config  mount
         option enabled '1'
         option enabled_fsck '1'
         option fstype 'btrfs'
-        option options 'compress=zstd'
+        option options 'compress=zstd:${ZSTD_LEVEL}'
 
 config  mount
         option target '/boot'
@@ -768,14 +769,14 @@ if [ -f /tmp/uEnv.txt ]; then
     lines=$((lines - 1))
     head -n $lines /tmp/uEnv.txt >uEnv.txt
     cat >>uEnv.txt <<EOF
-APPEND=root=UUID=${NEW_ROOT_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
+APPEND=root=UUID=${NEW_ROOT_UUID} rootfstype=btrfs rootflags=compress=zstd:${ZSTD_LEVEL} console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 else
     cat >uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
 FDT=${CUR_FDTFILE}
-APPEND=root=UUID=${NEW_ROOT_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
+APPEND=root=UUID=${NEW_ROOT_UUID} rootfstype=btrfs rootflags=compress=zstd:${ZSTD_LEVEL} console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 fi
 sync

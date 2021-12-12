@@ -5,7 +5,8 @@
 # Copyright (C) 2021-- https://github.com/ophub/luci-app-amlogic
 #======================================================================
 
-VERSION="v1.1"
+VERSION="v1.2"
+ZSTD_LEVEL=6
 SNAPSHOT_PRESTR=".snapshots/"
 BACKUP_DIR="/.reserved"
 BACKUP_NAME="openwrt_config.tar.gz"
@@ -202,7 +203,7 @@ config mount
 EOF
 
     if [ "${ROOT_FSTYPE}" == "btrfs" ]; then
-        echo "	option options 'compress=zstd'" >>/etc/config/fstab
+        echo "	option options 'compress=zstd:${ZSTD_LEVEL}'" >>/etc/config/fstab
     fi
 
     cat >>/etc/config/fstab <<EOF

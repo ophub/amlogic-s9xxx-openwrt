@@ -46,13 +46,27 @@ After activating the remaining space, the kernel and OpenWrt system can be upgra
 
 - ### Create swap for openwrt system
 
-If you feel that the memory of the current box is not enough when you are using applications with a large memory footprint such as `docker`, you can create a `swap` virtual memory partition, Change the disk space of `/mnt/[mmcblk?p|sd?]4` A certain capacity is virtualized into memory for use. The unit of the input parameter of the following command is `GB`, and the default is `1`.
+If you feel that the memory of the current box is not enough when you are using applications with a large memory footprint such as `docker`, you can create a `swap` virtual memory partition, Change the disk space of `/mnt/*4` A certain capacity is virtualized into memory for use. The unit of the input parameter of the following command is `GB`, and the default is `1`.
 
 Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
 
 ```yaml
 openwrt-swap 1
 ```
+
+- ### Backup/restore the original EMMC system
+
+Supports backup/restore of the box's `EMMC` partition in `TF/SD/USB`. It is recommended that you back up the Android TV system that comes with the current box before installing the OpenWrt system in a brand new box, so that you can use it in the future when restoring the TV system.
+
+Please start the OpenWrt system from `TF/SD/USB`, Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
+
+```yaml
+openwrt-ddbr
+```
+
+According to the prompt, enter `b` to perform system backup, and enter `r` to perform system recovery.
+
+💡Tip: You must use the `/mnt/*4/` space to store the `BACKUP-arm-64-emmc.img.gz` backup file, Users who have not created the `TF/SD/USB` extended partition must first use the `openwrt-tf` command to create the extended partition.
 
 ## Detailed make compile command
 
@@ -179,7 +193,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 
 
 - Uploads OpenWrt Firmware to Actions:
- 
+
 ```yaml
 - name: Upload artifact to Actions
   uses: kittaakos/upload-artifact-as-is@master

@@ -1,5 +1,6 @@
 #!/bin/bash
 #======================================================================================
+# Copyright (C) 2021- https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2021- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
 # Description: Backup and restore the system in emmc.

@@ -2,49 +2,57 @@
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
-The method of Use GitHub Actions to compile OpenWrt, as well as many contents in this document, come from many technical innovators and resource sharers such as `P3TERX`, `Flippy`, `tuanqing`, etc. Because of the dedication of everyone, let us use OpenWrt in Amlogic S9xxx STB So Easy.
+The method of Use GitHub Actions to compile OpenWrt, as well as many contents in this document, come from many technical innovators and resource sharers such as `P3TERX`, `Flippy`, `tuanqing`, etc. Because of the dedication of everyone, let us use OpenWrt in Amlogic s9xxx tv box So Easy.
 
 `GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
 
 # Tutorial directory
 
-1. [Register your own GitHub account](#1-register-your-own-github-account)
-2. [Set the privacy variable GitHub_TOKEN](#2-set-the-privacy-variable-github_token)
-3. [Fork repository and set RELEASES_TOKEN](#3-fork-repository-and-set-releases_token)
-4. [Personalized OpenWrt firmware customization file description](#4-personalized-openwrt-firmware-customization-file-description)
-    - 4.1 [.config file description](#41-config-file-description)
-        - 4.1.1 [Let the firmware support the native language](#411-let-the-firmware-support-the-native-language)
-        - 4.1.2 [Select the personalized software package](#412-select-the-personalized-software-package)
-    - 4.2 [DIY script operation: diy-part1.sh and diy-part2.sh](#42-diy-script-operation-diy-part1sh-and-diy-part2sh)
-        - 4.2.1 [Example 1: Add a third-party software package](#example-1-add-a-third-party-software-package)
-        - 4.2.2 [Example 2: Replace the existing software package](#example-2-replace-the-existing-software-package)
-        - 4.2.3 [Example 3: Modifying the code in the source code library](#example-3-modifying-the-code-in-the-source-code-library)
-5. [Compile the firmware](#5-compile-the-firmware)
-    - 5.1 [Manual compilation](#51-manual-compilation)
-    - 5.2 [Compile at the agreed time](#52-compile-at-the-agreed-time)
-6. [Save the firmware](#6-save-the-firmware)
-    - 6.1 [Save to GitHub Actions](#61-save-to-github-actions)
-    - 6.2 [Save to GitHub Releases](#62-save-to-github-releases)
-    - 6.3 [Save to a third party](#63-save-to-a-third-party)
-7. [Download the firmware](#7-download-the-firmware)
-    - 7.1 [Download from GitHub Actions](#71-download-from-github-actions)
-    - 7.2 [Download from GitHub Releases](#72-download-from-github-releases)
-    - 7.3 [Download from third parties](#73-download-from-third-parties)
-8. [Install the firmware](#8-install-the-firmware)
-9. [Update firmware](#9-update-firmware)
-10. [Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
-    - 10.1 [Know the complete .config file](#101-know-the-complete-config-file)
-    - 10.2 [Know the workflow file](#102-know-the-workflow-file)
-        - 10.2.1 [Replacing source code repositories and branches](#1021-replacing-source-code-repositories-and-branches)
-        - 10.2.2 [Change STB model and kernel version](#1022-change-stb-model-and-kernel-version)
-    - 10.3 [Custom banner information](#103-custom-banner-information)
-    - 10.4 [Custom feeds configuration file](#104-custom-feeds-configuration-file)
-    - 10.5 [Custom software default configuration information](#105-custom-software-default-configuration-information)
-    - 10.6 [Opkg Package Manager](#106-opkg-package-manager)
-    - 10.7 [Manage packages using web interface](#107-manage-packages-using-web-interface)
-    - 10.8 [How to recover if the install fails and cannot be started](#108-how-to-recover-if-the-install-fails-and-cannot-be-started)
-    - 10.9 [If you can’t startup after using the Mainline u-boot](#109-if-you-cant-startup-after-using-the-mainline-u-boot)
-    - 10.10 [Turn on the USB disk boot mode of the Amlogic S9xxx STB](#1010-turn-on-the-usb-disk-boot-mode-of-the-amlogic-s9xxx-stb)
+- [Use GitHub Actions to compile OpenWrt](#use-github-actions-to-compile-openwrt)
+- [Tutorial directory](#tutorial-directory)
+  - [1. Register your own GitHub account](#1-register-your-own-github-account)
+  - [2. Set the privacy variable GitHub_TOKEN](#2-set-the-privacy-variable-github_token)
+  - [3. Fork repository and set RELEASES_TOKEN](#3-fork-repository-and-set-releases_token)
+  - [4. Personalized OpenWrt firmware customization file description](#4-personalized-openwrt-firmware-customization-file-description)
+    - [4.1 .config file description](#41-config-file-description)
+      - [4.1.1 Let the firmware support the native language](#411-let-the-firmware-support-the-native-language)
+      - [4.1.2 Select the personalized software package](#412-select-the-personalized-software-package)
+    - [4.2 DIY script operation: diy-part1.sh and diy-part2.sh](#42-diy-script-operation-diy-part1sh-and-diy-part2sh)
+      - [Example 1, Add a third-party software package](#example-1-add-a-third-party-software-package)
+      - [Example 2: Replace the existing software package](#example-2-replace-the-existing-software-package)
+      - [Example 3: Modifying the code in the source code library](#example-3-modifying-the-code-in-the-source-code-library)
+  - [5. Compile the firmware](#5-compile-the-firmware)
+    - [5.1 Manual compilation](#51-manual-compilation)
+    - [5.2 Compile at the agreed time](#52-compile-at-the-agreed-time)
+  - [6. Save the firmware](#6-save-the-firmware)
+    - [6.1 Save to GitHub Actions](#61-save-to-github-actions)
+    - [6.2 Save to GitHub Releases](#62-save-to-github-releases)
+    - [6.3 Save to a third party](#63-save-to-a-third-party)
+  - [7. Download the firmware](#7-download-the-firmware)
+    - [7.1 Download from GitHub Actions](#71-download-from-github-actions)
+    - [7.2 Download from GitHub Releases](#72-download-from-github-releases)
+    - [7.3 Download from third parties](#73-download-from-third-parties)
+  - [8. Install the firmware](#8-install-the-firmware)
+    - [8.1 Method of integrating luci-app-amlogic at compile time](#81-method-of-integrating-luci-app-amlogic-at-compile-time)
+    - [8.2 Install using the operation panel](#82-install-using-the-operation-panel)
+    - [8.3 Install using script commands](#83-install-using-script-commands)
+  - [9. Update firmware](#9-update-firmware)
+    - [9.1 Update using the operation panel](#91-update-using-the-operation-panel)
+    - [9.2 Update using script commands](#92-update-using-script-commands)
+    - [9.3 Replace the kernel to update](#93-replace-the-kernel-to-update)
+  - [10. Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
+    - [10.1 Know the complete .config file](#101-know-the-complete-config-file)
+    - [10.2 Know the workflow file](#102-know-the-workflow-file)
+      - [10.2.1 Replacing source code repositories and branches](#1021-replacing-source-code-repositories-and-branches)
+      - [10.2.2 Change box model and kernel version](#1022-change-box-model-and-kernel-version)
+    - [10.3 Custom banner information](#103-custom-banner-information)
+    - [10.4 Custom feeds configuration file](#104-custom-feeds-configuration-file)
+    - [10.5 Custom software default configuration information](#105-custom-software-default-configuration-information)
+    - [10.6 Opkg Package Manager](#106-opkg-package-manager)
+    - [10.7 Manage packages using web interface](#107-manage-packages-using-web-interface)
+    - [10.8 How to recover if the install fails and cannot be started](#108-how-to-recover-if-the-install-fails-and-cannot-be-started)
+    - [10.9 If you can’t startup after using the Mainline u-boot](#109-if-you-cant-startup-after-using-the-mainline-u-boot)
+    - [10.10 Turn on the USB disk boot mode of the Amlogic s9xxx tv box](#1010-turn-on-the-usb-disk-boot-mode-of-the-amlogic-s9xxx-tv-box)
 
 ## 1. Register your own GitHub account
 
@@ -219,7 +227,7 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
     allowUpdates: true
     token: ${{ secrets.GITHUB_TOKEN }}
     body: |
-      This is OpenWrt firmware for Amlogic S9xxx STB
+      This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information
       Default IP: 192.168.1.1
       Default username: root
@@ -245,7 +253,7 @@ Download our compiled openwrt firmware.
 
 ### 7.1 Download from GitHub Actions
 
-Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic S9xxx STB`. The icons are as follows: 
+Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic s9xxx tv box`. The icons are as follows: 
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418782-08714c00-7a05-11eb-9556-91575640a4bb.jpg width="300" />
@@ -254,7 +262,7 @@ Click the `Actions` button in the `repository navigation bar`. In the `All workf
 
 ### 7.2 Download from GitHub Releases
 
-Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic S9xxx STB`. The icons are as follows:
+Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic s9xxx tv box`. The icons are as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg width="300" />
@@ -285,7 +293,7 @@ The support for uploading to a third party comes from [Mikubill/transfer](https:
 
 For more instructions on the plug-in, see：[https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)
 
-Choose the corresponding firmware according to your STB. Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the STB.
+Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the box.
 
 ### 8.2 Install using the operation panel
 
@@ -293,15 +301,15 @@ Choose the corresponding firmware according to your STB. Then write the IMG file
 
 ### 8.3 Install using script commands
 
-`Log in to the default IP: 192.168.1.1` → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command: 
+`Log in to the default IP: 192.168.1.1` → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command:
 
 ```yaml
 openwrt-install-amlogic
 ```
 
-When writing into EMMC through `openwrt-install-amlogic`, `select the name` of the Amlogic S9xxx STB you own in the menu.
+When writing into EMMC through `openwrt-install-amlogic`, `select the name` of the Amlogic s9xxx tv box you own in the menu.
 
-For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through `openwrt-install-amlogic`, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic S9xxx STB you own.
+For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through `openwrt-install-amlogic`, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic s9xxx tv box you own.
 
 ## 9. Update firmware
 
@@ -371,7 +379,7 @@ REPO_URL: https://github.com/openwrt/openwrt
 REPO_BRANCH: openwrt-19.07
 ```
 
-#### 10.2.2 Change STB model and kernel version
+#### 10.2.2 Change box model and kernel version
 
 Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
 ```yaml
@@ -390,7 +398,7 @@ Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
-Modify the -d parameter to the model of your STB, and modify the value after the -k parameter to the version number of the kernel you want to compile:
+Modify the -d parameter to the model of your box, and modify the value after the -k parameter to the version number of the kernel you want to compile:
 `sudo ./make -d -b s905x -k 5.4.160`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
 
 ### 10.3 Custom banner information
@@ -480,7 +488,7 @@ Search and install `luci-app-*` packages if you want to configure services using
 
 - Under normal circumstances, re-insert the USB hard disk and install it again.
 
-- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic S9xxx STB to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic S9xxx STB to factory settings first, and then reinstall it.
+- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx tv box to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx tv box to factory settings first, and then reinstall it.
 
 ```
 Take x96max+ as an example.
@@ -497,7 +505,7 @@ Prepare materials:
 
 Operation method:
 
-1. Connect the [ Amlogic S9xxx STB ] to the [ computer ] with a [ USB male-to-male data cable ].
+1. Connect the [ Amlogic s9xxx tv box ] to the [ computer ] with a [ USB male-to-male data cable ].
 2. Open the USB Burning Tool:
    [ File → Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
    [ Check ]：Erase flash
@@ -511,15 +519,15 @@ Operation method:
    Click [ stop ], unplug the [ USB male-to-male data cable ] and [ power ].
 6. If the progress bar is interrupted, repeat the above steps until it succeeds.
 ```
-After restoring the factory settings, the operation method is the same as when you install openwrt on the Amlogic S9xxx STB for the first time:
+After restoring the factory settings, the operation method is the same as when you install openwrt on the Amlogic s9xxx tv box for the first time:
 
-- Make an openwrt mirrored usb hard disk and insert it into the USB port of the Amlogic S9xxx STB. Use a paper clip or other objects to press and hold the reset button in the AV hole, plug in the power, wait 5 seconds and then release the reset button, the system will boot from the USB hard disk, enter the openwrt system, enter The installation command can reinstall openwrt.
+- Make an openwrt mirrored usb hard disk and insert it into the USB port of the Amlogic s9xxx tv box. Use a paper clip or other objects to press and hold the reset button in the AV hole, plug in the power, wait 5 seconds and then release the reset button, the system will boot from the USB hard disk, enter the openwrt system, enter The installation command can reinstall openwrt.
 
 ### 10.9 If you can’t startup after using the Mainline u-boot
 
-- Some Amlogic S905x3 STB sometimes fail to boot after use the `mainline u-boot`. The fault phenomenon is usually the `=>` prompt of u-boot automatically. The reason is that TTL lacks a pull-up resistor or pull-down resistor and is easily interfered by surrounding electromagnetic signals. The solution is to solder a 5K-10K resistor (pull-down) between TTL RX and GND, or solder a resistor between RX and 3.3V. A resistance of 5K-10K (pull-up).
+- Some Amlogic S905x3 box sometimes fail to boot after use the `mainline u-boot`. The fault phenomenon is usually the `=>` prompt of u-boot automatically. The reason is that TTL lacks a pull-up resistor or pull-down resistor and is easily interfered by surrounding electromagnetic signals. The solution is to solder a 5K-10K resistor (pull-down) between TTL RX and GND, or solder a resistor between RX and 3.3V. A resistance of 5K-10K (pull-up).
 
-If you choose to use the `mainline u-boot` during installation and it fails to start, please connect the Amlogic S905x3 STB to the monitor. If the screen shows the following prompt:
+If you choose to use the `mainline u-boot` during installation and it fails to start, please connect the Amlogic S905x3 box to the monitor. If the screen shows the following prompt:
 ```
 Net: eth0: ethernet0ff3f0000
 Hit any key to stop autoboot: 0
@@ -530,7 +538,7 @@ You need to install a resistor on the TTL: [X96 Max Plus's V4.0 Motherboard](htt
 
 ```
 #######################################################            #####################################################
-#                                                     #            #                                                   # 
+#                                                     #            #                                                   #
 #   Resistor (pull-down): between TTL's RX and GND    #            #   Resistor (pull-up): between TTL's 3.3V and RX   #
 #                                                     #            #                                                   #
 #            3.3V   RX       TX       GND             #     OR     #        3.3V               RX     TX     GND       #
@@ -540,7 +548,7 @@ You need to install a resistor on the TTL: [X96 Max Plus's V4.0 Motherboard](htt
 #######################################################            #####################################################
 ```
 
-### 10.10 Turn on the USB disk boot mode of the Amlogic S9xxx STB
+### 10.10 Turn on the USB disk boot mode of the Amlogic s9xxx tv box
 
 - Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 7 times in quick succession, and you will see that the developer mode is turned on.
 - Turn on USB debugging: After restarting, enter Settings → System → Advanced options → Developer options again (after entering, confirm that the status is on, and the USB debugging status in the list is also on)

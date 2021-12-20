@@ -14,7 +14,7 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ## amlogic-kernel
 
-The amlogic-s9xxx [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) storage directory. 
+The amlogic-s9xxx [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) storage directory.
 
 ## amlogic-u-boot
 
@@ -23,9 +23,11 @@ When using the 5.10 kernel version, you need to copy the corresponding [u-boot-*
 ## common-files
 
 - files: The files in the [files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files) directory are custom files, which must be completely consistent with the structure and file naming and storage under the ***`ROOTFS`*** partiton in openwrt. If there are files in this directory, they will be automatically copied to the openwrt directory during `sudo ./make`. E.g:
+
 ```yaml
 etc/config/network
 lib/u-boot
 ```
+
 - patches: The files in the [patches](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches) directory are patch files, which are integrated when build kernel files.
 

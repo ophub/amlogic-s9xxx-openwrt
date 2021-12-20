@@ -1,6 +1,6 @@
 #========================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Build OpenWrt for Amlogic S9xxx STB
+# Description: Automatically Build OpenWrt for Amlogic s9xxx tv box
 # Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
 # Source code repository: https://github.com/openwrt/openwrt / Branch: 21.02
 #========================================================================================================================
@@ -177,7 +177,7 @@ jobs:
         allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          This is OpenWrt firmware for Amlogic S9xxx STB
+          This is OpenWrt firmware for Amlogic s9xxx tv box
           * Firmware information
           Default IP: 192.168.1.1
           Default username: root

@@ -1,9 +1,9 @@
 #!/bin/bash
 #======================================================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Packaged OpenWrt for Amlogic S9xxx STB
-# Function: Use Flippy's kernrl files for Amlogic S9xxx STB to build openwrt
-# Copyright (C) 2020-2021 Flippy's kernrl files for Amlogic S9xxx STB
+# Description: Automatically Packaged OpenWrt for Amlogic s9xxx tv box
+# Function: Use Flippy's kernrl files for Amlogic s9xxx tv box to build openwrt
+# Copyright (C) 2020-2021 Flippy's kernrl files for Amlogic s9xxx tv box
 # Copyright (C) 2020-2021 https://github.com/tuanqing/mknop
 # Copyright (C) 2020-2021 https://github.com/ophub/amlogic-s9xxx-openwrt
 #======================================================================================================================

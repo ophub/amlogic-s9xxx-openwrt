@@ -6,15 +6,15 @@
 
 ## amlogic-armbian
 
-Armbian 相关文件存储目录。这里存放的文件是打包 OpenWrt 时使用的核心文件。除内核外，其他通用文件均放置于此。根据 Flippy 的打包脚本，把从 Armbian 中提取的通用文件打包存放于此。详见 [boot and firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-armbian) 
+Armbian 相关文件存储目录。这里存放的文件是打包 OpenWrt 时使用的核心文件。除内核外，其他通用文件均放置于此。根据 Flippy 的打包脚本，把从 Armbian 中提取的通用文件打包存放于此。详见 [boot and firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-armbian)
 
 ## amlogic-dtb
 
-这里收录了各种型号机顶盒使用的 .dtb 文件，当你在使用安装脚本 [openwrt-install-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/sbin/openwrt-install-amlogic) 将 OpenWrt 写入 EMMC 时，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)  
+这里收录了各种型号机顶盒使用的 .dtb 文件，当你在使用安装脚本 [openwrt-install-amlogic](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/amlogic-s9xxx/common-files/files/usr/sbin/openwrt-install-amlogic) 将 OpenWrt 写入 EMMC 时，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)
 
 ## amlogic-kernel
 
-这是各版本内核的存放目录，集中珍藏了 Flippy 分享的众多内核。具体详见 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 。 
+这是各版本内核的存放目录，集中珍藏了 Flippy 分享的众多内核。具体详见 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 。
 
 ## amlogic-u-boot
 
@@ -22,10 +22,12 @@ Armbian 相关文件存储目录。这里存放的文件是打包 OpenWrt 时使
 
 ## common-files
 
-- files: 这里存放的是 OpenWrt 固件的个性化配置文件，将在打包脚本 `sudo ./make` 执行时自动将相关文件集成到你的固件里，俗称 files 大法。相关目录及文件命名均须与 OpenWrt 中 ROOTFS 分区 ( 即在 TTYD 终端里输入： `cd / && ls .` 你所看到的目录及各目录里面的文件名称 ) 保持完全一致。你的网络配置文件，广告过滤插件的配置文件等均可以通过这样的方式自动集成（推荐你将 nerwork 文件等内容格式比较固定的配置文件放置于此，但是有些插件升级变化太大，可能与最新插件不兼容，你这样放置时可能导致因为配置文件不兼容而出现奇怪的现象。files 大法虽好，但一定要熟知你添加的配置文件，在安装后若有问题，可以把相关插件的配置文件先删除，再手动重新配置）。具体的例子请查看  [files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files) 
+- files: 这里存放的是 OpenWrt 固件的个性化配置文件，将在打包脚本 `sudo ./make` 执行时自动将相关文件集成到你的固件里，俗称 files 大法。相关目录及文件命名均须与 OpenWrt 中 ROOTFS 分区 ( 即在 TTYD 终端里输入： `cd / && ls .` 你所看到的目录及各目录里面的文件名称 ) 保持完全一致。你的网络配置文件，广告过滤插件的配置文件等均可以通过这样的方式自动集成（推荐你将 nerwork 文件等内容格式比较固定的配置文件放置于此，但是有些插件升级变化太大，可能与最新插件不兼容，你这样放置时可能导致因为配置文件不兼容而出现奇怪的现象。files 大法虽好，但一定要熟知你添加的配置文件，在安装后若有问题，可以把相关插件的配置文件先删除，再手动重新配置）。具体的例子请查看  [files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files)
+
 ```yaml
 etc/config/network
 lib/u-boot
 ```
+
 - patches: 这是补丁文件存放目录，你可以将扩展文件，魔改补丁等放置在该目录。具有详见 [patches](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches)
 

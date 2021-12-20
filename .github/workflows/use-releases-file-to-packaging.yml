@@ -88,7 +88,7 @@ jobs:
         allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          This is OpenWrt firmware for Amlogic S9xxx STB
+          This is OpenWrt firmware for Amlogic s9xxx tv box
           * Firmware information
           Default IP: 192.168.1.1
           Default username: root

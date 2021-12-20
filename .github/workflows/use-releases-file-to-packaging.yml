@@ -14,8 +14,6 @@ on:
         description: 'Select Branch [ official / lede ]'
         required: false
         default: 'lede'
-  #schedule:
-    #- cron: '0 22 * * *'
 
 env:
   UPLOAD_FIRMWARE: false

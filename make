@@ -299,6 +299,36 @@ EOF
     [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" >etc/modules.d/usb-net-rtl8152
     [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" >etc/modules.d/usb-net-asix-ax88179
 
+    # Optimize wifi/bluetooth module
+    [ -d "lib/firmware/brcm" ] && (
+        cd lib/firmware/brcm/ && mv -f ../*.hcd . 2>/dev/null
+
+        mac_hexchars="0123456789ABCDEF"
+        mac_end=$(for i in {1..6}; do echo -n ${mac_hexchars:$((${RANDOM} % 16)):1}; done | sed -e 's/\(..\)/:\1/g')
+        random_macaddr="9E:61${mac_end}"
+
+        # gtking/gtking pro is bcm4356 wifi/bluetooth, wifi5 module AP6356S
+        sed -e "s/macaddr=.*/macaddr=${random_macaddr}:00/" "brcmfmac4356-sdio.txt" >"brcmfmac4356-sdio.azw,gtking.txt"
+
+        # gtking/gtking pro is bcm4356 wifi/bluetooth, wifi6 module AP6275S
+        sed -e "s/macaddr=.*/macaddr=${random_macaddr}:01/" "brcmfmac4375-sdio.txt" >"brcmfmac4375-sdio.azw,gtking.txt"
+
+        # Phicomm N1 is bcm43455 wifi/bluetooth
+        sed -e "s/macaddr=.*/macaddr=${random_macaddr}:02/" "brcmfmac43455-sdio.txt" >"brcmfmac43455-sdio.phicomm,n1.txt"
+
+        # MXQ Pro+ is AP6330(bcm4330) wifi/bluetooth
+        sed -e "s/macaddr=.*/macaddr=${random_macaddr}:03/" "brcmfmac4330-sdio.txt" >"brcmfmac4330-sdio.crocon,mxq-pro-plus.txt"
+
+        # HK1 Box & H96 Max X3 is bcm54339 wifi/bluetooth
+        sed -e "s/macaddr=.*/macaddr=${random_macaddr}:04/" "brcmfmac4339-sdio.ZP.txt" >"brcmfmac4339-sdio.amlogic,sm1.txt"
+
+        # old ugoos x3 is bcm43455 wifi/bluetooth
+        sed -e "s/macaddr=.*/macaddr=${random_macaddr}:05/" "brcmfmac43455-sdio.txt" >"brcmfmac43455-sdio.amlogic,sm1.txt"
+
+        # new ugoos x3 is brm43456
+        sed -e "s/macaddr=.*/macaddr=${random_macaddr}:06/" "brcmfmac43456-sdio.txt" >"brcmfmac43456-sdio.amlogic,sm1.txt"
+    )
+
     # Add cpustat
     DISTRIB_SOURCECODE="$(cat etc/openwrt_release | grep "DISTRIB_SOURCECODE=" | awk -F "'" '{print $2}')"
     cpustat_file=${configfiles_path}/patches/cpustat

@@ -192,15 +192,6 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 | ${{ env.PACKAGED_OUTPUTDATE }}           | 2021.04.21.1058         | 打包日期                   |
 | ${{ env.PACKAGED_STATUS }}               | success / failure       | 打包状态。成功 / 失败       |
 
-- 上传固件到 github.com 的 Actions:
- 
-```yaml
-- name: Upload artifact to Actions
-  uses: kittaakos/upload-artifact-as-is@master
-  with:
-    path: ${{ env.PACKAGED_OUTPUTPATH }}/
-```
-
 - 上传固件到 github.com 的 Release:
 
 ```yaml

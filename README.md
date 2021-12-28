@@ -194,16 +194,6 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 | ${{ env.PACKAGED_OUTPUTDATE }}           | 2021.04.21.1058         | Packing date                  |
 | ${{ env.PACKAGED_STATUS }}               | success / failure       | Package status                |
 
-
-- Uploads OpenWrt Firmware to Actions:
-
-```yaml
-- name: Upload artifact to Actions
-  uses: kittaakos/upload-artifact-as-is@master
-  with:
-    path: ${{ env.PACKAGED_OUTPUTPATH }}/
-```
-
 - Uploads OpenWrt Firmware to Release:
 
 ```yaml

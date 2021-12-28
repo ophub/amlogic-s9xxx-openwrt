@@ -223,6 +223,15 @@ refactor_files() {
         ANDROID_UBOOT=""
         AMLOGIC_SOC="s912"
         ;;
+    s905 | beelinkminimx | mxqpro+)
+        FDTFILE="meson-gxbb-vega-s95-telos.dtb"
+        #FDTFILE="meson-gxbb-mxq-pro-plus.dtb"
+        UBOOT_OVERLOAD="u-boot-s905.bin"
+        #UBOOT_OVERLOAD="u-boot-p201.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s905"
+        ;;
     s905d | n1)
         FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
         UBOOT_OVERLOAD="u-boot-n1.bin"
@@ -560,15 +569,16 @@ choose_build() {
     done
     echo && read -p " Please select the Amlogic SoC: " pause
     case $pause in
-    1 | s922x) build="s922x" ;;
-    2 | s922x-n2) build="s922x-n2" ;;
-    3 | s905x3) build="s905x3" ;;
-    4 | s905x2) build="s905x2" ;;
-    5 | s912) build="s912" ;;
-    6 | s905d) build="s905d" ;;
-    7 | s905x) build="s905x" ;;
-    8 | s905w) build="s905w" ;;
-    *) die "Have no this Amlogic SoC" ;;
+        1 | s922x) build="s922x" ;;
+        2 | s922x-n2) build="s922x-n2" ;;
+        3 | s905x3) build="s905x3" ;;
+        4 | s905x2) build="s905x2" ;;
+        5 | s912) build="s912" ;;
+        6 | s905) build="s905" ;;
+        7 | s905d) build="s905d" ;;
+        8 | s905x) build="s905x" ;;
+        9 | s905w) build="s905w" ;;
+        *) die "Have no this Amlogic SoC" ;;
     esac
     tag ${build}
 }

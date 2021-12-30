@@ -628,7 +628,7 @@ Options:
 
     -v, --versionbranch    Set the kernel version branch, the default is stable
       , -v stable          Use stable branch
-      , -v beta            Use beta branch
+      , -v dev             Use dev branch
 
     -s, --size             Set the rootfs partition size, do not less than 256m
       , -s 1024            Set the rootfs partition size is 1024MB

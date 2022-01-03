@@ -37,12 +37,13 @@ process() {
     echo -e " [ \033[1;92m ${build} \033[0m - \033[1;92m ${kernel} \033[0m ] ${1}"
 }
 
-die() {
-    error "${1}" && exit 1
-}
-
 error() {
     echo -e " [ \033[1;91m Error \033[0m ] ${1}"
+}
+
+die() {
+    error "${1}"
+    exit 1
 }
 
 loop_setup() {
@@ -612,7 +613,7 @@ set_rootsize() {
             break
         else
             ((i++ >= 2)) && exit 1
-            error "Numerical value input error, try again!\n"
+            error "Invalid numeric input, try again!\n"
             sleep 1s
         fi
     done

@@ -13,17 +13,17 @@ inputs:
   amlogic_kernel:
     description: 'Choose kernel.'
     required: false
-    default: '5.10.80_5.4.160'
+    default: '5.10.90_5.4.170'
   auto_kernel:
     description: 'Auto use the latest kernel.'
     required: false
     default: 'true'
   amlogic_size:
-    description: 'Choose root size.'
+    description: 'Choose rootfs size.'
     required: false
     default: '1024'
   armvirt64_path:
-    description: 'Choose armvirt path.'
+    description: 'Choose armvirt64 file path.'
     required: false
     default: 'openwrt/bin/targets/*/*/*.tar.gz'
 

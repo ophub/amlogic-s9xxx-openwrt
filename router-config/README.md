@@ -253,7 +253,7 @@ Download our compiled openwrt firmware.
 
 ### 7.1 Download from GitHub Actions
 
-Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic s9xxx tv box`. The icons are as follows: 
+Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic s9xxx tv box`. The icons are as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418782-08714c00-7a05-11eb-9556-91575640a4bb.jpg width="300" />
@@ -315,7 +315,7 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ### 9.1 Update using the operation panel
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.10.80 to a lower version such as 5.4.160, or from a lower version such as 5.4.160 to a higher version such as 5.10.80. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.10.90 to a lower version such as 5.4.170, or from a lower version such as 5.4.170 to a higher version such as 5.10.90. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
 ### 9.2 Update using script commands
 
@@ -325,8 +325,8 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 openwrt-update-amlogic
 ```
 💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the `openwrt-update-amlogic` script will automatically find the `update file` from the `/mnt/mmcblk*p4/` directories.
-    
-If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.4.160_2021.03.17.0412.img.gz`*** command to specify the `update file`.
+
+If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.4.170_2021.03.17.0412.img.gz`*** command to specify the `update file`.
 
 - The `openwrt-update-amlogic` update file search order
 
@@ -392,14 +392,14 @@ Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.80_5.4.160
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.90_5.4.170
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
 Modify the -d parameter to the model of your box, and modify the value after the -k parameter to the version number of the kernel you want to compile:
-`sudo ./make -d -b s905x -k 5.4.160`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
+`sudo ./make -d -b s905x -k 5.4.170`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
 
 ### 10.3 Custom banner information
 
@@ -457,14 +457,14 @@ For such usage of OpenWrt firmware, **`it's warmly recommended to use the Image 
 
 Common commands:
 ```
-opkg update                                   #Update list of available packages  
-opkg upgrade <pkgs>                           #Upgrade packages  
+opkg update                                   #Update list of available packages
+opkg upgrade <pkgs>                           #Upgrade packages
 opkg install <pkgs>                           #Install package(s)
 opkg install --force-reinstall <pkgs>         #Force reinstall package(s)
-opkg configure <pkgs>                         #Configure unpacked package(s)  
+opkg configure <pkgs>                         #Configure unpacked package(s)
 opkg remove <pkgs | regexp>                   #Remove package(s)
-opkg list                                     #List available packages  
-opkg list-installed                           #List installed packages  
+opkg list                                     #List available packages
+opkg list-installed                           #List installed packages
 opkg list-upgradable                          #List installed and upgradable packages
 opkg list | grep <pkgs>                       #Find similar packages names
 ```

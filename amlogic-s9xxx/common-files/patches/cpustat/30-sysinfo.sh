@@ -60,7 +60,7 @@ function display() {
 		printf "%-1s%s\x1B[0m" "$5"
 		printf "%-9s%s\t" "$6"
 		return 1
-	elif [[ -n "$2" && "$2" = "0" ]]; then
+	else
 		printf "%-5s%s" "$1:"
 		echo -ne "\e[0;92m $2"
 		printf "%-1s%s\x1B[0m" "$5"

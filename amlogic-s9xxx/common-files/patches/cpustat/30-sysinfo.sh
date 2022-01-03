@@ -10,8 +10,31 @@ MOTD_DISABLE=""
 
 SHOW_IP_PATTERN="^[ewr].*|^br.*|^lt.*|^umts.*"
 
-DATA_STORAGE=/userdisk/data
-MEDIA_STORAGE=/userdisk/snail
+# Find the partition where root is located
+ROOT_PTNAME=$(df / | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')
+if [ "${ROOT_PTNAME}" == "" ]; then
+	echo "Cannot find the partition corresponding to the root file system!"
+	exit 1
+fi
+
+# Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
+case ${ROOT_PTNAME} in
+mmcblk?p[1-4])
+	EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-2)}')
+	PARTITION_NAME="p"
+	LB_PRE="EMMC_"
+	;;
+[hsv]d[a-z][1-4])
+	EMMC_NAME=$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-1)}')
+	PARTITION_NAME=""
+	LB_PRE=""
+	;;
+*)
+	echo "Unable to recognize the disk type of ${ROOT_PTNAME}!"
+	exit 1
+	;;
+esac
+PARTITION_PATH="/mnt/${EMMC_NAME}${PARTITION_NAME}4"
 
 [[ -f /etc/default/motd ]] && . /etc/default/motd
 for f in $MOTD_DISABLE; do
@@ -28,14 +51,20 @@ function display() {
 		local great=">"
 	fi
 	if [[ -n "$2" && "$2" > "0" && (("${2%.*}" -ge "$4")) ]]; then
-		printf "%-14s%s" "$1:"
+		printf "%-5s%s" "$1:"
 		if awk "BEGIN{exit ! ($2 $great $3)}"; then
 			echo -ne "\e[0;91m $2"
 		else
 			echo -ne "\e[0;92m $2"
 		fi
 		printf "%-1s%s\x1B[0m" "$5"
-		printf "%-11s%s\t" "$6"
+		printf "%-9s%s\t" "$6"
+		return 1
+	elif [[ -n "$2" && "$2" = "0" ]]; then
+		printf "%-5s%s" "$1:"
+		echo -ne "\e[0;92m $2"
+		printf "%-1s%s\x1B[0m" "$5"
+		printf "%-9s%s\t" "$6"
 		return 1
 	fi
 } # display
@@ -67,22 +96,17 @@ function storage_info() {
 	boot_usage=$(awk '/\// {print $(NF-1)}' <<<${BootInfo} | sed 's/%//g')
 	boot_total=$(awk '/\// {print $(NF-4)}' <<<${BootInfo})
 
-	StorageInfo=$(df -h $MEDIA_STORAGE 2>/dev/null | grep $MEDIA_STORAGE)
-	if [[ -n "${StorageInfo}" && ${RootInfo} != *$MEDIA_STORAGE* ]]; then
-		media_usage=$(awk '/\// {print $(NF-1)}' <<<${StorageInfo} | sed 's/%//g')
-		media_total=$(awk '/\// {print $(NF-4)}' <<<${StorageInfo})
+	# Get the size of the extended partition
+	if [ -d "${PARTITION_PATH}" ]; then
+		PartInfo=$(df -h ${PARTITION_PATH})
+		data_usage=$(awk '/\// {print $(NF-1)}' <<<${PartInfo} | sed 's/%//g')
+		data_total=$(awk '/\// {print $(NF-4)}' <<<${PartInfo})
 	fi
-
-	StorageInfo=$(df -h $DATA_STORAGE 2>/dev/null | grep $DATA_STORAGE)
-	if [[ -n "${StorageInfo}" && ${RootInfo} != *$DATA_STORAGE* ]]; then
-		data_usage=$(awk '/\// {print $(NF-1)}' <<<${StorageInfo} | sed 's/%//g')
-		data_total=$(awk '/\// {print $(NF-4)}' <<<${StorageInfo})
-	fi
-} # storage_info
+}
 
 function get_data_storage() {
 	if which lsblk >/dev/null; then
-		root_name=$(lsblk -l -o NAME,MOUNTPOINT | awk '$2~/^\/$/ {print $1'})
+		root_name=$(lsblk -l -o NAME,MOUNTPOINT | awk '$2~/^\/$/ {print $1}')
 		mmc_name=$(echo $root_name | awk '{print substr($1,1,length($1)-2);}')
 		if echo $mmc_name | grep mmcblk >/dev/null; then
 			DATA_STORAGE="/mnt/${mmc_name}p4"
@@ -120,25 +144,29 @@ else
 	esac
 fi
 
-# memory and swap
+# memory
 mem_info=$(LC_ALL=C free -w 2>/dev/null | grep "^Mem" || LC_ALL=C free | grep "^Mem")
 memory_usage=$(awk '{printf("%.0f",(($2-($4+$6))/$2) * 100)}' <<<${mem_info})
 memory_total=$(awk '{printf("%d",$2/1024)}' <<<${mem_info})
-swap_info=$(LC_ALL=C free -m | grep "^Swap")
-swap_usage=$( (awk '/Swap/ { printf("%3.0f", $3/$2*100) }' <<<${swap_info} 2>/dev/null || echo 0) | tr -c -d '[:digit:]')
-swap_total=$(awk '{print $(2)}' <<<${swap_info})
 
+# swap
+swap_info="$(free -m | sed -n '$p' | echo $(xargs))"
+swap_usage=$(awk '{printf("%d", $3/$2*100)}' <<<${swap_info} 2>/dev/null || echo 0)
+swap_total=$(awk '{printf("%d", $2/1024)}' <<<${swap_info} 2>/dev/null || echo 0)
+
+# cpu temp
 if grep -q "ipq40xx" "/etc/openwrt_release"; then
 	cpu_temp="$(sensors | grep -Eo '\+[0-9]+.+C' | sed ':a;N;$!ba;s/\n/ /g;s/+//g')"
-elif [ -f "/sys/class/thermal/thermal_zone0/temp" ]; then
-	cpu_temp="$(awk '{ printf("%.1f °C", $0 / 1000) }' /sys/class/thermal/thermal_zone0/temp)"
 elif [ -f "/sys/class/hwmon/hwmon0/temp1_input" ]; then
 	cpu_temp="$(awk '{ printf("%.1f °C", $0 / 1000) }' /sys/class/hwmon/hwmon0/temp1_input)"
+elif [ -f "/sys/class/thermal/thermal_zone0/temp" ]; then
+	cpu_temp="$(awk '{ printf("%.1f °C", $0 / 1000) }' /sys/class/thermal/thermal_zone0/temp)"
 else
 	cpu_temp="50.0 °C"
 fi
 cpu_tempx=$(echo $cpu_temp | sed 's/°C//g')
 
+# Architecture
 if [ -x /usr/bin/cpustat ]; then
 	sys_temp=$(/usr/bin/cpustat -A)
 else
@@ -147,41 +175,35 @@ fi
 sys_tempx=$(echo $sys_temp | sed 's/ / /g')
 
 # display info
-
 machine_model=$(cat /proc/device-tree/model | tr -d "\000")
-echo -e " Device Model: \033[93m${machine_model}\033[0m"
+printf " Device Model: \x1B[93m%s\x1B[0m" "${machine_model}"
+echo ""
 printf " Architecture: \x1B[93m%s\x1B[0m" "$sys_tempx"
 echo ""
 display " Load Average" "${load%% *}" "${critical_load}" "0" "" "${load#* }"
-printf "Uptime:  \x1B[92m%s\x1B[0m\t\t" "$time"
+printf "Uptime: \x1B[92m%s\x1B[0m" "$time"
 echo ""
 
-display " Ambient Temp" "$cpu_tempx" "60" "0" "" "°C"
+display " Ambient Temp" "$cpu_tempx" "80" "0" "" "°C"
 if [ -x /usr/bin/cpustat ]; then
 	cpu_freq=$(/usr/bin/cpustat -F1500)
-	echo -n "Frequency:  $cpu_freq"
+	echo -n "CPU Freq: $cpu_freq"
 else
-	display "Frequency" "$cpu_freq" "1500" "0" " Mhz" ""
+	display "CPU Freq" "$cpu_freq" "1500" "0" " Mhz" ""
 fi
 echo ""
 
-display " Memory Usage" "$memory_usage" "70" "0" "%" " of ${memory_total}MB"
-printf "IP Address:  \x1B[92m%s\x1B[0m" "$ip_address"
-#display "Swap Usage" "$swap_usage" "10" "0" "%" " of $swap_total""Mb"
+display " Memory Usage" "$memory_usage" "70" "0" "%" " of ${memory_total}M"
+display "Swap Usage" "$swap_usage" "80" "0" "%" " of ${swap_total}M"
 echo ""
-
-#echo "" # fixed newline
 
 display " Boot Storage" "$boot_usage" "90" "1" "%" " of $boot_total"
-display "SYS Storage" "$root_usage" "90" "1" "%" " of $root_total"
+display "ROOTFS" "$root_usage" "90" "1" "%" " of $root_total"
 echo ""
 
-if [ "$data_usage" != "" ]; then
-	display " Data Storage" "$data_usage" "90" "1" "%" " of $data_total"
+if [ -d "${PARTITION_PATH}" ]; then
+	display " Data Storage" "$data_usage" "90" "0" "%" " of ${data_total}"
+	printf "IP Addr: \x1B[92m%s\x1B[0m" "$ip_address"
 	echo ""
 fi
-if [ "$media_usage" != "" ]; then
-	display " Data Storage" "$media_usage" "90" "1" "%" " of $media_total"
-	echo ""
-fi
-echo ""
+echo " -------------------------------------------------------"

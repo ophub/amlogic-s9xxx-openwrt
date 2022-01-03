@@ -30,11 +30,11 @@ BOOT_MB=256
 ROOT_MB=960
 
 tag() {
-    echo -e " [ \033[1;32m ${1} \033[0m ]"
+    echo -e " [ \033[1;92m ${1} \033[0m ]"
 }
 
 process() {
-    echo -e " [ \033[1;32m ${build} \033[0m - \033[1;32m ${kernel} \033[0m ] ${1}"
+    echo -e " [ \033[1;92m ${build} \033[0m - \033[1;92m ${kernel} \033[0m ] ${1}"
 }
 
 die() {
@@ -42,7 +42,7 @@ die() {
 }
 
 error() {
-    echo -e " [ \033[1;31m Error \033[0m ] ${1}"
+    echo -e " [ \033[1;91m Error \033[0m ] ${1}"
 }
 
 loop_setup() {

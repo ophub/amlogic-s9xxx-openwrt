@@ -9,7 +9,7 @@
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
-build_openwrt=("s922x" "s922x-n2" "s905x3" "s905x2" "s912" "s905d" "s905x" "s905w" "s905")
+build_openwrt=("s922x" "s922x-n2" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
 make_path=${PWD}
 tmp_path=${make_path}/tmp
 out_path=${make_path}/out
@@ -223,6 +223,13 @@ refactor_files() {
         ANDROID_UBOOT=""
         AMLOGIC_SOC="s912"
         ;;
+    s912-t95z | s912-t95z-plus)
+        FDTFILE="meson-gxm-t95z-plus.dtb"
+        UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s912"
+        ;;
     s905 | beelinkminimx | mxqpro+)
         FDTFILE="meson-gxbb-vega-s95-telos.dtb"
         #FDTFILE="meson-gxbb-mxq-pro-plus.dtb"
@@ -237,6 +244,13 @@ refactor_files() {
         UBOOT_OVERLOAD="u-boot-n1.bin"
         MAINLINE_UBOOT=""
         ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
+        AMLOGIC_SOC="s905d"
+        ;;
+    s905d-ki)
+        FDTFILE="meson-gxl-s905d-mecool-ki-pro.dtb"
+        UBOOT_OVERLOAD="u-boot-p201.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
         AMLOGIC_SOC="s905d"
         ;;
     s905x | hg680p | b860h)
@@ -351,7 +365,7 @@ EOF
         echo " Amlogic SoC: ${build_op}" >>etc/banner
         echo " OpenWrt Kernel: ${op_version}" >>etc/banner
         echo " Packaged Date: ${op_packaged_date}" >>etc/banner
-        echo " -----------------------------------------------------" >>etc/banner
+        echo " -------------------------------------------------------" >>etc/banner
     fi
 
     # Add some package and script connection
@@ -569,16 +583,18 @@ choose_build() {
     done
     echo && read -p " Please select the Amlogic SoC: " pause
     case $pause in
-        1 | s922x) build="s922x" ;;
-        2 | s922x-n2) build="s922x-n2" ;;
-        3 | s905x3) build="s905x3" ;;
-        4 | s905x2) build="s905x2" ;;
-        5 | s912) build="s912" ;;
-        6 | s905) build="s905" ;;
-        7 | s905d) build="s905d" ;;
-        8 | s905x) build="s905x" ;;
-        9 | s905w) build="s905w" ;;
-        *) die "Have no this Amlogic SoC" ;;
+    11 | s922x) build="s922x" ;;
+    12 | s922x-n2) build="s922x-n2" ;;
+    13 | s905x3) build="s905x3" ;;
+    14 | s905x2) build="s905x2" ;;
+    15 | s912) build="s912" ;;
+    16 | s912-t95z) build="s912-t95z" ;;
+    17 | s905) build="s905" ;;
+    18 | s905d) build="s905d" ;;
+    19 | s905d-ki) build="s905d-ki" ;;
+    20 | s905x) build="s905x" ;;
+    21 | s905w) build="s905w" ;;
+    *) die "Have no this Amlogic SoC" ;;
     esac
     tag ${build}
 }
@@ -619,8 +635,8 @@ Options:
     -k, --kernelversion    Set the kernel version, which must be in the "kernel" directory
       , -k all             Build all the kernel version
       , -k latest          Build the latest kernel version
-      , -k 5.4.160         Specify a single kernel for compilation
-      , -k 5.4.160_5.10.80 Specify multiple cores, use "_" to connect
+      , -k 5.4.170         Specify a single kernel for compilation
+      , -k 5.4.170_5.10.90 Specify multiple cores, use "_" to connect
 
     -a, --autokernel       Whether to auto update to the latest kernel of the same series
       , -a true            Auto update to the latest kernel

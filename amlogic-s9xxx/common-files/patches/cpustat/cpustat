@@ -44,17 +44,17 @@ sub get_cpu_freq {
 	    my $color = "\x1b[92m";
             $freq = <$fh> / 1000;
 	    if($freq > $alert_mhz) {
-		$color = "\x1B[92m%s\x1B[0m";
+		$color = "\x1b[93m";
 	    }
             $freq = sprintf "%s%d Mhz\x1b[0m", $color, $freq;
         } else {
             $freq = sprintf "%dMhz", <$fh> / 1000;
-        }    
+        }
         close $fh;
-	$freq_str .= $freq;
+	    $freq_str .= $freq;
         if($i < $#fnames) {
             $freq_str .= " & ";
-        } 
+        }
     }
 
     if($#fnames > 0 && $f eq "") {
@@ -82,7 +82,7 @@ sub get_arch_info {
                      $group_core_count{$core_type_name} = 0;
                 }
                 $group_core_count{$core_type_name} += 1;
-            } 
+            }
         }
         close $fh;
     }
@@ -131,7 +131,7 @@ sub get_uptime {
 	my $smin  = $min . "m ";
 	my $ssec  = $sec . "s";
 	$result  .= $sday . $shour . $smin . $ssec;
-    } 
+    }
     close $fh;
     return $result;
 }

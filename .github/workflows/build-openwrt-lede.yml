@@ -100,8 +100,8 @@ jobs:
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
         cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905d_s922x_s922x-n2_s912_s905 -k 5.15.13_5.10.90_5.4.170
-        sudo ./make -d -b s905x_s905w -k 5.4.170
+        sudo ./make -d -b s922x_s905x3_s905d -k 5.15.13_5.10.90_5.4.170
+        sudo ./make -d -b s922x-n2_s905x2_s905_s905d-ki_s912_s912-t95z_s905x_s905w -k 5.4.170
         [ -d ipk ] || mkdir -p ipk
         cp -rf $(find openwrt/bin/packages/ -type f -name "*.ipk") ipk/ && sync
         sudo tar -czf ipk.tar.gz ipk && mv -f ipk.tar.gz out/ && sync

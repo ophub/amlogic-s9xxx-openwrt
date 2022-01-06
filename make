@@ -348,14 +348,15 @@ EOF
     fi
 
     # Add firmware information to the etc/flippy-openwrt-release
-    echo "FDTFILE='${FDTFILE}'" >>etc/flippy-openwrt-release 2>/dev/null
-    echo "U_BOOT_EXT='${K510}'" >>etc/flippy-openwrt-release 2>/dev/null
-    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>etc/flippy-openwrt-release 2>/dev/null
-    echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >>etc/flippy-openwrt-release 2>/dev/null
-    echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >>etc/flippy-openwrt-release 2>/dev/null
-    echo "KERNEL_VERSION='${build_usekernel}'" >>etc/flippy-openwrt-release 2>/dev/null
-    echo "SOC='${AMLOGIC_SOC}'" >>etc/flippy-openwrt-release 2>/dev/null
-    echo "K510='${K510}'" >>etc/flippy-openwrt-release 2>/dev/null
+    op_release="etc/flippy-openwrt-release"
+    echo "FDTFILE='${FDTFILE}'" >>${op_release} 2>/dev/null
+    echo "U_BOOT_EXT='${K510}'" >>${op_release} 2>/dev/null
+    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release} 2>/dev/null
+    echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >>${op_release} 2>/dev/null
+    echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
+    echo "KERNEL_VERSION='${build_usekernel}'" >>${op_release} 2>/dev/null
+    echo "SOC='${AMLOGIC_SOC}'" >>${op_release} 2>/dev/null
+    echo "K510='${K510}'" >>${op_release} 2>/dev/null
 
     # Add firmware version information to the terminal page
     if [ -f etc/banner ]; then
@@ -371,6 +372,13 @@ EOF
 
     # Add some package and script connection
     ln -sf /usr/sbin/openwrt-backup usr/sbin/flippy 2>/dev/null
+
+    # Add wireless master mode
+    wireless_mac80211="lib/netifd/wireless/mac80211.sh"
+    [ -f "${wireless_mac80211}" ] && {
+        sed -i "s|ip link |ipconfig link |g" ${wireless_mac80211}
+        sed -i "s|iw |ipconfig |g" ${wireless_mac80211}
+    }
 
     # Get random macaddr
     mac_hexchars="0123456789ABCDEF"

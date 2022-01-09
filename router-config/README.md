@@ -52,9 +52,7 @@ The method of Use GitHub Actions to compile OpenWrt, as well as many contents in
     - [10.7 Manage packages using web interface](#107-manage-packages-using-web-interface)
     - [10.8 How to recover if the install fails and cannot be started](#108-how-to-recover-if-the-install-fails-and-cannot-be-started)
     - [10.9 If you can’t startup after using the Mainline u-boot](#109-if-you-cant-startup-after-using-the-mainline-u-boot)
-    - [10.10 Turn on the USB disk boot mode of the Amlogic s9xxx tv box](#1010-turn-on-the-usb-disk-boot-mode-of-the-amlogic-s9xxx-tv-box)
-      - [10.10.1 Method 1: Use ADB tool](#10101-method-1-use-adb-tool)
-      - [10.10.2 Method 2: Use the reset button](#10102-method-2-use-the-reset-button)
+    - [10.10 Set the box to boot from USB/TF/SD](#1010-set-the-box-to-boot-from-usbtfsd)
 
 ## 1. Register your own GitHub account
 
@@ -550,25 +548,12 @@ You need to install a resistor on the TTL: [X96 Max Plus's V4.0 Motherboard](htt
 #######################################################            #####################################################
 ```
 
-### 10.10 Turn on the USB disk boot mode of the Amlogic s9xxx tv box
+### 10.10 Set the box to boot from USB/TF/SD
 
-#### 10.10.1 Method 1: Use ADB tool
-
-- Download [adb](https://github.com/ophub/script/releases/download/dev/adb.tar.gz) and unzip it, copy the three files `adb.exe`, `AdbWinApi.dll`, and `AdbWinUsbApi.dll` to the two files `system32` and `syswow64` under the directory of `c://windows/` Folder, then open the `cmd` command panel, use `adb --version` command, if it is displayed, it is ready to use.
-- Write the firmware to USB or TF/SD, insert it into the box after writing.
-- Enter the `cmd` command mode. Enter the `adb connect 192.168.1.137` command (the ip is modified according to your box, and you can check it in the router device connected to the box), if the link is successful, a message similar to the following will be displayed:
-```
-adb server version (31) doesn't match this client (40); killing... *
-daemon started successfully
-connected to 192.168.1.137:5555
-```
-- Enter the `adb shell reboot update` command, the box will restart and boot from the USB or TF/SD you inserted, access the firmware IP address from a browser, or SSH to enter the firmware.
-
-#### 10.10.2 Method 2: Use the reset button
-
-- Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 7 times in quick succession, and you will see that the developer mode is turned on.
-- Turn on USB debugging: After restarting, enter Settings → System → Advanced options → Developer options again (after entering, confirm that the status is on, and the USB debugging status in the list is also on)
-- Boot from USB hard disk: Unplug the power → insert the USB hard disk → insert the thimble into the AV port (top reset button) → insert the power → release the thimble of the av port → the system will boot from the USB hard disk.
-
-After booting from USB/TF/SD using one of the two methods above, Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
-
+- Write the firmware to USB/TF/SD, insert it into the box after writing.
+- Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 5 times in quick succession, See the prompt of `Enable Developer Mode` displayed by the system.
+- Turn on USB debugging: System → Advanced options → Developer options again (after entering, confirm that the status is on, and the `USB debugging` status in the list is also on). Enable `ADB` debugging.
+- Install ADB tools: Download [adb](https://github.com/ophub/script/releases/download/dev/adb.tar.gz) and unzip it, copy the three files `adb.exe`, `AdbWinApi.dll`, and `AdbWinUsbApi.dll` to the two files `system32` and `syswow64` under the directory of `c://windows/` Folder, then open the `cmd` command panel, use `adb --version` command, if it is displayed, it is ready to use.
+- Enter the `cmd` command mode. Enter the `adb connect 192.168.1.137` command (the ip is modified according to your box, and you can check it in the router device connected to the box), If the link is successful, it will display `connected to 192.168.1.137:5555`
+- Enter the `adb shell reboot update` command, the box will restart and boot from the USB/TF/SD you inserted, access the firmware IP address from a browser, or SSH to enter the firmware.
+- Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.

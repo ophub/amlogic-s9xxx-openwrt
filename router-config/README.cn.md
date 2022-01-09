@@ -2,7 +2,7 @@
 
 查看英文说明 | [View English description](README.md)
 
-使用 GitHub Actions 云编译 OpenWrt 的方法，以及本说明文档中的很多内容，来自 P3TERX, Flippy, tuanqing 等众多技术创新者和资源分享者, 因为众人的奉献，让我们在 Amlogic S9xxx 机顶盒中使用 OpenWrt 变的如此简单。
+使用 GitHub Actions 云编译 OpenWrt 的方法，以及本说明文档中的很多内容，来自 P3TERX, Flippy, tuanqing 等众多技术创新者和资源分享者, 因为众人的奉献，让我们在 Amlogic S9xxx 盒子中使用 OpenWrt 变的如此简单。
 
 Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非常不错的虚拟服务器环境，基于它可以进行构建、测试、打包、部署项目。对于公开仓库可免费无时间限制地使用，且单次编译时间长达 6 个小时，这对于编译 OpenWrt 来说是够用的（我们一般在3小时左右可以完成一次编译工作）。分享只是为了交流经验，不足的地方请大家理解，请不要在网络上发起各种不好的攻击行为，也不要恶意使用 GitHub Actions。
 
@@ -52,9 +52,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
     - [10.7 使用 Web 界面管理软件包](#107-使用-web-界面管理软件包)
     - [10.8 如果安装失败并且无法启动时如何救砖](#108-如果安装失败并且无法启动时如何救砖)
     - [10.9 在安装了主线 u-boot 后无法启动](#109-在安装了主线-u-boot-后无法启动)
-    - [10.10 设置 Amlogic S9xxx 系列机顶盒从 USB 中启动](#1010-设置-amlogic-s9xxx-系列机顶盒从-usb-中启动)
-      - [10.10.1 方法一： 使用 ADB 工具刷机](#10101-方法一-使用-adb-工具刷机)
-      - [10.10.2 方法二：使用复位键刷机](#10102-方法二使用复位键刷机)
+    - [10.10 设置盒子从 USB/TF/SD 中启动](#1010-设置盒子从-usbtfsd-中启动)
 
 ## 1. 注册自己的 Github 的账户
 
@@ -251,7 +249,7 @@ schedule:
 
 ### 7.1 从 Github Actions 下载
 
-点击仓库导航条里的 Actions 按钮，在 All workflows 列表里，点击已经编译完成的固件列表，在里面的固件列表里，选择和自己机顶盒型号对应的固件。图示如下：
+点击仓库导航条里的 Actions 按钮，在 All workflows 列表里，点击已经编译完成的固件列表，在里面的固件列表里，选择和自己盒子型号对应的固件。图示如下：
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418782-08714c00-7a05-11eb-9556-91575640a4bb.jpg width="300" />
@@ -260,7 +258,7 @@ schedule:
 
 ### 7.2 从 Github Releases 下载
 
-从仓库首页右下角的 Release 版块进入，选择和自己机顶盒型号对应的固件。图示如下：
+从仓库首页右下角的 Release 版块进入，选择和自己盒子型号对应的固件。图示如下：
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg width="300" />
@@ -303,9 +301,9 @@ UPLOAD_WETRANSFER: false
 openwrt-install-amlogic
 ```
 
-同一个型号的机顶盒，固件通用，比如 `openwrt_s905x3_v*.img` 固件可以用于 `x96max plus, hk1, h96` 等 `s905x3` 型号的机顶盒。在安装脚本将 OpenWrt 写入 EMMC 时，会提示你选择自己的机顶盒，请根据提示正确选择安装。
+同一个型号的盒子，固件通用，比如 `openwrt_s905x3_v*.img` 固件可以用于 `x96max plus, hk1, h96` 等 `s905x3` 型号的盒子。在安装脚本将 OpenWrt 写入 EMMC 时，会提示你选择自己的盒子，请根据提示正确选择安装。
 
-除默认的 13 个型号的机顶盒是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)
+除默认的 13 个型号的盒子是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)
 
 ## 9. 升级固件
 
@@ -394,7 +392,7 @@ REPO_BRANCH: openwrt-19.07
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
-修改 `-d` 后面的参数为你的机顶盒的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.4.170` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
+修改 `-d` 后面的参数为你的盒子的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.4.170` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
 
 ### 10.3 自定义 banner 信息
 
@@ -474,7 +472,7 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 
 - 一般情况下，重新插入电源，如果可以从 USB 中启动，只要重新安装即可，多试几次。
 
-- 如果接入显示器后，屏幕是黑屏状态，无法从 USB 启动，就需要进行机顶盒的短接初始化了。先将机顶盒恢复到原来的安卓系统，再重新刷入 OpenWrt 系统。
+- 如果接入显示器后，屏幕是黑屏状态，无法从 USB 启动，就需要进行盒子的短接初始化了。先将盒子恢复到原来的安卓系统，再重新刷入 OpenWrt 系统。
 
 ```
 以 x96max+ 为例
@@ -483,35 +481,35 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 
 1. [ 准备一条 USB 双公头数据线 ]: https://www.ebay.com/itm/152516378334
 2. [ 准备一个曲别针 ]: https://www.ebay.com/itm/133577738858
-3. 下载刷机软件和机顶盒的 Android TV 固件包
+3. 下载刷机软件和盒子的 Android TV 固件包
    [ 安装刷机软件 USB_Burning_Tool ]: https://androidmtk.com/download-amlogic-usb-burning-tool
    [ 下载 Android TV 固件包 ]: https://xdafirmware.com/x96-max-plus-2
-4. [ 在机顶盒的主板上确认短接点的位置 ]:
+4. [ 在盒子的主板上确认短接点的位置 ]:
    https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
 
 操作方法：
 
-1. 使用 [ USB 双公头数据线 ] 将 [ 机顶盒 ] 与 [ 电脑 ] 进行连接。
+1. 使用 [ USB 双公头数据线 ] 将 [ 盒子 ] 与 [ 电脑 ] 进行连接。
 2. 打开刷机软件 USB Burning Tool:
    [ 文件 → 导入固件包 ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
    [ 选择 ]：擦除 flash
    [ 选择 ]：擦除 bootloader
    点击 [ 开始 ] 按钮
-3. 使用 [ 曲别针 ] 将机顶盒主板上的 [ 两个短接点进行短接连接 ]。
+3. 使用 [ 曲别针 ] 将盒子主板上的 [ 两个短接点进行短接连接 ]。
    如果进度条没有走动，可以尝试插入电源。通长情况下不用电源支持供电，只 USB 双公头的供电即可满足刷机要求。
 4. 当看到 [ 进度条开始走动 ] 后，拿走曲别针，不再短接。
-5. 当看到 [ 进度条 100% ], 则刷机完成，机顶盒已经恢复成 Android TV 系统。
-   点击 [ 停止 ] 按钮, 拔掉 [ 机顶盒 ] 和 [ 电脑 ] 之间的 [ USB 双公头数据线] 。
+5. 当看到 [ 进度条 100% ], 则刷机完成，盒子已经恢复成 Android TV 系统。
+   点击 [ 停止 ] 按钮, 拔掉 [ 盒子 ] 和 [ 电脑 ] 之间的 [ USB 双公头数据线] 。
 6. 如果以上某个步骤失败，就再来一次，直至成功。
 ```
 
-当完成恢复出厂设置，机顶盒已经恢复成 Android TV 系统，其他安装 OpenWrt 系统的操作，就和你之前第一次安装系统时的要求一样了，再来一遍即可。使用写盘软件把 OpenWrt 写入 USB，将写好的 USB 插入机顶盒，使用牙签等顶住机顶盒的 AV 孔里的复位键，插入电源，等待 5 秒后松开牙签顶着的复位键，OpenWrt 将从 USB 中启动。
+当完成恢复出厂设置，盒子已经恢复成 Android TV 系统，其他安装 OpenWrt 系统的操作，就和你之前第一次安装系统时的要求一样了，再来一遍即可。使用写盘软件把 OpenWrt 写入 USB，将写好的 USB 插入盒子，使用牙签等顶住盒子的 AV 孔里的复位键，插入电源，等待 5 秒后松开牙签顶着的复位键，OpenWrt 将从 USB 中启动。
 
 ### 10.9 在安装了主线 u-boot 后无法启动
 
-- 极少数设备选择写入主线 `u-boot` 后可能会无法启动，在显示器中看到的提示为 `=>` 符号结尾的一段代码。这时你需要在 TTL 上焊接一个 5-10 K 的上拉或下拉电阻，解决机顶盒容易受周围电磁信号干扰而导致无法启动的问题，焊接电阻后就可以从 EMMC 启动了。
+- 极少数设备选择写入主线 `u-boot` 后可能会无法启动，在显示器中看到的提示为 `=>` 符号结尾的一段代码。这时你需要在 TTL 上焊接一个 5-10 K 的上拉或下拉电阻，解决盒子容易受周围电磁信号干扰而导致无法启动的问题，焊接电阻后就可以从 EMMC 启动了。
 
-如果你选择安装了主线 `u-boot` 并且无法启动，请将机顶盒接入屏幕，查看是否为这样的提示：
+如果你选择安装了主线 `u-boot` 并且无法启动，请将盒子接入屏幕，查看是否为这样的提示：
 
 ```
 Net: eth0: ethernet0ff3f0000
@@ -533,25 +531,12 @@ Hit any key to stop autoboot: 0
 #######################################################           #####################################################
 ```
 
-### 10.10 设置 Amlogic S9xxx 系列机顶盒从 USB 中启动
+### 10.10 设置盒子从 USB/TF/SD 中启动
 
-#### 10.10.1 方法一： 使用 ADB 工具刷机
-
-- 下载 [adb](https://github.com/ophub/script/releases/download/dev/adb.tar.gz) 并解压，将 `adb.exe`，`AdbWinApi.dll`，`AdbWinUsbApi.dll` 三个文件拷⻉到 `c://windows/` 目录下的 `system32` 和 `syswow64` 两个文件夹内，然后打开 `cmd` 命令面板，使用 `adb --version` 命令，如果有显示就表示可以使用了。
-- 把刷好固件的 USB 或者 TF/SD 插入盒子
-- 进入 `cmd` 命令模式。输入 `adb connect 192.168.1.137` 命令（其中的 ip 根据你的盒子修改，可以到盒子所接入的路由器设备里查看），如果链接成功会显示类似下面的信息:
-```
-adb server version (31) doesn't match this client (40); killing... *
-daemon started successfully
-connected to 192.168.1.137:5555
-```
-- 输入 `adb shell reboot update` 命令，盒子将重启并从你插入的 USB 或者 TF/SD 启动，从浏览器访问固件的 IP 地址，或者 SSH 访问即可进入固件。
-
-#### 10.10.2 方法二：使用复位键刷机
-
-- 开启开发者模式: 设置 → 关于本机 → 版本号 (如: X96max plus...), 在版本号上快速连击 7 次鼠标左键, 系统将提示开启开发者模式。
-- 开启 USB 调试模式: 重启后，再次进入 → 系统 → 高级选选 → 开发者选项 (设置 `开启USB调试` 为启用)
-- 从 USB 启动: 拔掉电源 → 插入 USB → 使用牙签等工具插入 AV 孔并顶住里面的复位键不要放 (此位置在重置按钮上面) → 插入电源 → 等待 5 秒后松开复位键 → OpenWrt 系统将从 USB 中启动。
-
-使用上面的两种方法之一从 USB/TF/SD 启动后，登录 OpenWrt 系统: 将你的机顶盒与电脑进行直连 → 关闭电脑的 WIFI 选项，只使用有线网卡 → 将有线网卡的网络设置为和 OpenWrt 相同的网段，如果 OpenWrt 的默认 IP 是: `192.168.1.1` ，你可以设置电脑的 IP 为 `192.168.1.2` ，子网掩码设置为 `255.255.255.0`, 除这 2 个选项外，其他选项不用设置。你就可以从浏览器进入 OpwnWrt 了，默认 IP : `192.168.1.1`, 默认账号: `root`, 默认密码: `password`
-
+- 把刷好固件的 USB/TF/SD 插入盒子。
+- 开启开发者模式: 设置 → 关于本机 → 版本号 (如: X96max plus...), 在版本号上快速连击 5 次鼠标左键, 看到系统显示 `开启开发者模式` 的提示。
+- 开启 USB 调试模式: 系统 → 高级选选 → 开发者选项 (设置 `开启USB调试` 为启用)。启用 `ADB` 调试。
+- 安装 ADB 工具：下载 [adb](https://github.com/ophub/script/releases/download/dev/adb.tar.gz) 并解压，将 `adb.exe`，`AdbWinApi.dll`，`AdbWinUsbApi.dll` 三个文件拷⻉到 `c://windows/` 目录下的 `system32` 和 `syswow64` 两个文件夹内，然后打开 `cmd` 命令面板，使用 `adb --version` 命令，如果有显示就表示可以使用了。
+- 进入 `cmd` 命令模式。输入 `adb connect 192.168.1.137` 命令（其中的 ip 根据你的盒子修改，可以到盒子所接入的路由器设备里查看），如果链接成功会显示 `connected to 192.168.1.137:5555`
+- 输入 `adb shell reboot update` 命令，盒子将重启并从你插入的 USB/TF/SD 启动，从浏览器访问固件的 IP 地址，或者 SSH 访问即可进入固件。
+- 登录 OpenWrt 系统: 将你的盒子与电脑进行直连 → 关闭电脑的 WIFI 选项，只使用有线网卡 → 将有线网卡的网络设置为和 OpenWrt 相同的网段，如果 OpenWrt 的默认 IP 是: `192.168.1.1` ，你可以设置电脑的 IP 为 `192.168.1.2` ，子网掩码设置为 `255.255.255.0`, 除这 2 个选项外，其他选项不用设置。你就可以从浏览器进入 OpwnWrt 了，默认 IP : `192.168.1.1`, 默认账号: `root`, 默认密码: `password`

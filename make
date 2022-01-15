@@ -9,7 +9,7 @@
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
-build_openwrt=("s922x" "s922x-n2" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
+build_openwrt=("s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
 make_path=${PWD}
 tmp_path=${make_path}/tmp
 out_path=${make_path}/out
@@ -196,10 +196,17 @@ refactor_files() {
         ANDROID_UBOOT=""
         AMLOGIC_SOC="s922x"
         ;;
-    s922x-n2 | odroid-n2)
-        FDTFILE="meson-g12b-gtking-pro-rev_a.dtb"
+    s922x-n2 | odroid-n2 | n2)
+        FDTFILE="meson-g12b-odroid-n2.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
         MAINLINE_UBOOT="/lib/u-boot/odroid-n2-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
+        AMLOGIC_SOC="s922x"
+        ;;
+    s922x-reva)
+        FDTFILE="meson-g12b-gtking-pro-rev_a.dtb"
+        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+        MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
         AMLOGIC_SOC="s922x"
         ;;
@@ -602,15 +609,16 @@ choose_build() {
     case $pause in
     11 | s922x) build="s922x" ;;
     12 | s922x-n2) build="s922x-n2" ;;
-    13 | s905x3) build="s905x3" ;;
-    14 | s905x2) build="s905x2" ;;
-    15 | s912) build="s912" ;;
-    16 | s912-t95z) build="s912-t95z" ;;
-    17 | s905) build="s905" ;;
-    18 | s905d) build="s905d" ;;
-    19 | s905d-ki) build="s905d-ki" ;;
-    20 | s905x) build="s905x" ;;
-    21 | s905w) build="s905w" ;;
+    13 | s922x-reva) build="s922x-reva" ;;
+    14 | s905x3) build="s905x3" ;;
+    15 | s905x2) build="s905x2" ;;
+    16 | s912) build="s912" ;;
+    17 | s912-t95z) build="s912-t95z" ;;
+    18 | s905) build="s905" ;;
+    19 | s905d) build="s905d" ;;
+    20 | s905d-ki) build="s905d-ki" ;;
+    21 | s905x) build="s905x" ;;
+    22 | s905w) build="s905w" ;;
     *) die "Have no this Amlogic SoC" ;;
     esac
     tag ${build}

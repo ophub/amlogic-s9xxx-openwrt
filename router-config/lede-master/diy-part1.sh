@@ -6,6 +6,9 @@
 # Source code repository: https://github.com/coolsnowwolf/lede / Branch: master
 #========================================================================================================================
 
+# add feed
+sed -i '$a src-git lynx https://github.com/lynxnexy/lynx.git;main' feeds.conf.default
+
 # Uncomment a feed source
 # sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
 # sed -i 's/\"#src-git\"/\"src-git\"/g' feeds.conf.default

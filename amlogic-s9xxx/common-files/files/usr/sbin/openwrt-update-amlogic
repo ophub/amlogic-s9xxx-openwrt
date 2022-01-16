@@ -438,7 +438,6 @@ if [ "${BR_FLAG}" -eq 0 ]; then
      "max-size": "10m",
      "max-file": "5"
    },
-  "iptables": true,
   "registry-mirrors": [
      "https://docker.mirrors.ustc.edu.cn",
      "https://registry.cn-shanghai.aliyuncs.com",

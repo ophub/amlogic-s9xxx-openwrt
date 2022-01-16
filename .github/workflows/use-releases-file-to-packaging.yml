@@ -55,9 +55,9 @@ jobs:
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/openwrt-armvirt-.*.tar.gz" | head -n 1 > DOWNLOAD_ARMVIRT
         [ -s DOWNLOAD_ARMVIRT ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x -k 5.4.170_5.15.13 -v dev
-        sudo rm -rf amlogic-s9xxx/amlogic-kernel/* && sync
-        sudo ./make -d -b s922x_s922x-n2_s922x-reva_s905d_s912_s912-t95z_s905x2_s905_s905d-ki -k 5.4.170_5.15.13
+        #sudo ./make -d -b s905x3_s905x -k 5.4.170_5.15.13 -v dev
+        #sudo rm -rf amlogic-s9xxx/amlogic-kernel/* && sync
+        sudo ./make -d -b s922x_s922x-n2_s922x-reva_s905d_s912_s912-t95z_s905x2_s905_s905d-ki_s905x3_s905x -k 5.4.170_5.15.13
         sudo ./make -d -b s905w -k 5.4.170
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/ipk.tar.gz" | head -n 1 > DOWNLOAD_IPK
         [ -s DOWNLOAD_IPK ] && wget -q -P out https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_IPK)

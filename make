@@ -383,9 +383,9 @@ EOF
     # Add some package and script connection
     ln -sf /usr/sbin/openwrt-backup usr/sbin/flippy 2>/dev/null
 
-    # Add rtl8189fs driver for s905x(HG680P & B860H), rtl8822cs driver for s905x3(x96max+) in the dev branch of the kernel repo
+    # Add rtl8189fs & rtl8188fu driver for s905x(HG680P & B860H), rtl8822cs driver for s905x3(x96max+) in the dev branch kernel
     [[ "${build_soc}" == "s905x3" || "${build_soc}" == "s905x" ]] && {
-        sed -i "s|stable|dev|g" etc/config/amlogic
+        #sed -i "s|stable|dev|g" etc/config/amlogic
     }
 
     # Add wireless master mode

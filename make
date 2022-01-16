@@ -432,9 +432,7 @@ EOF
     else
         old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
         sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt
-        
-        # fix not mount /dev/sda2 for rootfs
-        sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" uEnv.txt
+        sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/g" uEnv.txt
     fi
 
     # Add u-boot.ext for 5.10 kernel

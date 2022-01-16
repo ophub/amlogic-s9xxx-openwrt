@@ -170,7 +170,7 @@ cpu_tempx=$(echo $cpu_temp | sed 's/°C//g')
 if [ -x /usr/bin/cpustat ]; then
 	sys_temp=$(/usr/bin/cpustat -A)
 else
-	sys_temp=$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c)
+	sys_temp=$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq )
 fi
 sys_tempx=$(echo $sys_temp | sed 's/ / /g')
 

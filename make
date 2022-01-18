@@ -29,26 +29,26 @@ auto_kernel="true"
 BOOT_MB=256
 ROOT_MB=960
 
-tag() {
+tag_msg() {
     echo -e " [ \033[1;92m ${1} \033[0m ]"
 }
 
-process() {
+process_msg() {
     echo -e " [ \033[1;92m ${build} \033[0m - \033[1;92m ${kernel} \033[0m ] ${1}"
 }
 
-error() {
-    echo -e " [ \033[1;91m Error \033[0m ] ${1}"
+warn_msg() {
+    echo -e " [ \033[1;91m Warning \033[0m ] ${1}"
 }
 
-die() {
+error_msg() {
     error "${1}"
     exit 1
 }
 
 loop_setup() {
     loop=$(losetup -P -f --show "${1}")
-    [ ${loop} ] || die "losetup ${1} failed."
+    [ ${loop} ] || error_msg "losetup ${1} failed."
 }
 
 cleanup() {
@@ -157,7 +157,7 @@ extract_armbian() {
         find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
         sync
     else
-        die "Have no kernel files in [ ${kernel_dir} ]"
+        error_msg "Have no kernel files in [ ${kernel_dir} ]"
     fi
 
     cd ${make_path}
@@ -283,7 +283,7 @@ refactor_files() {
         AMLOGIC_SOC="s922x"
         ;;
     *)
-        die "Have no this firmware: [ ${build_op} - ${kernel} ]"
+        error_msg "Have no this firmware: [ ${build_op} - ${kernel} ]"
         ;;
     esac
 
@@ -433,7 +433,7 @@ EOF
 
     # Edit the uEnv.txt
     if [ ! -f "uEnv.txt" ]; then
-        die "The uEnv.txt File does not exist"
+        error_msg "The uEnv.txt File does not exist"
     else
         old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
         sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt
@@ -445,7 +445,7 @@ EOF
         if [ -f "${uboot_path}/${UBOOT_OVERLOAD}" ]; then
             cp -f ${uboot_path}/${UBOOT_OVERLOAD} u-boot.ext && sync && chmod +x u-boot.ext
         else
-            die "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
+            error_msg "${build_usekernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
         fi
     fi
 
@@ -506,10 +506,10 @@ copy2image() {
 
     mkdir -p ${bootfs} ${rootfs} && sync
     if ! mount ${loop}p1 ${bootfs}; then
-        die "mount ${loop}p1 failed!"
+        error_msg "mount ${loop}p1 failed!"
     fi
     if ! mount ${loop}p2 ${rootfs}; then
-        die "mount ${loop}p2 failed!"
+        error_msg "mount ${loop}p2 failed!"
     fi
 
     cp -rf ${boot}/* ${bootfs}
@@ -555,7 +555,7 @@ get_kernels() {
 
 show_kernels() {
     if [ ${#build_kernel[*]} = 0 ]; then
-        die "No kernel files in [ ${kernel_path} ] directory!"
+        error_msg "No kernel files in [ ${kernel_path} ] directory!"
     else
         show_list "${build_kernel[*]}" "kernel"
     fi
@@ -573,14 +573,14 @@ choose_firmware() {
     show_list "${firmwares[*]}" "firmware"
     choose_files ${#firmwares[*]} "firmware"
     firmware=${firmwares[opt]}
-    tag ${firmware} && echo
+    tag_msg ${firmware} && echo
 }
 
 choose_kernel() {
     show_kernels
     choose_files ${#build_kernel[*]} "kernel"
     kernel=${build_kernel[opt]}
-    tag ${kernel} && echo
+    tag_msg ${kernel} && echo
 }
 
 choose_files() {
@@ -598,7 +598,7 @@ choose_files() {
                 break
             else
                 ((i++ >= 2)) && exit 1
-                error "Wrong type, try again!"
+                warn_msg "Wrong type, try again!"
                 sleep 1s
             fi
         done
@@ -625,9 +625,9 @@ choose_build() {
     20 | s905d-ki) build="s905d-ki" ;;
     21 | s905x) build="s905x" ;;
     22 | s905w) build="s905w" ;;
-    *) die "Have no this Amlogic SoC" ;;
+    *) error_msg "Have no this Amlogic SoC" ;;
     esac
-    tag ${build}
+    tag_msg ${build}
 }
 
 set_rootsize() {
@@ -639,11 +639,11 @@ set_rootsize() {
  if you don't know what this means, press Enter to keep default: " rootsize
         [ ${rootsize} ] || rootsize=${ROOT_MB}
         if [[ "${rootsize}" -ge "256" ]]; then
-            tag ${rootsize} && echo
+            tag_msg ${rootsize} && echo
             break
         else
             ((i++ >= 2)) && exit 1
-            error "Invalid numeric input, try again!\n"
+            warn_msg "Invalid numeric input, try again!\n"
             sleep 1s
         fi
     done
@@ -689,7 +689,7 @@ Options:
 EOF
 }
 
-[ $(id -u) = 0 ] || die "please run this script as root: [ sudo ./make ]"
+[ $(id -u) = 0 ] || error_msg "please run this script as root: [ sudo ./make ]"
 echo -e "Welcome to use the OpenWrt packaging tool! \n"
 echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
@@ -721,7 +721,7 @@ while [ "${1}" ]; do
             : ${build:="all"}
             shift
         else
-            die "Invalid -b parameter [ ${2} ]!"
+            error_msg "Invalid -b parameter [ ${2} ]!"
         fi
         ;;
     -k | --kernelversion)
@@ -740,7 +740,7 @@ while [ "${1}" ]; do
             : ${kernel:="all"}
             shift
         else
-            die "Invalid -k parameter [ ${2} ]!"
+            error_msg "Invalid -k parameter [ ${2} ]!"
         fi
         ;;
     -a | --autokernel)
@@ -748,7 +748,7 @@ while [ "${1}" ]; do
             auto_kernel="${2}"
             shift
         else
-            die "Invalid -a parameter [ ${2} ]!"
+            error_msg "Invalid -a parameter [ ${2} ]!"
         fi
         ;;
     -v | --versionbranch)
@@ -756,7 +756,7 @@ while [ "${1}" ]; do
             version_branch="${2}"
             shift
         else
-            die "Invalid -v parameter [ ${2} ]!"
+            error_msg "Invalid -v parameter [ ${2} ]!"
         fi
         ;;
     -s | --size)
@@ -764,7 +764,7 @@ while [ "${1}" ]; do
             rootsize="${2}"
             shift
         else
-            die "Invalid -s parameter [ ${2} ]!"
+            error_msg "Invalid -s parameter [ ${2} ]!"
         fi
         ;;
     -h | --help)
@@ -779,18 +779,18 @@ while [ "${1}" ]; do
         show_kernels && exit 0
         ;;
     *)
-        die "Invalid option [ ${1} ]!"
+        error_msg "Invalid option [ ${1} ]!"
         ;;
     esac
     shift
 done
 
 if [ ${#firmwares[*]} = 0 ]; then
-    die "No the [ openwrt-armvirt-64-default-rootfs.tar.gz ] file in [ ${openwrt_path} ] directory!"
+    error_msg "No the [ openwrt-armvirt-64-default-rootfs.tar.gz ] file in [ ${openwrt_path} ] directory!"
 fi
 
 if [ ${#build_kernel[*]} = 0 ]; then
-    die "No this kernel files in [ ${kernel_path} ] directory!"
+    error_msg "No this kernel files in [ ${kernel_path} ] directory!"
 fi
 
 [ ${firmware} ] && echo " firmware   ==>   ${firmware}"
@@ -833,17 +833,17 @@ for b in ${build_openwrt[*]}; do
 
             kernel=${x}
             build=${b}
-            process " (1/6) extract armvirt files."
+            process_msg " (1/6) extract armvirt files."
             extract_openwrt
-            process " (2/6) extract armbian files."
+            process_msg " (2/6) extract armbian files."
             extract_armbian ${b}
-            process " (3/6) refactor related files."
+            process_msg " (3/6) refactor related files."
             refactor_files ${b} ${x}
-            process " (4/6) make openwrt image."
+            process_msg " (4/6) make openwrt image."
             make_image ${b}
-            process " (5/6) copy files to image."
+            process_msg " (5/6) copy files to image."
             copy2image ${b}
-            process " (6/6) cleanup tmp files."
+            process_msg " (6/6) cleanup tmp files."
             cleanup
 
             echo -e "(${k}.${i}) OpenWrt packaged successfully. \n"

@@ -488,7 +488,7 @@ Search and install `luci-app-*` packages if you want to configure services using
 
 - Under normal circumstances, re-insert the USB hard disk and install it again.
 
-- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx tv box to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx tv box to factory settings first, and then reinstall it.
+- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx tv box to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx tv box to factory settings first, and then reinstall it. First download the [amlogic_usb_burning_tool](https://github.com/ophub/script/releases/download/dev/amlogic_usb_burning_tool_v3.2.0_and_driver.tar.gz) system recovery tool and install it.
 
 ```
 Take x96max+ as an example.
@@ -497,9 +497,7 @@ Prepare materials:
 
 1. [ A USB male-to-male data cable ]: https://www.ebay.com/itm/152516378334
 2. [ A paper clip ]: https://www.ebay.com/itm/133577738858
-3. Install the software and Download the Android TV firmware
-   [ Install the USB_Burning_Tool ]: https://androidmtk.com/download-amlogic-usb-burning-tool
-   [ Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
+3. [ Download the Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
 4. [ Find the two short-circuit points on the motherboard ]:
    https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
 

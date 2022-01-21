@@ -472,7 +472,7 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 
 - 一般情况下，重新插入电源，如果可以从 USB 中启动，只要重新安装即可，多试几次。
 
-- 如果接入显示器后，屏幕是黑屏状态，无法从 USB 启动，就需要进行盒子的短接初始化了。先将盒子恢复到原来的安卓系统，再重新刷入 OpenWrt 系统。
+- 如果接入显示器后，屏幕是黑屏状态，无法从 USB 启动，就需要进行盒子的短接初始化了。先将盒子恢复到原来的安卓系统，再重新刷入 OpenWrt 系统。首先下载 [amlogic_usb_burning_tool](https://github.com/ophub/script/releases/download/dev/amlogic_usb_burning_tool_v3.2.0_and_driver.tar.gz) 系统恢复工具并安装好。
 
 ```
 以 x96max+ 为例
@@ -481,9 +481,7 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 
 1. [ 准备一条 USB 双公头数据线 ]: https://www.ebay.com/itm/152516378334
 2. [ 准备一个曲别针 ]: https://www.ebay.com/itm/133577738858
-3. 下载刷机软件和盒子的 Android TV 固件包
-   [ 安装刷机软件 USB_Burning_Tool ]: https://androidmtk.com/download-amlogic-usb-burning-tool
-   [ 下载 Android TV 固件包 ]: https://xdafirmware.com/x96-max-plus-2
+3. [ 下载盒子的 Android TV 固件包 ]: https://xdafirmware.com/x96-max-plus-2
 4. [ 在盒子的主板上确认短接点的位置 ]:
    https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
 

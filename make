@@ -671,7 +671,7 @@ Options:
       , -k all             Build all the kernel version
       , -k latest          Build the latest kernel version
       , -k 5.4.170         Specify a single kernel for compilation
-      , -k 5.4.170_5.15.13 Specify multiple cores, use "_" to connect
+      , -k 5.4.170_5.10.90 Specify multiple cores, use "_" to connect
 
     -a, --autokernel       Whether to auto update to the latest kernel of the same series
       , -a true            Auto update to the latest kernel

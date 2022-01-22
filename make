@@ -317,9 +317,13 @@ EOF
     echo panfrost >etc/modules.d/panfrost 2>/dev/null
     echo meson_gxbb_wdt >etc/modules.d/watchdog 2>/dev/null
 
-    # Edit fstab
-    ROOTFS_UUID=$(uuidgen)
+    # Generate UUID
+    ROOTFS_UUID="$(cat /proc/sys/kernel/random/uuid)"
+    [ -z "${ROOTFS_UUID}" ] && ROOTFS_UUID="$(uuidgen)"
+    [ -z "${ROOTFS_UUID}" ] && error_msg "The uuidgen is invalid, cannot continue."
     #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
+
+    # Edit fstab
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
     sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
 

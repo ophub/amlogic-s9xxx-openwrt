@@ -334,15 +334,36 @@ EOF
     [ -f etc/config/turboacc ] && sed -i "s|option hw_flow.*|option hw_flow '0'|g" etc/config/turboacc
     [ -f etc/config/turboacc ] && sed -i "s|option sfe_flow.*|option sfe_flow '0'|g" etc/config/turboacc
 
-    # Add drivers
-    [ -f etc/modules.d/8189fs ] || echo "8189fs" >etc/modules.d/8189fs
-    [ -f etc/modules.d/88x2cs ] || echo "88x2cs" >etc/modules.d/88x2cs
-    [ -f etc/modules.d/rtl8188fu ] || echo "rtl8188fu" >etc/modules.d/rtl8188fu
+    # Add USB and wireless network drivers
     [ -f etc/modules.d/usb-net-rtl8150 ] || echo "rtl8150" >etc/modules.d/usb-net-rtl8150
+    # USB RTL8152/8153/8156 network card Driver
     [ -f etc/modules.d/usb-net-rtl8152 ] || echo "r8152" >etc/modules.d/usb-net-rtl8152
+    # USB AX88179 network card Driver
     [ -f etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" >etc/modules.d/usb-net-asix-ax88179
-    [ -f etc/modules.d/brcmfmac ] || echo "brcmfmac" >etc/modules.d/brcmfmac
-    [ -f etc/modules.d/brcmutil ] || echo "brcmutil" >etc/modules.d/brcmutil
+    # brcmfmac built-in wireless network card Driver
+    echo "brcmfmac" >etc/modules.d/brcmfmac
+    echo "brcmutil" >etc/modules.d/brcmutil
+    # USB Realtek RTL8188EU Wireless LAN Driver
+    echo "r8188eu" >etc/modules.d/rtl8188eu
+    # Realtek RTL8189FS Wireless LAN Driver
+    echo "8189fs" >etc/modules.d/8189fs
+    # Realtek RTL8188FU Wireless LAN Driver
+    echo "rtl8188fu" >etc/modules.d/rtl8188fu
+    # Realtek RTL8822CS Wireless LAN Driver
+    echo "88x2cs" >etc/modules.d/88x2cs
+    # USB Ralink Wireless LAN Driver
+    echo "rt2500usb" >etc/modules.d/rt2500-usb
+    echo "rt2800usb" >etc/modules.d/rt2800-usb
+    echo "rt2x00usb" >etc/modules.d/rt2x00-usb
+    # USB Mediatek Wireless LAN Driver
+    echo "mt7601u" >etc/modules.d/mt7601u
+    echo "mt7663u" >etc/modules.d/mt7663u
+    echo "mt76x0u" >etc/modules.d/mt76x0u
+    echo "mt76x2u" >etc/modules.d/mt76x2u
+    # GPU Driver
+    echo "panfrost" >etc/modules.d/panfrost
+    # PWM Driver
+    echo "pwm_meson" >etc/modules.d/pwm_meson
 
     # Add cpustat
     DISTRIB_SOURCECODE="$(cat etc/openwrt_release | grep "DISTRIB_SOURCECODE=" | awk -F "'" '{print $2}')"

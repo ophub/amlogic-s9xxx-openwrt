@@ -213,6 +213,16 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 
 For the compilation method of the custom kernel, see [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
 
+```yaml
+- name: Compile the kernel for Amlogic s9xxx
+  uses: ophub/amlogic-s9xxx-armbian@main
+  with:
+    build_target: kernel
+    kernel_version: 5.15.13_5.4.170
+    kernel_auto: true
+    kernel_sign: -meson64-dev
+```
+
 ## ~/openwrt-armvirt/*-rootfs.tar.gz Firmware compilation parameters
 
 | Option | Value |

@@ -177,14 +177,16 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 
 - GitHub Action Input parameter description
 
-| Parameter              | Defaults               | Description                                                   |
-|------------------------|------------------------|---------------------------------------------------------------|
-| armvirt64_path         | no                     | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*.tar.gz` . |
-| amlogic_openwrt        | s905d_s905x3           | Set the `SoC` of the packaging box, the default `all` packs all boxes, you can specify a single box such as `s905x3`, you can choose multiple boxes to use `_` connection such as `s905x3_s905d` . SOC code of each box is: `s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s905d-ki`, `s905`, `s922x`, `s922x-n2`, `s912`, `s912-t95z` . Note: `s922x-reva` is `s922x-gtking-pro-rev_a`, `s922x-n2` is `s922x-odroid-n2`, `s912-t95z` is `s912-t95z-plus`, `s905d-ki` is `s912-mecool-ki-pro`, `s905x2-km3` is `s905x2-mecool-km3`. |
-| version_branch         | stable                 | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `stable`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
-| amlogic_kernel         | 5.15.13_5.4.170        | Set the kernel version，The [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) library contains many original kernels of `Flippy`, you can view and choose to specify. |
-| auto_kernel            | true                   | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `amlogic_kernel`. such as 5.4.170 version. If there is the latest version of 5.4 same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
-| amlogic_size           | 1024                   | Set the size of the firmware ROOTFS partition |
+The relevant parameters correspond to the `local packaging command`, please refer to the above description.
+
+| Parameter          | Defaults          | Description                                                   |
+|--------------------|-------------------|---------------------------------------------------------------|
+| armvirt64_path     | no                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*.tar.gz` . |
+| amlogic_openwrt    | s905d_s905x3      | Set the `SoC` of the packaging box, function reference `-b` |
+| version_branch     | stable            | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
+| amlogic_kernel     | 5.15.13_5.4.170   | Set the kernel version，function reference `-k` |
+| auto_kernel        | true              | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
+| amlogic_size       | 1024              | Set the size of the firmware ROOTFS partition, function reference `-s` |
 
 - GitHub Action Output variable description
 

@@ -24,7 +24,11 @@ on:
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
-        default: "-meson64-dev"
+        default: "-xiaoming"
+      kernel_config:
+        description: "Set the path of kernel .config"
+        required: false
+        default: ""
 
 env:
   TZ: Asia/Shanghai
@@ -58,6 +62,7 @@ jobs:
           kernel_version: ${{ github.event.inputs.kernel_version }}
           kernel_auto: ${{ github.event.inputs.kernel_auto }}
           kernel_sign: ${{ github.event.inputs.kernel_sign }}
+          kernel_config: ${{ github.event.inputs.kernel_config }}
 
       - name: Upload Kernel to Release
         uses: ncipollo/release-action@v1

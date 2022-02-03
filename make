@@ -9,56 +9,43 @@
 #======================================================================================================================
 
 #===== Do not modify the following parameter settings, Start =====
-build_openwrt=("s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
 make_path=${PWD}
 tmp_path=${make_path}/tmp
 out_path=${make_path}/out
 openwrt_path=${make_path}/openwrt-armvirt
+openwrt_file="openwrt-armvirt-64-default-rootfs.tar.gz"
 amlogic_path=${make_path}/amlogic-s9xxx
 kernel_path=${amlogic_path}/amlogic-kernel
 armbian_path=${amlogic_path}/amlogic-armbian
 uboot_path=${amlogic_path}/amlogic-u-boot
 configfiles_path=${amlogic_path}/common-files
+op_release="etc/flippy-openwrt-release"
+build_openwrt=("s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
+
 kernel_library="https://github.com/ophub/kernel/tree/main/pub"
 #kernel_library="https://github.com/ophub/kernel/trunk/pub"
 version_branch="stable"
 auto_kernel="true"
-#===== Do not modify the following parameter settings, End =======
+build_kernel=("5.10.90" "5.4.170")
 
-# Set firmware size ( BOOT_MB size >= 128, ROOT_MB size >= 512 )
+# Set firmware size (BOOT_MB >= 128, ROOT_MB >= 512)
+SKIP_MB=16
 BOOT_MB=256
 ROOT_MB=960
+#===== Do not modify the following parameter settings, End =======
 
-tag_msg() {
-    echo -e " [ \033[1;92m ${1} \033[0m ]"
+error_msg() {
+    echo -e " [\033[1;91m Error \033[0m] ${1}"
+    exit 1
 }
 
 process_msg() {
     echo -e " [ \033[1;92m ${build} \033[0m - \033[1;92m ${kernel} \033[0m ] ${1}"
 }
 
-warn_msg() {
-    echo -e " [ \033[1;91m Warning \033[0m ] ${1}"
-}
-
-error_msg() {
-    error "${1}"
-    exit 1
-}
-
 loop_setup() {
     loop=$(losetup -P -f --show "${1}")
     [ ${loop} ] || error_msg "losetup ${1} failed."
-}
-
-cleanup() {
-    cd ${make_path}
-    for x in $(lsblk | grep $(pwd) | grep -oE 'loop[0-9]+' | sort | uniq); do
-        umount -f /dev/${x}p* 2>/dev/null
-        losetup -d /dev/${x} 2>/dev/null
-    done
-    losetup -D
-    rm -rf ${tmp_path} 2>/dev/null
 }
 
 download_kernel() {
@@ -105,8 +92,7 @@ download_kernel() {
     for KERNEL_VAR in ${build_kernel[*]}; do
         if [ ! -d "${kernel_path}/${KERNEL_VAR}" ]; then
             echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_library}/${KERNEL_VAR} ]"
-            svn checkout ${kernel_library}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} >/dev/null
-            rm -rf ${kernel_path}/${KERNEL_VAR}/.svn >/dev/null && sync
+            svn export ${kernel_library}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} --force
         else
             echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
         fi
@@ -119,7 +105,7 @@ download_kernel() {
 
 extract_openwrt() {
     cd ${make_path}
-    local firmware="${openwrt_path}/${firmware}"
+    local firmware="${openwrt_path}/${openwrt_file}"
 
     root_comm="${tmp_path}/root_comm"
     mkdir -p ${root_comm}
@@ -389,8 +375,7 @@ EOF
         cp -f ${balethirq_file}/balance_irq etc/balance_irq >/dev/null 2>&1
     fi
 
-    # Add firmware information to the etc/flippy-openwrt-release
-    op_release="etc/flippy-openwrt-release"
+    # Add firmware information
     echo "FDTFILE='${FDTFILE}'" >>${op_release} 2>/dev/null
     echo "U_BOOT_EXT='${K510}'" >>${op_release} 2>/dev/null
     echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release} 2>/dev/null
@@ -491,8 +476,7 @@ make_image() {
     sync
 
     [ -d ${out_path} ] || mkdir -p ${out_path}
-    SKIP_MB=16
-    IMG_SIZE=$((SKIP_MB + BOOT_MB + rootsize))
+    IMG_SIZE=$((SKIP_MB + BOOT_MB + ROOT_MB))
 
     #fallocate -l ${IMG_SIZE}M ${build_image_file}
     dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} conv=fsync 2>/dev/null && sync
@@ -550,219 +534,43 @@ copy2image() {
     cd ${out_path} && gzip *.img && sync && cd ${make_path}
 }
 
-get_firmwares() {
-    firmwares=()
-    i=0
-    IFS=$'\n'
-
-    [ -d "${openwrt_path}" ] && {
-        for x in $(ls ${openwrt_path}); do
-            firmwares[i++]=${x}
-        done
-    }
-}
-
-get_kernels() {
-    build_kernel=()
-    i=0
-    IFS=$'\n'
-
-    local kernel_root="${kernel_path}"
-    [ -d ${kernel_root} ] && {
-        work=$(pwd)
-        cd ${kernel_root}
-        for x in $(ls ./); do
-            [ "$(ls ${x}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l)" -ge "3" ] && build_kernel[i++]=${x}
-        done
-        cd ${work}
-    }
-}
-
-show_kernels() {
-    if [ ${#build_kernel[*]} = 0 ]; then
-        error_msg "No kernel files in [ ${kernel_path} ] directory!"
-    else
-        show_list "${build_kernel[*]}" "kernel"
-    fi
-}
-
-show_list() {
-    echo " ${2}: "
-    i=0
-    for x in ${1}; do
-        echo " ($((++i))) ${x}"
+cleanup() {
+    cd ${make_path}
+    for x in $(lsblk | grep $(pwd) | grep -oE 'loop[0-9]+' | sort | uniq); do
+        umount -f /dev/${x}p* 2>/dev/null
+        losetup -d /dev/${x} 2>/dev/null
     done
+    losetup -D
+    rm -rf ${tmp_path} 2>/dev/null
 }
-
-choose_firmware() {
-    show_list "${firmwares[*]}" "firmware"
-    choose_files ${#firmwares[*]} "firmware"
-    firmware=${firmwares[opt]}
-    tag_msg ${firmware} && echo
-}
-
-choose_kernel() {
-    show_kernels
-    choose_files ${#build_kernel[*]} "kernel"
-    kernel=${build_kernel[opt]}
-    tag_msg ${kernel} && echo
-}
-
-choose_files() {
-    local len=${1}
-
-    if [ "${len}" = 1 ]; then
-        opt=0
-    else
-        i=0
-        while true; do
-            echo && read -p " select ${2} above, and press Enter to select the first one: " opt
-            [ ${opt} ] || opt=1
-            if [[ "${opt}" -ge "1" && "${opt}" -le "${len}" ]]; then
-                ((opt--))
-                break
-            else
-                ((i++ >= 2)) && exit 1
-                warn_msg "Wrong type, try again!"
-                sleep 1s
-            fi
-        done
-    fi
-}
-
-choose_build() {
-    i=1
-    for var in ${build_openwrt[*]}; do
-        echo " (${i}) ${var}"
-        let i++
-    done
-    echo && read -p " Please select the Amlogic SoC: " pause
-    case $pause in
-    11 | s922x) build="s922x" ;;
-    12 | s922x-n2) build="s922x-n2" ;;
-    13 | s922x-reva) build="s922x-reva" ;;
-    14 | s905x3) build="s905x3" ;;
-    15 | s905x2) build="s905x2" ;;
-    16 | s912) build="s912" ;;
-    17 | s912-t95z) build="s912-t95z" ;;
-    18 | s905) build="s905" ;;
-    19 | s905d) build="s905d" ;;
-    20 | s905d-ki) build="s905d-ki" ;;
-    21 | s905x) build="s905x" ;;
-    22 | s905w) build="s905w" ;;
-    *) error_msg "Have no this Amlogic SoC" ;;
-    esac
-    tag_msg ${build}
-}
-
-set_rootsize() {
-    i=0
-    rootsize=
-
-    while true; do
-        echo && read -p " input the rootfs partition size(mb) numerical value, defaults to 1024, do not less than 256
- if you don't know what this means, press Enter to keep default: " rootsize
-        [ ${rootsize} ] || rootsize=${ROOT_MB}
-        if [[ "${rootsize}" -ge "256" ]]; then
-            tag_msg ${rootsize} && echo
-            break
-        else
-            ((i++ >= 2)) && exit 1
-            warn_msg "Invalid numeric input, try again!\n"
-            sleep 1s
-        fi
-    done
-}
-
-usage() {
-    cat <<EOF
-Usage:
-    make [option]
-
-Options:
-
-    -d, --default          The kernel version is "latest", and the rootfs partition size is "1024m"
-
-    -b, --build=BUILD      Specify multiple cores, use "_" to connect
-      , -b all             Compile all types of openwrt
-      , -b s905x3          Specify a single openwrt for compilation
-      , -b s905x3_s905d    Specify multiple openwrt, use "_" to connect
-
-    -k, --kernelversion    Set the kernel version, which must be in the "kernel" directory
-      , -k all             Build all the kernel version
-      , -k latest          Build the latest kernel version
-      , -k 5.4.170         Specify a single kernel for compilation
-      , -k 5.4.170_5.10.90 Specify multiple cores, use "_" to connect
-
-    -a, --autokernel       Whether to auto update to the latest kernel of the same series
-      , -a true            Auto update to the latest kernel
-      , -a false           Do not upgrade, compile the specified kernel
-
-    -v, --versionbranch    Set the kernel version branch, the default is stable
-      , -v stable          Use stable branch
-      , -v dev             Use dev branch
-
-    -s, --size             Set the rootfs partition size, do not less than 256m
-      , -s 1024            Set the rootfs partition size is 1024MB
-
-    -h, --help             Display this help
-
-    -c, --clean            Clean up the output and temporary directories
-
-    --kernel               Show all kernel version in "kernel" directory
-
-EOF
-}
-
-[ $(id -u) = 0 ] || error_msg "please run this script as root: [ sudo ./make ]"
-echo -e "Welcome to use the OpenWrt packaging tool! \n"
-echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
-
-cleanup
-get_firmwares
-get_kernels
 
 while [ "${1}" ]; do
     case "${1}" in
     -d | --default)
-        : ${rootsize:=${ROOT_MB}}
-        : ${firmware:="${firmwares[0]}"}
-        : ${build:="all"}
-        : ${kernel:="${build_kernel[-1]}"}
-        : ${auto_kernel:=${auto_kernel}}
-        : ${version_branch:=${version_branch}}
+        : ${build_openwrt:="${build_openwrt}"}
+        : ${build_kernel:="${build_kernel}"}
+        : ${auto_kernel:="${auto_kernel}"}
+        : ${version_branch:="${version_branch}"}
+        : ${ROOT_MB:="${ROOT_MB}"}
         ;;
     -b | --build)
-        build=${2}
-        if [ "${build}" = "all" ]; then
-            shift
-        elif [ -n "${build}" ]; then
+        if [ -n "${2}" ]; then
             unset build_openwrt
             oldIFS=$IFS
             IFS=_
-            build_openwrt=(${build})
+            build_openwrt=(${2})
             IFS=$oldIFS
-            unset build
-            : ${build:="all"}
             shift
         else
             error_msg "Invalid -b parameter [ ${2} ]!"
         fi
         ;;
-    -k | --kernelversion)
-        kernel=${2}
-        if [ "${kernel}" = "all" ]; then
-            shift
-        elif [ "${kernel}" = "latest" ]; then
-            kernel="${build_kernel[-1]}"
-            shift
-        elif [ -n "${kernel}" ]; then
+    -k | --kernel)
+        if [ -n "${2}" ]; then
             oldIFS=$IFS
             IFS=_
-            build_kernel=(${kernel})
+            build_kernel=(${2})
             IFS=$oldIFS
-            unset kernel
-            : ${kernel:="all"}
             shift
         else
             error_msg "Invalid -k parameter [ ${2} ]!"
@@ -776,7 +584,7 @@ while [ "${1}" ]; do
             error_msg "Invalid -a parameter [ ${2} ]!"
         fi
         ;;
-    -v | --versionbranch)
+    -v | --version)
         if [ -n "${2}" ]; then
             version_branch="${2}"
             shift
@@ -786,22 +594,11 @@ while [ "${1}" ]; do
         ;;
     -s | --size)
         if [[ -n "${2}" && "${2}" -ge "512" ]]; then
-            rootsize="${2}"
+            ROOT_MB="${2}"
             shift
         else
             error_msg "Invalid -s parameter [ ${2} ]!"
         fi
-        ;;
-    -h | --help)
-        usage && exit 0
-        ;;
-    -c | --clean)
-        cleanup
-        rm -rf ${out_path} 2>/dev/null
-        echo "Clean up ok!" && exit 0
-        ;;
-    --kernel)
-        show_kernels && exit 0
         ;;
     *)
         error_msg "Invalid option [ ${1} ]!"
@@ -810,34 +607,12 @@ while [ "${1}" ]; do
     shift
 done
 
-if [ ${#firmwares[*]} = 0 ]; then
-    error_msg "No the [ openwrt-armvirt-64-default-rootfs.tar.gz ] file in [ ${openwrt_path} ] directory!"
-fi
-
-if [ ${#build_kernel[*]} = 0 ]; then
-    error_msg "No this kernel files in [ ${kernel_path} ] directory!"
-fi
-
-[ ${firmware} ] && echo " firmware   ==>   ${firmware}"
-[ ${rootsize} ] && echo " rootsize   ==>   ${rootsize}"
-[ ${make_path} ] && echo " make_path   ==>   ${make_path}"
-
-[ ${firmware} ] || [ ${kernel} ] || [ ${rootsize} ] && echo
-
-[ ${firmware} ] || choose_firmware
-[ ${kernel} ] || choose_kernel
-[ ${build} ] || choose_build
-[ ${rootsize} ] || set_rootsize
-
-[ ${kernel} != "all" ] && unset build_kernel && build_kernel=(${kernel})
-[ ${build} != "all" ] && unset build_openwrt && build_openwrt=(${build})
-
-# Set whether to replace the kernel
+[ $(id -u) = 0 ] || error_msg "please run this script as root: [ sudo ./$0 ]"
+echo -e "Welcome to use the OpenWrt packaging tool!"
 [ "${auto_kernel}" == "true" ] && download_kernel
-
 echo -e "OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
 echo -e "Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ]"
-echo -e "Ready, start packaging... \n"
+echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
 # Start loop compilation
 k=1

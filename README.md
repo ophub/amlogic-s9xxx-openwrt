@@ -81,7 +81,6 @@ According to the prompt, enter `b` to perform system backup, and enter `r` to pe
 | -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 5.4.170` . Multiple kernel use `_` connection such as `-k 5.15.13_5.4.170` |
 | -a | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 5.4.170 version. If there is the latest version of 5.4 same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | -s | Size | Specify the size of the ROOTFS partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
-| -h | help | View full documentation. |
 
 - `sudo ./make -d -b s905x3 -k 5.4.170`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
 - `sudo ./make -d -b s905x3_s905d -k 5.15.13_5.4.170`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
@@ -93,8 +92,6 @@ According to the prompt, enter `b` to perform system backup, and enter `r` to pe
 - `sudo ./make -d -k 5.15.13_5.4.170 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
 - `sudo ./make -d -k latest`: Use the default configuration to compile the latest kernel version of the openwrt firmware.
 - `sudo ./make -d -s 1024 -k 5.4.170`: Use the default configuration and set the partition size to 1024m, and only compile the openwrt firmware with the kernel version 5.4.170.
-- `sudo ./make -h`: Display help information and view detailed description of each parameter.
-- `sudo ./make`: If you are familiar with the relevant setting requirements of the s905x3 firmware, you can follow the prompts, such as selecting the firmware you want to make, the kernel version, setting the ROOTFS partition size, etc. If you don’t know these settings, just press Enter.
 
 ## Compilation and packaging method
 
@@ -111,7 +108,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 2. Clone the repository to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
 4. Name the kernel package according to the corresponding version number, such as `5.4.170` version, and put it into the `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` directory.
-5. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make` to make selection settings. The generated OpenWrt firmware is in the `out` directory under the root directory.
+5. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b s905x3 -k 5.4.170 -a false`. The generated OpenWrt firmware is in the `out` directory under the root directory.
 
 - ### Github.com One-stop compilation instructions
 

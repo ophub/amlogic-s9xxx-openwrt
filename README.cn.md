@@ -81,7 +81,6 @@ openwrt-ddbr
 | -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.4.170` . 多个内核使用 `_` 进行连接，如 `-k 5.15.13_5.4.170` |
 | -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.4.170 的 5.4 同系列是否有更新的版本，如有 5.4.170 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -s | Size | 对固件的 ROOTFS 分区大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
-| -h | help | 展示帮助文档. |
 
 - `sudo ./make -d -b s905x3 -k 5.4.170` : 推荐使用. 使用默认配置进行相关内核打包。
 - `sudo ./make -d -b s905x3_s905d -k 5.15.13_5.4.170` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
@@ -93,8 +92,6 @@ openwrt-ddbr
 - `sudo ./make -d -k 5.15.13_5.4.170 -a true` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
 - `sudo ./make -d -k latest` : 使用默认配置，最新的内核包，对全部型号的电视盒子进行打包。
 - `sudo ./make -d -s 1024 -k 5.4.170` : 使用默认配置，设置固件大小为 1024M, 并指定内核为 5.4.170 ，对全部型号电视盒子进行打包。
-- `sudo ./make -h` : 显示帮助文档。
-- `sudo ./make` : 如果你对脚本很熟悉，可以在本地编译时，这样进行问答式参数配置。
 
 ## OpenWrt 固件编译及打包说明
 
@@ -110,7 +107,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。
 4. 将内核包按对应的版本号命名如 `5.4.170` 放入 `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` 目录下。
-5. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make` 进行选择设置，打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
+5. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3 -k 5.4.170 -a false`。打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
 
 - ### Github.com 一站式编译和打包
 

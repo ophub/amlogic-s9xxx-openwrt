@@ -367,21 +367,21 @@ Let’s make a few brief introductions based on the files being used in the repo
 
 
 ```yaml
-#On Line 24: Source code library address
+#On Line 17: Source code library address
 REPO_URL: https://github.com/coolsnowwolf/lede
 
-#On Line 25: Branch name
+#On Line 18: Branch name
 REPO_BRANCH: master
 ```
 You can modify it to other, such as official:
 ```yaml
 REPO_URL: https://github.com/openwrt/openwrt
-REPO_BRANCH: openwrt-19.07
+REPO_BRANCH: openwrt-21.02
 ```
 
 #### 10.2.2 Change box model and kernel version
 
-Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
+Near line 96, find `Build OpenWrt firmware`, Code snippet like this:
 ```yaml
     - name: Build OpenWrt firmware
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()

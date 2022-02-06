@@ -361,21 +361,21 @@ GitHub官方给出了详细的说明，关于 GitHub Actions 的使用方法，�
 
 
 ```yaml
-#在第24行: 是指定openwrt编译源码的地址
+#在第17行: 是指定openwrt编译源码的地址
 REPO_URL: https://github.com/coolsnowwolf/lede
 
-#在第25行: 是指定分支的名称
+#在第18行: 是指定分支的名称
 REPO_BRANCH: master
 ```
-你可以修改成其他源码库的地址，如采用官方的源码库，使用其 `openwrt-19.07` 分支:
+你可以修改成其他源码库的地址，如采用官方的源码库，使用其 `openwrt-21.02` 分支:
 ```yaml
 REPO_URL: https://github.com/openwrt/openwrt
-REPO_BRANCH: openwrt-19.07
+REPO_BRANCH: openwrt-21.02
 ```
 
 #### 10.2.2 更改盒子的型号和内核版本号
 
-在第153行附近, 查找标题为 `Build OpenWrt firmware` 的编译步骤, 其代码块类似这样:
+在第96行附近, 查找标题为 `Build OpenWrt firmware` 的编译步骤, 其代码块类似这样:
 ```yaml
     - name: Build OpenWrt firmware
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()

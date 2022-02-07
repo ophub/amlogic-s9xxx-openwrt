@@ -78,19 +78,18 @@ According to the prompt, enter `b` to perform system backup, and enter `r` to pe
 | -d | Defaults | Compile all cores and all firmware types. |
 | -b | Build | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . You can use these codes: `s905x3`, `s905x2`, `s905x`, `s905w`, `s905d`, `s905d-ki`, `s905`, `s922x`, `s922x-n2`, `s912`, `s912-t95z` . Note: `s922x-reva` is `s922x-gtking-pro-rev_a`, `s922x-n2` is `s922x-odroid-n2`, `s912-t95z` is `s912-t95z-plus`, `s905d-ki` is `s912-mecool-ki-pro`, `s905x2-km3` is `s905x2-mecool-km3`. |
 | -v | Version | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
-| -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 5.4.170` . Multiple kernel use `_` connection such as `-k 5.15.13_5.4.170` |
+| -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 5.4.170` . Multiple kernel use `_` connection such as `-k 5.10.90_5.4.170` |
 | -a | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 5.4.170 version. If there is the latest version of 5.4 same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | -s | Size | Specify the size of the ROOTFS partition in MB. The default is 1024, and the specified size must be greater than 256. Such as `-s 1024` |
 
-- `sudo ./make -d -b s905x3 -k 5.4.170`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
-- `sudo ./make -d -b s905x3_s905d -k 5.15.13_5.4.170`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
 - `sudo ./make -d`: Compile latest kernel versions of openwrt for all SoC with the default configuration.
+- `sudo ./make -d -b s905x3 -k 5.4.170`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
+- `sudo ./make -d -b s905x3_s905d -k 5.10.90_5.4.170`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
 - `sudo ./make -d -b s905x3 -k 5.4.170 -s 1024`: Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation.
 - `sudo ./make -d -b s905x3 -v dev -k 5.7.19`: Use the default configuration, specify the model, specify the [version branch](https://github.com/ophub/kernel/tree/main/pub), and specify the kernel for packaging.
 - `sudo ./make -d -b s905x3_s905d`: Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels.
-- `sudo ./make -d -k 5.15.13_5.4.170`: Use the default configuration. Specify multiple cores, use `_` to connect.
-- `sudo ./make -d -k 5.15.13_5.4.170 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
-- `sudo ./make -d -k latest`: Use the default configuration to compile the latest kernel version of the openwrt firmware.
+- `sudo ./make -d -k 5.10.90_5.4.170`: Use the default configuration. Specify multiple cores, use `_` to connect.
+- `sudo ./make -d -k 5.10.90_5.4.170 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
 - `sudo ./make -d -s 1024 -k 5.4.170`: Use the default configuration and set the partition size to 1024m, and only compile the openwrt firmware with the kernel version 5.4.170.
 
 ## Compilation and packaging method
@@ -124,7 +123,7 @@ You can modify the configuration file in the `router-config` directory and `.yml
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.13_5.4.170
+    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.90_5.4.170
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -149,7 +148,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.13_5.4.170
+    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.10.90_5.4.170
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -169,7 +168,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
   with:
     armvirt64_path: openwrt/bin/targets/*/*/*.tar.gz
     amlogic_openwrt: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    amlogic_kernel: 5.15.13_5.4.170
+    amlogic_kernel: 5.10.90_5.4.170
 ```
 
 - GitHub Action Input parameter description
@@ -181,7 +180,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 | armvirt64_path     | no                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*.tar.gz` . |
 | amlogic_openwrt    | s905d_s905x3      | Set the `SoC` of the packaging box, function reference `-b` |
 | version_branch     | stable            | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
-| amlogic_kernel     | 5.15.13_5.4.170   | Set the kernel version，function reference `-k` |
+| amlogic_kernel     | 5.10.90_5.4.170   | Set the kernel version，function reference `-k` |
 | auto_kernel        | true              | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
 | amlogic_size       | 1024              | Set the size of the firmware ROOTFS partition, function reference `-s` |
 
@@ -217,7 +216,7 @@ For the compilation method of the custom kernel, see [compile-kernel](https://gi
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel
-    kernel_version: 5.15.13_5.4.170
+    kernel_version: 5.10.90_5.4.170
     kernel_auto: true
     kernel_sign: -meson64-dev
 ```

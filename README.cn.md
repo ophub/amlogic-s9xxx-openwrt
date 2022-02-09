@@ -37,7 +37,7 @@
 
 提示：安装/升级等功能由 [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 提供可视化操作支持。也支持[命令操作](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.cn.md#8-安装固件)。
 
-- ### 在 TF/USB 中使用 OpenWrt
+- ### 在 TF/SD/USB 中使用 OpenWrt
 
 从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
 
@@ -45,7 +45,7 @@
 openwrt-tf
 ```
 
-激活剩余空间后，支持在 TF/USB 中升级内核和 OpenWrt 系统。
+激活剩余空间后，支持在 TF/SD/USB 中升级内核和 OpenWrt 系统。
 
 - ### 为 OpenWrt 创建 swap
 
@@ -258,5 +258,4 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 
 ## License
 
-[LICENSE](https://github.com/ophub/op/blob/main/LICENSE) © OPHUB
-
+The amlogic-s9xxx-openwrt © OPHUB is licensed under [GPL-2.0](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/LICENSE)

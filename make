@@ -1,10 +1,20 @@
 #!/bin/bash
-#======================================================================================================================
+#========================================================================
+# This file is licensed under the terms of the GNU General Public
+# License version 2. This program is licensed "as is" without any
+# warranty of any kind, whether express or implied.
+#
+# This file is a part of the make OpenWrt for Amlogic s9xxx tv box
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+#
 # Description: Automatically Packaged OpenWrt for Amlogic s9xxx tv box
 # Copyright (C) 2020- https://github.com/unifreq
 # Copyright (C) 2020- https://github.com/tuanqing/mknop
 # Copyright (C) 2020- https://github.com/ophub/amlogic-s9xxx-openwrt
-#======================================================================================================================
+#
+# Command: sudo ./make -d
+# Command optional parameters please refer to the source code repository
+#========================================================================
 
 #===== Do not modify the following parameter settings, Start =====
 make_path=${PWD}

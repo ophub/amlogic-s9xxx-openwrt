@@ -37,7 +37,7 @@ Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system men
 
 Tip: Functions such as install/update are provided by [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) to provide visual operation support. Also supports [command operations](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md#8-install-the-firmware).
 
-- ### Use OpenWrt in TF/USB
+- ### Use OpenWrt in TF/SD/USB
 
 Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
 
@@ -45,7 +45,7 @@ Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system men
 openwrt-tf
 ```
 
-After activating the remaining space, the kernel and OpenWrt system can be upgraded in TF/USB.
+After activating the remaining space, the kernel and OpenWrt system can be upgraded in TF/SD/USB.
 
 - ### Create swap for openwrt system
 
@@ -260,5 +260,5 @@ iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is
 
 ## License
 
-[LICENSE](https://github.com/ophub/op/blob/main/LICENSE) © OPHUB
+The amlogic-s9xxx-openwrt © OPHUB is licensed under [GPL-2.0](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/LICENSE)
 

@@ -568,7 +568,7 @@ while [ "${1}" ]; do
         : ${version_branch:="${version_branch}"}
         : ${ROOT_MB:="${ROOT_MB}"}
         ;;
-    -b | --buildsoc)
+    -b | --buildSoC)
         if [ -n "${2}" ]; then
             unset build_openwrt
             oldIFS=$IFS
@@ -591,7 +591,7 @@ while [ "${1}" ]; do
             error_msg "Invalid -k parameter [ ${2} ]!"
         fi
         ;;
-    -a | --autokernel)
+    -a | --autoKernel)
         if [ -n "${2}" ]; then
             auto_kernel="${2}"
             shift
@@ -599,7 +599,7 @@ while [ "${1}" ]; do
             error_msg "Invalid -a parameter [ ${2} ]!"
         fi
         ;;
-    -v | --version)
+    -v | --versionBranch)
         if [ -n "${2}" ]; then
             version_branch="${2}"
             shift
@@ -622,9 +622,11 @@ while [ "${1}" ]; do
     shift
 done
 
+# Show welcome message
 [ $(id -u) = 0 ] || error_msg "please run this script as root: [ sudo ./$0 ]"
 echo -e "Welcome to use the OpenWrt packaging tool!"
 [ "${auto_kernel}" == "true" ] && download_kernel
+#
 echo -e "OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
 echo -e "Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"
 echo -e "Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
@@ -649,8 +651,8 @@ for b in ${build_openwrt[*]}; do
             fi
 
             # The loop variable assignment
-            kernel=${x}
             soc=${b}
+            kernel=${x}
 
             # Execute the following functions in sequence
             extract_openwrt

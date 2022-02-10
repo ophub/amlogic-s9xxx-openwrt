@@ -620,6 +620,8 @@ echo -e "Welcome to use the OpenWrt packaging tool!"
 [ "${auto_kernel}" == "true" ] && download_kernel
 echo -e "OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
 echo -e "Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ]"
+echo -e "Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+echo -e "Server memory usage: \n$(free -h) \n"
 echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
 # Start loop compilation

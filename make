@@ -13,14 +13,20 @@
 # Copyright (C) 2020- https://github.com/tuanqing/mknop
 # Copyright (C) 2020- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
+#===== Install the basic packages of make openwrt for Ubuntu 20.04 ======
+#
+# sudo apt-get update -y
+# sudo apt-get full-upgrade -y
+# sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
+#
 # Command: sudo ./make -d
 # Command optional parameters please refer to the source code repository
 #
 #============================ Functions list ============================
 #
 # error_msg          : Output error message
-# process_msg        : Output process information
-# losetup_msg        : Output loop device information
+# process_msg        : Output process message
+# losetup_msg        : Output loop device message
 #
 # init_var           : Initialize all variables
 # find_makefile      : Find make file (openwrt-*-rootfs.tar.gz)

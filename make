@@ -26,7 +26,6 @@
 #
 # error_msg          : Output error message
 # process_msg        : Output process message
-# losetup_msg        : Output loop device message
 #
 # init_var           : Initialize all variables
 # find_makefile      : Find make file (openwrt-*-rootfs.tar.gz)
@@ -58,8 +57,8 @@ op_release="etc/flippy-openwrt-release" # Add custom openwrt firmware informatio
 build_openwrt=("s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
 #
 # Latest kernel download repository
-kernel_library="https://github.com/ophub/kernel/tree/main/pub"
-#kernel_library="https://github.com/ophub/kernel/trunk/pub"
+kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
+#kernel_repo="https://github.com/ophub/kernel/trunk/pub"
 version_branch="stable"
 build_kernel=("5.10.90" "5.4.170")
 auto_kernel="true"
@@ -78,11 +77,6 @@ error_msg() {
 
 process_msg() {
     echo -e " [\033[1;92m ${soc} \033[0m - \033[1;92m ${kernel} \033[0m] ${1}"
-}
-
-losetup_msg() {
-    loop=$(losetup -P -f --show "${1}")
-    [ ${loop} ] || error_msg "losetup ${1} failed."
 }
 
 init_var() {
@@ -165,16 +159,16 @@ download_kernel() {
     cd ${make_path}
 
     # Convert kernel library address to svn format
-    if [[ ${kernel_library} == http* && $(echo ${kernel_library} | grep "tree/main") != "" ]]; then
-        kernel_library="${kernel_library//tree\/main/trunk}"
+    if [[ ${kernel_repo} == http* && $(echo ${kernel_repo} | grep "tree/main") != "" ]]; then
+        kernel_repo="${kernel_repo//tree\/main/trunk}"
     fi
-    kernel_library="${kernel_library}/${version_branch}"
+    kernel_repo="${kernel_repo}/${version_branch}"
 
     # Set empty array
     tmp_arr_kernels=()
 
     # Convert kernel library address to API format
-    server_kernel_url=${kernel_library#*com\/}
+    server_kernel_url=${kernel_repo#*com\/}
     server_kernel_url=${server_kernel_url//trunk/contents}
     server_kernel_url="https://api.github.com/repos/${server_kernel_url}"
 
@@ -206,8 +200,8 @@ download_kernel() {
     i=1
     for KERNEL_VAR in ${build_kernel[*]}; do
         if [ ! -d "${kernel_path}/${KERNEL_VAR}" ]; then
-            echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_library}/${KERNEL_VAR} ]"
-            svn export ${kernel_library}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} --force
+            echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_repo}/${KERNEL_VAR} ]"
+            svn export ${kernel_repo}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} --force
         else
             echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
         fi
@@ -605,19 +599,21 @@ make_image() {
     parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
     sync
 
-    losetup_msg ${build_image_file}
-    mkfs.vfat -n "BOOT" ${loop}p1 >/dev/null 2>&1
-    mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop}p2 >/dev/null 2>&1
+    loop_new=$(losetup -P -f --show "${build_image_file}")
+    [ ${loop_new} ] || error_msg "losetup ${build_image_file} failed."
+
+    mkfs.vfat -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
+    mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop_new}p2 >/dev/null 2>&1
     sync
 
     # Write the specified bootloader
     if [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
-        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
-        dd if=${root}${MAINLINE_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+        dd if=${root}${MAINLINE_UBOOT} of=${loop_new} bs=1 count=444 conv=fsync 2>/dev/null
+        dd if=${root}${MAINLINE_UBOOT} of=${loop_new} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${soc}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
     elif [[ "${ANDROID_UBOOT}" != "" && -f "${root}${ANDROID_UBOOT}" ]]; then
-        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=1 count=444 conv=fsync 2>/dev/null
-        dd if=${root}${ANDROID_UBOOT} of=${loop} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+        dd if=${root}${ANDROID_UBOOT} of=${loop_new} bs=1 count=444 conv=fsync 2>/dev/null
+        dd if=${root}${ANDROID_UBOOT} of=${loop_new} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${soc}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
     sync
@@ -634,11 +630,11 @@ copy_files() {
     local rootfs="${tmp_path}/${kernel}/${soc}/rootfs"
 
     mkdir -p ${bootfs} ${rootfs} && sync
-    if ! mount ${loop}p1 ${bootfs}; then
-        error_msg "mount ${loop}p1 failed!"
+    if ! mount ${loop_new}p1 ${bootfs}; then
+        error_msg "mount ${loop_new}p1 failed!"
     fi
-    if ! mount ${loop}p2 ${rootfs}; then
-        error_msg "mount ${loop}p2 failed!"
+    if ! mount ${loop_new}p2 ${rootfs}; then
+        error_msg "mount ${loop_new}p2 failed!"
     fi
 
     cp -rf ${boot}/* ${bootfs}
@@ -648,7 +644,7 @@ copy_files() {
     cd ${make_path}
     umount -f ${bootfs} 2>/dev/null
     umount -f ${rootfs} 2>/dev/null
-    losetup -d ${loop} 2>/dev/null
+    losetup -d ${loop_new} 2>/dev/null
     sync
 
     cd ${out_path} && gzip *.img && sync && cd ${make_path}
@@ -669,13 +665,13 @@ clean_tmp() {
 loop_make() {
     cd ${make_path}
 
-    k=1
+    j=1
     for b in ${build_openwrt[*]}; do
 
         i=1
-        for x in ${build_kernel[*]}; do
+        for k in ${build_kernel[*]}; do
             {
-                echo -n "(${k}.${i}) Start making OpenWrt [ ${b} - ${x} ]. "
+                echo -n "(${j}.${i}) Start making OpenWrt [ ${b} - ${k} ]. "
 
                 now_remaining_space=$(df -hT ${PWD} | grep '/dev/' | awk '{print $5}' | sed 's/.$//' | awk -F "." '{print $1}')
                 if [[ "${now_remaining_space}" -le "2" ]]; then
@@ -686,8 +682,8 @@ loop_make() {
                 fi
 
                 # The loop variable assignment
-                soc=${b}
-                kernel=${x}
+                soc="${b}"
+                kernel="${k}"
 
                 # Execute the following functions in sequence
                 extract_openwrt
@@ -697,12 +693,12 @@ loop_make() {
                 copy_files
                 clean_tmp
 
-                echo -e "(${k}.${i}) OpenWrt made successfully. \n"
+                echo -e "(${j}.${i}) OpenWrt made successfully. \n"
                 let i++
             }
         done
 
-        let k++
+        let j++
     done
 
     # Backup the ${openwrt_path}/${openwrt_file} file
@@ -716,6 +712,7 @@ echo -e "Welcome to tools for making Amlogic s9xxx OpenWrt! \n"
 echo -e "Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
 echo -e "Server memory usage: \n$(free -h) \n"
 echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
+#
 # Initialize variables and download the kernel
 init_var "${@}"
 find_makefile && echo -e "OpenWrt make file: [ ${openwrt_file} ]"
@@ -724,6 +721,7 @@ echo -e "OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
 echo -e "Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"
 # Loop to make OpenWrt firmware
 loop_make
+#
 # Show server end information
 echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 # All process completed

@@ -105,8 +105,8 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 ```
 2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。
-4. 将内核包按对应的版本号命名如 `5.4.170` 放入 `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` 目录下。
-5. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3 -k 5.4.170 -a false`。打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
+4. 在 `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` 目录下创建版本号对应的文件夹，如 `5.4.170` ，并将内核文件放入此目录。使用方法见 [amlogic-s9xxx/amlogic-kernel/README.md](amlogic-s9xxx/amlogic-kernel/README.md)
+5. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3 -k 5.4.170`。打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
 
 - ### Github.com 一站式编译和打包
 

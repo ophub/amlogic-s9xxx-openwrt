@@ -1,4 +1,4 @@
-# amlogic-s9xxx kernel related files
+# Description of Amlogic s9xxx series related documents
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
@@ -6,7 +6,7 @@ Some files needed for compilation related to amlogic-s9xxx kernel are stored in 
 
 ## amlogic-armbian
 
-Armbian files storage directory, such as [boot and firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-armbian) related.
+The files stored here are the Armbian related files that need to be used when packaging OpenWrt.
 
 ## amlogic-dtb
 
@@ -18,15 +18,15 @@ The kernel files needed to compile OpenWrt are stored in the `amlogic-kernel` di
 
 ## amlogic-u-boot
 
-When using the 5.10 kernel version, you need to copy the corresponding [u-boot-*.bin](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-u-boot) file to `u-boot.ext` (TF/SD card boot file) and `u-boot.emmc` (EMMC boot file).
+When you use OpenWrt with 5.10 kernel, you need to copy the u-boot file as `u-boot.ext` , when using it in EMMC, you need to copy the u-boot file as `u-boot.emmc` . These duplications are automated in the repository's packaging and install/upgrade scripts, eliminating the need for manual duplication. For the specific files corresponding to each model, see [u-boot-*.bin](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-u-boot)
 
 ## common-files
 
-- files: The files in the [files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/files) directory are custom files, which must be completely consistent with the structure and file naming and storage under the ***`ROOTFS`*** partiton in openwrt. If there are files in this directory, they will be automatically copied to the openwrt directory during `sudo ./make`. E.g:
+- files: Stored here is the personalized configuration file of the OpenWrt firmware, which will be automatically integrated into your firmware when the packaging script `sudo ./make` is executed. The names of related directories and files must be exactly the same as the ROOTFS partition in OpenWrt (that is, enter in the TTYD terminal: `cd / && ls .` The directories you see and the file names in each directory).
 
 ```yaml
-etc/config/network
-lib/u-boot
+etc/config/amlogic
+usr/sbin
 ```
 
 - patches: The files in the [patches](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches) directory are patch files, which are integrated when build kernel files.

@@ -43,16 +43,17 @@
 #==================== Set make environment variables ====================
 #
 # Related file storage path
-make_path=${PWD}
-tmp_path=${make_path}/tmp
-out_path=${make_path}/out
-openwrt_path=${make_path}/openwrt-armvirt
+make_path="${PWD}"
+tmp_path="${make_path}/tmp"
+out_path="${make_path}/out"
+openwrt_path="${make_path}/openwrt-armvirt"
 openwrt_file="openwrt-armvirt-64-default-rootfs.tar.gz"
-amlogic_path=${make_path}/amlogic-s9xxx
-kernel_path=${amlogic_path}/amlogic-kernel
-armbian_path=${amlogic_path}/amlogic-armbian
-uboot_path=${amlogic_path}/amlogic-u-boot
-configfiles_path=${amlogic_path}/common-files
+amlogic_path="${make_path}/amlogic-s9xxx"
+armbian_path="${amlogic_path}/amlogic-armbian"
+dtb_path="${amlogic_path}/amlogic-dtb"
+kernel_path="${amlogic_path}/amlogic-kernel"
+uboot_path="${amlogic_path}/amlogic-u-boot"
+configfiles_path="${amlogic_path}/common-files"
 op_release="etc/flippy-openwrt-release" # Add custom openwrt firmware information
 build_openwrt=("s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
 #
@@ -64,9 +65,9 @@ build_kernel=("5.10.100" "5.4.180")
 auto_kernel="true"
 #
 # Set OpenWrt firmware size (BOOT_MB >= 256, ROOT_MB >= 512)
-SKIP_MB=16
-BOOT_MB=256
-ROOT_MB=960
+SKIP_MB="16"
+BOOT_MB="256"
+ROOT_MB="960"
 #
 #========================================================================
 
@@ -242,6 +243,7 @@ extract_armbian() {
 
     if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
         mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
+        cp -rf ${dtb_path}/* ${boot}/dtb/amlogic
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
         sync
 
@@ -508,12 +510,6 @@ EOF
         echo " Packaged Date: ${op_packaged_date}" >>etc/banner
         echo " -------------------------------------------------------" >>etc/banner
     fi
-
-    # Add some package and script connection
-    ln -sf /usr/sbin/openwrt-backup usr/sbin/flippy 2>/dev/null
-
-    # Add rtl8189fs & rtl8188fu driver for s905x(HG680P & B860H), rtl8822cs driver for s905x3(x96max+) in the dev branch kernel
-    #[[ "${build_soc}" == "s905x3" || "${build_soc}" == "s905x" ]] && sed -i "s|stable|dev|g" etc/config/amlogic
 
     # Add wireless master mode
     wireless_mac80211="lib/netifd/wireless/mac80211.sh"

@@ -106,8 +106,8 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 ```
 2. Clone the repository to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
-4. Name the kernel package according to the corresponding version number, such as `5.4.170` version, and put it into the `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` directory.
-5. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b s905x3 -k 5.4.170 -a false`. The generated OpenWrt firmware is in the `out` directory under the root directory.
+4. Create a folder corresponding to the version number in the `~/amlogic-s9xxx-openwrt/amlogic-s9xxx/amlogic-kernel` directory, such as `5.4.170` , and put the kernel files in this directory. For usage, see [amlogic-s9xxx/amlogic-kernel/README.md](amlogic-s9xxx/amlogic-kernel/README.md)
+5. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b s905x3 -k 5.4.170`. The generated OpenWrt firmware is in the `out` directory under the root directory.
 
 - ### Github.com One-stop compilation instructions
 

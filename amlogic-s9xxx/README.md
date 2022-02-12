@@ -14,7 +14,7 @@ For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com
 
 ## amlogic-kernel
 
-The amlogic-s9xxx [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) storage directory.
+The kernel files needed to compile OpenWrt are stored in the `amlogic-kernel` directory. For usage, see [amlogic-kernel/README.md](amlogic-kernel/README.md)
 
 ## amlogic-u-boot
 

@@ -304,7 +304,7 @@ ROOT2=960
 if [[ "${AMLOGIC_SOC}" == "s912" || "${AMLOGIC_SOC}" == "s905d" ]]; then
     BOOT=512
     BLANK1=68
-    BLANK2=184
+    BLANK2=188
     BLANK3=0
     BLANK4=0
 elif [[ "${AMLOGIC_SOC}" == "s905x" ]]; then

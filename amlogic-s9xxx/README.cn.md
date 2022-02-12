@@ -14,7 +14,7 @@ Armbian 相关文件存储目录。这里存放的文件是打包 OpenWrt 时使
 
 ## amlogic-kernel
 
-这是各版本内核的存放目录，集中珍藏了 Flippy 分享的众多内核。具体详见 [kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-kernel) 。
+在 `amlogic-kernel` 目录下存放的是编译 OpenWrt 需要的内核文件，使用方法见 [amlogic-kernel/README.md](amlogic-kernel/README.md)
 
 ## amlogic-u-boot
 

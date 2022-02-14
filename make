@@ -28,17 +28,17 @@
 # process_msg        : Output process message
 #
 # init_var           : Initialize all variables
-# find_makefile      : Find make file (openwrt-*-rootfs.tar.gz)
+# find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
 # download_kernel    : Download the latest kernel
 #
-# extract_openwrt    : Extract openwrt files
-# extract_armbian    : Extract armbian firmware files
+# extract_openwrt    : Extract OpenWrt files
+# extract_armbian    : Extract Armbian files
 # refactor_files     : Refactor related files
-# make_image         : Making OpenWrt files
-# copy_files         : Copy the OpenWrt file
+# make_image         : Making OpenWrt file
+# copy_files         : Copy the OpenWrt files
 # clean_tmp          : Clear temporary files
 #
-# loop_make          : Loop to make OpenWrt firmware
+# loop_make          : Loop to make OpenWrt files
 #
 #==================== Set make environment variables ====================
 #
@@ -150,7 +150,7 @@ init_var() {
     done
 }
 
-find_makefile() {
+find_openwrt() {
     cd ${make_path}
 
     [[ -f "${openwrt_path}/${openwrt_file}" ]] || error_msg "The OpenWrt file does not exist!"
@@ -711,7 +711,7 @@ echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 #
 # Initialize variables and download the kernel
 init_var "${@}"
-find_makefile && echo -e "OpenWrt make file: [ ${openwrt_file} ]"
+find_openwrt && echo -e "OpenWrt make file: [ ${openwrt_file} ]"
 [ "${auto_kernel}" == "true" ] && download_kernel
 echo -e "OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
 echo -e "Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"

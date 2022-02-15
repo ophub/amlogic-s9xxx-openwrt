@@ -10,30 +10,24 @@
 # openwrt-kernel ${AUTO_MAINLINE_UBOOT}
 # E.g: openwrt-kernel yes
 # E.g: openwrt-kernel no
-# When there is no U-BOOT file in related directory, the script will auto try to download the file from the server:
-# UBOOT_OVERLOAD: https://github.com/ophub/luci-app-amlogic/tree/main/depends/meson_btld/without_fip
-# MAINLINE_UBOOT: https://github.com/ophub/luci-app-amlogic/tree/main/depends/meson_btld/with_fip
-
-# The UBOOT_OVERLOAD and MAINLINE_UBOOT files download path
-GITHUB_RAW="https://raw.githubusercontent.com/ophub/luci-app-amlogic/main/depends/meson_btld"
 
 # Receive one-key command related parameters
 AUTO_MAINLINE_UBOOT="${1}"
 
 # Encountered a serious error, abort the script execution
-die() {
+error_msg() {
     echo -e " [Error] ${1}"
     exit 1
 }
 
 echo -e "Start update the openwrt kernel."
 # Operation environment check
-[ -x /usr/sbin/openwrt-kernel ] || die "Please grant execution permission: chmod +x /usr/sbin/openwrt-kernel"
+[ -x /usr/sbin/openwrt-kernel ] || error_msg "Please grant execution permission: chmod +x /usr/sbin/openwrt-kernel"
 
 # Current device model
 MYDEVICE_NAME=$(cat /proc/device-tree/model | tr -d '\000')
 if [[ -z "${MYDEVICE_NAME}" ]]; then
-    die "The device name is empty and cannot be recognized."
+    error_msg "The device name is empty and cannot be recognized."
 elif [[ "$(echo ${MYDEVICE_NAME} | grep "Chainedbox L1 Pro")" != "" ]]; then
     MYDTB_FILE="rockchip"
     MYBOOT_VMLINUZ="Image"
@@ -47,7 +41,7 @@ elif [[ -f "/etc/flippy-openwrt-release" ]]; then
     MYDTB_FILE="amlogic"
     MYBOOT_VMLINUZ="zImage"
 else
-    die "Unknown device: [ ${MYDEVICE_NAME} ], Not supported."
+    error_msg "Unknown device: [ ${MYDEVICE_NAME} ], Not supported."
 fi
 
 # Find the partition where root is located
@@ -105,19 +99,19 @@ if [ $(ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l) -ge 3 ]; then
             K510=0
         fi
     else
-        die "Have no boot-*.tar.gz file found in the ${P4_PATH} directory."
+        error_msg "Have no boot-*.tar.gz file found in the ${P4_PATH} directory."
     fi
 
     if [[ -f ${P4_PATH}/dtb-${MYDTB_FILE}-${flippy_version}.tar.gz ]]; then
         build_dtb="dtb-${MYDTB_FILE}-${flippy_version}.tar.gz"
     else
-        die "Have no dtb-${MYDTB_FILE}-${flippy_version}.tar.gz file."
+        error_msg "Have no dtb-${MYDTB_FILE}-${flippy_version}.tar.gz file."
     fi
 
     if [ -f ${P4_PATH}/modules-${flippy_version}.tar.gz ]; then
         build_modules="modules-${flippy_version}.tar.gz"
     else
-        die "Have no modules-*.tar.gz file found in the ${P4_PATH} directory."
+        error_msg "Have no modules-*.tar.gz file found in the ${P4_PATH} directory."
     fi
 
     echo -e " \
@@ -165,39 +159,24 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
         # Check ${UBOOT_OVERLOAD}
         if [[ -n "${UBOOT_OVERLOAD}" ]]; then
             if [[ ! -f "/boot/${UBOOT_OVERLOAD}" ]]; then
-                echo -e "Try to download the ${UBOOT_OVERLOAD} file from the server."
-                GITHUB_UBOOT_OVERLOAD="${GITHUB_RAW}/without_fip/${UBOOT_OVERLOAD}"
-                #echo -e "UBOOT_OVERLOAD: ${GITHUB_UBOOT_OVERLOAD}"
-                wget -c "${GITHUB_UBOOT_OVERLOAD}" -O "/boot/${UBOOT_OVERLOAD}" >/dev/null 2>&1 && sync
-                if [[ "$?" -eq "0" && -f "/boot/${UBOOT_OVERLOAD}" ]]; then
-                    echo -e "The ${UBOOT_OVERLOAD} file download is complete."
-                else
-                    die "The ${UBOOT_OVERLOAD} file download failed. please try again."
-                fi
+                echo -e "The [ ${UBOOT_OVERLOAD} ] file is missing, please complete it first."
+                exit 1
             else
                 echo -e "The ${UBOOT_OVERLOAD} file has been found."
             fi
         else
-            die "The 5.10 kernel cannot be used without UBOOT_OVERLOAD."
+            error_msg "The 5.10 kernel cannot be used without UBOOT_OVERLOAD."
         fi
 
         # Check ${MAINLINE_UBOOT}
         if [[ -n "${MAINLINE_UBOOT}" && "${AUTO_MAINLINE_UBOOT}" == "yes" ]]; then
             if [[ ! -f "/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
-                echo -e "Try to download the MAINLINE_UBOOT file from the server."
-                GITHUB_MAINLINE_UBOOT="${GITHUB_RAW}/with_fip/${MAINLINE_UBOOT}"
-                #echo -e "MAINLINE_UBOOT: ${GITHUB_MAINLINE_UBOOT}"
-                [ -d "/lib/u-boot" ] || mkdir -p /lib/u-boot
-                wget -c "${GITHUB_MAINLINE_UBOOT}" -O "/lib/u-boot/${MAINLINE_UBOOT}" >/dev/null 2>&1 && sync
-                if [[ "$?" -eq "0" && -f "/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
-                    echo -e "The MAINLINE_UBOOT file download is complete."
-                else
-                    die "The MAINLINE_UBOOT file download failed. please try again."
-                fi
+                echo -e "The [ ${MAINLINE_UBOOT} ] file is missing, please complete it first."
+                exit 1
             fi
         fi
     else
-        die "The /etc/flippy-openwrt-release file is missing and cannot be update."
+        error_msg "The /etc/flippy-openwrt-release file is missing and cannot be update."
     fi
 
     # Copy u-boot.ext and u-boot.emmc
@@ -206,7 +185,7 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
         cp -f "/boot/${UBOOT_OVERLOAD}" /boot/u-boot.emmc && sync && chmod +x /boot/u-boot.emmc
         echo -e "The ${UBOOT_OVERLOAD} file copy is complete."
     else
-        die "The UBOOT_OVERLOAD file is missing and cannot be update."
+        error_msg "The UBOOT_OVERLOAD file is missing and cannot be update."
     fi
 
     # Write Mainline bootloader
@@ -241,9 +220,9 @@ if [[ -f "/boot/uInitrd-${flippy_version}" ]]; then
             continue
         fi
     done
-    [ "${i}" -eq "10" ] && die "/boot/uInitrd-${flippy_version} file copy failed."
+    [ "${i}" -eq "10" ] && error_msg "/boot/uInitrd-${flippy_version} file copy failed."
 else
-    die "/boot/uInitrd-${flippy_version} file is missing."
+    error_msg "/boot/uInitrd-${flippy_version} file is missing."
 fi
 
 if [[ -f "/boot/vmlinuz-${flippy_version}" ]]; then
@@ -262,13 +241,13 @@ if [[ -f "/boot/vmlinuz-${flippy_version}" ]]; then
             continue
         fi
     done
-    [ "${i}" -eq "10" ] && die "/boot/vmlinuz-${flippy_version} file copy failed."
+    [ "${i}" -eq "10" ] && error_msg "/boot/vmlinuz-${flippy_version} file copy failed."
 else
-    die "/boot/vmlinuz-${flippy_version} file is missing."
+    error_msg "/boot/vmlinuz-${flippy_version} file is missing."
 fi
 
-[ -f "/boot/config-${flippy_version}" ] || die "/boot/config-${flippy_version} file is missing."
-[ -f "/boot/System.map-${flippy_version}" ] || die "/boot/System.map-${flippy_version} file is missing."
+[ -f "/boot/config-${flippy_version}" ] || error_msg "/boot/config-${flippy_version} file is missing."
+[ -f "/boot/System.map-${flippy_version}" ] || error_msg "/boot/System.map-${flippy_version} file is missing."
 
 echo -e "01. Unpack [ ${build_boot} ] complete."
 sleep 3
@@ -280,7 +259,7 @@ if [[ "${MYDTB_FILE}" == "rockchip" ]]; then
     ln -sf /boot/dtb-${flippy_version} /boot/dtb
 fi
 tar -xzf ${P4_PATH}/${build_dtb} -C /boot/dtb/${MYDTB_FILE} && sync
-[ "$(ls /boot/dtb/${MYDTB_FILE} -l 2>/dev/null | grep "^-" | wc -l)" -ge "1" ] || die "/boot/dtb/${MYDTB_FILE} file is missing."
+[ "$(ls /boot/dtb/${MYDTB_FILE} -l 2>/dev/null | grep "^-" | wc -l)" -ge "1" ] || error_msg "/boot/dtb/${MYDTB_FILE} file is missing."
 echo -e "02. Unpack [ ${build_dtb} ] complete."
 sleep 3
 
@@ -293,7 +272,7 @@ find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
 sync && sleep 3
 x=$(ls *.ko -l 2>/dev/null | grep "^l" | wc -l)
 if [ "${x}" -eq "0" ]; then
-    die "Error *.ko Files not found."
+    error_msg "Error *.ko Files not found."
 fi
 echo -e "03. Unpack [ ${build_modules} ] complete."
 sleep 3

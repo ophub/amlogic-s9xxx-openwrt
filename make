@@ -315,10 +315,10 @@ confirm_version() {
         MAINLINE_UBOOT=""
         ANDROID_UBOOT=""
         ;;
-    a311d | khadas-vim3)
+    a311d | khadas-vim3 | vim3)
         FDTFILE="meson-g12b-a311d-khadas-vim3.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="/lib/u-boot/VIM3.u-boot.sd.bin"
+        MAINLINE_UBOOT="/lib/u-boot/khadas-vim3-u-boot.sd.bin"
         ANDROID_UBOOT=""
         ;;
     *)

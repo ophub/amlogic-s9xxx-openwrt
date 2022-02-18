@@ -31,6 +31,7 @@
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
 # download_kernel    : Download the latest kernel
 #
+# confirm_version    : Confirm version type
 # extract_openwrt    : Extract OpenWrt files
 # extract_armbian    : Extract Armbian files
 # refactor_files     : Refactor related files
@@ -213,28 +214,140 @@ download_kernel() {
     sync
 }
 
-extract_openwrt() {
-    process_msg " (1/6) extract armvirt files."
-
+confirm_version() {
+    process_msg " (1/7) Confirm version type."
     cd ${make_path}
+
+    # Confirm kernel branch
+    k510_ver=$(echo "${kernel}" | cut -d '.' -f1)
+    k510_maj=$(echo "${kernel}" | cut -d '.' -f2)
+    if [ "${k510_ver}" -eq "5" ]; then
+        if [ "${k510_maj}" -ge "10" ]; then
+            K510="1"
+        else
+            K510="0"
+        fi
+    elif [ "${k510_ver}" -gt "5" ]; then
+        K510="1"
+    else
+        K510="0"
+    fi
+
+    # Confirm soc branch
+    case "${soc}" in
+    s905x3 | x96 | hk1 | h96 | ugoosx3)
+        FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
+        UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
+        MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
+        ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+        ;;
+    s905x2 | x96max4g | x96max2g)
+        FDTFILE="meson-g12a-x96-max.dtb"
+        UBOOT_OVERLOAD="u-boot-x96max.bin"
+        MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
+        ;;
+    s905x2-km3)
+        FDTFILE="meson-g12a-sei510.dtb"
+        UBOOT_OVERLOAD="u-boot-x96max.bin"
+        MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
+        ;;
+    s905x | hg680p | b860h)
+        FDTFILE="meson-gxl-s905x-p212.dtb"
+        UBOOT_OVERLOAD="u-boot-p212.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        ;;
+    s905w | x96mini | tx3mini)
+        FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
+        UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        ;;
+    s905d | n1)
+        FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
+        UBOOT_OVERLOAD="u-boot-n1.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
+        ;;
+    s905d-ki)
+        FDTFILE="meson-gxl-s905d-mecool-ki-pro.dtb"
+        UBOOT_OVERLOAD="u-boot-p201.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        ;;
+    s905 | beelinkminimx | mxqpro+)
+        FDTFILE="meson-gxbb-vega-s95-telos.dtb"
+        #FDTFILE="meson-gxbb-mxq-pro-plus.dtb"
+        UBOOT_OVERLOAD="u-boot-s905.bin"
+        #UBOOT_OVERLOAD="u-boot-p201.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        ;;
+    s912 | h96proplus | octopus)
+        FDTFILE="meson-gxm-octopus-planet.dtb"
+        UBOOT_OVERLOAD="u-boot-zyxq.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        ;;
+    s912-t95z | s912-t95z-plus)
+        FDTFILE="meson-gxm-t95z-plus.dtb"
+        UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        ;;
+    s922x | belink | belinkpro | ugoos)
+        FDTFILE="meson-g12b-gtking-pro.dtb"
+        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+        MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
+        ;;
+    s922x-n2 | odroid-n2 | n2)
+        FDTFILE="meson-g12b-odroid-n2.dtb"
+        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+        MAINLINE_UBOOT="/lib/u-boot/odroid-n2-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
+        ;;
+    s922x-reva)
+        FDTFILE="meson-g12b-gtking-pro.dtb"
+        UBOOT_OVERLOAD="u-boot-gtkingpro-rev-a.bin"
+        MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        ;;
+    *)
+        error_msg "Have no this firmware: [ ${soc} - ${kernel} ]"
+        ;;
+    esac
+
+    # Generate UUID
+    ROOTFS_UUID="$(cat /proc/sys/kernel/random/uuid)"
+    [ -z "${ROOTFS_UUID}" ] && ROOTFS_UUID="$(uuidgen)"
+    [ -z "${ROOTFS_UUID}" ] && error_msg "The uuidgen is invalid, cannot continue."
+}
+
+extract_openwrt() {
+    process_msg " (2/7) Extract openwrt files."
+    cd ${make_path}
+
     local firmware="${openwrt_path}/${openwrt_file}"
 
     root_comm="${tmp_path}/root_comm"
     mkdir -p ${root_comm}
 
     tar -xzf ${firmware} -C ${root_comm}
-    rm -rf ${root_comm}/lib/modules/*/ 2>/dev/null
+    rm -rf ${root_comm}/lib/modules/* 2>/dev/null
     sync
 }
 
 extract_armbian() {
-    process_msg " (2/6) extract armbian files."
-
+    process_msg " (3/7) Extract armbian files."
     cd ${make_path}
+
     kernel_dir="${kernel_path}/${kernel}"
+
     root="${tmp_path}/${kernel}/${soc}/root"
     boot="${tmp_path}/${kernel}/${soc}/boot"
-
     mkdir -p ${root} ${boot}
 
     tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
@@ -269,125 +382,7 @@ extract_armbian() {
 }
 
 refactor_files() {
-    process_msg " (3/6) refactor related files."
-
-    cd ${make_path}
-
-    kernel_vermaj=$(echo ${kernel} | grep -oE '^[1-9].[0-9]{1,3}')
-    k510_ver=${kernel_vermaj%%.*}
-    k510_maj=${kernel_vermaj##*.}
-    if [ "${k510_ver}" -eq "5" ]; then
-        if [ "${k510_maj}" -ge "10" ]; then
-            K510="1"
-        else
-            K510="0"
-        fi
-    elif [ "${k510_ver}" -gt "5" ]; then
-        K510="1"
-    else
-        K510="0"
-    fi
-
-    case "${soc}" in
-    s905x3 | x96 | hk1 | h96 | ugoosx3)
-        FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
-        UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-        MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
-        ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
-        AMLOGIC_SOC="s905x3"
-        ;;
-    s905x2 | x96max4g | x96max2g)
-        FDTFILE="meson-g12a-x96-max.dtb"
-        UBOOT_OVERLOAD="u-boot-x96max.bin"
-        MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s905x2"
-        ;;
-    s905x2-km3)
-        FDTFILE="meson-g12a-sei510.dtb"
-        UBOOT_OVERLOAD="u-boot-x96max.bin"
-        MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s905x2"
-        ;;
-    s905x | hg680p | b860h)
-        FDTFILE="meson-gxl-s905x-p212.dtb"
-        UBOOT_OVERLOAD="u-boot-p212.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s905x"
-        ;;
-    s905w | x96mini | tx3mini)
-        FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
-        UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s905w"
-        ;;
-    s905d | n1)
-        FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
-        UBOOT_OVERLOAD="u-boot-n1.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
-        AMLOGIC_SOC="s905d"
-        ;;
-    s905d-ki)
-        FDTFILE="meson-gxl-s905d-mecool-ki-pro.dtb"
-        UBOOT_OVERLOAD="u-boot-p201.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s905d"
-        ;;
-    s905 | beelinkminimx | mxqpro+)
-        FDTFILE="meson-gxbb-vega-s95-telos.dtb"
-        #FDTFILE="meson-gxbb-mxq-pro-plus.dtb"
-        UBOOT_OVERLOAD="u-boot-s905.bin"
-        #UBOOT_OVERLOAD="u-boot-p201.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s905"
-        ;;
-    s912 | h96proplus | octopus)
-        FDTFILE="meson-gxm-octopus-planet.dtb"
-        UBOOT_OVERLOAD="u-boot-zyxq.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s912"
-        ;;
-    s912-t95z | s912-t95z-plus)
-        FDTFILE="meson-gxm-t95z-plus.dtb"
-        UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s912"
-        ;;
-    s922x | belink | belinkpro | ugoos)
-        FDTFILE="meson-g12b-gtking-pro.dtb"
-        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s922x"
-        ;;
-    s922x-n2 | odroid-n2 | n2)
-        FDTFILE="meson-g12b-odroid-n2.dtb"
-        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="/lib/u-boot/odroid-n2-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s922x"
-        ;;
-    s922x-reva)
-        FDTFILE="meson-g12b-gtking-pro.dtb"
-        UBOOT_OVERLOAD="u-boot-gtkingpro-rev-a.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        AMLOGIC_SOC="s922x"
-        ;;
-    *)
-        error_msg "Have no this firmware: [ ${soc} - ${kernel} ]"
-        ;;
-    esac
-
-    # Edit ${root}/* files ========== Begin ==========
+    process_msg " (4/7) Refactor related files."
     cd ${root}
 
     # Add other operations below
@@ -416,12 +411,6 @@ EOF
     echo pwm_meson >etc/modules.d/pwm_meson 2>/dev/null
     echo panfrost >etc/modules.d/panfrost 2>/dev/null
     echo meson_gxbb_wdt >etc/modules.d/watchdog 2>/dev/null
-
-    # Generate UUID
-    ROOTFS_UUID="$(cat /proc/sys/kernel/random/uuid)"
-    [ -z "${ROOTFS_UUID}" ] && ROOTFS_UUID="$(uuidgen)"
-    [ -z "${ROOTFS_UUID}" ] && error_msg "The uuidgen is invalid, cannot continue."
-    #echo "ROOTFS_UUID: ${ROOTFS_UUID}"
 
     # Edit fstab
     sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
@@ -496,7 +485,7 @@ EOF
     echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >>${op_release} 2>/dev/null
     echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
     echo "KERNEL_VERSION='${kernel}'" >>${op_release} 2>/dev/null
-    echo "SOC='${AMLOGIC_SOC}'" >>${op_release} 2>/dev/null
+    echo "SOC='${soc}'" >>${op_release} 2>/dev/null
     echo "K510='${K510}'" >>${op_release} 2>/dev/null
 
     # Add firmware version information to the terminal page
@@ -542,11 +531,8 @@ EOF
         # new ugoos x3 is brm43456
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:06/" "brcmfmac43456-sdio.txt" >"brcmfmac43456-sdio.amlogic,sm1.txt"
     )
-
     sync
-    # Edit ${root}/* files ========== End ==========
 
-    # Edit ${boot}/* files ========== Begin ==========
     cd ${boot}
 
     # Edit the uEnv.txt
@@ -573,13 +559,12 @@ EOF
     fi
 
     sync
-    # Edit ${boot}/* files ========== End ==========
 }
 
 make_image() {
-    process_msg " (4/6) make openwrt image."
-
+    process_msg " (5/7) Make openwrt image."
     cd ${make_path}
+
     build_image_file="${out_path}/openwrt_${soc}_k${kernel}_$(date +"%Y.%m.%d.%H%M").img"
     rm -f ${build_image_file}
     sync
@@ -616,16 +601,13 @@ make_image() {
 }
 
 copy_files() {
-    process_msg " (5/6) copy files to image."
-
+    process_msg " (6/7) Copy files to image."
     cd ${make_path}
-
-    set -e
 
     local bootfs="${tmp_path}/${kernel}/${soc}/bootfs"
     local rootfs="${tmp_path}/${kernel}/${soc}/rootfs"
-
     mkdir -p ${bootfs} ${rootfs} && sync
+
     if ! mount ${loop_new}p1 ${bootfs}; then
         error_msg "mount ${loop_new}p1 failed!"
     fi
@@ -641,21 +623,23 @@ copy_files() {
     umount -f ${bootfs} 2>/dev/null
     umount -f ${rootfs} 2>/dev/null
     losetup -d ${loop_new} 2>/dev/null
-    sync
 
-    cd ${out_path} && gzip *.img && sync && cd ${make_path}
+    cd ${out_path} && gzip *.img
+    sync
 }
 
 clean_tmp() {
-    process_msg " (6/6) cleanup tmp files."
-
+    process_msg " (7/7) Cleanup tmp files."
     cd ${make_path}
+
     for x in $(lsblk | grep $(pwd) | grep -oE 'loop[0-9]+' | sort | uniq); do
         umount -f /dev/${x}p* 2>/dev/null
         losetup -d /dev/${x} 2>/dev/null
     done
     losetup -D
+
     rm -rf ${tmp_path} 2>/dev/null
+    sync
 }
 
 loop_make() {
@@ -682,6 +666,7 @@ loop_make() {
                 kernel="${k}"
 
                 # Execute the following functions in sequence
+                confirm_version
                 extract_openwrt
                 extract_armbian
                 refactor_files
@@ -722,4 +707,3 @@ loop_make
 echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 # All process completed
 wait
-chmod -R 777 ${out_path}

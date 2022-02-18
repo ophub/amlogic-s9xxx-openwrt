@@ -56,7 +56,7 @@ kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
 op_release="etc/flippy-openwrt-release" # Add custom openwrt firmware information
-build_openwrt=("s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
+build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
 #
 # Latest kernel download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
@@ -313,6 +313,12 @@ confirm_version() {
         FDTFILE="meson-g12b-gtking-pro.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro-rev-a.bin"
         MAINLINE_UBOOT=""
+        ANDROID_UBOOT=""
+        ;;
+    a311d | khadas-vim3)
+        FDTFILE="meson-g12b-a311d-khadas-vim3.dtb"
+        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
+        MAINLINE_UBOOT="/lib/u-boot/VIM3.u-boot.sd.bin"
         ANDROID_UBOOT=""
         ;;
     *)

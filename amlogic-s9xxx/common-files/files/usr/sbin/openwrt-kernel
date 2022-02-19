@@ -47,8 +47,7 @@ fi
 # Find the partition where root is located
 ROOT_PTNAME=$(df / | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')
 if [ "${ROOT_PTNAME}" == "" ]; then
-    echo "Cannot find the partition corresponding to the root file system!"
-    exit 1
+    error_msg "Cannot find the partition corresponding to the root file system!"
 fi
 
 # Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
@@ -64,8 +63,7 @@ mmcblk?p[1-4])
     LB_PRE=""
     ;;
 *)
-    echo "Unable to recognize the disk type of ${ROOT_PTNAME}!"
-    exit 1
+    error_msg "Unable to recognize the disk type of ${ROOT_PTNAME}!"
     ;;
 esac
 
@@ -124,11 +122,7 @@ if [ $(ls ${P4_PATH}/*.tar.gz -l 2>/dev/null | grep "^-" | wc -l) -ge 3 ]; then
     K510: ${K510}"
 
 else
-    echo -e "Please upload the kernel files."
-    echo -e "Upload method: system menu → Amlogic Service → Manually Upload Update"
-    echo -e "Specify method: Place the kernel file in [ /mnt/${EMMC_NAME}${PARTITION_NAME}4/ ]"
-    echo -e "After upload the kernel file, run again."
-    exit 1
+    error_msg "After upload the kernel files in [ /mnt/${EMMC_NAME}${PARTITION_NAME}4/ ], run again."
 fi
 
 MODULES_OLD=$(ls /lib/modules/ 2>/dev/null)
@@ -159,8 +153,7 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
         # Check ${UBOOT_OVERLOAD}
         if [[ -n "${UBOOT_OVERLOAD}" ]]; then
             if [[ ! -f "/boot/${UBOOT_OVERLOAD}" ]]; then
-                echo -e "The [ ${UBOOT_OVERLOAD} ] file is missing, please complete it first."
-                exit 1
+                error_msg "The [ ${UBOOT_OVERLOAD} ] file is missing, please complete it first."
             else
                 echo -e "The ${UBOOT_OVERLOAD} file has been found."
             fi
@@ -171,8 +164,7 @@ if [[ "${V510}" -lt "${K510}" && "${MYDTB_FILE}" == "amlogic" ]]; then
         # Check ${MAINLINE_UBOOT}
         if [[ -n "${MAINLINE_UBOOT}" && "${AUTO_MAINLINE_UBOOT}" == "yes" ]]; then
             if [[ ! -f "/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
-                echo -e "The [ ${MAINLINE_UBOOT} ] file is missing, please complete it first."
-                exit 1
+                error_msg "The [ ${MAINLINE_UBOOT} ] file is missing, please complete it first."
             fi
         fi
     else

@@ -170,8 +170,8 @@ download_depends() {
 
     # Download all dependent files to a local directory
     echo -e "Download all dependent files from [ ${depends_repo} ]"
-    svn export ${depends_repo}/amlogic-dtb ${amlogic_path} --force
-    svn export ${depends_repo}/amlogic-u-boot ${amlogic_path} --force
+    svn export ${depends_repo}/amlogic-dtb ${dtb_path} --force
+    svn export ${depends_repo}/amlogic-u-boot ${uboot_path} --force
     sync
 }
 
@@ -228,7 +228,6 @@ download_kernel() {
 
         let i++
     done
-
     sync
 }
 
@@ -256,19 +255,19 @@ confirm_version() {
     s905x3 | x96 | hk1 | h96 | ugoosx3)
         FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-        MAINLINE_UBOOT="/lib/u-boot/x96maxplus-u-boot.bin.sd.bin"
-        ANDROID_UBOOT="/lib/u-boot/hk1box-bootloader.img"
+        MAINLINE_UBOOT="x96maxplus-u-boot.bin.sd.bin"
+        ANDROID_UBOOT="hk1box-bootloader.img"
         ;;
     s905x2 | x96max4g | x96max2g)
         FDTFILE="meson-g12a-x96-max.dtb"
         UBOOT_OVERLOAD="u-boot-x96max.bin"
-        MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
+        MAINLINE_UBOOT="x96max-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
         ;;
     s905x2-km3)
         FDTFILE="meson-g12a-sei510.dtb"
         UBOOT_OVERLOAD="u-boot-x96max.bin"
-        MAINLINE_UBOOT="/lib/u-boot/x96max-u-boot.bin.sd.bin"
+        MAINLINE_UBOOT="x96max-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
         ;;
     s905x | hg680p | b860h)
@@ -287,7 +286,7 @@ confirm_version() {
         FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
         UBOOT_OVERLOAD="u-boot-n1.bin"
         MAINLINE_UBOOT=""
-        ANDROID_UBOOT="/lib/u-boot/u-boot-2015-phicomm-n1.bin"
+        ANDROID_UBOOT="u-boot-2015-phicomm-n1.bin"
         ;;
     s905d-ki)
         FDTFILE="meson-gxl-s905d-mecool-ki-pro.dtb"
@@ -318,13 +317,13 @@ confirm_version() {
     s922x | belink | belinkpro | ugoos)
         FDTFILE="meson-g12b-gtking-pro.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="/lib/u-boot/gtkingpro-u-boot.bin.sd.bin"
+        MAINLINE_UBOOT="gtkingpro-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
         ;;
     s922x-n2 | odroid-n2 | n2)
         FDTFILE="meson-g12b-odroid-n2.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="/lib/u-boot/odroid-n2-u-boot.bin.sd.bin"
+        MAINLINE_UBOOT="odroid-n2-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
         ;;
     s922x-reva)
@@ -336,7 +335,7 @@ confirm_version() {
     a311d | khadas-vim3 | vim3)
         FDTFILE="meson-g12b-a311d-khadas-vim3.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="/lib/u-boot/khadas-vim3-u-boot.sd.bin"
+        MAINLINE_UBOOT="khadas-vim3-u-boot.sd.bin"
         ANDROID_UBOOT=""
         ;;
     *)
@@ -374,46 +373,45 @@ extract_armbian() {
     boot="${tmp_path}/${kernel}/${soc}/boot"
     mkdir -p ${root} ${boot}
 
+    # Copy OpenWrt files
+    cp -rf ${root_comm}/* ${root}
+    # Copy the overload files
+    cp -f ${uboot_path}/overload/* ${boot}
+    # Copy the bootloader files
+    [ -d "${root}/lib/u-boot" ] || mkdir -p "${root}/lib/u-boot"
+    cp -f ${uboot_path}/bootloader/* ${root}/lib/u-boot
+
     tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
-    sync
 
+    # Process kernel files
     if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
         mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
+
         cp -rf ${dtb_path}/* ${boot}/dtb/amlogic
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
-        sync
 
         tar -xzf ${kernel_dir}/boot-*.tar.gz -C ${boot}
         mv -f ${boot}/uInitrd-* ${boot}/uInitrd && mv -f ${boot}/vmlinuz-* ${boot}/zImage 2>/dev/null
-        sync
 
         tar -xzf ${kernel_dir}/modules-*.tar.gz -C ${root}/lib/modules
         cd ${root}/lib/modules/*/
         rm -rf *.ko
         find ./ -type f -name '*.ko' -exec ln -s {} ./ \;
-        sync
     else
         error_msg "Have no kernel files in [ ${kernel_dir} ]"
     fi
-
-    cd ${make_path}
-
-    cp -rf ${root_comm}/* ${root}
-
-    # Copy the bootloader files
-    [ -d "${root}/lib/u-boot" ] || mkdir -p "${root}/lib/u-boot"
-    cp -f ${uboot_path}/bootloader/* ${root}/lib/u-boot
-    # Copy the overload files
-    cp -f ${uboot_path}/overload/* ${boot}
-
-    # Complete file for ${root}: [ /etc ], [ /usr ] etc.
-    [ "$(ls ${configfiles_path}/files 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/files/* ${root}
     sync
 }
 
 refactor_files() {
     process_msg " (4/7) Refactor related files."
+    cd ${make_path}
+
+    # Complete file for ${root}: [ /etc ], [ /usr ] etc.
+    [ "$(ls ${configfiles_path}/files 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/files/* ${root}
+    sync
+
     cd ${root}
 
     # Add other operations below
@@ -513,8 +511,8 @@ EOF
     echo "PLATFORM='amlogic'" >>${op_release} 2>/dev/null
     echo "FDTFILE='${FDTFILE}'" >>${op_release} 2>/dev/null
     echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release} 2>/dev/null
-    echo "MAINLINE_UBOOT='${MAINLINE_UBOOT}'" >>${op_release} 2>/dev/null
-    echo "ANDROID_UBOOT='${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
+    echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release} 2>/dev/null
+    echo "ANDROID_UBOOT='/lib/u-boot/${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
     echo "KERNEL_VERSION='${kernel}'" >>${op_release} 2>/dev/null
     echo "SOC='${soc}'" >>${op_release} 2>/dev/null
     echo "K510='${K510}'" >>${op_release} 2>/dev/null
@@ -583,7 +581,6 @@ EOF
             error_msg "${kernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
         fi
     fi
-
     sync
 }
 
@@ -614,13 +611,13 @@ make_image() {
     sync
 
     # Write the specified bootloader
-    if [[ "${MAINLINE_UBOOT}" != "" && -f "${root}${MAINLINE_UBOOT}" ]]; then
-        dd if=${root}${MAINLINE_UBOOT} of=${loop_new} bs=1 count=444 conv=fsync 2>/dev/null
-        dd if=${root}${MAINLINE_UBOOT} of=${loop_new} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+    if [[ "${MAINLINE_UBOOT}" != "" && -f "${root}/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
+        dd if="${root}/lib/u-boot/${MAINLINE_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
+        dd if="${root}/lib/u-boot/${MAINLINE_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${soc}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
-    elif [[ "${ANDROID_UBOOT}" != "" && -f "${root}${ANDROID_UBOOT}" ]]; then
-        dd if=${root}${ANDROID_UBOOT} of=${loop_new} bs=1 count=444 conv=fsync 2>/dev/null
-        dd if=${root}${ANDROID_UBOOT} of=${loop_new} bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+    elif [[ "${ANDROID_UBOOT}" != "" && -f "${root}/lib/u-boot/${ANDROID_UBOOT}" ]]; then
+        dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
+        dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${soc}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
     sync

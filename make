@@ -62,6 +62,9 @@ build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" 
 # Dependency files repository, Download u-boot and dtb to the local directory
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
 #
+# The install/update script repository
+script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic/root/usr/sbin"
+#
 # Latest kernel download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 version_branch="stable"
@@ -163,16 +166,21 @@ find_openwrt() {
 
 download_depends() {
     cd ${make_path}
+    echo -e "Download all dependent files..."
 
     # Convert depends library address to svn format
     if [[ ${depends_repo} == http* && $(echo ${depends_repo} | grep "tree/main") != "" ]]; then
         depends_repo="${depends_repo//tree\/main/trunk}"
     fi
-
-    # Download all dependent files to a local directory
-    echo -e "Download all dependent files from [ ${depends_repo} ]"
     svn export ${depends_repo}/amlogic-dtb ${dtb_path} --force
     svn export ${depends_repo}/amlogic-u-boot ${uboot_path} --force
+
+    # Convert script library address to svn format
+    if [[ ${script_repo} == http* && $(echo ${script_repo} | grep "tree/main") != "" ]]; then
+        script_repo="${script_repo//tree\/main/trunk}"
+    fi
+    svn export ${script_repo} ${configfiles_path}/files/usr/sbin --force
+
     sync
 }
 

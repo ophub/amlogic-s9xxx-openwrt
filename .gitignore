@@ -1,5 +1,7 @@
 !.gitignore
+/amlogic-s9xxx/amlogic-dtb
 /amlogic-s9xxx/amlogic-kernel
+/amlogic-s9xxx/amlogic-u-boot
 /openwrt-armvirt
 /out
 /tmp

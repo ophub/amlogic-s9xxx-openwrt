@@ -29,6 +29,7 @@
 #
 # init_var           : Initialize all variables
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
+# download_depends   : Download the dependency files
 # download_kernel    : Download the latest kernel
 #
 # confirm_version    : Confirm version type
@@ -58,9 +59,11 @@ configfiles_path="${amlogic_path}/common-files"
 op_release="etc/flippy-openwrt-release" # Add custom openwrt firmware information
 build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s912" "s912-t95z" "s905" "s905d" "s905d-ki" "s905x" "s905w")
 #
+# Dependency files repository, Download u-boot and dtb to the local directory
+depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
+#
 # Latest kernel download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
-#kernel_repo="https://github.com/ophub/kernel/trunk/pub"
 version_branch="stable"
 build_kernel=("5.10.100" "5.4.180")
 auto_kernel="true"
@@ -155,6 +158,21 @@ find_openwrt() {
     cd ${make_path}
 
     [[ -f "${openwrt_path}/${openwrt_file}" ]] || error_msg "The OpenWrt file does not exist!"
+}
+
+download_depends() {
+    cd ${make_path}
+
+    # Convert depends library address to svn format
+    if [[ ${depends_repo} == http* && $(echo ${depends_repo} | grep "tree/main") != "" ]]; then
+        depends_repo="${depends_repo//tree\/main/trunk}"
+    fi
+
+    # Download all dependent files to a local directory
+    echo -e "Download all dependent files from [ ${depends_repo} ]"
+    svn export ${depends_repo}/amlogic-dtb ${amlogic_path} --force
+    svn export ${depends_repo}/amlogic-u-boot ${amlogic_path} --force
+    sync
 }
 
 download_kernel() {
@@ -380,9 +398,16 @@ extract_armbian() {
     fi
 
     cd ${make_path}
+
     cp -rf ${root_comm}/* ${root}
 
-    # Complete file for ${root}: [ /etc ], [ /lib/u-boot ] etc.
+    # Copy the bootloader files
+    [ -d "${root}/lib/u-boot" ] || mkdir -p "${root}/lib/u-boot"
+    cp -f ${uboot_path}/bootloader/* ${root}/lib/u-boot
+    # Copy the overload files
+    cp -f ${uboot_path}/overload/* ${boot}
+
+    # Complete file for ${root}: [ /etc ], [ /usr ] etc.
     [ "$(ls ${configfiles_path}/files 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/files/* ${root}
     sync
 }
@@ -552,16 +577,11 @@ EOF
 
     # Add u-boot.ext for 5.10 kernel
     if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then
-        if [ -f "${uboot_path}/${UBOOT_OVERLOAD}" ]; then
-            cp -f ${uboot_path}/${UBOOT_OVERLOAD} u-boot.ext && sync && chmod +x u-boot.ext
+        if [ -f "${UBOOT_OVERLOAD}" ]; then
+            cp -f ${UBOOT_OVERLOAD} u-boot.ext && sync && chmod +x u-boot.ext
         else
             error_msg "${kernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
         fi
-    fi
-
-    # Add ${UBOOT_OVERLOAD} to support kernel update to 5.10 and above
-    if [[ -n "${UBOOT_OVERLOAD}" && -f "${uboot_path}/${UBOOT_OVERLOAD}" ]]; then
-        cp -f ${uboot_path}/${UBOOT_OVERLOAD} . && sync && chmod +x ${UBOOT_OVERLOAD}
     fi
 
     sync
@@ -702,7 +722,11 @@ echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 #
 # Initialize variables and download the kernel
 init_var "${@}"
+# Find OpenWrt file
 find_openwrt && echo -e "OpenWrt make file: [ ${openwrt_file} ]"
+# Download the dependency files
+download_depends
+# Download the latest kernel
 [ "${auto_kernel}" == "true" ] && download_kernel
 echo -e "OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
 echo -e "Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"

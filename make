@@ -158,6 +158,7 @@ find_openwrt() {
     cd ${make_path}
 
     [[ -f "${openwrt_path}/${openwrt_file}" ]] || error_msg "The OpenWrt file does not exist!"
+    echo -e "OpenWrt make file: [ ${openwrt_file} ]"
 }
 
 download_depends() {
@@ -720,7 +721,7 @@ echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 # Initialize variables and download the kernel
 init_var "${@}"
 # Find OpenWrt file
-find_openwrt && echo -e "OpenWrt make file: [ ${openwrt_file} ]"
+find_openwrt
 # Download the dependency files
 download_depends
 # Download the latest kernel

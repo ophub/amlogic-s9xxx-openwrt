@@ -301,9 +301,9 @@ UPLOAD_WETRANSFER: false
 openwrt-install-amlogic
 ```
 
-同一个型号的盒子，固件通用，比如 `openwrt_s905x3_v*.img` 固件可以用于 `x96max plus, hk1, h96` 等 `s905x3` 型号的盒子。在安装脚本将 OpenWrt 写入 EMMC 时，会提示你选择自己的盒子，请根据提示正确选择安装。
+同一个型号的盒子，固件通用，比如 `openwrt_s905x3_v*.img` 固件可以用于 `x96max plus, hk1, h96` 等 `s905x3` 型号的盒子。在安装脚本将 OpenWrt 写入 EMMC 时，会提示你选择自己的盒子，请根据提示正确选择。
 
-除默认的 13 个型号的盒子是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb)
+除默认的 13 个型号的盒子是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-dtb)
 
 ## 9. 升级固件
 

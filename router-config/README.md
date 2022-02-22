@@ -307,9 +307,9 @@ Choose the corresponding firmware according to your box. Then write the IMG file
 openwrt-install-amlogic
 ```
 
-When writing into EMMC through `openwrt-install-amlogic`, `select the name` of the Amlogic s9xxx tv box you own in the menu.
+The same type of box, the firmware is common, such as `openwrt_s905x3_v*.img` firmware can be used for `x96max plus, hk1, h96` and other `s905x3` type boxes. When the installation script writes OpenWrt to EMMC, you will be prompted to choose your own box, please choose the correct one according to the prompt.
 
-For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through `openwrt-install-amlogic`, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic s9xxx tv box you own.
+In addition to the default 13 models of boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic for details] -dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-dtb)
 
 ## 9. Update firmware
 

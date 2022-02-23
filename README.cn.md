@@ -244,18 +244,11 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 | 默认 WIFI 名称 | OpenWrt |
 | 默认 WIFI 密码 | none |
 
-## 旁路网关设置
-
-如果你的电视盒子以旁路网关的方式运行，你可以根据需要在防火墙中添加路由规则 (网络 → 防火墙 → 自定义路由规则):
-
-```yaml
-iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE        #If the interface is eth0.
-iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is br-lan bridged.
-```
-
 ## 资源说明
 
-制作 OpenWrt 系统时，所使用的 [u-boot](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-u-boot) 和 [kernel](https://github.com/ophub/kernel) 等文件，与制作 [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 系统使用的是相同的文件。在使用时将自动从相关仓库进行下载。
+制作 OpenWrt 系统时，所使用的 [kernel](https://github.com/ophub/kernel) 和 [u-boot](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-u-boot) 等文件，与制作 [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 系统使用的是相同的文件。为了不重复维护，相关内容归类放在了对应的资源仓库，在使用时将自动从相关仓库进行下载。
+
+本系统所使用的 `kernel` / `u-boot` 等资源主要从 [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit) 的项目中复制而来，部分文件由用户在 [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) / [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) / [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) / [kernel](https://github.com/ophub/kernel) / [script](https://github.com/ophub/script) 等项目的 [Pull](https://github.com/ophub/amlogic-s9xxx-openwrt/pulls) 和 [Issues](https://github.com/ophub/amlogic-s9xxx-openwrt/issues) 中提供分享。为感谢这些开拓者和分享者，我统一在 [CONTRIBUTOR.md](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTOR.md) 中进行了记录。再次感谢大家为盒子赋予了新的生命和意义。
 
 ## 鸣谢
 

@@ -246,18 +246,11 @@ For the compilation method of the custom kernel, see [compile-kernel](https://gi
 | Default WIFI name | OpenWrt |
 | Default WIFI password | none |
 
-## Bypass gateway settings
-
-If used as a bypass gateway, you can add custom firewall rules as needed (Network → Firewall → Custom Rules):
-
-```yaml
-iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE        #If the interface is eth0.
-iptables -t nat -I POSTROUTING -o br-lan -j MASQUERADE      #If the interface is br-lan bridged.
-```
-
 ## Resource Description
 
-When making an OpenWrt system, the [u-boot](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-u-boot) and [kernel](https://github.com/ophub/kernel) files used are the same files used to make an [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system. It will be automatically downloaded from the relevant repository when used.
+When making an OpenWrt system, the [u-boot](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-u-boot) and [kernel](https://github.com/ophub/kernel) files used are the same files used to make an [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system. In order to avoid repeated maintenance, the relevant content is classified and placed in the corresponding resource repository, and it will be automatically downloaded from the relevant repository when it is used.
+
+The `kernel` / `scripts` / `u-boot` / `dtb` and other resources used by this system are mainly copied from the project of [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit), Some files are shared by users in [Pull](https://github.com/ophub/amlogic-s9xxx-openwrt/pulls) and [Issues](https://github.com/ophub/amlogic-s9xxx-openwrt/issues) of [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) / [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) / [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) / [kernel](https://github.com/ophub/kernel) / [script](https://github.com/ophub/script) and other projects. To thank these pioneers and sharers, I have recorded them in [CONTRIBUTOR.md](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTOR.md). Thanks again everyone for giving new life and meaning to the box.
 
 ## Acknowledgments
 

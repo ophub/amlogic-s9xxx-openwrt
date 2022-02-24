@@ -315,7 +315,7 @@ In addition to the default 13 models of boxes are automatically installed, when 
 
 ### 9.1 Update using the operation panel
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.10.100 to a lower version such as 5.4.180, or from a lower version such as 5.4.180 to a higher version such as 5.10.100. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.15.25 to a lower version such as 5.4.180, or from a lower version such as 5.4.180 to a higher version such as 5.15.25. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
 ### 9.2 Update using script commands
 
@@ -392,7 +392,7 @@ Near line 96, find `Build OpenWrt firmware`, Code snippet like this:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.100_5.4.180
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.15.25_5.4.180
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV

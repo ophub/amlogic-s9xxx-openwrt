@@ -309,7 +309,7 @@ openwrt-install-amlogic
 
 ### 9.1 使用操作面板安装
 
-从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.10.100 升级到低版本如 5.4.180 ，也可以从低版本如 5.4.180 升级到高版本如 5.10.100 。内核版本号的高低不影响升级，可自由升级/降级）。
+从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.15.25 升级到低版本如 5.4.180 ，也可以从低版本如 5.4.180 升级到高版本如 5.15.25 。内核版本号的高低不影响升级，可自由升级/降级）。
 
 ### 9.2 使用升级固件脚本命令安装
 
@@ -386,7 +386,7 @@ REPO_BRANCH: openwrt-21.02
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.100_5.4.180
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.15.25_5.4.180
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV

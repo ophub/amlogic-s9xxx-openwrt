@@ -68,7 +68,7 @@ script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogi
 # Latest kernel download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 version_branch="stable"
-build_kernel=("5.10.100" "5.4.180")
+build_kernel=("5.15.25" "5.4.180")
 auto_kernel="true"
 #
 # Set OpenWrt firmware size (BOOT_MB >= 256, ROOT_MB >= 512)

@@ -57,7 +57,7 @@ kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
 op_release="etc/flippy-openwrt-release" # Add custom openwrt firmware information
-build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s905x2-km3" "s905l3a" "s912" "s912-t95z" "s905d" "s905d-ki" "s905x" "s905w" "s905")
+build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s905l3a" "s905x2-km3" "s912" "s912-t95z" "s905d" "s905d-ki" "s905x" "s905w" "s905")
 #
 # Dependency files repository, Download u-boot and dtb to the local directory
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
@@ -279,12 +279,11 @@ confirm_version() {
         MAINLINE_UBOOT="x96max-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
         ;;
-    s905l3a)
+    s905l3a | e900v22c | e900v22d)
         FDTFILE="meson-g12a-u200.dtb"
         UBOOT_OVERLOAD="u-boot-u200.bin"
         MAINLINE_UBOOT=""
         ANDROID_UBOOT=""
-        AMLOGIC_SOC="s905l3a"
         ;;
     s905x | hg680p | b860h)
         FDTFILE="meson-gxl-s905x-p212.dtb"
@@ -311,8 +310,9 @@ confirm_version() {
         ANDROID_UBOOT=""
         ;;
     s905 | beelinkminimx | mxqpro+)
-        FDTFILE="meson-gxbb-vega-s95-telos.dtb"
+        FDTFILE="meson-gxbb-beelink-mini-mx.dtb"
         #FDTFILE="meson-gxbb-mxq-pro-plus.dtb"
+        #FDTFILE="meson-gxbb-vega-s95-telos.dtb"
         UBOOT_OVERLOAD="u-boot-s905.bin"
         #UBOOT_OVERLOAD="u-boot-p201.bin"
         MAINLINE_UBOOT=""
@@ -336,7 +336,7 @@ confirm_version() {
         MAINLINE_UBOOT="gtkingpro-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
         ;;
-    s922x-n2 | odroid-n2 | n2)
+    s922x-n2 | odroid-n2)
         FDTFILE="meson-g12b-odroid-n2.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
         MAINLINE_UBOOT="odroid-n2-u-boot.bin.sd.bin"
@@ -348,7 +348,7 @@ confirm_version() {
         MAINLINE_UBOOT=""
         ANDROID_UBOOT=""
         ;;
-    a311d | khadas-vim3 | vim3)
+    a311d | khadas-vim3)
         FDTFILE="meson-g12b-a311d-khadas-vim3.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
         MAINLINE_UBOOT="khadas-vim3-u-boot.sd.bin"

@@ -284,7 +284,7 @@ confirm_version() {
         UBOOT_OVERLOAD="u-boot-u200.bin"
         MAINLINE_UBOOT="u-boot-u200.bin.sd.bin"
         ANDROID_UBOOT=""
-		AMLOGIC_SOC="s905l3a"
+        AMLOGIC_SOC="s905l3a"
         ;;
     s905x | hg680p | b860h)
         FDTFILE="meson-gxl-s905x-p212.dtb"

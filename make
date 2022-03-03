@@ -282,7 +282,7 @@ confirm_version() {
     s905l3a)
         FDTFILE="meson-g12a-u200.dtb"
         UBOOT_OVERLOAD="u-boot-u200.bin"
-        MAINLINE_UBOOT="u-boot-u200.bin.sd.bin"
+        MAINLINE_UBOOT=""
         ANDROID_UBOOT=""
         AMLOGIC_SOC="s905l3a"
         ;;

@@ -13,11 +13,11 @@ on:
       branch:
         description: 'Select Branch [ official / lede ]'
         required: false
-        default: 'lede'
+        default: 'official'
       more_settings:
         description: "More parameter settings"
         required: false
-        default: ""
+        default: "-b s905l3a -k 5.15.25_5.4.180"
 
 env:
   TZ: Asia/Shanghai
@@ -77,7 +77,7 @@ jobs:
         body: |
           This is OpenWrt firmware for Amlogic s9xxx tv box
           * Firmware information
-          Default IP: 192.168.1.1
+          Default IP: 192.168.30.6
           Default username: root
           Default password: password
           Default WIFI name: OpenWrt

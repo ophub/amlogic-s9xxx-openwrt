@@ -57,7 +57,7 @@ kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
 op_release="etc/flippy-openwrt-release" # Add custom openwrt firmware information
-build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s905x2-km3" "s912" "s912-t95z" "s905d" "s905d-ki" "s905x" "s905w" "s905")
+build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s905x2-km3" "s905l3a" "s912" "s912-t95z" "s905d" "s905d-ki" "s905x" "s905w" "s905")
 #
 # Dependency files repository, Download u-boot and dtb to the local directory
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
@@ -278,6 +278,13 @@ confirm_version() {
         UBOOT_OVERLOAD="u-boot-x96max.bin"
         MAINLINE_UBOOT="x96max-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
+        ;;
+    s905l3a)
+        FDTFILE="meson-g12a-u200.dtb"
+        UBOOT_OVERLOAD="u-boot-u200.bin"
+        MAINLINE_UBOOT="u-boot-u200.bin.sd.bin"
+        ANDROID_UBOOT=""
+		AMLOGIC_SOC="s905l3a"
         ;;
     s905x | hg680p | b860h)
         FDTFILE="meson-gxl-s905x-p212.dtb"

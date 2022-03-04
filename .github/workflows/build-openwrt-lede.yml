@@ -108,7 +108,7 @@ jobs:
         sudo ./make -d ${{ github.event.inputs.more_settings }}
         [ -d ipk ] || mkdir -p ipk
         cp -rf $(find openwrt/bin/packages/ -type f -name "*.ipk") ipk/ && sync
-        sudo tar -czf ipk.tar.gz ipk && mv -f ipk.tar.gz out/ && sync
+        sudo tar -czf ipk.tar.gz ipk && sudo mv -f ipk.tar.gz out/ && sync
         echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
         echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
         echo "::set-output name=status::success"

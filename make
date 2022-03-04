@@ -589,6 +589,9 @@ EOF
         sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/g" uEnv.txt
     fi
 
+    # For s912-t95z-plus /boot/extlinux/extlinux.conf
+    [ "${FDTFILE}" == "meson-gxm-t95z-plus.dtb" ] && cp -rf ${configfiles_path}/patches/boot/s912-t95z-plus/* . && sync
+
     # Add u-boot.ext for 5.10 kernel
     if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then
         if [ -f "${UBOOT_OVERLOAD}" ]; then

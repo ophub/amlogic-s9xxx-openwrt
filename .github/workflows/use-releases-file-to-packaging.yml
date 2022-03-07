@@ -14,6 +14,10 @@ on:
         description: 'Select Branch [ official / lede ]'
         required: false
         default: 'lede'
+      more_settings:
+        description: "More parameter settings"
+        required: false
+        default: ""
 
 env:
   TZ: Asia/Shanghai
@@ -45,7 +49,7 @@ jobs:
            RELEASES_BRANCH=lede
         fi
         echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
-        echo "COMPILE_STARTINGTIME=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+        echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
 
     - name: Build OpenWrt firmware
       id: build
@@ -55,14 +59,11 @@ jobs:
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/openwrt-armvirt-.*.tar.gz" | head -n 1 > DOWNLOAD_ARMVIRT
         [ -s DOWNLOAD_ARMVIRT ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x -k 5.4.170_5.10.90_5.15.13 -v dev
-        sudo rm -rf amlogic-s9xxx/amlogic-kernel/* && sync
-        sudo ./make -d -b s922x_s922x-n2_s905d -k 5.4.170_5.15.13
-        sudo ./make -d -b s905w_s912_s912-t95z_s905x2_s905_s905d-ki -k 5.4.170
+        sudo ./make -d ${{ github.event.inputs.more_settings }}
         curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/ipk.tar.gz" | head -n 1 > DOWNLOAD_IPK
-        [ -s DOWNLOAD_IPK ] && wget -q -P out https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_IPK)
+        [ -s DOWNLOAD_IPK ] && sudo wget -q -P out https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_IPK)
         echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-        echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+        echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
     - name: Upload OpenWrt Firmware to Release

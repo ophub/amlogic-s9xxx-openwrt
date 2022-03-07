@@ -307,26 +307,26 @@ Choose the corresponding firmware according to your box. Then write the IMG file
 openwrt-install-amlogic
 ```
 
-When writing into EMMC through `openwrt-install-amlogic`, `select the name` of the Amlogic s9xxx tv box you own in the menu.
+The same type of box, the firmware is common, such as `openwrt_s905x3_v*.img` firmware can be used for `x96max plus, hk1, h96` and other `s905x3` type boxes. When the installation script writes OpenWrt to EMMC, you will be prompted to choose your own box, please choose the correct one according to the prompt.
 
-For more OpenWrt firmware .dtb files are in the [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb) directory. You can use the `openwrt_s905x3_v*.img` firmware to install via USB hard disk. When writing into EMMC through `openwrt-install-amlogic`, [select 0: Enter the dtb file name of your box](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/amlogic-dtb), and use the Amlogic s9xxx tv box you own.
+In addition to the default 13 models of boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-dtb)
 
 ## 9. Update firmware
 
 ### 9.1 Update using the operation panel
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.10.90 to a lower version such as 5.4.170, or from a lower version such as 5.4.170 to a higher version such as 5.10.90. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.15.25 to a lower version such as 5.4.180, or from a lower version such as 5.4.180 to a higher version such as 5.15.25. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
 ### 9.2 Update using script commands
 
-`Log in to your OpenWrt system` →  under the `System` menu → `Amlogic Service` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/mnt/mmcblk*p4/`***, enter the `system menu` → `TTYD terminal` → input command: 
+`Log in to your OpenWrt system` →  under the `System` menu → `Amlogic Service` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/mnt/mmcblk*p4/`***, enter the `system menu` → `TTYD terminal` → input command:
 
 ```yaml
 openwrt-update-amlogic
 ```
 💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the `openwrt-update-amlogic` script will automatically find the `update file` from the `/mnt/mmcblk*p4/` directories.
 
-If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.4.170_2021.03.17.0412.img.gz`*** command to specify the `update file`.
+If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.4.180_2021.03.17.0412.img.gz`*** command to specify the `update file`.
 
 - The `openwrt-update-amlogic` update file search order
 
@@ -367,21 +367,21 @@ Let’s make a few brief introductions based on the files being used in the repo
 
 
 ```yaml
-#On Line 24: Source code library address
+#On Line 17: Source code library address
 REPO_URL: https://github.com/coolsnowwolf/lede
 
-#On Line 25: Branch name
+#On Line 18: Branch name
 REPO_BRANCH: master
 ```
 You can modify it to other, such as official:
 ```yaml
 REPO_URL: https://github.com/openwrt/openwrt
-REPO_BRANCH: openwrt-19.07
+REPO_BRANCH: openwrt-21.02
 ```
 
 #### 10.2.2 Change box model and kernel version
 
-Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
+Near line 96, find `Build OpenWrt firmware`, Code snippet like this:
 ```yaml
     - name: Build OpenWrt firmware
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
@@ -392,14 +392,14 @@ Near line 153, find `Build OpenWrt firmware`, Code snippet like this:
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.90_5.4.170
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.15.25_5.4.180
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
 Modify the -d parameter to the model of your box, and modify the value after the -k parameter to the version number of the kernel you want to compile:
-`sudo ./make -d -b s905x -k 5.4.170`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
+`sudo ./make -d -b s905x -k 5.4.180`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
 
 ### 10.3 Custom banner information
 
@@ -488,7 +488,7 @@ Search and install `luci-app-*` packages if you want to configure services using
 
 - Under normal circumstances, re-insert the USB hard disk and install it again.
 
-- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx tv box to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx tv box to factory settings first, and then reinstall it.
+- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx tv box to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx tv box to factory settings first, and then reinstall it. First download the [amlogic_usb_burning_tool](https://github.com/ophub/script/releases/download/dev/amlogic_usb_burning_tool_v3.2.0_and_driver.tar.gz) system recovery tool and install it.
 
 ```
 Take x96max+ as an example.
@@ -497,9 +497,7 @@ Prepare materials:
 
 1. [ A USB male-to-male data cable ]: https://www.ebay.com/itm/152516378334
 2. [ A paper clip ]: https://www.ebay.com/itm/133577738858
-3. Install the software and Download the Android TV firmware
-   [ Install the USB_Burning_Tool ]: https://androidmtk.com/download-amlogic-usb-burning-tool
-   [ Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
+3. [ Download the Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
 4. [ Find the two short-circuit points on the motherboard ]:
    https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
 

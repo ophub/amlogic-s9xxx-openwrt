@@ -1,10 +1,17 @@
 #!/bin/bash
-#=======================================================================
-# Function: Create swap for openwrt system
-# Copyright (C) 2021 https://github.com/ophub/amlogic-s9xxx-openwrt
+#========================================================================
+# This file is licensed under the terms of the GNU General Public
+# License version 2. This program is licensed "as is" without any
+# warranty of any kind, whether express or implied.
 #
-# The input parameter unit is GB, the default is 1
+# This file is a part of the make OpenWrt for Amlogic s9xxx tv box
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+#
+# Description: Create swap for openwrt system
+# Copyright (C) 2021- https://github.com/ophub/amlogic-s9xxx-openwrt
+#
 # Command: openwrt-swap 1
+# The input parameter unit is GB, the default is 1
 #=======================================================================
 
 # Set the swap size in GB

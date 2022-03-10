@@ -4,10 +4,6 @@
 
 在相关目录中存储了一些与 Amlogic s9xxx 内核相关的编译 OpenWrt 所需的文件。
 
-## amlogic-armbian
-
-这里存放的文件是打包 OpenWrt 时需要使用的 Armbian 的相关文件。
-
 ## common-files
 
 - files: 这里存放的是 OpenWrt 固件的个性化配置文件，将在打包脚本 `sudo ./make` 执行时自动将相关文件集成到你的固件里。相关目录及文件命名均须与 OpenWrt 中 ROOTFS 分区 ( 即在 TTYD 终端里输入： `cd / && ls .` 你所看到的目录及各目录里面的文件名称 ) 保持完全一致。

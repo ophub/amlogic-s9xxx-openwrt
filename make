@@ -172,6 +172,7 @@ download_depends() {
     if [[ ${depends_repo} == http* && $(echo ${depends_repo} | grep "tree/main") != "" ]]; then
         depends_repo="${depends_repo//tree\/main/trunk}"
     fi
+    svn export ${depends_repo}/amlogic-armbian ${armbian_path} --force
     svn export ${depends_repo}/amlogic-dtb ${dtb_path} --force
     svn export ${depends_repo}/amlogic-u-boot ${uboot_path} --force
 

@@ -1,4 +1,4 @@
-# Amlogic s9xxx 系列相关文件说明
+# 目录说明
 
 查看英文说明 | [View English description](README.md)
 
@@ -15,3 +15,8 @@ usr/sbin
 
 - patches: 这是补丁文件存放目录，你可以将扩展文件，魔改补丁等放置在该目录。具有详见 [patches](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches)
 
+## 其他目录说明
+
+- 制作 OpenWrt 系统时，需要的 Armbian 相关文件将从 [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian) 仓库自动下载。包含以下目录：`amlogic-armbian`, `amlogic-dtb`, `amlogic-u-boot`
+
+- 需要的内核将从 [ophub/kernel](https://github.com/ophub/kernel) 仓库自动下载至 `amlogic-kernel` 目录。

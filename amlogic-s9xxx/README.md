@@ -1,4 +1,4 @@
-# Description of Amlogic s9xxx series related documents
+# Directory Description
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
@@ -15,3 +15,8 @@ usr/sbin
 
 - patches: The files in the [patches](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/amlogic-s9xxx/common-files/patches) directory are patch files, which are integrated when build kernel files.
 
+## Other directory descriptions
+
+- When building an OpenWrt system, the required Armbian related files will be automatically downloaded from the [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian) repository. Contains the following directories: `amlogic-armbian`, `amlogic-dtb`, `amlogic-u-boot`
+
+- The required kernels will be automatically downloaded from the [ophub/kernel](https://github.com/ophub/kernel) repository to the `amlogic-kernel` directory.

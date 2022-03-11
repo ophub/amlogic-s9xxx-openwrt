@@ -160,8 +160,11 @@ init_var() {
 find_openwrt() {
     cd ${make_path}
 
-    [[ -f "${openwrt_path}/${openwrt_file}" ]] || error_msg "The OpenWrt file does not exist!"
-    echo -e "OpenWrt make file: [ ${openwrt_file} ]"
+    if [[ -f "${openwrt_path}/${openwrt_file}" ]]; then
+        echo -e "OpenWrt make file: [ ${openwrt_file} ]"
+    else
+        error_msg "There is no [ ${openwrt_file} ] file in the [ ${openwrt_path} ] directory."
+    fi
 }
 
 download_depends() {
@@ -172,14 +175,30 @@ download_depends() {
     if [[ ${depends_repo} == http* && $(echo ${depends_repo} | grep "tree/main") != "" ]]; then
         depends_repo="${depends_repo//tree\/main/trunk}"
     fi
-    svn export ${depends_repo}/amlogic-armbian ${armbian_path} --force
-    svn export ${depends_repo}/amlogic-dtb ${dtb_path} --force
-    svn export ${depends_repo}/amlogic-u-boot ${uboot_path} --force
+    # Sync armbian related files
+    if [ -d "${armbian_path}" ]; then
+        svn up ${armbian_path} --force
+    else
+        svn co ${depends_repo}/amlogic-armbian ${armbian_path} --force
+    fi
+    # Sync dtb related files
+    if [ -d "${dtb_path}" ]; then
+        svn up ${dtb_path} --force
+    else
+        svn co ${depends_repo}/amlogic-dtb ${dtb_path} --force
+    fi
+    # Sync u-boot related files
+    if [ -d "${uboot_path}" ]; then
+        svn up ${uboot_path} --force
+    else
+        svn co ${depends_repo}/amlogic-u-boot ${uboot_path} --force
+    fi
 
     # Convert script library address to svn format
     if [[ ${script_repo} == http* && $(echo ${script_repo} | grep "tree/main") != "" ]]; then
         script_repo="${script_repo//tree\/main/trunk}"
     fi
+    # Sync install/update and other related files
     svn export ${script_repo} ${configfiles_path}/files/usr/sbin --force
 
     sync
@@ -405,7 +424,7 @@ extract_armbian() {
     if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
         mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
 
-        cp -rf ${dtb_path}/* ${boot}/dtb/amlogic
+        cp -f ${dtb_path}/*.dtb ${boot}/dtb/amlogic
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
 
         tar -xzf ${kernel_dir}/boot-*.tar.gz -C ${boot}

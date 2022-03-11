@@ -17,6 +17,8 @@ usr/sbin
 
 ## Other directory descriptions
 
-- When building an OpenWrt system, the required Armbian related files will be automatically downloaded from the [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian) repository. Contains the following directories: `amlogic-armbian`, `amlogic-dtb`, `amlogic-u-boot`
+- When building an OpenWrt system, the required Armbian related files will be automatically downloaded from the [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) repository. Contains the following directories: `amlogic-armbian`, `amlogic-dtb`, `amlogic-u-boot`
 
 - The required kernels will be automatically downloaded from the [ophub/kernel](https://github.com/ophub/kernel) repository to the `amlogic-kernel` directory.
+
+- The required install/update etc scripts will be automatically downloaded from the [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) repository to the `common-files/files/usr/sbin` directory.

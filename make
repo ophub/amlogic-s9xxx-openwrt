@@ -1,5 +1,5 @@
 #!/bin/bash
-#========================================================================
+#============================================================================
 #
 # This file is licensed under the terms of the GNU General Public
 # License version 2. This program is licensed "as is" without any
@@ -13,7 +13,7 @@
 # Copyright (C) 2020- https://github.com/tuanqing/mknop
 # Copyright (C) 2020- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-#===== Install the basic packages of make openwrt for Ubuntu 20.04 ======
+#======= Install the basic packages of make openwrt for Ubuntu 20.04 =======
 #
 # sudo apt-get update -y
 # sudo apt-get full-upgrade -y
@@ -22,7 +22,7 @@
 # Command: sudo ./make -d
 # Command optional parameters please refer to the source code repository
 #
-#============================ Functions list ============================
+#============================== Functions list ==============================
 #
 # error_msg          : Output error message
 # process_msg        : Output process message
@@ -42,7 +42,7 @@
 #
 # loop_make          : Loop to make OpenWrt files
 #
-#==================== Set make environment variables ====================
+#====================== Set make environment variables ======================
 #
 # Related file storage path
 make_path="${PWD}"
@@ -56,27 +56,34 @@ dtb_path="${amlogic_path}/amlogic-dtb"
 kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
-op_release="etc/flippy-openwrt-release" # Add custom openwrt firmware information
-build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s905l3a" "s905x2-km3" "s912" "s912-t95z" "s912-m8s" "s905d" "s905d-ki" "s905x" "s905w" "s905")
-#
-# Dependency files repository, Download the armbian related files needed to make the OpenWrt system to the local directory.
+# Add custom openwrt firmware information
+op_release="etc/flippy-openwrt-release"
+# Dependency files download repository
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
-#
-# The install/update script repository
+# Install/Update script files download repository
 script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic/root/usr/sbin"
-#
-# Latest kernel download repository
+# Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 version_branch="stable"
 build_kernel=("5.15.25" "5.4.180")
 auto_kernel="true"
-#
-# Set OpenWrt firmware size (BOOT_MB >= 256, ROOT_MB >= 512)
-SKIP_MB="16"
+# Set supported SoC
+build_openwrt=(
+    "s922x" "s922x-n2" "s922x-reva" "a311d"
+    "s905x3"
+    "s905x2" "s905x2-km3" "s905l3a"
+    "s912" "s912-t95z" "s912-m8s"
+    "s905d" "s905d-ki"
+    "s905x"
+    "s905w"
+    "s905"
+)
+# Set OpenWrt firmware size (SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
+SKIP_MB="68"
 BOOT_MB="256"
 ROOT_MB="960"
 #
-#========================================================================
+#============================================================================
 
 error_msg() {
     echo -e " [\033[1;91m Error \033[0m] ${1}"

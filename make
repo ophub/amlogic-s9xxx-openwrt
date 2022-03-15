@@ -49,7 +49,7 @@ make_path="${PWD}"
 tmp_path="${make_path}/tmp"
 out_path="${make_path}/out"
 openwrt_path="${make_path}/openwrt-armvirt"
-openwrt_file="*armvirt*rootfs.tar.gz"
+openwrt_rootfs_file="*armvirt*rootfs.tar.gz"
 amlogic_path="${make_path}/amlogic-s9xxx"
 armbian_path="${amlogic_path}/amlogic-armbian"
 dtb_path="${amlogic_path}/amlogic-dtb"
@@ -167,11 +167,11 @@ init_var() {
 find_openwrt() {
     cd ${make_path}
 
-    openwrt_file_name=$(ls ${openwrt_path}/${openwrt_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')
+    openwrt_file_name=$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')
     if [[ -n "${openwrt_file_name}" ]]; then
         echo -e "OpenWrt make file: [ ${openwrt_file_name} ]"
     else
-        error_msg "There is no [ ${openwrt_file} ] file in the [ ${openwrt_path} ] directory."
+        error_msg "There is no [ ${openwrt_rootfs_file} ] file in the [ ${openwrt_path} ] directory."
     fi
 }
 

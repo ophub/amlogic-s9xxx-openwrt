@@ -49,7 +49,7 @@ make_path="${PWD}"
 tmp_path="${make_path}/tmp"
 out_path="${make_path}/out"
 openwrt_path="${make_path}/openwrt-armvirt"
-openwrt_file="openwrt-armvirt-64-default-rootfs.tar.gz"
+openwrt_file="*armvirt*rootfs.tar.gz"
 amlogic_path="${make_path}/amlogic-s9xxx"
 armbian_path="${amlogic_path}/amlogic-armbian"
 dtb_path="${amlogic_path}/amlogic-dtb"
@@ -65,8 +65,8 @@ script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogi
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 version_branch="stable"
-build_kernel=("5.15.25" "5.4.180")
 auto_kernel="true"
+build_kernel=("5.15.25" "5.4.180")
 # Set supported SoC
 build_openwrt=(
     "s922x" "s922x-n2" "s922x-reva" "a311d"
@@ -167,8 +167,9 @@ init_var() {
 find_openwrt() {
     cd ${make_path}
 
-    if [[ -f "${openwrt_path}/${openwrt_file}" ]]; then
-        echo -e "OpenWrt make file: [ ${openwrt_file} ]"
+    openwrt_file_name=$(ls ${openwrt_path}/${openwrt_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')
+    if [[ -n "${openwrt_file_name}" ]]; then
+        echo -e "OpenWrt make file: [ ${openwrt_file_name} ]"
     else
         error_msg "There is no [ ${openwrt_file} ] file in the [ ${openwrt_path} ] directory."
     fi
@@ -402,7 +403,7 @@ extract_openwrt() {
     process_msg " (2/7) Extract openwrt files."
     cd ${make_path}
 
-    local firmware="${openwrt_path}/${openwrt_file}"
+    local firmware="${openwrt_path}/${openwrt_file_name}"
 
     root_comm="${tmp_path}/root_comm"
     mkdir -p ${root_comm}
@@ -757,8 +758,8 @@ loop_make() {
         let j++
     done
 
-    # Backup the ${openwrt_path}/${openwrt_file} file
-    cp -f ${openwrt_path}/${openwrt_file} ${out_path} 2>/dev/null && sync
+    # Backup the openwrt file
+    cp -f ${openwrt_path}/${openwrt_file_name} ${out_path} 2>/dev/null && sync
 }
 
 # Show welcome message

@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Select Branch [ official / lede ]'
+        description: "Select Branch [ official / lede ]"
         required: false
-        default: 'lede'
+        default: "lede"
       more_settings:
         description: "More parameter settings"
         required: false
@@ -28,59 +28,58 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Initialization environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL git.io/ubuntu-2004-openwrt)
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
-        sudo timedatectl set-timezone "$TZ"
-        # Input value validation
-        ARR_BRANCH=("official" "lede")
-        if [[ -n "${{ github.event.inputs.branch }}" && -n "$(echo "${ARR_BRANCH[@]}" | grep -w "${{ github.event.inputs.branch }}")" ]]; then
-           RELEASES_BRANCH=${{ github.event.inputs.branch }}
-        else
-           RELEASES_BRANCH=lede
-        fi
-        echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
-        echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
+      - name: Initialization environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install $(curl -fsSL git.io/ubuntu-2004-openwrt)
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          sudo timedatectl set-timezone "$TZ"
+          # Input value validation
+          ARR_BRANCH=("official" "lede")
+          if [[ -n "${{ github.event.inputs.branch }}" && -n "$(echo "${ARR_BRANCH[@]}" | grep -w "${{ github.event.inputs.branch }}")" ]]; then
+            RELEASES_BRANCH=${{ github.event.inputs.branch }}
+          else
+            RELEASES_BRANCH=lede
+          fi
+          echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
+          echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
 
-    - name: Build OpenWrt firmware
-      id: build
-      if: (!cancelled())
-      run: |
-        [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-        curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/openwrt-armvirt-.*.tar.gz" | head -n 1 > DOWNLOAD_ARMVIRT
-        [ -s DOWNLOAD_ARMVIRT ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
-        sudo chmod +x make
-        sudo ./make -d ${{ github.event.inputs.more_settings }}
-        curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/ipk.tar.gz" | head -n 1 > DOWNLOAD_IPK
-        [ -s DOWNLOAD_IPK ] && sudo wget -q -P out https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_IPK)
-        echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-        echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
-        echo "::set-output name=status::success"
+      - name: Build OpenWrt firmware
+        id: build
+        if: (!cancelled())
+        run: |
+          [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
+          curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/.*armvirt.*rootfs.tar.gz" | head -n 1 > DOWNLOAD_ARMVIRT
+          [ -s DOWNLOAD_ARMVIRT ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
+          sudo chmod +x make
+          sudo ./make -d ${{ github.event.inputs.more_settings }}
+          curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/ipk.tar.gz" | head -n 1 > DOWNLOAD_IPK
+          [ -s DOWNLOAD_IPK ] && sudo wget -q -P out https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_IPK)
+          echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
+          echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
+          echo "::set-output name=status::success"
 
-    - name: Upload OpenWrt Firmware to Release
-      uses: ncipollo/release-action@v1
-      if: steps.build.outputs.status == 'success' && !cancelled()
-      with:
-        tag: openwrt_s9xxx_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
-        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-        allowUpdates: true
-        token: ${{ secrets.GITHUB_TOKEN }}
-        body: |
-          This is OpenWrt firmware for Amlogic s9xxx tv box
-          * Firmware information
-          Default IP: 192.168.1.1
-          Default username: root
-          Default password: password
-          Default WIFI name: OpenWrt
-          Default WIFI password: none
-          Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
-
+      - name: Upload OpenWrt Firmware to Release
+        uses: ncipollo/release-action@v1
+        if: steps.build.outputs.status == 'success' && !cancelled()
+        with:
+          tag: openwrt_s9xxx_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
+          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            This is OpenWrt firmware for Amlogic s9xxx tv box
+            * Firmware information
+            Default IP: 192.168.1.1
+            Default username: root
+            Default password: password
+            Default WIFI name: OpenWrt
+            Default WIFI password: none
+            Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt

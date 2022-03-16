@@ -25,7 +25,7 @@ env:
   CONFIG_FILE: router-config/openwrt-21.02/.config
   DIY_P1_SH: router-config/openwrt-21.02/diy-part1.sh
   DIY_P2_SH: router-config/openwrt-21.02/diy-part2.sh
-  TZ: Asia/Shanghai
+  TZ: Asia/Jakarta
 
 jobs:
   build:
@@ -126,7 +126,7 @@ jobs:
           * Firmware information
           Default IP: 192.168.1.1
           Default username: root
-          Default password: password
+          Default password: root
           Default WIFI name: OpenWrt
           Default WIFI password: none
           Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt

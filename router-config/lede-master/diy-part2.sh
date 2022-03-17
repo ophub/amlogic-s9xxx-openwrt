@@ -12,7 +12,7 @@
 sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/luci/Makefile
 
 # Add luci-app-passwall
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk package/openwrt-passwall
+svn co https://github.com/xiaorouji/openwrt-passwall/trunk/luci-app-passwall package/luci-app-passwall
 
 # add your custom package feeds here
 #

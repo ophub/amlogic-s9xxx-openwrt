@@ -79,6 +79,21 @@ openwrt-ddbr
 
 💡提示：须使用 `/mnt/*4/` 空间进行存放 `BACKUP-arm-64-emmc.img.gz` 备份文件，未创建 `TF/SD/USB` 扩展分区的用户，须先使用 `openwrt-tf` 命令创建扩展分区。
 
+- ### 控制 LED 显示
+
+从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
+
+```yaml
+openwrt-led
+```
+
+根据 [LED 测试说明](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led.md) 进行调试。屏幕显示正常后，可以添加至开机自启动任务，下面命令中的 `15` 请根据 `openwrt-led` 选项中盒子对应的序号进行修改：
+
+```yaml
+sed -i '/openwrt-led/d' /etc/rc.local
+sed -i '/exit 0/i\openwrt-led 15' /etc/rc.local
+```
+
 ## 打包命令的相关参数说明
 
 | 参数 | 含义 | 说明 |

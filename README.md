@@ -79,6 +79,21 @@ According to the prompt, enter `b` to perform system backup, and enter `r` to pe
 
 💡Tip: You must use the `/mnt/*4/` space to store the `BACKUP-arm-64-emmc.img.gz` backup file, Users who have not created the `TF/SD/USB` extended partition must first use the `openwrt-tf` command to create the extended partition.
 
+- ### Controlling the LED display
+
+Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
+
+```yaml
+openwrt-led
+```
+
+Debug according to [LED test instructions](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led.md). After the screen is displayed normally, you can add it to the self-starting task at boot, Please modify the `15` in the following command according to the serial number corresponding to the box in the `openwrt-led` option:
+
+```yaml
+sed -i '/openwrt-led/d' /etc/rc.local
+sed -i '/exit 0/i\openwrt-led 15' /etc/rc.local
+```
+
 ## Detailed make compile command
 
 | Parameter | Meaning | Description |

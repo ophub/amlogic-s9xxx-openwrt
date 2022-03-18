@@ -56,6 +56,7 @@ dtb_path="${amlogic_path}/amlogic-dtb"
 kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
+openvfd_path="${configfiles_path}/files/usr/share/openvfd"
 # Add custom openwrt firmware information
 op_release="etc/flippy-openwrt-release"
 # Dependency files download repository
@@ -200,6 +201,12 @@ download_depends() {
         svn up ${uboot_path} --force
     else
         svn co ${depends_repo}/amlogic-u-boot ${uboot_path} --force
+    fi
+    # Sync openvfd related files
+    if [ -d "${openvfd_path}" ]; then
+        svn up ${openvfd_path} --force
+    else
+        svn co ${depends_repo}/common-files/files/usr/share/openvfd ${openvfd_path} --force
     fi
 
     # Convert script library address to svn format
@@ -532,6 +539,18 @@ EOF
     echo "panfrost" >etc/modules.d/panfrost
     # PWM Driver
     echo "pwm_meson" >etc/modules.d/pwm_meson
+
+    # Relink the kmod program
+    [ -x "usr/sbin/kmod" ] && (
+        cd usr/sbin
+        rm -f depmod insmod lsmod modinfo modprobe rmmod 2>/dev/null
+        ln -sf kmod depmod
+        ln -sf kmod insmod
+        ln -sf kmod lsmod
+        ln -sf kmod modinfo
+        ln -sf kmod modprobe
+        ln -sf kmod rmmod
+    )
 
     # Add cpustat
     DISTRIB_SOURCECODE="$(cat etc/openwrt_release | grep "DISTRIB_SOURCECODE=" | awk -F "'" '{print $2}')"

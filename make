@@ -542,14 +542,11 @@ EOF
 
     # Relink the kmod program
     [ -x "usr/sbin/kmod" ] && (
-        cd usr/sbin
-        rm -f depmod insmod lsmod modinfo modprobe rmmod 2>/dev/null
-        ln -sf kmod depmod
-        ln -sf kmod insmod
-        ln -sf kmod lsmod
-        ln -sf kmod modinfo
-        ln -sf kmod modprobe
-        ln -sf kmod rmmod
+        kmod_list="depmod insmod lsmod modinfo modprobe rmmod"
+        for ki in ${kmod_list}; do
+            rm -f usr/sbin/${ki} 2>/dev/null
+            ln -sf kmod usr/sbin/${ki}
+        done
     )
 
     # Add cpustat

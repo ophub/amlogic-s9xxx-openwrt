@@ -12,8 +12,8 @@ inputs:
     default: 's905d_s905x3'
   amlogic_kernel:
     description: 'Choose kernel.'
-    required: false
-    default: '5.15.25_5.4.180'
+    required: true
+    default: '5.10.106_5.4.180'
   auto_kernel:
     description: 'Auto use the latest kernel.'
     required: false
@@ -24,7 +24,7 @@ inputs:
     default: '1024'
   armvirt64_path:
     description: 'Choose armvirt64 file path.'
-    required: false
+    required: true
     default: 'openwrt/bin/targets/*/*/*.tar.gz'
 
 runs:

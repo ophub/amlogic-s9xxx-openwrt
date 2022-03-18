@@ -15,8 +15,8 @@ sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/l
 # add your custom package feeds here
 #
 # src/gz example_feed_name http://www.example.com/path/to/files
-src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic
-src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/aarch64_cortex-a53
+# src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic
+# src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/aarch64_cortex-a53
 
 # Add luci-app-openclash
 svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/openwrt-openclash

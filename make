@@ -637,21 +637,17 @@ EOF
 
     cd ${boot}
 
-    # Edit the uEnv.txt
-    if [ ! -f "uEnv.txt" ]; then
-        error_msg "The uEnv.txt File does not exist"
-    else
-        old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-        sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt
-        sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/g" uEnv.txt
-    fi
-
-    # For s912-t95z-plus /boot/extlinux/extlinux.conf
-    [ "${soc}" == "s912-t95z" ] && (
+    # Edit the uEnv.txt (s912-t95z-plus is /boot/extlinux/extlinux.conf)
+    if [[ "${soc}" == *s912-t95z* ]]; then
+        boot_conf_file="extlinux/extlinux.conf"
         cp -rf ${configfiles_path}/patches/boot/s912-t95z-plus/* . && sync
-        sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" extlinux/extlinux.conf
-        sed -i "s|meson.*.dtb|${FDTFILE}|g" extlinux/extlinux.conf
-    )
+    else
+        boot_conf_file="uEnv.txt"
+    fi
+    #
+    [ -f "${boot_conf_file}" ] || error_msg "The [ ${boot_conf_file} ] file does not exist."
+    sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" ${boot_conf_file}
+    sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
 
     # Add u-boot.ext for 5.10 kernel
     if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then

@@ -650,6 +650,7 @@ EOF
     [ "${soc}" == "s912-t95z" ] && (
         cp -rf ${configfiles_path}/patches/boot/s912-t95z-plus/* . && sync
         sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" extlinux/extlinux.conf
+        sed -i "s|meson.*.dtb|${FDTFILE}|g" extlinux/extlinux.conf
     )
 
     # Add u-boot.ext for 5.10 kernel

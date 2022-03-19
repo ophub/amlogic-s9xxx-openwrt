@@ -57,6 +57,7 @@ kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
 openvfd_path="${configfiles_path}/files/usr/share/openvfd"
+boot_patches_path="${configfiles_path}/patches/boot"
 # Add custom openwrt firmware information
 op_release="etc/flippy-openwrt-release"
 # Dependency files download repository
@@ -201,6 +202,12 @@ download_depends() {
         svn up ${uboot_path} --force
     else
         svn co ${depends_repo}/amlogic-u-boot ${uboot_path} --force
+    fi
+    # Sync boot patches files
+    if [ -d "${boot_patches_path}" ]; then
+        svn up ${boot_patches_path} --force
+    else
+        svn co ${depends_repo}/common-files/patches/boot ${boot_patches_path} --force
     fi
     # Sync openvfd related files
     if [ -d "${openvfd_path}" ]; then
@@ -640,7 +647,10 @@ EOF
     fi
 
     # For s912-t95z-plus /boot/extlinux/extlinux.conf
-    [ "${FDTFILE}" == "meson-gxm-t95z-plus.dtb" ] && cp -rf ${configfiles_path}/patches/boot/s912-t95z-plus/* . && sync
+    [ "${soc}" == "s912-t95z" ] && (
+        cp -rf ${configfiles_path}/patches/boot/s912-t95z-plus/* . && sync
+        sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" extlinux/extlinux.conf
+    )
 
     # Add u-boot.ext for 5.10 kernel
     if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then

@@ -503,19 +503,19 @@ Prepare materials:
 
 Operation method:
 
-1. Connect the [ Amlogic s9xxx tv box ] to the [ computer ] with a [ USB male-to-male data cable ].
-2. Open the USB Burning Tool:
+1. Open the USB Burning Tool:
    [ File → Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
    [ Check ]：Erase flash
    [ Check ]：Erase bootloader
    Click the [ Start ] button
-3. Use a [ paper clip ] to [ connect the two short-circuit points ] on the motherboard at the same time.
+2. Use a [ paper clip ] to connect the [ two shorting points ] on the main board of the box,
+   and use a [ USB dual male data cable ] to connect the [ box ] to the [ computer ] at the same time.
+3. Loosen the short contact after seeing the [ progress bar moving ].
+4. After the [ progress bar is 100% ], the restoration of the original Android TV system is completed.
+   Click [ stop ], unplug the [ USB male-to-male data cable ] and [ power ].
+5. If the progress bar is interrupted, repeat the above steps until it succeeds.
    If the progress bar does not respond after the short-circuit, plug in the [ power ] supply after the short-circuit.
    Generally, there is no need to plug in the power supply.
-4. Loosen the short contact after seeing the [ progress bar moving ].
-5. After the [ progress bar is 100% ], the restoration of the original Android TV system is completed.
-   Click [ stop ], unplug the [ USB male-to-male data cable ] and [ power ].
-6. If the progress bar is interrupted, repeat the above steps until it succeeds.
 ```
 After restoring the factory settings, the operation method is the same as when you install openwrt on the Amlogic s9xxx tv box for the first time:
 

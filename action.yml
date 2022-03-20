@@ -24,7 +24,7 @@ inputs:
     default: '1024'
   armvirt64_path:
     description: 'Choose armvirt64 file path.'
-    required: true
+    required: false
     default: 'openwrt/bin/targets/*/*/*.tar.gz'
 
 runs:

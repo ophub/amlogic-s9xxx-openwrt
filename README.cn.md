@@ -87,12 +87,7 @@ openwrt-ddbr
 openwrt-led
 ```
 
-根据 [LED 测试说明](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led.md) 进行调试。屏幕显示正常后，可以添加至开机自启动任务，下面命令中的 `15` 请根据 `openwrt-led` 选项中盒子对应的序号进行修改：
-
-```yaml
-sed -i '/openwrt-led/d' /etc/rc.local
-sed -i '/exit 0/i\openwrt-led 15' /etc/rc.local
-```
+根据 [LED 屏显示控制说明](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led_screen_display_control.md) 进行调试。
 
 ## 打包命令的相关参数说明
 

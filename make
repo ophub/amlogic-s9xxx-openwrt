@@ -58,6 +58,7 @@ uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
 openvfd_path="${configfiles_path}/files/usr/share/openvfd"
 bootfs_patches_path="${configfiles_path}/patches/bootfs"
+extlinux_patch="${configfiles_path}/patches/apply_patch/openwrt-install-update-script-for-extlinux.patch"
 # Add custom openwrt firmware information
 op_release="etc/flippy-openwrt-release"
 # Dependency files download repository
@@ -641,6 +642,7 @@ EOF
     if [[ "${soc}" == *s912-t95z* ]]; then
         boot_conf_file="extlinux/extlinux.conf"
         cp -rf ${configfiles_path}/patches/bootfs/extlinux .
+        (cd ${root} && patch -p1 <${extlinux_patch} >/dev/null)
     else
         boot_conf_file="uEnv.txt"
         cp -f ${configfiles_path}/patches/bootfs/uEnv.txt .

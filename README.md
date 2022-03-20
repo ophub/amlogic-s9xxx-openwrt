@@ -87,12 +87,7 @@ Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system men
 openwrt-led
 ```
 
-Debug according to [LED test instructions](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led.md). After the screen is displayed normally, you can add it to the self-starting task at boot, Please modify the `15` in the following command according to the serial number corresponding to the box in the `openwrt-led` option:
-
-```yaml
-sed -i '/openwrt-led/d' /etc/rc.local
-sed -i '/exit 0/i\openwrt-led 15' /etc/rc.local
-```
+Debug according to [LED screen display control instructions](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led_screen_display_control.md).
 
 ## Detailed make compile command
 

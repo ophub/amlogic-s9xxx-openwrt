@@ -382,13 +382,13 @@ REPO_BRANCH: openwrt-21.02
       id: build
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-        cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+        cp -f openwrt/bin/targets/*/*/*rootfs.tar.gz openwrt-armvirt/ && sync
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
         sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.15.25_5.4.180
         cd out/ && sudo gzip *.img
-        cp -f ../openwrt-armvirt/*.tar.gz . && sync
+        cp -f ../openwrt-armvirt/*rootfs.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```

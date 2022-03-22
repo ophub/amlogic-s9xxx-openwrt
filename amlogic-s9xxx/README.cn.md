@@ -17,7 +17,7 @@ usr/sbin
 
 ## 其他目录说明
 
-- 制作 OpenWrt 系统时，需要的 Armbian 相关文件将从 [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 仓库自动下载。包含以下目录：`amlogic-armbian`, `amlogic-dtb`, `amlogic-u-boot`
+- 制作 OpenWrt 系统时，需要的 Armbian 相关文件将从 [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 仓库自动下载。包含以下目录：`amlogic-armbian`，`amlogic-u-boot` 以及 `common-files` 目录中的相关文件。
 
 - 需要的内核将从 [ophub/kernel](https://github.com/ophub/kernel) 仓库自动下载至 `amlogic-kernel` 目录。
 

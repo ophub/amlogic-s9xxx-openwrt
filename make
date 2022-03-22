@@ -52,7 +52,6 @@ openwrt_path="${make_path}/openwrt-armvirt"
 openwrt_rootfs_file="*armvirt*rootfs.tar.gz"
 amlogic_path="${make_path}/amlogic-s9xxx"
 armbian_path="${amlogic_path}/amlogic-armbian"
-dtb_path="${amlogic_path}/amlogic-dtb"
 kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
@@ -190,12 +189,6 @@ download_depends() {
         svn up ${armbian_path} --force
     else
         svn co ${depends_repo}/amlogic-armbian ${armbian_path} --force
-    fi
-    # Sync dtb related files
-    if [ -d "${dtb_path}" ]; then
-        svn up ${dtb_path} --force
-    else
-        svn co ${depends_repo}/amlogic-dtb ${dtb_path} --force
     fi
     # Sync u-boot related files
     if [ -d "${uboot_path}" ]; then
@@ -446,7 +439,6 @@ extract_armbian() {
     if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
         mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
 
-        cp -f ${dtb_path}/*.dtb ${boot}/dtb/amlogic
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
 
         tar -xzf ${kernel_dir}/boot-*.tar.gz -C ${boot}

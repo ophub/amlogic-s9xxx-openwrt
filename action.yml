@@ -25,7 +25,7 @@ inputs:
   armvirt64_path:
     description: 'Choose armvirt64 file path.'
     required: false
-    default: 'openwrt/bin/targets/*/*/*.tar.gz'
+    default: 'openwrt/bin/targets/*/*/*rootfs.tar.gz'
 
 runs:
   using: "composite"

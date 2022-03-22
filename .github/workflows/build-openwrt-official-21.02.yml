@@ -103,7 +103,7 @@ jobs:
       id: build
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-        cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+        cp -f openwrt/bin/targets/*/*/*rootfs.tar.gz openwrt-armvirt/ && sync
         sudo chmod +x make
         sudo ./make -d ${{ github.event.inputs.more_settings }}
         [ -d ipk ] || mkdir -p ipk

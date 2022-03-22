@@ -138,7 +138,7 @@ You can modify the configuration file in the `router-config` directory and `.yml
   id: build
   run: |
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-    cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+    cp -f openwrt/bin/targets/*/*/*rootfs.tar.gz openwrt-armvirt/ && sync
     sudo chmod +x make
     sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.25_5.4.180
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
@@ -162,7 +162,7 @@ If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](h
   id: build
   run: |
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-    curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
+    curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/.*rootfs.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
     sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.25_5.4.180
@@ -183,7 +183,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
 - name: Package Armvirt as OpenWrt
   uses: ophub/amlogic-s9xxx-openwrt@main
   with:
-    armvirt64_path: openwrt/bin/targets/*/*/*.tar.gz
+    armvirt64_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     amlogic_openwrt: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
     amlogic_kernel: 5.15.25_5.4.180
 ```
@@ -194,7 +194,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 
 | Parameter          | Defaults          | Description                                                   |
 |--------------------|-------------------|---------------------------------------------------------------|
-| armvirt64_path     | no                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*.tar.gz` . |
+| armvirt64_path     | no                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` |
 | amlogic_openwrt    | s905d_s905x3      | Set the `SoC` of the packaging box, function reference `-b` |
 | version_branch     | stable            | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
 | amlogic_kernel     | 5.15.25_5.4.180   | Set the kernel version，function reference `-k` |

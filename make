@@ -56,7 +56,6 @@ kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
 openvfd_path="${configfiles_path}/files/usr/share/openvfd"
-bootfs_patches_path="${configfiles_path}/patches/bootfs"
 # Add custom openwrt firmware information
 op_release="etc/flippy-openwrt-release"
 # Dependency files download repository
@@ -195,12 +194,6 @@ download_depends() {
         svn up ${uboot_path} --force
     else
         svn co ${depends_repo}/amlogic-u-boot ${uboot_path} --force
-    fi
-    # Sync boot patches files
-    if [ -d "${bootfs_patches_path}" ]; then
-        svn up ${bootfs_patches_path} --force
-    else
-        svn co ${depends_repo}/common-files/patches/bootfs ${bootfs_patches_path} --force
     fi
     # Sync openvfd related files
     if [ -d "${openvfd_path}" ]; then
@@ -623,8 +616,8 @@ EOF
 
     cd ${boot}
 
-    cp -f ${configfiles_path}/patches/bootfs/uEnv.txt .
     boot_conf_file="uEnv.txt"
+    cp -f ${configfiles_path}/patches/bootfs/${boot_conf_file} .
     [ -f "${boot_conf_file}" ] || error_msg "The [ ${boot_conf_file} ] file does not exist."
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" ${boot_conf_file}
     sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}

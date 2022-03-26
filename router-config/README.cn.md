@@ -396,7 +396,7 @@ REPO_BRANCH: openwrt-21.02
 
 ### 10.3 自定义 banner 信息
 
-默认的 [banner](https://github.com/coolsnowwolf/lede/blob/master/package/base-files/files/etc/banner) 信息如下，你可以修改这个文件来定制专属自己的个性化 banner 信息。将你做好的 banner 文件放入 [etc/banner](../amlogic-s9xxx/common-files/files/etc) 目录，即可在编译时自动替换。
+默认的 [banner](https://github.com/coolsnowwolf/lede/blob/master/package/base-files/files/etc/banner) 信息如下，你可以修改这个文件来定制专属自己的个性化 banner 信息。将你做好的 banner 文件放入 [etc/banner](../amlogic-s9xxx/common-files/rootfs/etc) 目录，即可在编译时自动替换。
 
 ```yaml
   _______                     ________        __

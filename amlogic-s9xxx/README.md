@@ -23,4 +23,4 @@ usr/sbin
 
 - The required kernels will be automatically downloaded from the [ophub/kernel](https://github.com/ophub/kernel) repository to the `amlogic-kernel` directory.
 
-- The required install/update etc scripts will be automatically downloaded from the [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) repository to the `common-files/files/usr/sbin` directory.
+- The required install/update etc scripts will be automatically downloaded from the [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) repository to the `common-files/rootfs/usr/sbin` directory.

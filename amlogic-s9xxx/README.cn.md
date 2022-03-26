@@ -23,4 +23,4 @@ usr/sbin
 
 - 需要的内核将从 [ophub/kernel](https://github.com/ophub/kernel) 仓库自动下载至 `amlogic-kernel` 目录。
 
-- 需要的安装/更新等脚本将从 [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 仓库自动下载至 `common-files/files/usr/sbin` 目录。
+- 需要的安装/更新等脚本将从 [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 仓库自动下载至 `common-files/rootfs/usr/sbin` 目录。

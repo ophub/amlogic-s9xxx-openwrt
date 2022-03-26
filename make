@@ -199,7 +199,7 @@ download_depends() {
     if [ -d "${openvfd_path}" ]; then
         svn up ${openvfd_path} --force
     else
-        svn co ${depends_repo}/common-files/files/usr/share/openvfd ${openvfd_path} --force
+        svn co ${depends_repo}/common-files/rootfs/usr/share/openvfd ${openvfd_path} --force
     fi
 
     # Convert script library address to svn format

@@ -309,7 +309,7 @@ openwrt-install-amlogic
 
 The same type of box, the firmware is common, such as `openwrt_s905x3_v*.img` firmware can be used for `x96max plus, hk1, h96` and other `s905x3` type boxes. When the installation script writes OpenWrt to EMMC, you will be prompted to choose your own box, please choose the correct one according to the prompt.
 
-In addition to the default 13 models of boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-dtb)
+In addition to the default 13 models of boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/common-files/patches/amlogic-dtb)
 
 ## 9. Update firmware
 

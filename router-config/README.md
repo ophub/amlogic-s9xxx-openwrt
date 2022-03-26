@@ -403,7 +403,7 @@ Modify the -d parameter to the model of your box, and modify the value after the
 
 ### 10.3 Custom banner information
 
-The default [banner](https://github.com/coolsnowwolf/lede/blob/master/package/base-files/files/etc/banner) information is as follows, You can modify this file to customize your own personalized banner information. Put your finished banner file into the [etc/banner](../amlogic-s9xxx/common-files/files/etc) directory and it will be automatically replaced during compilation.
+The default [banner](https://github.com/coolsnowwolf/lede/blob/master/package/base-files/files/etc/banner) information is as follows, You can modify this file to customize your own personalized banner information. Put your finished banner file into the [etc/banner](../amlogic-s9xxx/common-files/rootfs/etc) directory and it will be automatically replaced during compilation.
 
 ```yaml
   _______                     ________        __

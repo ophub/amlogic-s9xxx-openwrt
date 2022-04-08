@@ -194,7 +194,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 
 | Parameter          | Defaults          | Description                                                   |
 |--------------------|-------------------|---------------------------------------------------------------|
-| armvirt64_path     | no                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , Use the path of the file in the current workflow such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` |
+| armvirt64_path     | no                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | amlogic_openwrt    | s905d_s905x3      | Set the `SoC` of the packaging box, function reference `-b` |
 | amlogic_kernel     | 5.15.25_5.4.180   | Set the kernel version，function reference `-k` |
 | auto_kernel        | true              | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |

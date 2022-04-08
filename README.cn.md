@@ -192,7 +192,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 
 | 参数              | 默认值             | 说明                                        |
 |-------------------|-------------------|-------------------------------------------|
-| armvirt64_path    | no                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，使用文件在当前工作流中的路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` |
+| armvirt64_path    | no                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | amlogic_openwrt   | s905d_s905x3      | 设置打包盒子的 `SOC` ，功能参考 `-b` |
 | amlogic_kernel    | 5.15.25_5.4.180   | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |

@@ -1,31 +1,35 @@
-name: 'Use ophub script to package Armvirt as OpenWrt'
-author: 'ophub'
-description: 'Package Armvirt as OpenWrt. Support Amlogic s9xxx tv box.'
+name: "Use ophub script to package Armvirt as OpenWrt"
+author: "ophub"
+description: "Package Armvirt as OpenWrt. Support Amlogic s9xxx tv box."
 inputs:
   mode:
-    description: 'Choose script.'
+    description: "Choose script."
     required: false
-    default: 'ophub'
-  amlogic_openwrt:
-    description: 'Choose Amlogic SoC.'
-    required: false
-    default: 's905d_s905x3'
-  amlogic_kernel:
-    description: 'Choose kernel.'
-    required: false
-    default: '5.15.25_5.4.180'
-  auto_kernel:
-    description: 'Auto use the latest kernel.'
-    required: false
-    default: 'true'
-  amlogic_size:
-    description: 'Choose rootfs size.'
-    required: false
-    default: '1024'
+    default: "ophub"
   armvirt64_path:
-    description: 'Choose armvirt64 file path.'
+    description: "Choose armvirt64 file path."
     required: false
-    default: 'openwrt/bin/targets/*/*/*rootfs.tar.gz'
+    default: "openwrt/bin/targets/*/*/*rootfs.tar.gz"
+  amlogic_openwrt:
+    description: "Choose Amlogic SoC."
+    required: false
+    default: "s905d_s905x3"
+  amlogic_kernel:
+    description: "Choose kernel version."
+    required: false
+    default: "5.15.25_5.4.180"
+  auto_kernel:
+    description: "Auto use the latest kernel."
+    required: false
+    default: "true"
+  version_branch:
+    description: "Choose version branch."
+    required: false
+    default: "stable"
+  amlogic_size:
+    description: "Set the rootfs size."
+    required: false
+    default: "1024"
 
 runs:
   using: "composite"
@@ -34,16 +38,36 @@ runs:
       run: |
         cd ${GITHUB_ACTION_PATH}
         echo -e "ophub package actions path: ${PWD}"
-        [ -z "${{ inputs.armvirt64_path }}" ] && echo -e "The [ armvirt64_path ] variable must be specified." && exit 1
-        [ -d openwrt-armvirt ] || sudo mkdir -p openwrt-armvirt
-        sudo cp -f ${GITHUB_WORKSPACE}/${{ inputs.armvirt64_path }} openwrt-armvirt && sync
+
+        openwrt_filename="${{ inputs.armvirt64_path }}"
+        openwrt_savepath="openwrt-armvirt"
+        echo -e "Get openwrt file input parameters: [ ${openwrt_filename} ]"
+        [ -z "${openwrt_filename}" ] && echo -e "The [ armvirt64_path ] variable must be specified." && exit 1
+        [ -d "${openwrt_savepath}" ] || sudo mkdir -p ${openwrt_savepath}
+
+        if [[ "${openwrt_filename}" == http* ]]; then
+          echo -e "Use wget to download file: [ ${openwrt_filename} ]"
+          sudo wget ${openwrt_filename} -q -P ${openwrt_savepath} 2>/dev/null
+        elif [[ "${openwrt_filename:0:16}" != "${openwrt_savepath}/" && "${openwrt_filename:0:18}" != "./${openwrt_savepath}/" ]]; then
+          echo -e "Copy files: [ ${openwrt_filename} ]"
+          sudo cp -f ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
+        else
+          echo -e "Use openwrt files: [ ${openwrt_filename} ]"
+        fi
+        sync
+        echo -e "About the ${openwrt_savepath} directory: \n $(ls ${openwrt_savepath} -l 2>/dev/null)"
+
+        cd ${GITHUB_ACTION_PATH}
+        echo -e "Start to make openwrt..."
         make_command=" -d"
         [ -n ${{ inputs.amlogic_openwrt }} ] && make_command="${make_command} -b ${{ inputs.amlogic_openwrt }}"
         [ -n ${{ inputs.amlogic_kernel }} ] && make_command="${make_command} -k ${{ inputs.amlogic_kernel }}"
         [ -n ${{ inputs.auto_kernel }} ] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
+        [ -n ${{ inputs.version_branch }} ] && make_command="${make_command} -v ${{ inputs.version_branch }}"
         [ -n ${{ inputs.amlogic_size }} ] && make_command="${make_command} -s ${{ inputs.amlogic_size }}"
         sudo chmod +x make
         sudo ./make ${make_command}
+
         echo -e "Output environment variables."
         echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
         echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
@@ -55,5 +79,5 @@ runs:
         echo -e "$(ls ${PWD}/out 2>/dev/null) \n"
 
 branding:
-  icon: 'terminal'
-  color: 'gray-dark'
+  icon: "terminal"
+  color: "gray-dark"

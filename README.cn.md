@@ -182,9 +182,9 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 - name: Package Armvirt as OpenWrt
   uses: ophub/amlogic-s9xxx-openwrt@main
   with:
-    armvirt64_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
-    amlogic_openwrt: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    amlogic_kernel: 5.15.25_5.4.180
+    openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
+    openwrt_soc: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
+    openwrt_kernel: 5.15.25_5.4.180
 ```
 - GitHub Action 输入参数说明
 
@@ -192,12 +192,12 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 
 | 参数              | 默认值             | 说明                                        |
 |-------------------|-------------------|-------------------------------------------|
-| armvirt64_path    | no                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
-| amlogic_openwrt   | s905d_s905x3      | 设置打包盒子的 `SOC` ，功能参考 `-b` |
-| amlogic_kernel    | 5.15.25_5.4.180   | 设置内核版本，功能参考 `-k` |
+| openwrt_path      | no                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
+| openwrt_soc       | s905d_s905x3      | 设置打包盒子的 `SOC` ，功能参考 `-b` |
+| openwrt_kernel    | 5.15.25_5.4.180   | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | version_branch    | stable            | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，功能参考 `-v` |
-| amlogic_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
+| openwrt_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
 
 - GitHub Action 输出变量说明
 

@@ -222,9 +222,9 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
       More information ...
 ```
 
-## 编译自定义内核
+## 编译内核
 
-自定义内核的编译方法详见 [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
+内核的编译方法详见 [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
 
 ```yaml
 - name: Compile the kernel for Amlogic s9xxx

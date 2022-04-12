@@ -527,11 +527,11 @@ EOF
     echo "pwm_meson" >etc/modules.d/pwm_meson
 
     # Relink the kmod program
-    [ -x "usr/sbin/kmod" ] && (
+    [ -x "sbin/kmod" ] && (
         kmod_list="depmod insmod lsmod modinfo modprobe rmmod"
         for ki in ${kmod_list}; do
-            rm -f usr/sbin/${ki} 2>/dev/null
-            ln -sf kmod usr/sbin/${ki}
+            rm -f sbin/${ki} 2>/dev/null
+            ln -sf kmod sbin/${ki}
         done
     )
 

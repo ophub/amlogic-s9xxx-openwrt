@@ -224,9 +224,9 @@ The relevant parameters correspond to the `local packaging command`, please refe
       More information ...
 ```
 
-## Compile a custom kernel
+## Compile the kernel
 
-For the compilation method of the custom kernel, see [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
+For the compilation method of the kernel, see [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
 
 ```yaml
 - name: Compile the kernel for Amlogic s9xxx

@@ -297,7 +297,7 @@ confirm_version() {
     # Confirm soc branch
     case "${soc}" in
     s905x3 | x96 | hk1 | h96 | ugoosx3)
-        FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
+        FDTFILE="meson-sm1-tx3-qz.dtb"
         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
         MAINLINE_UBOOT="x96maxplus-u-boot.bin.sd.bin"
         ANDROID_UBOOT="hk1box-bootloader.img"

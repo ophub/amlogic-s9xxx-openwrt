@@ -55,6 +55,7 @@ armbian_path="${amlogic_path}/amlogic-armbian"
 kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
+bootfs_path="${configfiles_path}/bootfs"
 openvfd_path="${configfiles_path}/rootfs/usr/share/openvfd"
 # Add custom openwrt firmware information
 op_release="etc/flippy-openwrt-release"
@@ -188,6 +189,12 @@ download_depends() {
         svn up ${armbian_path} --force
     else
         svn co ${depends_repo}/amlogic-armbian ${armbian_path} --force
+    fi
+    # Sync /boot related files
+    if [ -d "${bootfs_path}" ]; then
+        svn up ${bootfs_path} --force
+    else
+        svn co ${depends_repo}/common-files/bootfs ${bootfs_path} --force
     fi
     # Sync u-boot related files
     if [ -d "${uboot_path}" ]; then
@@ -419,14 +426,20 @@ extract_armbian() {
 
     # Copy OpenWrt files
     cp -rf ${root_comm}/* ${root}
-    # Copy the overload files
-    cp -f ${uboot_path}/overload/* ${boot}
+
+    # Unzip the relevant files
+    tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
+    tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
+
+    # Copy the same files
+    [ "$(ls ${configfiles_path}/bootfs 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/bootfs/* ${boot}
+    [ "$(ls ${configfiles_path}/rootfs 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/rootfs/* ${root}
+
     # Copy the bootloader files
     [ -d "${root}/lib/u-boot" ] || mkdir -p "${root}/lib/u-boot"
     cp -f ${uboot_path}/bootloader/* ${root}/lib/u-boot
-
-    tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
-    tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
+    # Copy the overload files
+    cp -f ${uboot_path}/overload/* ${boot}
 
     # Process kernel files
     if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
@@ -449,12 +462,6 @@ extract_armbian() {
 
 refactor_files() {
     process_msg " (4/7) Refactor related files."
-    cd ${make_path}
-
-    # Complete file for ${root}: [ /etc ], [ /usr ] etc.
-    [ "$(ls ${configfiles_path}/rootfs 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/rootfs/* ${root}
-    sync
-
     cd ${root}
 
     # Add other operations below
@@ -616,10 +623,11 @@ EOF
 
     cd ${boot}
 
+    # For btrfs file system
+    uenv_mount_string="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
     boot_conf_file="uEnv.txt"
-    cp -f ${configfiles_path}/bootfs/${boot_conf_file} .
     [ -f "${boot_conf_file}" ] || error_msg "The [ ${boot_conf_file} ] file does not exist."
-    sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" ${boot_conf_file}
+    sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_conf_file}
     sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
 
     # Add u-boot.ext for 5.10 kernel

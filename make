@@ -300,7 +300,7 @@ confirm_version() {
         FDTFILE="meson-sm1-tx3-qz.dtb"
         UBOOT_OVERLOAD="u-boot-tx3-qz.bin"
         MAINLINE_UBOOT="x96maxplus-u-boot.bin.sd.bin"
-        ANDROID_UBOOT="hk1box-bootloader.img"
+        ANDROID_UBOOT=""
         ;;
     s905x2 | x96max4g | x96max2g)
         FDTFILE="meson-g12a-x96-max.dtb"

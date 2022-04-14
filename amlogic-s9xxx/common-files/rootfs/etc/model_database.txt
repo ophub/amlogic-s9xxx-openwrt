@@ -45,6 +45,3 @@
 514:X96 Air 100Mb:s905x3:meson-sm1-x96-air.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,100M Nic,Wifi
 515:A95XF3 Air 1Gb:s905x3:meson-sm1-a95xf3-air-gbit.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,1Gb Nic,Wifi
 516:A95XF3 Air 100Mb:s905x3:meson-sm1-a95xf3-air.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,100M Nic,Wifi
-
-# Other
-0:Unknown:Other:Import-custom-dtb-file:NA:NA:NA:Enter the dtb file name of your box

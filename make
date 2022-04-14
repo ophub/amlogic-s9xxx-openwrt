@@ -280,15 +280,16 @@ confirm_version() {
     cd ${make_path}
 
     # Confirm kernel branch
-    k510_ver=$(echo "${kernel}" | cut -d '.' -f1)
-    k510_maj=$(echo "${kernel}" | cut -d '.' -f2)
-    if [ "${k510_ver}" -eq "5" ]; then
-        if [ "${k510_maj}" -ge "10" ]; then
+    kernel_mainversion=$(echo "${kernel}" | cut -d '.' -f1)
+    kernel_patchlevel=$(echo "${kernel}" | cut -d '.' -f2)
+    if [ "${kernel_mainversion}" -eq "5" ]; then
+        # The 5.4.y and 5.15.y kernels have TEXT_OFFSET patch and do not need u-boot support
+        if [[ "${kernel_patchlevel}" -ge "10" && "${kernel_patchlevel}" -ne "15" ]]; then
             K510="1"
         else
             K510="0"
         fi
-    elif [ "${k510_ver}" -gt "5" ]; then
+    elif [ "${kernel_mainversion}" -gt "5" ]; then
         K510="1"
     else
         K510="0"
@@ -631,9 +632,10 @@ EOF
     sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
 
     # Add u-boot.ext for 5.10 kernel
-    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then
-        if [ -f "${UBOOT_OVERLOAD}" ]; then
-            cp -f ${UBOOT_OVERLOAD} u-boot.ext && sync && chmod +x u-boot.ext
+    if [[ "${K510}" -eq "1" ]]; then
+        if [[ -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
+            cp -f ${UBOOT_OVERLOAD} u-boot.ext
+            chmod +x u-boot.ext
         else
             error_msg "${kernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
         fi
@@ -668,14 +670,16 @@ make_image() {
     sync
 
     # Write the specified bootloader
-    if [[ "${MAINLINE_UBOOT}" != "" && -f "${root}/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
-        dd if="${root}/lib/u-boot/${MAINLINE_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
-        dd if="${root}/lib/u-boot/${MAINLINE_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        #echo -e "${soc}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
-    elif [[ "${ANDROID_UBOOT}" != "" && -f "${root}/lib/u-boot/${ANDROID_UBOOT}" ]]; then
-        dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
-        dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        #echo -e "${soc}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
+    if [[ "${K510}" -eq "1" ]]; then
+        if [[ "${MAINLINE_UBOOT}" != "" && -f "${root}/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
+            dd if="${root}/lib/u-boot/${MAINLINE_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
+            dd if="${root}/lib/u-boot/${MAINLINE_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+            #echo -e "${soc}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
+        elif [[ "${ANDROID_UBOOT}" != "" && -f "${root}/lib/u-boot/${ANDROID_UBOOT}" ]]; then
+            dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
+            dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
+            #echo -e "${soc}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
+        fi
     fi
     sync
 }

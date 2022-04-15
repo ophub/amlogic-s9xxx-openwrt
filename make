@@ -26,6 +26,7 @@
 #
 # error_msg          : Output error message
 # process_msg        : Output process message
+# get_textoffset     : Get Kernel TextOffset
 #
 # init_var           : Initialize all variables
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
@@ -93,6 +94,27 @@ error_msg() {
 
 process_msg() {
     echo -e " [\033[1;92m ${soc} \033[0m - \033[1;92m ${kernel} \033[0m] ${1}"
+}
+
+get_textoffset() {
+    vmlinuz_name="${1}"
+    K510="1"
+    temp_script="$(mktemp)"
+    cat >${temp_script} <<EOF
+use strict;
+my \$filename = \$ARGV[0];
+open my \$fh, '<', \$filename or die;
+binmode \$fh;
+seek \$fh, 0x8, 0;
+my \$buf = "";
+read \$fh, \$buf, 0x4;
+close(\$fh);
+my \$str = unpack 'H*', \$buf;
+print "\$str\n";
+EOF
+    vmlinuz_text_offset="$(perl "${temp_script}" "${vmlinuz_name}")"
+    [ "${vmlinuz_text_offset}" == "00000801" ] && K510="0"
+    rm -f ${temp_script} 2>/dev/null
 }
 
 init_var() {
@@ -279,22 +301,6 @@ confirm_version() {
     process_msg " (1/7) Confirm version type."
     cd ${make_path}
 
-    # Confirm kernel branch
-    kernel_mainversion=$(echo "${kernel}" | cut -d '.' -f1)
-    kernel_patchlevel=$(echo "${kernel}" | cut -d '.' -f2)
-    if [ "${kernel_mainversion}" -eq "5" ]; then
-        # The 5.4.y and 5.15.y kernels have TEXT_OFFSET patch and do not need u-boot support
-        if [[ "${kernel_patchlevel}" -ge "10" && "${kernel_patchlevel}" -ne "15" ]]; then
-            K510="1"
-        else
-            K510="0"
-        fi
-    elif [ "${kernel_mainversion}" -gt "5" ]; then
-        K510="1"
-    else
-        K510="0"
-    fi
-
     # Confirm soc branch
     case "${soc}" in
     s905x3 | x96 | hk1 | h96 | ugoosx3)
@@ -444,13 +450,13 @@ extract_armbian() {
 
     # Process kernel files
     if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
-        mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
-
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
 
         tar -xzf ${kernel_dir}/boot-*.tar.gz -C ${boot}
         cp -f ${boot}/uInitrd-* ${boot}/uInitrd && cp -f ${boot}/vmlinuz-* ${boot}/zImage 2>/dev/null
+        get_textoffset "${boot}/zImage"
 
+        mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
         tar -xzf ${kernel_dir}/modules-*.tar.gz -C ${root}/lib/modules
         cd ${root}/lib/modules/*/
         rm -rf *.ko
@@ -575,7 +581,6 @@ EOF
     echo "ANDROID_UBOOT='/lib/u-boot/${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
     echo "KERNEL_VERSION='${kernel}'" >>${op_release} 2>/dev/null
     echo "SOC='${soc}'" >>${op_release} 2>/dev/null
-    echo "K510='${K510}'" >>${op_release} 2>/dev/null
 
     # Add firmware version information to the terminal page
     if [ -f etc/banner ]; then

@@ -26,7 +26,7 @@
 #
 # error_msg          : Output error message
 # process_msg        : Output process message
-# get_textoffset     : Get Kernel TextOffset
+# get_textoffset     : Get kernel TEXT_OFFSET
 #
 # init_var           : Initialize all variables
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
@@ -112,8 +112,7 @@ close(\$fh);
 my \$str = unpack 'H*', \$buf;
 print "\$str\n";
 EOF
-    vmlinuz_text_offset="$(perl "${temp_script}" "${vmlinuz_name}")"
-    [ "${vmlinuz_text_offset}" == "00000801" ] && K510="0"
+    [[ "$(perl "${temp_script}" "${vmlinuz_name}")" == "00000801" ]] && K510="0"
     rm -f ${temp_script} 2>/dev/null
 }
 
@@ -581,6 +580,7 @@ EOF
     echo "ANDROID_UBOOT='/lib/u-boot/${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
     echo "KERNEL_VERSION='${kernel}'" >>${op_release} 2>/dev/null
     echo "SOC='${soc}'" >>${op_release} 2>/dev/null
+    echo "K510='${K510}'" >>${op_release} 2>/dev/null
 
     # Add firmware version information to the terminal page
     if [ -f etc/banner ]; then

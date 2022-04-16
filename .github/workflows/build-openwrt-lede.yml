@@ -64,6 +64,27 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
+    - name: Clone Package
+      run: |
+        cd openwrt/package/
+        git clone https://github.com/mrkenz9595/rooter-package.git
+
+    - name: Add patch 5.4
+      run: |
+        cd openwrt/target/linux/generic/pending-5.4
+        wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-driver-19076.patch
+        wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-qcserial19074.patch
+        wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-rndis.patch
+        wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-spi-nor.patch
+ 
+    - name: Add patch 5.15
+      run: |
+        cd openwrt/target/linux/generic/pending-5.15
+        wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-driver-19076.patch
+        wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-qcserial19074.patch
+        wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-rndis.patch
+        wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-spi-nor.patch
+
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 

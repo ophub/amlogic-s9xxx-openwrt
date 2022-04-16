@@ -85,6 +85,17 @@ jobs:
         wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-rndis.patch
         wget https://raw.githubusercontent.com/mrkenz9595/rooter-package/master/900-spi-nor.patch
 
+    - name: OpenClash
+      run: |
+        cd openwrt && mkdir package/luci-app-openclash
+        cd package/luci-app-openclash
+        git init
+        git remote add -f origin https://github.com/vernesong/OpenClash.git
+        git config core.sparsecheckout true
+        echo "luci-app-openclash" >> .git/info/sparse-checkout
+        git pull --depth 1 origin master
+        git branch --set-upstream-to=origin/master master
+
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 

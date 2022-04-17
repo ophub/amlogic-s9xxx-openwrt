@@ -95,20 +95,20 @@ openwrt-led
 | ---- | ---- | ---- |
 | -d | Defaults | 使用默认配置 |
 | -b | BuildSoC | 指定电视盒子型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 可以指定的型号有: `a311d`, `s905x3`, `s905x2`, `s905l3a`, `s905x`, `s905w`, `s905d`, `s905d-ki`, `s905`, `s922x`, `s922x-n2`, `s912`, `s912-m8s` 。说明：`s922x-reva` 是 `s922x-gtking-pro-rev_a`，`s922x-n2` 是 `s922x-odroid-n2` ，`s912-m8s` 是 `s912-mecool-m8s-pro-l` ，`s905d-ki` 是 `s912-mecool-ki-pro`，`s905x2-km3` 是 `s905x2-mecool-km3` |
-| -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.4.180` . 多个内核使用 `_` 进行连接，如 `-k 5.15.25_5.4.180` |
-| -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.4.180 的 5.4 同系列是否有更新的版本，如有 5.4.180 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
+| -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.10.100` . 多个内核使用 `_` 进行连接，如 `-k 5.15.25_5.10.100` |
+| -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.10.100 的同系列是否有更新的版本，如有 5.10.100 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -v | VersionBranch | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，如 `-v stable` 。指定的名称须与分支目录名称相同。默认使用 `stable` 分支版本。 |
 | -s | Size | 对固件的 ROOTFS 分区大小进行设置，默认大小为 1024M, 固件大小必须大于 256M. 例如： `-s 1024` |
 
 - `sudo ./make -d` : 使用默认配置，使用内核库中的最新内核包，对全部型号的电视盒子进行打包。
-- `sudo ./make -d -b s905x3 -k 5.4.180` : 推荐使用. 使用默认配置进行相关内核打包。
-- `sudo ./make -d -b s905x3_s905d -k 5.15.25_5.4.180` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
-- `sudo ./make -d -b s905x3 -k 5.4.180 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为1024M。
+- `sudo ./make -d -b s905x3 -k 5.10.100` : 推荐使用. 使用默认配置进行相关内核打包。
+- `sudo ./make -d -b s905x3_s905d -k 5.15.25_5.10.100` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
+- `sudo ./make -d -b s905x3 -k 5.10.100 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为1024M。
 - `sudo ./make -d -b s905x3 -v dev -k 5.7.19` : 使用默认配置，指定型号，[指定版本分支](https://github.com/ophub/kernel/tree/main/pub) 和内核进行打包。
 - `sudo ./make -d -b s905x3_s905d`  使用默认配置，对多个型号的电视盒子进行全部内核打包, 使用 `_` 进行多型号连接。
-- `sudo ./make -d -k 5.15.25_5.4.180` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。
-- `sudo ./make -d -k 5.15.25_5.4.180 -a true` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
-- `sudo ./make -d -s 1024 -k 5.4.180` : 使用默认配置，设置固件大小为 1024M, 并指定内核为 5.4.180 ，对全部型号电视盒子进行打包。
+- `sudo ./make -d -k 5.15.25_5.10.100` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。
+- `sudo ./make -d -k 5.15.25_5.10.100 -a true` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
+- `sudo ./make -d -s 1024 -k 5.10.100` : 使用默认配置，设置固件大小为 1024M, 并指定内核为 5.10.100 ，对全部型号电视盒子进行打包。
 
 ## OpenWrt 固件编译及打包说明
 
@@ -123,7 +123,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 ```
 2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。
-4. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3 -k 5.4.180`。打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
+4. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3 -k 5.10.100`。打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
 
 - ### Github.com 一站式编译和打包
 
@@ -139,7 +139,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
     [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
     cp -f openwrt/bin/targets/*/*/*rootfs.tar.gz openwrt-armvirt/ && sync
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.25_5.4.180
+    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.25_5.10.100
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -164,7 +164,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
     curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/.*rootfs.tar.gz" | head -n 1 > DOWNLOAD_URL
     [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
     sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.25_5.4.180
+    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.25_5.10.100
     echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
     echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
     echo "::set-output name=status::success"
@@ -184,7 +184,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     openwrt_soc: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    openwrt_kernel: 5.15.25_5.4.180
+    openwrt_kernel: 5.15.25_5.10.100
 ```
 - GitHub Action 输入参数说明
 
@@ -194,7 +194,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
 |-------------------|-------------------|-------------------------------------------|
 | openwrt_path      | no                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_soc       | s905d_s905x3      | 设置打包盒子的 `SOC` ，功能参考 `-b` |
-| openwrt_kernel    | 5.15.25_5.4.180   | 设置内核版本，功能参考 `-k` |
+| openwrt_kernel    | 5.15.25_5.10.100   | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | version_branch    | stable            | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，功能参考 `-v` |
 | openwrt_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
@@ -231,7 +231,7 @@ sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel
-    kernel_version: 5.15.25_5.4.180
+    kernel_version: 5.15.25_5.10.100
     kernel_auto: true
     kernel_sign: -meson64-dev
 ```

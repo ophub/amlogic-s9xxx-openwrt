@@ -637,7 +637,7 @@ EOF
     sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
 
     # Add u-boot.ext for 5.10 kernel
-    if [[ -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
+    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
         cp -f ${UBOOT_OVERLOAD} u-boot.ext
         chmod +x u-boot.ext
     elif [[ "${K510}" -eq "1" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then

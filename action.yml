@@ -48,11 +48,9 @@ runs:
         if [[ "${openwrt_filename}" == http* ]]; then
           echo -e "Use wget to download file: [ ${openwrt_filename} ]"
           sudo wget ${openwrt_filename} -q -P ${openwrt_savepath} 2>/dev/null
-        elif [[ "${openwrt_filename:0:16}" != "${openwrt_savepath}/" && "${openwrt_filename:0:18}" != "./${openwrt_savepath}/" ]]; then
+        else
           echo -e "Copy files: [ ${openwrt_filename} ]"
           sudo cp -f ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
-        else
-          echo -e "Use openwrt files: [ ${openwrt_filename} ]"
         fi
         sync
         echo -e "About the ${openwrt_savepath} directory: \n $(ls ${openwrt_savepath} -l 2>/dev/null)"

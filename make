@@ -127,11 +127,13 @@ init_var() {
             ;;
         -b | --buildSoC)
             if [ -n "${2}" ]; then
-                unset build_openwrt
-                oldIFS=$IFS
-                IFS=_
-                build_openwrt=(${2})
-                IFS=$oldIFS
+                if [[ "${2}" != "all" ]]; then
+                    unset build_openwrt
+                    oldIFS=$IFS
+                    IFS=_
+                    build_openwrt=(${2})
+                    IFS=$oldIFS
+                fi
                 shift
             else
                 error_msg "Invalid -b parameter [ ${2} ]!"

@@ -4,7 +4,7 @@ View Chinese description  |  [查看中文说明](README.cn.md)
 
 The [OpenWrt](https://openwrt.org/) Project is a Linux router operating system targeting embedded devices. Instead of trying to create a single, static firmware, OpenWrt provides a fully writable filesystem with package management. Allows you to freely choose the software package you need to customize your router system. For developers, OpenWrt is the framework to build an application without having to build a complete firmware around it; for users this means the ability for full customization, to use the device in ways never envisioned. It has more than 3000+ standardized application packages and a very rich third-party plug-in support, so you can easily replicate the same setup on any supported device.
 
-Now you can replace the Android TV system of the TV box with the Amlogic chip with the OpenWrt system, making it a powerful router. This project supports `github.com One-stop compilation`, `Use GitHub Action to packaging`, `Use github.com Releases rootfs file to packaging`, `Local packaging`. including OpenWrt firmware install to EMMC and update related functions. Support Amlogic s9xxx tv box are ***`a311d, s922x, s905x3, s905x2, s905l3a, s912, s905d, s905x, s905w, s905`***, etc. such as ***`Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, X96-Max+, HK1-Box, H96-Max-X3, Phicomm-N1, Octopus-Planet, Fiberhome HG680P, ZTE B860H`***, etc.
+Now you can replace the Android TV system of the TV box with the Amlogic chip with the OpenWrt system, making it a powerful router. This project supports one-stop complete compilation of github.com (compiling from custom software packages to packaging firmware, all in one stop at giuhub.com). Support localized packaging (firmware packaging in local Ubuntu and other environments). including OpenWrt firmware install to EMMC and update related functions. Support Amlogic s9xxx tv box are ***`a311d, s922x, s905x3, s905x2, s905l3a, s912, s905d, s905x, s905w, s905`***, etc. such as ***`Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, X96-Max+, HK1-Box, H96-Max-X3, Phicomm-N1, Octopus-Planet, Fiberhome HG680P, ZTE B860H`***, etc.
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Welcome to use `Fork` for [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md). If you like it, Please click the `Star`.
 
@@ -89,7 +89,19 @@ openwrt-led
 
 Debug according to [LED screen display control instructions](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led_screen_display_control.md).
 
-## Detailed make compile command
+## Local build instructions
+
+1. Install the necessary packages (E.g Ubuntu 20.04 LTS user)
+```yaml
+sudo apt-get update -y
+sudo apt-get full-upgrade -y
+sudo apt-get install -y $(curl -fsSL https://raw.githubusercontent.com/ophub/amlogic-s9xxx-armbian/main/compile-kernel/tools/script/ubuntu2004-openwrt-depends)
+```
+2. Clone the repository to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
+3. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
+4. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b s905x3 -k 5.10.100`. The generated OpenWrt firmware is in the `out` directory under the root directory.
+
+- ### Description of localized packaging parameters
 
 | Parameter | Meaning | Description |
 | ---- | ---- | ---- |
@@ -110,74 +122,13 @@ Debug according to [LED screen display control instructions](https://github.com/
 - `sudo ./make -d -k 5.15.25_5.10.100 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
 - `sudo ./make -d -s 1024 -k 5.10.100`: Use the default configuration and set the partition size to 1024m, and only compile the openwrt firmware with the kernel version 5.10.100.
 
-## Compilation and packaging method
-
-Provide multiple ways to generate the OpenWrt firmware you need. Please choose one method you like. Each method can be used independently.
-
-- ### Local packaging instructions
-
-1. Install the necessary packages (E.g Ubuntu 20.04 LTS user)
-```yaml
-sudo apt-get update -y
-sudo apt-get full-upgrade -y
-sudo apt-get install -y $(curl -fsSL https://raw.githubusercontent.com/ophub/amlogic-s9xxx-armbian/main/compile-kernel/tools/script/ubuntu2004-openwrt-depends)
-```
-2. Clone the repository to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
-3. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
-4. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -d -b s905x3 -k 5.10.100`. The generated OpenWrt firmware is in the `out` directory under the root directory.
-
-- ### Github.com One-stop compilation instructions
+## Use GitHub Actions to build
 
 You can modify the configuration file in the `router-config` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
 
 1. Personalized plug-in configuration in [router-config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml) file.
-2. Select ***`Build OpenWrt`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
-
-```yaml
-- name: Build OpenWrt firmware
-  id: build
-  run: |
-    [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-    cp -f openwrt/bin/targets/*/*/*rootfs.tar.gz openwrt-armvirt/ && sync
-    sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.25_5.10.100
-    echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-    echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
-    echo "::set-output name=status::success"
-```
-
-The output variable ${{ env.PACKAGED_OUTPUTPATH }} is the path where the packaged file is located.
-
-- ### Use github.com Releases rootfs file to packaging
-
-If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in a [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) in your repository, you can use this file to directly package the required firmware.
-
-- `openwrt_s9xxx_.*` is Prefix the `tag_name` in the Release.
-- `openwrt-armvirt-64-default-rootfs.tar.gz` is the firmware you are going to package, please refer to [router-config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config) for compilation method.
-
-[For more instructions please see: use-releases-file-to-packaging.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/use-releases-file-to-packaging.yml)
-
-```yaml
-- name: Build OpenWrt firmware
-  id: build
-  run: |
-    [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-    curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_.*/.*rootfs.tar.gz" | head -n 1 > DOWNLOAD_URL
-    [ -s DOWNLOAD_URL ] && wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
-    sudo chmod +x make
-    sudo ./make -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.15.25_5.10.100
-    echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-    echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
-    echo "::set-output name=status::success"
-```
-
-This function is generally used to replace the kernel for quick packaging. If you have the `openwrt-armvirt-64-default-rootfs.tar.gz` file in your repository, when you want to use other kernel versions of OpenWrt, you can directly specify the relevant kernel for Quickly packaged, no longer waiting for a long firmware compilation.
-
-- ### Use GitHub Action to packaging instructions
-
-[For more instructions please see: .yml example](https://github.com/ophub/op/blob/main/.github/workflows/build-openwrt-s9xxx.yml)
-
-In your .github/workflows/.yml file, after completing the compilation of Subtarget is ARMv8, add the following online packaging code:
+2. New compilation: Select ***`Build OpenWrt`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
+3. Compile again: If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), you do not need to compile it completely, you can directly use this file to `build openwrt` of different soc. Select ***`Use Releases file to Packaging`*** on the [Actions](https://github.com/ophub/amlogic-s9xxx-armbian/openwrt) page. Click the ***`Run workflow`*** button.
 
 ```yaml
 - name: Package Armvirt as OpenWrt
@@ -188,7 +139,7 @@ In your .github/workflows/.yml file, after completing the compilation of Subtarg
     openwrt_kernel: 5.15.25_5.10.100
 ```
 
-- GitHub Action Input parameter description
+- ### GitHub Actions Input parameter description
 
 The relevant parameters correspond to the `local packaging command`, please refer to the above description.
 
@@ -201,28 +152,13 @@ The relevant parameters correspond to the `local packaging command`, please refe
 | version_branch     | stable            | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
 | openwrt_size       | 1024              | Set the size of the firmware ROOTFS partition, function reference `-s` |
 
-- GitHub Action Output variable description
+- ### GitHub Actions Output variable description
 
 | Parameter                                | For example             | Description                   |
 |------------------------------------------|-------------------------|-------------------------------|
-| ${{ env.PACKAGED_OUTPUTPATH }}           | ${PWD}/out              | OpenWrt firmware storage path |
+| ${{ env.PACKAGED_OUTPUTPATH }}           | out                     | OpenWrt firmware storage path |
 | ${{ env.PACKAGED_OUTPUTDATE }}           | 2021.04.13.1058         | Packing date                  |
 | ${{ env.PACKAGED_STATUS }}               | success / failure       | Package status                |
-
-- Uploads OpenWrt Firmware to Release:
-
-```yaml
-- name: Upload OpenWrt Firmware to Release
-  uses: ncipollo/release-action@v1
-  with:
-    tag: openwrt_s9xxx
-    artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-    allowUpdates: true
-    token: ${{ secrets.GITHUB_TOKEN }}
-    body: |
-      This is OpenWrt firmware for Amlogic s9xxx tv box.
-      More information ...
-```
 
 ## Compile the kernel
 
@@ -238,7 +174,7 @@ For the compilation method of the kernel, see [compile-kernel](https://github.co
     kernel_sign: -meson64-dev
 ```
 
-## ~/openwrt-armvirt/*-rootfs.tar.gz Firmware compilation parameters
+## openwrt-*-rootfs.tar.gz Firmware compilation parameters
 
 | Option | Value |
 | ---- | ---- |
@@ -249,7 +185,7 @@ For the compilation method of the kernel, see [compile-kernel](https://github.co
 
 [For more instructions please see: router-config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config)
 
-## Firmware information
+## OpenWrt firmware default information
 
 | Name | Value |
 | ---- | ---- |

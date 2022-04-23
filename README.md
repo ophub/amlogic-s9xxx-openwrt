@@ -89,6 +89,10 @@ openwrt-led
 
 Debug according to [LED screen display control instructions](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led_screen_display_control.md).
 
+- ### More instructions for use
+
+In the use of OpenWrt, please refer to [router-config](router-config) for some common problems that may be encountered.
+
 ## Local build instructions
 
 1. Install the necessary packages (E.g Ubuntu 20.04 LTS user)

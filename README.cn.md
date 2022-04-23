@@ -89,6 +89,10 @@ openwrt-led
 
 根据 [LED 屏显示控制说明](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/led_screen_display_control.md) 进行调试。
 
+- ### 更多使用说明
+
+在 OpenWrt 的使用中，一些可能遇到的常见问题详见 [router-config](router-config/README.cn.md)
+
 ## 本地化打包
 
 1. 安装必要的软件包（如 Ubuntu 20.04 LTS 用户）

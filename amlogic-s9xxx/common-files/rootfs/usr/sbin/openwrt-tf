@@ -64,7 +64,7 @@ mmcblk?p[1-4])
 esac
 
 # Get the starting position of the p3 partition
-ROOTFS_MB=960
+ROOTFS_MB="960"
 START_P3=$(fdisk -l | grep "${ROOT_PTNAME}" | sed -n '$p' | awk '{print $3}' | echo $(($(xargs) + 1)))
 if [[ -z "${START_P3}" || -z "$(echo ${START_P3} | sed -n "/^[0-9]\+$/p")" ]]; then
    echo -e "${ERROR} Unable to get starting position!"

@@ -114,17 +114,17 @@ sudo apt-get install -y $(curl -fsSL https://raw.githubusercontent.com/ophub/aml
 | -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 5.10.100` . Multiple kernel use `_` connection such as `-k 5.15.25_5.10.100` |
 | -a | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 5.10.100 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | -v | VersionBranch | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
-| -s | Size | Specify the size of the ROOTFS partition in MB. The default is 960MiB, and the specified size must be greater than 256. Such as `-s 960` |
+| -s | Size | Set the ROOTFS partition size for firmware (MiB). The default is 960 MiB, and the specified size must be greater than 512 MiB. Such as `-s 960` |
 
 - `sudo ./make -d`: Compile latest kernel versions of openwrt for all SoC with the default configuration.
 - `sudo ./make -d -b s905x3 -k 5.10.100`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
 - `sudo ./make -d -b s905x3_s905d -k 5.15.25_5.10.100`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
-- `sudo ./make -d -b s905x3 -k 5.10.100 -s 960`: Use the default configuration, specify a kernel, a firmware, and set the partition size for compilation.
+- `sudo ./make -d -b s905x3 -k 5.10.100 -s 960`: Using the default configuration, one kernel is specified, one model is packaged, and the firmware size is set to 960 MiB.
 - `sudo ./make -d -b s905x3 -v dev -k 5.7.19`: Use the default configuration, specify the model, specify the [version branch](https://github.com/ophub/kernel/tree/main/pub), and specify the kernel for packaging.
 - `sudo ./make -d -b s905x3_s905d`: Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels.
 - `sudo ./make -d -k 5.15.25_5.10.100`: Use the default configuration. Specify multiple cores, use `_` to connect.
 - `sudo ./make -d -k 5.15.25_5.10.100 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
-- `sudo ./make -d -s 960 -k 5.10.100`: Use the default configuration and set the partition size to 960MiB, and only compile the openwrt firmware with the kernel version 5.10.100.
+- `sudo ./make -d -s 960 -k 5.10.100`: Use the default configuration and set the partition size to 960 MiB, and only compile the openwrt firmware with the kernel version 5.10.100.
 
 ## Use GitHub Actions to build
 

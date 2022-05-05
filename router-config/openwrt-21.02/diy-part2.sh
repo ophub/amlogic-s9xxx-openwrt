@@ -27,15 +27,16 @@ echo "DISTRIB_SOURCECODE='openwrt'" >>package/base-files/files/etc/openwrt_relea
 # ------------------------------- Other started -------------------------------
 #
 # Add luci-app-amlogic
-svn co https://github.com/ophub/luci-app-amlogic/trunk package/luci-app-amlogic
+#svn co https://github.com/ophub/luci-app-amlogic/trunk package/luci-app-amlogic
+svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 
 # Add p7zip
 svn co https://github.com/hubutui/p7zip-lede/trunk package/lean/p7zip
 # add theme
 git clone https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
 #tool injek
-git clone https://github.com/frainzy1477/luci-app-clash.git package/luci-app-clash
-
+#git clone https://github.com/frainzy1477/luci-app-clash.git package/luci-app-clash
+svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
 # Add autocore
 # svn co https://github.com/ophub/amlogic-s9xxx-openwrt/trunk/amlogic-s9xxx/common-files/patches/autocore package/lean/autocore
 

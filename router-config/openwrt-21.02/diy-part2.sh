@@ -24,6 +24,7 @@ echo "DISTRIB_SOURCECODE='openwrt'" >>package/base-files/files/etc/openwrt_relea
 #
 # ------------------------------- Main source ends -------------------------------
 rm -rf feeds/package/network/services/dnsmasq
+rm -rf package/network/services/dnsmasq
 # ------------------------------- Other started -------------------------------
 #
 # Add luci-app-amlogic

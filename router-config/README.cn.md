@@ -215,13 +215,12 @@ schedule:
 
 ```yaml
 - name: Upload OpenWrt Firmware to Release
-  uses: ncipollo/release-action@v1
+  uses: ncipollo/release-action@main
   if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
   with:
     tag: openwrt_s9xxx_${{ env.FILE_DATE }}
     artifacts: ${{ env.FILEPATH }}/*
     allowUpdates: true
-    token: ${{ secrets.GITHUB_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information

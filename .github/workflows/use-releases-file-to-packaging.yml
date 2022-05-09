@@ -79,13 +79,12 @@ jobs:
           openwrt_size: ${{ github.event.inputs.openwrt_size }}
 
       - name: Upload OpenWrt Firmware to Release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success' && !cancelled()
         with:
           tag: openwrt_s9xxx_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
-          token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             This is OpenWrt firmware for Amlogic s9xxx tv box
             * Firmware information

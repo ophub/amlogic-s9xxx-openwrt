@@ -226,6 +226,7 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
     tag: openwrt_s9xxx_${{ env.FILE_DATE }}
     artifacts: ${{ env.FILEPATH }}/*
     allowUpdates: true
+    token: ${{ secrets.GH_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information

@@ -122,6 +122,7 @@ jobs:
           tag: openwrt_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
+          token: ${{ secrets.GH_TOKEN }}
           body: |
             This is OpenWrt firmware for Amlogic s9xxx tv box
             * Firmware information

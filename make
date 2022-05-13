@@ -569,12 +569,12 @@ EOF
     if [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/ 2>/dev/null))
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " Install: OpenWrt → System → Amlogic Service → Install" >>etc/banner
-        echo " Update: OpenWrt → System → Amlogic Service → Update" >>etc/banner
+        echo " Install OpenWrt: System → Amlogic Service → Install" >>etc/banner
+        echo " Update OpenWrt: System → Amlogic Service → Update" >>etc/banner
         echo " Amlogic SoC: ${soc}" >>etc/banner
         echo " OpenWrt Kernel: ${op_version}" >>etc/banner
         echo " Packaged Date: ${op_packaged_date}" >>etc/banner
-        echo " -------------------------------------------------------" >>etc/banner
+        echo "────────────────────────────────────────────────────────────────" >>etc/banner
     fi
 
     # Add wireless master mode

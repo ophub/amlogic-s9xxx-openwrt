@@ -1,5 +1,5 @@
 #!/bin/bash
-#========================================================================
+#============================================================================
 #
 # This file is licensed under the terms of the GNU General Public
 # License version 2. This program is licensed "as is" without any
@@ -13,19 +13,14 @@
 # Copyright (C) 2020- https://github.com/tuanqing/mknop
 # Copyright (C) 2020- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-#===== Install the basic packages of make openwrt for Ubuntu 20.04 ======
-#
-# sudo apt-get update -y
-# sudo apt-get full-upgrade -y
-# sudo apt-get install -y $(curl -fsSL git.io/ubuntu-2004-openwrt)
-#
 # Command: sudo ./make -d
 # Command optional parameters please refer to the source code repository
 #
-#============================ Functions list ============================
+#============================== Functions list ==============================
 #
 # error_msg          : Output error message
 # process_msg        : Output process message
+# get_textoffset     : Get kernel TEXT_OFFSET
 #
 # init_var           : Initialize all variables
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
@@ -42,41 +37,49 @@
 #
 # loop_make          : Loop to make OpenWrt files
 #
-#==================== Set make environment variables ====================
+#====================== Set make environment variables ======================
 #
 # Related file storage path
 make_path="${PWD}"
 tmp_path="${make_path}/tmp"
 out_path="${make_path}/out"
 openwrt_path="${make_path}/openwrt-armvirt"
-openwrt_file="openwrt-armvirt-64-default-rootfs.tar.gz"
+openwrt_rootfs_file="*rootfs.tar.gz"
 amlogic_path="${make_path}/amlogic-s9xxx"
 armbian_path="${amlogic_path}/amlogic-armbian"
-dtb_path="${amlogic_path}/amlogic-dtb"
 kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
-op_release="etc/flippy-openwrt-release" # Add custom openwrt firmware information
-build_openwrt=("a311d" "s922x" "s922x-n2" "s922x-reva" "s905x3" "s905x2" "s905l3a" "s905x2-km3" "s912" "s912-t95z" "s905d" "s905d-ki" "s905x" "s905w" "s905")
-#
-# Dependency files repository, Download u-boot and dtb to the local directory
+bootfs_path="${configfiles_path}/bootfs"
+openvfd_path="${configfiles_path}/rootfs/usr/share/openvfd"
+# Add custom openwrt firmware information
+op_release="etc/flippy-openwrt-release"
+# Dependency files download repository
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
-#
-# The install/update script repository
+# Install/Update script files download repository
 script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic/root/usr/sbin"
-#
-# Latest kernel download repository
+# Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 version_branch="stable"
-build_kernel=("5.15.25" "5.4.180")
 auto_kernel="true"
-#
-# Set OpenWrt firmware size (BOOT_MB >= 256, ROOT_MB >= 512)
-SKIP_MB="16"
+build_kernel=("5.15.25" "5.10.100")
+# Set supported SoC
+build_openwrt=(
+    "s922x" "s922x-n2" "s922x-reva" "a311d"
+    "s905x3"
+    "s905x2" "s905x2-km3" "s905l3a"
+    "s912" "s912-m8s"
+    "s905d" "s905d-ki"
+    "s905x"
+    "s905w"
+    "s905"
+)
+# Set OpenWrt firmware size (SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
+SKIP_MB="68"
 BOOT_MB="256"
 ROOT_MB="960"
 #
-#========================================================================
+#============================================================================
 
 error_msg() {
     echo -e " [\033[1;91m Error \033[0m] ${1}"
@@ -85,6 +88,13 @@ error_msg() {
 
 process_msg() {
     echo -e " [\033[1;92m ${soc} \033[0m - \033[1;92m ${kernel} \033[0m] ${1}"
+}
+
+get_textoffset() {
+    vmlinuz_name="${1}"
+    K510="1"
+    # With TEXT_OFFSET patch is [ 0108 ], without TEXT_OFFSET patch is [ 0000 ]
+    [[ "$(hexdump -n 15 -x "${vmlinuz_name}" 2>/dev/null | head -n 1 | awk '{print $7}')" == "0108" ]] && K510="0"
 }
 
 init_var() {
@@ -104,11 +114,13 @@ init_var() {
             ;;
         -b | --buildSoC)
             if [ -n "${2}" ]; then
-                unset build_openwrt
-                oldIFS=$IFS
-                IFS=_
-                build_openwrt=(${2})
-                IFS=$oldIFS
+                if [[ "${2}" != "all" ]]; then
+                    unset build_openwrt
+                    oldIFS=$IFS
+                    IFS=_
+                    build_openwrt=(${2})
+                    IFS=$oldIFS
+                fi
                 shift
             else
                 error_msg "Invalid -b parameter [ ${2} ]!"
@@ -160,8 +172,12 @@ init_var() {
 find_openwrt() {
     cd ${make_path}
 
-    [[ -f "${openwrt_path}/${openwrt_file}" ]] || error_msg "The OpenWrt file does not exist!"
-    echo -e "OpenWrt make file: [ ${openwrt_file} ]"
+    openwrt_file_name=$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')
+    if [[ -n "${openwrt_file_name}" ]]; then
+        echo -e "OpenWrt make file: [ ${openwrt_file_name} ]"
+    else
+        error_msg "There is no [ ${openwrt_rootfs_file} ] file in the [ ${openwrt_path} ] directory."
+    fi
 }
 
 download_depends() {
@@ -172,14 +188,37 @@ download_depends() {
     if [[ ${depends_repo} == http* && $(echo ${depends_repo} | grep "tree/main") != "" ]]; then
         depends_repo="${depends_repo//tree\/main/trunk}"
     fi
-    svn export ${depends_repo}/amlogic-dtb ${dtb_path} --force
-    svn export ${depends_repo}/amlogic-u-boot ${uboot_path} --force
+    # Sync armbian related files
+    if [ -d "${armbian_path}" ]; then
+        svn up ${armbian_path} --force
+    else
+        svn co ${depends_repo}/amlogic-armbian ${armbian_path} --force
+    fi
+    # Sync /boot related files
+    if [ -d "${bootfs_path}" ]; then
+        svn up ${bootfs_path} --force
+    else
+        svn co ${depends_repo}/common-files/bootfs ${bootfs_path} --force
+    fi
+    # Sync u-boot related files
+    if [ -d "${uboot_path}" ]; then
+        svn up ${uboot_path} --force
+    else
+        svn co ${depends_repo}/amlogic-u-boot ${uboot_path} --force
+    fi
+    # Sync openvfd related files
+    if [ -d "${openvfd_path}" ]; then
+        svn up ${openvfd_path} --force
+    else
+        svn co ${depends_repo}/common-files/rootfs/usr/share/openvfd ${openvfd_path} --force
+    fi
 
     # Convert script library address to svn format
     if [[ ${script_repo} == http* && $(echo ${script_repo} | grep "tree/main") != "" ]]; then
         script_repo="${script_repo//tree\/main/trunk}"
     fi
-    svn export ${script_repo} ${configfiles_path}/files/usr/sbin --force
+    # Sync install/update and other related files
+    svn export ${script_repo} ${configfiles_path}/rootfs/usr/sbin --force
 
     sync
 }
@@ -244,21 +283,6 @@ confirm_version() {
     process_msg " (1/7) Confirm version type."
     cd ${make_path}
 
-    # Confirm kernel branch
-    k510_ver=$(echo "${kernel}" | cut -d '.' -f1)
-    k510_maj=$(echo "${kernel}" | cut -d '.' -f2)
-    if [ "${k510_ver}" -eq "5" ]; then
-        if [ "${k510_maj}" -ge "10" ]; then
-            K510="1"
-        else
-            K510="0"
-        fi
-    elif [ "${k510_ver}" -gt "5" ]; then
-        K510="1"
-    else
-        K510="0"
-    fi
-
     # Confirm soc branch
     case "${soc}" in
     s905x3 | x96 | hk1 | h96 | ugoosx3)
@@ -280,9 +304,9 @@ confirm_version() {
         ANDROID_UBOOT=""
         ;;
     s905l3a | e900v22c | e900v22d)
-        FDTFILE="meson-g12a-u200.dtb"
-        UBOOT_OVERLOAD="u-boot-u200.bin"
-        MAINLINE_UBOOT=""
+        FDTFILE="meson-g12a-s905l3a-e900v22c.dtb"
+        UBOOT_OVERLOAD="u-boot-e900v22c.bin"
+        MAINLINE_UBOOT="e900v22c-u-boot.bin.sd.bin"
         ANDROID_UBOOT=""
         ;;
     s905x | hg680p | b860h)
@@ -324,8 +348,8 @@ confirm_version() {
         MAINLINE_UBOOT=""
         ANDROID_UBOOT=""
         ;;
-    s912-t95z | s912-t95z-plus)
-        FDTFILE="meson-gxm-t95z-plus.dtb"
+    s912-m8s | s912-m8s-pro)
+        FDTFILE="meson-gxm-q201.dtb"
         UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
         MAINLINE_UBOOT=""
         ANDROID_UBOOT=""
@@ -369,7 +393,7 @@ extract_openwrt() {
     process_msg " (2/7) Extract openwrt files."
     cd ${make_path}
 
-    local firmware="${openwrt_path}/${openwrt_file}"
+    local firmware="${openwrt_path}/${openwrt_file_name}"
 
     root_comm="${tmp_path}/root_comm"
     mkdir -p ${root_comm}
@@ -391,25 +415,30 @@ extract_armbian() {
 
     # Copy OpenWrt files
     cp -rf ${root_comm}/* ${root}
-    # Copy the overload files
-    cp -f ${uboot_path}/overload/* ${boot}
-    # Copy the bootloader files
-    [ -d "${root}/lib/u-boot" ] || mkdir -p "${root}/lib/u-boot"
-    cp -f ${uboot_path}/bootloader/* ${root}/lib/u-boot
 
+    # Unzip the relevant files
     tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
     tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
 
+    # Copy the same files
+    [ "$(ls ${configfiles_path}/bootfs 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/bootfs/* ${boot}
+    [ "$(ls ${configfiles_path}/rootfs 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/rootfs/* ${root}
+
+    # Copy the bootloader files
+    [ -d "${root}/lib/u-boot" ] || mkdir -p "${root}/lib/u-boot"
+    cp -f ${uboot_path}/bootloader/* ${root}/lib/u-boot
+    # Copy the overload files
+    cp -f ${uboot_path}/overload/* ${boot}
+
     # Process kernel files
     if [ -f ${kernel_dir}/boot-* -a -f ${kernel_dir}/dtb-amlogic-* -a -f ${kernel_dir}/modules-* ]; then
-        mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
-
-        cp -rf ${dtb_path}/* ${boot}/dtb/amlogic
         tar -xzf ${kernel_dir}/dtb-amlogic-*.tar.gz -C ${boot}/dtb/amlogic
 
         tar -xzf ${kernel_dir}/boot-*.tar.gz -C ${boot}
-        mv -f ${boot}/uInitrd-* ${boot}/uInitrd && mv -f ${boot}/vmlinuz-* ${boot}/zImage 2>/dev/null
+        cp -f ${boot}/uInitrd-* ${boot}/uInitrd && cp -f ${boot}/vmlinuz-* ${boot}/zImage 2>/dev/null
+        get_textoffset "${boot}/zImage"
 
+        mkdir -p ${boot}/dtb/amlogic ${root}/lib/modules
         tar -xzf ${kernel_dir}/modules-*.tar.gz -C ${root}/lib/modules
         cd ${root}/lib/modules/*/
         rm -rf *.ko
@@ -422,12 +451,6 @@ extract_armbian() {
 
 refactor_files() {
     process_msg " (4/7) Refactor related files."
-    cd ${make_path}
-
-    # Complete file for ${root}: [ /etc ], [ /usr ] etc.
-    [ "$(ls ${configfiles_path}/files 2>/dev/null | wc -w)" -ne "0" ] && cp -rf ${configfiles_path}/files/* ${root}
-    sync
-
     cd ${root}
 
     # Add other operations below
@@ -499,6 +522,15 @@ EOF
     # PWM Driver
     echo "pwm_meson" >etc/modules.d/pwm_meson
 
+    # Relink the kmod program
+    [ -x "sbin/kmod" ] && (
+        kmod_list="depmod insmod lsmod modinfo modprobe rmmod"
+        for ki in ${kmod_list}; do
+            rm -f sbin/${ki} 2>/dev/null
+            ln -sf kmod sbin/${ki}
+        done
+    )
+
     # Add cpustat
     DISTRIB_SOURCECODE="$(cat etc/openwrt_release | grep "DISTRIB_SOURCECODE=" | awk -F "'" '{print $2}')"
     cpustat_file=${configfiles_path}/patches/cpustat
@@ -537,12 +569,12 @@ EOF
     if [ -f etc/banner ]; then
         op_version=$(echo $(ls lib/modules/ 2>/dev/null))
         op_packaged_date=$(date +%Y-%m-%d)
-        echo " Install: OpenWrt → System → Amlogic Service → Install" >>etc/banner
-        echo " Update: OpenWrt → System → Amlogic Service → Update" >>etc/banner
+        echo " Install OpenWrt: System → Amlogic Service → Install" >>etc/banner
+        echo " Update OpenWrt: System → Amlogic Service → Update" >>etc/banner
         echo " Amlogic SoC: ${soc}" >>etc/banner
         echo " OpenWrt Kernel: ${op_version}" >>etc/banner
         echo " Packaged Date: ${op_packaged_date}" >>etc/banner
-        echo " -------------------------------------------------------" >>etc/banner
+        echo "────────────────────────────────────────────────────────────────" >>etc/banner
     fi
 
     # Add wireless master mode
@@ -575,30 +607,27 @@ EOF
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:05/" "brcmfmac43455-sdio.txt" >"brcmfmac43455-sdio.amlogic,sm1.txt"
         # new ugoos x3 is brm43456
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:06/" "brcmfmac43456-sdio.txt" >"brcmfmac43456-sdio.amlogic,sm1.txt"
+        # x96max plus v5.1 (ip1001m phy) adopts am7256 (brcm4354)
+        sed -e "s/macaddr=.*/macaddr=${random_macaddr}:07/" "brcmfmac4354-sdio.txt" >"brcmfmac4354-sdio.amlogic,sm1.txt"
     )
     sync
 
     cd ${boot}
 
-    # Edit the uEnv.txt
-    if [ ! -f "uEnv.txt" ]; then
-        error_msg "The uEnv.txt File does not exist"
-    else
-        old_fdt_dtb="meson-gxl-s905d-phicomm-n1.dtb"
-        sed -i "s/${old_fdt_dtb}/${FDTFILE}/g" uEnv.txt
-        sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/g" uEnv.txt
-    fi
-
-    # For s912-t95z-plus /boot/extlinux/extlinux.conf
-    [ "${FDTFILE}" == "meson-gxm-t95z-plus.dtb" ] && cp -rf ${configfiles_path}/patches/boot/s912-t95z-plus/* . && sync
+    # For btrfs file system
+    uenv_mount_string="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
+    boot_conf_file="uEnv.txt"
+    [ -f "${boot_conf_file}" ] || error_msg "The [ ${boot_conf_file} ] file does not exist."
+    sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_conf_file}
+    sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
+    rm -rf extlinux 2>/dev/null
 
     # Add u-boot.ext for 5.10 kernel
-    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" ]]; then
-        if [ -f "${UBOOT_OVERLOAD}" ]; then
-            cp -f ${UBOOT_OVERLOAD} u-boot.ext && sync && chmod +x u-boot.ext
-        else
-            error_msg "${kernel} have no the 5.10 kernel u-boot file: [ ${UBOOT_OVERLOAD} ]"
-        fi
+    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
+        cp -f ${UBOOT_OVERLOAD} u-boot.ext
+        chmod +x u-boot.ext
+    elif [[ "${K510}" -eq "1" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then
+        error_msg "${soc} SoC does not support using ${kernel} kernel, missing u-boot."
     fi
     sync
 }
@@ -618,15 +647,15 @@ make_image() {
     dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} conv=fsync 2>/dev/null && sync
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
-    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))M $((SKIP_MB + BOOT_MB - 1))M 2>/dev/null
-    parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))M 100% 2>/dev/null
+    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))MiB $((SKIP_MB + BOOT_MB - 1))MiB 2>/dev/null
+    parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))MiB 100% 2>/dev/null
     sync
 
     loop_new=$(losetup -P -f --show "${build_image_file}")
     [ ${loop_new} ] || error_msg "losetup ${build_image_file} failed."
 
     mkfs.vfat -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
-    mkfs.btrfs -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop_new}p2 >/dev/null 2>&1
+    mkfs.btrfs -f -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop_new}p2 >/dev/null 2>&1
     sync
 
     # Write the specified bootloader
@@ -724,8 +753,8 @@ loop_make() {
         let j++
     done
 
-    # Backup the ${openwrt_path}/${openwrt_file} file
-    cp -f ${openwrt_path}/${openwrt_file} ${out_path} 2>/dev/null && sync
+    # Backup the openwrt file
+    cp -f ${openwrt_path}/${openwrt_file_name} ${out_path} 2>/dev/null && sync
 }
 
 # Show welcome message

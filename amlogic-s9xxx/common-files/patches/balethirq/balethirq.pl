@@ -120,11 +120,16 @@ sub tunning_eth_ring {
     my $buf = `/usr/sbin/ethtool -g ${eth} 2>/dev/null`;
     if($buf) {
         $buf =~ s/\r|\n/\t/g;
-        if( $buf =~ m/.+?Pre-set maximums:\s+RX:\s+(\d+).+?TX:\s+(\d+).+?Current hardware settings:\s+RX:\s+(\d+).+?TX:\s+(\d+)/) {
+        if( $buf =~ m/.+?Pre-set maximums:\s+RX:\s+(\d+|n\/a).+?TX:\s+(\d+|n\/a).+?Current hardware settings:\s+RX:\s+(\d+|n\/a).+?TX:\s+(\d+|n\/a)/) {
             my $max_rx_ring  = $1;
             my $max_tx_ring  = $2;
             my $cur_rx_ring  = $3;
             my $cur_tx_ring  = $4;
+
+	    $max_rx_ring = 0 if ($max_rx_ring eq 'n/a');
+	    $max_tx_ring = 0 if ($max_tx_ring eq 'n/a');
+	    $cur_rx_ring = 0 if ($cur_rx_ring eq 'n/a');
+	    $cur_tx_ring = 0 if ($cur_tx_ring eq 'n/a');
 
             if( ($max_rx_ring > 0) && ($target_rx_ring>0) && ($max_rx_ring > $target_rx_ring) && ($cur_rx_ring != $target_rx_ring) ) {
                 system "/usr/sbin/ethtool -G ${eth} rx ${target_rx_ring} >/dev/null 2>&1";

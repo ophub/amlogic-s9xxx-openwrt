@@ -12,7 +12,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
 - [目录](#目录)
   - [1. 注册自己的 Github 的账户](#1-注册自己的-github-的账户)
   - [2. 设置隐私变量 GITHUB_TOKEN](#2-设置隐私变量-github_token)
-  - [3. Fork 仓库并设置 RELEASES_TOKEN](#3-fork-仓库并设置-releases_token)
+  - [3. Fork 仓库并设置 GH_TOKEN](#3-fork-仓库并设置-gh_token)
   - [4. 个性化 OpenWrt 固件定制文件说明](#4-个性化-openwrt-固件定制文件说明)
     - [4.1 .config 文件说明](#41-config-文件说明)
       - [4.1.1 首先让固件支持本国语言](#411-首先让固件支持本国语言)
@@ -71,15 +71,16 @@ Personal center: Settings > Developer settings > Personal access tokens > Genera
 <img src=https://user-images.githubusercontent.com/68696949/109418485-93514700-7a03-11eb-848d-36de784a4438.jpg width="300" />
 </div>
 
-## 3. Fork 仓库并设置 RELEASES_TOKEN
+## 3. Fork 仓库并设置 GH_TOKEN
 
-现在可以 Fork 仓库了，打开仓库 https://github.com/ophub/amlogic-s9xxx-openwrt ，点击右上的 Fork 按钮，复制一份仓库代码到自己的账户下，稍等几秒钟，提示 Fork 完成后，到自己的账户下访问自己仓库里的 amlogic-s9xxx-openwrt 。在右上角的 Settings > Secrets > New repostiory secret ( Name: RELEASES_TOKEN, Value: 填写刚才GITHUB_TOKEN的值 )，保存。图示如下：
+现在可以 Fork 仓库了，打开仓库 https://github.com/ophub/amlogic-s9xxx-openwrt ，点击右上的 Fork 按钮，复制一份仓库代码到自己的账户下，稍等几秒钟，提示 Fork 完成后，到自己的账户下访问自己仓库里的 amlogic-s9xxx-armbian 。在右上角的 `Settings` > `Secrets` > `Actions` > `New repostiory secret` ( Name: `GH_TOKEN`, Value: `填写刚才GITHUB_TOKEN的值` )，保存。并在左侧导航栏的 `Actions` > `General` > `Workflow permissions` 下选择 `Read and write permissions` 并保存。图示如下：
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418571-12467f80-7a04-11eb-878e-012c2ba11772.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/163203032-f044c63f-d113-4076-bf94-41f86c7dd0ce.png width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/109418573-15417000-7a04-11eb-97a7-93973d7479c2.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418579-1c687e00-7a04-11eb-9941-3d37be9012ef.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/167579714-fdb331f3-5198-406f-b850-13da0024b245.png width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/167585338-841d3b05-8d98-4d73-ba72-475aad4a95a9.png width="300" />
 </div>
 
 ## 4. 个性化 OpenWrt 固件定制文件说明
@@ -215,13 +216,13 @@ schedule:
 
 ```yaml
 - name: Upload OpenWrt Firmware to Release
-  uses: ncipollo/release-action@v1
+  uses: ncipollo/release-action@main
   if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
   with:
     tag: openwrt_s9xxx_${{ env.FILE_DATE }}
     artifacts: ${{ env.FILEPATH }}/*
     allowUpdates: true
-    token: ${{ secrets.GITHUB_TOKEN }}
+    token: ${{ secrets.GH_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information
@@ -303,13 +304,13 @@ openwrt-install-amlogic
 
 同一个型号的盒子，固件通用，比如 `openwrt_s905x3_v*.img` 固件可以用于 `x96max plus, hk1, h96` 等 `s905x3` 型号的盒子。在安装脚本将 OpenWrt 写入 EMMC 时，会提示你选择自己的盒子，请根据提示正确选择。
 
-除默认的 13 个型号的盒子是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-dtb)
+除默认的 13 个型号的盒子是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/common-files/patches/amlogic-dtb)
 
 ## 9. 升级固件
 
 ### 9.1 使用操作面板安装
 
-从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.15.25 升级到低版本如 5.4.180 ，也可以从低版本如 5.4.180 升级到高版本如 5.15.25 。内核版本号的高低不影响升级，可自由升级/降级）。
+从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.15.25 升级到低版本如 5.10.100 ，也可以从低版本如 5.10.100 升级到高版本如 5.15.25 。内核版本号的高低不影响升级，可自由升级/降级）。
 
 ### 9.2 使用升级固件脚本命令安装
 
@@ -321,7 +322,7 @@ openwrt-update-amlogic
 
 💡提示: 脚本 `openwrt-update-amlogic` 会自动从 `/mnt/mmcblk*p4/` 目录中寻找各种后缀的升级文件，你可以通过晶晨宝盒插件或其他软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
 
-如果在 `/mnt/mmcblk*p4/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic openwrt_s905x3_v5.4.180_2021.03.17.0412.img.gz` ）。
+如果在 `/mnt/mmcblk*p4/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic openwrt_s905x3_v5.10.100_2021.03.17.0412.img.gz` ）。
 
 - 脚本  `openwrt-update-amlogic` 在目录中的查找顺序说明
 
@@ -382,31 +383,30 @@ REPO_BRANCH: openwrt-21.02
       id: build
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-        cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+        cp -f openwrt/bin/targets/*/*/*rootfs.tar.gz openwrt-armvirt/ && sync
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.15.25_5.4.180
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.15.25_5.10.100
         cd out/ && sudo gzip *.img
-        cp -f ../openwrt-armvirt/*.tar.gz . && sync
+        cp -f ../openwrt-armvirt/*rootfs.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
-修改 `-d` 后面的参数为你的盒子的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.4.180` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
+修改 `-d` 后面的参数为你的盒子的型号。修改 `-k` 的参数为你选择的内核版本号，如: `sudo ./make -d -b s905x -k 5.10.100` 可以指定的参数及更多使用方法详见: [打包命令的相关参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#打包命令的相关参数说明)
 
 ### 10.3 自定义 banner 信息
 
-默认的 [banner](https://github.com/coolsnowwolf/lede/blob/master/package/base-files/files/etc/banner) 信息如下，你可以修改这个文件来定制专属自己的个性化 banner 信息。将你做好的 banner 文件放入 [etc/banner](../amlogic-s9xxx/common-files/files/etc) 目录，即可在编译时自动替换。
+默认的 [/etc/banner](../amlogic-s9xxx/common-files/rootfs/etc/banner) 信息如下，你可以使用 [banner 生成器](https://www.bootschool.net/ascii) 定制专属自己的个性化 banner 信息，覆盖同名文件即可。
 
 ```yaml
-  _______                     ________        __
- |       |.-----.-----.-----.|  |  |  |.----.|  |_
- |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
- |_______||   __|_____|__|__||________||__|  |____|
-          |__| W I R E L E S S   F R E E D O M
- -----------------------------------------------------
- %D %V, %C
- -----------------------------------------------------
+  ██████╗ ██████╗ ███████╗███╗   ██╗██╗    ██╗██████╗ ████████╗
+ ██╔═══██╗██╔══██╗██╔════╝████╗  ██║██║    ██║██╔══██╗╚══██╔══╝
+ ██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║ █╗ ██║██████╔╝   ██║
+ ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║███╗██║██╔══██╗   ██║
+ ╚██████╔╝██║     ███████╗██║ ╚████║╚███╔███╔╝██║  ██║   ██║
+  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
+────────────────────────────────────────────────────────────────
  ```
 
 ### 10.4 自定义 feeds 配置文件
@@ -472,36 +472,28 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 
 - 一般情况下，重新插入电源，如果可以从 USB 中启动，只要重新安装即可，多试几次。
 
-- 如果接入显示器后，屏幕是黑屏状态，无法从 USB 启动，就需要进行盒子的短接初始化了。先将盒子恢复到原来的安卓系统，再重新刷入 OpenWrt 系统。首先下载 [amlogic_usb_burning_tool](https://github.com/ophub/script/releases/download/dev/amlogic_usb_burning_tool_v3.2.0_and_driver.tar.gz) 系统恢复工具并安装好。
+- 如果接入显示器后，屏幕是黑屏状态，无法从 USB 启动，就需要进行盒子的短接初始化了。先将盒子恢复到原来的安卓系统，再重新刷入 OpenWrt 系统。首先下载 [amlogic_usb_burning_tool](https://github.com/ophub/kernel/releases/tag/tools) 系统恢复工具并安装好。准备一条 [USB 双公头数据线](https://user-images.githubusercontent.com/68696949/159267576-74ad69a5-b6fc-489d-b1a6-0f8f8ff28634.png)，准备一个 [曲别针](https://user-images.githubusercontent.com/68696949/159267790-38cf4681-6827-4cb6-86b2-19c7f1943342.png)。
+
+- 以 x96max+ 为例，在盒子的主板上确认 [短接点](https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg) 的位置，下载盒子的 [Android TV 固件包](https://github.com/ophub/kernel/releases/tag/tools)。其他常见设备的安卓 TV 系统固件及对应的短接点示意图也可以在此[下载查看](https://github.com/ophub/kernel/releases/tag/tools)。
 
 ```
-以 x96max+ 为例
-
-刷机准备：
-
-1. [ 准备一条 USB 双公头数据线 ]: https://www.ebay.com/itm/152516378334
-2. [ 准备一个曲别针 ]: https://www.ebay.com/itm/133577738858
-3. [ 下载盒子的 Android TV 固件包 ]: https://xdafirmware.com/x96-max-plus-2
-4. [ 在盒子的主板上确认短接点的位置 ]:
-   https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
-
 操作方法：
 
-1. 使用 [ USB 双公头数据线 ] 将 [ 盒子 ] 与 [ 电脑 ] 进行连接。
-2. 打开刷机软件 USB Burning Tool:
+1. 打开刷机软件 USB Burning Tool:
    [ 文件 → 导入固件包 ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
    [ 选择 ]：擦除 flash
    [ 选择 ]：擦除 bootloader
    点击 [ 开始 ] 按钮
-3. 使用 [ 曲别针 ] 将盒子主板上的 [ 两个短接点进行短接连接 ]。
-   如果进度条没有走动，可以尝试插入电源。通长情况下不用电源支持供电，只 USB 双公头的供电即可满足刷机要求。
-4. 当看到 [ 进度条开始走动 ] 后，拿走曲别针，不再短接。
-5. 当看到 [ 进度条 100% ], 则刷机完成，盒子已经恢复成 Android TV 系统。
+2. 使用 [ 曲别针 ] 将盒子主板上的 [ 两个短接点进行短接连接 ]，
+   并同时使用 [ USB 双公头数据线 ] 将 [ 盒子 ] 与 [ 电脑 ] 进行连接。
+3. 当看到 [ 进度条开始走动 ] 后，拿走曲别针，不再短接。
+4. 当看到 [ 进度条 100% ], 则刷机完成，盒子已经恢复成 Android TV 系统。
    点击 [ 停止 ] 按钮, 拔掉 [ 盒子 ] 和 [ 电脑 ] 之间的 [ USB 双公头数据线] 。
-6. 如果以上某个步骤失败，就再来一次，直至成功。
+5. 如果以上某个步骤失败，就再来一次，直至成功。
+   如果进度条没有走动，可以尝试插入电源。通长情况下不用电源支持供电，只 USB 双公头的供电即可满足刷机要求。
 ```
 
-当完成恢复出厂设置，盒子已经恢复成 Android TV 系统，其他安装 OpenWrt 系统的操作，就和你之前第一次安装系统时的要求一样了，再来一遍即可。使用写盘软件把 OpenWrt 写入 USB，将写好的 USB 插入盒子，使用牙签等顶住盒子的 AV 孔里的复位键，插入电源，等待 5 秒后松开牙签顶着的复位键，OpenWrt 将从 USB 中启动。
+当完成恢复出厂设置，盒子已经恢复成 Android TV 系统，其他安装 OpenWrt 系统的操作，就和你之前第一次安装系统时的要求一样了，再来一遍即可。
 
 ### 10.9 在安装了主线 u-boot 后无法启动
 
@@ -534,7 +526,7 @@ Hit any key to stop autoboot: 0
 - 把刷好固件的 USB/TF/SD 插入盒子。
 - 开启开发者模式: 设置 → 关于本机 → 版本号 (如: X96max plus...), 在版本号上快速连击 5 次鼠标左键, 看到系统显示 `开启开发者模式` 的提示。
 - 开启 USB 调试模式: 系统 → 高级选选 → 开发者选项 (设置 `开启USB调试` 为启用)。启用 `ADB` 调试。
-- 安装 ADB 工具：下载 [adb](https://github.com/ophub/script/releases/download/dev/adb.tar.gz) 并解压，将 `adb.exe`，`AdbWinApi.dll`，`AdbWinUsbApi.dll` 三个文件拷⻉到 `c://windows/` 目录下的 `system32` 和 `syswow64` 两个文件夹内，然后打开 `cmd` 命令面板，使用 `adb --version` 命令，如果有显示就表示可以使用了。
+- 安装 ADB 工具：下载 [adb](https://github.com/ophub/kernel/releases/tag/tools) 并解压，将 `adb.exe`，`AdbWinApi.dll`，`AdbWinUsbApi.dll` 三个文件拷⻉到 `c://windows/` 目录下的 `system32` 和 `syswow64` 两个文件夹内，然后打开 `cmd` 命令面板，使用 `adb --version` 命令，如果有显示就表示可以使用了。
 - 进入 `cmd` 命令模式。输入 `adb connect 192.168.1.137` 命令（其中的 ip 根据你的盒子修改，可以到盒子所接入的路由器设备里查看），如果链接成功会显示 `connected to 192.168.1.137:5555`
 - 输入 `adb shell reboot update` 命令，盒子将重启并从你插入的 USB/TF/SD 启动，从浏览器访问固件的 IP 地址，或者 SSH 访问即可进入固件。
 - 登录 OpenWrt 系统: 将你的盒子与电脑进行直连 → 关闭电脑的 WIFI 选项，只使用有线网卡 → 将有线网卡的网络设置为和 OpenWrt 相同的网段，如果 OpenWrt 的默认 IP 是: `192.168.1.1` ，你可以设置电脑的 IP 为 `192.168.1.2` ，子网掩码设置为 `255.255.255.0`, 除这 2 个选项外，其他选项不用设置。你就可以从浏览器进入 OpwnWrt 了，默认 IP : `192.168.1.1`, 默认账号: `root`, 默认密码: `password`

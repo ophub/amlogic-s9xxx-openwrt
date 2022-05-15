@@ -14,9 +14,9 @@ on:
         required: false
         default: "unifreq"
       kernel_version:
-        description: "Kernel version: 5.4.180"
+        description: "Kernel version: 5.10.100"
         required: false
-        default: "5.15.25_5.4.180"
+        default: "5.15.25_5.10.100"
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
@@ -48,7 +48,7 @@ jobs:
         run: |
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
           sudo -E apt-get -qq update
-          sudo -E apt-get -qq install $(curl -fsSL git.io/ubuntu-2004-server)
+          sudo -E apt-get -qq install $(curl -fsSL https://raw.githubusercontent.com/ophub/amlogic-s9xxx-armbian/main/compile-kernel/tools/script/ubuntu2004-armbian-depends)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "$TZ"
@@ -65,13 +65,13 @@ jobs:
           kernel_config: ${{ github.event.inputs.kernel_config }}
 
       - name: Upload Kernel to Release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success' && !cancelled()
         with:
           tag: kernel_${{ env.PACKAGED_OUTPUTTAGS }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           body: |
-            The kernel can be used to compile Armbian and OpenWer.
+            The kernel can be used to compile Armbian and OpenWrt.
             The kernel source code comes from: ${{ github.event.inputs.kernel_repo }}

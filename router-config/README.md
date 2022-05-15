@@ -12,7 +12,7 @@ The method of Use GitHub Actions to compile OpenWrt, as well as many contents in
 - [Tutorial directory](#tutorial-directory)
   - [1. Register your own GitHub account](#1-register-your-own-github-account)
   - [2. Set the privacy variable GitHub_TOKEN](#2-set-the-privacy-variable-github_token)
-  - [3. Fork repository and set RELEASES_TOKEN](#3-fork-repository-and-set-releases_token)
+  - [3. Fork repository and set GH_TOKEN](#3-fork-repository-and-set-gh_token)
   - [4. Personalized OpenWrt firmware customization file description](#4-personalized-openwrt-firmware-customization-file-description)
     - [4.1 .config file description](#41-config-file-description)
       - [4.1.1 Let the firmware support the native language](#411-let-the-firmware-support-the-native-language)
@@ -71,15 +71,16 @@ Set the GitHub privacy variable `GitHub_TOKEN`. After the firmware is compiled, 
 <img src=https://user-images.githubusercontent.com/68696949/109418485-93514700-7a03-11eb-848d-36de784a4438.jpg width="300" />
 </div>
 
-## 3. Fork repository and set RELEASES_TOKEN
+## 3. Fork repository and set GH_TOKEN
 
-Now you can `Fork` the `repository`, open the repository [https://github.com/ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt), click the `Fork` button on the `upper right`, Will copy a copy of the repository code to your account, `wait a few seconds`, and prompt the Fork to complete Later, go to your account to access `amlogic-s9xxx-openwrt` in `your repository`. In the upper right corner of `Settings` > `Secrets` > `New repostiory secret` (Name: `RELEASES_TOKEN`, Value: `Fill in the value of GitHub_TOKEN` just now), `save it`. The icons are as follows:
+Now you can `Fork` the `repository`, open the repository [https://github.com/ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt), click the `Fork` button on the `upper right`, Will copy a copy of the repository code to your account, `wait a few seconds`, and prompt the Fork to complete Later, go to your account to access `amlogic-s9xxx-armbian` in `your repository`. In the upper right corner of `Settings` > `Secrets` > `Actions` > `New repostiory secret` (Name: `GH_TOKEN`, Value: `Fill in the value of GitHub_TOKEN` just now), `save it`. And select `Read and write permissions` under `Actions` > `General` > `Workflow permissions` in the left nav and save. The icons are as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418571-12467f80-7a04-11eb-878e-012c2ba11772.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/163203032-f044c63f-d113-4076-bf94-41f86c7dd0ce.png width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/109418573-15417000-7a04-11eb-97a7-93973d7479c2.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418579-1c687e00-7a04-11eb-9941-3d37be9012ef.jpg width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/167579714-fdb331f3-5198-406f-b850-13da0024b245.png width="300" />
+<img src=https://user-images.githubusercontent.com/68696949/167585338-841d3b05-8d98-4d73-ba72-475aad4a95a9.png width="300" />
 </div>
 
 ## 4. Personalized OpenWrt firmware customization file description
@@ -219,13 +220,13 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
 
 ```yaml
 - name: Upload OpenWrt Firmware to Release
-  uses: ncipollo/release-action@v1
+  uses: ncipollo/release-action@main
   if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
   with:
     tag: openwrt_s9xxx_${{ env.FILE_DATE }}
     artifacts: ${{ env.FILEPATH }}/*
     allowUpdates: true
-    token: ${{ secrets.GITHUB_TOKEN }}
+    token: ${{ secrets.GH_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information
@@ -309,13 +310,13 @@ openwrt-install-amlogic
 
 The same type of box, the firmware is common, such as `openwrt_s905x3_v*.img` firmware can be used for `x96max plus, hk1, h96` and other `s905x3` type boxes. When the installation script writes OpenWrt to EMMC, you will be prompted to choose your own box, please choose the correct one according to the prompt.
 
-In addition to the default 13 models of boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/amlogic-dtb)
+In addition to the default 13 models of boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/common-files/patches/amlogic-dtb)
 
 ## 9. Update firmware
 
 ### 9.1 Update using the operation panel
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.15.25 to a lower version such as 5.4.180, or from a lower version such as 5.4.180 to a higher version such as 5.15.25. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.15.25 to a lower version such as 5.10.100, or from a lower version such as 5.10.100 to a higher version such as 5.15.25. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
 ### 9.2 Update using script commands
 
@@ -326,7 +327,7 @@ openwrt-update-amlogic
 ```
 💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the `openwrt-update-amlogic` script will automatically find the `update file` from the `/mnt/mmcblk*p4/` directories.
 
-If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.4.180_2021.03.17.0412.img.gz`*** command to specify the `update file`.
+If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.10.100_2021.03.17.0412.img.gz`*** command to specify the `update file`.
 
 - The `openwrt-update-amlogic` update file search order
 
@@ -388,32 +389,31 @@ Near line 96, find `Build OpenWrt firmware`, Code snippet like this:
       id: build
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-        cp -f openwrt/bin/targets/*/*/*.tar.gz openwrt-armvirt/ && sync
+        cp -f openwrt/bin/targets/*/*/*rootfs.tar.gz openwrt-armvirt/ && sync
         sudo rm -rf openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.15.25_5.4.180
+        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.15.25_5.10.100
         cd out/ && sudo gzip *.img
-        cp -f ../openwrt-armvirt/*.tar.gz . && sync
+        cp -f ../openwrt-armvirt/*rootfs.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 ```
 Modify the -d parameter to the model of your box, and modify the value after the -k parameter to the version number of the kernel you want to compile:
-`sudo ./make -d -b s905x -k 5.4.180`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
+`sudo ./make -d -b s905x -k 5.10.100`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
 
 ### 10.3 Custom banner information
 
-The default [banner](https://github.com/coolsnowwolf/lede/blob/master/package/base-files/files/etc/banner) information is as follows, You can modify this file to customize your own personalized banner information. Put your finished banner file into the [etc/banner](../amlogic-s9xxx/common-files/files/etc) directory and it will be automatically replaced during compilation.
+The default [/etc/banner](../amlogic-s9xxx/common-files/rootfs/etc/banner) information is as follows, you can use the [banner generator](https://www.bootschool.net/ascii) Customize your own personalized banner information, just overwrite the file with the same name.
 
 ```yaml
-  _______                     ________        __
- |       |.-----.-----.-----.|  |  |  |.----.|  |_
- |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
- |_______||   __|_____|__|__||________||__|  |____|
-          |__| W I R E L E S S   F R E E D O M
- -----------------------------------------------------
- %D %V, %C
- -----------------------------------------------------
+  ██████╗ ██████╗ ███████╗███╗   ██╗██╗    ██╗██████╗ ████████╗
+ ██╔═══██╗██╔══██╗██╔════╝████╗  ██║██║    ██║██╔══██╗╚══██╔══╝
+ ██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║ █╗ ██║██████╔╝   ██║
+ ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║███╗██║██╔══██╗   ██║
+ ╚██████╔╝██║     ███████╗██║ ╚████║╚███╔███╔╝██║  ██║   ██║
+  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
+────────────────────────────────────────────────────────────────
  ```
 
 ### 10.4 Custom feeds configuration file
@@ -488,38 +488,29 @@ Search and install `luci-app-*` packages if you want to configure services using
 
 - Under normal circumstances, re-insert the USB hard disk and install it again.
 
-- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx tv box to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx tv box to factory settings first, and then reinstall it. First download the [amlogic_usb_burning_tool](https://github.com/ophub/script/releases/download/dev/amlogic_usb_burning_tool_v3.2.0_and_driver.tar.gz) system recovery tool and install it.
+- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx tv box to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx tv box to factory settings first, and then reinstall it. First download the [amlogic_usb_burning_tool](https://github.com/ophub/kernel/releases/tag/tools) system recovery tool and install it. Prepare a [USB dual male data cable](https://user-images.githubusercontent.com/68696949/159267576-74ad69a5-b6fc-489d-b1a6-0f8f8ff28634.png), Prepare a [paper clip](https://user-images.githubusercontent.com/68696949/159267790-38cf4681-6827-4cb6-86b2-19c7f1943342.png).
+
+- Take x96max+ as an example. Find the two [short-circuit points](https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg) on the motherboard, Download the [Android TV firmware](https://github.com/ophub/kernel/releases/tag/tools). The Android TV system firmware of other common devices and the corresponding short circuit diagrams can also be [downloaded and viewed here](https://github.com/ophub/kernel/releases/tag/tools).
 
 ```
-Take x96max+ as an example.
-
-Prepare materials:
-
-1. [ A USB male-to-male data cable ]: https://www.ebay.com/itm/152516378334
-2. [ A paper clip ]: https://www.ebay.com/itm/133577738858
-3. [ Download the Android TV firmware ]: https://xdafirmware.com/x96-max-plus-2
-4. [ Find the two short-circuit points on the motherboard ]:
-   https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg
-
 Operation method:
 
-1. Connect the [ Amlogic s9xxx tv box ] to the [ computer ] with a [ USB male-to-male data cable ].
-2. Open the USB Burning Tool:
+1. Open the USB Burning Tool:
    [ File → Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
    [ Check ]：Erase flash
    [ Check ]：Erase bootloader
    Click the [ Start ] button
-3. Use a [ paper clip ] to [ connect the two short-circuit points ] on the motherboard at the same time.
+2. Use a [ paper clip ] to connect the [ two shorting points ] on the main board of the box,
+   and use a [ USB dual male data cable ] to connect the [ box ] to the [ computer ] at the same time.
+3. Loosen the short contact after seeing the [ progress bar moving ].
+4. After the [ progress bar is 100% ], the restoration of the original Android TV system is completed.
+   Click [ stop ], unplug the [ USB male-to-male data cable ] and [ power ].
+5. If the progress bar is interrupted, repeat the above steps until it succeeds.
    If the progress bar does not respond after the short-circuit, plug in the [ power ] supply after the short-circuit.
    Generally, there is no need to plug in the power supply.
-4. Loosen the short contact after seeing the [ progress bar moving ].
-5. After the [ progress bar is 100% ], the restoration of the original Android TV system is completed.
-   Click [ stop ], unplug the [ USB male-to-male data cable ] and [ power ].
-6. If the progress bar is interrupted, repeat the above steps until it succeeds.
 ```
-After restoring the factory settings, the operation method is the same as when you install openwrt on the Amlogic s9xxx tv box for the first time:
 
-- Make an openwrt mirrored usb hard disk and insert it into the USB port of the Amlogic s9xxx tv box. Use a paper clip or other objects to press and hold the reset button in the AV hole, plug in the power, wait 5 seconds and then release the reset button, the system will boot from the USB hard disk, enter the openwrt system, enter The installation command can reinstall openwrt.
+When the factory reset is completed, the box has been restored to the Android TV system, and other operations to install the OpenWrt system are the same as the requirements when you installed the system for the first time before, just do it again.
 
 ### 10.9 If you can’t startup after using the Mainline u-boot
 
@@ -551,7 +542,7 @@ You need to install a resistor on the TTL: [X96 Max Plus's V4.0 Motherboard](htt
 - Write the firmware to USB/TF/SD, insert it into the box after writing.
 - Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 5 times in quick succession, See the prompt of `Enable Developer Mode` displayed by the system.
 - Turn on USB debugging: System → Advanced options → Developer options again (after entering, confirm that the status is on, and the `USB debugging` status in the list is also on). Enable `ADB` debugging.
-- Install ADB tools: Download [adb](https://github.com/ophub/script/releases/download/dev/adb.tar.gz) and unzip it, copy the three files `adb.exe`, `AdbWinApi.dll`, and `AdbWinUsbApi.dll` to the two files `system32` and `syswow64` under the directory of `c://windows/` Folder, then open the `cmd` command panel, use `adb --version` command, if it is displayed, it is ready to use.
+- Install ADB tools: Download [adb](https://github.com/ophub/kernel/releases/tag/tools) and unzip it, copy the three files `adb.exe`, `AdbWinApi.dll`, and `AdbWinUsbApi.dll` to the two files `system32` and `syswow64` under the directory of `c://windows/` Folder, then open the `cmd` command panel, use `adb --version` command, if it is displayed, it is ready to use.
 - Enter the `cmd` command mode. Enter the `adb connect 192.168.1.137` command (the ip is modified according to your box, and you can check it in the router device connected to the box), If the link is successful, it will display `connected to 192.168.1.137:5555`
 - Enter the `adb shell reboot update` command, the box will restart and boot from the USB/TF/SD you inserted, access the firmware IP address from a browser, or SSH to enter the firmware.
 - Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.

@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Select Branch [ official / lede ]"
+        description: "Branch [ official_master / lede ]"
         required: false
         default: "lede"
       openwrt_soc:

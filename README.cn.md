@@ -160,11 +160,11 @@ sudo apt-get install -y $(curl -fsSL https://raw.githubusercontent.com/ophub/aml
 
 上传到 `Releases` 需要给仓库添加 `GITHUB_TOKEN` 和 `GH_TOKEN` 并设置 `Workflow 读写权限`，详见[使用说明](router-config/README.cn.md#2-设置隐私变量-github_token)。
 
-| 参数                                      | 默认值                  | 说明                       |
-|------------------------------------------|-------------------------|---------------------------|
-| ${{ env.PACKAGED_OUTPUTPATH }}           | out                     | 打包后的固件所在文件夹的路径  |
-| ${{ env.PACKAGED_OUTPUTDATE }}           | 2021.04.13.1058         | 打包日期                   |
-| ${{ env.PACKAGED_STATUS }}               | success / failure       | 打包状态。成功 / 失败       |
+| 参数                                      | 默认值              | 说明                     |
+|------------------------------------------|--------------------|--------------------------|
+| ${{ env.PACKAGED_OUTPUTPATH }}           | out                | 打包后的固件所在文件夹的路径  |
+| ${{ env.PACKAGED_OUTPUTDATE }}           | 04.13.1058         | 打包日期（月.日.时分）      |
+| ${{ env.PACKAGED_STATUS }}               | success / failure  | 打包状态。成功 / 失败       |
 
 ## 编译内核
 

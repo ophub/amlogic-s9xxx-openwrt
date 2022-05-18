@@ -2,7 +2,7 @@
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
-The method of Use GitHub Actions to compile OpenWrt, as well as many contents in this document, come from many technical innovators and resource sharers such as `P3TERX`, `Flippy`, `tuanqing`, etc. Because of the dedication of everyone, let us use OpenWrt in Amlogic s9xxx tv box So Easy.
+How to use GitHub Actions cloud to compile OpenWrt, and many of the content in this documentation, from P3TERX, Flippy and many other technology innovators and resource sharers. Because of the dedication of everyone, let us use OpenWrt in Amlogic s9xxx tv box So Easy.
 
 `GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
 

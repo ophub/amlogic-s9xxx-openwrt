@@ -2,7 +2,7 @@
 
 查看英文说明 | [View English description](README.md)
 
-使用 GitHub Actions 云编译 OpenWrt 的方法，以及本说明文档中的很多内容，来自 P3TERX, Flippy, tuanqing 等众多技术创新者和资源分享者, 因为众人的奉献，让我们在 Amlogic S9xxx 盒子中使用 OpenWrt 变的如此简单。
+使用 GitHub Actions 云编译 OpenWrt 的方法，以及本说明文档中的很多内容，来自 P3TERX, Flippy 等众多技术创新者和资源分享者, 因为众人的奉献，让我们在 Amlogic S9xxx 盒子中使用 OpenWrt 变的如此简单。
 
 Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非常不错的虚拟服务器环境，基于它可以进行构建、测试、打包、部署项目。对于公开仓库可免费无时间限制地使用，且单次编译时间长达 6 个小时，这对于编译 OpenWrt 来说是够用的（我们一般在3小时左右可以完成一次编译工作）。分享只是为了交流经验，不足的地方请大家理解，请不要在网络上发起各种不好的攻击行为，也不要恶意使用 GitHub Actions。
 

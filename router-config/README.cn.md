@@ -53,6 +53,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
     - [10.8 如果安装失败并且无法启动时如何救砖](#108-如果安装失败并且无法启动时如何救砖)
     - [10.9 在安装了主线 u-boot 后无法启动](#109-在安装了主线-u-boot-后无法启动)
     - [10.10 设置盒子从 USB/TF/SD 中启动](#1010-设置盒子从-usbtfsd-中启动)
+    - [10.11 OpenWrt 必选项](#1011-openwrt-必选项)
 
 ## 1. 注册自己的 Github 的账户
 
@@ -530,3 +531,39 @@ Hit any key to stop autoboot: 0
 - 进入 `cmd` 命令模式。输入 `adb connect 192.168.1.137` 命令（其中的 ip 根据你的盒子修改，可以到盒子所接入的路由器设备里查看），如果链接成功会显示 `connected to 192.168.1.137:5555`
 - 输入 `adb shell reboot update` 命令，盒子将重启并从你插入的 USB/TF/SD 启动，从浏览器访问固件的 IP 地址，或者 SSH 访问即可进入固件。
 - 登录 OpenWrt 系统: 将你的盒子与电脑进行直连 → 关闭电脑的 WIFI 选项，只使用有线网卡 → 将有线网卡的网络设置为和 OpenWrt 相同的网段，如果 OpenWrt 的默认 IP 是: `192.168.1.1` ，你可以设置电脑的 IP 为 `192.168.1.2` ，子网掩码设置为 `255.255.255.0`, 除这 2 个选项外，其他选项不用设置。你就可以从浏览器进入 OpwnWrt 了，默认 IP : `192.168.1.1`, 默认账号: `root`, 默认密码: `password`
+
+### 10.11 OpenWrt 必选项
+
+根据 [unifreq](https://github.com/unifreq/openwrt_packit) 的开发指南，当在 `OpenWrt` 中使用 `make menuconfig` 进行配置时，以下是必选项：
+
+```
+Target System  ->  QEMU ARM Virtual Machine
+Subtarget      ->  QEMU ARMv8 Virtual Machine (cortex-a53)
+Target Profile ->  Default
+Target Images  ->  tar.gz
+
+Languages -> Perl
+             ->  perl-http-date
+             ->  perlbase-getopt
+             ->  perlbase-time
+             ->  perlbase-unicode
+             ->  perlbase-utf8
+
+Utilities -> Disc -> blkid、fdisk、lsblk、parted
+          -> Filesystem -> attr、btrfs-progs(Build with zstd support)、chattr、dosfstools、
+                           e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
+          -> Compression -> bsdtar、pigz
+          -> Shells -> bash
+          -> gawk、getopt、losetup、pv、tar、uuidgen
+
+Kernel modules -> Wireless Drivers -> kmod-brcmfmac(SDIO)
+                                   -> kmod-brcmutil
+                                   -> kmod-cfg80211
+                                   -> kmod-mac80211
+
+Network -> WirelessAPD -> hostapd-common
+                       -> wpa-cli
+                       -> wpad-basic
+        -> iw
+```
+

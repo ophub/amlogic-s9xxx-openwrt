@@ -177,7 +177,7 @@ sudo apt-get install -y $(curl -fsSL https://raw.githubusercontent.com/ophub/aml
     build_target: kernel
     kernel_version: 5.15.25_5.10.100
     kernel_auto: true
-    kernel_sign: -meson64-dev
+    kernel_sign: -ophub
 ```
 
 ## openwrt-*-rootfs.tar.gz 用于打包的文件编译选项

@@ -53,6 +53,7 @@ How to use GitHub Actions cloud to compile OpenWrt, and many of the content in t
     - [10.8 How to recover if the install fails and cannot be started](#108-how-to-recover-if-the-install-fails-and-cannot-be-started)
     - [10.9 If you can’t startup after using the Mainline u-boot](#109-if-you-cant-startup-after-using-the-mainline-u-boot)
     - [10.10 Set the box to boot from USB/TF/SD](#1010-set-the-box-to-boot-from-usbtfsd)
+    - [10.11 Required options for OpenWrt](#1011-required-options-for-openwrt)
 
 ## 1. Register your own GitHub account
 
@@ -546,3 +547,39 @@ You need to install a resistor on the TTL: [X96 Max Plus's V4.0 Motherboard](htt
 - Enter the `cmd` command mode. Enter the `adb connect 192.168.1.137` command (the ip is modified according to your box, and you can check it in the router device connected to the box), If the link is successful, it will display `connected to 192.168.1.137:5555`
 - Enter the `adb shell reboot update` command, the box will restart and boot from the USB/TF/SD you inserted, access the firmware IP address from a browser, or SSH to enter the firmware.
 - Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
+
+### 10.11 Required options for OpenWrt
+
+According to the development guide of [unifreq](https://github.com/unifreq/openwrt_packit), when configuring with `make menuconfig` in `OpenWrt`, the following are required:
+
+```
+Target System  ->  QEMU ARM Virtual Machine
+Subtarget      ->  QEMU ARMv8 Virtual Machine (cortex-a53)
+Target Profile ->  Default
+Target Images  ->  tar.gz
+
+Languages -> Perl
+             ->  perl-http-date
+             ->  perlbase-getopt
+             ->  perlbase-time
+             ->  perlbase-unicode
+             ->  perlbase-utf8
+
+Utilities -> Disc -> blkid、fdisk、lsblk、parted
+          -> Filesystem -> attr、btrfs-progs(Build with zstd support)、chattr、dosfstools、
+                           e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
+          -> Compression -> bsdtar、pigz
+          -> Shells -> bash
+          -> gawk、getopt、losetup、pv、tar、uuidgen
+
+Kernel modules -> Wireless Drivers -> kmod-brcmfmac(SDIO)
+                                   -> kmod-brcmutil
+                                   -> kmod-cfg80211
+                                   -> kmod-mac80211
+
+Network -> WirelessAPD -> hostapd-common
+                       -> wpa-cli
+                       -> wpad-basic
+        -> iw
+```
+

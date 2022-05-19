@@ -166,20 +166,6 @@ sudo apt-get install -y $(curl -fsSL https://raw.githubusercontent.com/ophub/aml
 | ${{ env.PACKAGED_OUTPUTDATE }}           | 04.13.1058         | 打包日期（月.日.时分）      |
 | ${{ env.PACKAGED_STATUS }}               | success / failure  | 打包状态。成功 / 失败       |
 
-## 编译内核
-
-内核的编译方法详见 [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
-
-```yaml
-- name: Compile the kernel for Amlogic s9xxx
-  uses: ophub/amlogic-s9xxx-armbian@main
-  with:
-    build_target: kernel
-    kernel_version: 5.15.25_5.10.100
-    kernel_auto: true
-    kernel_sign: -ophub
-```
-
 ## openwrt-*-rootfs.tar.gz 用于打包的文件编译选项
 
 | Option | Value |
@@ -200,6 +186,20 @@ sudo apt-get install -y $(curl -fsSL https://raw.githubusercontent.com/ophub/aml
 | 默认密码 | password |
 | 默认 WIFI 名称 | OpenWrt |
 | 默认 WIFI 密码 | none |
+
+## 编译内核
+
+内核的编译方法详见 [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
+
+```yaml
+- name: Compile the kernel for Amlogic s9xxx
+  uses: ophub/amlogic-s9xxx-armbian@main
+  with:
+    build_target: kernel
+    kernel_version: 5.15.25_5.10.100
+    kernel_auto: true
+    kernel_sign: -ophub
+```
 
 ## 资源说明
 

@@ -1,14 +1,14 @@
-# Use GitHub Actions to compile OpenWrt
+# How to make and use OpenWrt
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
-How to use GitHub Actions cloud to compile OpenWrt, and many of the content in this documentation, from P3TERX, Flippy and many other technology innovators and resource sharers. Because of the dedication of everyone, let us use OpenWrt in Amlogic s9xxx tv box So Easy.
+How to use GitHub Actions cloud to compile OpenWrt, and many of the content in this documentation, from P3TERX, Flippy and many other technology innovators and resource sharers. Because of the dedication of everyone, let us use OpenWrt in Amlogic s9xxx TV Boxes So Easy.
 
 `GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
 
 # Tutorial directory
 
-- [Use GitHub Actions to compile OpenWrt](#use-github-actions-to-compile-openwrt)
+- [How to make and use OpenWrt](#how-to-make-and-use-openwrt)
 - [Tutorial directory](#tutorial-directory)
   - [1. Register your own GitHub account](#1-register-your-own-github-account)
   - [2. Set the privacy variable GitHub_TOKEN](#2-set-the-privacy-variable-github_token)
@@ -44,7 +44,7 @@ How to use GitHub Actions cloud to compile OpenWrt, and many of the content in t
     - [10.1 Know the complete .config file](#101-know-the-complete-config-file)
     - [10.2 Know the workflow file](#102-know-the-workflow-file)
       - [10.2.1 Replacing source code repositories and branches](#1021-replacing-source-code-repositories-and-branches)
-      - [10.2.2 Change box model and kernel version](#1022-change-box-model-and-kernel-version)
+      - [10.2.2 Change TV Boxes model and kernel version](#1022-change-tv-boxes-model-and-kernel-version)
     - [10.3 Custom banner information](#103-custom-banner-information)
     - [10.4 Custom feeds configuration file](#104-custom-feeds-configuration-file)
     - [10.5 Custom software default configuration information](#105-custom-software-default-configuration-information)
@@ -229,7 +229,7 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
     allowUpdates: true
     token: ${{ secrets.GH_TOKEN }}
     body: |
-      This is OpenWrt firmware for Amlogic s9xxx tv box
+      This is OpenWrt firmware for Amlogic s9xxx TV Boxes
       * Firmware information
       Default IP: 192.168.1.1
       Default username: root
@@ -255,7 +255,7 @@ Download our compiled openwrt firmware.
 
 ### 7.1 Download from GitHub Actions
 
-Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic s9xxx tv box`. The icons are as follows:
+Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic s9xxx TV Boxes`. The icons are as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418782-08714c00-7a05-11eb-9556-91575640a4bb.jpg width="300" />
@@ -264,7 +264,7 @@ Click the `Actions` button in the `repository navigation bar`. In the `All workf
 
 ### 7.2 Download from GitHub Releases
 
-Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic s9xxx tv box`. The icons are as follows:
+Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic s9xxx TV Boxes`. The icons are as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg width="300" />
@@ -309,9 +309,9 @@ Choose the corresponding firmware according to your box. Then write the IMG file
 openwrt-install-amlogic
 ```
 
-The same type of box, the firmware is common, such as `openwrt_s905x3_v*.img` firmware can be used for `x96max plus, hk1, h96` and other `s905x3` type boxes. When the installation script writes OpenWrt to EMMC, you will be prompted to choose your own box, please choose the correct one according to the prompt.
+The same type of TV Boxes, the firmware is common, such as `openwrt_s905x3_v*.img` firmware can be used for `x96max plus, hk1, h96` and other `s905x3` type TV Boxes. When the installation script writes OpenWrt to EMMC, you will be prompted to choose your own box, please choose the correct one according to the prompt.
 
-In addition to the default 13 models of boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/common-files/patches/amlogic-dtb)
+In addition to the default 13 models of TV Boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/common-files/patches/amlogic-dtb)
 
 ## 9. Update firmware
 
@@ -381,7 +381,7 @@ REPO_URL: https://github.com/openwrt/openwrt
 REPO_BRANCH: openwrt-21.02
 ```
 
-#### 10.2.2 Change box model and kernel version
+#### 10.2.2 Change TV Boxes model and kernel version
 
 Near line 96, find `Build OpenWrt firmware`, Code snippet like this:
 ```yaml
@@ -489,7 +489,7 @@ Search and install `luci-app-*` packages if you want to configure services using
 
 - Under normal circumstances, re-insert the USB hard disk and install it again.
 
-- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx tv box to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx tv box to factory settings first, and then reinstall it. First download the [amlogic_usb_burning_tool](https://github.com/ophub/kernel/releases/tag/tools) system recovery tool and install it. Prepare a [USB dual male data cable](https://user-images.githubusercontent.com/68696949/159267576-74ad69a5-b6fc-489d-b1a6-0f8f8ff28634.png), Prepare a [paper clip](https://user-images.githubusercontent.com/68696949/159267790-38cf4681-6827-4cb6-86b2-19c7f1943342.png).
+- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx TV Boxes to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx TV Boxes to factory settings first, and then reinstall it. First download the [amlogic_usb_burning_tool](https://github.com/ophub/kernel/releases/tag/tools) system recovery tool and install it. Prepare a [USB dual male data cable](https://user-images.githubusercontent.com/68696949/159267576-74ad69a5-b6fc-489d-b1a6-0f8f8ff28634.png), Prepare a [paper clip](https://user-images.githubusercontent.com/68696949/159267790-38cf4681-6827-4cb6-86b2-19c7f1943342.png).
 
 - Take x96max+ as an example. Find the two [short-circuit points](https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg) on the motherboard, Download the [Android TV firmware](https://github.com/ophub/kernel/releases/tag/tools). The Android TV system firmware of other common devices and the corresponding short circuit diagrams can also be [downloaded and viewed here](https://github.com/ophub/kernel/releases/tag/tools).
 

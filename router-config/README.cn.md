@@ -1,4 +1,4 @@
-# 使用 GitHub Actions 云编译 OpenWrt
+# OpenWrt 制作及使用方法
 
 查看英文说明 | [View English description](README.md)
 
@@ -8,7 +8,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
 
 # 目录
 
-- [使用 GitHub Actions 云编译 OpenWrt](#使用-github-actions-云编译-openwrt)
+- [OpenWrt 制作及使用方法](#openwrt-制作及使用方法)
 - [目录](#目录)
   - [1. 注册自己的 Github 的账户](#1-注册自己的-github-的账户)
   - [2. 设置隐私变量 GITHUB_TOKEN](#2-设置隐私变量-github_token)
@@ -225,7 +225,7 @@ schedule:
     allowUpdates: true
     token: ${{ secrets.GH_TOKEN }}
     body: |
-      This is OpenWrt firmware for Amlogic s9xxx tv box
+      This is OpenWrt firmware for Amlogic s9xxx TV Boxes
       * Firmware information
       Default IP: 192.168.1.1
       Default username: root

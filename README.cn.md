@@ -1,4 +1,4 @@
-# 可以安装在 Amlogic S9xxx 电视盒中使用的 OpenWrt 系统
+# OpenWrt for Amlogic TV Boxes / 晶晨 OpenWrt
 
 查看英文说明 | [View English description](README.md)
 

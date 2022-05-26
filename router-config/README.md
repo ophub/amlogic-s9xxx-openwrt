@@ -560,27 +560,29 @@ You need to install a resistor on the TTL: [X96 Max Plus's V4.0 Motherboard](htt
 
 ### 10.11 Required options for OpenWrt
 
-According to the development guide of [unifreq](https://github.com/unifreq/openwrt_packit), when configuring with `make menuconfig` in `OpenWrt`, the following are required:
+This list is organized based on the development guide of [unifreq](https://github.com/unifreq/openwrt_packit). In order to ensure that scripts such as installation/update can run normally in OpenWrt, when using `make menuconfig` to configure, you need to add the following mandatory options:
 
 ```
-Target System  ->  QEMU ARM Virtual Machine
-Subtarget      ->  QEMU ARMv8 Virtual Machine (cortex-a53)
-Target Profile ->  Default
-Target Images  ->  tar.gz
+Target System  -> QEMU ARM Virtual Machine
+Subtarget      -> QEMU ARMv8 Virtual Machine (cortex-a53)
+Target Profile -> Default
+Target Images  -> tar.gz
 
 Languages -> Perl
-             ->  perl-http-date
-             ->  perlbase-getopt
-             ->  perlbase-time
-             ->  perlbase-unicode
-             ->  perlbase-utf8
+             -> perl-http-date
+             -> perlbase-getopt
+             -> perlbase-time
+             -> perlbase-unicode
+             -> perlbase-utf8
 
 Utilities -> Disc -> blkid、fdisk、lsblk、parted
           -> Filesystem -> attr、btrfs-progs(Build with zstd support)、chattr、dosfstools、
                            e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
           -> Compression -> bsdtar、pigz
           -> Shells -> bash
-          -> gawk、getopt、losetup、pv、tar、uuidgen
+          -> gawk、getopt、losetup、pv、tar、uuidgen、coremark
+             coreutils
+             -> coreutils-base64、coreutils-nohup
 
 Kernel modules -> Wireless Drivers -> kmod-brcmfmac(SDIO)
                                    -> kmod-brcmutil

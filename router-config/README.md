@@ -50,7 +50,9 @@ How to use GitHub Actions cloud to compile OpenWrt, and many of the content in t
     - [10.5 Custom software default configuration information](#105-custom-software-default-configuration-information)
     - [10.6 Opkg Package Manager](#106-opkg-package-manager)
     - [10.7 Manage packages using web interface](#107-manage-packages-using-web-interface)
-    - [10.8 How to recover if the install fails and cannot be started](#108-how-to-recover-if-the-install-fails-and-cannot-be-started)
+    - [10.8 How to restore the original Android TV system](#108-how-to-restore-the-original-android-tv-system)
+      - [10.8.1 Restoring using openwrt-ddbr backup](#1081-restoring-using-openwrt-ddbr-backup)
+      - [10.8.2 Restoring with Amlogic usb burning tool](#1082-restoring-with-amlogic-usb-burning-tool)
     - [10.9 If you can’t startup after using the Mainline u-boot](#109-if-you-cant-startup-after-using-the-mainline-u-boot)
     - [10.10 Set the box to boot from USB/TF/SD](#1010-set-the-box-to-boot-from-usbtfsd)
     - [10.11 Required options for OpenWrt](#1011-required-options-for-openwrt)
@@ -485,7 +487,15 @@ Search and install `luci-app-*` packages if you want to configure services using
 
 [For more instructions please see: packages](https://openwrt.org/packages/start)
 
-### 10.8 How to recover if the install fails and cannot be started
+### 10.8 How to restore the original Android TV system
+
+Usually use openwrt-ddbr backup to restore, or use Amlogic usb burning tool to restore the original Android TV system.
+
+#### 10.8.1 Restoring using openwrt-ddbr backup
+
+It is recommended that you make a backup of the original Android TV system that comes with the current box before installing the OpenWrt system in a new box, so that you can use it when you need to restore the system. Please boot the OpenWrt system from `TF/SD/USB`, enter the `openwrt-ddbr` command, and then enter `b` according to the prompts to backup the system. The backup file is stored in the path `/ddbr/BACKUP-arm-64-emmc. img.gz` , please download and save. When you need to restore the Android TV system, upload the previously backed up files to the same path of the `TF/SD/USB` device, enter the `openwrt-ddbr` command, and then enter `r` according to the prompt to restore the system.
+
+#### 10.8.2 Restoring with Amlogic usb burning tool
 
 - Under normal circumstances, re-insert the USB hard disk and install it again.
 

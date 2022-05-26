@@ -544,27 +544,29 @@ Hit any key to stop autoboot: 0
 
 ### 10.11 OpenWrt 必选项
 
-根据 [unifreq](https://github.com/unifreq/openwrt_packit) 的开发指南，当在 `OpenWrt` 中使用 `make menuconfig` 进行配置时，以下是必选项：
+此列表以 [unifreq](https://github.com/unifreq/openwrt_packit) 的开发指南为基础进行整理。为保障安装/更新等脚本在 OpenWrt 中可以正常运行，当使用 `make menuconfig` 进行配置时，需要添加以下必选项：
 
 ```
-Target System  ->  QEMU ARM Virtual Machine
-Subtarget      ->  QEMU ARMv8 Virtual Machine (cortex-a53)
-Target Profile ->  Default
-Target Images  ->  tar.gz
+Target System  -> QEMU ARM Virtual Machine
+Subtarget      -> QEMU ARMv8 Virtual Machine (cortex-a53)
+Target Profile -> Default
+Target Images  -> tar.gz
 
 Languages -> Perl
-             ->  perl-http-date
-             ->  perlbase-getopt
-             ->  perlbase-time
-             ->  perlbase-unicode
-             ->  perlbase-utf8
+             -> perl-http-date
+             -> perlbase-getopt
+             -> perlbase-time
+             -> perlbase-unicode
+             -> perlbase-utf8
 
 Utilities -> Disc -> blkid、fdisk、lsblk、parted
           -> Filesystem -> attr、btrfs-progs(Build with zstd support)、chattr、dosfstools、
                            e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
           -> Compression -> bsdtar、pigz
           -> Shells -> bash
-          -> gawk、getopt、losetup、pv、tar、uuidgen
+          -> gawk、getopt、losetup、pv、tar、uuidgen、coremark
+             coreutils
+             -> coreutils-base64、coreutils-nohup
 
 Kernel modules -> Wireless Drivers -> kmod-brcmfmac(SDIO)
                                    -> kmod-brcmutil

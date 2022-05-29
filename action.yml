@@ -27,7 +27,7 @@ inputs:
     required: false
     default: "stable"
   openwrt_size:
-    description: "Set the rootfs size."
+    description: "Set the rootfs size(Unit: MiB)."
     required: false
     default: "960"
 

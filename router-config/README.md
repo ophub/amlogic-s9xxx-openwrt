@@ -59,7 +59,7 @@ How to use GitHub Actions cloud to compile OpenWrt, and many of the content in t
 
 ## 1. Register your own GitHub account
 
-Register your own account, so that you can continue to customize the firmware. Click the `Sign up` button in the upper right corner of the `giuhub.com` website and follow the prompts to `register your account`.
+Register your own account, so that you can continue to customize the firmware. Click the `Sign up` button in the upper right corner of the `github.com` website and follow the prompts to `register your account`.
 
 ## 2. Set the privacy variable GitHub_TOKEN
 

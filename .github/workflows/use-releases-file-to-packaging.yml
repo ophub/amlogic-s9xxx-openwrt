@@ -23,7 +23,7 @@ on:
         required: false
         default: "5.15.25_5.10.100"
       openwrt_size:
-        description: "Set the rootfs size."
+        description: "Set the rootfs size(Unit: MiB)."
         required: false
         default: "960"
 

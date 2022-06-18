@@ -21,6 +21,7 @@ How to use GitHub Actions cloud to compile OpenWrt, and many of the content in t
       - [Example 1, Add a third-party software package](#example-1-add-a-third-party-software-package)
       - [Example 2: Replace the existing software package](#example-2-replace-the-existing-software-package)
       - [Example 3: Modifying the code in the source code library](#example-3-modifying-the-code-in-the-source-code-library)
+    - [4.3 Make firmware with Image Builder](#43-make-firmware-with-image-builder)
   - [5. Compile the firmware](#5-compile-the-firmware)
     - [5.1 Manual compilation](#51-manual-compilation)
     - [5.2 Compile at the agreed time](#52-compile-at-the-agreed-time)
@@ -179,6 +180,14 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 This realizes the modification of the source code.
 
 Through `diy-part1.sh` and `diy-part2.sh` two scripts, we add operation commands to make more powerful functions.
+
+### 4.3 Make firmware with Image Builder
+
+The official website of OpenWrt provides the prepared openwrt-imagebuilder-*-armvirt-64.Linux-x86_64.tar.xz file (download address: [https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)), you can use the official Image Builder to add packages and plug-ins to this file, usually Create an openwrt-rootfs.tar.gz file in just a few minutes. For the production method, please refer to the official document: [Using the Image Builder](https://openwrt.org/zh/docs/guide-user/additional-software/imagebuilder)
+
+This repository provides a one-click production service. You only need to pass the branch parameters into the [imagebuilder script]((openwrt-imagebuilder/imagebuilder.sh)) to complete the production.
+- Localized make command: `./imagebuilder.sh <branch>`, for example: `./imagebuilder.sh 21.02.3`
+- Use github.com's `Actions` to make: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
 
 ## 5. Compile the firmware
 

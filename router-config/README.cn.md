@@ -21,6 +21,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
       - [举例1，添加第三方软件包](#举例1添加第三方软件包)
       - [举例2，用第三方软件包替换当前源码库中的已有的同名软件包](#举例2用第三方软件包替换当前源码库中的已有的同名软件包)
       - [举例3，通过修改源码库中的代码来实现某些需求](#举例3通过修改源码库中的代码来实现某些需求)
+    - [4.3 使用 Image Builder 制作固件](#43-使用-image-builder-制作固件)
   - [5. 编译固件](#5-编译固件)
     - [5.1 手动编译](#51-手动编译)
     - [5.2 定时编译](#52-定时编译)
@@ -175,6 +176,14 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 ```
 
 这样就实现了对源码的修改。通过 diy-part1.sh 和 diy-part2.sh 这两个脚本，我们添加了一些操作命令，让编译的固件更符合我们的个性化需求。
+
+### 4.3 使用 Image Builder 制作固件
+
+OpenWrt 官方网站提供了制作好的 openwrt-imagebuilder-*-armvirt-64.Linux-x86_64.tar.xz 文件（下载地址：[https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)），可以使用官方的 Image Builder 在此文件中添加软件包和插件，通常只用几分钟便可制作出一个 openwrt-rootfs.tar.gz 文件。制作方法可以参照官方文档：[使用Image Builder](https://openwrt.org/zh/docs/guide-user/additional-software/imagebuilder)
+
+本仓库提供了一键制作服务，你只需要把分支参数传入 [imagebuilder 脚本](openwrt-imagebuilder/imagebuilder.sh) 即可完成制作。
+- 本地化制作命令：`./imagebuilder.sh <branch>`，例如：`./imagebuilder.sh 21.02.3`
+- 使用 github.com 的 `Actions` 中进行制作：[Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
 
 ## 5. 编译固件
 

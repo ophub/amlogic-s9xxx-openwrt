@@ -2,6 +2,7 @@
 /amlogic-s9xxx/amlogic-dtb
 /amlogic-s9xxx/amlogic-kernel
 /amlogic-s9xxx/amlogic-u-boot
+/openwrt
 /openwrt-armvirt
 /out
 /tmp

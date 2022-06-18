@@ -1,28 +1,31 @@
-#========================================================================================================================
+#===============================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Use Releases file to packaging
-# Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
-#========================================================================================================================
+# Description: Build OpenWrt with Image Builder
+# Download options: https://downloads.openwrt.org/releases
+#===============================================================
 
-name: Use Releases file to Packaging
+name: Build OpenWrt with Image Builder
 
 on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Select the packaged source branch"
+        description: "Select the releases branch"
         required: false
-        default: "lede"
+        default: "21.02.3"
         type: choice
         options:
-          - lede
-          - official
-          - imagebuilder
+          - 22.03.0-rc4
+          - 22.03.0-rc1
+          - 21.02.3
+          - 19.07.10
+          - 18.06.9
+          - 17.01.7
       openwrt_soc:
         description: "Select Amlogic SoC"
         required: false
-        default: "all"
+        default: "s905x3_s905d_s912"
         type: choice
         options:
           - all
@@ -66,6 +69,7 @@ on:
 
 env:
   TZ: Asia/Shanghai
+  IMAGEBUILDER_SH: router-config/openwrt-imagebuilder/imagebuilder.sh
 
 jobs:
   build:
@@ -86,28 +90,20 @@ jobs:
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "$TZ"
-          # Input value validation
-          ARR_BRANCH=("official" "lede")
-          if [[ -n "${{ github.event.inputs.branch }}" && -n "$(echo "${ARR_BRANCH[@]}" | grep -w "${{ github.event.inputs.branch }}")" ]]; then
-            RELEASES_BRANCH=${{ github.event.inputs.branch }}
-          else
-            RELEASES_BRANCH=lede
-          fi
-          echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
           echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
 
-      - name: Download OpenWrt Armvirt firmware
-        id: down
+      - name: Build Rootfs with Image Builder
+        id: imagebuilder
         if: (!cancelled())
         run: |
-          armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
-          [ -d "${armvirt_tarfile_path}" ] || mkdir -p ${armvirt_tarfile_path}
-          curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/.*rootfs.tar.gz" | head -n 1 > DOWNLOAD_ARMVIRT
-          [ -s DOWNLOAD_ARMVIRT ] && wget -q -P ${armvirt_tarfile_path} https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
+          RELEASES_BRANCH=${{ github.event.inputs.branch }}
+          chmod +x ${IMAGEBUILDER_SH}
+          ${IMAGEBUILDER_SH} ${RELEASES_BRANCH}
+          echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
           echo "::set-output name=status::success"
 
       - name: Build OpenWrt firmware
-        if: steps.down.outputs.status == 'success' && !cancelled()
+        if: steps.imagebuilder.outputs.status == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
           openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
@@ -120,7 +116,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success' && !cancelled()
         with:
-          tag: openwrt_s9xxx_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: openwrt_s9xxx_imagebuilder_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}

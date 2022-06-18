@@ -29,7 +29,7 @@
 # Set default parameters
 make_path="${PWD}"
 imagebuilder_path="${make_path}/openwrt"
-mydiy_files="${make_path}/router-config/openwrt-imagebuilder/files"
+custom_files_path="${make_path}/router-config/openwrt-imagebuilder/files"
 # Set default parameters
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
@@ -99,10 +99,10 @@ custom_files() {
     cd ${imagebuilder_path}
 
     # Copy custom files
-    [[ -d "${mydiy_files}" ]] && {
+    [[ -d "${custom_files_path}" ]] && {
         echo -e "${STEPS} Start adding custom files..."
         [[ -d "files" ]] || mkdir -p files
-        cp -rf ${mydiy_files}/* files
+        cp -rf ${custom_files_path}/* files
 
         sync && sleep 3
         echo -e "${INFO} files directory status: $(ls files -l 2>/dev/null)"
@@ -117,22 +117,27 @@ rebuild_firmware() {
 
     # Selecting packages
     my_packages="\
-        perl-http-date perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 \
-        blkid fdisk lsblk parted attr btrfs-progs chattr dosfstools e2fsprogs f2fs-tools \
-        f2fsck lsattr mkf2fs xfs-fsck xfs-mkfs bsdtar pigz bash gawk getopt losetup pv tar \
-        uuidgen coremark coreutils coreutils-base64 coreutils-nohup kmod-brcmfmac kmod-brcmutil \
-        kmod-cfg80211 kmod-mac80211 hostapd-common wpa-cli wpad-basic iw \
-        liblucihttp liblucihttp-lua luci luci-app-firewall luci-app-opkg luci-base luci-lib-base \
-        luci-lib-ip luci-lib-jsonc luci-lib-nixio luci-mod-admin-full luci-mod-network \
-        luci-mod-status luci-mod-system luci-proto-ipv6 luci-proto-ppp \
-        luci-theme-bootstrap luci-compat luci-app-amlogic \
+        perl-http-date perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 blkid fdisk \
+        lsblk parted attr btrfs-progs chattr dosfstools e2fsprogs f2fs-tools f2fsck lsattr mkf2fs \
+        xfs-fsck xfs-mkfs bash gawk getopt losetup pv uuidgen coremark coreutils uclient-fetch wwan \
+        coreutils-base64 coreutils-nohup kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 \
+        hostapd-common wpa-cli wpad-basic iw subversion-client subversion-libs wget curl whereis \
+        base-files bind-server block-mount blockd busybox usb-modeswitch tini lscpu mount-utils \
+        ziptool zstd iconv jq docker docker-compose dockerd containerd dumpe2fs e2freefrag exfat-mkfs \
+        resize2fs tune2fs ttyd zoneinfo-asia zoneinfo-core bc iwinfo jshn libjson-script libnetwork \
+        openssl-util rename runc which liblucihttp bsdtar pigz gzip bzip2 unzip xz-utils xz tar \
+        liblucihttp-lua ppp ppp-mod-pppoe proto-bonding cgi-io uhttpd uhttpd-mod-ubus comgt comgt-ncm uqmi \
+        luci luci-app-firewall luci-app-opkg luci-base luci-lib-base luci-i18n-base-en luci-i18n-base-zh-cn \
+        luci-lib-ip luci-lib-ipkg luci-lib-jsonc luci-lib-nixio luci-mod-admin-full \
+        luci-mod-network luci-proto-3g luci-proto-bonding luci-proto-ipip luci-proto-ncm luci-proto-openconnect \
+        luci-mod-status luci-mod-system luci-proto-ipv6 luci-proto-ppp luci-proto-qmi luci-proto-relay \
+        luci-theme-material luci-theme-bootstrap luci-compat luci-lib-docker \
+        luci-app-amlogic luci-app-ddns luci-app-dockerman luci-app-firewall luci-app-frpc luci-app-frps \
+        luci-app-opkg luci-app-samba4 luci-app-transmission luci-app-ttyd luci-app-upnp luci-app-wol \
         "
 
     # Rebuild firmware
-    make image \
-        PROFILE="Default" \
-        PACKAGES="${my_packages}" \
-        FILES="files"
+    make image PROFILE="Default" PACKAGES="${my_packages}"
 
     sync && sleep 3
     echo -e "${INFO} The rebuild result: $(ls bin/targets/*/* -l 2>/dev/null)"
@@ -144,7 +149,7 @@ echo -e "${STEPS} Welcome to Rebuild OpenWrt Using the Image Builder."
 [[ -x "${0}" ]] || error_msg "Please give the script permission to run: [ chmod +x $0 ]"
 [[ -z "${1}" ]] && error_msg "Please specify the OpenWrt Branch, such as [ 21.02.3 ]"
 rebuild_branch="${1}"
-echo -e "${INFO} Rebuild path: ${PWD}"
+echo -e "${INFO} Rebuild path: [ ${PWD} ]"
 echo -e "${INFO} Rebuild branch: [ ${rebuild_branch} ]"
 #
 # Perform related operations

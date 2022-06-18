@@ -22,6 +22,7 @@
 # download_imagebuilder   : Downloading OpenWrt ImageBuilder
 # custom_packages         : Add custom packages
 # custom_files            : Add custom files
+# adjust_settings         : Adjust related file settings
 # rebuild_firmware        : rebuild_firmware
 #
 #================================ Set make environment variables ================================
@@ -47,12 +48,13 @@ error_msg() {
 
 # Downloading OpenWrt ImageBuilder
 download_imagebuilder() {
-    # Downloading imagebuilder files
+
     echo -e "${STEPS} Start downloading OpenWrt files..."
-    # # Download example: https://downloads.openwrt.org/releases/21.02.3/targets/armvirt/64/openwrt-imagebuilder-21.02.3-armvirt-64.Linux-x86_64.tar.xz
+    # Downloading imagebuilder files
+    # Download example: https://downloads.openwrt.org/releases/21.02.3/targets/armvirt/64/openwrt-imagebuilder-21.02.3-armvirt-64.Linux-x86_64.tar.xz
     download_file="https://downloads.openwrt.org/releases/${rebuild_branch}/targets/armvirt/64/openwrt-imagebuilder-${rebuild_branch}-armvirt-64.Linux-x86_64.tar.xz"
     wget -q ${download_file}
-    [[ "$?" -eq "0" ]] || error_msg "Wget download failed: ${download_file}"
+    [[ "${?}" -eq "0" ]] || error_msg "Wget download failed: ${download_file}"
 
     # Unzip and change the directory name
     tar -xJf openwrt-imagebuilder-* && sync && rm -f openwrt-imagebuilder-*.tar.xz
@@ -68,8 +70,8 @@ download_imagebuilder() {
 custom_packages() {
     cd ${imagebuilder_path}
 
-    # Create a [ packages ] directory
     echo -e "${STEPS} Start adding custom packages..."
+    # Create a [ packages ] directory
     [[ -d "packages" ]] || mkdir packages
 
     # Download luci-app-amlogic
@@ -78,15 +80,15 @@ custom_packages() {
     amlogic_file="luci-app-amlogic"
     amlogic_file_down="$(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*${amlogic_name}.*.ipk" | head -n 1)"
     wget -q ${amlogic_file_down} -O packages/${amlogic_file_down##*/}
-    [[ "$?" -eq "0" ]] && echo -e "${INFO} The [ ${amlogic_file} ] is downloaded successfully."
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} The [ ${amlogic_file} ] is downloaded successfully."
     #
     amlogic_i18n="luci-i18n-amlogic"
     amlogic_i18n_down="$(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*${amlogic_i18n}.*.ipk" | head -n 1)"
     wget -q ${amlogic_i18n_down} -O packages/${amlogic_i18n_down##*/}
-    [[ "$?" -eq "0" ]] && echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
 
     # Download other luci-app-xxx
-    #
+    # ......
 
     sync && sleep 3
     echo -e "${INFO} Packages directory status: $(ls packages -l 2>/dev/null)"
@@ -98,9 +100,9 @@ custom_packages() {
 custom_files() {
     cd ${imagebuilder_path}
 
-    # Copy custom files
     [[ -d "${custom_files_path}" ]] && {
         echo -e "${STEPS} Start adding custom files..."
+        # Copy custom files
         [[ -d "files" ]] || mkdir -p files
         cp -rf ${custom_files_path}/* files
 
@@ -109,12 +111,33 @@ custom_files() {
     }
 }
 
+# Adjust related files in the ImageBuilder directory
+adjust_settings() {
+    cd ${imagebuilder_path}
+
+    # For .config file
+    [[ -s ".config" ]] && {
+        echo -e "${STEPS} Start adjusting .config file settings..."
+        # Root filesystem archives
+        sed -i "s|CONFIG_TARGET_ROOTFS_CPIOGZ=.*|# CONFIG_TARGET_ROOTFS_CPIOGZ is not set|g" .config
+        # Root filesystem images
+        sed -i "s|CONFIG_TARGET_ROOTFS_EXT4FS=.*|# CONFIG_TARGET_ROOTFS_EXT4FS is not set|g" .config
+        sed -i "s|CONFIG_TARGET_ROOTFS_SQUASHFS=.*|# CONFIG_TARGET_ROOTFS_SQUASHFS is not set|g" .config
+        sed -i "s|CONFIG_TARGET_IMAGES_GZIP=.*|# CONFIG_TARGET_IMAGES_GZIP is not set|g" .config
+    }
+
+    # For other files
+    # ......
+
+    sync && sleep 3
+    echo -e "${INFO} Root directory status: $(ls -al 2>/dev/null)"
+}
+
 # Rebuild OpenWrt firmware
 rebuild_firmware() {
     cd ${imagebuilder_path}
 
     echo -e "${STEPS} Start building OpenWrt with Image Builder..."
-
     # Selecting packages
     my_packages="\
         perl-http-date perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 blkid fdisk \
@@ -146,8 +169,8 @@ rebuild_firmware() {
 
 # Show welcome message
 echo -e "${STEPS} Welcome to Rebuild OpenWrt Using the Image Builder."
-[[ -x "${0}" ]] || error_msg "Please give the script permission to run: [ chmod +x $0 ]"
-[[ -z "${1}" ]] && error_msg "Please specify the OpenWrt Branch, such as [ 21.02.3 ]"
+[[ -x "${0}" ]] || error_msg "Please give the script permission to run: [ chmod +x ${0} ]"
+[[ -z "${1}" ]] && error_msg "Please specify the OpenWrt Branch, such as [ ${0} 21.02.3 ]"
 rebuild_branch="${1}"
 echo -e "${INFO} Rebuild path: [ ${PWD} ]"
 echo -e "${INFO} Rebuild branch: [ ${rebuild_branch} ]"
@@ -156,4 +179,5 @@ echo -e "${INFO} Rebuild branch: [ ${rebuild_branch} ]"
 download_imagebuilder
 custom_packages
 custom_files
+adjust_settings
 rebuild_firmware

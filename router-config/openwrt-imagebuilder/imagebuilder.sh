@@ -36,7 +36,7 @@ custom_files_path="${make_path}/router-config/openwrt-imagebuilder/files"
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
 SUCCESS="[\033[92m SUCCESS \033[0m]"
-OPTIONS="[\033[93m OPTIONS \033[0m]"
+WARNING="[\033[93m WARNING \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 #
 #================================================================================================
@@ -124,6 +124,8 @@ adjust_settings() {
         sed -i "s|CONFIG_TARGET_ROOTFS_EXT4FS=.*|# CONFIG_TARGET_ROOTFS_EXT4FS is not set|g" .config
         sed -i "s|CONFIG_TARGET_ROOTFS_SQUASHFS=.*|# CONFIG_TARGET_ROOTFS_SQUASHFS is not set|g" .config
         sed -i "s|CONFIG_TARGET_IMAGES_GZIP=.*|# CONFIG_TARGET_IMAGES_GZIP is not set|g" .config
+        # Themes
+        sed -i "s|CONFIG_PACKAGE_luci-theme-bootstrap=.*|# CONFIG_PACKAGE_luci-theme-bootstrap is not set|g" .config
     }
 
     # For other files
@@ -138,9 +140,9 @@ rebuild_firmware() {
     cd ${imagebuilder_path}
 
     echo -e "${STEPS} Start building OpenWrt with Image Builder..."
-    # Selecting packages
+    # Selecting packages, lib, theme, app and i18n
     my_packages="\
-        perl-http-date perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 blkid fdisk \
+        bash perl-http-date perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 blkid fdisk \
         lsblk parted attr btrfs-progs chattr dosfstools e2fsprogs f2fs-tools f2fsck lsattr mkf2fs \
         xfs-fsck xfs-mkfs bash gawk getopt losetup pv uuidgen coremark coreutils uclient-fetch wwan \
         coreutils-base64 coreutils-nohup kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 \
@@ -150,13 +152,22 @@ rebuild_firmware() {
         resize2fs tune2fs ttyd zoneinfo-asia zoneinfo-core bc iwinfo jshn libjson-script libnetwork \
         openssl-util rename runc which liblucihttp bsdtar pigz gzip bzip2 unzip xz-utils xz tar \
         liblucihttp-lua ppp ppp-mod-pppoe proto-bonding cgi-io uhttpd uhttpd-mod-ubus comgt comgt-ncm uqmi \
-        luci luci-app-firewall luci-app-opkg luci-base luci-lib-base luci-i18n-base-en luci-i18n-base-zh-cn \
-        luci-lib-ip luci-lib-ipkg luci-lib-jsonc luci-lib-nixio luci-mod-admin-full \
-        luci-mod-network luci-proto-3g luci-proto-bonding luci-proto-ipip luci-proto-ncm luci-proto-openconnect \
-        luci-mod-status luci-mod-system luci-proto-ipv6 luci-proto-ppp luci-proto-qmi luci-proto-relay \
-        luci-theme-material luci-theme-bootstrap luci-compat luci-lib-docker \
-        luci-app-amlogic luci-app-ddns luci-app-dockerman luci-app-firewall luci-app-frpc luci-app-frps \
-        luci-app-opkg luci-app-samba4 luci-app-transmission luci-app-ttyd luci-app-upnp luci-app-wol \
+        \
+        luci luci-base luci-lib-base luci-i18n-base-en luci-i18n-base-zh-cn luci-lib-ipkg luci-lib-docker \
+        luci-lib-ip luci-lib-jsonc luci-lib-nixio luci-mod-network luci-mod-status luci-mod-system \
+        luci-mod-admin-full luci-compat luci-proto-3g luci-proto-bonding luci-proto-ipip luci-proto-ncm \
+        luci-proto-ipv6 luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay \
+        \
+        luci-theme-material \
+        \
+        luci-app-opkg luci-app-ddns luci-app-dockerman luci-app-firewall luci-app-transmission \
+        luci-app-ttyd luci-app-samba4 luci-app-upnp luci-app-amlogic \
+        \
+        luci-i18n-opkg-en luci-i18n-ddns-en luci-i18n-dockerman-en luci-i18n-firewall-en luci-i18n-transmission-en \
+        luci-i18n-ttyd-en luci-i18n-samba4-en luci-i18n-upnp-en \
+        \
+        luci-i18n-opkg-zh-cn luci-i18n-ddns-zh-cn luci-i18n-dockerman-zh-cn luci-i18n-firewall-zh-cn luci-i18n-transmission-zh-cn \
+        luci-i18n-ttyd-zh-cn luci-i18n-samba4-zh-cn luci-i18n-upnp-zh-cn luci-i18n-amlogic-zh-cn \
         "
 
     # Rebuild firmware

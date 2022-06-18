@@ -171,7 +171,7 @@ rebuild_firmware() {
         "
 
     # Rebuild firmware
-    make image PROFILE="Default" PACKAGES="${my_packages}"
+    make image PROFILE="Default" PACKAGES="${my_packages}" FILES="files"
 
     sync && sleep 3
     echo -e "${INFO} The rebuild result: $(ls bin/targets/*/* -l 2>/dev/null)"

@@ -14,7 +14,8 @@
 #
 # Instructions: https://openwrt.org/docs/guide-user/additional-software/imagebuilder
 # Download options: https://downloads.openwrt.org/releases
-# Command: ./imagebuilder.sh
+# Command: ./imagebuilder.sh <branch>
+#          ./imagebuilder.sh 21.02.3
 #
 #======================================== Functions list ========================================
 #
@@ -48,13 +49,12 @@ error_msg() {
 
 # Downloading OpenWrt ImageBuilder
 download_imagebuilder() {
-
     echo -e "${STEPS} Start downloading OpenWrt files..."
     # Downloading imagebuilder files
     # Download example: https://downloads.openwrt.org/releases/21.02.3/targets/armvirt/64/openwrt-imagebuilder-21.02.3-armvirt-64.Linux-x86_64.tar.xz
     download_file="https://downloads.openwrt.org/releases/${rebuild_branch}/targets/armvirt/64/openwrt-imagebuilder-${rebuild_branch}-armvirt-64.Linux-x86_64.tar.xz"
     wget -q ${download_file}
-    [[ "${?}" -eq "0" ]] || error_msg "Wget download failed: ${download_file}"
+    [[ "${?}" -eq "0" ]] || error_msg "Wget download failed: [ ${download_file} ]"
 
     # Unzip and change the directory name
     tar -xJf openwrt-imagebuilder-* && sync && rm -f openwrt-imagebuilder-*.tar.xz
@@ -91,7 +91,7 @@ custom_packages() {
     # ......
 
     sync && sleep 3
-    echo -e "${INFO} Packages directory status: $(ls packages -l 2>/dev/null)"
+    echo -e "${INFO} [ packages ] directory status: $(ls packages -l 2>/dev/null)"
 }
 
 # Add custom files
@@ -107,7 +107,7 @@ custom_files() {
         cp -rf ${custom_files_path}/* files
 
         sync && sleep 3
-        echo -e "${INFO} files directory status: $(ls files -l 2>/dev/null)"
+        echo -e "${INFO} [ files ] directory status: $(ls files -l 2>/dev/null)"
     }
 }
 
@@ -130,7 +130,7 @@ adjust_settings() {
     # ......
 
     sync && sleep 3
-    echo -e "${INFO} Root directory status: $(ls -al 2>/dev/null)"
+    echo -e "${INFO} [ Root ] directory status: $(ls -al 2>/dev/null)"
 }
 
 # Rebuild OpenWrt firmware

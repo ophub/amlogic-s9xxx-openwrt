@@ -574,7 +574,7 @@ EOF
         echo " Amlogic SoC: ${soc}" >>etc/banner
         echo " OpenWrt Kernel: ${op_version}" >>etc/banner
         echo " Packaged Date: ${op_packaged_date}" >>etc/banner
-        echo "────────────────────────────────────────────────────────────────" >>etc/banner
+        echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
     fi
 
     # Add wireless master mode

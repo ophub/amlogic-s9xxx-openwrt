@@ -191,7 +191,7 @@ This repository provides a one-click production service. You only need to pass t
 
 ## 5. Compile the firmware
 
-The firmware compilation process is controlled in the [.github/workflows/build-openwrt-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml) file. There are other `yml files` in the `workflows` directory to achieve other different functions. There are many ways to compile firmware, you can set timed compilation, manual compilation, or set some specific events to trigger compilation. Let's start with simple operations.
+The firmware compilation process is controlled in the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file. There are other `yml files` in the `workflows` directory to achieve other different functions. There are many ways to compile firmware, you can set timed compilation, manual compilation, or set some specific events to trigger compilation. Let's start with simple operations.
 
 ### 5.1 Manual compilation
 
@@ -205,7 +205,7 @@ In the `navigation bar of your repository`, click the `Actions` button, and then
 
 ### 5.2 Compile at the agreed time
 
-In the [.github/workflows/build-openwrt-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml) file, use `cron` to set the timing compilation. The 5 different positions represent min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday). Set the time by modifying the values of different positions. The system uses `UTC standard time` by default, please convert it according to the time zone of your country.
+In the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file, use `cron` to set the timing compilation. The 5 different positions represent min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday). Set the time by modifying the values of different positions. The system uses `UTC standard time` by default, please convert it according to the time zone of your country.
 
 ```yaml
 schedule:
@@ -214,7 +214,7 @@ schedule:
 
 ## 6. Save the firmware
 
-The settings saved by the firmware are also controlled in the [.github/workflows/build-openwrt-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml) file. We will automatically upload the compiled firmware to the `Actions` and `Releases` officially provided by `GitHub` through scripts, or upload it to a `third party` (such as WeTransfer).
+The settings saved by the firmware are also controlled in the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file. We will automatically upload the compiled firmware to the `Actions` and `Releases` officially provided by `GitHub` through scripts, or upload it to a `third party` (such as WeTransfer).
 
 Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is permanent`, and third parties such as WeTransfer are 7 days. First of all, we thank these service providers for their free support, but we also ask you to use it sparingly. We advocate the reasonable use of free services.
 
@@ -284,7 +284,7 @@ Enter from the GitHub `Releases` section at the bottom right corner of the `repo
 
 ### 7.3 Download from third parties
 
-In the [.github/workflows/build-openwrt-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml) file, upload to the third party is closed by default. If you need, change `false` to `true`, and upload to the third party when the compilation is completed next time. The third-party URL can be seen `in the log` of the firmware compilation process, and can also be output to the compilation information.
+In the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file, upload to the third party is closed by default. If you need, change `false` to `true`, and upload to the third party when the compilation is completed next time. The third-party URL can be seen `in the log` of the firmware compilation process, and can also be output to the compilation information.
 
 ```yaml
 UPLOAD_COWTRANSFER: false
@@ -374,7 +374,7 @@ After you complete the `OpenWrt personalized configuration` locally, `save and e
 
 The official GitHub gave a detailed explanation. Regarding the use of `GitHub Actions`, you can start to get to know it from here: [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart)
 
-Let’s make a few brief introductions based on the files being used in the repository: [build-openwrt-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml)
+Let’s make a few brief introductions based on the files being used in the repository: [build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml)
 
 #### 10.2.1 Replacing source code repositories and branches
 
@@ -434,7 +434,7 @@ When you look at the `feeds.conf.default` file in the `source code repository`, 
 
 ### 10.5 Custom software default configuration information
 
-When we use `OpenWrt`, we have already configured many software. Most of the `configuration information` of these software is stored in your OpenWrt's `/etc/config/` and other related directories. Copy the storage files of these configuration information to In the `files` folder under the root directory of the `repository in GitHub`, please `keep the directory structure and files the same`. During OpenWrt compilation, the storage files of these configuration information will be compiled into your firmware. The specific method is in the [.github/workflows/build-openwrt-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-lede.yml) file. Let's take a look at this code together:
+When we use `OpenWrt`, we have already configured many software. Most of the `configuration information` of these software is stored in your OpenWrt's `/etc/config/` and other related directories. Copy the storage files of these configuration information to In the `files` folder under the root directory of the `repository in GitHub`, please `keep the directory structure and files the same`. During OpenWrt compilation, the storage files of these configuration information will be compiled into your firmware. The specific method is in the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file. Let's take a look at this code together:
 
 ```yaml
 - name: Load custom configuration

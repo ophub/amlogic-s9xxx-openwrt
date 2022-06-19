@@ -61,7 +61,7 @@ download_imagebuilder() {
     mv -f openwrt-imagebuilder-* openwrt
 
     sync && sleep 3
-    echo -e "${INFO} Current directory status: $(ls . -l 2>/dev/null)"
+    echo -e "${INFO} [ ${make_path} ] directory status: $(ls . -l 2>/dev/null)"
 }
 
 # Add custom packages
@@ -124,15 +124,13 @@ adjust_settings() {
         sed -i "s|CONFIG_TARGET_ROOTFS_EXT4FS=.*|# CONFIG_TARGET_ROOTFS_EXT4FS is not set|g" .config
         sed -i "s|CONFIG_TARGET_ROOTFS_SQUASHFS=.*|# CONFIG_TARGET_ROOTFS_SQUASHFS is not set|g" .config
         sed -i "s|CONFIG_TARGET_IMAGES_GZIP=.*|# CONFIG_TARGET_IMAGES_GZIP is not set|g" .config
-        # Themes
-        sed -i "s|CONFIG_PACKAGE_luci-theme-bootstrap=.*|# CONFIG_PACKAGE_luci-theme-bootstrap is not set|g" .config
     }
 
     # For other files
     # ......
 
     sync && sleep 3
-    echo -e "${INFO} [ Root ] directory status: $(ls -al 2>/dev/null)"
+    echo -e "${INFO} [ openwrt ] directory status: $(ls -al 2>/dev/null)"
 }
 
 # Rebuild OpenWrt firmware
@@ -160,13 +158,13 @@ rebuild_firmware() {
         \
         luci-theme-material \
         \
-        luci-app-opkg luci-app-ddns luci-app-dockerman luci-app-firewall luci-app-transmission \
+        luci-app-opkg luci-app-dockerman luci-app-firewall luci-app-transmission \
         luci-app-ttyd luci-app-samba4 luci-app-upnp luci-app-amlogic \
         \
-        luci-i18n-opkg-en luci-i18n-ddns-en luci-i18n-dockerman-en luci-i18n-firewall-en luci-i18n-transmission-en \
+        luci-i18n-opkg-en luci-i18n-dockerman-en luci-i18n-firewall-en luci-i18n-transmission-en \
         luci-i18n-ttyd-en luci-i18n-samba4-en luci-i18n-upnp-en \
         \
-        luci-i18n-opkg-zh-cn luci-i18n-ddns-zh-cn luci-i18n-dockerman-zh-cn luci-i18n-firewall-zh-cn luci-i18n-transmission-zh-cn \
+        luci-i18n-opkg-zh-cn luci-i18n-dockerman-zh-cn luci-i18n-firewall-zh-cn luci-i18n-transmission-zh-cn \
         luci-i18n-ttyd-zh-cn luci-i18n-samba4-zh-cn luci-i18n-upnp-zh-cn luci-i18n-amlogic-zh-cn \
         "
 
@@ -174,7 +172,7 @@ rebuild_firmware() {
     make image PROFILE="Default" PACKAGES="${my_packages}" FILES="files"
 
     sync && sleep 3
-    echo -e "${INFO} The rebuild result: $(ls bin/targets/*/* -l 2>/dev/null)"
+    echo -e "${INFO} [ openwrt/bin/targets/armvirt/64 ] directory status: $(ls bin/targets/*/* -l 2>/dev/null)"
     echo -e "${SUCCESS} The rebuild is successful, the current path: [ ${PWD} ]"
 }
 
@@ -192,3 +190,8 @@ custom_packages
 custom_files
 adjust_settings
 rebuild_firmware
+#
+# Show server end information
+echo -e "Server space usage after compilation: \n$(df -hT ${make_path}) \n"
+# All process completed
+wait

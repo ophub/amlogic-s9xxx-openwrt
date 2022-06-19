@@ -18,7 +18,6 @@ on:
         options:
           - lede
           - official
-          - imagebuilder
       openwrt_soc:
         description: "Select Amlogic SoC"
         required: false

@@ -531,20 +531,19 @@ EOF
         done
     )
 
+    # Modify the cpu mode to schedutil
+    if [[ -f "etc/config/cpufreq" ]]; then
+        sed -i "s/ondemand/schedutil/" etc/config/cpufreq
+    fi
+
     # Add cpustat
-    DISTRIB_SOURCECODE="$(cat etc/openwrt_release | grep "DISTRIB_SOURCECODE=" | awk -F "'" '{print $2}')"
     cpustat_file="${configfiles_path}/patches/cpustat"
-    if [[ -d "${cpustat_file}" && -x "bin/bash" && "${DISTRIB_SOURCECODE}" == "lede" ]]; then
+    if [[ -d "${cpustat_file}" && -x "bin/bash" ]]; then
         cp -f ${cpustat_file}/cpustat usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
         cp -f ${cpustat_file}/getcpu bin/getcpu && chmod +x bin/getcpu >/dev/null 2>&1
         cp -f ${cpustat_file}/30-sysinfo.sh etc/profile.d/30-sysinfo.sh >/dev/null 2>&1
         sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd >/dev/null 2>&1
         sed -i "s/\/bin\/ash/\/bin\/bash/" usr/libexec/login.sh >/dev/null 2>&1
-    fi
-
-    # Modify the cpu mode to schedutil
-    if [[ -f "etc/config/cpufreq" ]]; then
-        sed -i "s/ondemand/schedutil/" etc/config/cpufreq
     fi
 
     # Add balethirq

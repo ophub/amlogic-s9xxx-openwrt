@@ -22,7 +22,6 @@ on:
           - 21.02.3
           - 19.07.10
           - 18.06.9
-          - 17.01.7
       openwrt_soc:
         description: "Select Amlogic SoC"
         required: false

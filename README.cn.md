@@ -37,7 +37,7 @@
 
 从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `手动上传更新 / 在线下载更新`
 
-如果选择 `手动上传更新` [OpenWrt 固件](https://github.com/ophub/amlogic-s9xxx-openwrt/releases)，可以将编译好 OpenWrt 固件压缩包，如 openwrt_s9xxx_k5.15.25_xxx.img.gz 进行上传（推荐上传压缩包，系统会自动解压。如果上传解压缩后的 xxx.img 格式的文件，可能会因为文件太大而上传失败），上传完成后界面将显示 `更新固件` 的操作按钮，点击即可更新。
+如果选择 `手动上传更新` [OpenWrt 固件](https://github.com/ophub/amlogic-s9xxx-openwrt/releases)，可以将编译好 OpenWrt 固件压缩包，如 openwrt_s9xxx_k5.15.50_xxx.img.gz 进行上传（推荐上传压缩包，系统会自动解压。如果上传解压缩后的 xxx.img 格式的文件，可能会因为文件太大而上传失败），上传完成后界面将显示 `更新固件` 的操作按钮，点击即可更新。
 
 如果选择 `手动上传更新` [OpenWrt 内核](https://github.com/ophub/kernel/tree/main/pub/stable)，可以将 `boot-xxx.tar.gz`, `dtb-amlogic-xxx.tar.gz`, `modules-xxx.tar.gz` 这 3 个内核文件上传（其他内核文件不需要，如果同时上传也不影响更新，系统可以准确识别需要的内核文件），上传完成后界面将显示 `更新内核` 的操作按钮，点击即可更新。
 
@@ -104,7 +104,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 ```
 2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。
-4. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3 -k 5.10.100`。打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
+4. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./make -d -b s905x3 -k 5.10.125`。打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
 
 - ### 本地化打包参数说明
 
@@ -112,20 +112,20 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | ---- | ---- | ---- |
 | -d | Defaults | 使用默认配置 |
 | -b | BuildSoC | 指定电视盒子型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` 。使用 `all` 表示全部型号。可以指定的型号有: `a311d`, `s905x3`, `s905x2`, `s905l3a`, `s905x`, `s905w`, `s905d`, `s905d-ki`, `s905`, `s922x`, `s922x-n2`, `s912`, `s912-m8s` 。说明：`s922x-reva` 是 `s922x-gtking-pro-rev_a`，`s922x-n2` 是 `s922x-odroid-n2` ，`s912-m8s` 是 `s912-mecool-m8s-pro-l` ，`s905d-ki` 是 `s912-mecool-ki-pro`，`s905x2-km3` 是 `s905x2-mecool-km3` |
-| -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.10.100` . 多个内核使用 `_` 进行连接，如 `-k 5.15.25_5.10.100` |
-| -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.10.100 的同系列是否有更新的版本，如有 5.10.100 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
+| -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.10.125` . 多个内核使用 `_` 进行连接，如 `-k 5.10.125_5.15.50` |
+| -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.10.125 的同系列是否有更新的版本，如有 5.10.125 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -v | VersionBranch | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，如 `-v stable` 。指定的名称须与分支目录名称相同。默认使用 `stable` 分支版本。 |
 | -s | Size | 对固件的 ROOTFS 分区大小进行设置（MiB），默认大小为 960 MiB, 固件大小必须大于 512 MiB. 例如： `-s 960` |
 
 - `sudo ./make -d` : 使用默认配置，使用内核库中的最新内核包，对全部型号的电视盒子进行打包。
-- `sudo ./make -d -b s905x3 -k 5.10.100` : 推荐使用. 使用默认配置进行相关内核打包。
-- `sudo ./make -d -b s905x3_s905d -k 5.15.25_5.10.100` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
-- `sudo ./make -d -b s905x3 -k 5.10.100 -s 960` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为 960 MiB。
-- `sudo ./make -d -b s905x3 -v dev -k 5.7.19` : 使用默认配置，指定型号，[指定版本分支](https://github.com/ophub/kernel/tree/main/pub) 和内核进行打包。
+- `sudo ./make -d -b s905x3 -k 5.10.125` : 推荐使用. 使用默认配置进行相关内核打包。
+- `sudo ./make -d -b s905x3_s905d -k 5.10.125_5.15.50` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
+- `sudo ./make -d -b s905x3 -k 5.10.125 -s 960` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为 960 MiB。
+- `sudo ./make -d -b s905x3 -v dev -k 5.10.125` : 使用默认配置，指定型号，[指定版本分支](https://github.com/ophub/kernel/tree/main/pub) 和内核进行打包。
 - `sudo ./make -d -b s905x3_s905d`  使用默认配置，对多个型号的电视盒子进行全部内核打包, 使用 `_` 进行多型号连接。
-- `sudo ./make -d -k 5.15.25_5.10.100` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。
-- `sudo ./make -d -k 5.15.25_5.10.100 -a true` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
-- `sudo ./make -d -s 960 -k 5.10.100` : 使用默认配置，设置固件大小为 960 MiB, 并指定内核为 5.10.100 ，对全部型号电视盒子进行打包。
+- `sudo ./make -d -k 5.10.125_5.15.50` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。
+- `sudo ./make -d -k 5.10.125_5.15.50 -a true` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
+- `sudo ./make -d -s 960 -k 5.10.125` : 使用默认配置，设置固件大小为 960 MiB, 并指定内核为 5.10.125 ，对全部型号电视盒子进行打包。
 
 ## 使用 GitHub Actions 进行编译
 
@@ -141,7 +141,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     openwrt_soc: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    openwrt_kernel: 5.15.25_5.10.100
+    openwrt_kernel: 5.10.125_5.15.50
 ```
 - ### GitHub Actions 输入参数说明
 
@@ -151,7 +151,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 |-------------------|-------------------|-------------------------------------------|
 | openwrt_path      | no                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_soc       | s905d_s905x3      | 设置打包盒子的 `SOC` ，功能参考 `-b` |
-| openwrt_kernel    | 5.15.25_5.10.100   | 设置内核版本，功能参考 `-k` |
+| openwrt_kernel    | 5.10.125_5.15.50   | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | version_branch    | stable            | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，功能参考 `-v` |
 | openwrt_size      | 960               | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
@@ -196,7 +196,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel
-    kernel_version: 5.15.25_5.10.100
+    kernel_version: 5.10.125_5.15.50
     kernel_auto: true
     kernel_sign: -ophub
 ```

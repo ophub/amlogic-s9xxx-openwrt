@@ -69,7 +69,7 @@ on:
         default: "960"
 
 env:
-  TZ: Asia/Shanghai
+  TZ: America/New_York
   IMAGEBUILDER_SH: router-config/openwrt-imagebuilder/imagebuilder.sh
 
 jobs:

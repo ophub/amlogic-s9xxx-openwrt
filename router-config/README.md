@@ -186,7 +186,9 @@ Through `diy-part1.sh` and `diy-part2.sh` two scripts, we add operation commands
 The official website of OpenWrt provides the prepared openwrt-imagebuilder-*-armvirt-64.Linux-x86_64.tar.xz file (download address: [https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)), you can use the official Image Builder to add packages and plug-ins to this file, usually Create an openwrt-rootfs.tar.gz file in just a few minutes. For the production method, please refer to the official document: [Using the Image Builder](https://openwrt.org/docs/guide-user/additional-software/imagebuilder)
 
 This repository provides a one-click production service. You only need to pass the branch parameters into the [imagebuilder script](openwrt-imagebuilder/imagebuilder.sh) to complete the production.
-- Localized make command: `./imagebuilder.sh <branch>`, for example: `./imagebuilder.sh 21.02.3`
+
+- Localized make command: You can run the `sudo ./router-config/openwrt-imagebuilder/imagebuilder.sh 21.02.3` command in the `~/amlogic-s9xxx-openwrt` root directory to generate it. The parameter `21.02.3` is the version number of `releases` currently available for [download](https://downloads.openwrt.org/releases). The generated files are in the `openwrt/bin/targets/armvirt/64` directory.
+
 - Use github.com's `Actions` to make: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
 
 ## 5. Compile the firmware

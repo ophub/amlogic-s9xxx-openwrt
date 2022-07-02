@@ -182,7 +182,9 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 OpenWrt 官方网站提供了制作好的 openwrt-imagebuilder-*-armvirt-64.Linux-x86_64.tar.xz 文件（下载地址：[https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)），可以使用官方的 Image Builder 在此文件中添加软件包和插件，通常只用几分钟便可制作出一个 openwrt-rootfs.tar.gz 文件。制作方法可以参照官方文档：[使用 Image Builder](https://openwrt.org/zh/docs/guide-user/additional-software/imagebuilder)
 
 本仓库提供了一键制作服务，你只需要把分支参数传入 [imagebuilder 脚本](openwrt-imagebuilder/imagebuilder.sh) 即可完成制作。
-- 本地化制作命令：`./imagebuilder.sh <branch>`，例如：`./imagebuilder.sh 21.02.3`
+
+- 本地化制作命令：可以在 `~/amlogic-s9xxx-openwrt` 根目录下运行 `sudo ./router-config/openwrt-imagebuilder/imagebuilder.sh 21.02.3` 指令即可生成。其中的参数 `21.02.3` 是当前可以[下载](https://downloads.openwrt.org/releases)使用的 `releases` 版本号。生成的文件在 `openwrt/bin/targets/armvirt/64` 目录下。
+
 - 使用 github.com 的 `Actions` 中进行制作：[Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
 
 ## 5. 编译固件

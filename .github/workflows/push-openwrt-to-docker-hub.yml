@@ -1,0 +1,86 @@
+#=====================================================================================
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: Push OpenWrt to Docker Hub
+# Instructions: https://github.com/docker/build-push-action
+# Push to: https://hub.docker.com/
+#=====================================================================================
+
+name: Push OpenWrt to Docker Hub
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      openwrt_file:
+        description: "Select the OpenWrt rootfs file"
+        required: false
+        default: "lede"
+        type: choice
+        options:
+          - lede
+          - official
+      docker_img:
+        description: "Set the docker image"
+        required: false
+        default: "ophub/openwrt-aarch64:latest"
+
+env:
+  DOCKER_OUTPATH: out
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download OpenWrt rootfs file
+        id: down
+        if: (!cancelled())
+        run: |
+          # Get OpenWrt file
+          openwrt_file="${{ github.event.inputs.openwrt_file }}"
+          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${openwrt_file}.*/.*rootfs.tar.gz" | head -n 1)"
+          [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found." && exit 1
+          rm -rf ${{ env.DOCKER_OUTPATH }} 2>/dev/null && mkdir -p ${{ env.DOCKER_OUTPATH }}
+          wget -q "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}" -O ${{ env.DOCKER_OUTPATH }}/openwrt-armvirt-64-default-rootfs.tar.gz
+
+          # Generate Dockerfile
+          docker_envfile="${{ env.DOCKER_OUTPATH }}/Dockerfile"
+          echo 'FROM scratch' >${docker_envfile}
+          echo 'ADD openwrt-armvirt-64-default-rootfs.tar.gz /' >>${docker_envfile}
+          echo 'EXPOSE 22 53 80 443 7681' >>${docker_envfile}
+          echo 'ENTRYPOINT ["/sbin/init"]' >>${docker_envfile}
+
+          sync && echo -e "Current ${{ env.DOCKER_OUTPATH }} directory status: \n$(ls ${{ env.DOCKER_OUTPATH }} -l)"
+          echo "::set-output name=status::success"
+
+      - name: Set up QEMU
+        id: qemu
+        if: (!cancelled())
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        if: (!cancelled())
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        id: login
+        if: (!cancelled())
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Push to Docker Hub
+        id: push
+        if: (!cancelled())
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          platforms: linux/arm64
+          context: ${{ env.DOCKER_OUTPATH }}
+          tags: "${{ github.event.inputs.docker_img }}"

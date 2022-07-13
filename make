@@ -80,15 +80,22 @@ SKIP_MB="68"
 BOOT_MB="256"
 ROOT_MB="960"
 #
+# Set font color
+STEPS="[\033[95m STEPS \033[0m]"
+INFO="[\033[94m INFO \033[0m]"
+SUCCESS="[\033[92m SUCCESS \033[0m]"
+WARNING="[\033[93m WARNING \033[0m]"
+ERROR="[\033[91m ERROR \033[0m]"
+#
 #============================================================================
 
 error_msg() {
-    echo -e "[\033[1;91m Error \033[0m] ${1}"
+    echo -e "${ERROR} ${1}"
     exit 1
 }
 
 process_msg() {
-    echo -e " [\033[1;92m ${soc} \033[0m - \033[1;92m ${kernel} \033[0m] ${1}"
+    echo -e " [\033[1;92m ${soc} - ${kernel} \033[0m] ${1}"
 }
 
 get_textoffset() {
@@ -175,7 +182,7 @@ find_openwrt() {
 
     openwrt_file_name="$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')"
     if [[ -n "${openwrt_file_name}" ]]; then
-        echo -e "OpenWrt make file: [ ${openwrt_file_name} ]"
+        echo -e "${INFO} OpenWrt make file: [ ${openwrt_file_name} ]"
     else
         error_msg "There is no [ ${openwrt_rootfs_file} ] file in the [ ${openwrt_path} ] directory."
     fi
@@ -183,7 +190,7 @@ find_openwrt() {
 
 download_depends() {
     cd ${make_path}
-    echo -e "Download all dependent files..."
+    echo -e "${STEPS} Download all dependent files..."
 
     # Convert depends library address to svn format
     if [[ "${depends_repo}" == http* && -n "$(echo ${depends_repo} | grep "tree/main")" ]]; then
@@ -244,7 +251,7 @@ download_kernel() {
     # Query the latest kernel in a loop
     i=1
     for KERNEL_VAR in ${build_kernel[*]}; do
-        echo -e "(${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
+        echo -e "${INFO} (${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
         # Identify the kernel mainline
         MAIN_LINE="$(echo ${KERNEL_VAR} | awk -F '.' '{print $1"."$2}')"
         # Check the version on the server (e.g LATEST_VERSION="125")
@@ -254,7 +261,7 @@ download_kernel() {
         else
             tmp_arr_kernels[${i}]="${KERNEL_VAR}"
         fi
-        echo -e "(${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel. \n"
+        echo -e "${INFO} (${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel. \n"
 
         let i++
     done
@@ -267,10 +274,10 @@ download_kernel() {
     i=1
     for KERNEL_VAR in ${build_kernel[*]}; do
         if [[ ! -d "${kernel_path}/${KERNEL_VAR}" ]]; then
-            echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_repo/trunk/tree\/main}/${KERNEL_VAR} ]"
+            echo -e "${INFO} (${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_repo/trunk/tree\/main}/${KERNEL_VAR} ]"
             svn export ${kernel_repo}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} --force
         else
-            echo -e "(${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
+            echo -e "${INFO} (${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
         fi
 
         let i++
@@ -666,11 +673,11 @@ make_image() {
     if [[ -n "${MAINLINE_UBOOT}" && -f "${root}/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
         dd if="${root}/lib/u-boot/${MAINLINE_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
         dd if="${root}/lib/u-boot/${MAINLINE_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        #echo -e "${soc}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
+        #echo -e "${INFO} ${soc}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
     elif [[ -n "${ANDROID_UBOOT}" && -f "${root}/lib/u-boot/${ANDROID_UBOOT}" ]]; then
         dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
         dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        #echo -e "${soc}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
+        #echo -e "${INFO} ${soc}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
     sync
 }
@@ -767,13 +774,13 @@ loop_make() {
 }
 
 # Show welcome message
-echo -e "Welcome to tools for making Amlogic s9xxx OpenWrt! \n"
+echo -e "${INFO} Welcome to tools for making Amlogic s9xxx OpenWrt! \n"
 [[ "$(id -u)" == "0" ]] || error_msg "please run this script as root: [ sudo ./${0} ]"
 # Show server start information
-echo -e "Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
-echo -e "Server memory usage: \n$(free -h) \n"
-echo -e "Server space usage before starting to compile: \n$(df -hT ${make_path}) \n"
-echo -e "Setting parameters: [ ${@} ] \n"
+echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+echo -e "${INFO} Server memory usage: \n$(free -h) \n"
+echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${make_path}) \n"
+echo -e "${INFO} Setting parameters: [ ${@} ] \n"
 #
 # Initialize variables and download the kernel
 init_var "${@}"
@@ -783,12 +790,12 @@ find_openwrt
 download_depends
 # Download the latest kernel
 [[ "${auto_kernel}" == "true" ]] && download_kernel
-echo -e "OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
-echo -e "Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"
+echo -e "${INFO} OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
+echo -e "${INFO} Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"
 # Loop to make OpenWrt firmware
 loop_make
 #
 # Show server end information
-echo -e "Server space usage after compilation: \n$(df -hT ${make_path}) \n"
+echo -e "${INFO} Server space usage after compilation: \n$(df -hT ${make_path}) \n"
 # All process completed
 wait

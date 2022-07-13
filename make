@@ -699,7 +699,7 @@ copy_files() {
     umount -f ${rootfs} 2>/dev/null
     losetup -d ${loop_new} 2>/dev/null
 
-    cd ${out_path} && gzip *.img
+    cd ${out_path} && pigz -9 *.img
     sync
 }
 

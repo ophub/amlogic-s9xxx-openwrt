@@ -528,6 +528,10 @@ EOF
     echo "panfrost" >etc/modules.d/panfrost
     # PWM Driver
     echo "pwm_meson" >etc/modules.d/pwm_meson
+    # Ath10k Driver
+    echo "ath10k_core" >etc/modules.d/ath10k_core
+    echo "ath10k_sdio" >etc/modules.d/ath10k_sdio
+    echo "ath10k_usb" >etc/modules.d/ath10k_usb
 
     # Relink the kmod program
     [[ -x "sbin/kmod" ]] && (

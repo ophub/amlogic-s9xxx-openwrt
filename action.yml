@@ -1,34 +1,34 @@
-name: "Use ophub script to package Armvirt as OpenWrt"
-author: "ophub"
+name: "Use AKBARDIRGANTARA script to package Armvirt as OpenWrt"
+author: "AKBARDIRGANTARA"
 description: "Package Armvirt as OpenWrt. Support Amlogic s9xxx tv box."
 inputs:
   mode:
     description: "Choose script."
-    required: false
+    required: true
     default: "ophub"
   openwrt_path:
     description: "Choose armvirt64 file path."
-    required: false
+    required: true
     default: "openwrt/bin/targets/*/*/*rootfs.tar.gz"
   openwrt_soc:
     description: "Choose Amlogic SoC."
-    required: false
+    required: true
     default: "s905d_s905x3"
   openwrt_kernel:
     description: "Choose kernel version."
-    required: false
-    default: "5.10.125_5.15.50"
+    required: true
+    default: "5.4.200"
   auto_kernel:
     description: "Auto use the latest kernel."
-    required: false
+    required: true
     default: "true"
   version_branch:
     description: "Choose version branch."
-    required: false
+    required: true
     default: "stable"
   openwrt_size:
     description: "Set the rootfs size(Unit: MiB)."
-    required: false
+    required: true
     default: "960"
 
 runs:
@@ -37,7 +37,7 @@ runs:
     - shell: bash
       run: |
         cd ${GITHUB_ACTION_PATH}
-        echo -e "ophub package actions path: ${PWD}"
+        echo -e "AKBARDIRGANTARA package actions path: ${PWD}"
 
         openwrt_filename="${{ inputs.openwrt_path }}"
         openwrt_savepath="openwrt-armvirt"

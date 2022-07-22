@@ -8,13 +8,13 @@
 
 # ------------------------------- Main source started -------------------------------
 #
-# Modify default theme（FROM uci-theme-bootstrap CHANGE TO luci-theme-material）
+Modify default theme（FROM uci-theme-bootstrap CHANGE TO luci-theme-material）
 sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/luci/Makefile
 
-# Add autocore support for armvirt
+Add autocore support for armvirt
 sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/autocore/Makefile
 
-# Set etc/openwrt_release
+Set etc/openwrt_release
 sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package/lean/default-settings/files/zzz-default-settings
 echo "DISTRIB_SOURCECODE='lede'" >>package/base-files/files/etc/openwrt_release
 
@@ -38,16 +38,16 @@ Modify default root's password（FROM 'password'[$1$V4UetPzk$CYXluq4wUazHjmCDBCq
 
 # ------------------------------- Other started -------------------------------
 #
-# Add luci-app-amlogic
+Add luci-app-amlogic
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 
-# Fix runc version error
-# rm -rf ./feeds/packages/utils/runc/Makefile
-# svn export https://github.com/openwrt/packages/trunk/utils/runc/Makefile ./feeds/packages/utils/runc/Makefile
+Fix runc version error
+rm -rf ./feeds/packages/utils/runc/Makefile
+svn export https://github.com/openwrt/packages/trunk/utils/runc/Makefile ./feeds/packages/utils/runc/Makefile
 
 # coolsnowwolf default software package replaced with Lienol related software package
-# rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}
-# svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils
+rm -rf feeds/packages/utils/{containerd,libnetwork,runc,tini}
+svn co https://github.com/Lienol/openwrt-packages/trunk/utils/{containerd,libnetwork,runc,tini} feeds/packages/utils
 
 # Add third-party software packages (The entire repository)
 # git clone https://github.com/libremesh/lime-packages.git package/lime-packages

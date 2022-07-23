@@ -41,16 +41,20 @@ runs:
 
         openwrt_filename="${{ inputs.openwrt_path }}"
         openwrt_savepath="openwrt-armvirt"
+        openwrt_outpath="out"
         echo -e "Get openwrt file input parameters: [ ${openwrt_filename} ]"
-        [ -z "${openwrt_filename}" ] && echo -e "The [ openwrt_path ] variable must be specified." && exit 1
-        [ -d "${openwrt_savepath}" ] || mkdir -p ${openwrt_savepath}
+        [[ -z "${openwrt_filename}" ]] && echo -e "The [ openwrt_path ] variable must be specified." && exit 1
+        [[ -d "${openwrt_savepath}" ]] || mkdir -p ${openwrt_savepath}
+        [[ -d "${openwrt_outpath}" ]] || mkdir -p ${openwrt_outpath}
 
         if [[ "${openwrt_filename}" == http* ]]; then
             echo -e "Use wget to download file: [ ${openwrt_filename} ]"
             wget ${openwrt_filename} -q -P ${openwrt_savepath} 2>/dev/null
         else
             echo -e "Copy files: [ ${openwrt_filename} ]"
-            cp -f ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
+            cp -vf ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
+            config_file="${GITHUB_WORKSPACE}/${openwrt_filename%%/*}/.config"
+            [[ -s "${config_file}" ]] && cp -vf ${config_file} ${openwrt_outpath} 2>/dev/null
         fi
         sync
         echo -e "About the ${openwrt_savepath} directory: \n$(ls -l ${openwrt_savepath} 2>/dev/null)"
@@ -58,23 +62,23 @@ runs:
         cd ${GITHUB_ACTION_PATH}
         echo -e "Start to make openwrt..."
         make_command=" -d"
-        [ -n "${{ inputs.openwrt_soc }}" ] && make_command="${make_command} -b ${{ inputs.openwrt_soc }}"
-        [ -n "${{ inputs.openwrt_kernel }}" ] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
-        [ -n "${{ inputs.auto_kernel }}" ] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
-        [ -n "${{ inputs.version_branch }}" ] && make_command="${make_command} -v ${{ inputs.version_branch }}"
-        [ -n "${{ inputs.openwrt_size }}" ] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
+        [[ -n "${{ inputs.openwrt_soc }}" ]] && make_command="${make_command} -b ${{ inputs.openwrt_soc }}"
+        [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
+        [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
+        [[ -n "${{ inputs.version_branch }}" ]] && make_command="${make_command} -v ${{ inputs.version_branch }}"
+        [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
         sudo chmod +x make
         sudo ./make ${make_command}
 
         cd ${GITHUB_ACTION_PATH}
         echo -e "Output environment variables."
-        echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
+        echo "PACKAGED_OUTPUTPATH=${PWD}/${openwrt_outpath}" >> $GITHUB_ENV
         echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
         echo "PACKAGED_STATUS=success" >> $GITHUB_ENV
-        echo -e "PACKAGED_OUTPUTPATH: ${PWD}/out"
+        echo -e "PACKAGED_OUTPUTPATH: ${PWD}/${openwrt_outpath}"
         echo -e "PACKAGED_OUTPUTDATE: $(date +"%m.%d.%H%M")"
         echo -e "PACKAGED_STATUS: success"
-        echo -e "PACKAGED_OUTPUTPATH files list: \n$(ls -l ${PWD}/out 2>/dev/null)"
+        echo -e "PACKAGED_OUTPUTPATH files list: \n$(ls -l ${PWD}/${openwrt_outpath} 2>/dev/null)"
 
 branding:
   icon: "terminal"

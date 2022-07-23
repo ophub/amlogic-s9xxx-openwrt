@@ -51,10 +51,15 @@ runs:
             echo -e "Use wget to download file: [ ${openwrt_filename} ]"
             wget ${openwrt_filename} -q -P ${openwrt_savepath} 2>/dev/null
         else
-            echo -e "Copy files: [ ${openwrt_filename} ]"
+            echo -e "Copy OpenWrt rootfs file: [ ${openwrt_filename} ]"
             cp -vf ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
+
+            # If the .config file exists, save it to the out directory
             config_file="${GITHUB_WORKSPACE}/${openwrt_filename%%/*}/.config"
-            [[ -s "${config_file}" ]] && cp -vf ${config_file} ${openwrt_outpath} 2>/dev/null
+            [[ -s "${config_file}" ]] && {
+                echo -e "Copy OpenWrt .config file: [ ${config_file} ]"
+                cp -vf ${config_file} ${openwrt_outpath}/config 2>/dev/null
+            }
         fi
         sync
         echo -e "About the ${openwrt_savepath} directory: \n$(ls -l ${openwrt_savepath} 2>/dev/null)"

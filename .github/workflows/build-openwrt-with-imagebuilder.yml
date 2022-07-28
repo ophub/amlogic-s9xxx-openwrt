@@ -17,6 +17,7 @@ on:
         default: "21.02.3"
         type: choice
         options:
+          - 22.03.0-rc5
           - 22.03.0-rc4
           - 22.03.0-rc1
           - 21.02.3

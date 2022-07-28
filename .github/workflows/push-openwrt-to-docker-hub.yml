@@ -11,8 +11,8 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      openwrt_file:
-        description: "Select the OpenWrt rootfs file"
+      branch:
+        description: "Select the source branch"
         required: false
         default: "lede"
         type: choice
@@ -41,19 +41,18 @@ jobs:
         if: (!cancelled())
         run: |
           # Get OpenWrt file
-          openwrt_file="${{ github.event.inputs.openwrt_file }}"
-          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${openwrt_file}.*/.*rootfs.tar.gz" | head -n 1)"
-          [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found." && exit 1
+          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_.*${{ github.event.inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
+          [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
           rm -rf ${{ env.DOCKER_OUTPATH }} 2>/dev/null && mkdir -p ${{ env.DOCKER_OUTPATH }}
-          wget -q "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}" -O ${{ env.DOCKER_OUTPATH }}/openwrt-armvirt-64-default-rootfs.tar.gz
-
+          wget -q "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}" -O "${{ env.DOCKER_OUTPATH }}/openwrt-armvirt-64-default-rootfs.tar.gz"
+          #
           # Generate Dockerfile
           docker_envfile="${{ env.DOCKER_OUTPATH }}/Dockerfile"
           echo 'FROM scratch' >${docker_envfile}
           echo 'ADD openwrt-armvirt-64-default-rootfs.tar.gz /' >>${docker_envfile}
           echo 'EXPOSE 22 53 80 443 7681' >>${docker_envfile}
           echo 'ENTRYPOINT ["/sbin/init"]' >>${docker_envfile}
-
+          #
           sync && echo -e "Current ${{ env.DOCKER_OUTPATH }} directory status: \n$(ls ${{ env.DOCKER_OUTPATH }} -l)"
           echo "::set-output name=status::success"
 

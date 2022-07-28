@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Select the packaged source branch"
+        description: "Select the source branch"
         required: false
         default: "lede"
         type: choice
@@ -19,7 +19,7 @@ on:
           - lede
           - official
       openwrt_soc:
-        description: "Select Amlogic SoC"
+        description: "Select device SoC"
         required: false
         default: "all"
         type: choice
@@ -85,25 +85,21 @@ jobs:
           sudo -E apt-get -qq install $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
-          sudo timedatectl set-timezone "$TZ"
-          # Input value validation
-          ARR_BRANCH=("official" "lede")
-          if [[ -n "${{ github.event.inputs.branch }}" && -n "$(echo "${ARR_BRANCH[@]}" | grep -w "${{ github.event.inputs.branch }}")" ]]; then
-            RELEASES_BRANCH=${{ github.event.inputs.branch }}
-          else
-            RELEASES_BRANCH=lede
-          fi
-          echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
+          sudo timedatectl set-timezone "${TZ}"
           echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
 
       - name: Download OpenWrt Armvirt firmware
         id: down
         if: (!cancelled())
         run: |
+          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_.*${{ github.event.inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
+          [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
+          #
           armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
-          [ -d "${armvirt_tarfile_path}" ] || mkdir -p ${armvirt_tarfile_path}
-          curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_s9xxx_${{ env.RELEASES_BRANCH }}.*/.*rootfs.tar.gz" | head -n 1 > DOWNLOAD_ARMVIRT
-          [ -s DOWNLOAD_ARMVIRT ] && wget -q -P ${armvirt_tarfile_path} https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
+          [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
+          #
+          wget -q -P "${armvirt_tarfile_path}" "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}"
+          [[ "${?}" -ne "0" ]] && echo "The armvirt file download failed!" && exit 1
           echo "::set-output name=status::success"
 
       - name: Build OpenWrt firmware
@@ -120,7 +116,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success' && !cancelled()
         with:
-          tag: openwrt_s9xxx_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: openwrt_amlogic_s9xxx_${{ github.event.inputs.branch }}_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}

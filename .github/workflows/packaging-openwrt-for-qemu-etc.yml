@@ -1,0 +1,121 @@
+#===============================================================================
+# Description: Packaging OpenWrt for qemu, allwinner, rockchip and amlogic
+# Copyright (C) 2021 https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021 https://github.com/ophub/flippy-openwrt-actions
+#===============================================================================
+
+name: Packaging OpenWrt for qemu, etc.
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Select the source branch"
+        required: false
+        default: "lede"
+        type: choice
+        options:
+          - lede
+          - official
+      openwrt_soc:
+        description: "Select device SoC"
+        required: false
+        default: "qemu_vplus_beikeyun_l1pro"
+        type: choice
+        options:
+          - all
+          - qemu_vplus_beikeyun_l1pro_s922x_s905x3_s905d
+          - qemu_vplus_beikeyun_l1pro
+          - qemu
+          - vplus
+          - beikeyun
+          - l1pro
+          - s922x
+          - s922x-n2
+          - s905x3
+          - s905x2
+          - s912
+          - s905d
+          - s905
+          - diy
+      openwrt_kernel:
+        description: "Select kernel version"
+        required: false
+        default: "5.10.125_5.15.50"
+        type: choice
+        options:
+          - 5.4.200_5.10.125
+          - 5.10.125_5.15.50
+          - 5.15.45_5.18.5
+          - 5.4.200
+          - 5.10.125
+          - 5.15.50
+          - 5.18.5
+      auto_kernel:
+        description: "Auto use the latest kernel"
+        required: false
+        default: true
+        type: boolean
+
+env:
+  TZ: America/New_York
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Initialization environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc 2>/dev/null
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          sudo timedatectl set-timezone "${TZ}"
+
+      - name: Download armvirt file
+        id: download
+        run: |
+          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "openwrt_.*${{ github.event.inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
+          [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
+          #
+          armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
+          [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
+          #
+          wget -q -P "${armvirt_tarfile_path}" "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}"
+          [[ "${?}" -ne "0" ]] && echo "The armvirt file download failed!" && exit 1
+          echo "::set-output name=status::success"
+
+      - name: Packaging OpenWrt
+        uses: ophub/flippy-openwrt-actions@main
+        if: steps.download.outputs.status == 'success' && !cancelled()
+        env:
+          OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
+          PACKAGE_SOC: ${{ github.event.inputs.openwrt_soc }}
+          KERNEL_VERSION_NAME: ${{ github.event.inputs.openwrt_kernel }}
+          KERNEL_AUTO_LATEST: ${{ github.event.inputs.auto_kernel }}
+
+      - name: Upload OpenWrt Firmware to Release
+        uses: ncipollo/release-action@main
+        if: env.PACKAGED_STATUS == 'success' && !cancelled()
+        with:
+          tag: openwrt_qemu_allwinner_rockchip_${{ env.PACKAGED_OUTPUTDATE }}
+          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          allowUpdates: true
+          token: ${{ secrets.GH_TOKEN }}
+          body: |
+            This is OpenWrt firmware for Armvirt 64
+            * Firmware information
+            Default IP: 192.168.1.1
+            Default username: root
+            Default password: password
+            Default WIFI name: OpenWrt
+            Default WIFI password: none

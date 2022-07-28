@@ -90,14 +90,14 @@ jobs:
           sudo -E apt-get -qq install $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
-          sudo timedatectl set-timezone "$TZ"
+          sudo timedatectl set-timezone "${TZ}"
           echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
 
       - name: Build Rootfs with Image Builder
         id: imagebuilder
         if: (!cancelled())
         run: |
-          RELEASES_BRANCH=${{ github.event.inputs.branch }}
+          RELEASES_BRANCH="${{ github.event.inputs.branch }}"
           chmod +x ${IMAGEBUILDER_SH}
           ${IMAGEBUILDER_SH} ${RELEASES_BRANCH}
           echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
@@ -117,7 +117,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success' && !cancelled()
         with:
-          tag: openwrt_s9xxx_imagebuilder_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: openwrt_amlogic_s9xxx_imagebuilder_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}

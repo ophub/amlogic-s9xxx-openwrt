@@ -86,24 +86,24 @@ jobs:
           sudo -E apt-get -qq install $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
-          sudo timedatectl set-timezone "$TZ"
+          sudo timedatectl set-timezone "${TZ}"
           sudo mkdir -p /workdir
-          sudo chown $USER:$GROUPS /workdir
+          sudo chown ${USER}:${GROUPS} /workdir
           echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
 
       - name: Clone source code
         working-directory: /workdir
         run: |
-          df -hT $PWD
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+          df -hT ${PWD}
+          git clone --depth 1 ${REPO_URL} -b ${REPO_BRANCH} openwrt
+          ln -sf /workdir/openwrt ${GITHUB_WORKSPACE}/openwrt
 
       - name: Load custom feeds
         run: |
-          [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF openwrt/feeds.conf.default
-          chmod +x $DIY_P1_SH
+          [[ -e "${FEEDS_CONF}" ]] && cp -f ${FEEDS_CONF} openwrt/feeds.conf.default
+          chmod +x ${DIY_P1_SH}
           cd openwrt
-          $GITHUB_WORKSPACE/$DIY_P1_SH
+          ${GITHUB_WORKSPACE}/${DIY_P1_SH}
 
       - name: Update feeds
         run: cd openwrt && ./scripts/feeds update -a
@@ -113,11 +113,11 @@ jobs:
 
       - name: Load custom configuration
         run: |
-          [ -e files ] && mv files openwrt/files
-          [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE openwrt/.config
-          chmod +x $DIY_P2_SH
+          [[ -d "files" ]] && mv -f files openwrt/files
+          [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
+          chmod +x ${DIY_P2_SH}
           cd openwrt
-          $GITHUB_WORKSPACE/$DIY_P2_SH
+          ${GITHUB_WORKSPACE}/${DIY_P2_SH}
 
       - name: Download package
         id: package
@@ -134,9 +134,6 @@ jobs:
           cd openwrt
           echo -e "$(nproc) thread compile"
           make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
-          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=$(cat DEVICE_NAME)" >> $GITHUB_ENV
-          echo "FILE_DATE=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
           echo "::set-output name=status::success"
 
       - name: Build OpenWrt firmware
@@ -153,7 +150,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success' && !cancelled()
         with:
-          tag: openwrt_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: openwrt_amlogic_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}

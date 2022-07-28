@@ -563,6 +563,13 @@ Subtarget      -> QEMU ARMv8 Virtual Machine (cortex-a53)
 Target Profile -> Default
 Target Images  -> tar.gz
 
+
+Kernel modules -> Wireless Drivers -> kmod-brcmfmac(SDIO)
+                                   -> kmod-brcmutil
+                                   -> kmod-cfg80211
+                                   -> kmod-mac80211
+
+
 Languages -> Perl
              -> perl-http-date
              -> perlbase-getopt
@@ -570,23 +577,19 @@ Languages -> Perl
              -> perlbase-unicode
              -> perlbase-utf8
 
-Utilities -> Disc -> blkid、fdisk、lsblk、parted
-          -> Filesystem -> attr、btrfs-progs(Build with zstd support)、chattr、dosfstools、
-                           e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
-          -> Compression -> bsdtar、pigz
-          -> Shells -> bash
-          -> gawk、getopt、losetup、pv、tar、uuidgen、coremark
-             coreutils
-             -> coreutils-base64、coreutils-nohup
-
-Kernel modules -> Wireless Drivers -> kmod-brcmfmac(SDIO)
-                                   -> kmod-brcmutil
-                                   -> kmod-cfg80211
-                                   -> kmod-mac80211
 
 Network -> WirelessAPD -> hostapd-common
                        -> wpa-cli
                        -> wpad-basic
         -> iw
+
+
+Utilities -> Compression -> bsdtar、pigz
+          -> Disc -> blkid、fdisk、lsblk、parted
+          -> Filesystem -> attr、btrfs-progs(Build with zstd support)、chattr、dosfstools、
+                           e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
+          -> Shells -> bash
+          -> acpid、coremark、coreutils(-> coreutils-base64、coreutils-nohup)、gawk、getopt、
+             losetup、pv、tar、uuidgen
 ```
 

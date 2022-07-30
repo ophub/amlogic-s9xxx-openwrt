@@ -235,14 +235,14 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
 ```yaml
 - name: Upload OpenWrt Firmware to Release
   uses: ncipollo/release-action@main
-  if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+  if: env.PACKAGED_STATUS == 'success' && !cancelled()
   with:
-    tag: openwrt_s9xxx_${{ env.FILE_DATE }}
-    artifacts: ${{ env.FILEPATH }}/*
+    tag: openwrt_amlogic_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
+    artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
     allowUpdates: true
     token: ${{ secrets.GH_TOKEN }}
     body: |
-      This is OpenWrt firmware for Amlogic s9xxx TV Boxes
+      This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information
       Default IP: 192.168.1.1
       Default username: root
@@ -380,12 +380,11 @@ Let’s make a few brief introductions based on the files being used in the repo
 
 #### 10.2.1 Replacing source code repositories and branches
 
-
 ```yaml
-#On Line 17: Source code library address
+#On Line 63: Source code library address
 REPO_URL: https://github.com/coolsnowwolf/lede
 
-#On Line 18: Branch name
+#On Line 64: Branch name
 REPO_BRANCH: master
 ```
 You can modify it to other, such as official:
@@ -396,25 +395,22 @@ REPO_BRANCH: openwrt-21.02
 
 #### 10.2.2 Change TV Boxes model and kernel version
 
-Near line 96, find `Build OpenWrt firmware`, Code snippet like this:
+Near line 139, find `Build OpenWrt firmware`, Code snippet like this:
 ```yaml
-    - name: Build OpenWrt firmware
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      id: build
-      run: |
-        [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-        cp -f openwrt/bin/targets/*/*/*rootfs.tar.gz openwrt-armvirt/ && sync
-        sudo rm -rf openwrt && sync
-        sudo rm -rf /workdir && sync
-        sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.10.125_5.15.50
-        cd out/ && sudo gzip *.img
-        cp -f ../openwrt-armvirt/*rootfs.tar.gz . && sync
-        echo "FILEPATH=$PWD" >> $GITHUB_ENV
-        echo "::set-output name=status::success"
+- name: Build OpenWrt firmware
+  if: steps.compile.outputs.status == 'success' && !cancelled()
+  uses: ophub/amlogic-s9xxx-openwrt@main
+  with:
+    openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
+    openwrt_soc: ${{ github.event.inputs.openwrt_soc }}
+    openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
+    auto_kernel: ${{ github.event.inputs.auto_kernel }}
+    openwrt_size: ${{ github.event.inputs.openwrt_size }}
 ```
-Modify the -d parameter to the model of your box, and modify the value after the -k parameter to the version number of the kernel you want to compile:
-`sudo ./make -d -b s905x -k 5.10.125`. Optional parameters and usage method see: [Detailed make compile command](https://github.com/ophub/amlogic-s9xxx-openwrt#detailed-make-compile-command)
+Refer to the related [parameter description](https://github.com/ophub/amlogic-s9xxx-openwrt#github-actions-input-parameter-description) of the packaging command. The above setting options can be set by writing fixed values, or they can be selected through the `Actions` panel:
+<div style="width:100%;margin-top:40px;margin:5px;">
+<img src=https://user-images.githubusercontent.com/68696949/181870674-1816aa21-ece4-4149-83ce-6ec7f95ece68.png width="700" />
+</div>
 
 ### 10.3 Custom banner information
 
@@ -441,11 +437,11 @@ When we use `OpenWrt`, we have already configured many software. Most of the `co
 ```yaml
 - name: Load custom configuration
   run: |
-    [ -e files ] && mv files openwrt/files
-    [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-    chmod +x $DIY_P2_SH
+    [[ -d "files" ]] && mv -f files openwrt/files
+    [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
+    chmod +x ${DIY_P2_SH}
     cd openwrt
-    $GITHUB_WORKSPACE/$DIY_P2_SH
+    ${GITHUB_WORKSPACE}/${DIY_P2_SH}
 ```
 
 Please do not copy the configuration information files that `involve privacy`. If `your repository is public`, then the files you put in the `files` directory are also `public`. Do not disclose the secrets. Some passwords and other information can be used using the `private key settings` you just learned in [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart). You must understand what you are doing.

@@ -47,11 +47,12 @@ on:
         options:
           - 5.4.200_5.10.125
           - 5.10.125_5.15.50
-          - 5.15.45_5.18.5
+          - 5.15.45_5.18.15
           - 5.4.200
           - 5.10.125
           - 5.15.50
-          - 5.18.5
+          - 5.18.15
+          - 5.19.1
       auto_kernel:
         description: "Auto use the latest kernel"
         required: false
@@ -108,7 +109,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success' && !cancelled()
         with:
-          tag: openwrt_qemu_allwinner_rockchip_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: openwrt_aarch64_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}
@@ -118,5 +119,3 @@ jobs:
             Default IP: 192.168.1.1
             Default username: root
             Default password: password
-            Default WIFI name: OpenWrt
-            Default WIFI password: none

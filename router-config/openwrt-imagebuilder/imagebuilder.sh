@@ -156,22 +156,26 @@ rebuild_firmware() {
 
     echo -e "${STEPS} Start building OpenWrt with Image Builder..."
     # Selecting default packages, lib, theme, app and i18n, etc.
+    # sorting by https://build.moz.one
     my_packages="\
-        bash perl-http-date perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 acpid blkid fdisk \
-        lsblk parted attr btrfs-progs chattr dosfstools e2fsprogs f2fs-tools f2fsck lsattr mkf2fs \
-        xfs-fsck xfs-mkfs bash gawk getopt losetup pv uuidgen coremark coreutils uclient-fetch wwan \
-        coreutils-base64 coreutils-nohup kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 \
-        hostapd-common wpa-cli wpad-basic iw subversion-client subversion-libs wget-ssl curl whereis \
-        base-files bind-server block-mount blockd busybox usb-modeswitch tini lscpu mount-utils \
-        ziptool zstd iconv jq docker docker-compose dockerd containerd dumpe2fs e2freefrag exfat-mkfs \
-        resize2fs tune2fs ttyd zoneinfo-asia zoneinfo-core bc iwinfo jshn libjson-script libnetwork \
-        openssl-util rename runc which liblucihttp bsdtar pigz gzip bzip2 unzip xz-utils xz tar \
-        liblucihttp-lua ppp ppp-mod-pppoe proto-bonding cgi-io uhttpd uhttpd-mod-ubus comgt comgt-ncm uqmi \
+        acpid attr base-files bash bc bind-server blkid block-mount blockd bsdtar  \
+        btrfs-progs busybox bzip2 cgi-io chattr comgt comgt-ncm containerd coremark  \
+        coreutils coreutils-base64 coreutils-nohup curl docker docker-compose dockerd  \
+        dosfstools dumpe2fs e2freefrag e2fsprogs exfat-mkfs f2fs-tools f2fsck fdisk gawk  \
+        getopt gzip hostapd-common iconv iw iwinfo jq jshn kmod-brcmfmac kmod-brcmutil  \
+        kmod-cfg80211 kmod-mac80211 libjson-script liblucihttp liblucihttp-lua  \
+        libnetwork losetup lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted  \
+        perl-http-date perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 pigz  \
+        ppp ppp-mod-pppoe proto-bonding pv rename resize2fs runc subversion-client  \
+        subversion-libs tar tini ttyd tune2fs uclient-fetch uhttpd uhttpd-mod-ubus unzip  \
+        uqmi usb-modeswitch uuidgen wget-ssl whereis which wpa-cli wpad-basic wwan  \
+        xfs-fsck xfs-mkfs xz xz-utils ziptool zoneinfo-asia zoneinfo-core zstd  \
         \
-        luci luci-base luci-lib-base luci-i18n-base-en luci-i18n-base-zh-cn luci-lib-ipkg luci-lib-docker \
-        luci-lib-ip luci-lib-jsonc luci-lib-nixio luci-mod-network luci-mod-status luci-mod-system \
-        luci-mod-admin-full luci-compat luci-proto-3g luci-proto-bonding luci-proto-ipip luci-proto-ncm \
-        luci-proto-ipv6 luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay \
+        luci luci-base luci-compat luci-i18n-base-en luci-i18n-base-zh-cn luci-lib-base  \
+        luci-lib-docker luci-lib-ip luci-lib-ipkg luci-lib-jsonc luci-lib-nixio  \
+        luci-mod-admin-full luci-mod-network luci-mod-status luci-mod-system  \
+        luci-proto-3g luci-proto-bonding luci-proto-ipip luci-proto-ipv6 luci-proto-ncm  \
+        luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay  \
         \
         luci-app-amlogic luci-i18n-amlogic-zh-cn \
         \

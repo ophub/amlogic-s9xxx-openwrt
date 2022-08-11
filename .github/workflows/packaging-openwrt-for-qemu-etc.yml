@@ -21,16 +21,17 @@ on:
       openwrt_soc:
         description: "Select device SoC"
         required: false
-        default: "qemu_vplus_beikeyun_l1pro"
+        default: "qemu_vplus_beikeyun_l1pro_r68s"
         type: choice
         options:
           - all
-          - qemu_vplus_beikeyun_l1pro_s922x_s905x3_s905d
-          - qemu_vplus_beikeyun_l1pro
+          - qemu_vplus_beikeyun_l1pro_r68s_s922x_s905x3_s905d
+          - qemu_vplus_beikeyun_l1pro_r68s
           - qemu
           - vplus
           - beikeyun
           - l1pro
+          - r68s
           - s922x
           - s922x-n2
           - s905x3

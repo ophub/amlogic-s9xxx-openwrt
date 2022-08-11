@@ -569,6 +569,7 @@ Kernel modules -> Wireless Drivers -> kmod-brcmfmac(SDIO)
 
 Languages -> Perl
              -> perl-http-date
+             -> perlbase-file
              -> perlbase-getopt
              -> perlbase-time
              -> perlbase-unicode

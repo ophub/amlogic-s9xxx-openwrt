@@ -1,5 +1,6 @@
 #==========================================================================
-# Description: Compile the Armbian kernel
+# Description: Compile the kernel
+# Copyright (C) 2021 https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2021 https://github.com/ophub/amlogic-s9xxx-armbian
 #==========================================================================
 
@@ -10,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       kernel_repo:
-        description: "Choose to compile kernel sources"
+        description: "Select the kernel repository"
         required: false
         default: "unifreq"
         type: choice
@@ -37,6 +38,14 @@ on:
         required: false
         default: true
         type: boolean
+      kernel_package:
+        description: "Select compile package list"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - dtbs
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
@@ -64,19 +73,20 @@ jobs:
         run: |
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc 2>/dev/null
           sudo -E apt-get -qq update
-          sudo -E apt-get -qq install $(curl -fsSL https://is.gd/depend_ubuntu2204_armbian)
+          sudo -E apt-get -qq install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_armbian)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "${TZ}"
           echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
 
-      - name: Compile the kernel for Amlogic s9xxx
+      - name: Compile the kernel
         uses: ophub/amlogic-s9xxx-armbian@main
         with:
           build_target: kernel
           kernel_repo: ${{ github.event.inputs.kernel_repo }}
           kernel_version: ${{ github.event.inputs.kernel_version }}
           kernel_auto: ${{ github.event.inputs.kernel_auto }}
+          kernel_package: ${{ github.event.inputs.kernel_package }}
           kernel_sign: ${{ github.event.inputs.kernel_sign }}
           kernel_config: ${{ github.event.inputs.kernel_config }}
 

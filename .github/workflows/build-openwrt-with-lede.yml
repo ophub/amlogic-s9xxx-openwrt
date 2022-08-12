@@ -1,9 +1,8 @@
-#========================================================================================================================
+#=====================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Build OpenWrt with lede
-# Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
 # Source code repository: https://github.com/coolsnowwolf/lede / Branch: master
-#========================================================================================================================
+#=====================================================================================
 
 name: Build OpenWrt with lede
 
@@ -58,8 +57,6 @@ on:
         description: "Set the rootfs size(Unit: MiB)."
         required: false
         default: "960"
-  #schedule:
-  #- cron: '0 17 * * 0'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -80,6 +77,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Initialization environment
+        id: init
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -91,7 +89,7 @@ jobs:
           sudo timedatectl set-timezone "${TZ}"
           sudo mkdir -p /workdir
           sudo chown ${USER}:${GROUPS} /workdir
-          echo "COMPILE_STARTINGTIME=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
+          echo "::set-output name=status::success"
 
       - name: Clone source code
         working-directory: /workdir

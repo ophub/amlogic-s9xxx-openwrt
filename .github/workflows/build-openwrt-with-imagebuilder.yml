@@ -14,10 +14,10 @@ on:
       branch:
         description: "Select the releases branch"
         required: false
-        default: "21.02.3"
+        default: "22.03.0"
         type: choice
         options:
-          - 22.03.0-rc6
+          - 22.03.0
           - 21.02.3
           - 19.07.10
           - 18.06.9
@@ -79,7 +79,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Initialization environment
         id: init

@@ -13,6 +13,9 @@
 # Add a feed source
 # sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
 
+sed -i '$a src-git small8 https://github.com/kenzok8/small-package' feeds.conf.default
+git clone https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
+
 # other
 # rm -rf package/lean/{samba4,luci-app-samba4,luci-app-ttyd}
 

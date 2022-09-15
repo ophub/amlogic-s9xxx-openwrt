@@ -91,7 +91,7 @@ openwrt-led
 
 - ### 更多使用说明
 
-在 OpenWrt 的使用中，一些可能遇到的常见问题详见 [router-config](router-config/README.cn.md)
+使用 `firstboot` 命令可以恢复系统至初始化状态。在 OpenWrt 的使用中，一些可能遇到的常见问题详见 [router-config](router-config/README.cn.md)
 
 ## 本地化打包
 

@@ -91,7 +91,7 @@ Debug according to [LED screen display control instructions](https://github.com/
 
 - ### More instructions for use
 
-In the use of OpenWrt, please refer to [router-config](router-config) for some common problems that may be encountered.
+Use the `firstboot` command to restore the system to its initial state. In the use of OpenWrt, please refer to [router-config](router-config) for some common problems that may be encountered.
 
 ## Local build instructions
 

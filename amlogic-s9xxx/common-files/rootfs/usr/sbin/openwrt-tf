@@ -146,7 +146,7 @@ EOF
 
 echo -e "${STEPS} Welcome to use TF/SD/USB partition management tool."
 # Check script permission
-[[ "$(id -u)" == "0" ]] || error_msg "please run this script as root: [ sudo $0 ]"
+[[ -x "/usr/sbin/openwrt-tf" ]] || error_msg "Please grant execution permission: [ chmod +x /usr/sbin/openwrt-tf ]"
 #
 echo -ne "${STEPS} This operation will clear the data in the remaining space, are you sure to continue? y/n [y]\b\b"
 read yn

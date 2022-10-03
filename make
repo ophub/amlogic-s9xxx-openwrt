@@ -745,7 +745,7 @@ loop_make() {
             {
                 echo -n "(${j}.${i}) Start making OpenWrt [ ${b} - ${k} ]. "
 
-                now_remaining_space="$(df -hT ${make_path} | grep '/dev/' | awk '{print $5}' | sed 's/.$//' | awk -F "." '{print $1}')"
+                now_remaining_space="$(df -Tk ${make_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                 if [[ "${now_remaining_space}" -le "2" ]]; then
                     echo "Remaining space is less than 2G, exit this making. \n"
                     break

@@ -220,6 +220,9 @@ download_depends() {
     else
         svn co ${depends_repo}/common-files/rootfs/usr/share/openvfd ${openvfd_path} --force
     fi
+    # Sync balethirq related files
+    svn export ${depends_repo}/common-files/rootfs/usr/sbin/balethirq.pl ${configfiles_path}/rootfs/usr/sbin --force
+    svn export ${depends_repo}/common-files/rootfs/etc/balance_irq ${configfiles_path}/rootfs/etc --force
 
     # Convert script library address to svn format
     if [[ "${script_repo}" == http* && -n "$(echo ${script_repo} | grep "tree/main")" ]]; then
@@ -227,6 +230,7 @@ download_depends() {
     fi
     # Sync install/update and other related files
     svn export ${script_repo} ${configfiles_path}/rootfs/usr/sbin --force
+    chmod +x ${configfiles_path}/rootfs/usr/sbin/*
 
     sync
 }
@@ -558,12 +562,8 @@ EOF
     fi
 
     # Add balethirq
-    balethirq_file="${configfiles_path}/patches/balethirq"
-    if [[ -d "${balethirq_file}" ]]; then
-        cp -f ${balethirq_file}/balethirq.pl usr/sbin/balethirq.pl && chmod +x usr/sbin/balethirq.pl >/dev/null 2>&1
-        sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
-        cp -f ${balethirq_file}/balance_irq etc/balance_irq >/dev/null 2>&1
-    fi
+    balethirq_file="${configfiles_path}/rootfs/usr/sbin/balethirq.pl"
+    [[ -x "${balethirq_file}" ]] && sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
 
     # Add firmware information
     echo "PLATFORM='amlogic'" >>${op_release} 2>/dev/null

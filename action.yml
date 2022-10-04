@@ -72,7 +72,6 @@ runs:
         [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [[ -n "${{ inputs.version_branch }}" ]] && make_command="${make_command} -v ${{ inputs.version_branch }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
-        sudo chmod +x make
         sudo ./make ${make_command}
 
         cd ${GITHUB_ACTION_PATH}

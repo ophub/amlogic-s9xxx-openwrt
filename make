@@ -422,7 +422,7 @@ extract_armbian() {
     mkdir -p ${root} ${boot}
 
     # Copy OpenWrt files
-    cp -rf ${root_comm}/* ${root}
+    mv -f ${root_comm}/* ${root}
 
     # Unzip the relevant files
     tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
@@ -704,7 +704,7 @@ copy_files() {
     btrfs subvolume create ${rootfs}/etc >/dev/null 2>&1
 
     cp -rf ${boot}/* ${bootfs}
-    cp -rf ${root}/* ${rootfs}
+    mv -f ${root}/* ${rootfs}
 
     mkdir -p ${rootfs}/.snapshots
     btrfs subvolume snapshot -r ${rootfs}/etc ${rootfs}/.snapshots/etc-000 >/dev/null 2>&1

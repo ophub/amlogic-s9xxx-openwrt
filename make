@@ -196,31 +196,31 @@ download_depends() {
     if [[ "${depends_repo}" == http* && -n "$(echo ${depends_repo} | grep "tree/main")" ]]; then
         depends_repo="${depends_repo//tree\/main/trunk}"
     fi
-    # Sync armbian related files
+    # Download armbian related files
     if [[ -d "${armbian_path}" ]]; then
         svn up ${armbian_path} --force
     else
         svn co ${depends_repo}/amlogic-armbian ${armbian_path} --force
     fi
-    # Sync /boot related files
+    # Download /boot related files
     if [[ -d "${bootfs_path}" ]]; then
         svn up ${bootfs_path} --force
     else
         svn co ${depends_repo}/common-files/bootfs ${bootfs_path} --force
     fi
-    # Sync u-boot related files
+    # Download u-boot related files
     if [[ -d "${uboot_path}" ]]; then
         svn up ${uboot_path} --force
     else
         svn co ${depends_repo}/amlogic-u-boot ${uboot_path} --force
     fi
-    # Sync openvfd related files
+    # Download openvfd related files
     if [[ -d "${openvfd_path}" ]]; then
         svn up ${openvfd_path} --force
     else
         svn co ${depends_repo}/common-files/rootfs/usr/share/openvfd ${openvfd_path} --force
     fi
-    # Sync balethirq related files
+    # Download balethirq related files
     svn export ${depends_repo}/common-files/rootfs/usr/sbin/balethirq.pl ${configfiles_path}/rootfs/usr/sbin --force
     svn export ${depends_repo}/common-files/rootfs/etc/balance_irq ${configfiles_path}/rootfs/etc --force
 
@@ -228,11 +228,9 @@ download_depends() {
     if [[ "${script_repo}" == http* && -n "$(echo ${script_repo} | grep "tree/main")" ]]; then
         script_repo="${script_repo//tree\/main/trunk}"
     fi
-    # Sync install/update and other related files
+    # Download install/update and other related files
     svn export ${script_repo} ${configfiles_path}/rootfs/usr/sbin --force
     chmod +x ${configfiles_path}/rootfs/usr/sbin/*
-
-    sync
 }
 
 download_kernel() {
@@ -274,7 +272,7 @@ download_kernel() {
     unset build_kernel
     build_kernel="${tmp_arr_kernels[*]}"
 
-    # Synchronization related kernel
+    # Download kernel
     i=1
     for KERNEL_VAR in ${build_kernel[*]}; do
         if [[ ! -d "${kernel_path}/${KERNEL_VAR}" ]]; then
@@ -410,7 +408,6 @@ extract_openwrt() {
 
     tar -xzf ${firmware} -C ${root_comm}
     rm -rf ${root_comm}/lib/modules/* 2>/dev/null
-    sync
 }
 
 extract_armbian() {
@@ -445,19 +442,18 @@ extract_armbian() {
     [[ -n "${build_boot}" && -n "${build_dtb}" && -n "${build_modules}" ]] || error_msg "The 3 kernel missing."
 
     # 01. For /boot five files
-    tar -xzf ${build_boot} -C ${boot} && sync
+    tar -xzf ${build_boot} -C ${boot}
     [[ "$(ls ${boot}/*-${kernel}-* -l 2>/dev/null | grep "^-" | wc -l)" -ge "4" ]] || error_msg "The /boot files is missing."
-    (cd ${boot} && cp -f uInitrd-* uInitrd && cp -f vmlinuz-* zImage && sync)
+    (cd ${boot} && cp -f uInitrd-* uInitrd && cp -f vmlinuz-* zImage)
     get_textoffset "${boot}/zImage"
 
     # 02. For /boot/dtb/amlogic/*
-    tar -xzf ${build_dtb} -C ${boot}/dtb/amlogic && sync
+    tar -xzf ${build_dtb} -C ${boot}/dtb/amlogic
 
     # 03. For /lib/modules/*
-    tar -xzf ${build_modules} -C ${root}/lib/modules && sync
-    (cd ${root}/lib/modules/${kernel}-*/ && rm -f build source *.ko 2>/dev/null && find ./ -type f -name '*.ko' -exec ln -s {} ./ \; && sync)
+    tar -xzf ${build_modules} -C ${root}/lib/modules
+    (cd ${root}/lib/modules/${kernel}-*/ && rm -f build source *.ko 2>/dev/null && find ./ -type f -name '*.ko' -exec ln -s {} ./ \;)
     [[ "$(ls ${root}/lib/modules/${kernel}-* -l 2>/dev/null | grep "^d" | wc -l)" -eq "1" ]] || error_msg "Missing kernel."
-    sync
 }
 
 refactor_files() {
@@ -619,7 +615,6 @@ EOF
         # x96max plus v5.1 (ip1001m phy) adopts am7256 (brcm4354)
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:07/" "brcmfmac4354-sdio.txt" >"brcmfmac4354-sdio.amlogic,sm1.txt"
     )
-    sync
 
     cd ${boot}
 
@@ -644,7 +639,6 @@ EOF
     elif [[ "${K510}" -eq "1" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then
         error_msg "${soc} SoC does not support using ${kernel} kernel, missing u-boot."
     fi
-    sync
 }
 
 make_image() {
@@ -653,25 +647,22 @@ make_image() {
 
     build_image_file="${out_path}/openwrt_${soc}_k${kernel}_$(date +"%Y.%m.%d").img"
     rm -f ${build_image_file}
-    sync
 
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
     IMG_SIZE="$((SKIP_MB + BOOT_MB + ROOT_MB))"
 
     #fallocate -l ${IMG_SIZE}M ${build_image_file}
-    dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} conv=fsync 2>/dev/null && sync
+    dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} conv=fsync 2>/dev/null
 
     parted -s ${build_image_file} mklabel msdos 2>/dev/null
     parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))MiB $((SKIP_MB + BOOT_MB - 1))MiB 2>/dev/null
     parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))MiB 100% 2>/dev/null
-    sync
 
     loop_new="$(losetup -P -f --show "${build_image_file}")"
     [[ -n "${loop_new}" ]] || error_msg "losetup ${build_image_file} failed."
 
     mkfs.vfat -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
     mkfs.btrfs -f -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop_new}p2 >/dev/null 2>&1
-    sync
 
     # Write the specified bootloader
     if [[ -n "${MAINLINE_UBOOT}" && -f "${root}/lib/u-boot/${MAINLINE_UBOOT}" ]]; then
@@ -683,7 +674,6 @@ make_image() {
         dd if="${root}/lib/u-boot/${ANDROID_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
         #echo -e "${INFO} ${soc}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
-    sync
 }
 
 copy_files() {
@@ -692,7 +682,7 @@ copy_files() {
 
     local bootfs="${tmp_path}/${kernel}/${soc}/bootfs"
     local rootfs="${tmp_path}/${kernel}/${soc}/rootfs"
-    mkdir -p ${bootfs} ${rootfs} && sync
+    mkdir -p ${bootfs} ${rootfs}
 
     if ! mount ${loop_new}p1 ${bootfs}; then
         error_msg "mount ${loop_new}p1 failed!"
@@ -709,15 +699,15 @@ copy_files() {
     mkdir -p ${rootfs}/.snapshots
     btrfs subvolume snapshot -r ${rootfs}/etc ${rootfs}/.snapshots/etc-000 >/dev/null 2>&1
     rm -f ${rootfs}/rom/sbin/firstboot 2>/dev/null
-    sync
+    sync && sleep 3
 
     cd ${make_path}
     umount -f ${bootfs} 2>/dev/null
     umount -f ${rootfs} 2>/dev/null
     losetup -d ${loop_new} 2>/dev/null
 
-    cd ${out_path} && pigz -9 *.img
-    sync
+    cd ${out_path}
+    pigz -9 *.img && sync
 }
 
 clean_tmp() {
@@ -731,7 +721,6 @@ clean_tmp() {
     losetup -D
 
     rm -rf ${tmp_path} 2>/dev/null
-    sync
 }
 
 loop_make() {
@@ -777,7 +766,7 @@ loop_make() {
     cd ${out_path}
 
     # Backup the openwrt file
-    cp -f ${openwrt_path}/${openwrt_file_name} . 2>/dev/null && sync
+    cp -f ${openwrt_path}/${openwrt_file_name} . 2>/dev/null
 
     # Generate sha256sum check file
     sha256sum * >sha256sums && sync

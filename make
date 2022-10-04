@@ -492,8 +492,8 @@ EOF
     echo meson_gxbb_wdt >etc/modules.d/watchdog 2>/dev/null
 
     # Edit fstab
-    sed -i "s/LABEL=ROOTFS/UUID=${ROOTFS_UUID}/" etc/fstab 2>/dev/null
-    sed -i "s/option label 'ROOTFS'/option uuid '${ROOTFS_UUID}'/" etc/config/fstab 2>/dev/null
+    sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|" etc/fstab 2>/dev/null
+    sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|" etc/config/fstab 2>/dev/null
 
     # Turn off speed limit by default
     [[ -f "etc/config/nft-qos" ]] && sed -i "s|option limit_enable.*|option limit_enable '0'|g" etc/config/nft-qos

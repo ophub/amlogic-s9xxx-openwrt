@@ -62,4 +62,4 @@
 518:X96 Air Q1000:s905x3:meson-sm1-x96-max-plus-q2.dtb:u-boot-x96maxplus.bin:/lib/u-boot/x96maxplus-u-boot.bin.sd.bin:NA:4C@2208Mhz,4GB Mem,1Gb Nic,qca9377 wifi
 519:A95XF3 Air 1Gb:s905x3:meson-sm1-a95xf3-air-gbit.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,1Gb Nic,Wifi
 520:A95XF3 Air 100Mb:s905x3:meson-sm1-a95xf3-air.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,100M Nic,Wifi
-521:Tencent Aurora 3Pro:s905x3:meson-sm1-skyworth-lb2004-a4091.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,4GB Mem,32G Rom,MT7661RSN chip Wifi-5(mt7663s)/Bluetooth-5.0(btmtksdio),JL2121 1Gb Nic
+521:Tencent Aurora 3Pro:s905x3:meson-sm1-skyworth-lb2004-a4091.dtb:u-boot-skyworth-lb2004.bin:/usr/lib/u-boot/skyworth-lb2004-u-boot.bin.sd.bin:NA:4C@2100Mhz,4GB Mem,32G Rom,MT7661RSN chip Wifi-5(mt7663s)/Bluetooth-5.0(btmtksdio),JL2121 1Gb Nic

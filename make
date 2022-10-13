@@ -66,7 +66,7 @@ build_kernel=("5.10.125" "5.15.50")
 build_openwrt=(
     "a311d"
     "s922x" "s922x-n2" "s922x-reva"
-    "s905x3"
+    "s905x3" "s905x3-b"
     "s905x2" "s905x2-km3"
     "s912" "s912-m8s"
     "s905d" "s905d-ki"
@@ -322,6 +322,12 @@ confirm_version() {
         UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
         MAINLINE_UBOOT="x96maxplus-u-boot.bin.sd.bin"
         ANDROID_UBOOT="hk1box-bootloader.img"
+        ;;
+    s905x3-b | ta3pro)
+        FDTFILE="meson-sm1-skyworth-lb2004-a4091.dtb"
+        UBOOT_OVERLOAD="u-boot-skyworth-lb2004.bin"
+        MAINLINE_UBOOT="skyworth-lb2004-u-boot.bin.sd.bin"
+        ANDROID_UBOOT=""
         ;;
     s905x2 | x96max4g | x96max2g)
         FDTFILE="meson-g12a-x96-max.dtb"

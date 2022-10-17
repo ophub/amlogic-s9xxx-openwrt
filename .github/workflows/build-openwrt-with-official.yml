@@ -135,24 +135,15 @@ jobs:
           cd openwrt
           echo -e "$(nproc) thread compile"
           make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
+          echo "::set-output name=build_tag::OpenWrt_Aml_official_$(date +"%m.%d.%H%M")"
           echo "::set-output name=status::success"
-
-      - name: Build OpenWrt firmware
-        if: steps.compile.outputs.status == 'success' && !cancelled()
-        uses: ophub/amlogic-s9xxx-openwrt@main
-        with:
-          openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
-          openwrt_soc: ${{ github.event.inputs.openwrt_soc }}
-          openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
-          auto_kernel: ${{ github.event.inputs.auto_kernel }}
-          openwrt_size: ${{ github.event.inputs.openwrt_size }}
 
       - name: Upload OpenWrt Firmware to Release
         uses: ncipollo/release-action@main
-        if: env.PACKAGED_STATUS == 'success' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && !cancelled()
         with:
-          tag: OpenWrt_Aml_official_${{ env.PACKAGED_OUTPUTDATE }}
-          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          tag: ${{ steps.compile.outputs.build_tag }}
+          artifacts: openwrt/bin/targets/*/*/*rootfs.tar.gz
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}
           body: |
@@ -164,3 +155,23 @@ jobs:
             Default WIFI name: OpenWrt
             Default WIFI password: none
             Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
+
+      - name: Build OpenWrt firmware
+        if: steps.compile.outputs.status == 'success' && !cancelled()
+        uses: ophub/amlogic-s9xxx-openwrt@main
+        with:
+          openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
+          openwrt_soc: ${{ github.event.inputs.openwrt_soc }}
+          openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
+          auto_kernel: ${{ github.event.inputs.auto_kernel }}
+          openwrt_size: ${{ github.event.inputs.openwrt_size }}
+
+      - name: Upload the packaged firmware to Release
+        uses: ncipollo/release-action@main
+        if: env.PACKAGED_STATUS == 'success' && !cancelled()
+        with:
+          tag: ${{ steps.compile.outputs.build_tag }}
+          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          allowUpdates: true
+          token: ${{ secrets.GH_TOKEN }}
+

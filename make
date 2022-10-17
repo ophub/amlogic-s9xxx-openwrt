@@ -622,6 +622,14 @@ EOF
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:07/" "brcmfmac4354-sdio.txt" >"brcmfmac4354-sdio.amlogic,sm1.txt"
     )
 
+    # Find DISTRIB_SOURCECODE, such as [ official/lede ]
+    source_codename=""
+    source_release_file="etc/openwrt_release"
+    [[ -f "${source_release_file}" ]] && {
+        source_codename="$(cat ${source_release_file} | grep -oE "^DISTRIB_SOURCECODE=.*" | head -n 1 | cut -d"'" -f2)"
+        [[ -n "${source_codename}" && "${source_codename:0:1}" != "_" ]] && source_codename="_${source_codename}"
+    }
+
     cd ${boot}
 
     # For btrfs file system
@@ -651,7 +659,7 @@ make_image() {
     process_msg " (5/7) Make openwrt image."
     cd ${make_path}
 
-    build_image_file="${out_path}/openwrt_${soc}_k${kernel}_$(date +"%Y.%m.%d").img"
+    build_image_file="${out_path}/openwrt${source_codename}_${soc}_k${kernel}_$(date +"%Y.%m.%d").img"
     rm -f ${build_image_file}
 
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}

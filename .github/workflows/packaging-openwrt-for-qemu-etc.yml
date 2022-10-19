@@ -4,7 +4,7 @@
 # Copyright (C) 2021 https://github.com/ophub/flippy-openwrt-actions
 #=====================================================================================
 
-name: Packaging OpenWrt for qemu, etc.
+name: Packaging QEMU and others
 
 on:
   repository_dispatch:
@@ -67,7 +67,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    if: github.event.repository.owner.id == github.event.sender.id
+    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
 
     steps:
       - name: Checkout
@@ -84,10 +84,11 @@ jobs:
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "${TZ}"
-          echo "::set-output name=status::success"
+          echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Download armvirt file
-        id: download
+        id: down
+        if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
           openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ github.event.inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
           [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
@@ -96,12 +97,12 @@ jobs:
           [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
           #
           wget -q -P "${armvirt_tarfile_path}" "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}"
-          [[ "${?}" -ne "0" ]] && echo "The armvirt file download failed!" && exit 1
-          echo "::set-output name=status::success"
+          [[ "${?}" -ne "0" ]] && echo -e "The armvirt file download failed!" && exit 1
+          echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Packaging OpenWrt
         uses: ophub/flippy-openwrt-actions@main
-        if: steps.download.outputs.status == 'success' && !cancelled()
+        if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
         env:
           OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
           KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
@@ -111,7 +112,7 @@ jobs:
 
       - name: Upload OpenWrt Firmware to Release
         uses: ncipollo/release-action@main
-        if: env.PACKAGED_STATUS == 'success' && !cancelled()
+        if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
           tag: OpenWrt_aarch64_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*

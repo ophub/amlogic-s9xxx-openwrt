@@ -221,7 +221,7 @@ schedule:
 ```yaml
 - name: Upload artifact to Actions
   uses: kittaakos/upload-artifact-as-is@master
-  if: steps.build.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+  if: ${{ steps.build.outputs.status }} == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
   with:
     path: ${{ env.FILEPATH }}/
 ```
@@ -231,7 +231,7 @@ schedule:
 ```yaml
 - name: Upload OpenWrt Firmware to Release
   uses: ncipollo/release-action@main
-  if: env.PACKAGED_STATUS == 'success' && !cancelled()
+  if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
   with:
     tag: openwrt_amlogic_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
     artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
@@ -251,7 +251,7 @@ schedule:
 
 ```yaml
 - name: Upload OpenWrt Firmware to WeTransfer
-  if: steps.build.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+  if: ${{ steps.build.outputs.status }} == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
   run: |
     curl -fsSL git.io/file-transfer | sh
     ./transfer wet -s -p 16 --no-progress ${{ env.FILEPATH }}/{openwrt_s9xxx_*,openwrt_n1_*} 2>&1 | tee wetransfer.log
@@ -392,7 +392,7 @@ REPO_BRANCH: openwrt-21.02
 在第 139 行附近, 查找标题为 `Build OpenWrt firmware` 的编译步骤, 其代码块类似这样:
 ```yaml
 - name: Build OpenWrt firmware
-  if: steps.compile.outputs.status == 'success' && !cancelled()
+  if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
   uses: ophub/amlogic-s9xxx-openwrt@main
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz

@@ -428,8 +428,8 @@ extract_armbian() {
     mv -f ${root_comm}/* ${root}
 
     # Unzip the relevant files
-    tar -xJf "${armbian_path}/boot-common.tar.xz" -C ${boot}
-    tar -xJf "${armbian_path}/firmware.tar.xz" -C ${root}
+    tar -xJf "${armbian_path}/boot-common.tar.xz" --no-same-owner -C ${boot}
+    tar -xJf "${armbian_path}/firmware.tar.xz" --no-same-owner -C ${root}
 
     # Copy the same files
     [[ "$(ls ${configfiles_path}/bootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${configfiles_path}/bootfs/* ${boot}
@@ -707,8 +707,8 @@ copy_files() {
 
     btrfs subvolume create ${rootfs}/etc >/dev/null 2>&1
 
-    cp -rf ${boot}/* ${bootfs}
-    mv -f ${root}/* ${rootfs}
+    cp -af ${boot}/* ${bootfs}
+    cp -af ${root}/* ${rootfs}
 
     mkdir -p ${rootfs}/.snapshots
     btrfs subvolume snapshot -r ${rootfs}/etc ${rootfs}/.snapshots/etc-000 >/dev/null 2>&1

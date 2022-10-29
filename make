@@ -27,10 +27,10 @@
 # download_kernel    : Download the latest kernel
 #
 # confirm_version    : Confirm version type
+# make_image         : Making OpenWrt file
 # extract_openwrt    : Extract OpenWrt files
 # replace_kernel     : Replace the kernel
 # refactor_files     : Refactor related files
-# make_image         : Making OpenWrt file
 # clean_tmp          : Clear temporary files
 #
 # loop_make          : Loop to make OpenWrt files
@@ -179,12 +179,27 @@ init_var() {
 find_openwrt() {
     cd ${make_path}
 
+    # Find whether the openwrt file exists
     openwrt_file_name="$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')"
     if [[ -n "${openwrt_file_name}" ]]; then
-        echo -e "${INFO} OpenWrt make file: [ ${openwrt_file_name} ]"
+        echo -e "${INFO} OpenWrt file: [ ${openwrt_file_name} ]"
     else
         error_msg "There is no [ ${openwrt_rootfs_file} ] file in the [ ${openwrt_path} ] directory."
     fi
+
+    # Extract the openwrt release information file
+    source_codename=""
+    source_release_file="etc/openwrt_release"
+    temp_dir="$(mktemp -d)"
+    (cd ${temp_dir} && tar -xzf "${openwrt_path}/${openwrt_file_name}" "./${source_release_file}" 2>/dev/null)
+    # Find custom DISTRIB_SOURCECODE, such as [ official/lede ]
+    [[ -f "${temp_dir}/${source_release_file}" ]] && {
+        source_codename="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCECODE=.*" | head -n 1 | cut -d"'" -f2)"
+        [[ -n "${source_codename}" && "${source_codename:0:1}" != "_" ]] && source_codename="_${source_codename}"
+        echo -e "${INFO} The source_codename: [ ${source_codename} ]"
+    }
+    # Remove temporary directory
+    rm -rf ${temp_dir} 2>/dev/null
 }
 
 download_depends() {
@@ -407,8 +422,8 @@ make_image() {
     cd ${make_path}
 
     # Set openwrt filename
-    build_image_file="${out_path}/openwrt_${soc}_k${kernel}_$(date +"%Y.%m.%d").img"
-    rm -f ${build_image_file}
+    build_image_file="${out_path}/openwrt${source_codename}_${soc}_k${kernel}_$(date +"%Y.%m.%d").img"
+    rm -f ${build_image_file} 2>/dev/null
 
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
     IMG_SIZE="$((SKIP_MB + BOOT_MB + ROOT_MB))"
@@ -509,15 +524,6 @@ replace_kernel() {
 refactor_files() {
     process_msg " (5/6) Refactor related files."
     cd ${tag_rootfs}
-
-    # Improve openwrt image filename, find DISTRIB_SOURCECODE, such as [ official/lede ]
-    source_codename=""
-    rename_imgfile=""
-    source_release_file="etc/openwrt_release"
-    [[ -f "${source_release_file}" ]] && {
-        source_codename="$(cat ${source_release_file} | grep -oE "^DISTRIB_SOURCECODE=.*" | head -n 1 | cut -d"'" -f2)"
-        [[ -n "${source_codename}" ]] && rename_imgfile="openwrt_${source_codename}_${soc}_k${kernel}_$(date +"%Y.%m.%d").img"
-    }
 
     # Add other operations below
     echo 'pwm_meson' >etc/modules.d/pwm-meson
@@ -726,8 +732,7 @@ clean_tmp() {
 
     cd ${out_path}
 
-    # Rename the openwrt file and compress it
-    [[ -n "${rename_imgfile}" ]] && mv -f *.img ${rename_imgfile} 2>/dev/null
+    # Compress the openwrt image file
     pigz -9f *.img && sync
 
     cd ${make_path}

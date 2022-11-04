@@ -22,6 +22,10 @@
 | s905w | [X96-Mini](https://www.gearbest.com/tv-box/pp_3008306149708795.html), [TX3-Mini](https://www.gearbest.com/tv-box/pp_009748238474.html), [W95](https://www.gearbest.com/tv-box/pp_736121.html) | 5.4.y/5.15.y | openwrt_s905w_k*.img |
 | s905 | [Beelink-Mini-MX-2G](https://www.gearbest.com/tv-box-mini-pc/pp_321409.html), [MXQ-PRO+4K](https://www.gearbest.com/tv-box-mini-pc/pp_354313.html) | 全部 | openwrt_s905_k*.img |
 | s905l3a | [E900V22C/D](https://github.com/Calmact/e900v22c), [CM311-1a-YST](https://www.znds.com/tv-1216697-1-1.html), [M401A](https://blog.csdn.net/fatiaozhang9527/article/details/124157038), [M411A](https://blog.csdn.net/fatiaozhang9527/article/details/126388479), [UNT403A](https://blog.csdn.net/wjf149575296/article/details/123947681), [UNT413A](https://blog.csdn.net/fatiaozhang9527/article/details/122232733), [M302A/M304A(s905l3-b)](https://blog.csdn.net/fatiaozhang9527/article/details/122006745), [MGV2000(s905l2)](https://github.com/ophub/amlogic-s9xxx-armbian/issues/648) | 全部 | openwrt_s905l3a_k*.img |
+| rk3568 | [R66S](https://r68s.cn/), [R68S](https://r68s.cn/), [e25](https://wiki.radxa.com/Rock3/CM/CM3I/E25), [h68k](http://www.hinlink.com/index.php?id=145) | 全部 | openwrt_box-name.img |
+| rk3328 | [beikeyun](https://www.cnblogs.com/milton/p/15391525.html), [l1pro](https://post.smzdm.com/p/a4wkdo7l/) | 全部 | openwrt_box-name.img |
+| allwinner | [vplus(h6)](https://www.allwinnertech.com/index.php?c=product&a=index&id=66) | 全部 | openwrt_vplus_*.img |
+| KVM | [qemu](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md) | 全部 | openwrt_qemu_*.img |
 
 💡提示：当前 ***`s905w`*** 系列的盒子只支持使用 `5.4.y/5.15.y` 内核，其他型号的盒子可任选内核版本使用。当前 ***`s905`*** 的盒子只能在 `TF/SD/USB` 中使用，其他型号的盒子同时支持写入 `EMMC` 中使用。每个盒子的 dtb 和 u-boot 请查阅[说明](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/armbian-docs/amlogic_model_database.md)。
 

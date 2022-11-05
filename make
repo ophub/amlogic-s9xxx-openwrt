@@ -754,7 +754,7 @@ loop_make() {
 
                 now_remaining_space="$(df -Tk ${make_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                 if [[ "${now_remaining_space}" -le "3" ]]; then
-                    echo "Remaining space is less than 3G, exit this making. \n"
+                    echo "Remaining space is less than 3G, exit this making."
                     break
                 else
                     echo "Remaining space is ${now_remaining_space}G."

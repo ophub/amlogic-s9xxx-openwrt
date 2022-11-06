@@ -10,8 +10,8 @@ inputs:
     description: "Choose armvirt64 file path."
     required: false
     default: "openwrt/bin/targets/*/*/*rootfs.tar.gz"
-  openwrt_soc:
-    description: "Choose Amlogic SoC."
+  openwrt_board:
+    description: "Choose Amlogic board."
     required: false
     default: "s905d_s905x3"
   openwrt_kernel:
@@ -67,7 +67,7 @@ runs:
         cd ${GITHUB_ACTION_PATH}
         echo -e "Start to make openwrt..."
         make_command=" -d"
-        [[ -n "${{ inputs.openwrt_soc }}" ]] && make_command="${make_command} -b ${{ inputs.openwrt_soc }}"
+        [[ -n "${{ inputs.openwrt_board }}" ]] && make_command="${make_command} -b ${{ inputs.openwrt_board }}"
         [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
         [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [[ -n "${{ inputs.version_branch }}" ]] && make_command="${make_command} -v ${{ inputs.version_branch }}"

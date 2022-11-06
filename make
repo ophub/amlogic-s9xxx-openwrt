@@ -48,6 +48,7 @@ armbian_path="${amlogic_path}/amlogic-armbian"
 kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/amlogic-u-boot"
 configfiles_path="${amlogic_path}/common-files"
+amlogic_model_conf="${configfiles_path}/rootfs/etc/model_database.txt"
 bootfs_path="${configfiles_path}/bootfs"
 openvfd_path="${configfiles_path}/rootfs/usr/share/openvfd"
 # Add custom openwrt firmware information
@@ -305,111 +306,18 @@ confirm_version() {
     process_msg " (1/6) Confirm version type."
     cd ${make_path}
 
-    # Confirm board branch
-    case "${board}" in
-    a311d | khadas-vim3)
-        FDTFILE="meson-g12b-a311d-khadas-vim3.dtb"
-        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="khadas-vim3-u-boot.sd.bin"
-        ANDROID_UBOOT=""
-        ;;
-    s922x | belink | belinkpro | ugoos)
-        FDTFILE="meson-g12b-gtking-pro.dtb"
-        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="gtkingpro-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        ;;
-    s922x-n2 | odroid-n2)
-        FDTFILE="meson-g12b-odroid-n2.dtb"
-        UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
-        MAINLINE_UBOOT="odroid-n2-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        ;;
-    s922x-reva)
-        FDTFILE="meson-g12b-gtking-pro.dtb"
-        UBOOT_OVERLOAD="u-boot-gtkingpro-rev-a.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        ;;
-    s905x3 | tx3 | x96 | hk1 | h96 | ugoosx3)
-        FDTFILE="meson-sm1-x96-max-plus-100m.dtb"
-        UBOOT_OVERLOAD="u-boot-x96maxplus.bin"
-        MAINLINE_UBOOT="x96maxplus-u-boot.bin.sd.bin"
-        ANDROID_UBOOT="hk1box-bootloader.img"
-        ;;
-    s905x3-b | ta3pro)
-        FDTFILE="meson-sm1-skyworth-lb2004-a4091.dtb"
-        UBOOT_OVERLOAD="u-boot-skyworth-lb2004.bin"
-        MAINLINE_UBOOT="skyworth-lb2004-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        ;;
-    s905x2 | x96max4g | x96max2g)
-        FDTFILE="meson-g12a-x96-max.dtb"
-        UBOOT_OVERLOAD="u-boot-x96max.bin"
-        MAINLINE_UBOOT="x96max-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        ;;
-    s905x2-km3)
-        FDTFILE="meson-g12a-sei510.dtb"
-        UBOOT_OVERLOAD="u-boot-x96max.bin"
-        MAINLINE_UBOOT="x96max-u-boot.bin.sd.bin"
-        ANDROID_UBOOT=""
-        ;;
-    s912 | h96proplus | octopus)
-        FDTFILE="meson-gxm-octopus-planet.dtb"
-        UBOOT_OVERLOAD="u-boot-zyxq.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        ;;
-    s912-m8s | s912-m8s-pro-l)
-        FDTFILE="meson-gxm-q201.dtb"
-        UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        ;;
-    s905d | n1)
-        FDTFILE="meson-gxl-s905d-phicomm-n1.dtb"
-        UBOOT_OVERLOAD="u-boot-n1.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT="u-boot-2015-phicomm-n1.bin"
-        ;;
-    s905d-ki)
-        FDTFILE="meson-gxl-s905d-mecool-ki-pro.dtb"
-        UBOOT_OVERLOAD="u-boot-p201.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        ;;
-    s905x | hg680p | tbee | b860h)
-        FDTFILE="meson-gxl-s905x-p212.dtb"
-        UBOOT_OVERLOAD="u-boot-p212.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        ;;
-    s905w | x96mini | tx3mini)
-        FDTFILE="meson-gxl-s905w-tx3-mini.dtb"
-        UBOOT_OVERLOAD="u-boot-s905x-s912.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        ;;
-    s905 | beelinkminimx | mxqpro+)
-        FDTFILE="meson-gxbb-beelink-mini-mx.dtb"
-        #FDTFILE="meson-gxbb-mxq-pro-plus.dtb"
-        #FDTFILE="meson-gxbb-vega-s95-telos.dtb"
-        UBOOT_OVERLOAD="u-boot-s905.bin"
-        #UBOOT_OVERLOAD="u-boot-p201.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        ;;
-    s905l3a | e900v22c | e900v22d)
-        FDTFILE="meson-g12a-s905l3a-e900v22c.dtb"
-        UBOOT_OVERLOAD="u-boot-e900v22c.bin"
-        MAINLINE_UBOOT=""
-        ANDROID_UBOOT=""
-        ;;
-    *)
-        error_msg "Have no this board: [ ${board} ]"
-        ;;
-    esac
+    # Get ${board} config
+    [[ -f "${amlogic_model_conf}" ]] || error_msg "[ ${amlogic_model_conf} ] file is missing!"
+    board_conf="$(cat ${amlogic_model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[0-9]{1,3}:.*:${board}:yes$" | head -n 1)"
+    [[ -n "${board_conf}" ]] || error_msg "[ ${board} ] config is missing!"
+
+    # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.ANDROID_UBOOT  8.DESCRIPTION  9.FAMILY  10.BOARD  11.BUILD
+    SOC="$(echo ${board_conf} | awk -F':' '{print $3}')"
+    FDTFILE="$(echo ${board_conf} | awk -F':' '{print $4}')"
+    UBOOT_OVERLOAD="$(echo ${board_conf} | awk -F':' '{print $5}')"
+    MAINLINE_UBOOT="$(echo ${board_conf} | awk -F':' '{print $6}')" && MAINLINE_UBOOT="${MAINLINE_UBOOT##*/}"
+    ANDROID_UBOOT="$(echo ${board_conf} | awk -F':' '{print $7}')" && ANDROID_UBOOT="${ANDROID_UBOOT##*/}"
+    FAMILY="$(echo ${board_conf} | awk -F':' '{print $9}')"
 
     # Confirm UUID
     ROOTFS_UUID="$(cat /proc/sys/kernel/random/uuid)"
@@ -628,13 +536,14 @@ EOF
 
     # Add firmware information
     echo "PLATFORM='amlogic'" >>${op_release} 2>/dev/null
+    echo "SOC='${SOC}'" >>${op_release} 2>/dev/null
     echo "FDTFILE='${FDTFILE}'" >>${op_release} 2>/dev/null
     echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release} 2>/dev/null
     echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release} 2>/dev/null
     echo "ANDROID_UBOOT='/lib/u-boot/${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
-    echo "KERNEL_VERSION='${kernel}'" >>${op_release} 2>/dev/null
-    echo "SOC='${board}'" >>${op_release} 2>/dev/null
+    echo "FAMILY='${FAMILY}'" >>${op_release} 2>/dev/null
     echo "BOARD='${board}'" >>${op_release} 2>/dev/null
+    echo "KERNEL_VERSION='${kernel}'" >>${op_release} 2>/dev/null
     echo "K510='${K510}'" >>${op_release} 2>/dev/null
 
     # Add firmware version information to the terminal page

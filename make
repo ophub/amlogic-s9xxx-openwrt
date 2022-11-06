@@ -61,7 +61,7 @@ kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 version_branch="stable"
 auto_kernel="true"
 build_kernel=("5.10.125" "5.15.50")
-# Set supported SoC
+# Set supported board
 build_openwrt=(
     "a311d"
     "s922x" "s922x-n2" "s922x-reva"
@@ -94,7 +94,7 @@ error_msg() {
 }
 
 process_msg() {
-    echo -e " [\033[1;92m ${soc} - ${kernel} \033[0m] ${1}"
+    echo -e " [\033[1;92m ${board} - ${kernel} \033[0m] ${1}"
 }
 
 get_textoffset() {
@@ -119,7 +119,7 @@ init_var() {
             : ${version_branch:="${version_branch}"}
             : ${ROOT_MB:="${ROOT_MB}"}
             ;;
-        -b | --BuildSoC)
+        -b | --Board)
             if [[ -n "${2}" ]]; then
                 if [[ "${2}" != "all" ]]; then
                     unset build_openwrt
@@ -305,8 +305,8 @@ confirm_version() {
     process_msg " (1/6) Confirm version type."
     cd ${make_path}
 
-    # Confirm soc branch
-    case "${soc}" in
+    # Confirm board branch
+    case "${board}" in
     a311d | khadas-vim3)
         FDTFILE="meson-g12b-a311d-khadas-vim3.dtb"
         UBOOT_OVERLOAD="u-boot-gtkingpro.bin"
@@ -407,7 +407,7 @@ confirm_version() {
         ANDROID_UBOOT=""
         ;;
     *)
-        error_msg "Have no this soc: [ ${soc} ]"
+        error_msg "Have no this board: [ ${board} ]"
         ;;
     esac
 
@@ -422,7 +422,7 @@ make_image() {
     cd ${make_path}
 
     # Set openwrt filename
-    build_image_file="${out_path}/openwrt${source_codename}_${soc}_k${kernel}_$(date +"%Y.%m.%d").img"
+    build_image_file="${out_path}/openwrt${source_codename}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
     rm -f ${build_image_file} 2>/dev/null
 
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
@@ -448,11 +448,11 @@ make_image() {
     if [[ -n "${MAINLINE_UBOOT}" && -f "${uboot_path}/bootloader/${MAINLINE_UBOOT}" ]]; then
         dd if="${uboot_path}/bootloader/${MAINLINE_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
         dd if="${uboot_path}/bootloader/${MAINLINE_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        #echo -e "${INFO} ${soc}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
+        #echo -e "${INFO} ${board}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
     elif [[ -n "${ANDROID_UBOOT}" && -f "${uboot_path}/bootloader/${ANDROID_UBOOT}" ]]; then
         dd if="${uboot_path}/bootloader/${ANDROID_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
         dd if="${uboot_path}/bootloader/${ANDROID_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        #echo -e "${INFO} ${soc}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
+        #echo -e "${INFO} ${board}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
     fi
 }
 
@@ -461,8 +461,8 @@ extract_openwrt() {
     cd ${make_path}
 
     # Create openwrt mirror partition
-    tag_bootfs="${tmp_path}/${kernel}/${soc}/bootfs"
-    tag_rootfs="${tmp_path}/${kernel}/${soc}/rootfs"
+    tag_bootfs="${tmp_path}/${kernel}/${board}/bootfs"
+    tag_rootfs="${tmp_path}/${kernel}/${board}/rootfs"
     mkdir -p ${tag_bootfs} ${tag_rootfs}
 
     # Mount the openwrt image
@@ -633,7 +633,8 @@ EOF
     echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release} 2>/dev/null
     echo "ANDROID_UBOOT='/lib/u-boot/${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
     echo "KERNEL_VERSION='${kernel}'" >>${op_release} 2>/dev/null
-    echo "SOC='${soc}'" >>${op_release} 2>/dev/null
+    echo "SOC='${board}'" >>${op_release} 2>/dev/null
+    echo "BOARD='${board}'" >>${op_release} 2>/dev/null
     echo "K510='${K510}'" >>${op_release} 2>/dev/null
 
     # Add firmware version information to the terminal page
@@ -642,7 +643,7 @@ EOF
         op_production_date=$(date +%Y-%m-%d)
         echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
         echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
-        echo " Amlogic Box SoC: ${soc} | OpenWrt Kernel: ${op_version}" >>etc/banner
+        echo " Amlogic Box SoC: ${board} | OpenWrt Kernel: ${op_version}" >>etc/banner
         echo " Production Date: ${op_production_date}" >>etc/banner
         echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
     fi
@@ -702,7 +703,7 @@ EOF
         cp -f ${UBOOT_OVERLOAD} u-boot.ext
         chmod +x u-boot.ext
     elif [[ "${K510}" -eq "1" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then
-        error_msg "${soc} SoC does not support using ${kernel} kernel, missing u-boot."
+        error_msg "${board} Board does not support using ${kernel} kernel, missing u-boot."
     fi
 
     cd ${make_path}
@@ -761,7 +762,7 @@ loop_make() {
                 fi
 
                 # The loop variable assignment
-                soc="${b}"
+                board="${b}"
                 kernel="${k}"
 
                 # Execute the following functions in sequence
@@ -806,7 +807,7 @@ find_openwrt
 download_depends
 # Download the latest kernel
 [[ "${auto_kernel}" == "true" ]] && download_kernel
-echo -e "${INFO} OpenWrt SoC List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
+echo -e "${INFO} OpenWrt Board List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
 echo -e "${INFO} Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"
 # Loop to make OpenWrt firmware
 loop_make

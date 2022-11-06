@@ -396,7 +396,7 @@ REPO_BRANCH: openwrt-21.02
   uses: ophub/amlogic-s9xxx-openwrt@main
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
-    openwrt_soc: ${{ github.event.inputs.openwrt_soc }}
+    openwrt_board: ${{ github.event.inputs.openwrt_board }}
     openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
     auto_kernel: ${{ github.event.inputs.auto_kernel }}
     openwrt_size: ${{ github.event.inputs.openwrt_size }}

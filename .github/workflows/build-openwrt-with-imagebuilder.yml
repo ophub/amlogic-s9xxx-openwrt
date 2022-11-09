@@ -107,6 +107,13 @@ jobs:
           echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
+      - name: Clean up server space
+        if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
+        run: |
+          cd openwrt/
+          rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+          df -hT ${PWD}
+
       - name: Build OpenWrt firmware
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main

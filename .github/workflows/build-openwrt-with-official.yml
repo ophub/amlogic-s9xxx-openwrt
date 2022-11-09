@@ -105,27 +105,27 @@ jobs:
         run: |
           [[ -e "${FEEDS_CONF}" ]] && cp -f ${FEEDS_CONF} openwrt/feeds.conf.default
           chmod +x ${DIY_P1_SH}
-          cd openwrt
+          cd openwrt/
           ${GITHUB_WORKSPACE}/${DIY_P1_SH}
 
       - name: Update feeds
-        run: cd openwrt && ./scripts/feeds update -a
+        run: cd openwrt/ && ./scripts/feeds update -a
 
       - name: Install feeds
-        run: cd openwrt && ./scripts/feeds install -a
+        run: cd openwrt/ && ./scripts/feeds install -a
 
       - name: Load custom configuration
         run: |
           [[ -d "files" ]] && mv -f files openwrt/files
           [[ -e ${CONFIG_FILE} ]] && cp -f ${CONFIG_FILE} openwrt/.config
           chmod +x ${DIY_P2_SH}
-          cd openwrt
+          cd openwrt/
           ${GITHUB_WORKSPACE}/${DIY_P2_SH}
 
       - name: Download package
         id: package
         run: |
-          cd openwrt
+          cd openwrt/
           make defconfig
           make download -j8
           find dl -size -1024c -exec ls -l {} \;
@@ -134,7 +134,7 @@ jobs:
       - name: Compile the firmware
         id: compile
         run: |
-          cd openwrt
+          cd openwrt/
           echo -e "$(nproc) thread compile"
           make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
           echo "build_tag=OpenWrt_Aml_official_$(date +"%m.%d.%H%M")" >> ${GITHUB_OUTPUT}
@@ -148,6 +148,13 @@ jobs:
           artifacts: openwrt/bin/targets/*/*/*rootfs.tar.gz
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}
+
+      - name: Clean up server space
+        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
+        run: |
+          cd openwrt/
+          rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+          df -hT ${PWD}
 
       - name: Build OpenWrt firmware
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()

@@ -12,6 +12,8 @@
 109:W95:s905w:meson-gxl-s905w-p281.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1512Mhz,2GB RAM,16GB ROM,100Mb Nic,USB2.0:meson-gxl:s905w:no
 110:X96 Mini:s905w:meson-gxl-s905w-x96-mini.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1512Mhz,100Mb Nic:meson-gxl:s905x:no
 111:TX9:s905x:meson-gxl-s905x-tx9.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1512Mhz,100Mb Nic,rtl8723cs WLAN,rtl8723bs Bluetooth:meson-gxl:s905x:no
+112:M302A/M304A:s905l3b:meson-gxl-s905l3b-m302a.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1908Mhz,2+8G,100Mb Nic:meson-g12a:s905l3a:no
+113:MGV2000:s905l2:meson-gxl-s905l2-x7-5g.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1908Mhz,2+8G,100Mb Nic:meson-g12a:s905l2:yes
 
 # Amlogic GXM Family
 201:Octopus Planet:s912:meson-gxm-octopus-planet.dtb:u-boot-zyxq.bin:NA:NA:4C@1512Mhz+4C@1000Mhz,2GB Mem,1Gb Nic:meson-gxm:s912:yes
@@ -33,8 +35,6 @@
 303:MECOOL KM3 4G:s905x2:meson-g12a-sei510.dtb:u-boot-x96max.bin:/lib/u-boot/x96max-u-boot.bin.sd.bin:NA:4C@1908Mhz,4+64G/128G,2.4G/5G WiFi,Bluetooth 4.1,100M Nic:meson-g12a:s905x2-km3:yes
 304:E900V22C-D:s905l3a:meson-g12a-s905l3a-e900v22c.dtb:u-boot-e900v22c.bin:NA:NA:4C@1908Mhz,4+64G/128G,2.4G/5G WiFi,Bluetooth 4.1,100Mb Nic:meson-g12a:s905l3a:yes
 305:CM311-1a-YST:s905l3a:meson-g12a-s905l3a-cm311.dtb:u-boot-e900v22c.bin:NA:NA:4C@1908Mhz,2+16G,Bluetooth rtl8761b,100Mb Nic:meson-g12a:s905l3a:no
-306:M302A/M304A:s905l3b:meson-gxl-s905l3b-m302a.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1908Mhz,2+8G,100Mb Nic:meson-g12a:s905l3a:no
-307:MGV2000:s905l2:meson-gxl-s905l2-x7-5g.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1908Mhz,2+8G,100Mb Nic:meson-g12a:s905l3a:no
 
 # Amlogic G12B Family
 401:Beelink GT-King:s922x:meson-g12b-gtking.dtb:u-boot-gtking.bin:/lib/u-boot/gtking-u-boot.bin.sd.bin:NA:2C@1800Mhz(A53)+4C@1908Mhz(A73),4GB Mem,1Gb Nic,brcm4356 wifi:meson-g12b:s922x:no

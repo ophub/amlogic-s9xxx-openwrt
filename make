@@ -109,6 +109,8 @@ get_textoffset() {
 }
 
 init_var() {
+    echo -e "${STEPS} Start Initializing Variables..."
+
     # If it is followed by [ : ], it means that the option requires a parameter value
     get_all_ver="$(getopt "db:k:a:v:s:" "${@}")"
 
@@ -180,6 +182,7 @@ init_var() {
 
 find_openwrt() {
     cd ${make_path}
+    echo -e "${STEPS} Start searching for OpenWrt file..."
 
     # Find whether the openwrt file exists
     openwrt_file_name="$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')"
@@ -206,7 +209,7 @@ find_openwrt() {
 
 download_depends() {
     cd ${make_path}
-    echo -e "${STEPS} Download all dependent files..."
+    echo -e "${STEPS} Start downloading dependency files..."
 
     # Convert depends library address to svn format
     if [[ "${depends_repo}" == http* && -n "$(echo ${depends_repo} | grep "tree/main")" ]]; then
@@ -250,6 +253,8 @@ download_depends() {
 }
 
 query_version() {
+    echo -e "${STEPS} Start querying the latest kernel version..."
+
     # Convert kernel library address to API format
     server_kernel_url="${kernel_repo#*com\/}"
     server_kernel_url="${server_kernel_url//trunk/contents}"
@@ -283,6 +288,7 @@ query_version() {
 
 download_kernel() {
     cd ${make_path}
+    echo -e "${STEPS} Start downloading the kernel files..."
 
     i=1
     for KERNEL_VAR in ${build_kernel[*]}; do
@@ -648,6 +654,7 @@ clean_tmp() {
 
 loop_make() {
     cd ${make_path}
+    echo -e "${STEPS} Start making OpenWrt firmware..."
 
     j="1"
     for b in ${build_openwrt[*]}; do
@@ -695,7 +702,7 @@ loop_make() {
 }
 
 # Show welcome message
-echo -e "${INFO} Welcome to tools for making Amlogic s9xxx OpenWrt! \n"
+echo -e "${STEPS} Welcome to tools for making Amlogic s9xxx OpenWrt! \n"
 [[ "$(id -u)" == "0" ]] || error_msg "please run this script as root: [ sudo ./${0} ]"
 # Show server start information
 echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
@@ -718,6 +725,7 @@ echo -e "${INFO} Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"
 loop_make
 #
 # Show server end information
-echo -e "${INFO} Server space usage after compilation: \n$(df -hT ${make_path}) \n"
+echo -e "${STEPS} Server space usage after compilation: \n$(df -hT ${make_path}) \n"
+echo -e "${SUCCESS} All process completed successfully."
 # All process completed
 wait

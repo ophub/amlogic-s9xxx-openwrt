@@ -24,6 +24,7 @@
 # init_var           : Initialize all variables
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
 # download_depends   : Download the dependency files
+# query_version      : Query the latest kernel version
 # download_kernel    : Download the latest kernel
 #
 # confirm_version    : Confirm version type
@@ -59,6 +60,8 @@ depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-arm
 script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic/root/usr/sbin"
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
+# Convert kernel library address to svn format
+kernel_repo="${kernel_repo//tree\/main/trunk}"
 version_branch="stable"
 auto_kernel="true"
 build_kernel=("5.10.125" "5.15.50")
@@ -106,8 +109,6 @@ get_textoffset() {
 }
 
 init_var() {
-    cd ${make_path}
-
     # If it is followed by [ : ], it means that the option requires a parameter value
     get_all_ver="$(getopt "db:k:a:v:s:" "${@}")"
 
@@ -248,22 +249,14 @@ download_depends() {
     chmod +x ${configfiles_path}/rootfs/usr/sbin/*
 }
 
-download_kernel() {
-    cd ${make_path}
-
-    # Convert kernel library address to svn format
-    if [[ "${kernel_repo}" == http* && -n "$(echo ${kernel_repo} | grep "tree/main")" ]]; then
-        kernel_repo="${kernel_repo//tree\/main/trunk}"
-    fi
-    kernel_repo="${kernel_repo}/${version_branch}"
-
-    # Set empty array
-    tmp_arr_kernels=()
-
+query_version() {
     # Convert kernel library address to API format
     server_kernel_url="${kernel_repo#*com\/}"
     server_kernel_url="${server_kernel_url//trunk/contents}"
-    server_kernel_url="https://api.github.com/repos/${server_kernel_url}"
+    server_kernel_url="https://api.github.com/repos/${server_kernel_url}/${version_branch}"
+
+    # Set empty array
+    tmp_arr_kernels=()
 
     # Query the latest kernel in a loop
     i=1
@@ -286,20 +279,22 @@ download_kernel() {
     # Reset the kernel array to the latest kernel version
     unset build_kernel
     build_kernel="${tmp_arr_kernels[*]}"
+}
 
-    # Download kernel
+download_kernel() {
+    cd ${make_path}
+
     i=1
     for KERNEL_VAR in ${build_kernel[*]}; do
         if [[ ! -d "${kernel_path}/${KERNEL_VAR}" ]]; then
-            echo -e "${INFO} (${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_repo/trunk/tree\/main}/${KERNEL_VAR} ]"
-            svn export ${kernel_repo}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} --force
+            echo -e "${INFO} (${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_repo/trunk/tree\/main}/${version_branch}/${KERNEL_VAR} ]"
+            svn export ${kernel_repo}/${version_branch}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} --force
         else
             echo -e "${INFO} (${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
         fi
 
         let i++
     done
-    sync
 }
 
 confirm_version() {
@@ -715,7 +710,8 @@ find_openwrt
 # Download the dependency files
 download_depends
 # Download the latest kernel
-[[ "${auto_kernel}" == "true" ]] && download_kernel
+[[ "${auto_kernel}" == "true" ]] && query_version
+download_kernel
 echo -e "${INFO} OpenWrt Board List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
 echo -e "${INFO} Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"
 # Loop to make OpenWrt firmware

@@ -102,7 +102,7 @@ jobs:
         id: imagebuilder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          RELEASES_BRANCH="${{ github.event.inputs.branch }}"
+          RELEASES_BRANCH="${{ inputs.branch }}"
           chmod +x ${IMAGEBUILDER_SH}
           ${IMAGEBUILDER_SH} ${RELEASES_BRANCH}
           echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> ${GITHUB_ENV}
@@ -120,10 +120,10 @@ jobs:
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
           openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
-          openwrt_board: ${{ github.event.inputs.openwrt_board }}
-          openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
-          auto_kernel: ${{ github.event.inputs.auto_kernel }}
-          openwrt_size: ${{ github.event.inputs.openwrt_size }}
+          openwrt_board: ${{ inputs.openwrt_board }}
+          openwrt_kernel: ${{ inputs.openwrt_kernel }}
+          auto_kernel: ${{ inputs.auto_kernel }}
+          openwrt_size: ${{ inputs.openwrt_size }}
 
       - name: Upload OpenWrt Firmware to Release
         uses: ncipollo/release-action@main

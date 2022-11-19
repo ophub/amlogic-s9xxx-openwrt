@@ -41,7 +41,7 @@ jobs:
         if: (!cancelled())
         run: |
           # Get OpenWrt file
-          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ github.event.inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
+          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
           [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
           rm -rf ${{ env.DOCKER_OUTPATH }} 2>/dev/null && mkdir -p ${{ env.DOCKER_OUTPATH }}
           wget -q "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}" -O "${{ env.DOCKER_OUTPATH }}/openwrt-armvirt-64-default-rootfs.tar.gz"
@@ -82,4 +82,4 @@ jobs:
           push: true
           platforms: linux/arm64
           context: ${{ env.DOCKER_OUTPATH }}
-          tags: "${{ github.event.inputs.docker_img }}"
+          tags: "${{ inputs.docker_img }}"

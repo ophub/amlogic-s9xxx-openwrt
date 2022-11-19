@@ -97,7 +97,7 @@ jobs:
         id: down
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ github.event.inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
+          openwrt_url="$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
           [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
           #
           armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
@@ -114,9 +114,9 @@ jobs:
           OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
           KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub
           KERNEL_VERSION_DIR: stable_rk3588
-          PACKAGE_SOC: ${{ github.event.inputs.openwrt_soc }}
-          KERNEL_VERSION_NAME: ${{ github.event.inputs.openwrt_kernel }}
-          KERNEL_AUTO_LATEST: ${{ github.event.inputs.auto_kernel }}
+          PACKAGE_SOC: ${{ inputs.openwrt_soc }}
+          KERNEL_VERSION_NAME: ${{ inputs.openwrt_kernel }}
+          KERNEL_AUTO_LATEST: ${{ inputs.auto_kernel }}
 
       - name: Upload OpenWrt Firmware to Release
         uses: ncipollo/release-action@main

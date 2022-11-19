@@ -402,10 +402,10 @@ Near line 139, find `Build OpenWrt firmware`, Code snippet like this:
   uses: ophub/amlogic-s9xxx-openwrt@main
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
-    openwrt_board: ${{ github.event.inputs.openwrt_board }}
-    openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
-    auto_kernel: ${{ github.event.inputs.auto_kernel }}
-    openwrt_size: ${{ github.event.inputs.openwrt_size }}
+    openwrt_board: ${{ inputs.openwrt_board }}
+    openwrt_kernel: ${{ inputs.openwrt_kernel }}
+    auto_kernel: ${{ inputs.auto_kernel }}
+    openwrt_size: ${{ inputs.openwrt_size }}
 ```
 Refer to the related [parameter description](https://github.com/ophub/amlogic-s9xxx-openwrt#github-actions-input-parameter-description) of the packaging command. The above setting options can be set by writing fixed values, or they can be selected through the `Actions` panel:
 <div style="width:100%;margin-top:40px;margin:5px;">

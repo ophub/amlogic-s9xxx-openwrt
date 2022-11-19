@@ -396,10 +396,10 @@ REPO_BRANCH: openwrt-21.02
   uses: ophub/amlogic-s9xxx-openwrt@main
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
-    openwrt_board: ${{ github.event.inputs.openwrt_board }}
-    openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
-    auto_kernel: ${{ github.event.inputs.auto_kernel }}
-    openwrt_size: ${{ github.event.inputs.openwrt_size }}
+    openwrt_board: ${{ inputs.openwrt_board }}
+    openwrt_kernel: ${{ inputs.openwrt_kernel }}
+    auto_kernel: ${{ inputs.auto_kernel }}
+    openwrt_size: ${{ inputs.openwrt_size }}
 ```
 参考打包命令的相关[参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#github-actions-输入参数说明)。以上设置选项可以通过写入固定值来设置，也可以通过 `Actions` 面板进行选择：
 <div style="width:100%;margin-top:40px;margin:5px;">

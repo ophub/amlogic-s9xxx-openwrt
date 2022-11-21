@@ -69,5 +69,7 @@
 521:Tencent Aurora 3Pro:s905x3:meson-sm1-skyworth-lb2004-a4091.dtb:u-boot-skyworth-lb2004.bin:/lib/u-boot/skyworth-lb2004-u-boot.bin.sd.bin:NA:4C@2100Mhz,4GB Mem,32G Rom,MT7661RSN chip Wifi-5(mt7663s)/Bluetooth-5.0(btmtksdio),JL2121 1Gb Nic:meson-sm1:s905x3-b:yes
 
 # Amlogic GXBB Family
-a01:mxqpro+:s905:meson-gxbb-beelink-mini-mx.dtb:u-boot-s905.bin:NA:NA:2GB RAM 16GB ROM 2.4G/5.8G,1Gb Nic:meson-gxbb:s905:yes
+a01:Beelink-Mini-MX-2G:s905:meson-gxbb-beelink-mini-mx.dtb:u-boot-s905.bin:NA:NA:2GB RAM 16GB ROM 2.4G/5.8G,1Gb Nic:meson-gxbb:s905:yes
+a02:Sunvell-T95M:s905:meson-gxbb-p201.dtb:u-boot-s905.bin:NA:NA:2GB RAM 16GB ROM 2.4G/5.8G,1Gb Nic:meson-gxbb:s905:no
+a03:mxqpro+:s905:meson-gxbb-mxq-pro-plus.dtb:u-boot-p201.bin:NA:NA:2GB DDR3 + 8G eMMC, LAN 100Mb Nic:meson-gxbb:s905:no
 

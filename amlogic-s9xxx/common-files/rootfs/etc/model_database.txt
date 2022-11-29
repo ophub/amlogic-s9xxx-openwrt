@@ -25,12 +25,13 @@
 205:VORKE Z6 Plus:s912:meson-gxm-octopus-planet.dtb:u-boot-zyxq.bin:NA:NA:3GB DDR3 32GB eMMC5.0,1.5Ghz,TF CARD Support 1~32GB,1Gb Nic:meson-gxm:s912:no
 206:MECOOL-M8S-Pro-L:s912:meson-gxm-q201.dtb:u-boot-s905x-s912.bin:NA:NA:2G RAM,3G RAM,16G ROM,32G ROM,100M Nic:meson-gxm:s912-m8s:yes
 207:T95Z Plus:s912:meson-gxm-t95z-plus.dtb:u-boot-s905x-s912.bin:NA:NA:3G+32G,Octa-Core,2.4/5.8G Dual-Band WiFi,1Gb Nic:meson-gxm:s912:no
-208:TX9 Pro:s912:meson-gxm-tx9-pro.dtb:u-boot-zyxq.bin:NA:NA:4C@1512Mhz+4C@1000Mhz,3G RAM,32G ROM,Bluetooth 4.1,1Gb Nic,brcm43455 wifi:meson-gxm:s912:no
-209:Nexbox A1 & A95X:s912:meson-gxm-nexbox-a1.dtb:u-boot-p212.bin:NA:NA:2G DDR3 RAM 16G eMMC,1Gb Nic,qca9377 wifi(no work):meson-gxm:s912:no
-210:Nexbox A95X A2:s912:meson-gxm-nexbox-a2.dtb:u-boot-p212.bin:NA:NA:2GB RAM,16GB ROM,2.4G/5.0G WiFi,qca9377 WLAN/Bluetooth 4.0,1Gb Nic:meson-gxm:s912:no
-211:Tanix TX8 MAX:s912:meson-gxm-tx8-max.dtb:u-boot-p212.bin:NA:NA:3GB RAM,16GB/32GB eMMC,2.4G/5.0G WiFi,qca9377 WLAN/Bluetooth 4.1,1Gb Nic:meson-gxm:s912:no
-212:Vontar X92:s912:meson-gxm-x92.dtb:u-boot-p212.bin:NA:NA:3GB RAM,16GB/32GB eMMC,2.4G/5.0G WiFi,AP6255 WLAN/Bluetooth 4.0,1Gb Nic:meson-gxm:s912:no
-213:Phicomm-T1:s912:meson-gxm-phicomm-t1.dtb:u-boot-s905x-s912.bin:NA:NA:2G RAM,16G ROM,100Mb Nic,Wifi,Bluetooth:meson-gxm:s912-m8s:no
+208:TX9-Pro(3G_32G_1Gb):s912:meson-gxm-tx9-pro.dtb:u-boot-zyxq.bin:NA:NA:4C@1512Mhz+4C@1000Mhz,3G RAM,32G ROM,Bluetooth 4.1,1Gb Nic,brcm43455 wifi:meson-gxm:s912:no
+209:TX9-Pro(2G_16G_100Mb):s912:meson-gxm-q201.dtb:u-boot-p212.bin:NA:NA:4C@1512Mhz+4C@1000Mhz,3G RAM,32G ROM,Bluetooth 4.1,100Mb Nic,RTL8189ETV wifi:meson-gxm:s912:no
+210:Nexbox A1 & A95X:s912:meson-gxm-nexbox-a1.dtb:u-boot-p212.bin:NA:NA:2G DDR3 RAM 16G eMMC,1Gb Nic,qca9377 wifi(no work):meson-gxm:s912:no
+211:Nexbox A95X A2:s912:meson-gxm-nexbox-a2.dtb:u-boot-p212.bin:NA:NA:2GB RAM,16GB ROM,2.4G/5.0G WiFi,qca9377 WLAN/Bluetooth 4.0,1Gb Nic:meson-gxm:s912:no
+212:Tanix TX8 MAX:s912:meson-gxm-tx8-max.dtb:u-boot-p212.bin:NA:NA:3GB RAM,16GB/32GB eMMC,2.4G/5.0G WiFi,qca9377 WLAN/Bluetooth 4.1,1Gb Nic:meson-gxm:s912:no
+213:Vontar X92:s912:meson-gxm-x92.dtb:u-boot-p212.bin:NA:NA:3GB RAM,16GB/32GB eMMC,2.4G/5.0G WiFi,AP6255 WLAN/Bluetooth 4.0,1Gb Nic:meson-gxm:s912:no
+214:Phicomm-T1:s912:meson-gxm-phicomm-t1.dtb:u-boot-s905x-s912.bin:NA:NA:2G RAM,16G ROM,100Mb Nic,Wifi,Bluetooth:meson-gxm:s912-m8s:no
 
 # Amlogic G12A Family
 301:X96 Max 4GB:s905x2:meson-g12a-x96-max.dtb:u-boot-x96max.bin:/lib/u-boot/x96max-u-boot.bin.sd.bin:NA:4C@1908Mhz,4GB Mem,1Gb Nic:meson-g12a:s905x2:yes

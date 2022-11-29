@@ -533,7 +533,7 @@ EOF
 
     # Add balethirq
     balethirq_file="${configfiles_path}/rootfs/usr/sbin/balethirq.pl"
-    [[ -x "${balethirq_file}" ]] && sed -i "/exit/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
+    [[ -x "${balethirq_file}" ]] && sed -i "/^exit 0/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
 
     # Add firmware information
     echo "PLATFORM='amlogic'" >>${op_release} 2>/dev/null

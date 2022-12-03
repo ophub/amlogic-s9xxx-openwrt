@@ -11,8 +11,8 @@ How to use GitHub Actions cloud to compile OpenWrt, and many of the content in t
 - [How to make and use OpenWrt](#how-to-make-and-use-openwrt)
 - [Tutorial directory](#tutorial-directory)
   - [1. Register your own GitHub account](#1-register-your-own-github-account)
-  - [2. Set the privacy variable GitHub_TOKEN](#2-set-the-privacy-variable-github_token)
-  - [3. Fork repository and set GH_TOKEN](#3-fork-repository-and-set-gh_token)
+  - [2. Set the privacy variable GitHub\_TOKEN](#2-set-the-privacy-variable-github_token)
+  - [3. Fork repository and set GH\_TOKEN](#3-fork-repository-and-set-gh_token)
   - [4. Personalized OpenWrt firmware customization file description](#4-personalized-openwrt-firmware-customization-file-description)
     - [4.1 .config file description](#41-config-file-description)
       - [4.1.1 Let the firmware support the native language](#411-let-the-firmware-support-the-native-language)
@@ -77,7 +77,7 @@ Set the GitHub privacy variable `GitHub_TOKEN`. After the firmware is compiled, 
 
 ## 3. Fork repository and set GH_TOKEN
 
-Now you can `Fork` the `repository`, open the repository [https://github.com/ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt), click the `Fork` button on the `upper right`, Will copy a copy of the repository code to your account, `wait a few seconds`, and prompt the Fork to complete Later, go to your account to access `amlogic-s9xxx-armbian` in `your repository`. In the upper right corner of `Settings` > `Secrets` > `Actions` > `New repostiory secret` (Name: `GH_TOKEN`, Value: `Fill in the value of GitHub_TOKEN` just now), `save it`. And select `Read and write permissions` under `Actions` > `General` > `Workflow permissions` in the left nav and save. The icons are as follows:
+Now you can `Fork` the `repository`, open the repository [https://github.com/ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt), click the `Fork` button on the `upper right`, Will copy a copy of the repository code to your account, `wait a few seconds`, and prompt the Fork to complete Later, go to your account to access `amlogic-s9xxx-openwrt` in `your repository`. In the upper right corner of `Settings` > `Secrets` > `Actions` > `New repostiory secret` (Name: `GH_TOKEN`, Value: `Fill in the value of GitHub_TOKEN` just now), `save it`. And select `Read and write permissions` under `Actions` > `General` > `Workflow permissions` in the left nav and save. The icons are as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
@@ -324,7 +324,7 @@ openwrt-install-amlogic
 
 The same type of TV Boxes, the firmware is common, such as `openwrt_s905x3_v*.img` firmware can be used for `x96max plus, hk1, h96` and other `s905x3` type TV Boxes. When the installation script writes OpenWrt to EMMC, you will be prompted to choose your own box, please choose the correct one according to the prompt.
 
-In addition to the default 13 models of TV Boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/common-files/patches/amlogic-dtb)
+In addition to the default 13 models of TV Boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/armbian-files/platform-files/amlogic/bootfs/dtb/amlogic)
 
 ## 9. Update firmware
 

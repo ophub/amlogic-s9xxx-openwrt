@@ -45,9 +45,9 @@ out_path="${make_path}/out"
 openwrt_path="${make_path}/openwrt-armvirt"
 openwrt_rootfs_file="*rootfs.tar.gz"
 amlogic_path="${make_path}/amlogic-s9xxx"
-armbian_path="${amlogic_path}/amlogic-armbian"
+firmware_path="${amlogic_path}/firmware"
 kernel_path="${amlogic_path}/amlogic-kernel"
-uboot_path="${amlogic_path}/amlogic-u-boot"
+uboot_path="${amlogic_path}/u-boot/amlogic"
 configfiles_path="${amlogic_path}/common-files"
 amlogic_model_conf="${configfiles_path}/rootfs/etc/model_database.txt"
 bootfs_path="${configfiles_path}/bootfs"
@@ -215,33 +215,33 @@ download_depends() {
     if [[ "${depends_repo}" == http* && -n "$(echo ${depends_repo} | grep "tree/main")" ]]; then
         depends_repo="${depends_repo//tree\/main/trunk}"
     fi
-    # Download armbian related files
-    if [[ -d "${armbian_path}" ]]; then
-        svn up ${armbian_path} --force
+    # Download armbian firmware file
+    if [[ -d "${firmware_path}" ]]; then
+        svn up ${firmware_path} --force
     else
-        svn co ${depends_repo}/amlogic-armbian ${armbian_path} --force
+        svn co ${depends_repo}/firmware ${firmware_path} --force
     fi
     # Download /boot related files
     if [[ -d "${bootfs_path}" ]]; then
         svn up ${bootfs_path} --force
     else
-        svn co ${depends_repo}/common-files/bootfs ${bootfs_path} --force
+        svn co ${depends_repo}/armbian-files/platform-files/amlogic/bootfs ${bootfs_path} --force
     fi
     # Download u-boot related files
     if [[ -d "${uboot_path}" ]]; then
         svn up ${uboot_path} --force
     else
-        svn co ${depends_repo}/amlogic-u-boot ${uboot_path} --force
+        svn co ${depends_repo}/u-boot/amlogic ${uboot_path} --force
     fi
     # Download openvfd related files
     if [[ -d "${openvfd_path}" ]]; then
         svn up ${openvfd_path} --force
     else
-        svn co ${depends_repo}/common-files/rootfs/usr/share/openvfd ${openvfd_path} --force
+        svn co ${depends_repo}/armbian-files/platform-files/amlogic/rootfs/usr/share/openvfd ${openvfd_path} --force
     fi
     # Download balethirq related files
-    svn export ${depends_repo}/common-files/rootfs/usr/sbin/balethirq.pl ${configfiles_path}/rootfs/usr/sbin --force
-    svn export ${depends_repo}/common-files/rootfs/etc/balance_irq ${configfiles_path}/rootfs/etc --force
+    svn export ${depends_repo}/armbian-files/common-files/usr/sbin/balethirq.pl ${configfiles_path}/rootfs/usr/sbin --force
+    svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${configfiles_path}/rootfs/etc --force
 
     # Convert script library address to svn format
     if [[ "${script_repo}" == http* && -n "$(echo ${script_repo} | grep "tree/main")" ]]; then
@@ -391,8 +391,7 @@ extract_openwrt() {
     rm -f ${tag_rootfs}/rom/sbin/firstboot 2>/dev/null
 
     # Unzip the relevant files
-    tar -xJf "${armbian_path}/boot-common.tar.xz" --no-same-owner -C ${tag_bootfs}
-    tar -xJf "${armbian_path}/firmware.tar.xz" --no-same-owner -C ${tag_rootfs}
+    tar -xJf "${firmware_path}/firmware.tar.xz" --no-same-owner -C ${tag_rootfs}
 
     # Copy the same files
     [[ "$(ls ${configfiles_path}/bootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${configfiles_path}/bootfs/* ${tag_bootfs}

@@ -12,7 +12,7 @@
 # Copyright (C) 2020- https://github.com/unifreq
 # Copyright (C) 2020- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Command: sudo ./make -d
+# Command: sudo ./make
 # Command optional parameters please refer to the source code repository
 #
 #============================== Functions list ==============================
@@ -112,17 +112,10 @@ init_var() {
     echo -e "${STEPS} Start Initializing Variables..."
 
     # If it is followed by [ : ], it means that the option requires a parameter value
-    get_all_ver="$(getopt "db:k:a:v:s:" "${@}")"
+    get_all_ver="$(getopt "b:k:a:v:s:" "${@}")"
 
     while [[ -n "${1}" ]]; do
         case "${1}" in
-        -d | --Default)
-            : ${build_openwrt:="${build_openwrt}"}
-            : ${build_kernel:="${build_kernel}"}
-            : ${auto_kernel:="${auto_kernel}"}
-            : ${version_branch:="${version_branch}"}
-            : ${ROOT_MB:="${ROOT_MB}"}
-            ;;
         -b | --Board)
             if [[ -n "${2}" ]]; then
                 if [[ "${2}" != "all" ]]; then

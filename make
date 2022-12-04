@@ -47,24 +47,29 @@ openwrt_rootfs_file="*rootfs.tar.gz"
 amlogic_path="${make_path}/amlogic-s9xxx"
 firmware_path="${amlogic_path}/firmware"
 kernel_path="${amlogic_path}/amlogic-kernel"
-uboot_path="${amlogic_path}/u-boot/amlogic"
-configfiles_path="${amlogic_path}/common-files"
-amlogic_model_conf="${configfiles_path}/rootfs/etc/model_database.txt"
-bootfs_path="${configfiles_path}/bootfs"
-openvfd_path="${configfiles_path}/rootfs/usr/share/openvfd"
+uboot_path="${amlogic_path}/u-boot"
+common_files="${amlogic_path}/common-files"
+bootfs_path="${common_files}/bootfs"
+openvfd_path="${common_files}/rootfs/usr/share/openvfd"
+model_conf="${common_files}/rootfs/etc/model_database.txt"
+
 # Add custom openwrt firmware information
 op_release="etc/flippy-openwrt-release"
+
 # Dependency files download repository
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
+
 # Install/Update script files download repository
 script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic/root/usr/sbin"
+
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 # Convert kernel library address to svn format
 kernel_repo="${kernel_repo//tree\/main/trunk}"
 version_branch="stable"
-auto_kernel="true"
 build_kernel=("5.10.125" "5.15.50")
+auto_kernel="true"
+
 # Set supported board
 build_openwrt=(
     "a311d"
@@ -78,11 +83,12 @@ build_openwrt=(
     "s905"
     "s905l3a"
 )
+
 # Set OpenWrt firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
 SKIP_MB="68"
 BOOT_MB="256"
 ROOT_MB="960"
-#
+
 # Set font color
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
@@ -197,7 +203,7 @@ find_openwrt() {
         echo -e "${INFO} The source_codename: [ ${source_codename} ]"
     }
     # Remove temporary directory
-    rm -rf ${temp_dir} 2>/dev/null
+    rm -rf ${temp_dir}
 }
 
 download_depends() {
@@ -233,16 +239,16 @@ download_depends() {
         svn co ${depends_repo}/armbian-files/platform-files/amlogic/rootfs/usr/share/openvfd ${openvfd_path} --force
     fi
     # Download balethirq related files
-    svn export ${depends_repo}/armbian-files/common-files/usr/sbin/balethirq.pl ${configfiles_path}/rootfs/usr/sbin --force
-    svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${configfiles_path}/rootfs/etc --force
+    svn export ${depends_repo}/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/rootfs/usr/sbin --force
+    svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${common_files}/rootfs/etc --force
 
     # Convert script library address to svn format
     if [[ "${script_repo}" == http* && -n "$(echo ${script_repo} | grep "tree/main")" ]]; then
         script_repo="${script_repo//tree\/main/trunk}"
     fi
     # Download install/update and other related files
-    svn export ${script_repo} ${configfiles_path}/rootfs/usr/sbin --force
-    chmod +x ${configfiles_path}/rootfs/usr/sbin/*
+    svn export ${script_repo} ${common_files}/rootfs/usr/sbin --force
+    chmod +x ${common_files}/rootfs/usr/sbin/*
 }
 
 query_version() {
@@ -300,9 +306,9 @@ confirm_version() {
     process_msg " (1/6) Confirm version type."
     cd ${make_path}
 
-    # Find [ the first ] configuration information with [ the same BOARD name ] and [ BUILD as yes ] in the ${amlogic_model_conf} file.
-    [[ -f "${amlogic_model_conf}" ]] || error_msg "[ ${amlogic_model_conf} ] file is missing!"
-    board_conf="$(cat ${amlogic_model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:${board}:yes$" | head -n 1)"
+    # Find [ the first ] configuration information with [ the same BOARD name ] and [ BUILD as yes ] in the ${model_conf} file.
+    [[ -f "${model_conf}" ]] || error_msg "[ ${model_conf} ] file is missing!"
+    board_conf="$(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:${board}:yes$" | head -n 1)"
     [[ -n "${board_conf}" ]] || error_msg "[ ${board} ] config is missing!"
 
     # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.ANDROID_UBOOT  8.DESCRIPTION  9.FAMILY  10.BOARD  11.BUILD
@@ -325,7 +331,7 @@ make_image() {
 
     # Set openwrt filename
     build_image_file="${out_path}/openwrt${source_codename}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
-    rm -f ${build_image_file} 2>/dev/null
+    rm -f ${build_image_file}
 
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
     IMG_SIZE="$((SKIP_MB + BOOT_MB + ROOT_MB))"
@@ -380,15 +386,15 @@ extract_openwrt() {
 
     # Unzip the openwrt package
     tar -xzf ${openwrt_path}/${openwrt_file_name} -C ${tag_rootfs}
-    rm -rf ${tag_rootfs}/lib/modules/* 2>/dev/null
-    rm -f ${tag_rootfs}/rom/sbin/firstboot 2>/dev/null
+    rm -rf ${tag_rootfs}/lib/modules/*
+    rm -f ${tag_rootfs}/rom/sbin/firstboot
 
     # Unzip the relevant files
     tar -xJf "${firmware_path}/firmware.tar.xz" --no-same-owner -C ${tag_rootfs}
 
     # Copy the same files
-    [[ "$(ls ${configfiles_path}/bootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${configfiles_path}/bootfs/* ${tag_bootfs}
-    [[ "$(ls ${configfiles_path}/rootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${configfiles_path}/rootfs/* ${tag_rootfs}
+    [[ "$(ls ${common_files}/bootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${common_files}/bootfs/* ${tag_bootfs}
+    [[ "$(ls ${common_files}/rootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${common_files}/rootfs/* ${tag_rootfs}
 
     # Copy the bootloader files
     [[ -d "${tag_rootfs}/lib/u-boot" ]] || mkdir -p "${tag_rootfs}/lib/u-boot"
@@ -424,38 +430,78 @@ replace_kernel() {
 
 refactor_files() {
     process_msg " (5/6) Refactor related files."
+    cd ${tag_bootfs}
+
+    # For btrfs file system
+    uenv_mount_string="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
+    boot_conf_file="uEnv.txt"
+    [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
+    sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_conf_file}
+    sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
+
+    # Add an alternate file (/boot/extlinux/extlinux.conf) for devices like T95Z. If needed, rename delete .bak
+    boot_extlinux_file="extlinux/extlinux.conf.bak"
+    [[ -f "${boot_extlinux_file}" ]] && {
+        sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_extlinux_file}
+        sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_extlinux_file}
+    }
+
+    # Add u-boot.ext for 5.10 kernel
+    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
+        cp -f ${UBOOT_OVERLOAD} u-boot.ext
+        chmod +x u-boot.ext
+    elif [[ "${K510}" -eq "1" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then
+        error_msg "${board} Board does not support using ${kernel} kernel, missing u-boot."
+    fi
+
     cd ${tag_rootfs}
 
-    # Add other operations below
-    echo 'pwm_meson' >etc/modules.d/pwm-meson
-    if ! grep -q 'ulimit -n' etc/init.d/boot; then
-        sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
-    fi
-    if ! grep -q '/tmp/update' etc/init.d/boot; then
-        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/update' etc/init.d/boot
-    fi
-    sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
-    sed -i 's/ttyS0/tty0/' etc/inittab
-
-    mkdir -p boot run opt
-    chown -R 0:0 ./
-
-    mkdir -p etc/modprobe.d
-    cat >etc/modprobe.d/99-local.conf <<EOF
-blacklist snd_soc_meson_aiu_i2s
-alias brnf br_netfilter
-alias pwm pwm_meson
-alias wifi brcmfmac
-EOF
-
-    # echo br_netfilter > etc/modules.d/br_netfilter
-    echo pwm_meson >etc/modules.d/pwm_meson 2>/dev/null
-    echo panfrost >etc/modules.d/panfrost 2>/dev/null
-    echo meson_gxbb_wdt >etc/modules.d/watchdog 2>/dev/null
+    # Add directory
+    mkdir -p .reserved boot run
 
     # Edit fstab
-    sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|" etc/fstab 2>/dev/null
-    sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|" etc/config/fstab 2>/dev/null
+    sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|" etc/fstab
+    sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|" etc/config/fstab
+
+    # Add firmware information
+    echo "PLATFORM='amlogic'" >${op_release}
+    echo "SOC='${SOC}'" >>${op_release}
+    echo "FDTFILE='${FDTFILE}'" >>${op_release}
+    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
+    echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
+    echo "ANDROID_UBOOT='/lib/u-boot/${ANDROID_UBOOT}'" >>${op_release}
+    echo "FAMILY='${FAMILY}'" >>${op_release}
+    echo "BOARD='${board}'" >>${op_release}
+    echo "KERNEL_VERSION='${kernel}'" >>${op_release}
+    echo "K510='${K510}'" >>${op_release}
+
+    # Add firmware version information to the terminal page
+    [[ -f "etc/banner" ]] && {
+        op_version=$(echo $(ls lib/modules/ 2>/dev/null))
+        op_production_date=$(date +%Y-%m-%d)
+        echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
+        echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
+        echo " Amlogic Box SoC: ${SOC} | OpenWrt Kernel: ${op_version}" >>etc/banner
+        echo " Production Date: ${op_production_date}" >>etc/banner
+        echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
+    }
+
+    # Add cpustat
+    cpustat_file="${common_files}/patches/cpustat"
+    [[ -d "${cpustat_file}" && -x "bin/bash" ]] && {
+        cp -f ${cpustat_file}/30-sysinfo.sh etc/profile.d/30-sysinfo.sh
+        cp -f ${cpustat_file}/getcpu bin/getcpu && chmod +x bin/getcpu
+        cp -f ${cpustat_file}/cpustat usr/bin/cpustat && chmod +x usr/bin/cpustat
+        sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd
+        sed -i "s/\/bin\/ash/\/bin\/bash/" usr/libexec/login.sh
+    }
+
+    # Add balethirq
+    balethirq_file="${common_files}/rootfs/usr/sbin/balethirq.pl"
+    [[ -x "${balethirq_file}" ]] && sed -i "/^exit 0/i\/usr/sbin/balethirq.pl" etc/rc.local
+
+    # Modify the cpu mode to schedutil
+    [[ -f "etc/config/cpufreq" ]] && sed -i "s/ondemand/schedutil/" etc/config/cpufreq
 
     # Turn off speed limit by default
     [[ -f "etc/config/nft-qos" ]] && sed -i "s|option limit_enable.*|option limit_enable '0'|g" etc/config/nft-qos
@@ -498,57 +544,36 @@ EOF
     echo "ath10k_core" >etc/modules.d/ath10k_core
     echo "ath10k_sdio" >etc/modules.d/ath10k_sdio
     echo "ath10k_usb" >etc/modules.d/ath10k_usb
+    # Enable watchdog driver
+    echo "meson_gxbb_wdt" >etc/modules.d/watchdog
+
+    # Add blacklist
+    mkdir -p etc/modprobe.d
+    cat >etc/modprobe.d/99-local.conf <<EOF
+blacklist snd_soc_meson_aiu_i2s
+alias brnf br_netfilter
+alias pwm pwm_meson
+alias wifi brcmfmac
+EOF
+
+    # Adjust startup settings
+    if ! grep -q 'ulimit -n' etc/init.d/boot; then
+        sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
+    fi
+    if ! grep -q '/tmp/update' etc/init.d/boot; then
+        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/update' etc/init.d/boot
+    fi
+    sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
+    sed -i 's/ttyS0/tty0/' etc/inittab
 
     # Relink the kmod program
     [[ -x "sbin/kmod" ]] && (
         kmod_list="depmod insmod lsmod modinfo modprobe rmmod"
         for ki in ${kmod_list}; do
-            rm -f sbin/${ki} 2>/dev/null
+            rm -f sbin/${ki}
             ln -sf kmod sbin/${ki}
         done
     )
-
-    # Modify the cpu mode to schedutil
-    if [[ -f "etc/config/cpufreq" ]]; then
-        sed -i "s/ondemand/schedutil/" etc/config/cpufreq
-    fi
-
-    # Add cpustat
-    cpustat_file="${configfiles_path}/patches/cpustat"
-    if [[ -d "${cpustat_file}" && -x "bin/bash" ]]; then
-        cp -f ${cpustat_file}/cpustat usr/bin/cpustat && chmod +x usr/bin/cpustat >/dev/null 2>&1
-        cp -f ${cpustat_file}/getcpu bin/getcpu && chmod +x bin/getcpu >/dev/null 2>&1
-        cp -f ${cpustat_file}/30-sysinfo.sh etc/profile.d/30-sysinfo.sh >/dev/null 2>&1
-        sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd >/dev/null 2>&1
-        sed -i "s/\/bin\/ash/\/bin\/bash/" usr/libexec/login.sh >/dev/null 2>&1
-    fi
-
-    # Add balethirq
-    balethirq_file="${configfiles_path}/rootfs/usr/sbin/balethirq.pl"
-    [[ -x "${balethirq_file}" ]] && sed -i "/^exit 0/i\/usr/sbin/balethirq.pl" etc/rc.local >/dev/null 2>&1
-
-    # Add firmware information
-    echo "PLATFORM='amlogic'" >>${op_release} 2>/dev/null
-    echo "SOC='${SOC}'" >>${op_release} 2>/dev/null
-    echo "FDTFILE='${FDTFILE}'" >>${op_release} 2>/dev/null
-    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release} 2>/dev/null
-    echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release} 2>/dev/null
-    echo "ANDROID_UBOOT='/lib/u-boot/${ANDROID_UBOOT}'" >>${op_release} 2>/dev/null
-    echo "FAMILY='${FAMILY}'" >>${op_release} 2>/dev/null
-    echo "BOARD='${board}'" >>${op_release} 2>/dev/null
-    echo "KERNEL_VERSION='${kernel}'" >>${op_release} 2>/dev/null
-    echo "K510='${K510}'" >>${op_release} 2>/dev/null
-
-    # Add firmware version information to the terminal page
-    if [[ -f "etc/banner" ]]; then
-        op_version=$(echo $(ls lib/modules/ 2>/dev/null))
-        op_production_date=$(date +%Y-%m-%d)
-        echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
-        echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
-        echo " Amlogic Box SoC: ${SOC} | OpenWrt Kernel: ${op_version}" >>etc/banner
-        echo " Production Date: ${op_production_date}" >>etc/banner
-        echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
-    fi
 
     # Add wireless master mode
     wireless_mac80211="lib/netifd/wireless/mac80211.sh"
@@ -584,30 +609,6 @@ EOF
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:07/" "brcmfmac4354-sdio.txt" >"brcmfmac4354-sdio.amlogic,sm1.txt"
     )
 
-    cd ${tag_bootfs}
-
-    # For btrfs file system
-    uenv_mount_string="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
-    boot_conf_file="uEnv.txt"
-    [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
-    sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_conf_file}
-    sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
-
-    # Add an alternate file (/boot/extlinux/extlinux.conf) for devices like T95Z. If needed, rename delete .bak
-    boot_extlinux_file="extlinux/extlinux.conf.bak"
-    if [[ -f "${boot_extlinux_file}" ]]; then
-        sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_extlinux_file}
-        sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_extlinux_file}
-    fi
-
-    # Add u-boot.ext for 5.10 kernel
-    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
-        cp -f ${UBOOT_OVERLOAD} u-boot.ext
-        chmod +x u-boot.ext
-    elif [[ "${K510}" -eq "1" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then
-        error_msg "${board} Board does not support using ${kernel} kernel, missing u-boot."
-    fi
-
     cd ${make_path}
 
     # Create snapshot
@@ -641,7 +642,7 @@ clean_tmp() {
     cd ${make_path}
 
     # Clear temporary files directory
-    rm -rf ${tmp_path} 2>/dev/null
+    rm -rf ${tmp_path}
 }
 
 loop_make() {
@@ -687,7 +688,7 @@ loop_make() {
     cd ${out_path}
 
     # Backup the openwrt file
-    cp -f ${openwrt_path}/${openwrt_file_name} . 2>/dev/null
+    cp -f ${openwrt_path}/${openwrt_file_name} .
 
     # Generate sha256sum check file
     sha256sum * >sha256sums && sync

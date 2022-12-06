@@ -85,7 +85,7 @@ build_openwrt=(
 )
 
 # Set OpenWrt firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
-SKIP_MB="68"
+SKIP_MB="4"
 BOOT_MB="256"
 ROOT_MB="960"
 

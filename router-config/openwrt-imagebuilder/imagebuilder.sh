@@ -36,7 +36,7 @@
 make_path="${PWD}"
 imagebuilder_path="${make_path}/openwrt"
 custom_files_path="${make_path}/router-config/openwrt-imagebuilder/files"
-config_file_path="${make_path}/router-config/openwrt-imagebuilder/.config"
+config_file_path="${make_path}/router-config/openwrt-imagebuilder/config"
 # Set default parameters
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
@@ -144,6 +144,7 @@ custom_files() {
         # Copy custom files
         [[ -d "files" ]] || mkdir -p files
         cp -rf ${custom_files_path}/* files
+        mv -f files/config files/.config 2>/dev/null
 
         sync && sleep 3
         echo -e "${INFO} [ files ] directory status: $(ls files -l 2>/dev/null)"

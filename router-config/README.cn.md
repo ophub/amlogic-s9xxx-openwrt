@@ -364,7 +364,7 @@ openwrt-kernel
 
 使用 openwrt 的官方源码库，或者其他分支的源码库进行一次本地化编译，如选择 https://github.com/coolsnowwolf/lede 的源码库，根据它的编译说明，在本地安装 Ubuntu 系统，部署环境并完成一次本地编译。在本地编译配置界面中，你也可以看到很多丰富的说明，这将加强你对 openwrt 编译过程的理解。
 
-当你在本地完成 openwrt 个性化配置后，保存并退出配置界面，你可以在本地 openwrt 源码库的根目录下找到 .config 文件（ 在代码库的根目录下输入 `ls -a` 命令查看全部隐藏文件），你可以把这个文件直接上传到 github.com 里你的仓库里，替换 router-config/lede-master/.config 这个文件。
+当你在本地完成 openwrt 个性化配置后，保存并退出配置界面，你可以在本地 openwrt 源码库的根目录下找到 .config 文件（ 在代码库的根目录下输入 `ls -a` 命令查看全部隐藏文件），你可以把这个文件直接上传到 github.com 里你的仓库里，替换 router-config/lede-master/config 这个文件。
 
 ### 10.2 认识 workflow 文件
 

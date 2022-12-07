@@ -370,7 +370,7 @@ If you see this step in the tutorial, I believe you already know how to play hap
 
 Use the official source code library of `OpenWrt` or the source code library of other branches to perform a `localized compilation`. For example, select the source code library of [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede), and install the `Ubuntu system` locally and deploy the environment according to its compilation instructions. And `complete a local compilation`. In the local compilation configuration interface, you can also see a lot of rich instructions, which will strengthen your understanding of the OpenWrt compilation process.
 
-After you complete the `OpenWrt personalized configuration` locally, `save and exit` the configuration interface. You can find the `.config` file in the root directory of the local OpenWrt source code library. You can upload this file directly to `your repository on github.com`, Replace the `router-config/lede-master/.config` file.
+After you complete the `OpenWrt personalized configuration` locally, `save and exit` the configuration interface. You can find the `.config` file in the root directory of the local OpenWrt source code library. You can upload this file directly to `your repository on github.com`, Replace the `router-config/lede-master/config` file.
 
 ### 10.2 Know the workflow file
 

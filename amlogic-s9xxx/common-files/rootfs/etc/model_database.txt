@@ -73,7 +73,7 @@
 519:A95XF3 Air 1Gb:s905x3:meson-sm1-a95xf3-air-gbit.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,1Gb Nic,Wifi:meson-sm1:s905x3:no
 520:A95XF3 Air 100Mb:s905x3:meson-sm1-a95xf3-air.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,100Mb Nic,Wifi:meson-sm1:s905x3:no
 521:Tencent Aurora 3Pro:s905x3:meson-sm1-skyworth-lb2004-a4091.dtb:u-boot-skyworth-lb2004.bin:/lib/u-boot/skyworth-lb2004-u-boot.bin.sd.bin:/lib/u-boot/skyworth-lb2004-bootloader.img:4C@2100Mhz,4GB Mem,32G Rom,MT7661RSN chip Wifi-5(mt7663s)/Bluetooth-5.0(btmtksdio),JL2121 1Gb Nic:meson-sm1:s905x3-b:yes
-522:X96 Max+ A100:s905x3:meson-sm1-sei610.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,4GB Mem,32G Rom,Wifi AM7256, 100Mb Nic:meson-sm1:s905x3:no
+522:X96 Max+ A100:s905x3:meson-sm1-sei610.dtb:u-boot-x96maxplus.bin:/lib/u-boot/x96maxplus-u-boot.bin.sd.bin:NA:4C@2100Mhz,4GB Mem,32G Rom,Wifi AM7256, 100Mb Nic:meson-sm1:s905x3:no
 
 # Amlogic GXBB Family
 a01:Beelink-Mini-MX-2G:s905:meson-gxbb-beelink-mini-mx.dtb:u-boot-s905.bin:NA:NA:2GB RAM 16GB ROM 2.4G/5.8G,1Gb Nic:meson-gxbb:s905:yes

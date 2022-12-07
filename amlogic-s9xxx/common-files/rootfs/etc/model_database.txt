@@ -3,12 +3,12 @@
 # Amlogic GXL Family
 101:Phicomm N1:s905d:meson-gxl-s905d-phicomm-n1.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:4C@1512Mhz,2GB Mem,1Gb Nic,brcm43455 wifi:meson-gxl:s905d:yes
 102:Phicomm N1 (DMA thresh):s905d:meson-gxl-s905d-phicomm-n1-thresh.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:Same as above, when ethmac flow control is off:meson-gxl:s905d:no
-103:HG680P:s905x:meson-gxl-s905x-p212.dtb:u-boot-p212.bin:NA:NA:4C@1512Mhz,100M Nic:meson-gxl:s905x:yes
-104:TX3-Mini:s905w:meson-gxl-s905w-tx3-mini.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1512Mhz,100M Nic:meson-gxl:s905w:yes
+103:HG680P:s905x:meson-gxl-s905x-p212.dtb:u-boot-p212.bin:NA:NA:4C@1512Mhz,100Mb Nic:meson-gxl:s905x:yes
+104:TX3-Mini:s905w:meson-gxl-s905w-tx3-mini.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1512Mhz,100Mb Nic:meson-gxl:s905w:yes
 105:MECOOL KI Pro:s905d:meson-gxl-s905d-mecool-ki-pro.dtb:u-boot-p201.bin:NA:NA:2G/16G,1Gb Nic:meson-gxl:s905d-ki:yes
 106:T95:s905x:meson-gxl-s905x-p212.dtb:u-boot-s905x-s912.bin:NA:NA:2G/16G,1Gb Nic:meson-gxl:s905x:no
-107:B860H:s905x:meson-gxl-s905x-b860h.dtb:u-boot-p212.bin:NA:NA:4C@1512Mhz,100M Nic:meson-gxl:s905x:no
-108:TBee:s905x:meson-gxl-s905x-tbee.dtb:u-boot-p212.bin:NA:NA:4C@1512Mhz,100M Nic:meson-gxl:s905x:no
+107:B860H:s905x:meson-gxl-s905x-b860h.dtb:u-boot-p212.bin:NA:NA:4C@1512Mhz,100Mb Nic:meson-gxl:s905x:no
+108:TBee:s905x:meson-gxl-s905x-tbee.dtb:u-boot-p212.bin:NA:NA:4C@1512Mhz,100Mb Nic:meson-gxl:s905x:no
 109:W95:s905w:meson-gxl-s905w-p281.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1512Mhz,2GB RAM,16GB ROM,100Mb Nic,USB2.0:meson-gxl:s905w:no
 110:X96 Mini:s905w:meson-gxl-s905w-x96-mini.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1512Mhz,100Mb Nic:meson-gxl:s905x:no
 111:TX9:s905x:meson-gxl-s905x-tx9.dtb:u-boot-s905x-s912.bin:NA:NA:4C@1512Mhz,100Mb Nic,rtl8723cs WLAN,rtl8723bs Bluetooth:meson-gxl:s905x:no
@@ -24,7 +24,7 @@
 203:H96 Pro Plus:s912:meson-gxm-octopus-planet.dtb:u-boot-zyxq.bin:NA:NA:2G/32G,1Gb Nic:meson-gxm:s912:no
 204:Tanix TX92:s912:meson-gxm-octopus-planet.dtb:u-boot-zyxq.bin:NA:NA:3GB DDR4 32GB eMMC,1.5GHz,5G WIFI,1Gb Nic:meson-gxm:s912:no
 205:VORKE Z6 Plus:s912:meson-gxm-octopus-planet.dtb:u-boot-zyxq.bin:NA:NA:3GB DDR3 32GB eMMC5.0,1.5Ghz,TF CARD Support 1~32GB,1Gb Nic:meson-gxm:s912:no
-206:MECOOL-M8S-Pro-L:s912:meson-gxm-q201.dtb:u-boot-s905x-s912.bin:NA:NA:2G RAM,3G RAM,16G ROM,32G ROM,100M Nic:meson-gxm:s912-m8s:yes
+206:MECOOL-M8S-Pro-L:s912:meson-gxm-q201.dtb:u-boot-s905x-s912.bin:NA:NA:2G RAM,3G RAM,16G ROM,32G ROM,100Mb Nic:meson-gxm:s912-m8s:yes
 207:T95Z Plus:s912:meson-gxm-t95z-plus.dtb:u-boot-s905x-s912.bin:NA:NA:3G+32G,Octa-Core,2.4/5.8G Dual-Band WiFi,1Gb Nic:meson-gxm:s912:no
 208:TX9-Pro(3G_32G_1Gb):s912:meson-gxm-tx9-pro.dtb:u-boot-zyxq.bin:NA:NA:4C@1512Mhz+4C@1000Mhz,3G RAM,32G ROM,Bluetooth 4.1,1Gb Nic,brcm43455 wifi:meson-gxm:s912:no
 209:TX9-Pro(2G_16G_100Mb):s912:meson-gxm-q201.dtb:u-boot-p212.bin:NA:NA:4C@1512Mhz+4C@1000Mhz,3G RAM,32G ROM,Bluetooth 4.1,100Mb Nic,RTL8189ETV wifi:meson-gxm:s912:no
@@ -36,8 +36,8 @@
 
 # Amlogic G12A Family
 301:X96 Max 4GB:s905x2:meson-g12a-x96-max.dtb:u-boot-x96max.bin:/lib/u-boot/x96max-u-boot.bin.sd.bin:NA:4C@1908Mhz,4GB Mem,1Gb Nic:meson-g12a:s905x2:yes
-302:X96 Max 2GB:s905x2:meson-g12a-x96-max-rmii.dtb:u-boot-x96max.bin:/lib/u-boot/x96max-u-boot.bin.sd.bin:NA:4C@1908Mhz,2GB Mem,100M Nic:meson-g12a:s905x2:no
-303:MECOOL KM3 4G:s905x2:meson-g12a-sei510.dtb:u-boot-x96max.bin:/lib/u-boot/x96max-u-boot.bin.sd.bin:NA:4C@1908Mhz,4+64G/128G,2.4G/5G WiFi,Bluetooth 4.1,100M Nic:meson-g12a:s905x2-km3:yes
+302:X96 Max 2GB:s905x2:meson-g12a-x96-max-rmii.dtb:u-boot-x96max.bin:/lib/u-boot/x96max-u-boot.bin.sd.bin:NA:4C@1908Mhz,2GB Mem,100Mb Nic:meson-g12a:s905x2:no
+303:MECOOL KM3 4G:s905x2:meson-g12a-sei510.dtb:u-boot-x96max.bin:/lib/u-boot/x96max-u-boot.bin.sd.bin:NA:4C@1908Mhz,4+64G/128G,2.4G/5G WiFi,Bluetooth 4.1,100Mb Nic:meson-g12a:s905x2-km3:yes
 304:E900V22C-D:s905l3a:meson-g12a-s905l3a-e900v22c.dtb:u-boot-e900v22c.bin:NA:NA:4C@1908Mhz,4+64G/128G,2.4G/5G WiFi,Bluetooth 4.1,100Mb Nic:meson-g12a:s905l3a:yes
 305:CM311-1a-YST:s905l3a:meson-g12a-s905l3a-cm311.dtb:u-boot-e900v22c.bin:NA:NA:4C@1908Mhz,2+16G,Bluetooth rtl8761b,100Mb Nic:meson-g12a:s905l3a:no
 306:M401A/ZTE-B863AV3.2-M:s905l3a:meson-g12a-s905l3a-m401a.dtb:u-boot-e900v22c.bin:NA:NA:4C@1908Mhz,2+16G,100Mb Nic:meson-g12a:s905l3a:no
@@ -68,11 +68,12 @@
 514:TX3 100Mb:s905x3:meson-sm1-tx3-bz.dtb:u-boot-tx3-bz.bin:/lib/u-boot/x96maxplus-u-boot.bin.sd.bin:NA:4C@2100Mhz,4GB Mem,100Mb Nic,bcm4330 wifi:meson-sm1:s905x3:no
 515:TX3 100Mb (OverClock):s905x3:meson-sm1-tx3-bz-oc.dtb:u-boot-tx3-bz.bin:/lib/u-boot/x96maxplus-u-boot.bin.sd.bin:NA:4C@2208Mhz,4GB Mem,100Mb Nic,bcm4330 wifi:meson-sm1:s905x3:no
 516:X96 Air 1Gb:s905x3:meson-sm1-x96-air-gbit.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,1Gb Nic,Wifi:meson-sm1:s905x3:no
-517:X96 Air/X96 Max+ 100Mb:s905x3:meson-sm1-x96-air.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,100M Nic,Wifi:meson-sm1:s905x3:no
+517:X96 Air/X96 Max+ 100Mb:s905x3:meson-sm1-x96-air.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,100Mb Nic,Wifi:meson-sm1:s905x3:no
 518:X96 Air Q1000:s905x3:meson-sm1-x96-max-plus-q2.dtb:u-boot-x96maxplus.bin:/lib/u-boot/x96maxplus-u-boot.bin.sd.bin:NA:4C@2208Mhz,4GB Mem,1Gb Nic,qca9377 wifi:meson-sm1:s905x3:no
 519:A95XF3 Air 1Gb:s905x3:meson-sm1-a95xf3-air-gbit.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,1Gb Nic,Wifi:meson-sm1:s905x3:no
-520:A95XF3 Air 100Mb:s905x3:meson-sm1-a95xf3-air.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,100M Nic,Wifi:meson-sm1:s905x3:no
+520:A95XF3 Air 100Mb:s905x3:meson-sm1-a95xf3-air.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,2GB Mem,100Mb Nic,Wifi:meson-sm1:s905x3:no
 521:Tencent Aurora 3Pro:s905x3:meson-sm1-skyworth-lb2004-a4091.dtb:u-boot-skyworth-lb2004.bin:/lib/u-boot/skyworth-lb2004-u-boot.bin.sd.bin:/lib/u-boot/skyworth-lb2004-bootloader.img:4C@2100Mhz,4GB Mem,32G Rom,MT7661RSN chip Wifi-5(mt7663s)/Bluetooth-5.0(btmtksdio),JL2121 1Gb Nic:meson-sm1:s905x3-b:yes
+522:X96 Max+ A100:s905x3:meson-sm1-sei610.dtb:u-boot-x96maxplus.bin:NA:NA:4C@2100Mhz,4GB Mem,32G Rom,Wifi AM7256, 100Mb Nic:meson-sm1:s905x3:no
 
 # Amlogic GXBB Family
 a01:Beelink-Mini-MX-2G:s905:meson-gxbb-beelink-mini-mx.dtb:u-boot-s905.bin:NA:NA:2GB RAM 16GB ROM 2.4G/5.8G,1Gb Nic:meson-gxbb:s905:yes

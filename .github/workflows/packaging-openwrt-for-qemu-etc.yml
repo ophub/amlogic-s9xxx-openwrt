@@ -125,7 +125,7 @@ jobs:
         with:
           tag: OpenWrt_aarch64_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-          allowUpdates: true
+          allowUpdates: false
           token: ${{ secrets.GH_TOKEN }}
           body: |
             This is OpenWrt firmware for Armvirt 64

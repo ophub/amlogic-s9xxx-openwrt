@@ -63,7 +63,7 @@ env:
   REPO_URL: https://github.com/openwrt/openwrt
   REPO_BRANCH: master
   FEEDS_CONF: router-config/openwrt-master/feeds.conf.default
-  CONFIG_FILE: router-config/openwrt-master/.config
+  CONFIG_FILE: router-config/openwrt-master/config
   DIY_P1_SH: router-config/openwrt-master/diy-part1.sh
   DIY_P2_SH: router-config/openwrt-master/diy-part2.sh
   TZ: America/New_York
@@ -174,7 +174,7 @@ jobs:
         with:
           tag: ${{ steps.compile.outputs.build_tag }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-          allowUpdates: true
+          allowUpdates: false
           token: ${{ secrets.GH_TOKEN }}
           body: |
             This is OpenWrt firmware for Amlogic s9xxx tv box

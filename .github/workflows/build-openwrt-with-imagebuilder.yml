@@ -132,7 +132,7 @@ jobs:
         with:
           tag: OpenWrt_Aml_imagebuilder_${{ env.RELEASES_BRANCH }}_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-          allowUpdates: false
+          allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}
           body: |
             This is OpenWrt firmware for Amlogic s9xxx tv box

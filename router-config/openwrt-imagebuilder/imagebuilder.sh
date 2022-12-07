@@ -34,9 +34,11 @@
 #
 # Set default parameters
 make_path="${PWD}"
-imagebuilder_path="${make_path}/openwrt"
+openwrt_dir="openwrt"
+imagebuilder_path="${make_path}/${openwrt_dir}"
 custom_files_path="${make_path}/router-config/openwrt-imagebuilder/files"
 custom_config_file="${make_path}/router-config/openwrt-imagebuilder/config"
+
 # Set default parameters
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
@@ -65,7 +67,7 @@ download_imagebuilder() {
 
     # Unzip and change the directory name
     tar -xJf openwrt-imagebuilder-* && sync && rm -f openwrt-imagebuilder-*.tar.xz
-    mv -f openwrt-imagebuilder-* ${imagebuilder_path}
+    mv -f openwrt-imagebuilder-* ${openwrt_dir}
 
     sync && sleep 3
     echo -e "${INFO} [ ${make_path} ] directory status: $(ls . -l 2>/dev/null)"

@@ -496,6 +496,12 @@ refactor_files() {
         sed -i "s/\/bin\/ash/\/bin\/bash/" usr/libexec/login.sh
     }
 
+    # Turn off hw_flow by default
+    [[ -f "etc/config/turboacc" ]] && {
+        sed -i "s|option hw_flow.*|option hw_flow '0'|g" etc/config/turboacc
+        sed -i "s|option sw_flow.*|option sw_flow '0'|g" etc/config/turboacc
+    }
+
     # Add balethirq
     balethirq_file="${common_files}/rootfs/usr/sbin/balethirq.pl"
     [[ -x "${balethirq_file}" ]] && sed -i "/^exit 0/i\/usr/sbin/balethirq.pl" etc/rc.local
@@ -505,10 +511,6 @@ refactor_files() {
 
     # Turn off speed limit by default
     [[ -f "etc/config/nft-qos" ]] && sed -i "s|option limit_enable.*|option limit_enable '0'|g" etc/config/nft-qos
-
-    # Turn off hw_flow by default
-    [[ -f "etc/config/turboacc" ]] && sed -i "s|option hw_flow.*|option hw_flow '0'|g" etc/config/turboacc
-    [[ -f "etc/config/turboacc" ]] && sed -i "s|option sfe_flow.*|option sfe_flow '0'|g" etc/config/turboacc
 
     # Add USB and wireless network drivers
     [[ -f "etc/modules.d/usb-net-rtl8150" ]] || echo "rtl8150" >etc/modules.d/usb-net-rtl8150

@@ -45,12 +45,12 @@ out_path="${make_path}/out"
 openwrt_path="${make_path}/openwrt-armvirt"
 openwrt_rootfs_file="*rootfs.tar.gz"
 amlogic_path="${make_path}/amlogic-s9xxx"
-firmware_path="${amlogic_path}/firmware"
 kernel_path="${amlogic_path}/amlogic-kernel"
 uboot_path="${amlogic_path}/u-boot"
 common_files="${amlogic_path}/common-files"
 bootfs_path="${common_files}/bootfs"
 openvfd_path="${common_files}/rootfs/usr/share/openvfd"
+firmware_path="${common_files}/rootfs/lib/firmware"
 model_conf="${common_files}/rootfs/etc/model_database.txt"
 
 # Add custom openwrt firmware information
@@ -58,9 +58,18 @@ op_release="etc/flippy-openwrt-release"
 
 # Dependency files download repository
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
+# Convert depends library address to svn format
+depends_repo="${depends_repo//tree\/main/trunk}"
+
+# Firmware files download repository
+firmware_repo="https://github.com/ophub/firmware/tree/main/firmware"
+# Convert firmware library address to svn format
+firmware_repo="${firmware_repo//tree\/main/trunk}"
 
 # Install/Update script files download repository
 script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic/root/usr/sbin"
+# Convert script library address to svn format
+script_repo="${script_repo//tree\/main/trunk}"
 
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
@@ -210,42 +219,38 @@ download_depends() {
     cd ${make_path}
     echo -e "${STEPS} Start downloading dependency files..."
 
-    # Convert depends library address to svn format
-    if [[ "${depends_repo}" == http* && -n "$(echo ${depends_repo} | grep "tree/main")" ]]; then
-        depends_repo="${depends_repo//tree\/main/trunk}"
-    fi
-    # Download armbian firmware file
-    if [[ -d "${firmware_path}" ]]; then
-        svn up ${firmware_path} --force
-    else
-        svn co ${depends_repo}/firmware ${firmware_path} --force
-    fi
     # Download /boot related files
     if [[ -d "${bootfs_path}" ]]; then
         svn up ${bootfs_path} --force
     else
         svn co ${depends_repo}/armbian-files/platform-files/amlogic/bootfs ${bootfs_path} --force
     fi
+
     # Download u-boot related files
     if [[ -d "${uboot_path}" ]]; then
         svn up ${uboot_path} --force
     else
         svn co ${depends_repo}/u-boot/amlogic ${uboot_path} --force
     fi
+
     # Download openvfd related files
     if [[ -d "${openvfd_path}" ]]; then
         svn up ${openvfd_path} --force
     else
         svn co ${depends_repo}/armbian-files/platform-files/amlogic/rootfs/usr/share/openvfd ${openvfd_path} --force
     fi
+
     # Download balethirq related files
     svn export ${depends_repo}/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/rootfs/usr/sbin --force
     svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${common_files}/rootfs/etc --force
 
-    # Convert script library address to svn format
-    if [[ "${script_repo}" == http* && -n "$(echo ${script_repo} | grep "tree/main")" ]]; then
-        script_repo="${script_repo//tree\/main/trunk}"
+    # Download armbian firmware file
+    if [[ -d "${firmware_path}" ]]; then
+        svn up ${firmware_path} --force
+    else
+        svn co ${firmware_repo} ${firmware_path} --force
     fi
+
     # Download install/update and other related files
     svn export ${script_repo} ${common_files}/rootfs/usr/sbin --force
     chmod +x ${common_files}/rootfs/usr/sbin/*
@@ -389,12 +394,9 @@ extract_openwrt() {
     rm -rf ${tag_rootfs}/lib/modules/*
     rm -f ${tag_rootfs}/rom/sbin/firstboot
 
-    # Unzip the relevant files
-    tar -xJf "${firmware_path}/firmware.tar.xz" --no-same-owner -C ${tag_rootfs}
-
     # Copy the same files
-    [[ "$(ls ${common_files}/bootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${common_files}/bootfs/* ${tag_bootfs}
-    [[ "$(ls ${common_files}/rootfs 2>/dev/null | wc -w)" -ne "0" ]] && cp -rf ${common_files}/rootfs/* ${tag_rootfs}
+    [[ -d "${common_files}/bootfs" ]] && cp -rf ${common_files}/bootfs/* ${tag_bootfs}
+    [[ -d "${common_files}/rootfs" ]] && cp -rf ${common_files}/rootfs/* ${tag_rootfs}
 
     # Copy the bootloader files
     [[ -d "${tag_rootfs}/lib/u-boot" ]] || mkdir -p "${tag_rootfs}/lib/u-boot"

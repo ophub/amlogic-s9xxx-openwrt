@@ -96,7 +96,7 @@ build_openwrt=(
 # Set OpenWrt firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
 SKIP_MB="4"
 BOOT_MB="256"
-ROOT_MB="960"
+ROOT_MB="1024"
 
 # Set font color
 STEPS="[\033[95m STEPS \033[0m]"
@@ -466,7 +466,7 @@ refactor_files() {
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|" etc/config/fstab
 
     # Add firmware information
-    echo "PLATFORM='amlogic'" >${op_release}
+    echo "PLATFORM='amlogic'" >>${op_release}
     echo "SOC='${SOC}'" >>${op_release}
     echo "FDTFILE='${FDTFILE}'" >>${op_release}
     echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}

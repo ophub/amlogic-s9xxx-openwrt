@@ -121,17 +121,17 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -k | Kernel | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 5.10.125` . 多个内核使用 `_` 进行连接，如 `-k 5.10.125_5.15.50` |
 | -a | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.10.125 的同系列是否有更新的版本，如有 5.10.125 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -v | VersionBranch | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，如 `-v stable` 。指定的名称须与分支目录名称相同。默认使用 `stable` 分支版本。 |
-| -s | Size | 对固件的 ROOTFS 分区大小进行设置（MiB），默认大小为 960 MiB, 固件大小必须大于 512 MiB. 例如： `-s 960` |
+| -s | Size | 对固件的 ROOTFS 分区大小进行设置（MiB），默认大小为 1024 MiB, 固件大小必须大于 512 MiB. 例如： `-s 1024` |
 
 - `sudo ./make` : 使用默认配置，使用内核库中的最新内核包，对全部型号的电视盒子进行打包。
 - `sudo ./make -b s905x3 -k 5.10.125` : 推荐使用. 使用默认配置进行相关内核打包。
 - `sudo ./make -b s905x3_s905d -k 5.10.125_5.15.50` : 使用默认配置，进行多个内核同时打包。使用 `_` 进行多内核参数连接。
-- `sudo ./make -b s905x3 -k 5.10.125 -s 960` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为 960 MiB。
+- `sudo ./make -b s905x3 -k 5.10.125 -s 1024` : 使用默认配置，指定一个内核，一个型号进行打包，固件大小设定为 1024 MiB。
 - `sudo ./make -b s905x3 -v dev -k 5.10.125` : 使用默认配置，指定型号，[指定版本分支](https://github.com/ophub/kernel/tree/main/pub) 和内核进行打包。
 - `sudo ./make -b s905x3_s905d`  使用默认配置，对多个型号的电视盒子进行全部内核打包, 使用 `_` 进行多型号连接。
 - `sudo ./make -k 5.10.125_5.15.50` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。
 - `sudo ./make -k 5.10.125_5.15.50 -a true` : 使用默认配置，指定多个内核，进行全部型号电视盒子进行打包, 内核包使用 `_` 进行连接。自动升级到同系列最新内核。
-- `sudo ./make -s 960 -k 5.10.125` : 使用默认配置，设置固件大小为 960 MiB, 并指定内核为 5.10.125 ，对全部型号电视盒子进行打包。
+- `sudo ./make -s 1024 -k 5.10.125` : 使用默认配置，设置固件大小为 1024 MiB, 并指定内核为 5.10.125 ，对全部型号电视盒子进行打包。
 
 ## 使用 GitHub Actions 进行编译
 
@@ -161,7 +161,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | openwrt_kernel    | 5.10.125_5.15.50   | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | version_branch    | stable            | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，功能参考 `-v` |
-| openwrt_size      | 960               | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
+| openwrt_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
 
 - ### GitHub Actions 输出变量说明
 

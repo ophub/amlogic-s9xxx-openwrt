@@ -64,7 +64,7 @@ on:
       openwrt_size:
         description: "Set the rootfs size(Unit: MiB)."
         required: false
-        default: "960"
+        default: "1024"
 
 env:
   TZ: America/New_York

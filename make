@@ -96,6 +96,9 @@ SKIP_MB="4"
 BOOT_MB="256"
 ROOT_MB="1024"
 
+# Get ${{ secrets.GH_TOKEN }} for api.github.com
+GH_TOKEN=""
+
 # Set font color
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
@@ -125,7 +128,7 @@ init_var() {
     echo -e "${STEPS} Start Initializing Variables..."
 
     # If it is followed by [ : ], it means that the option requires a parameter value
-    get_all_ver="$(getopt "b:k:a:v:r:s:" "${@}")"
+    get_all_ver="$(getopt "b:k:a:v:r:s:g:" "${@}")"
 
     while [[ -n "${1}" ]]; do
         case "${1}" in
@@ -184,6 +187,14 @@ init_var() {
                 shift
             else
                 error_msg "Invalid -s parameter [ ${2} ]!"
+            fi
+            ;;
+        -g | --GH_TOKEN)
+            if [[ -n "${2}" ]]; then
+                GH_TOKEN="${2}"
+                shift
+            else
+                error_msg "Invalid -g parameter [ ${2} ]!"
             fi
             ;;
         *)
@@ -276,16 +287,26 @@ query_version() {
     i=1
     for KERNEL_VAR in ${build_kernel[*]}; do
         echo -e "${INFO} (${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
+
         # Identify the kernel mainline
         MAIN_LINE="$(echo ${KERNEL_VAR} | awk -F '.' '{print $1"."$2}')"
+
         # Check the version on the server (e.g LATEST_VERSION="125")
-        LATEST_VERSION="$(curl -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}\.[0-9]+" | sed -e "s/${MAIN_LINE}\.//g" | sort -n | sed -n '$p')"
-        if [[ "${?}" -eq "0" && ! -z "${LATEST_VERSION}" ]]; then
+        if [[ -n "${GH_TOKEN}" ]]; then
+            LATEST_VERSION="$(curl --header "authorization: Bearer ${GH_TOKEN}" -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}\.[0-9]+" | sed -e "s/${MAIN_LINE}\.//g" | sort -n | sed -n '$p')"
+            query_api="authenticated"
+        else
+            LATEST_VERSION="$(curl -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}\.[0-9]+" | sed -e "s/${MAIN_LINE}\.//g" | sort -n | sed -n '$p')"
+            query_api="unauthenticated"
+        fi
+
+        if [[ "${?}" -eq "0" && -n "${LATEST_VERSION}" ]]; then
             tmp_arr_kernels[${i}]="${MAIN_LINE}.${LATEST_VERSION}"
         else
             tmp_arr_kernels[${i}]="${KERNEL_VAR}"
         fi
-        echo -e "${INFO} (${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel. \n"
+
+        echo -e "${INFO} (${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel(${query_api}). \n"
 
         let i++
     done
@@ -710,7 +731,6 @@ echo -e "${STEPS} Welcome to tools for making Amlogic s9xxx OpenWrt! \n"
 echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
 echo -e "${INFO} Server memory usage: \n$(free -h) \n"
 echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${make_path}) \n"
-echo -e "${INFO} Setting parameters: [ ${@} ] \n"
 #
 # Initialize variables and download the kernel
 init_var "${@}"

@@ -123,6 +123,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -v | VersionBranch | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
 | -r | KernelRepository | Specify the name of the kernel [repository](https://github.com/ophub/kernel/tree/main/pub), Such as `-r https://github.com/ophub/kernel/tree/main/pub`. The [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75) is used by default. |
 | -s | Size | Set the ROOTFS partition size for firmware (MiB). The default is 1024 MiB, and the specified size must be greater than 512 MiB. Such as `-s 1024` |
+| -g | GH_TOKEN | Optional. Set ${{ secrets.GH_TOKEN }} for [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) query. Default: `None` |
 
 - `sudo ./make`: Compile latest kernel versions of openwrt for all board with the default configuration.
 - `sudo ./make -b s905x3 -k 5.10.125`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
@@ -165,10 +166,11 @@ The relevant parameters correspond to the `local packaging command`, please refe
 | version_branch     | stable            | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
 | kernel_repo     | [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75)            | Specify the name of the kernel Repository, function reference `-r` |
 | openwrt_size       | 1024              | Set the size of the firmware ROOTFS partition, function reference `-s` |
+| gh_token           | None              | Optional. Set ${{ secrets.GH_TOKEN }}, function reference `-g` |
 
 - ### GitHub Actions Output variable description
 
-To upload to `Releases`, you need to add `GITHUB_TOKEN` and `GH_TOKEN` to the repository and set `Workflow read and write permissions`, see the [instructions for details](router-config#2-set-the-privacy-variable-github_token).
+To upload to `Releases`, you need to add `${{ secrets.GITHUB_TOKEN }}` and `${{ secrets.GH_TOKEN }}` to the repository and set `Workflow read and write permissions`, see the [instructions for details](router-config#2-set-the-privacy-variable-github_token).
 
 | Parameter                                | For example         | Description                         |
 |------------------------------------------|---------------------|-------------------------------------|

@@ -34,6 +34,10 @@ inputs:
     description: "Set the rootfs size(Unit: MiB)."
     required: false
     default: "1024"
+  gh_token:
+    description: "Set the token."
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -77,6 +81,7 @@ runs:
         [[ -n "${{ inputs.version_branch }}" ]] && make_command="${make_command} -v ${{ inputs.version_branch }}"
         [[ -n "${{ inputs.kernel_repo }}" ]] && make_command="${make_command} -r ${{ inputs.kernel_repo }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
+        [[ -n "${{ inputs.gh_token }}" ]] && make_command="${make_command} -g ${{ inputs.gh_token }}"
         sudo ./make ${make_command}
 
         cd ${GITHUB_ACTION_PATH}

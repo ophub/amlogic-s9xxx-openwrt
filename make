@@ -73,8 +73,6 @@ script_repo="${script_repo//tree\/main/trunk}"
 
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
-# Convert kernel library address to svn format
-kernel_repo="${kernel_repo//tree\/main/trunk}"
 version_branch="stable"
 build_kernel=("5.10.125" "5.15.50")
 auto_kernel="true"
@@ -127,7 +125,7 @@ init_var() {
     echo -e "${STEPS} Start Initializing Variables..."
 
     # If it is followed by [ : ], it means that the option requires a parameter value
-    get_all_ver="$(getopt "b:k:a:v:s:" "${@}")"
+    get_all_ver="$(getopt "b:k:a:v:r:s:" "${@}")"
 
     while [[ -n "${1}" ]]; do
         case "${1}" in
@@ -172,6 +170,14 @@ init_var() {
                 error_msg "Invalid -v parameter [ ${2} ]!"
             fi
             ;;
+        -r | --KernelRepository)
+            if [[ -n "${2}" ]]; then
+                kernel_repo="${2}"
+                shift
+            else
+                error_msg "Invalid -r parameter [ ${2} ]!"
+            fi
+            ;;
         -s | --Size)
             if [[ -n "${2}" && "${2}" -ge "512" ]]; then
                 ROOT_MB="${2}"
@@ -186,6 +192,9 @@ init_var() {
         esac
         shift
     done
+
+    # Convert kernel library address to svn format
+    kernel_repo="${kernel_repo//tree\/main/trunk}"
 }
 
 find_openwrt() {

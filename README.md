@@ -121,6 +121,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 5.10.125` . Multiple kernel use `_` connection such as `-k 5.10.125_5.15.50` |
 | -a | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 5.10.125 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | -v | VersionBranch | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
+| -r | KernelRepository | Specify the name of the kernel [repository](https://github.com/ophub/kernel/tree/main/pub), Such as `-r https://github.com/ophub/kernel/tree/main/pub`. The [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75) is used by default. |
 | -s | Size | Set the ROOTFS partition size for firmware (MiB). The default is 1024 MiB, and the specified size must be greater than 512 MiB. Such as `-s 1024` |
 
 - `sudo ./make`: Compile latest kernel versions of openwrt for all board with the default configuration.
@@ -162,6 +163,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 | openwrt_kernel     | 5.10.125_5.15.50   | Set the kernel version，function reference `-k` |
 | auto_kernel        | true              | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
 | version_branch     | stable            | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
+| kernel_repo     | [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75)            | Specify the name of the kernel Repository, function reference `-r` |
 | openwrt_size       | 1024              | Set the size of the firmware ROOTFS partition, function reference `-s` |
 
 - ### GitHub Actions Output variable description

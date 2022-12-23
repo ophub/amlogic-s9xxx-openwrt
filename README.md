@@ -159,12 +159,12 @@ The relevant parameters correspond to the `local packaging command`, please refe
 
 | Parameter          | Defaults          | Description                                                   |
 |--------------------|-------------------|---------------------------------------------------------------|
-| openwrt_path     | no                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
+| openwrt_path       | None                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_board      | s905d_s905x3      | Set the `board` of the packaging TV Boxes, function reference `-b` |
 | openwrt_kernel     | 5.10.125_5.15.50   | Set the kernel version，function reference `-k` |
 | auto_kernel        | true              | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
 | version_branch     | stable            | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
-| kernel_repo     | [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75)            | Specify the name of the kernel Repository, function reference `-r` |
+| kernel_repo        | [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75)            | Specify the name of the kernel Repository, function reference `-r` |
 | openwrt_size       | 1024              | Set the size of the firmware ROOTFS partition, function reference `-s` |
 | gh_token           | None              | Optional. Set ${{ secrets.GH_TOKEN }}, function reference `-g` |
 

@@ -156,16 +156,16 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 
 相关参数与`本地打包命令`相对应，请参考上面的说明。
 
-| 参数              | 默认值             | 说明                                        |
+| 参数               | 默认值             | 说明                                        |
 |-------------------|-------------------|-------------------------------------------|
-| openwrt_path      | no                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
+| openwrt_path      | 无                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_board     | s905d_s905x3      | 设置打包盒子的 `board` ，功能参考 `-b` |
 | openwrt_kernel    | 5.10.125_5.15.50   | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | version_branch    | stable            | 指定内核 [版本分支](https://github.com/ophub/kernel/tree/main/pub) 名称，功能参考 `-v` |
 | kernel_repo       | [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75)            | 指定内核仓库地址，功能参考 `-r` |
 | openwrt_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
-| gh_token          | 空                | 可选项。设置 ${{ secrets.GH_TOKEN }}。功能参考 `-g`      |
+| gh_token          | 无                | 可选项。设置 ${{ secrets.GH_TOKEN }}。功能参考 `-g`      |
 
 - ### GitHub Actions 输出变量说明
 

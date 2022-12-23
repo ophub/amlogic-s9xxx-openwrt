@@ -61,8 +61,12 @@ on:
         required: false
         default: true
         type: boolean
+      kernel_repo:
+        description: "Set the kernel repository"
+        required: false
+        default: "https://github.com/ophub/kernel/tree/main/pub"
       openwrt_size:
-        description: "Set the rootfs size(Unit: MiB)."
+        description: "Set the rootfs size(Unit: MiB)"
         required: false
         default: "1024"
 
@@ -116,6 +120,7 @@ jobs:
           openwrt_board: ${{ inputs.openwrt_board }}
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}
+          kernel_repo: ${{ inputs.kernel_repo }}
           openwrt_size: ${{ inputs.openwrt_size }}
 
       - name: Upload OpenWrt Firmware to Release

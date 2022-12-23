@@ -26,6 +26,10 @@ inputs:
     description: "Choose version branch."
     required: false
     default: "stable"
+  kernel_repo:
+    description: "Choose kernel repository."
+    required: false
+    default: "https://github.com/ophub/kernel/tree/main/pub"
   openwrt_size:
     description: "Set the rootfs size(Unit: MiB)."
     required: false
@@ -71,6 +75,7 @@ runs:
         [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
         [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [[ -n "${{ inputs.version_branch }}" ]] && make_command="${make_command} -v ${{ inputs.version_branch }}"
+        [[ -n "${{ inputs.kernel_repo }}" ]] && make_command="${make_command} -r ${{ inputs.kernel_repo }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
         sudo ./make ${make_command}
 

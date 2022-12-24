@@ -151,6 +151,7 @@ You can modify the configuration file in the `router-config` directory and `.yml
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     openwrt_board: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
     openwrt_kernel: 5.10.125_5.15.50
+    gh_token: ${{ secrets.GH_TOKEN }}
 ```
 
 - ### GitHub Actions Input parameter description

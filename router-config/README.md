@@ -406,6 +406,7 @@ Near line 139, find `Build OpenWrt firmware`, Code snippet like this:
     openwrt_kernel: ${{ inputs.openwrt_kernel }}
     auto_kernel: ${{ inputs.auto_kernel }}
     openwrt_size: ${{ inputs.openwrt_size }}
+    gh_token: ${{ secrets.GH_TOKEN }}
 ```
 Refer to the related [parameter description](https://github.com/ophub/amlogic-s9xxx-openwrt#github-actions-input-parameter-description) of the packaging command. The above setting options can be set by writing fixed values, or they can be selected through the `Actions` panel:
 <div style="width:100%;margin-top:40px;margin:5px;">

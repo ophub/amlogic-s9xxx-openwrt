@@ -39,12 +39,14 @@ do_checkdisk() {
     mmcblk?p[1-4])
         EMMC_NAME="$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-2)}')"
         PARTITION_NAME="p"
-        LB_PRE="EMMC_"
         ;;
     [hsv]d[a-z][1-4])
         EMMC_NAME="$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-1)}')"
         PARTITION_NAME=""
-        LB_PRE=""
+        ;;
+    nvme?n?p[1-4])
+        EMMC_NAME="$(echo ${ROOT_PTNAME} | awk '{print substr($1, 1, length($1)-2)}')"
+        PARTITION_NAME="p"
         ;;
     *)
         error_msg "Unable to recognize the disk type of ${ROOT_PTNAME}!"
@@ -52,7 +54,7 @@ do_checkdisk() {
     esac
 
     PARTITION_PATH="/mnt/${EMMC_NAME}${PARTITION_NAME}4"
-    available_space="$(df -hT ${PARTITION_PATH} | grep '/dev/' | awk '{print $5}' | sed 's/.$//' | awk -F "." '{print $1}')"
+    available_space="$(df -Tk ${PARTITION_PATH} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
     if [[ -z "$(echo "${available_space}" | sed -n "/^[0-9]\+$/p")" ]]; then
         error_msg "The path is not available, the remaining space cannot be obtained."
     fi

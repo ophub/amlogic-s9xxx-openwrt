@@ -1,25 +1,17 @@
-#=====================================================================================
+#============================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Use Releases file to packaging
-#=====================================================================================
+# Description: Build OpenWrt with immortalwrt
+# Source code repository: https://github.com/immortalwrt/immortalwrt / Branch: openwrt-21.02
+#============================================================================================
 
-name: Use Releases file to Packaging
+name: Build OpenWrt with immortalwrt
 
 on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      branch:
-        description: "Select the source branch"
-        required: false
-        default: "lede"
-        type: choice
-        options:
-          - lede
-          - official
-          - immortalwrt
       openwrt_board:
-        description: "Select device board"
+        description: "Select Amlogic board"
         required: false
         default: "all"
         type: choice
@@ -72,6 +64,12 @@ on:
         default: "1024"
 
 env:
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: openwrt-21.02
+  FEEDS_CONF: router-config/immortalwrt-21.02/feeds.conf.default
+  CONFIG_FILE: router-config/immortalwrt-21.02/config
+  DIY_P1_SH: router-config/immortalwrt-21.02/diy-part1.sh
+  DIY_P2_SH: router-config/immortalwrt-21.02/diy-part2.sh
   TZ: America/New_York
 
 jobs:
@@ -93,28 +91,79 @@ jobs:
           sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* mongodb* dotnet* moby* snapd* || true
           sudo -E apt-get -qq update -y
           sudo -E apt-get -qq full-upgrade -y
-          sudo -E apt-get -qq install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
+          sudo bash -c 'bash <(curl -s https://build-scripts.immortalwrt.eu.org/init_build_environment.sh)'
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "${TZ}"
+          sudo mkdir -p /workdir
+          sudo chown ${USER}:${GROUPS} /workdir
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Download OpenWrt Armvirt firmware
-        id: down
+      - name: Clone source code
+        working-directory: /workdir
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          openwrt_url="$(curl --header "authorization: Bearer ${{ secrets.GH_TOKEN }}" -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
-          [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
-          #
-          armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
-          [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
-          #
-          wget -q -P "${armvirt_tarfile_path}" "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}"
-          [[ "${?}" -ne "0" ]] && echo "The armvirt file download failed!" && exit 1
+          df -hT ${PWD}
+          git clone --depth 1 ${REPO_URL} -b ${REPO_BRANCH} openwrt
+          ln -sf /workdir/openwrt ${GITHUB_WORKSPACE}/openwrt
+
+      - name: Load custom feeds
+        run: |
+          [[ -e "${FEEDS_CONF}" ]] && cp -f ${FEEDS_CONF} openwrt/feeds.conf.default
+          chmod +x ${DIY_P1_SH}
+          cd openwrt/
+          ${GITHUB_WORKSPACE}/${DIY_P1_SH}
+
+      - name: Update feeds
+        run: cd openwrt/ && ./scripts/feeds update -a
+
+      - name: Install feeds
+        run: cd openwrt/ && ./scripts/feeds install -a
+
+      - name: Load custom configuration
+        run: |
+          [[ -d "files" ]] && mv -f files openwrt/files
+          [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
+          chmod +x ${DIY_P2_SH}
+          cd openwrt/
+          ${GITHUB_WORKSPACE}/${DIY_P2_SH}
+
+      - name: Download package
+        id: package
+        run: |
+          cd openwrt/
+          make defconfig
+          make download -j8
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
+
+      - name: Compile the firmware
+        id: compile
+        run: |
+          cd openwrt/
+          echo -e "$(nproc) thread compile"
+          make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
+          echo "build_tag=OpenWrt_Aml_immortalwrt_$(date +"%m.%d.%H%M")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
+      - name: Upload OpenWrt Firmware to Release
+        uses: ncipollo/release-action@main
+        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
+        with:
+          tag: ${{ steps.compile.outputs.build_tag }}
+          artifacts: openwrt/bin/targets/*/*/*rootfs.tar.gz
+          allowUpdates: true
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Clean up server space
+        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
+        run: |
+          cd openwrt/
+          rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+          df -hT ${PWD}
+
       - name: Build OpenWrt firmware
-        if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
           openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
@@ -125,11 +174,11 @@ jobs:
           openwrt_size: ${{ inputs.openwrt_size }}
           gh_token: ${{ secrets.GH_TOKEN }}
 
-      - name: Upload OpenWrt Firmware to Release
+      - name: Upload the packaged firmware to Release
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
-          tag: OpenWrt_Aml_${{ inputs.branch }}_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: ${{ steps.compile.outputs.build_tag }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}

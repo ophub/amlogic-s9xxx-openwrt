@@ -306,7 +306,7 @@ query_version() {
             tmp_arr_kernels[${i}]="${KERNEL_VAR}"
         fi
 
-        echo -e "${INFO} (${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel(${query_api}). \n"
+        echo -e "${INFO} (${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel (${query_api}). \n"
 
         let i++
     done

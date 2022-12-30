@@ -77,7 +77,7 @@ delete_current_swap() {
 }
 
 # create new swap
-create_new_swap() {
+create_the_swap() {
     echo -e "${STEPS} Start creating a new swap..."
     ROOTFS_TYPE="$(df -hT / | tail -n1 | awk '{print $2}')"
     echo -e "${INFO} The swap size is [ ${swap_gb} ] GiB, partition types is [ ${ROOTFS_TYPE} ], Please wait..."
@@ -88,8 +88,8 @@ create_new_swap() {
         chattr +C ${SWAP_PATH}/swapfile
         btrfs property set ${SWAP_PATH}/swapfile compression none
     }
-    dd if=/dev/zero of=${SWAP_PATH}/swapfile bs=1G count=${swap_gb} conv=fsync && sync
-    chmod 0600 ${SWAP_PATH}/swapfile
+    dd if="/dev/zero" of="${SWAP_PATH}/swapfile" bs="1024" count="$((1048576 * ${swap_gb}))" conv="fsync"
+    chmod 600 ${SWAP_PATH}/swapfile
     mkswap -L SWAP ${SWAP_PATH}/swapfile
     swapon ${SWAP_PATH}/swapfile
 
@@ -121,11 +121,11 @@ do_checkswap() {
 
     # manage swap
     current_swap="$(free -m | sed -n '$p' | awk '{print $2}' | echo $(xargs))"
-    if [[ "${current_swap}" -gt "0" ]]; then
+    if [[ "${current_swap}" -ne "0" ]]; then
         delete_current_swap ${current_swap}
-        create_new_swap ${swap_gb}
+        create_the_swap ${swap_gb}
     else
-        create_new_swap ${swap_gb}
+        create_the_swap ${swap_gb}
     fi
     exit 0
 }

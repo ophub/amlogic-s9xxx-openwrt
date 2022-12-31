@@ -226,9 +226,10 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 
 ## 链接
 
+- [unifreq](https://github.com/unifreq/openwrt_packit)
 - [OpenWrt](https://github.com/openwrt/openwrt)
-- [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
-- [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit)
+- [coolsnowwolf](https://github.com/coolsnowwolf/lede)
+- [immortalwrt](https://github.com/immortalwrt/immortalwrt)
 
 ## License
 

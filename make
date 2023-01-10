@@ -96,8 +96,8 @@ SKIP_MB="4"
 BOOT_MB="256"
 ROOT_MB="1024"
 
-# Get ${{ secrets.GH_TOKEN }} for api.github.com
-GH_TOKEN=""
+# Get gh_token for api.github.com
+gh_token=""
 
 # Set font color
 STEPS="[\033[95m STEPS \033[0m]"
@@ -189,9 +189,9 @@ init_var() {
                 error_msg "Invalid -s parameter [ ${2} ]!"
             fi
             ;;
-        -g | --GH_TOKEN)
+        -g | --gh_token)
             if [[ -n "${2}" ]]; then
-                GH_TOKEN="${2}"
+                gh_token="${2}"
                 shift
             else
                 error_msg "Invalid -g parameter [ ${2} ]!"
@@ -292,8 +292,8 @@ query_version() {
         MAIN_LINE="$(echo ${KERNEL_VAR} | awk -F '.' '{print $1"."$2}')"
 
         # Check the version on the server (e.g LATEST_VERSION="125")
-        if [[ -n "${GH_TOKEN}" ]]; then
-            LATEST_VERSION="$(curl --header "authorization: Bearer ${GH_TOKEN}" -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}\.[0-9]+" | sed -e "s/${MAIN_LINE}\.//g" | sort -n | sed -n '$p')"
+        if [[ -n "${gh_token}" ]]; then
+            LATEST_VERSION="$(curl --header "authorization: Bearer ${gh_token}" -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}\.[0-9]+" | sed -e "s/${MAIN_LINE}\.//g" | sort -n | sed -n '$p')"
             query_api="Authenticated user request"
         else
             LATEST_VERSION="$(curl -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}\.[0-9]+" | sed -e "s/${MAIN_LINE}\.//g" | sort -n | sed -n '$p')"

@@ -405,10 +405,10 @@ extract_openwrt() {
     mkdir -p ${tag_bootfs} ${tag_rootfs}
 
     # Mount the openwrt image
-    mount -t vfat ${loop_new}p1 ${tag_bootfs}
+    mount -t vfat -o discard ${loop_new}p1 ${tag_bootfs}
     [[ "${?}" -eq "0" ]] || error_msg "mount ${loop_new}p1 failed!"
 
-    mount -t btrfs -o compress=zstd:6 ${loop_new}p2 ${tag_rootfs}
+    mount -t btrfs -o discard,compress=zstd:6 ${loop_new}p2 ${tag_rootfs}
     [[ "${?}" -eq "0" ]] || error_msg "mount ${loop_new}p2 failed!"
 
     # Create snapshot directory

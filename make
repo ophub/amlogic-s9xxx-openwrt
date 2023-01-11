@@ -73,11 +73,14 @@ script_repo="${script_repo//tree\/main/trunk}"
 
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
-version_branch="stable"
-build_kernel=("5.10.125" "5.15.50")
+# Set the kernel directory used by default
+kernel_dir="stable"
+# Set the list of kernels used by default
+kernel_list=("5.10.125" "5.15.50")
+# Set to automatically use the latest kernel
 auto_kernel="true"
 
-# Set supported board
+# Set the list of supported openwrt board
 build_openwrt=(
     "a311d"
     "s922x" "s922x-n2" "s922x-reva"
@@ -150,7 +153,7 @@ init_var() {
             if [[ -n "${2}" ]]; then
                 oldIFS=$IFS
                 IFS=_
-                build_kernel=(${2})
+                kernel_list=(${2})
                 IFS=$oldIFS
                 shift
             else
@@ -167,7 +170,7 @@ init_var() {
             ;;
         -v | --VersionBranch)
             if [[ -n "${2}" ]]; then
-                version_branch="${2}"
+                kernel_dir="${2}"
                 shift
             else
                 error_msg "Invalid -v parameter [ ${2} ]!"
@@ -278,18 +281,18 @@ query_version() {
     # Convert kernel library address to API format
     server_kernel_url="${kernel_repo#*com\/}"
     server_kernel_url="${server_kernel_url//trunk/contents}"
-    server_kernel_url="https://api.github.com/repos/${server_kernel_url}/${version_branch}"
+    server_kernel_url="https://api.github.com/repos/${server_kernel_url}/${kernel_dir}"
 
     # Set empty array
     tmp_arr_kernels=()
 
     # Query the latest kernel in a loop
     i=1
-    for KERNEL_VAR in ${build_kernel[*]}; do
-        echo -e "${INFO} (${i}) Auto query the latest kernel version of the same series for [ ${KERNEL_VAR} ]"
+    for k in ${kernel_list[*]}; do
+        echo -e "${INFO} (${i}) Auto query the latest kernel version of the same series for [ ${k} ]"
 
         # Identify the kernel mainline
-        MAIN_LINE="$(echo ${KERNEL_VAR} | awk -F '.' '{print $1"."$2}')"
+        MAIN_LINE="$(echo ${k} | awk -F '.' '{print $1"."$2}')"
 
         # Check the version on the server (e.g LATEST_VERSION="125")
         if [[ -n "${gh_token}" ]]; then
@@ -303,7 +306,7 @@ query_version() {
         if [[ "${?}" -eq "0" && -n "${LATEST_VERSION}" ]]; then
             tmp_arr_kernels[${i}]="${MAIN_LINE}.${LATEST_VERSION}"
         else
-            tmp_arr_kernels[${i}]="${KERNEL_VAR}"
+            tmp_arr_kernels[${i}]="${k}"
         fi
 
         echo -e "${INFO} (${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel (${query_api}). \n"
@@ -312,8 +315,8 @@ query_version() {
     done
 
     # Reset the kernel array to the latest kernel version
-    unset build_kernel
-    build_kernel="${tmp_arr_kernels[*]}"
+    unset kernel_list
+    kernel_list="${tmp_arr_kernels[*]}"
 }
 
 download_kernel() {
@@ -321,12 +324,12 @@ download_kernel() {
     echo -e "${STEPS} Start downloading the kernel files..."
 
     i=1
-    for KERNEL_VAR in ${build_kernel[*]}; do
-        if [[ ! -d "${kernel_path}/${KERNEL_VAR}" ]]; then
-            echo -e "${INFO} (${i}) [ ${KERNEL_VAR} ] Kernel loading from [ ${kernel_repo/trunk/tree\/main}/${version_branch}/${KERNEL_VAR} ]"
-            svn export ${kernel_repo}/${version_branch}/${KERNEL_VAR} ${kernel_path}/${KERNEL_VAR} --force
+    for k in ${kernel_list[*]}; do
+        if [[ ! -d "${kernel_path}/${k}" ]]; then
+            echo -e "${INFO} (${i}) [ ${k} ] Kernel loading from [ ${kernel_repo/trunk/tree\/main}/${kernel_dir}/${k} ]"
+            svn export ${kernel_repo}/${kernel_dir}/${k} ${kernel_path}/${k} --force
         else
-            echo -e "${INFO} (${i}) [ ${KERNEL_VAR} ] Kernel is in the local directory."
+            echo -e "${INFO} (${i}) [ ${k} ] Kernel is in the local directory."
         fi
 
         let i++
@@ -682,7 +685,7 @@ loop_make() {
     for b in ${build_openwrt[*]}; do
 
         i="1"
-        for k in ${build_kernel[*]}; do
+        for k in ${kernel_list[*]}; do
             {
                 echo -n "(${j}.${i}) Start making OpenWrt [ ${b} - ${k} ]. "
 
@@ -741,8 +744,8 @@ download_depends
 [[ "${auto_kernel}" == "true" ]] && query_version
 download_kernel
 #
-echo -e "${INFO} OpenWrt Board List: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
-echo -e "${INFO} Kernel List: [ $(echo ${build_kernel[*]} | tr "\n" " ") ] \n"
+echo -e "${INFO} OpenWrt list: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
+echo -e "${INFO} Kernel  list: [ $(echo ${kernel_list[*]} | tr "\n" " ") ] \n"
 #
 # Loop to make OpenWrt firmware
 loop_make

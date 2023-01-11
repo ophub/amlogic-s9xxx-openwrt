@@ -86,9 +86,9 @@ runs:
 
         cd ${GITHUB_ACTION_PATH}
         echo -e "Output environment variables."
-        echo "PACKAGED_OUTPUTPATH=${PWD}/${openwrt_outpath}" >> $GITHUB_ENV
-        echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> $GITHUB_ENV
-        echo "PACKAGED_STATUS=success" >> $GITHUB_ENV
+        echo "PACKAGED_OUTPUTPATH=${PWD}/${openwrt_outpath}" >> ${GITHUB_ENV}
+        echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> ${GITHUB_ENV}
+        echo "PACKAGED_STATUS=success" >> ${GITHUB_ENV}
         echo -e "PACKAGED_OUTPUTPATH: ${PWD}/${openwrt_outpath}"
         echo -e "PACKAGED_OUTPUTDATE: $(date +"%m.%d.%H%M")"
         echo -e "PACKAGED_STATUS: success"

@@ -68,6 +68,7 @@ CONFIG_DEFAULT_e2fsprogs=y
 CONFIG_DEFAULT_firewall=y
 CONFIG_DEFAULT_fstools=y
 CONFIG_DEFAULT_iptables=y
+CONFIG_DEFAULT_ipv6helper=y
 CONFIG_DEFAULT_kmod-ipt-raw=y
 CONFIG_DEFAULT_kmod-nf-nathelper=y
 CONFIG_DEFAULT_kmod-nf-nathelper-extra=y
@@ -1904,6 +1905,7 @@ CONFIG_PACKAGE_kmod-dm=y
 # CONFIG_PACKAGE_kmod-loop is not set
 # CONFIG_PACKAGE_kmod-md-mod is not set
 # CONFIG_PACKAGE_kmod-nbd is not set
+# CONFIG_PACKAGE_kmod-nvme is not set
 # CONFIG_PACKAGE_kmod-scsi-cdrom is not set
 CONFIG_PACKAGE_kmod-scsi-core=y
 # CONFIG_PACKAGE_kmod-scsi-generic is not set
@@ -2246,7 +2248,6 @@ CONFIG_PACKAGE_kmod-ipt-raw=y
 # CONFIG_PACKAGE_kmod-ipt-tee is not set
 CONFIG_PACKAGE_kmod-ipt-tproxy=y
 # CONFIG_PACKAGE_kmod-ipt-u32 is not set
-# CONFIG_PACKAGE_kmod-ipt-ulog is not set
 # CONFIG_PACKAGE_kmod-netatop is not set
 CONFIG_PACKAGE_kmod-nf-conntrack=y
 CONFIG_PACKAGE_kmod-nf-conntrack-netlink=y
@@ -2304,7 +2305,6 @@ CONFIG_PACKAGE_kmod-dummy=y
 # CONFIG_PACKAGE_kmod-hfcmulti is not set
 # CONFIG_PACKAGE_kmod-hfcpci is not set
 # CONFIG_PACKAGE_kmod-i40e is not set
-# CONFIG_PACKAGE_kmod-i40e-vendor is not set
 # CONFIG_PACKAGE_kmod-iavf is not set
 CONFIG_PACKAGE_kmod-ifb=y
 # CONFIG_PACKAGE_kmod-igb is not set
@@ -4376,7 +4376,6 @@ CONFIG_PACKAGE_libmbim=y
 # CONFIG_PACKAGE_libmcrypt is not set
 # CONFIG_PACKAGE_libmicrohttpd-no-ssl is not set
 # CONFIG_PACKAGE_libmicrohttpd-ssl is not set
-# CONFIG_PACKAGE_libmicrosocks11 is not set
 # CONFIG_PACKAGE_libmilter-sendmail is not set
 CONFIG_PACKAGE_libminiupnpc=y
 # CONFIG_PACKAGE_libmms is not set
@@ -4807,6 +4806,7 @@ CONFIG_PACKAGE_luci-app-firewall=y
 # CONFIG_PACKAGE_luci-app-ledtrig-usbport is not set
 # CONFIG_PACKAGE_luci-app-lxc is not set
 # CONFIG_PACKAGE_luci-app-mentohust is not set
+# CONFIG_PACKAGE_luci-app-microsocks is not set
 # CONFIG_PACKAGE_luci-app-minidlna is not set
 # CONFIG_PACKAGE_luci-app-minieap is not set
 # CONFIG_PACKAGE_luci-app-mjpg-streamer is not set
@@ -4817,6 +4817,7 @@ CONFIG_PACKAGE_luci-app-mwan3=y
 # CONFIG_PACKAGE_luci-app-mwol is not set
 # CONFIG_PACKAGE_luci-app-n2n is not set
 # CONFIG_PACKAGE_luci-app-naiveproxy is not set
+# CONFIG_PACKAGE_luci-app-natmap is not set
 CONFIG_PACKAGE_luci-app-netdata=y
 # CONFIG_PACKAGE_luci-app-nextdns is not set
 # CONFIG_PACKAGE_luci-app-nfs is not set
@@ -4902,7 +4903,6 @@ CONFIG_PACKAGE_luci-app-samba4=y
 # CONFIG_PACKAGE_luci-app-splash is not set
 # CONFIG_PACKAGE_luci-app-sqm is not set
 # CONFIG_PACKAGE_luci-app-squid is not set
-# CONFIG_PACKAGE_luci-app-ssocks is not set
 # CONFIG_PACKAGE_luci-app-ssr-libev-server is not set
 # CONFIG_PACKAGE_luci-app-ssr-mudb-server is not set
 # CONFIG_PACKAGE_luci-app-ssr-plus is not set
@@ -5760,7 +5760,6 @@ CONFIG_PACKAGE_iptables-mod-ipopt=y
 # CONFIG_PACKAGE_iptables-mod-tee is not set
 # CONFIG_PACKAGE_iptables-mod-trace is not set
 # CONFIG_PACKAGE_iptables-mod-u32 is not set
-# CONFIG_PACKAGE_iptables-mod-ulog is not set
 # CONFIG_PACKAGE_iptaccount is not set
 # CONFIG_PACKAGE_iptgeoip is not set
 
@@ -6583,7 +6582,6 @@ CONFIG_PACKAGE_libipset=y
 # CONFIG_PACKAGE_map is not set
 # CONFIG_PACKAGE_mbusd is not set
 # CONFIG_PACKAGE_memcached is not set
-# CONFIG_PACKAGE_microsocks11 is not set
 # CONFIG_PACKAGE_mii-tool is not set
 # CONFIG_PACKAGE_mikrotik-btest is not set
 # CONFIG_PACKAGE_mini_snmpd is not set
@@ -6599,6 +6597,7 @@ CONFIG_PACKAGE_libipset=y
 # CONFIG_PACKAGE_mstpd is not set
 # CONFIG_PACKAGE_mtr is not set
 # CONFIG_PACKAGE_mwol is not set
+# CONFIG_PACKAGE_natmap is not set
 # CONFIG_PACKAGE_nbd is not set
 # CONFIG_PACKAGE_nbd-server is not set
 # CONFIG_PACKAGE_ncp is not set
@@ -6706,8 +6705,6 @@ CONFIG_PACKAGE_samba4-utils=y
 # CONFIG_PACKAGE_speedtest-go is not set
 # CONFIG_PACKAGE_speedtest-netperf is not set
 # CONFIG_PACKAGE_spoofer is not set
-# CONFIG_PACKAGE_ssocks is not set
-# CONFIG_PACKAGE_ssocksd is not set
 # CONFIG_PACKAGE_static-neighbor-reports is not set
 # CONFIG_PACKAGE_stunnel is not set
 # CONFIG_PACKAGE_sub-web is not set

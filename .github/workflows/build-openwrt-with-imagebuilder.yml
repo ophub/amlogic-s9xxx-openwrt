@@ -14,10 +14,10 @@ on:
       branch:
         description: "Select the releases branch"
         required: false
-        default: "22.03.2"
+        default: "22.03.3"
         type: choice
         options:
-          - 22.03.2
+          - 22.03.3
           - 21.02.5
           - 19.07.10
           - 18.06.9

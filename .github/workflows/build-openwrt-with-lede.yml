@@ -104,7 +104,7 @@ jobs:
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
           df -hT ${PWD}
-          git clone --depth 1 ${REPO_URL} -b ${REPO_BRANCH} openwrt
+          git clone -q --single-branch --depth 1 ${REPO_URL} -b ${REPO_BRANCH} openwrt
           ln -sf /workdir/openwrt ${GITHUB_WORKSPACE}/openwrt
 
       - name: Load custom feeds

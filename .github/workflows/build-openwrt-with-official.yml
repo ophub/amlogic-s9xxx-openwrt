@@ -94,8 +94,6 @@ jobs:
           sudo -E apt-get -qq install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
-
-          df -hT ${PWD}
           sudo mkdir -p /workdir
           sudo chown ${USER}:${GROUPS} /workdir
           sudo timedatectl set-timezone "${TZ}"
@@ -105,6 +103,7 @@ jobs:
         working-directory: /workdir
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
+          df -hT ${PWD}
           git clone -q --single-branch --depth 1 ${REPO_URL} -b ${REPO_BRANCH} openwrt
           ln -sf /workdir/openwrt ${GITHUB_WORKSPACE}/openwrt
 

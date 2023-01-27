@@ -208,6 +208,7 @@ echo -e "${STEPS} Welcome to Rebuild OpenWrt Using the Image Builder."
 rebuild_branch="${1}"
 echo -e "${INFO} Rebuild path: [ ${PWD} ]"
 echo -e "${INFO} Rebuild branch: [ ${rebuild_branch} ]"
+echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${make_path}) \n"
 #
 # Perform related operations
 download_imagebuilder

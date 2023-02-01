@@ -25,7 +25,7 @@
 | s905l3b | [M302A/M304A](https://blog.csdn.net/fatiaozhang9527/article/details/122006745), [E900V22E](https://github.com/ophub/amlogic-s9xxx-armbian/issues/939) | 全部 | openwrt_s905l2_k*.img |
 | s905l2/3 | [MGV2000](https://github.com/ophub/amlogic-s9xxx-armbian/issues/648), [MGV3000](https://github.com/ophub/amlogic-s9xxx-armbian/issues/921), [Wojia-TV-IPBS9505](https://github.com/ophub/amlogic-s9xxx-armbian/issues/648), [CM311-1(s905l3)](https://github.com/ophub/amlogic-s9xxx-armbian/issues/763), [HG680-LC(s905l3)](https://github.com/ophub/amlogic-s9xxx-armbian/issues/978) | 全部 | openwrt_s905l2_k*.img |
 | rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/install), [HinLink-H88K](http://www.hinlink.com/index.php?id=151) | [rk3588](https://github.com/ophub/kernel/tree/main/pub/rk3588) | openwrt_box-name.img |
-| rk3568 | [R66S](https://r68s.cn/), [R68S](https://r68s.cn/), [e25](https://wiki.radxa.com/Rock3/CM/CM3I/E25), [h68k](http://www.hinlink.com/index.php?id=145) | [6.0.y](https://github.com/ophub/kernel/tree/main/pub/stable) | openwrt_box-name.img |
+| rk3568 | [R66S](https://r68s.cn/), [R68S](https://r68s.cn/), [e25](https://wiki.radxa.com/Rock3/CM/CM3I/E25), [h68k](http://www.hinlink.com/index.php?id=145) | [6.x.y](https://github.com/ophub/kernel/tree/main/pub/stable) | openwrt_box-name.img |
 | rk3328 | [beikeyun](https://www.cnblogs.com/milton/p/15391525.html), [l1pro](https://post.smzdm.com/p/a4wkdo7l/) | 全部 | openwrt_box-name.img |
 | allwinner | [vplus(h6)](https://www.allwinnertech.com/index.php?c=product&a=index&id=66) | 全部 | openwrt_vplus_*.img |
 | KVM | [qemu](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md) | 全部 | openwrt_qemu_*.img |

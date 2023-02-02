@@ -80,19 +80,8 @@ kernel_list=("5.10.125" "5.15.50")
 # Set to automatically use the latest kernel
 auto_kernel="true"
 
-# Set the list of supported openwrt board
-build_openwrt=(
-    "a311d"
-    "s922x" "s922x-n2" "s922x-reva"
-    "s905x3" "s905x3-b"
-    "s905x2" "s905x2-km3"
-    "s912" "s912-m8s"
-    "s905d" "s905d-ki" "s905l2"
-    "s905x"
-    "s905w"
-    "s905"
-    "s905l3a"
-)
+# Get the list of devices built by default
+build_openwrt=($(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:yes$" | awk -F':' '{print $10}' | sort | uniq | xargs))
 
 # Set OpenWrt firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
 SKIP_MB="4"

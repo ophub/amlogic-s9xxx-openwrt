@@ -82,6 +82,8 @@ auto_kernel="true"
 
 # Get the list of devices built by default
 build_openwrt=($(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:yes$" | awk -F':' '{print $10}' | sort | uniq | xargs))
+# Set the list of devices that must use the /boot/extlinux/extlinux.conf file
+must_extlinux=("s905x-t95" "s912-t95z-plus" "s905lb-r3300l")
 
 # Set OpenWrt firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
 SKIP_MB="4"
@@ -458,11 +460,17 @@ refactor_files() {
     sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_conf_file}
     sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
 
-    # Add an alternate file (/boot/extlinux/extlinux.conf) for devices like T95Z. If needed, rename delete .bak
+    # Add an alternate file (/boot/extlinux/extlinux.conf)
     boot_extlinux_file="extlinux/extlinux.conf.bak"
     [[ -f "${boot_extlinux_file}" ]] && {
         sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_extlinux_file}
         sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_extlinux_file}
+    }
+
+    # If needed, such as t95z(s905x), rename delete .bak
+    rename_extlinux_file="extlinux/extlinux.conf"
+    [[ -n "$(echo "${must_extlinux[@]}" | grep -w "${board}")" ]] && {
+        mv -f ${boot_extlinux_file} ${rename_extlinux_file}
     }
 
     # Add u-boot.ext for 5.10 kernel

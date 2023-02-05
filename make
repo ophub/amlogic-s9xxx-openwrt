@@ -741,8 +741,9 @@ download_depends
 [[ "${auto_kernel}" == "true" ]] && query_version
 download_kernel
 #
-echo -e "${INFO} OpenWrt list: [ $(echo ${build_openwrt[*]} | tr "\n" " ") ]"
-echo -e "${INFO} Kernel  list: [ $(echo ${kernel_list[*]} | tr "\n" " ") ] \n"
+echo -e "${INFO} [ ${#build_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${build_openwrt[*]} | xargs) ]"
+echo -e "${INFO} [ ${#kernel_list[*]} ] lists of Kernel branch: [ $(echo ${kernel_list[*]} | xargs) ]"
+echo -e "${INFO} Use the latest kernel version: [ ${auto_kernel} ] \n"
 #
 # Loop to make OpenWrt firmware
 loop_make

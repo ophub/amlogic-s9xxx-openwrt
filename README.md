@@ -1,10 +1,10 @@
-# OpenWrt for Amlogic TV Boxes
+# OpenWrt for Amlogic and Rochchip
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
 The [OpenWrt](https://openwrt.org/) Project is a Linux router operating system targeting embedded devices. Instead of trying to create a single, static firmware, OpenWrt provides a fully writable filesystem with package management. Allows you to freely choose the software package you need to customize your router system. For developers, OpenWrt is the framework to build an application without having to build a complete firmware around it; for users this means the ability for full customization, to use the device in ways never envisioned. It has more than 3000+ standardized application packages and a very rich third-party plug-in support, so you can easily replicate the same setup on any supported device.
 
-Now you can replace the Android TV system of the TV Boxes with the Amlogic chip with the OpenWrt system, making it a powerful router. This project supports one-stop complete compilation of github.com (compiling from custom software packages to packaging firmware, all in one stop at github.com). Support localized packaging (firmware packaging in local Ubuntu and other environments). including OpenWrt firmware install to EMMC and update related functions. Support Amlogic s9xxx TV Boxes are ***`a311d, s922x, s905x3, s905x2, s905l3a, s912, s905d, s905x, s905w, s905`***, etc. such as ***`Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, X96-Max+, HK1-Box, H96-Max-X3, Phicomm-N1, Octopus-Planet, Fiberhome HG680P, ZTE B860H`***, etc.
+Now you can replace the Android TV system of the TV Boxes with the `Amlogic` and `Rochchip` chip with the OpenWrt system, making it a powerful router. This project supports one-stop complete compilation of github.com (compiling from custom software packages to packaging firmware, all in one stop at github.com). Support localized packaging (firmware packaging in local Ubuntu and other environments). including OpenWrt firmware install to EMMC and update related functions. Support Amlogic s9xxx TV Boxes are ***`a311d, s922x, s905x3, s905x2, s905l3a, s912, s905d, s905x, s905w, s905`***, etc. such as ***`Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, X96-Max+, HK1-Box, H96-Max-X3, Phicomm-N1, Octopus-Planet, Fiberhome HG680P, ZTE B860H`***, etc. and Rockchip ***`BeikeYun`, `Chainedbox L1 Pro`, `FastRhino R66S/R68S`, `Radxa 5b`***, etc.
 
 The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Welcome to use `Fork` for [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md). If you like it, Please click the `Star`.
 
@@ -111,29 +111,29 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 ```
 2. Clone the repository to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
-4. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -b s905x3 -k 5.10.125`. The generated OpenWrt firmware is in the `out` directory under the root directory.
+4. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -b s905x3 -k 6.1.10`. The generated OpenWrt firmware is in the `out` directory under the root directory.
 
 - ### Description of localized packaging parameters
 
 | Parameter | Meaning | Description |
 | ---- | ---- | ---- |
-| -b | Board    | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . Use `all` for all board models. You can use these codes: `a311d`, `s905x3`, `s905x3-b`, `s905x2`, `s905l3a`, `s905x`, `s905w`, `s905d`, `s905d-ki`, `s905l2`, `s905`, `s922x`, `s922x-n2`, `s912`, `s912-m8s` . Note: `s922x-reva` is `s922x-gtking-pro-rev_a`, `s922x-n2` is `s922x-odroid-n2`, `s912-m8s` is `s912-mecool-m8s-pro-l`, `s905d-ki` is `s905d-mecool-ki-pro`, `s905x2-km3` is `s905x2-mecool-km3` |
-| -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 5.10.125` . Multiple kernel use `_` connection such as `-k 5.10.125_5.15.50` |
-| -a | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 5.10.125 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
-| -v | VersionBranch | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
+| -b | Board    | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . Use `all` for all board models. The model code is detailed in the `BOARD` setting in [model_database.conf](amlogic-s9xxx/common-files/rootfs/etc/model_database.conf). |
+| -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 6.1.10` . Multiple kernel use `_` connection such as `-k 6.1.10_5.15.50` |
+| -a | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 6.1.10 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
+| -v | VersionBranch | Specify the [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable_rk3588`. The specified name must be the same as the branch directory name. The `stable_rk3588` branch version is used by default. |
 | -r | KernelRepository | Specify the name of the kernel [repository](https://github.com/ophub/kernel/tree/main/pub), Such as `-r https://github.com/ophub/kernel/tree/main/pub`. The [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75) is used by default. |
 | -s | Size | Set the ROOTFS partition size for firmware (MiB). The default is 1024 MiB, and the specified size must be greater than 512 MiB. Such as `-s 1024` |
-| -g | GH_TOKEN | Optional. Set ${{ secrets.GH_TOKEN }} for [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) query. Default: `None` |
+| -g | GH_TOKEN | Optional. Set `${{ secrets.GH_TOKEN }}` for [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) query. Default: `""` |
 
 - `sudo ./make`: Compile latest kernel versions of openwrt for all board with the default configuration.
-- `sudo ./make -b s905x3 -k 5.10.125`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
-- `sudo ./make -b s905x3_s905d -k 5.10.125_5.15.50`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
-- `sudo ./make -b s905x3 -k 5.10.125 -s 1024`: Using the default configuration, one kernel is specified, one model is packaged, and the firmware size is set to 1024 MiB.
-- `sudo ./make -b s905x3 -v dev -k 5.10.125`: Use the default configuration, specify the model, specify the [version branch](https://github.com/ophub/kernel/tree/main/pub), and specify the kernel for packaging.
+- `sudo ./make -b s905x3 -k 6.1.10`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
+- `sudo ./make -b s905x3_s905d -k 6.1.10_5.15.50`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
+- `sudo ./make -b s905x3 -k 6.1.10 -s 1024`: Using the default configuration, one kernel is specified, one model is packaged, and the firmware size is set to 1024 MiB.
+- `sudo ./make -b s905x3 -v dev -k 6.1.10`: Use the default configuration, specify the model, specify the [version branch](https://github.com/ophub/kernel/tree/main/pub), and specify the kernel for packaging.
 - `sudo ./make -b s905x3_s905d`: Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels.
-- `sudo ./make -k 5.10.125_5.15.50`: Use the default configuration. Specify multiple cores, use `_` to connect.
-- `sudo ./make -k 5.10.125_5.15.50 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
-- `sudo ./make -s 1024 -k 5.10.125`: Use the default configuration and set the partition size to 1024 MiB, and only compile the openwrt firmware with the kernel version 5.10.125.
+- `sudo ./make -k 6.1.10_5.15.50`: Use the default configuration. Specify multiple cores, use `_` to connect.
+- `sudo ./make -k 6.1.10_5.15.50 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
+- `sudo ./make -s 1024 -k 6.1.10`: Use the default configuration and set the partition size to 1024 MiB, and only compile the openwrt firmware with the kernel version 6.1.10.
 
 ## Use GitHub Actions to build
 
@@ -150,7 +150,7 @@ You can modify the configuration file in the `router-config` directory and `.yml
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     openwrt_board: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    openwrt_kernel: 5.10.125_5.15.50
+    openwrt_kernel: 6.1.10_5.15.50
     gh_token: ${{ secrets.GH_TOKEN }}
 ```
 
@@ -158,16 +158,16 @@ You can modify the configuration file in the `router-config` directory and `.yml
 
 The relevant parameters correspond to the `local packaging command`, please refer to the above description.
 
-| Parameter          | Defaults          | Description                                                   |
-|--------------------|-------------------|---------------------------------------------------------------|
-| openwrt_path       | None                | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
-| openwrt_board      | s905d_s905x3      | Set the `board` of the packaging TV Boxes, function reference `-b` |
-| openwrt_kernel     | 5.10.125_5.15.50   | Set the kernel version，function reference `-k` |
-| auto_kernel        | true              | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
-| version_branch     | stable            | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
-| kernel_repo        | [ophub/kernel](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/make#L75)            | Specify the name of the kernel Repository, function reference `-r` |
-| openwrt_size       | 1024              | Set the size of the firmware ROOTFS partition, function reference `-s` |
-| gh_token           | None              | Optional. Set ${{ secrets.GH_TOKEN }}, function reference `-g` |
+| Parameter          | Defaults         | Description                                                   |
+|--------------------|------------------|---------------------------------------------------------------|
+| openwrt_path       | ""               | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
+| openwrt_board      | all              | Set the `board` of the packaging TV Boxes, function reference `-b` |
+| openwrt_kernel     | 6.1.10_5.15.50   | Set the kernel version，function reference `-k` |
+| auto_kernel        | true             | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
+| version_branch     | stable_rk3588    | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
+| kernel_repo        | [ophub/kernel](make#L75) | Specify the name of the kernel Repository, function reference `-r` |
+| openwrt_size       | 1024             | Set the size of the firmware ROOTFS partition, function reference `-s` |
+| gh_token           | ""               | Optional. Set `${{ secrets.GH_TOKEN }}`, function reference `-g` |
 
 - ### GitHub Actions Output variable description
 
@@ -188,7 +188,7 @@ To upload to `Releases`, you need to add `${{ secrets.GITHUB_TOKEN }}` and `${{ 
 | Target Profile | Default |
 | Target Images | tar.gz |
 
-[For more instructions please see: router-config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config)
+[For more instructions please see: router-config](router-config)
 
 ## OpenWrt firmware default information
 
@@ -209,7 +209,7 @@ For the compilation method of the kernel, see [compile-kernel](https://github.co
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel
-    kernel_version: 5.10.125_5.15.50
+    kernel_version: 6.1.10_5.15.50
     kernel_auto: true
     kernel_sign: -yourname
 ```

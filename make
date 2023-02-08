@@ -5,10 +5,10 @@
 # License version 2. This program is licensed "as is" without any
 # warranty of any kind, whether express or implied.
 #
-# This file is a part of the make OpenWrt for Amlogic s9xxx tv box
+# This file is a part of the make OpenWrt for Amlogic and Rockchip
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Description: Automatically Packaged OpenWrt for Amlogic s9xxx tv box
+# Description: Automatically Packaged OpenWrt for Amlogic and Rockchip
 # Copyright (C) 2020- https://github.com/unifreq
 # Copyright (C) 2020- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
@@ -151,7 +151,7 @@ init_var() {
                 error_msg "Invalid -k parameter [ ${2} ]!"
             fi
             ;;
-        -a | --AutoKernel)
+        -a | --Autokernel)
             if [[ -n "${2}" ]]; then
                 auto_kernel="${2}"
                 shift
@@ -171,7 +171,7 @@ init_var() {
                 error_msg "Invalid -v parameter [ ${2} ]!"
             fi
             ;;
-        -r | --KernelRepository)
+        -r | --kernelRepository)
             if [[ -n "${2}" ]]; then
                 kernel_repo="${2}"
                 shift
@@ -187,7 +187,7 @@ init_var() {
                 error_msg "Invalid -s parameter [ ${2} ]!"
             fi
             ;;
-        -g | --gh_token)
+        -g | --Gh_token)
             if [[ -n "${2}" ]]; then
                 gh_token="${2}"
                 shift
@@ -395,7 +395,7 @@ confirm_version() {
     # Define platform variables for Amlogic boxes
     [[ "${PLATFORM}" == "amlogic" ]] && {
         # Set up the welcome board
-        bd_name="Aml ${SOC}"
+        bd_name="Amlogic ${SOC}"
         # Set Armbian image file parameters
         partition_table_type="msdos"
         bootfs_type="fat32"
@@ -411,7 +411,7 @@ confirm_version() {
     # Define platform variables for Rockchip boxes
     [[ "${PLATFORM}" == "rockchip" ]] && {
         # Set up the welcome board
-        bd_name="${board}"
+        bd_name="Rockchip ${board}"
         # Set Armbian image file parameters
         partition_table_type="gpt"
         bootfs_type="ext4"
@@ -431,7 +431,7 @@ make_image() {
     cd ${make_path}
 
     # Set openwrt filename
-    build_image_file="${out_path}/openwrt${source_codename}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
+    build_image_file="${out_path}/openwrt${source_codename}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
     rm -f ${build_image_file}
 
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
@@ -618,7 +618,6 @@ refactor_files() {
     echo "BOARD='${board}'" >>${op_release}
     echo "KERNEL_VERSION='${kernel}'" >>${op_release}
     echo "KERNEL_BRANCH='${KERNEL_BRANCH}'" >>${op_release}
-    echo "NEED_OVERLOAD='${NEED_OVERLOAD}'" >>${op_release}
     echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
 
     # Add firmware version information to the terminal page
@@ -627,7 +626,7 @@ refactor_files() {
         op_production_date=$(date +%Y-%m-%d)
         echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
         echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
-        echo " Amlogic Box SoC: ${SOC} | OpenWrt Kernel: ${op_version}" >>etc/banner
+        echo " Board: ${bd_name} | OpenWrt Kernel: ${op_version}" >>etc/banner
         echo " Production Date: ${op_production_date}" >>etc/banner
         echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
     }

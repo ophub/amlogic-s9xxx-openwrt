@@ -45,11 +45,10 @@ out_path="${make_path}/out"
 openwrt_path="${make_path}/openwrt-armvirt"
 openwrt_rootfs_file="*rootfs.tar.gz"
 amlogic_path="${make_path}/amlogic-s9xxx"
-kernel_path="${amlogic_path}/amlogic-kernel"
+kernel_path="${amlogic_path}/kernel"
 uboot_path="${amlogic_path}/u-boot"
 common_files="${amlogic_path}/common-files"
-bootfs_path="${common_files}/bootfs"
-openvfd_path="${common_files}/rootfs/usr/share/openvfd"
+platform_files="${amlogic_path}/platform-files"
 firmware_path="${common_files}/rootfs/lib/firmware"
 model_conf="${common_files}/rootfs/etc/model_database.conf"
 model_txt="${common_files}/rootfs/etc/model_database.txt"
@@ -74,10 +73,11 @@ script_repo="${script_repo//tree\/main/trunk}"
 
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
-# Set the kernel directory used by default
-kernel_dir="stable"
+# Set stable kernel directory: [ stable ], rk3588 kernel directory: [ rk3588 ]
+kernel_dir=("stable" "rk3588")
 # Set the list of kernels used by default
-kernel_list=("5.10.125" "5.15.50")
+stable_kernel=("6.1.10" "5.15.50")
+rk3588_kernel=("5.10.150")
 # Set to automatically use the latest kernel
 auto_kernel="true"
 
@@ -85,8 +85,7 @@ auto_kernel="true"
 # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION  9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
 build_openwrt=($(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:yes$" | awk -F':' '{print $13}' | sort | uniq | xargs))
 
-# Set OpenWrt firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
-SKIP_MB="4"
+# Set OpenWrt firmware size (Unit: MiB, BOOT_MB >= 256, ROOT_MB >= 512)
 BOOT_MB="256"
 ROOT_MB="1024"
 
@@ -96,8 +95,9 @@ gh_token=""
 # Set font color
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
-SUCCESS="[\033[92m SUCCESS \033[0m]"
+TIPS="[\033[93m TIPS \033[0m]"
 WARNING="[\033[93m WARNING \033[0m]"
+SUCCESS="[\033[92m SUCCESS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 #
 #============================================================================
@@ -113,9 +113,9 @@ process_msg() {
 
 get_textoffset() {
     vmlinuz_name="${1}"
-    K510="1"
+    NEED_OVERLOAD="yes"
     # With TEXT_OFFSET patch is [ 0108 ], without TEXT_OFFSET patch is [ 0000 ]
-    [[ "$(hexdump -n 15 -x "${vmlinuz_name}" 2>/dev/null | head -n 1 | awk '{print $7}')" == "0108" ]] && K510="0"
+    [[ "$(hexdump -n 15 -x "${vmlinuz_name}" 2>/dev/null | head -n 1 | awk '{print $7}')" == "0108" ]] && NEED_OVERLOAD="no"
 }
 
 init_var() {
@@ -144,7 +144,7 @@ init_var() {
             if [[ -n "${2}" ]]; then
                 oldIFS=$IFS
                 IFS=_
-                kernel_list=(${2})
+                stable_kernel=(${2})
                 IFS=$oldIFS
                 shift
             else
@@ -159,9 +159,13 @@ init_var() {
                 error_msg "Invalid -a parameter [ ${2} ]!"
             fi
             ;;
-        -v | --VersionBranch)
+        -v | --Versionbranch)
             if [[ -n "${2}" ]]; then
-                kernel_dir="${2}"
+                oldIFS=${IFS}
+                IFS=_
+                kernel_dir=(${2})
+                IFS=${oldIFS}
+                [[ -n "$(echo "${kernel_dir[@]}" | grep -oE "rk3588")" ]] || kernel_dir[$(((${#kernel_dir[@]} + 1)))]="rk3588"
                 shift
             else
                 error_msg "Invalid -v parameter [ ${2} ]!"
@@ -234,24 +238,18 @@ download_depends() {
     echo -e "${STEPS} Start downloading dependency files..."
 
     # Download /boot related files
-    if [[ -d "${bootfs_path}" ]]; then
-        svn up ${bootfs_path} --force
+    if [[ -d "${platform_files}" ]]; then
+        svn up ${platform_files} --force
     else
-        svn co ${depends_repo}/armbian-files/platform-files/amlogic/bootfs ${bootfs_path} --force
+        svn co ${depends_repo}/armbian-files/platform-files ${platform_files} --force
     fi
+    rm -rf ${platform_files}/amlogic/rootfs/usr/sbin
 
     # Download u-boot related files
     if [[ -d "${uboot_path}" ]]; then
         svn up ${uboot_path} --force
     else
-        svn co ${depends_repo}/u-boot/amlogic ${uboot_path} --force
-    fi
-
-    # Download openvfd related files
-    if [[ -d "${openvfd_path}" ]]; then
-        svn up ${openvfd_path} --force
-    else
-        svn co ${depends_repo}/armbian-files/platform-files/amlogic/rootfs/usr/share/openvfd ${openvfd_path} --force
+        svn co ${depends_repo}/u-boot ${uboot_path} --force
     fi
 
     # Download armbian firmware file
@@ -264,7 +262,6 @@ download_depends() {
     # Download install/update and other related files
     svn export ${script_repo} ${common_files}/rootfs/usr/sbin --force
     chmod +x ${common_files}/rootfs/usr/sbin/*
-
     # Convert text format profiles for install script(openwrt-install-amlogic)
     cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*" >${model_txt}
 }
@@ -275,63 +272,99 @@ query_version() {
     # Convert kernel library address to API format
     server_kernel_url="${kernel_repo#*com\/}"
     server_kernel_url="${server_kernel_url//trunk/contents}"
-    server_kernel_url="https://api.github.com/repos/${server_kernel_url}/${kernel_dir}"
+    server_kernel_url="https://api.github.com/repos/${server_kernel_url}"
 
-    # Set empty array
-    tmp_arr_kernels=()
+    # Check the version on the kernel library
+    x="1"
+    for k in ${kernel_dir[*]}; do
+        {
+            # Select the corresponding kernel directory and list
+            if [[ "${k}" == "rk3588" ]]; then
+                down_kernel_list=(${rk3588_kernel[*]})
+            else
+                down_kernel_list=(${stable_kernel[*]})
+            fi
 
-    # Query the latest kernel in a loop
-    i=1
-    for k in ${kernel_list[*]}; do
-        echo -e "${INFO} (${i}) Auto query the latest kernel version of the same series for [ ${k} ]"
+            # Query the name of the latest kernel version
+            tmp_arr_kernels=()
+            i=1
+            for kernel_var in ${down_kernel_list[*]}; do
+                echo -e "${INFO} (${x}.${i}) Auto query the latest kernel version of the same series for [ ${k} - ${kernel_var} ]"
 
-        # Identify the kernel mainline
-        MAIN_LINE="$(echo ${k} | awk -F '.' '{print $1"."$2}')"
+                # Identify the kernel mainline
+                MAIN_LINE="$(echo ${kernel_var} | awk -F '.' '{print $1"."$2}')"
 
-        # Check the version on the server (e.g LATEST_VERSION="125")
-        if [[ -n "${gh_token}" ]]; then
-            LATEST_VERSION="$(curl --header "authorization: Bearer ${gh_token}" -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}\.[0-9]+" | sed -e "s/${MAIN_LINE}\.//g" | sort -n | sed -n '$p')"
-            query_api="Authenticated user request"
-        else
-            LATEST_VERSION="$(curl -s "${server_kernel_url}" | grep "name" | grep -oE "${MAIN_LINE}\.[0-9]+" | sed -e "s/${MAIN_LINE}\.//g" | sort -n | sed -n '$p')"
-            query_api="Unauthenticated user request"
-        fi
+                # Check the version on the server (e.g LATEST_VERSION="125")
+                if [[ -n "${gh_token}" ]]; then
+                    LATEST_VERSION="$(curl --header "authorization: Bearer ${gh_token}" -s "${server_kernel_url}/${k}" | grep "name" | grep -oE "${MAIN_LINE}.[0-9]+" | sed -e "s/${MAIN_LINE}.//g" | sort -n | sed -n '$p')"
+                    query_api="Authenticated user request"
+                else
+                    LATEST_VERSION="$(curl -s "${server_kernel_url}/${k}" | grep "name" | grep -oE "${MAIN_LINE}.[0-9]+" | sed -e "s/${MAIN_LINE}.//g" | sort -n | sed -n '$p')"
+                    query_api="Unauthenticated user request"
+                fi
 
-        if [[ "${?}" -eq "0" && -n "${LATEST_VERSION}" ]]; then
-            tmp_arr_kernels[${i}]="${MAIN_LINE}.${LATEST_VERSION}"
-        else
-            tmp_arr_kernels[${i}]="${k}"
-        fi
+                if [[ "${?}" -eq "0" && -n "${LATEST_VERSION}" ]]; then
+                    tmp_arr_kernels[${i}]="${MAIN_LINE}.${LATEST_VERSION}"
+                else
+                    tmp_arr_kernels[${i}]="${kernel_var}"
+                fi
 
-        echo -e "${INFO} (${i}) [ ${tmp_arr_kernels[$i]} ] is latest kernel (${query_api}). \n"
+                echo -e "${INFO} (${x}.${i}) [ ${k} - ${tmp_arr_kernels[$i]} ] is latest kernel (${query_api}). \n"
 
-        let i++
+                let i++
+            done
+
+            # Reset the kernel array to the latest kernel version
+            if [[ "${k}" == "rk3588" ]]; then
+                unset rk3588_kernel
+                rk3588_kernel=(${tmp_arr_kernels[*]})
+            else
+                unset stable_kernel
+                stable_kernel=(${tmp_arr_kernels[*]})
+            fi
+
+            let x++
+        }
     done
 
-    # Reset the kernel array to the latest kernel version
-    unset kernel_list
-    kernel_list="${tmp_arr_kernels[*]}"
+    echo -e "${INFO} The latest version of the stable_kernel: [ ${stable_kernel[*]} ]"
+    echo -e "${INFO} The latest version of the rk3588_kernel: [ ${rk3588_kernel[*]} ]"
 }
 
 download_kernel() {
     cd ${make_path}
     echo -e "${STEPS} Start downloading the kernel files..."
 
-    i=1
-    for k in ${kernel_list[*]}; do
-        if [[ ! -d "${kernel_path}/${k}" ]]; then
-            echo -e "${INFO} (${i}) [ ${k} ] Kernel loading from [ ${kernel_repo/trunk/tree\/main}/${kernel_dir}/${k} ]"
-            svn export ${kernel_repo}/${kernel_dir}/${k} ${kernel_path}/${k} --force
-        else
-            echo -e "${INFO} (${i}) [ ${k} ] Kernel is in the local directory."
-        fi
+    x="1"
+    for k in ${kernel_dir[*]}; do
+        {
+            # Set the kernel download list
+            if [[ "${k}" == "rk3588" ]]; then
+                down_kernel_list=(${rk3588_kernel[*]})
+            else
+                down_kernel_list=(${stable_kernel[*]})
+            fi
 
-        let i++
+            # Download the kernel to the storage directory
+            i="1"
+            for kernel_var in ${down_kernel_list[*]}; do
+                if [[ ! -d "${kernel_path}/${k}/${kernel_var}" ]]; then
+                    echo -e "${INFO} (${x}.${i}) [ ${k} - ${kernel_var} ] Kernel loading from [ ${kernel_repo/trunk/tree\/main}/${k}/${kernel_var} ]"
+                    svn export ${kernel_repo}/${k}/${kernel_var} ${kernel_path}/${k}/${kernel_var} --force
+                else
+                    echo -e "${INFO} (${x}.${i}) [ ${k} - ${kernel_var} ] Kernel is in the local directory."
+                fi
+
+                let i++
+            done
+            sync
+
+            let x++
+        }
     done
 }
 
 confirm_version() {
-    process_msg " (1/6) Confirm version type."
     cd ${make_path}
 
     # Find [ the first ] configuration information with [ the same BOARD name ] and [ BUILD as yes ] in the ${model_conf} file.
@@ -344,18 +377,57 @@ confirm_version() {
     FDTFILE="$(echo ${board_conf} | awk -F':' '{print $4}')"
     UBOOT_OVERLOAD="$(echo ${board_conf} | awk -F':' '{print $5}')"
     MAINLINE_UBOOT="$(echo ${board_conf} | awk -F':' '{print $6}')" && MAINLINE_UBOOT="${MAINLINE_UBOOT##*/}"
-    ANDROID_UBOOT="$(echo ${board_conf} | awk -F':' '{print $7}')" && ANDROID_UBOOT="${ANDROID_UBOOT##*/}"
+    BOOTLOADER_IMG="$(echo ${board_conf} | awk -F':' '{print $7}')" && BOOTLOADER_IMG="${BOOTLOADER_IMG##*/}"
+    KERNEL_BRANCH="$(echo ${board_conf} | awk -F':' '{print $9}')"
+    PLATFORM="$(echo ${board_conf} | awk -F':' '{print $10}')"
     FAMILY="$(echo ${board_conf} | awk -F':' '{print $11}')"
     BOOT_CONF="$(echo ${board_conf} | awk -F':' '{print $12}')"
 
-    # Confirm UUID
+    # Confirm BOOT_UUID
+    BOOT_UUID="$(cat /proc/sys/kernel/random/uuid)"
+    [[ -z "${BOOT_UUID}" ]] && BOOT_UUID="$(uuidgen)"
+    [[ -z "${BOOT_UUID}" ]] && error_msg "The uuidgen is invalid, cannot continue."
+    # Confirm ROOTFS_UUID
     ROOTFS_UUID="$(cat /proc/sys/kernel/random/uuid)"
     [[ -z "${ROOTFS_UUID}" ]] && ROOTFS_UUID="$(uuidgen)"
     [[ -z "${ROOTFS_UUID}" ]] && error_msg "The uuidgen is invalid, cannot continue."
+
+    # Define platform variables for Amlogic boxes
+    [[ "${PLATFORM}" == "amlogic" ]] && {
+        # Set up the welcome board
+        bd_name="Aml ${SOC}"
+        # Set Armbian image file parameters
+        partition_table_type="msdos"
+        bootfs_type="fat32"
+        # Set directory name
+        platform_bootfs="${platform_files}/amlogic/bootfs"
+        platform_rootfs="${platform_files}/amlogic/rootfs"
+        bootloader_dir="${uboot_path}/amlogic/bootloader"
+        # Set the type of file system
+        uenv_rootdev="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
+        fstab_string="discard,defaults,noatime,compress=zstd:6"
+    }
+
+    # Define platform variables for Rockchip boxes
+    [[ "${PLATFORM}" == "rockchip" ]] && {
+        # Set up the welcome board
+        bd_name="${board}"
+        # Set Armbian image file parameters
+        partition_table_type="gpt"
+        bootfs_type="ext4"
+        # Set directory name
+        platform_bootfs="${platform_files}/rockchip/bootfs/${board}"
+        platform_rootfs="${platform_files}/rockchip/rootfs"
+        bootloader_dir="${uboot_path}/rockchip/${board}"
+        # Set the type of file system
+        uenv_rootflags="compress=zstd:6"
+        uenv_rootdev="UUID=${ROOTFS_UUID}"
+        fstab_string="discard,defaults,noatime,compress=zstd:6"
+    }
 }
 
 make_image() {
-    process_msg " (2/6) Make openwrt image."
+    process_msg " (1/5) Make openwrt image."
     cd ${make_path}
 
     # Set openwrt filename
@@ -363,38 +435,58 @@ make_image() {
     rm -f ${build_image_file}
 
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
+
+    [[ "${PLATFORM}" == "amlogic" ]] && SKIP_MB="4"
+    [[ "${PLATFORM}" == "rockchip" ]] && SKIP_MB="16"
+
     IMG_SIZE="$((SKIP_MB + BOOT_MB + ROOT_MB))"
 
-    #fallocate -l ${IMG_SIZE}M ${build_image_file}
-    dd if=/dev/zero of=${build_image_file} bs=1M count=${IMG_SIZE} conv=fsync 2>/dev/null
+    truncate -s ${IMG_SIZE}M ${build_image_file} >/dev/null 2>&1
 
-    # Create openwrt image file partition
-    parted -s ${build_image_file} mklabel msdos 2>/dev/null
-    parted -s ${build_image_file} mkpart primary fat32 $((SKIP_MB))MiB $((SKIP_MB + BOOT_MB - 1))MiB 2>/dev/null
+    parted -s ${build_image_file} mklabel ${partition_table_type} 2>/dev/null
+    parted -s ${build_image_file} mkpart primary ${bootfs_type} $((SKIP_MB))MiB $((SKIP_MB + BOOT_MB - 1))MiB 2>/dev/null
     parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))MiB 100% 2>/dev/null
 
     # Mount the openwrt image file
     loop_new="$(losetup -P -f --show "${build_image_file}")"
     [[ -n "${loop_new}" ]] || error_msg "losetup ${build_image_file} failed."
 
-    # Format openwrt image file
-    mkfs.vfat -F 32 -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
+    # Format bootfs partition
+    [[ "${PLATFORM}" == "amlogic" ]] && mkfs.vfat -F 32 -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
+    [[ "${PLATFORM}" == "rockchip" ]] && mkfs.ext4 -F -q -U ${BOOT_UUID} -L "BOOT" -b 4k -m 0 ${loop_new}p1 >/dev/null 2>&1
+
+    # Format rootfs partition
     mkfs.btrfs -f -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop_new}p2 >/dev/null 2>&1
 
-    # Write the specified bootloader
-    if [[ -n "${MAINLINE_UBOOT}" && -f "${uboot_path}/bootloader/${MAINLINE_UBOOT}" ]]; then
-        dd if="${uboot_path}/bootloader/${MAINLINE_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
-        dd if="${uboot_path}/bootloader/${MAINLINE_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        #echo -e "${INFO} ${board}_v${kernel} write Mainline bootloader: ${MAINLINE_UBOOT}"
-    elif [[ -n "${ANDROID_UBOOT}" && -f "${uboot_path}/bootloader/${ANDROID_UBOOT}" ]]; then
-        dd if="${uboot_path}/bootloader/${ANDROID_UBOOT}" of="${loop_new}" bs=1 count=444 conv=fsync 2>/dev/null
-        dd if="${uboot_path}/bootloader/${ANDROID_UBOOT}" of="${loop_new}" bs=512 skip=1 seek=1 conv=fsync 2>/dev/null
-        #echo -e "${INFO} ${board}_v${kernel} write Android bootloader: ${ANDROID_UBOOT}"
-    fi
+    # Write the specified bootloader for Amlogic boxes
+    [[ "${PLATFORM}" == "amlogic" ]] && {
+        if [[ -n "${MAINLINE_UBOOT}" && -f "${uboot_path}/amlogic/bootloader/${MAINLINE_UBOOT}" ]]; then
+            dd if="${uboot_path}/amlogic/bootloader/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync bs=1 count=444 2>/dev/null
+            dd if="${uboot_path}/amlogic/bootloader/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync bs=512 skip=1 seek=1 2>/dev/null
+            #echo -e "${INFO} For [ ${board} ] write Mainline u-boot: ${MAINLINE_UBOOT}"
+        elif [[ -n "${BOOTLOADER_IMG}" && -f "${uboot_path}/amlogic/bootloader/${BOOTLOADER_IMG}" ]]; then
+            dd if="${uboot_path}/amlogic/bootloader/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync bs=1 count=444 2>/dev/null
+            dd if="${uboot_path}/amlogic/bootloader/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync bs=512 skip=1 seek=1 2>/dev/null
+            #echo -e "${INFO} For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
+        fi
+    }
+
+    # Write the specified bootloader for Rockchip boxes
+    [[ "${PLATFORM}" == "rockchip" ]] && {
+        if [[ -n "${BOOTLOADER_IMG}" && -f "${uboot_path}/rockchip/${board}/${BOOTLOADER_IMG}" ]] &&
+            [[ -n "${MAINLINE_UBOOT}" && -f "${uboot_path}/rockchip/${board}/${MAINLINE_UBOOT}" ]]; then
+            dd if="${uboot_path}/rockchip/${board}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=64 2>/dev/null
+            dd if="${uboot_path}/rockchip/${board}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=16384 2>/dev/null
+            #echo -e "${INFO} For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
+        elif [[ -n "${BOOTLOADER_IMG}" && -f "${uboot_path}/rockchip/${board}/${BOOTLOADER_IMG}" ]]; then
+            dd if="${uboot_path}/rockchip/${board}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 skip=64 seek=64 2>/dev/null
+            #echo -e "${INFO} For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
+        fi
+    }
 }
 
 extract_openwrt() {
-    process_msg " (3/6) Extract openwrt files."
+    process_msg " (2/5) Extract openwrt files."
     cd ${make_path}
 
     # Create openwrt mirror partition
@@ -402,10 +494,15 @@ extract_openwrt() {
     tag_rootfs="${tmp_path}/${kernel}/${board}/rootfs"
     mkdir -p ${tag_bootfs} ${tag_rootfs}
 
-    # Mount the openwrt image
-    mount -t vfat -o discard ${loop_new}p1 ${tag_bootfs}
+    # Mount bootfs
+    if [[ "${PLATFORM}" == "amlogic" ]]; then
+        mount -t vfat -o discard ${loop_new}p1 ${tag_bootfs}
+    else
+        mount -t ext4 -o discard ${loop_new}p1 ${tag_bootfs}
+    fi
     [[ "${?}" -eq "0" ]] || error_msg "mount ${loop_new}p1 failed!"
 
+    # Mount rootfs
     mount -t btrfs -o discard,compress=zstd:6 ${loop_new}p2 ${tag_rootfs}
     [[ "${?}" -eq "0" ]] || error_msg "mount ${loop_new}p2 failed!"
 
@@ -418,69 +515,88 @@ extract_openwrt() {
     rm -f ${tag_rootfs}/rom/sbin/firstboot
 
     # Copy the same files
-    [[ -d "${common_files}/bootfs" ]] && cp -rf ${common_files}/bootfs/* ${tag_bootfs}
+    [[ -d "${platform_bootfs}" ]] && cp -rf ${platform_bootfs}/* ${tag_bootfs}
+    [[ -d "${platform_rootfs}" ]] && cp -rf ${platform_rootfs}/* ${tag_rootfs}
     [[ -d "${common_files}/rootfs" ]] && cp -rf ${common_files}/rootfs/* ${tag_rootfs}
 
     # Copy the bootloader files
     [[ -d "${tag_rootfs}/lib/u-boot" ]] || mkdir -p "${tag_rootfs}/lib/u-boot"
-    cp -f ${uboot_path}/bootloader/* ${tag_rootfs}/lib/u-boot
+    [[ -d "${bootloader_dir}" ]] && cp -rf ${bootloader_dir}/* ${tag_rootfs}/lib/u-boot
+
     # Copy the overload files
-    cp -f ${uboot_path}/overload/* ${tag_bootfs}
+    [[ "${PLATFORM}" == "amlogic" ]] && cp -f ${uboot_path}/${PLATFORM}/overload/* ${tag_bootfs}
 }
 
 replace_kernel() {
-    process_msg " (4/6) Replace the kernel."
+    process_msg " (3/5) Replace the kernel."
     cd ${make_path}
 
     # Replace the kernel
-    build_boot="$(ls ${kernel_path}/${kernel}/boot-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
-    build_dtb="$(ls ${kernel_path}/${kernel}/dtb-amlogic-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
-    build_modules="$(ls ${kernel_path}/${kernel}/modules-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
-    [[ -n "${build_boot}" && -n "${build_dtb}" && -n "${build_modules}" ]] || error_msg "The 3 kernel missing."
+    kernel_boot="$(ls ${kernel_path}/${kd}/${kernel}/boot-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
+    kernel_dtb="$(ls ${kernel_path}/${kd}/${kernel}/dtb-${PLATFORM}-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
+    kernel_modules="$(ls ${kernel_path}/${kd}/${kernel}/modules-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
+    kernel_name="${kernel_boot##*/}" && kernel_name="${kernel_name/boot-/}" && kernel_name="${kernel_name/.tar.gz/}"
+    [[ -n "${kernel_boot}" && -n "${kernel_dtb}" && -n "${kernel_modules}" ]] || error_msg "The 3 kernel missing."
 
     # 01. For /boot five files
-    tar -xzf ${build_boot} -C ${tag_bootfs}
-    [[ "$(ls ${tag_bootfs}/*-${kernel}-* -l 2>/dev/null | grep "^-" | wc -l)" -ge "4" ]] || error_msg "The /boot files is missing."
-    (cd ${tag_bootfs} && cp -f uInitrd-* uInitrd && cp -f vmlinuz-* zImage)
-    get_textoffset "${tag_bootfs}/zImage"
+    tar -xzf ${kernel_boot} -C ${tag_bootfs}
+    [[ "${PLATFORM}" == "amlogic" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
+    [[ "${PLATFORM}" == "rockchip" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
+    [[ "$(ls ${tag_bootfs}/*${kernel_name}* -l 2>/dev/null | grep "^-" | wc -l)" -ge "4" ]] || error_msg "The /boot files is missing."
+    [[ "${PLATFORM}" == "amlogic" ]] && get_textoffset "${tag_bootfs}/zImage"
 
-    # 02. For /boot/dtb/amlogic/*
-    tar -xzf ${build_dtb} -C ${tag_bootfs}/dtb/amlogic
+    # 02. For /boot/dtb/${PLATFORM}/*
+    tar -xzf ${kernel_dtb} -C ${tag_bootfs}/dtb/${PLATFORM}
+    [[ "${PLATFORM}" == "rockchip" ]] && ln -sf dtb ${tag_bootfs}/dtb-${kernel_name}
+    [[ "$(ls ${tag_bootfs}/dtb/${PLATFORM} -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "/boot/dtb/${PLATFORM} files is missing."
 
-    # 03. For /lib/modules/*
-    tar -xzf ${build_modules} -C ${tag_rootfs}/lib/modules
-    (cd ${tag_rootfs}/lib/modules/${kernel}-*/ && rm -f build source *.ko 2>/dev/null && find ./ -type f -name '*.ko' -exec ln -s {} ./ \;)
-    [[ "$(ls ${tag_rootfs}/lib/modules/${kernel}-* -l 2>/dev/null | grep "^d" | wc -l)" -eq "1" ]] || error_msg "Missing kernel."
+    # 03. For /lib/modules/${kernel_name}
+    tar -xzf ${kernel_modules} -C ${tag_rootfs}/lib/modules
+    (cd ${tag_rootfs}/lib/modules/${kernel_name}/ && rm -f build source *.ko 2>/dev/null && find ./ -type f -name '*.ko' -exec ln -s {} ./ \;)
+    [[ "$(ls ${tag_rootfs}/lib/modules/${kernel_name} -l 2>/dev/null | grep "^d" | wc -l)" -eq "1" ]] || error_msg "/usr/lib/modules kernel folder is missing."
 }
 
 refactor_files() {
-    process_msg " (5/6) Refactor related files."
+    process_msg " (4/5) Refactor related files."
     cd ${tag_bootfs}
 
-    # For btrfs file system
-    uenv_mount_string="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
-    boot_conf_file="uEnv.txt"
-    [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
-    sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_conf_file}
-    sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
+    # Process Amlogic series boot partition files
+    [[ "${PLATFORM}" == "amlogic" ]] && {
+        # Add u-boot.ext for Amlogic 5.10 kernel
+        if [[ "${NEED_OVERLOAD}" == "yes" && -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
+            cp -f ${UBOOT_OVERLOAD} u-boot.ext
+            chmod +x u-boot.ext
+        elif [[ "${NEED_OVERLOAD}" == "yes" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then
+            error_msg "${board} Board does not support using ${kernel} kernel, missing u-boot."
+        fi
 
-    # Add an alternate file (/boot/extlinux/extlinux.conf)
-    boot_extlinux_file="extlinux/extlinux.conf.bak"
-    rename_extlinux_file="extlinux/extlinux.conf"
-    [[ -f "${boot_extlinux_file}" ]] && {
-        sed -i "s|LABEL=ROOTFS|${uenv_mount_string}|g" ${boot_extlinux_file}
-        sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_extlinux_file}
+        # Edit the uEnv.txt
+        boot_conf_file="uEnv.txt"
+        [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
+        sed -i "s|LABEL=ROOTFS|${uenv_rootdev}|g" ${boot_conf_file}
+        sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
+
+        # Add an alternate file (/boot/extlinux/extlinux.conf)
+        boot_extlinux_file="extlinux/extlinux.conf.bak"
+        rename_extlinux_file="extlinux/extlinux.conf"
+        [[ -f "${boot_extlinux_file}" ]] && {
+            sed -i "s|LABEL=ROOTFS|${uenv_rootdev}|g" ${boot_extlinux_file}
+            sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_extlinux_file}
+        }
+        # If needed, such as t95z(s905x), rename delete .bak
+        [[ "${BOOT_CONF}" == "extlinux.conf" ]] && mv -f ${boot_extlinux_file} ${rename_extlinux_file}
     }
-    # If needed, such as t95z(s905x), rename delete .bak
-    [[ "${BOOT_CONF}" == "extlinux.conf" ]] && mv -f ${boot_extlinux_file} ${rename_extlinux_file}
 
-    # Add u-boot.ext for 5.10 kernel
-    if [[ "${K510}" -eq "1" && -n "${UBOOT_OVERLOAD}" && -f "${UBOOT_OVERLOAD}" ]]; then
-        cp -f ${UBOOT_OVERLOAD} u-boot.ext
-        chmod +x u-boot.ext
-    elif [[ "${K510}" -eq "1" ]] && [[ -z "${UBOOT_OVERLOAD}" || ! -f "${UBOOT_OVERLOAD}" ]]; then
-        error_msg "${board} Board does not support using ${kernel} kernel, missing u-boot."
-    fi
+    # Process Rockchip series boot partition files
+    [[ "${PLATFORM}" == "rockchip" ]] && {
+        # Edit the armbianEnv.txt
+        boot_conf_file="armbianEnv.txt"
+        [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
+        sed -i "s|fdtfile.*|fdtfile=rockchip/${FDTFILE}|g" ${boot_conf_file}
+        sed -i "s|rootdev=.*|rootdev=${uenv_rootdev}|g" ${boot_conf_file}
+        sed -i "s|rootfstype=.*|rootfstype=btrfs|g" ${boot_conf_file}
+        sed -i "s|rootflags.*|rootflags=${uenv_rootflags}|g" ${boot_conf_file}
+    }
 
     cd ${tag_rootfs}
 
@@ -492,16 +608,17 @@ refactor_files() {
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|" etc/config/fstab
 
     # Add firmware information
-    echo "PLATFORM='amlogic'" >>${op_release}
+    echo "PLATFORM='${PLATFORM}'" >>${op_release}
     echo "SOC='${SOC}'" >>${op_release}
     echo "FDTFILE='${FDTFILE}'" >>${op_release}
     echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
     echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
-    echo "ANDROID_UBOOT='/lib/u-boot/${ANDROID_UBOOT}'" >>${op_release}
+    echo "ANDROID_UBOOT='/lib/u-boot/${BOOTLOADER_IMG}'" >>${op_release}
     echo "FAMILY='${FAMILY}'" >>${op_release}
     echo "BOARD='${board}'" >>${op_release}
     echo "KERNEL_VERSION='${kernel}'" >>${op_release}
-    echo "K510='${K510}'" >>${op_release}
+    echo "KERNEL_BRANCH='${KERNEL_BRANCH}'" >>${op_release}
+    echo "NEED_OVERLOAD='${NEED_OVERLOAD}'" >>${op_release}
     echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
 
     # Add firmware version information to the terminal page
@@ -650,7 +767,7 @@ EOF
 }
 
 clean_tmp() {
-    process_msg " (6/6) Cleanup tmp files."
+    process_msg " (5/5) Cleanup tmp files."
     cd ${make_path}
 
     # Unmount the openwrt image file
@@ -682,38 +799,55 @@ loop_make() {
 
     j="1"
     for b in ${build_openwrt[*]}; do
+        {
 
-        i="1"
-        for k in ${kernel_list[*]}; do
-            {
-                echo -n "(${j}.${i}) Start making OpenWrt [ ${b} - ${k} ]. "
+            board="${b}"
+            confirm_version
 
-                now_remaining_space="$(df -Tk ${make_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
-                if [[ "${now_remaining_space}" -le "3" ]]; then
-                    echo "Remaining space is less than 3G, exit this making."
-                    break
-                else
-                    echo "Remaining space is ${now_remaining_space}G."
-                fi
+            # Determine kernel branch
+            if [[ "${KERNEL_BRANCH}" == "rk3588" ]]; then
+                kernel_list=(${rk3588_kernel[*]})
+                kd="rk3588"
+            else
+                kernel_list=(${stable_kernel[*]})
+                kd="$(echo "${kernel_dir[@]}" | sed -e "s|rk3588||" | xargs)"
+            fi
 
-                # The loop variable assignment
-                board="${b}"
-                kernel="${k}"
+            i="1"
+            for k in ${kernel_list[*]}; do
+                {
+                    kernel="${k}"
 
-                # Execute the following functions in sequence
-                confirm_version
-                make_image
-                extract_openwrt
-                replace_kernel
-                refactor_files
-                clean_tmp
+                    # Identify devices that must use the 6.x.y kernel
+                    [[ "${KERNEL_BRANCH}" == "6.x.y" && "${kernel:0:2}" != "6." ]] && {
+                        echo -e "(${j}.${i}) ${TIPS} The ${board} device cannot use ${kd}/${kernel} kernel, skip."
+                        let i++
+                        continue
+                    }
 
-                echo -e "(${j}.${i}) OpenWrt made successfully. \n"
-                let i++
-            }
-        done
+                    echo -ne "(${j}.${i}) Start making OpenWrt [ ${board} - ${kd}/${kernel} ]. "
+                    now_remaining_space="$(df -Tk ${make_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
+                    if [[ "${now_remaining_space}" -le "3" ]]; then
+                        echo -e "${WARNING} Remaining space is less than 3G, exit this build."
+                        break
+                    else
+                        echo "Remaining space is ${now_remaining_space}G."
+                    fi
 
-        let j++
+                    # Execute the following functions in sequence
+                    make_image
+                    extract_openwrt
+                    replace_kernel
+                    refactor_files
+                    clean_tmp
+
+                    echo -e "(${j}.${i}) OpenWrt made successfully. \n"
+                    let i++
+                }
+            done
+
+            let j++
+        }
     done
 
     cd ${out_path}
@@ -744,7 +878,8 @@ download_depends
 download_kernel
 #
 echo -e "${INFO} [ ${#build_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${build_openwrt[*]} | xargs) ]"
-echo -e "${INFO} [ ${#kernel_list[*]} ] lists of Kernel branch: [ $(echo ${kernel_list[*]} | xargs) ]"
+echo -e "${INFO} [ ${#stable_kernel[*]} ] lists of stable kernel: [ $(echo ${stable_kernel[*]} | xargs) ]"
+echo -e "${INFO} [ ${#rk3588_kernel[*]} ] lists of rk3588 Kernel: [ $(echo ${rk3588_kernel[*]} | xargs) ]"
 echo -e "${INFO} Use the latest kernel version: [ ${auto_kernel} ] \n"
 #
 # Loop to make OpenWrt firmware

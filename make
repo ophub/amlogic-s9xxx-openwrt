@@ -51,7 +51,8 @@ common_files="${amlogic_path}/common-files"
 bootfs_path="${common_files}/bootfs"
 openvfd_path="${common_files}/rootfs/usr/share/openvfd"
 firmware_path="${common_files}/rootfs/lib/firmware"
-model_conf="${common_files}/rootfs/etc/model_database.txt"
+model_conf="${common_files}/rootfs/etc/model_database.conf"
+model_txt="${common_files}/rootfs/etc/model_database.txt"
 
 # Add custom openwrt firmware information
 op_release="etc/flippy-openwrt-release"
@@ -81,8 +82,8 @@ kernel_list=("5.10.125" "5.15.50")
 auto_kernel="true"
 
 # Get the list of devices built by default
-# 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.ANDROID_UBOOT  8.DESCRIPTION  9.FAMILY  10.BOOT_CONF 11.BOARD  12.BUILD
-build_openwrt=($(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:yes$" | awk -F':' '{print $11}' | sort | uniq | xargs))
+# 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION  9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
+build_openwrt=($(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:yes$" | awk -F':' '{print $13}' | sort | uniq | xargs))
 
 # Set OpenWrt firmware size (Unit: MiB, SKIP_MB >= 4, BOOT_MB >= 256, ROOT_MB >= 512)
 SKIP_MB="4"
@@ -263,6 +264,9 @@ download_depends() {
     # Download install/update and other related files
     svn export ${script_repo} ${common_files}/rootfs/usr/sbin --force
     chmod +x ${common_files}/rootfs/usr/sbin/*
+
+    # Convert text format profiles for install script(openwrt-install-amlogic)
+    cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*" >${model_txt}
 }
 
 query_version() {
@@ -335,14 +339,14 @@ confirm_version() {
     board_conf="$(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:${board}:yes$" | head -n 1)"
     [[ -n "${board_conf}" ]] || error_msg "[ ${board} ] config is missing!"
 
-    # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.ANDROID_UBOOT  8.DESCRIPTION  9.FAMILY  10.BOOT_CONF 11.BOARD  12.BUILD
+    # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION  9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
     SOC="$(echo ${board_conf} | awk -F':' '{print $3}')"
     FDTFILE="$(echo ${board_conf} | awk -F':' '{print $4}')"
     UBOOT_OVERLOAD="$(echo ${board_conf} | awk -F':' '{print $5}')"
     MAINLINE_UBOOT="$(echo ${board_conf} | awk -F':' '{print $6}')" && MAINLINE_UBOOT="${MAINLINE_UBOOT##*/}"
     ANDROID_UBOOT="$(echo ${board_conf} | awk -F':' '{print $7}')" && ANDROID_UBOOT="${ANDROID_UBOOT##*/}"
-    FAMILY="$(echo ${board_conf} | awk -F':' '{print $9}')"
-    BOOT_CONF="$(echo ${board_conf} | awk -F':' '{print $10}')"
+    FAMILY="$(echo ${board_conf} | awk -F':' '{print $11}')"
+    BOOT_CONF="$(echo ${board_conf} | awk -F':' '{print $12}')"
 
     # Confirm UUID
     ROOTFS_UUID="$(cat /proc/sys/kernel/random/uuid)"

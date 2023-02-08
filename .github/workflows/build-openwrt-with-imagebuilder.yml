@@ -24,11 +24,12 @@ on:
       openwrt_board:
         description: "Select Amlogic board"
         required: false
-        default: "s905x3_s905d_s912"
+        default: "all"
         type: choice
         options:
           - all
-          - s905x3_s905d_s912
+          - s922x_s905x3_s905d_s912_s905l3a
+          - rock5b_r66s_r68s_beikeyun_l1pro
           - a311d
           - s922x
           - s922x-n2
@@ -47,6 +48,15 @@ on:
           - s905l3a
           - s905l2
           - s905lb-r3300l
+          - rock5b
+          - h88k
+          - r66s
+          - r68s
+          - h66k
+          - h68k
+          - eaidk-610
+          - beikeyun
+          - l1pro
       openwrt_kernel:
         description: "Select kernel version"
         required: false

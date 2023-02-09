@@ -6,7 +6,7 @@ The [OpenWrt](https://openwrt.org/) Project is a Linux router operating system t
 
 Now you can replace the Android TV system of the TV Boxes with the `Amlogic` and `Rochchip` chip with the OpenWrt system, making it a powerful router. This project supports one-stop complete compilation of github.com (compiling from custom software packages to packaging firmware, all in one stop at github.com). Support localized packaging (firmware packaging in local Ubuntu and other environments). including OpenWrt firmware install to EMMC and update related functions. Support Amlogic s9xxx TV Boxes are ***`a311d, s922x, s905x3, s905x2, s905l3a, s912, s905d, s905x, s905w, s905`***, etc. such as ***`Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, X96-Max+, HK1-Box, H96-Max-X3, Phicomm-N1, Octopus-Planet, Fiberhome HG680P, ZTE B860H`***, etc. and Rockchip ***`BeikeYun`, `Chainedbox L1 Pro`, `FastRhino R66S/R68S`, `Radxa 5b`***, etc.
 
-The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Welcome to use `Fork` for [personalized OpenWrt firmware configuration](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md). If you like it, Please click the `Star`.
+The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Welcome to use `Fork` for [personalized OpenWrt firmware configuration](make-openwrt/documents). If you like it, Please click the `Star`.
 
 ## OpenWrt Firmware instructions
 
@@ -50,7 +50,7 @@ If you choose `Manually upload updates` [OpenWrt kernel](https://github.com/ophu
 
 If you choose `Online Download Update` OpenWrt firmware or kernel, it will be downloaded according to `Firmware download address` and `Kernel download address` in `Plugin Settings`, you can customize and modify the download source, For details, please refer to the compilation and usage instructions of [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic).
 
-Tip: Functions such as install/update are provided by [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) to provide visual operation support. Also supports [command operations](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/router-config/README.md#8-install-the-firmware).
+Tip: Functions such as install/update are provided by [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) to provide visual operation support. Also supports [command operations](make-openwrt/documents/README.md#8-install-the-firmware).
 
 - ### Use OpenWrt in TF/SD/USB
 
@@ -98,7 +98,7 @@ Debug according to [LED screen display control instructions](https://github.com/
 
 - ### More instructions for use
 
-Use the `firstboot` command to restore the system to its initial state. In the use of OpenWrt, please refer to [router-config](router-config) for some common problems that may be encountered.
+Use the `firstboot` command to restore the system to its initial state. In the use of OpenWrt, please refer to [documents](./make-openwrt/documents) for some common problems that may be encountered.
 
 ## Local build instructions
 
@@ -117,7 +117,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 
 | Parameter | Meaning | Description |
 | ---- | ---- | ---- |
-| -b | Board    | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . Use `all` for all board models. The model code is detailed in the `BOARD` setting in [model_database.conf](amlogic-s9xxx/common-files/rootfs/etc/model_database.conf). |
+| -b | Board    | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . Use `all` for all board models. The model code is detailed in the `BOARD` setting in [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf). |
 | -k | Kernel | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 6.1.10` . Multiple kernel use `_` connection such as `-k 6.1.10_5.15.50` |
 | -a | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 6.1.10 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | -v | VersionBranch | Specify the [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable_rk3588`. The specified name must be the same as the branch directory name. The `stable_rk3588` branch version is used by default. |
@@ -137,9 +137,9 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 
 ## Use GitHub Actions to build
 
-You can modify the configuration file in the `router-config` directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
+You can modify the configuration file in the [router-config](router-config) directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
 
-1. Personalized plug-in configuration in [router-config](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/router-config) directory. Workflows configuration in [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file.
+1. Personalized plug-in configuration in [documents](./make-openwrt/documents) directory. Workflows configuration in [.yml](.github/workflows) file.
 2. New compilation: Select ***`Build OpenWrt`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
 3. Compile again: If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), you do not need to compile it completely, you can directly use this file to `build openwrt` of different board. Select ***`Use Releases file to Packaging`*** on the [Actions](https://github.com/ophub/amlogic-s9xxx-armbian/openwrt) page. Click the ***`Run workflow`*** button.
 4. More support: The compiled `openwrt-armvirt-64-default-rootfs.tar.gz` file is a common file for making various board firmware, and it is also suitable for making OpenWrt firmware using [unifreq's packaging script](https://github.com/unifreq/openwrt_packit). As the pioneer of using OpenWrt and Armbian system in the box, he has supported more devices, such as OpenWrt ([qemu version](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md)) as used by `KVM` virtual machine on [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system, Allwinner (`V-Plus Cloud`), and Rockchip (`BeikeYun`, `Chainedbox L1 Pro`), and Amlogic series, etc. For details on the packaging method, please refer to his source code repository description. In Actions, you can use [packaging-openwrt-for-qemu-etc.yml](.github/workflows/packaging-openwrt-for-qemu-etc.yml) to call his packaging script to make more firmware.
@@ -171,7 +171,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 
 - ### GitHub Actions Output variable description
 
-To upload to `Releases`, you need to add `${{ secrets.GITHUB_TOKEN }}` and `${{ secrets.GH_TOKEN }}` to the repository and set `Workflow read and write permissions`, see the [instructions for details](router-config#2-set-the-privacy-variable-github_token).
+To upload to `Releases`, you need to add `${{ secrets.GITHUB_TOKEN }}` and `${{ secrets.GH_TOKEN }}` to the repository and set `Workflow read and write permissions`, see the [instructions for details](./make-openwrt/documents/README.md#2-set-the-privacy-variable-github_token).
 
 | Parameter                                | For example         | Description                         |
 |------------------------------------------|---------------------|-------------------------------------|
@@ -188,7 +188,7 @@ To upload to `Releases`, you need to add `${{ secrets.GITHUB_TOKEN }}` and `${{ 
 | Target Profile | Default |
 | Target Images | tar.gz |
 
-[For more instructions please see: router-config](router-config)
+For more instructions please see: [documents](./make-openwrt/documents)
 
 ## OpenWrt firmware default information
 

@@ -39,19 +39,20 @@
 #====================== Set make environment variables ======================
 #
 # Related file storage path
-make_path="${PWD}"
-tmp_path="${make_path}/tmp"
-out_path="${make_path}/out"
-openwrt_path="${make_path}/openwrt-armvirt"
+current_path="${PWD}"
+tmp_path="${current_path}/tmp"
+out_path="${current_path}/out"
+openwrt_path="${current_path}/openwrt-armvirt"
 openwrt_rootfs_file="*rootfs.tar.gz"
-amlogic_path="${make_path}/amlogic-s9xxx"
-kernel_path="${amlogic_path}/kernel"
-uboot_path="${amlogic_path}/u-boot"
-common_files="${amlogic_path}/common-files"
-platform_files="${amlogic_path}/platform-files"
-firmware_path="${common_files}/rootfs/lib/firmware"
-model_conf="${common_files}/rootfs/etc/model_database.conf"
-model_txt="${common_files}/rootfs/etc/model_database.txt"
+make_path="${current_path}/male-openwrt"
+kernel_path="${make_path}/kernel"
+uboot_path="${make_path}/u-boot"
+common_files="${make_path}/openwrt-files/common-files"
+platform_files="${make_path}/openwrt-files/platform-files"
+patches_path="${make_path}/openwrt-files/patches"
+firmware_path="${common_files}/lib/firmware"
+model_conf="${common_files}/etc/model_database.conf"
+model_txt="${common_files}/etc/model_database.txt"
 
 # Add custom openwrt firmware information
 op_release="etc/flippy-openwrt-release"
@@ -207,7 +208,7 @@ init_var() {
 }
 
 find_openwrt() {
-    cd ${make_path}
+    cd ${current_path}
     echo -e "${STEPS} Start searching for OpenWrt file..."
 
     # Find whether the openwrt file exists
@@ -234,7 +235,7 @@ find_openwrt() {
 }
 
 download_depends() {
-    cd ${make_path}
+    cd ${current_path}
     echo -e "${STEPS} Start downloading dependency files..."
 
     # Download /boot related files
@@ -256,12 +257,12 @@ download_depends() {
     svn co ${firmware_repo} ${firmware_path} --force
 
     # Download balethirq related files
-    svn export ${depends_repo}/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/rootfs/usr/sbin --force
-    svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${common_files}/rootfs/etc --force
+    svn export ${depends_repo}/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/usr/sbin --force
+    svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${common_files}/etc --force
 
     # Download install/update and other related files
-    svn export ${script_repo} ${common_files}/rootfs/usr/sbin --force
-    chmod +x ${common_files}/rootfs/usr/sbin/*
+    svn export ${script_repo} ${common_files}/usr/sbin --force
+    chmod +x ${common_files}/usr/sbin/*
     # Convert text format profiles for install script(openwrt-install-amlogic)
     cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*" >${model_txt}
 }
@@ -332,7 +333,7 @@ query_version() {
 }
 
 download_kernel() {
-    cd ${make_path}
+    cd ${current_path}
     echo -e "${STEPS} Start downloading the kernel files..."
 
     x="1"
@@ -365,7 +366,7 @@ download_kernel() {
 }
 
 confirm_version() {
-    cd ${make_path}
+    cd ${current_path}
 
     # Find [ the first ] configuration information with [ the same BOARD name ] and [ BUILD as yes ] in the ${model_conf} file.
     [[ -f "${model_conf}" ]] || error_msg "[ ${model_conf} ] file is missing!"
@@ -428,7 +429,7 @@ confirm_version() {
 
 make_image() {
     process_msg " (1/5) Make openwrt image."
-    cd ${make_path}
+    cd ${current_path}
 
     # Set openwrt filename
     build_image_file="${out_path}/openwrt${source_codename}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
@@ -487,7 +488,7 @@ make_image() {
 
 extract_openwrt() {
     process_msg " (2/5) Extract openwrt files."
-    cd ${make_path}
+    cd ${current_path}
 
     # Create openwrt mirror partition
     tag_bootfs="${tmp_path}/${kernel}/${board}/bootfs"
@@ -517,7 +518,7 @@ extract_openwrt() {
     # Copy the same files
     [[ -d "${platform_bootfs}" ]] && cp -rf ${platform_bootfs}/* ${tag_bootfs}
     [[ -d "${platform_rootfs}" ]] && cp -rf ${platform_rootfs}/* ${tag_rootfs}
-    [[ -d "${common_files}/rootfs" ]] && cp -rf ${common_files}/rootfs/* ${tag_rootfs}
+    [[ -d "${common_files}" ]] && cp -rf ${common_files}/* ${tag_rootfs}
 
     # Copy the bootloader files
     [[ -d "${tag_rootfs}/lib/u-boot" ]] || mkdir -p "${tag_rootfs}/lib/u-boot"
@@ -529,7 +530,7 @@ extract_openwrt() {
 
 replace_kernel() {
     process_msg " (3/5) Replace the kernel."
-    cd ${make_path}
+    cd ${current_path}
 
     # Replace the kernel
     kernel_boot="$(ls ${kernel_path}/${kd}/${kernel}/boot-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
@@ -632,7 +633,7 @@ refactor_files() {
     }
 
     # Add cpustat
-    cpustat_file="${common_files}/patches/cpustat"
+    cpustat_file="${patches_path}/cpustat"
     [[ -d "${cpustat_file}" && -x "bin/bash" ]] && {
         cp -f ${cpustat_file}/30-sysinfo.sh etc/profile.d/30-sysinfo.sh
         cp -f ${cpustat_file}/getcpu bin/getcpu && chmod +x bin/getcpu
@@ -648,7 +649,7 @@ refactor_files() {
     }
 
     # Add balethirq
-    balethirq_file="${common_files}/rootfs/usr/sbin/balethirq.pl"
+    balethirq_file="${common_files}/usr/sbin/balethirq.pl"
     [[ -x "${balethirq_file}" ]] && sed -i "/^exit 0/i\/usr/sbin/balethirq.pl" etc/rc.local
 
     # Modify the cpu mode to schedutil
@@ -756,7 +757,7 @@ EOF
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:07/" "brcmfmac4354-sdio.txt" >"brcmfmac4354-sdio.amlogic,sm1.txt"
     )
 
-    cd ${make_path}
+    cd ${current_path}
 
     # Create snapshot
     mkdir -p ${tag_rootfs}/.snapshots
@@ -767,7 +768,7 @@ EOF
 
 clean_tmp() {
     process_msg " (5/5) Cleanup tmp files."
-    cd ${make_path}
+    cd ${current_path}
 
     # Unmount the openwrt image file
     umount -f ${tag_bootfs} 2>/dev/null
@@ -786,14 +787,14 @@ clean_tmp() {
     # Compress the openwrt image file
     pigz -f *.img && sync
 
-    cd ${make_path}
+    cd ${current_path}
 
     # Clear temporary files directory
     rm -rf ${tmp_path}
 }
 
 loop_make() {
-    cd ${make_path}
+    cd ${current_path}
     echo -e "${STEPS} Start making OpenWrt firmware..."
 
     j="1"
@@ -825,7 +826,7 @@ loop_make() {
                     }
 
                     echo -ne "(${j}.${i}) Start making OpenWrt [ ${board} - ${kd}/${kernel} ]. "
-                    now_remaining_space="$(df -Tk ${make_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
+                    now_remaining_space="$(df -Tk ${current_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                     if [[ "${now_remaining_space}" -le "3" ]]; then
                         echo -e "${WARNING} Remaining space is less than 3G, exit this build."
                         break
@@ -864,7 +865,7 @@ echo -e "${STEPS} Welcome to tools for making Amlogic s9xxx OpenWrt! \n"
 # Show server start information
 echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
 echo -e "${INFO} Server memory usage: \n$(free -h) \n"
-echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${make_path}) \n"
+echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${current_path}) \n"
 #
 # Initialize variables and download the kernel
 init_var "${@}"
@@ -885,7 +886,7 @@ echo -e "${INFO} Use the latest kernel version: [ ${auto_kernel} ] \n"
 loop_make
 #
 # Show server end information
-echo -e "${STEPS} Server space usage after compilation: \n$(df -hT ${make_path}) \n"
+echo -e "${STEPS} Server space usage after compilation: \n$(df -hT ${current_path}) \n"
 echo -e "${SUCCESS} All process completed successfully."
 # All process completed
 wait

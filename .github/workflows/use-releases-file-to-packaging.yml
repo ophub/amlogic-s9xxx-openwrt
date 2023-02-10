@@ -114,7 +114,12 @@ jobs:
         id: down
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          openwrt_url="$(curl --header "authorization: Bearer ${{ secrets.GH_TOKEN }}" -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
+          openwrt_url="$(curl \
+                            --header "authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+                            -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" |
+                            grep -o "OpenWrt_.*${{ inputs.branch }}.*/.*rootfs.tar.gz" |
+                            head -n 1
+                        )"
           [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
           #
           armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
@@ -140,12 +145,12 @@ jobs:
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
-          tag: OpenWrt_Aml_${{ inputs.branch }}_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: OpenWrt_${{ inputs.branch }}_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}
           body: |
-            This is OpenWrt firmware for Amlogic s9xxx tv box
+            This is OpenWrt firmware for Amlogic and Rockchip
             * Firmware information
             Default IP: 192.168.1.1
             Default username: root

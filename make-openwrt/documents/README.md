@@ -418,12 +418,12 @@ Refer to the related [parameter description](https://github.com/ophub/amlogic-s9
 The default [/etc/banner](../openwrt-files/common-files/etc/banner) information is as follows, you can use the [banner generator](https://www.bootschool.net/ascii) Customize your own personalized banner information(The style below is `slant`), just overwrite the file with the same name.
 
 ```yaml
-     ___              __      ____                 _       __     __
-    /   |  ____ ___  / /     / __ \____  ___  ____| |     / /____/ /_
-   / /| | / __ `__ \/ /_____/ / / / __ \/ _ \/ __ \ | /| / / ___/ __/
-  / ___ |/ / / / / / /_____/ /_/ / /_/ /  __/ / / / |/ |/ / /  / /_
- /_/  |_/_/ /_/ /_/_/      \____/ .___/\___/_/ /_/|__/|__/_/   \__/
- A M L O G I C - S E R V I C E /_/ W I R E L E S S - F R E E D O M
+      ____                 _       __     __        ____
+     / __ \____  ___  ____| |     / /____/ /_      / __ )____  _  __
+    / / / / __ \/ _ \/ __ \ | /| / / ___/ __/_____/ __  / __ \| |/_/
+   / /_/ / /_/ /  __/ / / / |/ |/ / /  / /_/_____/ /_/ / /_/ />  <
+   \____/ .___/\___/_/ /_/|__/|__/_/   \__/     /_____/\____/_/|_|
+       /_/  H E L L O - W O R L D    W I R E L E S S - F R E E D O M
 ───────────────────────────────────────────────────────────────────────
 ```
 

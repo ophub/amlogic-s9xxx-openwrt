@@ -89,7 +89,7 @@ Personal center: Settings > Developer settings > Personal access tokens > Genera
 
 ## 4. 个性化 OpenWrt 固件定制文件说明
 
-经过前面 3 步准备工作，现在开始进行个性化固件定制吧。在 [router-config/lede-master](../../router-config/lede-master) 目录下的 3 个是进行 OpenWrt 固件个性化定制的文件。这个章节我们只做最简单的说明，让你一动手就能体验到个性化定制的快乐，比较复杂的定制化操作我放在了第 10 节里，这需要你有一点点基础。
+经过前面 3 步准备工作，现在开始进行个性化固件定制吧。在 [config-openwrt/lede-master](../../config-openwrt/lede-master) 目录下的 3 个是进行 OpenWrt 固件个性化定制的文件。这个章节我们只做最简单的说明，让你一动手就能体验到个性化定制的快乐，比较复杂的定制化操作我放在了第 10 节里，这需要你有一点点基础。
 
 ### 4.1 .config 文件说明
 
@@ -183,7 +183,7 @@ OpenWrt 官方网站提供了制作好的 openwrt-imagebuilder-*-armvirt-64.Linu
 
 本仓库提供了一键制作服务，你只需要把分支参数传入 [imagebuilder 脚本](openwrt-imagebuilder/imagebuilder.sh) 即可完成制作。
 
-- 本地化制作命令：可以在 `~/amlogic-s9xxx-openwrt` 根目录下运行 `sudo ./router-config/openwrt-imagebuilder/imagebuilder.sh 21.02.3` 指令即可生成。其中的参数 `21.02.3` 是当前可以[下载](https://downloads.openwrt.org/releases)使用的 `releases` 版本号。生成的文件在 `openwrt/bin/targets/armvirt/64` 目录下。
+- 本地化制作命令：可以在 `~/amlogic-s9xxx-openwrt` 根目录下运行 `sudo ./config-openwrt/openwrt-imagebuilder/imagebuilder.sh 21.02.3` 指令即可生成。其中的参数 `21.02.3` 是当前可以[下载](https://downloads.openwrt.org/releases)使用的 `releases` 版本号。生成的文件在 `openwrt/bin/targets/armvirt/64` 目录下。
 
 - 使用 github.com 的 `Actions` 中进行制作：[Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
 
@@ -364,7 +364,7 @@ openwrt-kernel
 
 使用 openwrt 的官方源码库，或者其他分支的源码库进行一次本地化编译，如选择 https://github.com/coolsnowwolf/lede 的源码库，根据它的编译说明，在本地安装 Ubuntu 系统，部署环境并完成一次本地编译。在本地编译配置界面中，你也可以看到很多丰富的说明，这将加强你对 openwrt 编译过程的理解。
 
-当你在本地完成 openwrt 个性化配置后，保存并退出配置界面，你可以在本地 openwrt 源码库的根目录下找到 .config 文件（ 在代码库的根目录下输入 `ls -a` 命令查看全部隐藏文件），你可以把这个文件直接上传到 github.com 里你的仓库里，替换 router-config/lede-master/config 这个文件。
+当你在本地完成 openwrt 个性化配置后，保存并退出配置界面，你可以在本地 openwrt 源码库的根目录下找到 .config 文件（ 在代码库的根目录下输入 `ls -a` 命令查看全部隐藏文件），你可以把这个文件直接上传到 github.com 里你的仓库里，替换 config-openwrt/lede-master/config 这个文件。
 
 ### 10.2 认识 workflow 文件
 

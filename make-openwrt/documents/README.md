@@ -89,7 +89,7 @@ Now you can `Fork` the `repository`, open the repository [https://github.com/oph
 
 ## 4. Personalized OpenWrt firmware customization file description
 
-After the previous 3 steps of preparation, let's start personalized firmware customization now. Have some files in the [router-config/lede-master](../../router-config/lede-master/) directory. The 3 files for customizing OpenWrt firmware. In this chapter, we only make the simplest instructions, so that you can experience the happiness of personalized customization with your hands. I put more complex customization operations in `Section 10`, which requires you to have a little foundation.
+After the previous 3 steps of preparation, let's start personalized firmware customization now. Have some files in the [config-openwrt/lede-master](../../config-openwrt/lede-master/) directory. The 3 files for customizing OpenWrt firmware. In this chapter, we only make the simplest instructions, so that you can experience the happiness of personalized customization with your hands. I put more complex customization operations in `Section 10`, which requires you to have a little foundation.
 
 ### 4.1 .config file description
 
@@ -187,7 +187,7 @@ The official website of OpenWrt provides the prepared openwrt-imagebuilder-*-arm
 
 This repository provides a one-click production service. You only need to pass the branch parameters into the [imagebuilder script](openwrt-imagebuilder/imagebuilder.sh) to complete the production.
 
-- Localized make command: You can run the `sudo ./router-config/openwrt-imagebuilder/imagebuilder.sh 21.02.3` command in the `~/amlogic-s9xxx-openwrt` root directory to generate it. The parameter `21.02.3` is the version number of `releases` currently available for [download](https://downloads.openwrt.org/releases). The generated files are in the `openwrt/bin/targets/armvirt/64` directory.
+- Localized make command: You can run the `sudo ./config-openwrt/openwrt-imagebuilder/imagebuilder.sh 21.02.3` command in the `~/amlogic-s9xxx-openwrt` root directory to generate it. The parameter `21.02.3` is the version number of `releases` currently available for [download](https://downloads.openwrt.org/releases). The generated files are in the `openwrt/bin/targets/armvirt/64` directory.
 
 - Use github.com's `Actions` to make: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
 
@@ -370,7 +370,7 @@ If you see this step in the tutorial, I believe you already know how to play hap
 
 Use the official source code library of `OpenWrt` or the source code library of other branches to perform a `localized compilation`. For example, select the source code library of [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede), and install the `Ubuntu system` locally and deploy the environment according to its compilation instructions. And `complete a local compilation`. In the local compilation configuration interface, you can also see a lot of rich instructions, which will strengthen your understanding of the OpenWrt compilation process.
 
-After you complete the `OpenWrt personalized configuration` locally, `save and exit` the configuration interface. You can find the `.config` file in the root directory of the local OpenWrt source code library. You can upload this file directly to `your repository on github.com`, Replace the `router-config/lede-master/config` file.
+After you complete the `OpenWrt personalized configuration` locally, `save and exit` the configuration interface. You can find the `.config` file in the root directory of the local OpenWrt source code library. You can upload this file directly to `your repository on github.com`, Replace the `config-openwrt/lede-master/config` file.
 
 ### 10.2 Know the workflow file
 

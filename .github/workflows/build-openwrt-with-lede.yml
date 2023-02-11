@@ -77,10 +77,10 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: router-config/lede-master/feeds.conf.default
-  CONFIG_FILE: router-config/lede-master/config
-  DIY_P1_SH: router-config/lede-master/diy-part1.sh
-  DIY_P2_SH: router-config/lede-master/diy-part2.sh
+  FEEDS_CONF: config-openwrt/lede-master/feeds.conf.default
+  CONFIG_FILE: config-openwrt/lede-master/config
+  DIY_P1_SH: config-openwrt/lede-master/diy-part1.sh
+  DIY_P2_SH: config-openwrt/lede-master/diy-part2.sh
   TZ: America/New_York
 
 jobs:

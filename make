@@ -533,9 +533,9 @@ replace_kernel() {
     cd ${current_path}
 
     # Replace the kernel
-    kernel_boot="$(ls ${kernel_path}/${kd}/${kernel}/boot-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
-    kernel_dtb="$(ls ${kernel_path}/${kd}/${kernel}/dtb-${PLATFORM}-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
-    kernel_modules="$(ls ${kernel_path}/${kd}/${kernel}/modules-${kernel}-*.tar.gz 2>/dev/null | head -n 1)"
+    kernel_boot="$(ls ${kernel_path}/${kd}/${kernel}/boot-${kernel}*.tar.gz 2>/dev/null | head -n 1)"
+    kernel_dtb="$(ls ${kernel_path}/${kd}/${kernel}/dtb-${PLATFORM}-${kernel}*.tar.gz 2>/dev/null | head -n 1)"
+    kernel_modules="$(ls ${kernel_path}/${kd}/${kernel}/modules-${kernel}*.tar.gz 2>/dev/null | head -n 1)"
     kernel_name="${kernel_boot##*/}" && kernel_name="${kernel_name/boot-/}" && kernel_name="${kernel_name/.tar.gz/}"
     [[ -n "${kernel_boot}" && -n "${kernel_dtb}" && -n "${kernel_modules}" ]] || error_msg "The 3 kernel missing."
 
@@ -543,7 +543,7 @@ replace_kernel() {
     tar -xzf ${kernel_boot} -C ${tag_bootfs}
     [[ "${PLATFORM}" == "amlogic" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
     [[ "${PLATFORM}" == "rockchip" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
-    [[ "$(ls ${tag_bootfs}/*${kernel_name}* -l 2>/dev/null | grep "^-" | wc -l)" -ge "4" ]] || error_msg "The /boot files is missing."
+    [[ "$(ls ${tag_bootfs}/{vmlinuz-${kernel_name}*,uInitrd-${kernel_name}*} -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "The /boot files is missing."
     [[ "${PLATFORM}" == "amlogic" ]] && get_textoffset "${tag_bootfs}/zImage"
 
     # 02. For /boot/dtb/${PLATFORM}/*

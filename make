@@ -824,6 +824,7 @@ loop_make() {
     for b in ${build_openwrt[*]}; do
         {
 
+            # Set specific configuration for building OpenWrt system
             board="${b}"
             confirm_version
 
@@ -841,13 +842,16 @@ loop_make() {
                 {
                     kernel="${k}"
 
-                    # Identify devices that must use the 6.x.y kernel
-                    [[ "${KERNEL_BRANCH}" == "6.x.y" && "${kernel:0:2}" != "6." ]] && {
-                        echo -e "(${j}.${i}) ${TIPS} The ${board} device cannot use ${kd}/${kernel} kernel, skip."
+                    # Skip inapplicable kernels
+                    if { [[ "${KERNEL_BRANCH}" == "rk3588" ]] && [[ "${kernel:0:5}" != "5.10." ]]; } ||
+                        { [[ "${KERNEL_BRANCH}" == "6.x.y" ]] && [[ "${kernel:0:2}" != "6." ]]; } ||
+                        { [[ "${KERNEL_BRANCH}" == "5.15.y" ]] && [[ "${kernel:0:5}" != "5.15." && "${kernel:0:4}" != "5.4." ]]; }; then
+                        echo -e "(${j}.${i}) ${TIPS} The [ ${board} ] device cannot use [ ${kd}/${kernel} ] kernel, skip."
                         let i++
                         continue
-                    }
+                    fi
 
+                    # Check disk space size
                     echo -ne "(${j}.${i}) Start making OpenWrt [ ${board} - ${kd}/${kernel} ]. "
                     now_remaining_space="$(df -Tk ${current_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                     if [[ "${now_remaining_space}" -le "3" ]]; then

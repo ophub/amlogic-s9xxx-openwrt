@@ -55,7 +55,7 @@ firmware_path="${common_files}/lib/firmware"
 model_conf="${common_files}/etc/model_database.conf"
 model_txt="${common_files}/etc/model_database.txt"
 
-# Add custom openwrt firmware information
+# Add custom OpenWrt firmware information
 op_release="etc/flippy-openwrt-release"
 
 # Dependency files download repository
@@ -212,7 +212,7 @@ find_openwrt() {
     cd ${current_path}
     echo -e "${STEPS} Start searching for OpenWrt file..."
 
-    # Find whether the openwrt file exists
+    # Find whether the OpenWrt file exists
     openwrt_file_name="$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')"
     if [[ -n "${openwrt_file_name}" ]]; then
         echo -e "${INFO} OpenWrt file: [ ${openwrt_file_name} ]"
@@ -220,7 +220,7 @@ find_openwrt() {
         error_msg "There is no [ ${openwrt_rootfs_file} ] file in the [ ${openwrt_path} ] directory."
     fi
 
-    # Extract the openwrt release information file
+    # Extract the OpenWrt release information file
     source_codename=""
     source_release_file="etc/openwrt_release"
     temp_dir="$(mktemp -d)"
@@ -468,15 +468,16 @@ confirm_version() {
 }
 
 make_image() {
-    process_msg " (1/5) Make openwrt image."
+    process_msg " (1/5) Make OpenWrt image."
     cd ${current_path}
 
-    # Set openwrt filename
+    # Set OpenWrt filename
     build_image_file="${out_path}/openwrt${source_codename}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
     rm -f ${build_image_file}
 
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
 
+    # Reserve bootloader write area (Unit: MiB)
     [[ "${PLATFORM}" == "amlogic" ]] && SKIP_MB="4"
     [[ "${PLATFORM}" == "rockchip" ]] && SKIP_MB="16"
     [[ "${PLATFORM}" == "allwinner" ]] && SKIP_MB="16"
@@ -489,7 +490,7 @@ make_image() {
     parted -s ${build_image_file} mkpart primary ${bootfs_type} $((SKIP_MB))MiB $((SKIP_MB + BOOT_MB - 1))MiB 2>/dev/null
     parted -s ${build_image_file} mkpart primary btrfs $((SKIP_MB + BOOT_MB))MiB 100% 2>/dev/null
 
-    # Mount the openwrt image file
+    # Mount the OpenWrt image file
     loop_new="$(losetup -P -f --show "${build_image_file}")"
     [[ -n "${loop_new}" ]] || error_msg "losetup ${build_image_file} failed."
 
@@ -551,10 +552,10 @@ make_image() {
 }
 
 extract_openwrt() {
-    process_msg " (2/5) Extract openwrt files."
+    process_msg " (2/5) Extract OpenWrt files."
     cd ${current_path}
 
-    # Create openwrt mirror partition
+    # Create OpenWrt mirror partition
     tag_bootfs="${tmp_path}/${kernel}/${board}/bootfs"
     tag_rootfs="${tmp_path}/${kernel}/${board}/rootfs"
     mkdir -p ${tag_bootfs} ${tag_rootfs}
@@ -574,7 +575,7 @@ extract_openwrt() {
     # Create snapshot directory
     btrfs subvolume create ${tag_rootfs}/etc >/dev/null 2>&1
 
-    # Unzip the openwrt package
+    # Unzip the OpenWrt package
     tar -xzf ${openwrt_path}/${openwrt_file_name} -C ${tag_rootfs}
     rm -rf ${tag_rootfs}/lib/modules/*
     rm -f ${tag_rootfs}/rom/sbin/firstboot
@@ -848,7 +849,7 @@ clean_tmp() {
     process_msg " (5/5) Cleanup tmp files."
     cd ${current_path}
 
-    # Unmount the openwrt image file
+    # Unmount the OpenWrt image file
     umount -f ${tag_bootfs} 2>/dev/null
     umount -f ${tag_rootfs} 2>/dev/null
     losetup -d ${loop_new} 2>/dev/null
@@ -862,7 +863,7 @@ clean_tmp() {
 
     cd ${out_path}
 
-    # Compress the openwrt image file
+    # Compress the OpenWrt image file
     pigz -f *.img && sync
 
     cd ${current_path}
@@ -934,7 +935,7 @@ loop_make() {
 
     cd ${out_path}
 
-    # Backup the openwrt file
+    # Backup the OpenWrt file
     cp -f ${openwrt_path}/${openwrt_file_name} .
 
     # Generate sha256sum check file

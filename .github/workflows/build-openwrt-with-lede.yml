@@ -45,6 +45,7 @@ on:
           - king3399
           - beikeyun
           - l1pro
+          - vplus
       openwrt_kernel:
         description: "Select kernel version"
         required: false

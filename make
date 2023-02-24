@@ -415,7 +415,7 @@ confirm_version() {
     [[ -z "${ROOTFS_UUID}" ]] && ROOTFS_UUID="$(uuidgen)"
     [[ -z "${ROOTFS_UUID}" ]] && error_msg "The uuidgen is invalid, cannot continue."
 
-    # Define platform variables for Amlogic boxes
+    # Define platform variables for [ Amlogic ] boxes
     [[ "${PLATFORM}" == "amlogic" ]] && {
         # Set up the welcome board
         bd_name="Amlogic ${SOC}"
@@ -423,15 +423,15 @@ confirm_version() {
         partition_table_type="msdos"
         bootfs_type="fat32"
         # Set directory name
-        platform_bootfs="${platform_files}/amlogic/bootfs"
-        platform_rootfs="${platform_files}/amlogic/rootfs"
-        bootloader_dir="${uboot_path}/amlogic/bootloader"
+        platform_bootfs="${platform_files}/${PLATFORM}/bootfs"
+        platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
+        bootloader_dir="${uboot_path}/${PLATFORM}/bootloader"
         # Set the type of file system
         uenv_rootdev="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
         fstab_string="discard,defaults,noatime,compress=zstd:6"
     }
 
-    # Define platform variables for Rockchip boxes
+    # Define platform variables for [ Rockchip ] boxes
     [[ "${PLATFORM}" == "rockchip" ]] && {
         # Set up the welcome board
         bd_name="Rockchip ${board}"
@@ -439,12 +439,28 @@ confirm_version() {
         partition_table_type="gpt"
         bootfs_type="ext4"
         # Set directory name
-        platform_bootfs="${platform_files}/rockchip/bootfs/${board}"
-        platform_rootfs="${platform_files}/rockchip/rootfs"
-        bootloader_dir="${uboot_path}/rockchip/${board}"
+        platform_bootfs="${platform_files}/${PLATFORM}/bootfs/${board}"
+        platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
+        bootloader_dir="${uboot_path}/${PLATFORM}/${board}"
         # Set the type of file system
         uenv_rootflags="compress=zstd:6"
         uenv_rootdev="UUID=${ROOTFS_UUID}"
+        fstab_string="discard,defaults,noatime,compress=zstd:6"
+    }
+
+    # Define platform variables for [ Allwinner ] boxes
+    [[ "${PLATFORM}" == "allwinner" ]] && {
+        # Set up the welcome board
+        bd_name="Allwinner ${board}"
+        # Set Armbian image file parameters
+        partition_table_type="msdos"
+        bootfs_type="fat32"
+        # Set directory name
+        platform_bootfs="${platform_files}/${PLATFORM}/bootfs/${board}"
+        platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
+        bootloader_dir="${uboot_path}/${PLATFORM}/${board}"
+        # Set the type of file system
+        uenv_rootdev="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
         fstab_string="discard,defaults,noatime,compress=zstd:6"
     }
 }
@@ -460,7 +476,7 @@ make_image() {
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
 
     [[ "${PLATFORM}" == "amlogic" ]] && SKIP_MB="4"
-    [[ "${PLATFORM}" == "rockchip" ]] && SKIP_MB="16"
+    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && SKIP_MB="16"
 
     IMG_SIZE="$((SKIP_MB + BOOT_MB + ROOT_MB))"
 
@@ -475,34 +491,50 @@ make_image() {
     [[ -n "${loop_new}" ]] || error_msg "losetup ${build_image_file} failed."
 
     # Format bootfs partition
-    [[ "${PLATFORM}" == "amlogic" ]] && mkfs.vfat -F 32 -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
+    [[ "${PLATFORM}" == "amlogic" || "${PLATFORM}" == "allwinner" ]] && mkfs.vfat -F 32 -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
     [[ "${PLATFORM}" == "rockchip" ]] && mkfs.ext4 -F -q -U ${BOOT_UUID} -L "BOOT" -b 4k -m 0 ${loop_new}p1 >/dev/null 2>&1
 
     # Format rootfs partition
     mkfs.btrfs -f -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop_new}p2 >/dev/null 2>&1
 
-    # Write the specified bootloader for Amlogic boxes
+    # Write the specified bootloader for [ Amlogic ] boxes
     [[ "${PLATFORM}" == "amlogic" ]] && {
-        if [[ -n "${MAINLINE_UBOOT}" && -f "${uboot_path}/amlogic/bootloader/${MAINLINE_UBOOT}" ]]; then
-            dd if="${uboot_path}/amlogic/bootloader/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync bs=1 count=444 2>/dev/null
-            dd if="${uboot_path}/amlogic/bootloader/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync bs=512 skip=1 seek=1 2>/dev/null
-            #echo -e "${INFO} For [ ${board} ] write Mainline u-boot: ${MAINLINE_UBOOT}"
-        elif [[ -n "${BOOTLOADER_IMG}" && -f "${uboot_path}/amlogic/bootloader/${BOOTLOADER_IMG}" ]]; then
-            dd if="${uboot_path}/amlogic/bootloader/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync bs=1 count=444 2>/dev/null
-            dd if="${uboot_path}/amlogic/bootloader/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync bs=512 skip=1 seek=1 2>/dev/null
+        bootloader_path="${uboot_path}/${PLATFORM}/bootloader"
+        if [[ -n "${MAINLINE_UBOOT}" && -f "${bootloader_path}/${MAINLINE_UBOOT}" ]]; then
+            dd if="${bootloader_path}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync bs=1 count=444 2>/dev/null
+            dd if="${bootloader_path}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync bs=512 skip=1 seek=1 2>/dev/null
+            #echo -e "${INFO} For [ ${board} ] write bootloader: ${MAINLINE_UBOOT}"
+        elif [[ -n "${BOOTLOADER_IMG}" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]]; then
+            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync bs=1 count=444 2>/dev/null
+            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync bs=512 skip=1 seek=1 2>/dev/null
             #echo -e "${INFO} For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
         fi
     }
 
-    # Write the specified bootloader for Rockchip boxes
+    # Write the specified bootloader for [ Rockchip ] boxes
     [[ "${PLATFORM}" == "rockchip" ]] && {
-        if [[ -n "${BOOTLOADER_IMG}" && -f "${uboot_path}/rockchip/${board}/${BOOTLOADER_IMG}" ]] &&
-            [[ -n "${MAINLINE_UBOOT}" && -f "${uboot_path}/rockchip/${board}/${MAINLINE_UBOOT}" ]]; then
-            dd if="${uboot_path}/rockchip/${board}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=64 2>/dev/null
-            dd if="${uboot_path}/rockchip/${board}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=16384 2>/dev/null
+        bootloader_path="${uboot_path}/${PLATFORM}/${board}"
+        if [[ -n "${BOOTLOADER_IMG}" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]] &&
+            [[ -n "${MAINLINE_UBOOT}" && -f "${bootloader_path}/${MAINLINE_UBOOT}" ]]; then
+            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=64 2>/dev/null
+            dd if="${bootloader_path}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=16384 2>/dev/null
             #echo -e "${INFO} For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
-        elif [[ -n "${BOOTLOADER_IMG}" && -f "${uboot_path}/rockchip/${board}/${BOOTLOADER_IMG}" ]]; then
-            dd if="${uboot_path}/rockchip/${board}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 skip=64 seek=64 2>/dev/null
+        elif [[ -n "${BOOTLOADER_IMG}" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]]; then
+            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 skip=64 seek=64 2>/dev/null
+            #echo -e "${INFO} For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
+        fi
+    }
+
+    # Write the specified bootloader for [ Allwinner ] boxes
+    [[ "${PLATFORM}" == "allwinner" ]] && {
+        bootloader_path="${uboot_path}/${PLATFORM}/${board}"
+        if [[ -n "${BOOTLOADER_IMG}" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]] &&
+            [[ -n "${MAINLINE_UBOOT}" && -f "${bootloader_path}/${MAINLINE_UBOOT}" ]]; then
+            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=1024 seek=8 2>/dev/null
+            dd if="${bootloader_path}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=1024 seek=40 2>/dev/null
+            #echo -e "${INFO} For [ ${board} ] write bootloader: ${MAINLINE_UBOOT}"
+        elif [[ -n "${BOOTLOADER_IMG}" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]]; then
+            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=1024 seek=8 2>/dev/null
             #echo -e "${INFO} For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
         fi
     }
@@ -518,7 +550,7 @@ extract_openwrt() {
     mkdir -p ${tag_bootfs} ${tag_rootfs}
 
     # Mount bootfs
-    if [[ "${PLATFORM}" == "amlogic" ]]; then
+    if [[ "${PLATFORM}" == "amlogic" || "${PLATFORM}" == "allwinner" ]]; then
         mount -t vfat -o discard ${loop_new}p1 ${tag_bootfs}
     else
         mount -t ext4 -o discard ${loop_new}p1 ${tag_bootfs}
@@ -564,7 +596,7 @@ replace_kernel() {
 
     # 01. For /boot five files
     tar -xzf ${kernel_boot} -C ${tag_bootfs}
-    [[ "${PLATFORM}" == "amlogic" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
+    [[ "${PLATFORM}" == "amlogic" || "${PLATFORM}" == "allwinner" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
     [[ "${PLATFORM}" == "rockchip" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
     [[ "$(ls ${tag_bootfs}/*${kernel_name} -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "The /boot files is missing."
     [[ "${PLATFORM}" == "amlogic" ]] && get_textoffset "${tag_bootfs}/zImage"
@@ -621,6 +653,15 @@ refactor_files() {
         sed -i "s|rootdev=.*|rootdev=${uenv_rootdev}|g" ${boot_conf_file}
         sed -i "s|rootfstype=.*|rootfstype=btrfs|g" ${boot_conf_file}
         sed -i "s|rootflags.*|rootflags=${uenv_rootflags}|g" ${boot_conf_file}
+    }
+
+    # Process Allwinner series boot partition files
+    [[ "${PLATFORM}" == "allwinner" ]] && {
+        # Edit the uEnv.txt
+        boot_conf_file="uEnv.txt"
+        [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
+        sed -i "s|LABEL=ROOTFS|${uenv_rootdev}|g" ${boot_conf_file}
+        sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
     }
 
     cd ${tag_rootfs}

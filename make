@@ -396,9 +396,11 @@ confirm_version() {
     [[ -n "${board_conf}" ]] || error_msg "[ ${board} ] config is missing!"
 
     # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION  9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
+    # Column 5, called <UBOOT_OVERLOAD> in Amlogic and <TRUST_IMG> in Rockchip and Allwinner
     SOC="$(echo ${board_conf} | awk -F':' '{print $3}')"
     FDTFILE="$(echo ${board_conf} | awk -F':' '{print $4}')"
     UBOOT_OVERLOAD="$(echo ${board_conf} | awk -F':' '{print $5}')"
+    TRUST_IMG="${UBOOT_OVERLOAD}"
     MAINLINE_UBOOT="$(echo ${board_conf} | awk -F':' '{print $6}')" && MAINLINE_UBOOT="${MAINLINE_UBOOT##*/}"
     BOOTLOADER_IMG="$(echo ${board_conf} | awk -F':' '{print $7}')" && BOOTLOADER_IMG="${BOOTLOADER_IMG##*/}"
     KERNEL_BRANCH="$(echo ${board_conf} | awk -F':' '{print $9}')"
@@ -476,7 +478,8 @@ make_image() {
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
 
     [[ "${PLATFORM}" == "amlogic" ]] && SKIP_MB="4"
-    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && SKIP_MB="16"
+    [[ "${PLATFORM}" == "rockchip" ]] && SKIP_MB="16"
+    [[ "${PLATFORM}" == "allwinner" ]] && SKIP_MB="16"
 
     IMG_SIZE="$((SKIP_MB + BOOT_MB + ROOT_MB))"
 
@@ -515,6 +518,13 @@ make_image() {
     [[ "${PLATFORM}" == "rockchip" ]] && {
         bootloader_path="${uboot_path}/${PLATFORM}/${board}"
         if [[ -n "${BOOTLOADER_IMG}" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]] &&
+            [[ -n "${MAINLINE_UBOOT}" && -f "${bootloader_path}/${MAINLINE_UBOOT}" ]] &&
+            [[ -n "${TRUST_IMG}" && -f "${bootloader_path}/${TRUST_IMG}" ]]; then
+            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=64 2>/dev/null
+            dd if="${bootloader_path}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=16384 2>/dev/null
+            dd if="${bootloader_path}/${TRUST_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=24576 2>/dev/null
+            #echo -e "${INFO} For [ ${board} ] write bootloader: ${TRUST_IMG}"
+        elif [[ -n "${BOOTLOADER_IMG}" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]] &&
             [[ -n "${MAINLINE_UBOOT}" && -f "${bootloader_path}/${MAINLINE_UBOOT}" ]]; then
             dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=64 2>/dev/null
             dd if="${bootloader_path}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=16384 2>/dev/null
@@ -677,23 +687,26 @@ refactor_files() {
     echo "PLATFORM='${PLATFORM}'" >>${op_release}
     echo "SOC='${SOC}'" >>${op_release}
     echo "FDTFILE='${FDTFILE}'" >>${op_release}
-    echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
-    echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
-    echo "ANDROID_UBOOT='/lib/u-boot/${BOOTLOADER_IMG}'" >>${op_release}
     echo "FAMILY='${FAMILY}'" >>${op_release}
     echo "BOARD='${board}'" >>${op_release}
     echo "KERNEL_VERSION='${kernel}'" >>${op_release}
     echo "KERNEL_BRANCH='${KERNEL_BRANCH}'" >>${op_release}
     echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
+    echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
+    echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
+    echo "ANDROID_UBOOT='/lib/u-boot/${BOOTLOADER_IMG}'" >>${op_release}
+    if [[ "${PLATFORM}" == "amlogic" ]]; then
+        echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
+    else
+        echo "TRUST_IMG='${TRUST_IMG}'" >>${op_release}
+    fi
 
     # Add firmware version information to the terminal page
     [[ -f "etc/banner" ]] && {
-        op_version=$(echo $(ls lib/modules/ 2>/dev/null))
-        op_production_date=$(date +%Y-%m-%d)
         echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
         echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
-        echo " Board: ${bd_name} | OpenWrt Kernel: ${op_version}" >>etc/banner
-        echo " Production Date: ${op_production_date}" >>etc/banner
+        echo " Board: ${bd_name} | OpenWrt Kernel: ${kernel_name}" >>etc/banner
+        echo " Production Date: $(date +%Y-%m-%d)" >>etc/banner
         echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
     }
 

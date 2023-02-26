@@ -1,12 +1,12 @@
-# OpenWrt for Amlogic and Rochchip
+# OpenWrt
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
 The [OpenWrt](https://openwrt.org/) Project is a Linux router operating system targeting embedded devices. Instead of trying to create a single, static firmware, OpenWrt provides a fully writable filesystem with package management. Allows you to freely choose the software package you need to customize your router system. For developers, OpenWrt is the framework to build an application without having to build a complete firmware around it; for users this means the ability for full customization, to use the device in ways never envisioned. It has more than 3000+ standardized application packages and a very rich third-party plug-in support, so you can easily replicate the same setup on any supported device.
 
-Now you can replace the Android TV system of the TV Boxes with the `Amlogic` and `Rochchip` chip with the OpenWrt system, making it a powerful router. This project supports one-stop complete compilation of github.com (compiling from custom software packages to packaging firmware, all in one stop at github.com). Support localized packaging (firmware packaging in local Ubuntu and other environments). including OpenWrt firmware install to EMMC and update related functions. Support Amlogic s9xxx TV Boxes are ***`a311d, s922x, s905x3, s905x2, s905l3a, s912, s905d, s905x, s905w, s905`***, etc. such as ***`Belink GT-King, Belink GT-King Pro, UGOOS AM6 Plus, X96-Max+, HK1-Box, H96-Max-X3, Phicomm-N1, Octopus-Planet, Fiberhome HG680P, ZTE B860H`***, etc. and Rockchip ***`BeikeYun`, `Chainedbox L1 Pro`, `FastRhino R66S/R68S`, `Radxa 5b`***, etc.
+Now you can replace the Android TV system of the TV box with the OpenWrt system, making it a powerful router. This project builds OpenWrt system for `Amlogic`, `Rockchip` and `Allwinner` boxes. including install to eMMC and update kernel related functions. Please refer to the [OpenWrt Documentation](./make-openwrt/documents) for the usage method.
 
-The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Welcome to use `Fork` for [personalized OpenWrt firmware configuration](make-openwrt/documents). If you like it, Please click the `Star`.
+The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Welcome to use `Fork` for personalized OpenWrt firmware configuration. If you like it, Please click the `Star`.
 
 ## OpenWrt Firmware instructions
 
@@ -47,7 +47,7 @@ Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system men
 
 If you choose `Upload Updates Manually` [OpenWrt firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), You can upload the corresponding OpenWrt firmware package, such as openwrt_s9xxx_k5.15.50_xxx.img.gz (It is recommended to upload the compressed package, and the system will automatically decompress it. If you upload the decompressed xxx.img file, the upload may fail because the file is too large), After the upload is complete, the interface will display the `Update firmware` operation button, click to update.
 
-If you choose `Manually upload updates` [OpenWrt kernel](https://github.com/ophub/kernel/tree/main/pub/stable), You can upload the three kernel files `boot-xxx.tar.gz`, `dtb-amlogic-xxx.tar.gz`, `modules-xxx.tar.gz` (Other kernel files are not required. If uploading at the same time does not affect the update, the system can accurately identify the required kernel files.)，After the upload is complete, the interface will display the `Update Kernel` operation button, click to update.
+If you choose `Manually upload updates` [OpenWrt kernel](https://github.com/ophub/kernel/tree/main/pub/stable), You can upload the three kernel files `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` (Other kernel files are not required. If uploading at the same time does not affect the update, the system can accurately identify the required kernel files.)，After the upload is complete, the interface will display the `Update Kernel` operation button, click to update.
 
 If you choose `Online Download Update` OpenWrt firmware or kernel, it will be downloaded according to `Firmware download address` and `Kernel download address` in `Plugin Settings`, you can customize and modify the download source, For details, please refer to the compilation and usage instructions of [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic).
 
@@ -143,7 +143,7 @@ You can modify the configuration file in the [config-openwrt](config-openwrt) di
 1. Personalized plug-in configuration in [documents](./make-openwrt/documents) directory. Workflows configuration in [.yml](.github/workflows) file.
 2. New compilation: Select ***`Build OpenWrt`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
 3. Compile again: If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), you do not need to compile it completely, you can directly use this file to `build openwrt` of different board. Select ***`Use Releases file to Packaging`*** on the [Actions](https://github.com/ophub/amlogic-s9xxx-armbian/openwrt) page. Click the ***`Run workflow`*** button.
-4. More support: The compiled `openwrt-armvirt-64-default-rootfs.tar.gz` file is a common file for making various board firmware, and it is also suitable for making OpenWrt firmware using [unifreq's packaging script](https://github.com/unifreq/openwrt_packit). As the pioneer of using OpenWrt and Armbian system in the box, he has supported more devices, such as OpenWrt ([qemu version](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md)) as used by `KVM` virtual machine on [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system, Allwinner (`V-Plus Cloud`), and Rockchip (`BeikeYun`, `Chainedbox L1 Pro`), and Amlogic series, etc. For details on the packaging method, please refer to his source code repository description. In Actions, you can use [packaging-openwrt-for-qemu-etc.yml](.github/workflows/packaging-openwrt-for-qemu-etc.yml) to call his packaging script to make more firmware.
+4. More support: The compiled `openwrt-armvirt-64-default-rootfs.tar.gz` file is a common file for making various board firmware, and it is also suitable for making OpenWrt firmware using [unifreq's packaging script](https://github.com/unifreq/openwrt_packit). As the pioneer of using OpenWrt and Armbian system in the box, he has supported more devices, such as OpenWrt ([qemu version](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md)) as used by `KVM` virtual machine on [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system, Amlogic, and Rockchip, and Allwinner series, etc. For details on the packaging method, please refer to his source code repository description. In Actions, you can use [packaging-openwrt-for-qemu-etc.yml](.github/workflows/packaging-openwrt-for-qemu-etc.yml) to call his packaging script to make more firmware.
 
 ```yaml
 - name: Package Armvirt as OpenWrt
@@ -206,7 +206,7 @@ For more instructions please see: [documents](./make-openwrt/documents)
 For the compilation method of the kernel, see [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
 
 ```yaml
-- name: Compile the kernel for Amlogic s9xxx
+- name: Compile the kernel
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel

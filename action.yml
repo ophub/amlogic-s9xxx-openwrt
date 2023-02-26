@@ -1,21 +1,21 @@
-name: "Use ophub script to package Armvirt as OpenWrt"
-author: "ophub"
-description: "Package Armvirt as OpenWrt. Support Amlogic s9xxx tv box."
+name: "Make OpenWrt"
+author: "https://github.com/ophub/amlogic-s9xxx-openwrt"
+description: "Support Amlogic, Rockchip and Allwinner boxes."
 inputs:
   mode:
-    description: "Choose script."
+    description: "Select script."
     required: false
     default: "ophub"
   openwrt_path:
-    description: "Choose armvirt64 file path."
+    description: "Select armvirt64 file path."
     required: false
     default: "openwrt/bin/targets/*/*/*rootfs.tar.gz"
   openwrt_board:
-    description: "Choose Amlogic board."
+    description: "Select device board."
     required: false
     default: "s905d_s905x3"
   openwrt_kernel:
-    description: "Choose kernel version."
+    description: "Select kernel version."
     required: false
     default: "5.10.125_5.15.50"
   auto_kernel:
@@ -23,11 +23,11 @@ inputs:
     required: false
     default: "true"
   version_branch:
-    description: "Choose version branch."
+    description: "Select version branch."
     required: false
     default: "stable"
   kernel_repo:
-    description: "Choose kernel repository."
+    description: "Select kernel repository."
     required: false
     default: "https://github.com/ophub/kernel/tree/main/pub"
   openwrt_size:

@@ -19,7 +19,7 @@ on:
           - lede
           - official
       openwrt_soc:
-        description: "Select device SoC"
+        description: "Select device board"
         required: false
         default: "qemu_vplus_beikeyun_l1pro_rock5b_h66k_h68k_h88k_r66s_r68s_e25"
         type: choice

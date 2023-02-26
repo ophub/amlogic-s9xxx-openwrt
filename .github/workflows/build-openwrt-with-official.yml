@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       openwrt_board:
-        description: "Select Amlogic board"
+        description: "Select device board"
         required: false
         default: "all"
         type: choice

@@ -2,7 +2,7 @@
 
 View Chinese description  |  [查看中文说明](README.cn.md)
 
-How to use GitHub Actions cloud to compile OpenWrt, and many of the content in this documentation, from P3TERX, Flippy and many other technology innovators and resource sharers. Because of the dedication of everyone, let us use OpenWrt in Amlogic s9xxx TV Boxes So Easy.
+How to use GitHub Actions cloud to compile OpenWrt, and many of the content in this documentation, from P3TERX, Flippy and many other technology innovators and resource sharers. Because of the dedication of everyone, let us use OpenWrt in TV Boxes So Easy.
 
 `GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
 
@@ -352,7 +352,7 @@ If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you
 
 ### 9.3 Replace the kernel to update
 
-- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `Amlogic Service` → Upload kernel package ***`(There are 3 files：boot-*，dtb-amlogic-*，modules-*)`*** to ***`/mnt/mmcblk*p4/`***, enter the `system menu` → `TTYD terminal` → input the Kernel replacement command: 
+- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `Amlogic Service` → Upload kernel package (There are 3 files：boot-xxx.tar.gz, dtb-xxx.tar.gz, modules-xxx.tar.gz) to ***`/mnt/mmcblk*p4/`***, enter the `system menu` → `TTYD terminal` → input the Kernel replacement command:
 
 ```yaml
 openwrt-kernel

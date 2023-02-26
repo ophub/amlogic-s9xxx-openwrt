@@ -245,7 +245,8 @@ download_depends() {
     else
         svn co ${depends_repo}/armbian-files/platform-files ${platform_files} --force
     fi
-    rm -rf ${platform_files}/amlogic/rootfs/usr/sbin
+    # Remove the special files in the [ sbin ] directory of the Armbian system
+    rm -rf $(find ${platform_files} -type d -name "sbin")
 
     # Download u-boot related files
     if [[ -d "${uboot_path}" ]]; then

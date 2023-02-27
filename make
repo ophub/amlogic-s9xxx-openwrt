@@ -406,11 +406,12 @@ confirm_version() {
     [[ -n "${board_conf}" ]] || error_msg "[ ${board} ] config is missing!"
 
     # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION  9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
-    # Column 5, called <UBOOT_OVERLOAD> in Amlogic and <TRUST_IMG> in Rockchip and Allwinner
+    # Column 5, called <UBOOT_OVERLOAD> in Amlogic, <TRUST_IMG> in Rockchip, and <SPL_LOAD_ADDRESS> in Allwinner
     SOC="$(echo ${board_conf} | awk -F':' '{print $3}')"
     FDTFILE="$(echo ${board_conf} | awk -F':' '{print $4}')"
     UBOOT_OVERLOAD="$(echo ${board_conf} | awk -F':' '{print $5}')"
     TRUST_IMG="${UBOOT_OVERLOAD}"
+    SPL_LOAD_ADDRESS="${UBOOT_OVERLOAD}"
     MAINLINE_UBOOT="$(echo ${board_conf} | awk -F':' '{print $6}')" && MAINLINE_UBOOT="${MAINLINE_UBOOT##*/}"
     BOOTLOADER_IMG="$(echo ${board_conf} | awk -F':' '{print $7}')" && BOOTLOADER_IMG="${BOOTLOADER_IMG##*/}"
     KERNEL_BRANCH="$(echo ${board_conf} | awk -F':' '{print $9}')"
@@ -452,8 +453,8 @@ confirm_version() {
         platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
         bootloader_dir="${uboot_path}/${PLATFORM}/${board}"
         # Set the type of file system
-        uenv_rootflags="compress=zstd:6"
-        uenv_rootdev="UUID=${ROOTFS_UUID}"
+        armbianenv_rootflags="compress=zstd:6"
+        armbianenv_rootdev="UUID=${ROOTFS_UUID}"
         fstab_string="discard,defaults,noatime,compress=zstd:6"
     }
 
@@ -469,6 +470,8 @@ confirm_version() {
         platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
         bootloader_dir="${uboot_path}/${PLATFORM}/${board}"
         # Set the type of file system
+        armbianenv_rootflags="compress=zstd:6"
+        armbianenv_rootdev="UUID=${ROOTFS_UUID}"
         uenv_rootdev="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
         fstab_string="discard,defaults,noatime,compress=zstd:6"
     }
@@ -668,18 +671,29 @@ refactor_files() {
         boot_conf_file="armbianEnv.txt"
         [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
         sed -i "s|fdtfile.*|fdtfile=rockchip/${FDTFILE}|g" ${boot_conf_file}
-        sed -i "s|rootdev=.*|rootdev=${uenv_rootdev}|g" ${boot_conf_file}
+        sed -i "s|rootdev=.*|rootdev=${armbianenv_rootdev}|g" ${boot_conf_file}
         sed -i "s|rootfstype=.*|rootfstype=btrfs|g" ${boot_conf_file}
-        sed -i "s|rootflags.*|rootflags=${uenv_rootflags}|g" ${boot_conf_file}
+        sed -i "s|rootflags.*|rootflags=${armbianenv_rootflags}|g" ${boot_conf_file}
     }
 
     # Process Allwinner series boot partition files
     [[ "${PLATFORM}" == "allwinner" ]] && {
         # Edit the uEnv.txt
         boot_conf_file="uEnv.txt"
-        [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
-        sed -i "s|LABEL=ROOTFS|${uenv_rootdev}|g" ${boot_conf_file}
-        sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
+        [[ -f "${boot_conf_file}" ]] && {
+            sed -i "s|LABEL=ROOTFS|${uenv_rootdev}|g" ${boot_conf_file}
+            sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
+        }
+
+        # Edit the armbianEnv.txt
+        boot_env_file="armbianEnv.txt"
+        [[ -f "${boot_env_file}" ]] && {
+            sed -i "s|fdtfile.*|fdtfile=allwinner/${FDTFILE}|g" ${boot_env_file}
+            sed -i "s|rootfstype=.*|rootfstype=${ROOTFS_TYPE}|g" ${boot_env_file}
+            sed -i "s|overlay_prefix.*|overlay_prefix=${FAMILY}|g" ${boot_env_file}
+            sed -i "s|rootdev=.*|rootdev=${armbianenv_rootdev}|g" ${boot_env_file}
+            sed -i "s|rootflags.*|rootflags=${armbianenv_rootflags}|g" ${boot_env_file}
+        }
     }
 
     cd ${tag_rootfs}
@@ -705,8 +719,10 @@ refactor_files() {
     echo "ANDROID_UBOOT='/lib/u-boot/${BOOTLOADER_IMG}'" >>${op_release}
     if [[ "${PLATFORM}" == "amlogic" ]]; then
         echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
-    else
+    elif [[ "${PLATFORM}" == "rockchip" ]]; then
         echo "TRUST_IMG='${TRUST_IMG}'" >>${op_release}
+    elif [[ "${PLATFORM}" == "allwinner" ]]; then
+        echo "SPL_LOAD_ADDRESS='${SPL_LOAD_ADDRESS}'" >>${op_release}
     fi
 
     # Add firmware version information to the terminal page

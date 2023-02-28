@@ -441,12 +441,13 @@ confirm_version() {
         fstab_string="discard,defaults,noatime,compress=zstd:6"
     }
 
-    # Define platform variables for [ Rockchip ] boxes
-    [[ "${PLATFORM}" == "rockchip" ]] && {
+    # Define platform variables for [ Rockchip / Allwinner ] boxes
+    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && {
         # Set up the welcome board
-        bd_name="Rockchip ${board}"
+        bd_name="${board}"
         # Set Armbian image file parameters
-        partition_table_type="gpt"
+        [[ "${PLATFORM}" == "rockchip" ]] && partition_table_type="gpt"
+        [[ "${PLATFORM}" == "allwinner" ]] && partition_table_type="msdos"
         bootfs_type="ext4"
         # Set directory name
         platform_bootfs="${platform_files}/${PLATFORM}/bootfs/${board}"
@@ -455,24 +456,6 @@ confirm_version() {
         # Set the type of file system
         armbianenv_rootflags="compress=zstd:6"
         armbianenv_rootdev="UUID=${ROOTFS_UUID}"
-        fstab_string="discard,defaults,noatime,compress=zstd:6"
-    }
-
-    # Define platform variables for [ Allwinner ] boxes
-    [[ "${PLATFORM}" == "allwinner" ]] && {
-        # Set up the welcome board
-        bd_name="Allwinner ${board}"
-        # Set Armbian image file parameters
-        partition_table_type="msdos"
-        bootfs_type="fat32"
-        # Set directory name
-        platform_bootfs="${platform_files}/${PLATFORM}/bootfs/${board}"
-        platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
-        bootloader_dir="${uboot_path}/${PLATFORM}/${board}"
-        # Set the type of file system
-        armbianenv_rootflags="compress=zstd:6"
-        armbianenv_rootdev="UUID=${ROOTFS_UUID}"
-        uenv_rootdev="UUID=${ROOTFS_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
         fstab_string="discard,defaults,noatime,compress=zstd:6"
     }
 }
@@ -505,8 +488,10 @@ make_image() {
     [[ -n "${loop_new}" ]] || error_msg "losetup ${build_image_file} failed."
 
     # Format bootfs partition
-    [[ "${PLATFORM}" == "amlogic" || "${PLATFORM}" == "allwinner" ]] && mkfs.vfat -F 32 -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
-    [[ "${PLATFORM}" == "rockchip" ]] && mkfs.ext4 -F -q -U ${BOOT_UUID} -L "BOOT" -b 4k -m 0 ${loop_new}p1 >/dev/null 2>&1
+    [[ "${PLATFORM}" == "amlogic" ]] && mkfs.vfat -F 32 -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
+    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && {
+        mkfs.ext4 -F -q -U ${BOOT_UUID} -L "BOOT" -b 4k -m 0 ${loop_new}p1 >/dev/null 2>&1
+    }
 
     # Format rootfs partition
     mkfs.btrfs -f -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop_new}p2 >/dev/null 2>&1
@@ -571,7 +556,7 @@ extract_openwrt() {
     mkdir -p ${tag_bootfs} ${tag_rootfs}
 
     # Mount bootfs
-    if [[ "${PLATFORM}" == "amlogic" || "${PLATFORM}" == "allwinner" ]]; then
+    if [[ "${PLATFORM}" == "amlogic" ]]; then
         mount -t vfat -o discard ${loop_new}p1 ${tag_bootfs}
     else
         mount -t ext4 -o discard ${loop_new}p1 ${tag_bootfs}
@@ -617,15 +602,15 @@ replace_kernel() {
 
     # 01. For /boot five files
     tar -xzf ${kernel_boot} -C ${tag_bootfs}
-    [[ "${PLATFORM}" == "amlogic" || "${PLATFORM}" == "allwinner" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
-    [[ "${PLATFORM}" == "rockchip" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
+    [[ "${PLATFORM}" == "amlogic" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
+    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
     [[ "$(ls ${tag_bootfs}/*${kernel_name} -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "The /boot files is missing."
     [[ "${PLATFORM}" == "amlogic" ]] && get_textoffset "${tag_bootfs}/zImage"
 
     # 02. For /boot/dtb/${PLATFORM}/*
     [[ -d "${tag_bootfs}/dtb/${PLATFORM}" ]] || mkdir -p ${tag_bootfs}/dtb/${PLATFORM}
     tar -xzf ${kernel_dtb} -C ${tag_bootfs}/dtb/${PLATFORM}
-    [[ "${PLATFORM}" == "rockchip" ]] && ln -sf dtb ${tag_bootfs}/dtb-${kernel_name}
+    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && ln -sf dtb ${tag_bootfs}/dtb-${kernel_name}
     [[ "$(ls ${tag_bootfs}/dtb/${PLATFORM} -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "/boot/dtb/${PLATFORM} files is missing."
 
     # 03. For /lib/modules/${kernel_name}
@@ -665,8 +650,8 @@ refactor_files() {
         [[ "${BOOT_CONF}" == "extlinux.conf" ]] && mv -f ${boot_extlinux_file} ${rename_extlinux_file}
     }
 
-    # Process Rockchip series boot partition files
-    [[ "${PLATFORM}" == "rockchip" ]] && {
+    # Process [ Rockchip / Allwinner ] series boot partition files
+    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && {
         # Edit the armbianEnv.txt
         boot_conf_file="armbianEnv.txt"
         [[ -f "${boot_conf_file}" ]] || error_msg "The [ ${boot_conf_file} ] file does not exist."
@@ -674,26 +659,6 @@ refactor_files() {
         sed -i "s|rootdev=.*|rootdev=${armbianenv_rootdev}|g" ${boot_conf_file}
         sed -i "s|rootfstype=.*|rootfstype=btrfs|g" ${boot_conf_file}
         sed -i "s|rootflags.*|rootflags=${armbianenv_rootflags}|g" ${boot_conf_file}
-    }
-
-    # Process Allwinner series boot partition files
-    [[ "${PLATFORM}" == "allwinner" ]] && {
-        # Edit the uEnv.txt
-        boot_conf_file="uEnv.txt"
-        [[ -f "${boot_conf_file}" ]] && {
-            sed -i "s|LABEL=ROOTFS|${uenv_rootdev}|g" ${boot_conf_file}
-            sed -i "s|meson.*.dtb|${FDTFILE}|g" ${boot_conf_file}
-        }
-
-        # Edit the armbianEnv.txt
-        boot_env_file="armbianEnv.txt"
-        [[ -f "${boot_env_file}" ]] && {
-            sed -i "s|fdtfile.*|fdtfile=allwinner/${FDTFILE}|g" ${boot_env_file}
-            sed -i "s|rootfstype=.*|rootfstype=${ROOTFS_TYPE}|g" ${boot_env_file}
-            sed -i "s|overlay_prefix.*|overlay_prefix=${FAMILY}|g" ${boot_env_file}
-            sed -i "s|rootdev=.*|rootdev=${armbianenv_rootdev}|g" ${boot_env_file}
-            sed -i "s|rootflags.*|rootflags=${armbianenv_rootflags}|g" ${boot_env_file}
-        }
     }
 
     cd ${tag_rootfs}

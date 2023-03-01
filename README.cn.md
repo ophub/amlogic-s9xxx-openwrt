@@ -92,7 +92,7 @@ openwrt-ddbr
 从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
 
 ```yaml
-openwrt-led
+openwrt-openvfd
 ```
 
 根据 [LED 屏显示控制说明](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/led_screen_display_control.md) 进行调试。

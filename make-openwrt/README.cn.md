@@ -6,7 +6,7 @@
 
 ## openwrt-files
 
-这里存放的文件是打包 OpenWrt 时需要使用的相关文件。其中 `common-files` 目录下的是通用文件，`platform-files` 目录下是各平台的差异化文件，`patches` 目录下存放的是补丁文件。
+这里存放的文件是打包 OpenWrt 时需要使用的相关文件。其中 `common-files` 目录下的是通用文件，`platform-files` 目录下是各平台的文件，`different-files` 目录下是针对不同设备的差异化文件。
 
 - 需要的固件将从 [ophub/firmware](https://github.com/ophub/firmware) 仓库自动下载至 `common-files/lib/firmware` 目录。
 

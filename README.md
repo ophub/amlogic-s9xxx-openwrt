@@ -92,7 +92,7 @@ According to the prompt, enter `b` to perform system backup, and enter `r` to pe
 Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
 
 ```yaml
-openwrt-led
+openwrt-openvfd
 ```
 
 Debug according to [LED screen display control instructions](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/led_screen_display_control.md).

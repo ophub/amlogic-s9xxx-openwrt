@@ -50,6 +50,7 @@ kernel_path="${make_path}/kernel"
 uboot_path="${make_path}/u-boot"
 common_files="${make_path}/openwrt-files/common-files"
 platform_files="${make_path}/openwrt-files/platform-files"
+different_files="${make_path}/openwrt-files/different-files"
 patches_path="${make_path}/openwrt-files/patches"
 firmware_path="${common_files}/lib/firmware"
 model_conf="${common_files}/etc/model_database.conf"
@@ -239,7 +240,7 @@ download_depends() {
     cd ${current_path}
     echo -e "${STEPS} Start downloading dependency files..."
 
-    # Download /boot related files
+    # Download platform files
     if [[ -d "${platform_files}" ]]; then
         svn up ${platform_files} --force
     else
@@ -248,14 +249,23 @@ download_depends() {
     # Remove the special files in the [ sbin ] directory of the Armbian system
     rm -rf $(find ${platform_files} -type d -name "sbin")
 
-    # Download u-boot related files
+    # Download different files
+    if [[ -d "${different_files}" ]]; then
+        svn up ${different_files} --force
+    else
+        svn co ${depends_repo}/armbian-files/different-files ${different_files} --force
+    fi
+    # Remove the special files in the [ sbin ] directory of the Armbian system
+    rm -rf $(find ${different_files} -type d -name "sbin")
+
+    # Download u-boot files
     if [[ -d "${uboot_path}" ]]; then
         svn up ${uboot_path} --force
     else
         svn co ${depends_repo}/u-boot ${uboot_path} --force
     fi
 
-    # Download armbian firmware file
+    # Download Armbian firmware files
     svn co ${firmware_repo} ${firmware_path} --force
 
     # Download balethirq related files
@@ -450,7 +460,7 @@ confirm_version() {
         [[ "${PLATFORM}" == "allwinner" ]] && partition_table_type="msdos"
         bootfs_type="ext4"
         # Set directory name
-        platform_bootfs="${platform_files}/${PLATFORM}/bootfs/${board}"
+        platform_bootfs="${platform_files}/${PLATFORM}/bootfs"
         platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
         bootloader_dir="${uboot_path}/${PLATFORM}/${board}"
         # Set the type of file system
@@ -576,9 +586,13 @@ extract_openwrt() {
     rm -f ${tag_rootfs}/rom/sbin/firstboot
 
     # Copy the same files
+    [[ -d "${common_files}" ]] && cp -rf ${common_files}/* ${tag_rootfs}
     [[ -d "${platform_bootfs}" ]] && cp -rf ${platform_bootfs}/* ${tag_bootfs}
     [[ -d "${platform_rootfs}" ]] && cp -rf ${platform_rootfs}/* ${tag_rootfs}
-    [[ -d "${common_files}" ]] && cp -rf ${common_files}/* ${tag_rootfs}
+
+    # Copy the different files
+    [[ -d "${different_files}/${board}/bootfs" ]] && cp -rf ${different_files}/${board}/bootfs/* ${tag_bootfs}
+    [[ -d "${different_files}/${board}/rootfs" ]] && cp -rf ${different_files}/${board}/rootfs/* ${tag_rootfs}
 
     # Copy the bootloader files
     [[ -d "${tag_rootfs}/lib/u-boot" ]] || mkdir -p "${tag_rootfs}/lib/u-boot"
@@ -659,6 +673,7 @@ refactor_files() {
         sed -i "s|rootdev=.*|rootdev=${armbianenv_rootdev}|g" ${boot_conf_file}
         sed -i "s|rootfstype=.*|rootfstype=btrfs|g" ${boot_conf_file}
         sed -i "s|rootflags.*|rootflags=${armbianenv_rootflags}|g" ${boot_conf_file}
+        sed -i "s|overlay_prefix.*|overlay_prefix=${FAMILY}|g" ${boot_conf_file}
     }
 
     cd ${tag_rootfs}

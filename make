@@ -439,7 +439,7 @@ confirm_version() {
     [[ "${PLATFORM}" == "amlogic" ]] && {
         # Set up the welcome board
         bd_name="Amlogic ${SOC}"
-        # Set Armbian image file parameters
+        # Set OpenWrt image file parameters
         partition_table_type="msdos"
         bootfs_type="fat32"
         # Set directory name
@@ -455,10 +455,15 @@ confirm_version() {
     [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && {
         # Set up the welcome board
         bd_name="${board}"
-        # Set Armbian image file parameters
-        [[ "${PLATFORM}" == "rockchip" ]] && partition_table_type="gpt"
-        [[ "${PLATFORM}" == "allwinner" ]] && partition_table_type="msdos"
-        bootfs_type="ext4"
+        # Set OpenWrt image file parameters
+        [[ "${PLATFORM}" == "rockchip" ]] && {
+            partition_table_type="gpt"
+            bootfs_type="ext4"
+        }
+        [[ "${PLATFORM}" == "allwinner" ]] && {
+            partition_table_type="msdos"
+            bootfs_type="fat32"
+        }
         # Set directory name
         platform_bootfs="${platform_files}/${PLATFORM}/bootfs"
         platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
@@ -498,10 +503,11 @@ make_image() {
     [[ -n "${loop_new}" ]] || error_msg "losetup ${build_image_file} failed."
 
     # Format bootfs partition
-    [[ "${PLATFORM}" == "amlogic" ]] && mkfs.vfat -F 32 -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
-    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && {
+    if [[ "${bootfs_type}" == "fat32" ]]; then
+        mkfs.vfat -F 32 -n "BOOT" ${loop_new}p1 >/dev/null 2>&1
+    else
         mkfs.ext4 -F -q -U ${BOOT_UUID} -L "BOOT" -b 4k -m 0 ${loop_new}p1 >/dev/null 2>&1
-    }
+    fi
 
     # Format rootfs partition
     mkfs.btrfs -f -U ${ROOTFS_UUID} -L "ROOTFS" -m single ${loop_new}p2 >/dev/null 2>&1
@@ -566,7 +572,7 @@ extract_openwrt() {
     mkdir -p ${tag_bootfs} ${tag_rootfs}
 
     # Mount bootfs
-    if [[ "${PLATFORM}" == "amlogic" ]]; then
+    if [[ "${bootfs_type}" == "fat32" ]]; then
         mount -t vfat -o discard ${loop_new}p1 ${tag_bootfs}
     else
         mount -t ext4 -o discard ${loop_new}p1 ${tag_bootfs}
@@ -616,15 +622,15 @@ replace_kernel() {
 
     # 01. For /boot five files
     tar -xzf ${kernel_boot} -C ${tag_bootfs}
-    [[ "${PLATFORM}" == "amlogic" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
-    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
+    [[ "${PLATFORM}" == "amlogic" || "${PLATFORM}" == "allwinner" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
+    [[ "${PLATFORM}" == "rockchip" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
     [[ "$(ls ${tag_bootfs}/*${kernel_name} -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "The /boot files is missing."
     [[ "${PLATFORM}" == "amlogic" ]] && get_textoffset "${tag_bootfs}/zImage"
 
     # 02. For /boot/dtb/${PLATFORM}/*
     [[ -d "${tag_bootfs}/dtb/${PLATFORM}" ]] || mkdir -p ${tag_bootfs}/dtb/${PLATFORM}
     tar -xzf ${kernel_dtb} -C ${tag_bootfs}/dtb/${PLATFORM}
-    [[ "${PLATFORM}" == "rockchip" || "${PLATFORM}" == "allwinner" ]] && ln -sf dtb ${tag_bootfs}/dtb-${kernel_name}
+    [[ "${PLATFORM}" == "rockchip" ]] && ln -sf dtb ${tag_bootfs}/dtb-${kernel_name}
     [[ "$(ls ${tag_bootfs}/dtb/${PLATFORM} -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "/boot/dtb/${PLATFORM} files is missing."
 
     # 03. For /lib/modules/${kernel_name}

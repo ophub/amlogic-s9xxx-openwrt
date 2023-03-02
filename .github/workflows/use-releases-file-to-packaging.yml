@@ -9,7 +9,7 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      branch:
+      source_branch:
         description: "Select the source branch"
         required: false
         default: "lede"
@@ -114,28 +114,31 @@ jobs:
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
           sudo timedatectl set-timezone "${TZ}"
+          echo "OPENWRT_RELEASE=${{ inputs.source_branch }}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Download OpenWrt Armvirt firmware
         id: down
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
+          armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
+          [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
+
           openwrt_url="$(curl \
                             --header "authorization: Bearer ${{ secrets.GH_TOKEN }}" \
                             -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" |
-                            grep -o "OpenWrt_.*${{ inputs.branch }}.*/.*rootfs.tar.gz" |
+                            grep -oE "OpenWrt_.*${{ env.OPENWRT_RELEASE }}.*/.*rootfs.tar.gz" |
                             head -n 1
                         )"
           [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
-          #
-          armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
-          [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
-          #
-          wget -q -P "${armvirt_tarfile_path}" "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}"
+          down_file="https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}"
+
+          wget -q -P "${armvirt_tarfile_path}" "${down_file}"
           [[ "${?}" -ne "0" ]] && echo "The armvirt file download failed!" && exit 1
+
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Build OpenWrt firmware
+      - name: Build OpenWrt firmware [ ${{ env.OPENWRT_RELEASE }} ]
         if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
@@ -151,7 +154,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
-          tag: OpenWrt_${{ inputs.branch }}_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: OpenWrt_${{ env.OPENWRT_RELEASE }}_${{ env.PACKAGED_OUTPUTDATE }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}

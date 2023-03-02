@@ -10,7 +10,7 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      branch:
+      source_branch:
         description: "Select the source branch"
         required: false
         default: "lede"
@@ -100,7 +100,7 @@ jobs:
         id: down
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          openwrt_url="$(curl --header "authorization: Bearer ${{ secrets.GH_TOKEN }}" -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ inputs.branch }}.*/.*rootfs.tar.gz" | head -n 1)"
+          openwrt_url="$(curl --header "authorization: Bearer ${{ secrets.GH_TOKEN }}" -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "OpenWrt_.*${{ inputs.source_branch }}.*/.*rootfs.tar.gz" | head -n 1)"
           [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
           #
           armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"

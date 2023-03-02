@@ -11,7 +11,7 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      branch:
+      releases_branch:
         description: "Select the releases branch"
         required: false
         default: "22.03.3"
@@ -124,7 +124,7 @@ jobs:
         id: imagebuilder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          RELEASES_BRANCH="${{ inputs.branch }}"
+          RELEASES_BRANCH="${{ inputs.releases_branch }}"
           chmod +x ${IMAGEBUILDER_SH}
           ${IMAGEBUILDER_SH} ${RELEASES_BRANCH}
           echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> ${GITHUB_ENV}

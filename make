@@ -680,35 +680,6 @@ refactor_rootfs() {
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|" etc/fstab
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|" etc/config/fstab
 
-    # Add firmware information
-    echo "PLATFORM='${PLATFORM}'" >>${op_release}
-    echo "SOC='${SOC}'" >>${op_release}
-    echo "FDTFILE='${FDTFILE}'" >>${op_release}
-    echo "FAMILY='${FAMILY}'" >>${op_release}
-    echo "BOARD='${board}'" >>${op_release}
-    echo "KERNEL_VERSION='${kernel}'" >>${op_release}
-    echo "KERNEL_BRANCH='${KERNEL_BRANCH}'" >>${op_release}
-    echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
-    echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
-    echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
-    echo "ANDROID_UBOOT='/lib/u-boot/${BOOTLOADER_IMG}'" >>${op_release}
-    if [[ "${PLATFORM}" == "amlogic" ]]; then
-        echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
-    elif [[ "${PLATFORM}" == "rockchip" ]]; then
-        echo "TRUST_IMG='${TRUST_IMG}'" >>${op_release}
-    elif [[ "${PLATFORM}" == "allwinner" ]]; then
-        echo "SPL_LOAD_ADDRESS='${SPL_LOAD_ADDRESS}'" >>${op_release}
-    fi
-
-    # Add firmware version information to the terminal page
-    [[ -f "etc/banner" ]] && {
-        echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
-        echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
-        echo " Board: ${board} | OpenWrt Kernel: ${kernel_name}" >>etc/banner
-        echo " Production Date: $(date +%Y-%m-%d)" >>etc/banner
-        echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
-    }
-
     # Add cpustat
     cpustat_file="${patches_path}/cpustat"
     [[ -d "${cpustat_file}" && -x "bin/bash" ]] && {
@@ -833,6 +804,35 @@ EOF
         # x96max plus v5.1 (ip1001m phy) adopts am7256 (brcm4354)
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:07/" "brcmfmac4354-sdio.txt" >"brcmfmac4354-sdio.amlogic,sm1.txt"
     )
+
+    # Add firmware version information to the terminal page
+    [[ -f "etc/banner" ]] && {
+        echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
+        echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
+        echo " Board: ${board} | OpenWrt Kernel: ${kernel_name}" >>etc/banner
+        echo " Production Date: $(date +%Y-%m-%d)" >>etc/banner
+        echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
+    }
+
+    # Add firmware information
+    echo "PLATFORM='${PLATFORM}'" >>${op_release}
+    echo "SOC='${SOC}'" >>${op_release}
+    echo "FDTFILE='${FDTFILE}'" >>${op_release}
+    echo "FAMILY='${FAMILY}'" >>${op_release}
+    echo "BOARD='${board}'" >>${op_release}
+    echo "KERNEL_VERSION='${kernel}'" >>${op_release}
+    echo "KERNEL_BRANCH='${KERNEL_BRANCH}'" >>${op_release}
+    echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
+    echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
+    echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
+    echo "ANDROID_UBOOT='/lib/u-boot/${BOOTLOADER_IMG}'" >>${op_release}
+    if [[ "${PLATFORM}" == "amlogic" ]]; then
+        echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
+    elif [[ "${PLATFORM}" == "rockchip" ]]; then
+        echo "TRUST_IMG='${TRUST_IMG}'" >>${op_release}
+    elif [[ "${PLATFORM}" == "allwinner" ]]; then
+        echo "SPL_LOAD_ADDRESS='${SPL_LOAD_ADDRESS}'" >>${op_release}
+    fi
 
     cd ${current_path}
 

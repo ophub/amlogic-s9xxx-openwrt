@@ -32,7 +32,8 @@
 # make_image         : Making OpenWrt file
 # extract_openwrt    : Extract OpenWrt files
 # replace_kernel     : Replace the kernel
-# refactor_files     : Refactor related files
+# refactor_bootfs    : Refactor bootfs files
+# refactor_rootfs    : Refactor rootfs files
 # clean_tmp          : Clear temporary files
 #
 # loop_make          : Loop to make OpenWrt files
@@ -428,7 +429,7 @@ confirm_version() {
 }
 
 make_image() {
-    process_msg " (1/5) Make OpenWrt image."
+    process_msg " (1/6) Make OpenWrt image."
     cd ${current_path}
 
     # Set Armbian image file parameters
@@ -534,7 +535,7 @@ make_image() {
 }
 
 extract_openwrt() {
-    process_msg " (2/5) Extract OpenWrt files."
+    process_msg " (2/6) Extract OpenWrt files."
     cd ${current_path}
 
     # Create OpenWrt mirror partition
@@ -586,7 +587,7 @@ extract_openwrt() {
 }
 
 replace_kernel() {
-    process_msg " (3/5) Replace the kernel."
+    process_msg " (3/6) Replace the kernel."
     cd ${current_path}
 
     # Determine custom kernel filename
@@ -616,10 +617,8 @@ replace_kernel() {
     [[ "$(ls ${tag_rootfs}/lib/modules/${kernel_name} -l 2>/dev/null | grep "^d" | wc -l)" -eq "1" ]] || error_msg "/usr/lib/modules kernel folder is missing."
 }
 
-refactor_files() {
-    process_msg " (4/5) Refactor related files."
-
-    # Processing partition files: bootfs
+refactor_bootfs() {
+    process_msg " (4/6) Refactor bootfs files."
     cd ${tag_bootfs}
 
     # Process Amlogic series boot partition files
@@ -668,8 +667,10 @@ refactor_files() {
 
     # Check if the /boot/*Env.txt file exists
     [[ -f "${uenv_conf_file}" || -f "${armbianenv_conf_file}" ]] || error_msg "Missing [ /boot/*Env.txt ]"
+}
 
-    # Processing partition files: rootfs
+refactor_rootfs() {
+    process_msg " (5/6) Refactor rootfs files."
     cd ${tag_rootfs}
 
     # Add directory
@@ -843,7 +844,7 @@ EOF
 }
 
 clean_tmp() {
-    process_msg " (5/5) Cleanup tmp files."
+    process_msg " (6/6) Cleanup tmp files."
     cd ${current_path}
 
     # Unmount the OpenWrt image file
@@ -918,7 +919,8 @@ loop_make() {
                     make_image
                     extract_openwrt
                     replace_kernel
-                    refactor_files
+                    refactor_bootfs
+                    refactor_rootfs
                     clean_tmp
 
                     echo -e "(${j}.${i}) OpenWrt made successfully. \n"

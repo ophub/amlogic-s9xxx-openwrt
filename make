@@ -575,7 +575,7 @@ extract_openwrt() {
     # Copy the different files
     different_bootfs="${different_files}/${board}/bootfs"
     different_rootfs="${different_files}/${board}/rootfs"
-    [[ -d "${different_bootfs}" ]] && rm -rf ${tag_bootfs}/* && cp -rf ${different_bootfs}/* ${tag_bootfs}
+    [[ -d "${different_bootfs}" ]] && cp -rf ${different_bootfs}/* ${tag_bootfs}
     [[ -d "${different_rootfs}" ]] && cp -rf ${different_rootfs}/* ${tag_rootfs}
 
     # Copy the bootloader files

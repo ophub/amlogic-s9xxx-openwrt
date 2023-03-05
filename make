@@ -580,6 +580,7 @@ extract_openwrt() {
 
     # Copy the bootloader files
     [[ -d "${tag_rootfs}/lib/u-boot" ]] || mkdir -p "${tag_rootfs}/lib/u-boot"
+    rm -rf ${tag_rootfs}/lib/u-boot/*
     [[ -d "${bootloader_path}" ]] && cp -rf ${bootloader_path}/* ${tag_rootfs}/lib/u-boot
 
     # Copy the overload files
@@ -683,12 +684,8 @@ refactor_rootfs() {
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|" etc/fstab
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|" etc/config/fstab
 
-    # Add cpustat
-    cpustat_file="${patches_path}/cpustat"
-    [[ -d "${cpustat_file}" && -x "bin/bash" ]] && {
-        cp -f ${cpustat_file}/30-sysinfo.sh etc/profile.d/30-sysinfo.sh
-        cp -f ${cpustat_file}/getcpu bin/getcpu && chmod +x bin/getcpu
-        cp -f ${cpustat_file}/cpustat usr/bin/cpustat && chmod +x usr/bin/cpustat
+    # Modify the default script to [ bash ] for [ cpustat ]
+    [[ -x "bin/bash" ]] && {
         sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd
         sed -i "s/\/bin\/ash/\/bin\/bash/" usr/libexec/login.sh
     }

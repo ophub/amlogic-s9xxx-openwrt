@@ -665,8 +665,8 @@ refactor_bootfs() {
         sed -i "s|^fdtfile=.*|fdtfile=${PLATFORM}/${FDTFILE}|g" ${armbianenv_conf_file}
         sed -i "s|^rootdev=.*|rootdev=${armbianenv_rootdev}|g" ${armbianenv_conf_file}
         sed -i "s|^rootfstype=.*|rootfstype=btrfs|g" ${armbianenv_conf_file}
-        sed -i "s|^rootflags.*|rootflags=${armbianenv_rootflags}|g" ${armbianenv_conf_file}
-        sed -i "s|^overlay_prefix.*|overlay_prefix=${FAMILY}|g" ${armbianenv_conf_file}
+        sed -i "s|^rootflags=.*|rootflags=${armbianenv_rootflags}|g" ${armbianenv_conf_file}
+        sed -i "s|^overlay_prefix=.*|overlay_prefix=${FAMILY}|g" ${armbianenv_conf_file}
     }
 
     # Check device configuration files

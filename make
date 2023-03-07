@@ -57,6 +57,9 @@ firmware_path="${common_files}/lib/firmware"
 model_conf="${common_files}/etc/model_database.conf"
 model_txt="${common_files}/etc/model_database.txt"
 
+# System operation environment
+arch_info="$(arch)"
+host_release="$(cat /etc/os-release | grep '^VERSION_CODENAME=.*' | cut -d'=' -f2)"
 # Add custom OpenWrt firmware information
 op_release="etc/flippy-openwrt-release"
 
@@ -940,31 +943,35 @@ loop_make() {
 }
 
 # Show welcome message
-echo -e "${STEPS} Welcome to tools for making Amlogic s9xxx OpenWrt! \n"
+echo -e "${STEPS} Welcome to make OpenWrt!"
+echo -e "${INFO} Server running on Ubuntu: [ Release: ${host_release} / Host: ${arch_info} ] \n"
+# Check script permission
 [[ "$(id -u)" == "0" ]] || error_msg "please run this script as root: [ sudo ./${0} ]"
-# Show server start information
-echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
-echo -e "${INFO} Server memory usage: \n$(free -h) \n"
-echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${current_path}) \n"
-#
+
 # Initialize variables and download the kernel
 init_var "${@}"
 # Find OpenWrt file
 find_openwrt
 # Download the dependency files
 download_depends
-# Download the latest kernel
+# Query the latest kernel version
 [[ "${auto_kernel}" == "true" ]] && query_version
+# Download the kernel files
 download_kernel
-#
+
+# Show make settings
 echo -e "${INFO} [ ${#build_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${build_openwrt[*]} | xargs) ]"
 echo -e "${INFO} [ ${#stable_kernel[*]} ] lists of stable kernel: [ $(echo ${stable_kernel[*]} | xargs) ]"
 echo -e "${INFO} [ ${#rk3588_kernel[*]} ] lists of rk3588 Kernel: [ $(echo ${rk3588_kernel[*]} | xargs) ]"
 echo -e "${INFO} Use the latest kernel version: [ ${auto_kernel} ] \n"
-#
+# Show server start information
+echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+echo -e "${INFO} Server memory usage: \n$(free -h) \n"
+echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${current_path}) \n"
+
 # Loop to make OpenWrt firmware
 loop_make
-#
+
 # Show server end information
 echo -e "${STEPS} Server space usage after compilation: \n$(df -hT ${current_path}) \n"
 echo -e "${SUCCESS} All process completed successfully."

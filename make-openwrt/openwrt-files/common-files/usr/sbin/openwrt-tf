@@ -16,8 +16,13 @@
 #
 #========================= Set default parameters ===========================
 #
+# Automatically expand file
+todo_rootfs_resize="/root/.todo_rootfs_resize"
+#
+# Set font color
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
+TIPS="[\033[93m TIPS \033[0m]"
 SUCCESS="[\033[92m SUCCESS \033[0m]"
 OPTIONS="[\033[93m OPTIONS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
@@ -57,10 +62,15 @@ do_checkdisk() {
         error_msg "Unable to recognize the disk type of ${ROOT_PTNAME}!"
         ;;
     esac
+    echo -e "${INFO} OpenWrt running: [ ${LB_PRE:0:-1} - /dev/${DISK_NAME} ]."
 
     # Check whether partition is required
-    [[ -n "$(lsblk -l -o NAME | grep -oE "^${PT_PRE}4")" ]] && error_msg "Partitioned, no operation required."
-    echo -e "${INFO} OpenWrt running: [ ${LB_PRE:0:-1} - /dev/${DISK_NAME} ]."
+    [[ -n "$(lsblk -l -o NAME | grep -oE "^${PT_PRE}4")" ]] && {
+        # Delete auto-extending file
+        rm -f ${todo_rootfs_resize} 2>/dev/null
+        echo -e "${TIPS} Partitioned, no operation required."
+        exit 0
+    }
 }
 
 # Create the 3rd and 4th partition
@@ -140,6 +150,9 @@ EOF
 
     /etc/init.d/dockerd start 2>/dev/null
     /etc/init.d/dockerd enable 2>/dev/null
+
+    # Delete auto-extending file
+    rm -f ${todo_rootfs_resize} 2>/dev/null
 
     echo -e "${INFO} Current partition status: \n$(lsblk)"
     echo -e "${SUCCESS} Create partition successfully."

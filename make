@@ -698,9 +698,11 @@ refactor_rootfs() {
         sed -i "s|option sw_flow.*|option sw_flow '0'|g" etc/config/turboacc
     }
 
-    # Add balethirq
-    balethirq_file="${common_files}/usr/sbin/balethirq.pl"
-    [[ -x "${balethirq_file}" ]] && sed -i "/^exit 0/i\/usr/sbin/balethirq.pl" etc/rc.local
+    # Add custom startup script
+    custom_startup_script="etc/custom_service/start_service.sh"
+    [[ -x "${custom_startup_script}" && -f "etc/rc.local" ]] && {
+        sed -i '/^exit 0/i\bash /etc/custom_service/start_service.sh' etc/rc.local
+    }
 
     # Modify the cpu mode to schedutil
     [[ -f "etc/config/cpufreq" ]] && sed -i "s/ondemand/schedutil/" etc/config/cpufreq
@@ -763,6 +765,9 @@ EOF
     fi
     sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
     sed -i 's/ttyS0/tty0/' etc/inittab
+
+    # Automatic expansion of the third and fourth partitions
+    echo "yes" >root/.todo_rootfs_resize
 
     # Relink the kmod program
     [[ -x "sbin/kmod" ]] && (

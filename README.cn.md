@@ -54,16 +54,6 @@
 
 提示：安装/升级等功能由 [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 提供可视化操作支持。也支持[命令操作](./make-openwrt/documents/README.cn.md#8-安装固件)。
 
-- ### 在 TF/SD/USB 中使用 OpenWrt
-
-从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
-
-```yaml
-openwrt-tf
-```
-
-激活剩余空间后，支持在 TF/SD/USB 中升级内核和 OpenWrt 系统。
-
 - ### 为 OpenWrt 创建 swap
 
 如果你在使用 `docker` 等内存占用较大的应用时，觉得当前盒子的内存不够使用，可以创建 `swap` 虚拟内存分区，将 `/mnt/*4` 磁盘空间的一定容量虚拟成内存来使用。下面命令输入参数的单位是 `GB`，默认为 `1`。
@@ -85,8 +75,6 @@ openwrt-ddbr
 ```
 
 根据提示输入 `b` 进行系统备份，输入 `r` 进行系统恢复。
-
-💡提示：须使用 `/mnt/*4/` 空间进行存放 `BACKUP-arm-64-emmc.img.gz` 备份文件，未创建 `TF/SD/USB` 扩展分区的用户，须先使用 `openwrt-tf` 命令创建扩展分区。
 
 - ### 控制 LED 显示
 

@@ -54,16 +54,6 @@ If you choose `Online Download Update` OpenWrt firmware or kernel, it will be do
 
 Tip: Functions such as install/update are provided by [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) to provide visual operation support. Also supports [command operations](make-openwrt/documents/README.md#8-install-the-firmware).
 
-- ### Use OpenWrt in TF/SD/USB
-
-Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
-
-```yaml
-openwrt-tf
-```
-
-After activating the remaining space, the kernel and OpenWrt system can be upgraded in TF/SD/USB.
-
 - ### Create swap for openwrt system
 
 If you feel that the memory of the current box is not enough when you are using applications with a large memory footprint such as `docker`, you can create a `swap` virtual memory partition, Change the disk space of `/mnt/*4` A certain capacity is virtualized into memory for use. The unit of the input parameter of the following command is `GB`, and the default is `1`.
@@ -85,8 +75,6 @@ openwrt-ddbr
 ```
 
 According to the prompt, enter `b` to perform system backup, and enter `r` to perform system recovery.
-
-💡Tip: You must use the `/mnt/*4/` space to store the `BACKUP-arm-64-emmc.img.gz` backup file, Users who have not created the `TF/SD/USB` extended partition must first use the `openwrt-tf` command to create the extended partition.
 
 - ### Controlling the LED display
 

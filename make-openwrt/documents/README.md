@@ -36,11 +36,7 @@ How to use GitHub Actions cloud to compile OpenWrt, and many of the content in t
   - [8. Install the firmware](#8-install-the-firmware)
     - [8.1 Method of integrating luci-app-amlogic at compile time](#81-method-of-integrating-luci-app-amlogic-at-compile-time)
     - [8.2 Install using the operation panel](#82-install-using-the-operation-panel)
-    - [8.3 Install using script commands](#83-install-using-script-commands)
   - [9. Update firmware](#9-update-firmware)
-    - [9.1 Update using the operation panel](#91-update-using-the-operation-panel)
-    - [9.2 Update using script commands](#92-update-using-script-commands)
-    - [9.3 Replace the kernel to update](#93-replace-the-kernel-to-update)
   - [10. Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
     - [10.1 Know the complete .config file](#101-know-the-complete-config-file)
     - [10.2 Know the workflow file](#102-know-the-workflow-file)
@@ -312,55 +308,13 @@ Choose the corresponding firmware according to your box. Then write the IMG file
 
 ### 8.2 Install using the operation panel
 
-`Log in to the default IP: 192.168.1.1` → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
+1. For the installation method of the `Rockchip` platform, please refer to [Section 8](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents) in the documentation. The installation method is the same as Armbian.
 
-### 8.3 Install using script commands
-
-`Log in to the default IP: 192.168.1.1` → `Login in to openwrt` → `system menu` → `TTYD terminal` → input command:
-
-```yaml
-openwrt-install-amlogic
-```
-
-The same type of TV Boxes, the firmware is common, such as `openwrt_s905x3_v*.img` firmware can be used for `x96max plus, hk1, h96` and other `s905x3` type TV Boxes. When the installation script writes OpenWrt to EMMC, you will be prompted to choose your own box, please choose the correct one according to the prompt.
-
-In addition to the default 13 models of TV Boxes are automatically installed, when you select 0 for optional .dtb file installation, you need to fill in the specific .dtb file name, you can check the exact file name from here and fill in it, see [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/armbian-files/platform-files/amlogic/bootfs/dtb/amlogic)
+2. `Amlogic` and `Allwinner` platform，Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the box. `Log in to the default IP: 192.168.1.1` → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
 
 ## 9. Update firmware
 
-### 9.1 Update using the operation panel
-
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt` to update. (You can update from a higher version such as 5.15.50 to a lower version such as 5.10.125, or from a lower version such as 5.10.125 to a higher version such as 5.15.50. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
-
-### 9.2 Update using script commands
-
-`Log in to your OpenWrt system` →  under the `System` menu → `Amlogic Service` → upload ***`openwrt*.img.gz (Support suffix: *.img.xz, *.img.gz, *.7z, *.zip)`*** to ***`/mnt/mmcblk*p4/`***, enter the `system menu` → `TTYD terminal` → input command:
-
-```yaml
-openwrt-update-amlogic
-```
-💡Tips: You can also put the `update file` in the `/mnt/mmcblk*p4/` directory, the `openwrt-update-amlogic` script will automatically find the `update file` from the `/mnt/mmcblk*p4/` directories.
-
-If there is only one `update file` in the ***`/mnt/mmcblk*p4/`*** directory, you can just enter the ***`openwrt-update-amlogic`*** command without specifying a specific `update file`. The `openwrt-update-amlogic` script will vaguely look for `update file` from this directory and try to update. If there are multiple `update file` in the `/mnt/mmcblk*p4/` directory, please use the ***`openwrt-update-amlogic openwrt_s905x3_v5.10.125_2021.03.17.0412.img.gz`*** command to specify the `update file`.
-
-- The `openwrt-update-amlogic` update file search order
-
-| Directory | `/mnt/mmcblk*p4/` 1-6 |
-| ---- | ---- |
-| Oeder | `specified_update_file` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → |
-
-
-### 9.3 Replace the kernel to update
-
-- Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `Amlogic Service` → Upload kernel package (There are 3 files：boot-xxx.tar.gz, dtb-xxx.tar.gz, modules-xxx.tar.gz) to ***`/mnt/mmcblk*p4/`***, enter the `system menu` → `TTYD terminal` → input the Kernel replacement command:
-
-```yaml
-openwrt-kernel
-```
-
-💡Tips: You can also put the `kernel files` in the `/mnt/mmcblk*p4/` directory, the `openwrt-kernel` script will automatically find the `kernel file` from the `/mnt/mmcblk*p4/` directories.
-
-Replacing the OpenWrt kernel is only a kernel replacement, and the various personalized configurations of the firmware remain unchanged. It is the easiest way to update. Support replacement of kernel high/low version.
+`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt firmware` or `Replace OpenWrt Kernel` to update. (You can update from a higher version such as 5.15.50 to a lower version such as 5.10.125, or from a lower version such as 5.10.125 to a higher version such as 5.15.50. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
 
 ## 10. Personalized firmware customization update tutorial
 

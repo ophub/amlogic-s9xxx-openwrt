@@ -36,11 +36,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
   - [8. 安装固件](#8-安装固件)
     - [8.1 在编译时集成 luci-app-amlogic 操作面板](#81-在编译时集成-luci-app-amlogic-操作面板)
     - [8.2 使用操作面板安装](#82-使用操作面板安装)
-    - [8.3 使用脚本命令安装](#83-使用脚本命令安装)
   - [9. 升级固件](#9-升级固件)
-    - [9.1 使用操作面板安装](#91-使用操作面板安装)
-    - [9.2 使用升级固件脚本命令安装](#92-使用升级固件脚本命令安装)
-    - [9.3 通过升级 OpenWrt 内核进行升级](#93-通过升级-openwrt-内核进行升级)
   - [10. 个性化固件定制晋级教程](#10-个性化固件定制晋级教程)
     - [10.1 认识完整的 .config 文件](#101-认识完整的-config-文件)
     - [10.2 认识 workflow 文件](#102-认识-workflow-文件)
@@ -306,55 +302,13 @@ UPLOAD_WETRANSFER: false
 
 ### 8.2 使用操作面板安装
 
-从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` 。
+1. `Rockchip` 平台的安装方法请查看说明文档中的 [第 8 章节](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/README.cn.md) 的介绍，和 Armbian 的安装方法相同。
 
-### 8.3 使用脚本命令安装
-
-从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 openwrt` → `系统菜单` → `TTYD 终端` → 输入写入EMMC的命令:
-
-```yaml
-openwrt-install-amlogic
-```
-
-同一个型号的盒子，固件通用，比如 `openwrt_s905x3_v*.img` 固件可以用于 `x96max plus, hk1, h96` 等 `s905x3` 型号的盒子。在安装脚本将 OpenWrt 写入 EMMC 时，会提示你选择自己的盒子，请根据提示正确选择。
-
-除默认的 13 个型号的盒子是自动安装外，当你选择 0 进行自选 .dtb 文件安装时，需要填写具体的 .dtb 文件名称，你可以从这里查阅准确的文件名并填写，具体参见 [amlogic-dtb](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/armbian-files/platform-files/amlogic/bootfs/dtb/amlogic)
+2. `Amlogic` 和 `Allwinner` 平台，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入 USB 里，然后把写好固件的 USB 插入盒子。从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` 。
 
 ## 9. 升级固件
 
-### 9.1 使用操作面板安装
-
-从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 功能进行升级。（你可以从高版本如 5.15.50 升级到低版本如 5.10.125 ，也可以从低版本如 5.10.125 升级到高版本如 5.15.50 。内核版本号的高低不影响升级，可自由升级/降级）。
-
-### 9.2 使用升级固件脚本命令安装
-
-从浏览器访问 OpenWrt 系统，在 `系统` 菜单下 → `晶晨宝盒` → 上传固件包 ***`openwrt*.img.gz (支持的后缀有: *.img.xz, *.img.gz, *.7z, *.zip)`*** 到默认的上传路径 ***`/mnt/mmcblk*p4/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入升级命令:
-
-```yaml
-openwrt-update-amlogic
-```
-
-💡提示: 脚本 `openwrt-update-amlogic` 会自动从 `/mnt/mmcblk*p4/` 目录中寻找各种后缀的升级文件，你可以通过晶晨宝盒插件或其他软件将升级固件手动上传至 `/mnt/mmcblk*p4/` 目录下。
-
-如果在 `/mnt/mmcblk*p4/` 目录下仅有一个符合要求的升级文件时，你可以直接运行升级命令 `openwrt-update-amlogic` 进行升级，无需输入固件名称的参数。如果目录中有多个符合要求的可用于升级 OpenWrt 的文件时，请在 `openwrt-update-amlogic` 命令后面空格，并输入 `你指定使用的升级固件`（如 `openwrt-update-amlogic openwrt_s905x3_v5.10.125_2021.03.17.0412.img.gz` ）。
-
-- 脚本  `openwrt-update-amlogic` 在目录中的查找顺序说明
-
-| 目录 | `/mnt/mmcblk*p4/` 1-6 |
-| ---- | ---- |
-| 顺序 | `你指定使用的升级固件` → `*.img` → `*.img.xz` → `*.img.gz` → `*.7z` → `*.zip` → |
-
-### 9.3 通过升级 OpenWrt 内核进行升级
-
-从浏览器访问 openwrt 系统，在 `系统` 菜单下 → `晶晨宝盒` → 上传内核包（共有 3 文件：boot-xxx.tar.gz, dtb-xxx.tar.gz, modules-xxx.tar.gz）到默认的上传路径 ***`/mnt/mmcblk*p4/`***, 然后在 `系统菜单` → `TTYD 终端` → 输入内核更换命令:
-
-```yaml
-openwrt-kernel
-```
-
-💡提示: 脚本会自动从 `/mnt/mmcblk*p4/` 目录中寻找内核文件，你可以通过 `openwrt` → `系统菜单` → `晶晨宝盒` 将内核文件上传到默认的上传路径 `/mnt/mmcblk*p4/` ，也可以借助 WinSCP 等软件将内核文件手动上传至 `/mnt/mmcblk*p4/` 目录下。
-
-更换 OpenWrt 内核仅做了内核替换，固件原本的各种个性化配置均保持不变。是一种最简单的升级方法。支持内核高/低版本自由更换。
+从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 或 `更换 OpenWrt 内核` 功能进行升级。（你可以从高版本如 5.15.50 升级到低版本如 5.10.125 ，也可以从低版本如 5.10.125 升级到高版本如 5.15.50 。内核版本号的高低不影响升级，可自由升级/降级）。
 
 ## 10. 个性化固件定制晋级教程
 

@@ -89,8 +89,14 @@ rk3588_kernel=("5.10.150")
 auto_kernel="true"
 
 # Get the list of devices built by default
-# 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION  9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
-build_openwrt=($(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:yes$" | awk -F':' '{print $13}' | sort | uniq | xargs))
+# 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
+# 9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
+build_openwrt=($(
+    cat ${model_conf} |
+        sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
+        grep -E "^[^#].*:yes$" | awk -F':' '{print $13}' |
+        sort | uniq | xargs
+))
 
 # Set OpenWrt firmware size (Unit: MiB, boot_mb >= 256, root_mb >= 512)
 boot_mb="256"
@@ -313,10 +319,21 @@ query_version() {
 
                 # Check the kernel <SUBLEVEL>, such as [ 125 ]
                 if [[ -n "${gh_token}" ]]; then
-                    kernel_sub="$(curl --header "authorization: Bearer ${gh_token}" -s "${server_kernel_url}/${k}" | grep "name" | grep -oE "${kernel_verpatch}.[0-9]+" | sed -e "s/${kernel_verpatch}.//g" | sort -n | sed -n '$p')"
+                    kernel_sub="$(
+                        curl -s "${server_kernel_url}/${k}" \
+                            --header "authorization: Bearer ${gh_token}" |
+                            grep "name" | grep -oE "${kernel_verpatch}.[0-9]+" |
+                            sed -e "s/${kernel_verpatch}.//g" |
+                            sort -n | sed -n '$p'
+                    )"
                     query_api="Authenticated user request"
                 else
-                    kernel_sub="$(curl -s "${server_kernel_url}/${k}" | grep "name" | grep -oE "${kernel_verpatch}.[0-9]+" | sed -e "s/${kernel_verpatch}.//g" | sort -n | sed -n '$p')"
+                    kernel_sub="$(
+                        curl -s "${server_kernel_url}/${k}" |
+                            grep "name" | grep -oE "${kernel_verpatch}.[0-9]+" |
+                            sed -e "s/${kernel_verpatch}.//g" |
+                            sort -n | sed -n '$p'
+                    )"
                     query_api="Unauthenticated user request"
                 fi
 
@@ -407,10 +424,16 @@ confirm_version() {
 
     # Find [ the first ] configuration information with [ the same BOARD name ] and [ BUILD as yes ] in the ${model_conf} file.
     [[ -f "${model_conf}" ]] || error_msg "[ ${model_conf} ] file is missing!"
-    board_conf="$(cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*:${board}:yes$" | head -n 1)"
+    board_conf="$(
+        cat ${model_conf} |
+            sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
+            grep -E "^[^#].*:${board}:yes$" |
+            head -n 1
+    )"
     [[ -n "${board_conf}" ]] || error_msg "[ ${board} ] config is missing!"
 
-    # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION  9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
+    # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
+    # 9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
     # Column 5, called <UBOOT_OVERLOAD> in Amlogic, <TRUST_IMG> in Rockchip, Not used in Allwinner.
     SOC="$(echo ${board_conf} | awk -F':' '{print $3}')"
     FDTFILE="$(echo ${board_conf} | awk -F':' '{print $4}')"

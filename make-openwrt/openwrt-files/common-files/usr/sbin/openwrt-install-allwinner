@@ -281,6 +281,21 @@ EOF
     sed -i "s|option label 'BOOT'|option label 'EMMC_BOOT'|" ${DIR_INSTALL}/etc/config/fstab
     sed -i "s|option uuid.*|option uuid '${ROOTFS1_UUID}'|" ${DIR_INSTALL}/etc/config/fstab
 
+    # Add the third and fourth partition mount directory
+    mkdir -p ${DIR_INSTALL}/mnt/${install_emmc}p3
+    mkdir -p ${DIR_INSTALL}/mnt/${install_emmc}p4/docker
+    rm -rf ${DIR_INSTALL}/opt/docker
+    ln -sf /mnt/${install_emmc}p4/docker/ ${DIR_INSTALL}/opt/docker
+
+    # Update docker settings
+    echo -e "${INFO} Update docker data storage path."
+    [[ -f "${DIR_INSTALL}/etc/docker/daemon.json" ]] && {
+        sed -i "s|mnt\/.*\/docker|mnt\/${install_emmc}p4\/docker|" ${DIR_INSTALL}/etc/docker/daemon.json
+    }
+    [[ -f "${DIR_INSTALL}/etc/config/dockerd" ]] && {
+        sed -i "s|mnt\/.*\/docker|mnt\/${install_emmc}p4\/docker|" ${DIR_INSTALL}/etc/config/dockerd
+    }
+
     # Generate initialization snapshot
     echo -e "${INFO} Create initial /etc snapshot."
     btrfs subvolume snapshot -r ${DIR_INSTALL}/etc ${DIR_INSTALL}/.snapshots/etc-000 >/dev/null 2>&1

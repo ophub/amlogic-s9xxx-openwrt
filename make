@@ -861,6 +861,11 @@ EOF
     elif [[ "${PLATFORM}" == "rockchip" ]]; then
         echo "TRUST_IMG='${TRUST_IMG}'" >>${op_release}
     fi
+    if [[ "${PLATFORM}" == "rockchip" ]]; then
+        echo "SHOW_INSTALL_MENU='no'" >>${op_release}
+    else
+        echo "SHOW_INSTALL_MENU='yes'" >>${op_release}
+    fi
 
     cd ${current_path}
 

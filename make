@@ -80,8 +80,6 @@ script_repo="${script_repo//tree\/main/trunk}"
 
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
-# Set stable, rk3588 and sun50i-h6 kernel directory
-kernel_dir=("stable" "rk3588" "h6")
 # Set the list of kernels used by default
 stable_kernel=("6.1.10" "5.15.50")
 rk3588_kernel=("5.10.150")
@@ -89,15 +87,8 @@ h6_kernel=("6.1.15")
 # Set to automatically use the latest kernel
 auto_kernel="true"
 
-# Get the list of devices built by default
-# 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
-# 9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
-build_openwrt=($(
-    cat ${model_conf} |
-        sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
-        grep -E "^[^#].*:yes$" | awk -F':' '{print $13}' |
-        sort | uniq | xargs
-))
+# Initialize the build device
+build_board="all"
 
 # Set OpenWrt firmware size (Unit: MiB, boot_mb >= 256, root_mb >= 512)
 boot_mb="256"
@@ -136,19 +127,13 @@ init_var() {
     echo -e "${STEPS} Start Initializing Variables..."
 
     # If it is followed by [ : ], it means that the option requires a parameter value
-    get_all_ver="$(getopt "b:k:a:v:r:s:g:" "${@}")"
+    get_all_ver="$(getopt "b:k:a:r:s:g:" "${@}")"
 
     while [[ -n "${1}" ]]; do
         case "${1}" in
         -b | --Board)
             if [[ -n "${2}" ]]; then
-                if [[ "${2}" != "all" ]]; then
-                    unset build_openwrt
-                    oldIFS=$IFS
-                    IFS=_
-                    build_openwrt=(${2})
-                    IFS=$oldIFS
-                fi
+                build_board="${2}"
                 shift
             else
                 error_msg "Invalid -b parameter [ ${2} ]!"
@@ -171,14 +156,6 @@ init_var() {
                 shift
             else
                 error_msg "Invalid -a parameter [ ${2} ]!"
-            fi
-            ;;
-        -v | --Versionbranch)
-            if [[ -n "${2}" ]]; then
-                kernel_dir="${2}"
-                shift
-            else
-                error_msg "Invalid -v parameter [ ${2} ]!"
             fi
             ;;
         -r | --kernelRepository)
@@ -212,12 +189,33 @@ init_var() {
         shift
     done
 
+    # Get the list of devices built by default
+    # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
+    # 9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
+    if [[ "${build_board}" == "all" ]]; then
+        board_list=""
+        build_openwrt=($(
+            cat ${model_conf} |
+                sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
+                grep -E "^[^#].*:yes$" | awk -F':' '{print $13}' |
+                sort | uniq | xargs
+        ))
+    else
+        board_list=":($(echo ${build_board} | sed -e 's/_/\|/g'))"
+        build_openwrt=($(echo ${build_board} | sed -e 's/_/ /g'))
+    fi
+
+    # Set kernel download directory
+    kernel_dir=($(
+        cat ${model_conf} |
+            sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
+            grep -E "^[^#].*${board_list}:yes$" | awk -F':' '{if ($9 ~ /^[a-z]/) print $9}' |
+            sort | uniq | xargs
+    ))
+    [[ "${#kernel_dir[*]}" -eq "0" ]] && kernel_dir=("stable")
+
     # Convert kernel library address to svn format
     kernel_repo="${kernel_repo//tree\/main/trunk}"
-
-    # Complete the kernel directory
-    [[ -n "$(echo "${kernel_dir[@]}" | grep -oE "rk3588")" ]] || kernel_dir[$(((${#kernel_dir[@]} + 1)))]="rk3588"
-    [[ -n "$(echo "${kernel_dir[@]}" | grep -oE "h6")" ]] || kernel_dir[$(((${#kernel_dir[@]} + 1)))]="h6"
 }
 
 find_openwrt() {
@@ -366,10 +364,6 @@ query_version() {
             let x++
         }
     done
-
-    echo -e "${INFO} The latest version of the stable_kernel: [ ${stable_kernel[*]} ]"
-    echo -e "${INFO} The latest version of the rk3588_kernel: [ ${rk3588_kernel[*]} ]"
-    echo -e "${INFO} The latest version of the h6_kernel: [ ${h6_kernel[*]} ]\n"
 }
 
 check_kernel() {
@@ -942,7 +936,7 @@ loop_make() {
                 kd="h6"
             else
                 kernel_list=(${stable_kernel[*]})
-                kd="$(echo "${kernel_dir[@]}" | sed -e "s|rk3588||" | sed -e "s|h6||" | xargs)"
+                kd="stable"
             fi
 
             i="1"
@@ -1014,9 +1008,6 @@ download_kernel
 
 # Show make settings
 echo -e "${INFO} [ ${#build_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${build_openwrt[*]} | xargs) ]"
-echo -e "${INFO} [ ${#stable_kernel[*]} ] lists of stable kernel: [ $(echo ${stable_kernel[*]} | xargs) ]"
-echo -e "${INFO} [ ${#rk3588_kernel[*]} ] lists of rk3588 Kernel: [ $(echo ${rk3588_kernel[*]} | xargs) ]"
-echo -e "${INFO} [ ${#h6_kernel[*]} ] lists of h6 Kernel: [ $(echo ${h6_kernel[*]} | xargs) ]"
 echo -e "${INFO} Use the latest kernel version: [ ${auto_kernel} ] \n"
 # Show server start information
 echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"

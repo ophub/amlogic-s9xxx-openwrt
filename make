@@ -80,11 +80,12 @@ script_repo="${script_repo//tree\/main/trunk}"
 
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
-# Set stable kernel directory: [ stable ], rk3588 kernel directory: [ rk3588 ]
-kernel_dir=("stable" "rk3588")
+# Set stable, rk3588 and sun50i-h6 kernel directory
+kernel_dir=("stable" "rk3588" "h6")
 # Set the list of kernels used by default
 stable_kernel=("6.1.10" "5.15.50")
 rk3588_kernel=("5.10.150")
+h6_kernel=("6.1.15")
 # Set to automatically use the latest kernel
 auto_kernel="true"
 
@@ -174,11 +175,7 @@ init_var() {
             ;;
         -v | --Versionbranch)
             if [[ -n "${2}" ]]; then
-                oldIFS=${IFS}
-                IFS=_
-                kernel_dir=(${2})
-                IFS=${oldIFS}
-                [[ -n "$(echo "${kernel_dir[@]}" | grep -oE "rk3588")" ]] || kernel_dir[$(((${#kernel_dir[@]} + 1)))]="rk3588"
+                kernel_dir="${2}"
                 shift
             else
                 error_msg "Invalid -v parameter [ ${2} ]!"
@@ -217,6 +214,10 @@ init_var() {
 
     # Convert kernel library address to svn format
     kernel_repo="${kernel_repo//tree\/main/trunk}"
+
+    # Complete the kernel directory
+    [[ -n "$(echo "${kernel_dir[@]}" | grep -oE "rk3588")" ]] || kernel_dir[$(((${#kernel_dir[@]} + 1)))]="rk3588"
+    [[ -n "$(echo "${kernel_dir[@]}" | grep -oE "h6")" ]] || kernel_dir[$(((${#kernel_dir[@]} + 1)))]="h6"
 }
 
 find_openwrt() {
@@ -304,6 +305,8 @@ query_version() {
             # Select the corresponding kernel directory and list
             if [[ "${k}" == "rk3588" ]]; then
                 down_kernel_list=(${rk3588_kernel[*]})
+            elif [[ "${k}" == "h6" ]]; then
+                down_kernel_list=(${h6_kernel[*]})
             else
                 down_kernel_list=(${stable_kernel[*]})
             fi
@@ -352,6 +355,9 @@ query_version() {
             if [[ "${k}" == "rk3588" ]]; then
                 unset rk3588_kernel
                 rk3588_kernel=(${tmp_arr_kernels[*]})
+            elif [[ "${k}" == "h6" ]]; then
+                unset h6_kernel
+                h6_kernel=(${tmp_arr_kernels[*]})
             else
                 unset stable_kernel
                 stable_kernel=(${tmp_arr_kernels[*]})
@@ -362,7 +368,8 @@ query_version() {
     done
 
     echo -e "${INFO} The latest version of the stable_kernel: [ ${stable_kernel[*]} ]"
-    echo -e "${INFO} The latest version of the rk3588_kernel: [ ${rk3588_kernel[*]} ]\n"
+    echo -e "${INFO} The latest version of the rk3588_kernel: [ ${rk3588_kernel[*]} ]"
+    echo -e "${INFO} The latest version of the h6_kernel: [ ${h6_kernel[*]} ]\n"
 }
 
 check_kernel() {
@@ -393,6 +400,8 @@ download_kernel() {
             # Set the kernel download list
             if [[ "${k}" == "rk3588" ]]; then
                 down_kernel_list=(${rk3588_kernel[*]})
+            elif [[ "${k}" == "h6" ]]; then
+                down_kernel_list=(${h6_kernel[*]})
             else
                 down_kernel_list=(${stable_kernel[*]})
             fi
@@ -706,8 +715,17 @@ refactor_rootfs() {
     mkdir -p .reserved boot run
 
     # Edit fstab
-    sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|" etc/fstab
-    sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|" etc/config/fstab
+    sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" etc/fstab
+    sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|g" etc/config/fstab
+
+    # Edit Kernel download directory
+    [[ -f "etc/config/amlogic" ]] && {
+        if [[ "${KERNEL_BRANCH}" == "rk3588" ]]; then
+            sed -i "s|pub\/stable|pub\/rk3588|g" etc/config/amlogic
+        elif [[ "${KERNEL_BRANCH}" == "h6" ]]; then
+            sed -i "s|pub\/stable|pub\/h6|g" etc/config/amlogic
+        fi
+    }
 
     # Modify the default script to [ bash ] for [ cpustat ]
     [[ -x "bin/bash" ]] && {
@@ -919,9 +937,12 @@ loop_make() {
             if [[ "${KERNEL_BRANCH}" == "rk3588" ]]; then
                 kernel_list=(${rk3588_kernel[*]})
                 kd="rk3588"
+            elif [[ "${KERNEL_BRANCH}" == "h6" ]]; then
+                kernel_list=(${h6_kernel[*]})
+                kd="h6"
             else
                 kernel_list=(${stable_kernel[*]})
-                kd="$(echo "${kernel_dir[@]}" | sed -e "s|rk3588||" | xargs)"
+                kd="$(echo "${kernel_dir[@]}" | sed -e "s|rk3588||" | sed -e "s|h6||" | xargs)"
             fi
 
             i="1"
@@ -930,8 +951,7 @@ loop_make() {
                     kernel="${k}"
 
                     # Skip inapplicable kernels
-                    if { [[ "${KERNEL_BRANCH}" == "rk3588" ]] && [[ "${kernel:0:5}" != "5.10." ]]; } ||
-                        { [[ "${KERNEL_BRANCH}" == "6.x.y" ]] && [[ "${kernel:0:2}" != "6." ]]; } ||
+                    if { [[ "${KERNEL_BRANCH}" == "6.x.y" ]] && [[ "${kernel:0:2}" != "6." ]]; } ||
                         { [[ "${KERNEL_BRANCH}" == "5.10.y" ]] && [[ "${kernel:0:5}" != "5.10." ]]; } ||
                         { [[ "${KERNEL_BRANCH}" == "5.15.y" ]] && [[ "${kernel:0:5}" != "5.15." && "${kernel:0:4}" != "5.4." ]]; }; then
                         echo -e "(${j}.${i}) ${TIPS} The [ ${board} ] device cannot use [ ${kd}/${kernel} ] kernel, skip."
@@ -996,6 +1016,7 @@ download_kernel
 echo -e "${INFO} [ ${#build_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${build_openwrt[*]} | xargs) ]"
 echo -e "${INFO} [ ${#stable_kernel[*]} ] lists of stable kernel: [ $(echo ${stable_kernel[*]} | xargs) ]"
 echo -e "${INFO} [ ${#rk3588_kernel[*]} ] lists of rk3588 Kernel: [ $(echo ${rk3588_kernel[*]} | xargs) ]"
+echo -e "${INFO} [ ${#h6_kernel[*]} ] lists of h6 Kernel: [ $(echo ${h6_kernel[*]} | xargs) ]"
 echo -e "${INFO} Use the latest kernel version: [ ${auto_kernel} ] \n"
 # Show server start information
 echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"

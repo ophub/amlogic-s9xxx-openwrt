@@ -110,7 +110,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -b        | Board         | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . Use `all` for all board models. The model code is detailed in the `BOARD` setting in [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf). |
 | -k        | Kernel        | Specify the [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) name. Write the kernel name individually such as `-k 6.1.10` . Multiple kernel use `_` connection such as `-k 6.1.10_5.15.50` |
 | -a        | AutoKernel    | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 6.1.10 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
-| -v        | VersionBranch | Specify the [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v stable_rk3588`. The specified name must be the same as the branch directory name. The `stable_rk3588` branch version is used by default. |
+| -v        | VersionBranch | Specify the [version branch](https://github.com/ophub/kernel/tree/main/pub), Such as `-v dev`. The specified name must be the same as the branch directory name. The `stable` branch version is used by default. |
 | -r        | KernelRepo    | Specify the name of the kernel repository, Such as `-r https://github.com/ophub/kernel/tree/main/pub` |
 | -s        | Size          | Set the ROOTFS partition size for firmware (MiB). The default is 1024 MiB, and the specified size must be greater than 512 MiB. Such as `-s 1024` |
 | -g        | GH_TOKEN      | Optional. Set `${{ secrets.GH_TOKEN }}` for [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) query. Default: `""` |
@@ -154,7 +154,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 | openwrt_board      | all              | Set the `board` of the packaging TV Boxes, function reference `-b` |
 | openwrt_kernel     | 6.1.10_5.15.50   | Set the kernel version，function reference `-k` |
 | auto_kernel        | true             | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
-| version_branch     | stable_rk3588    | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
+| version_branch     | stable           | Specify the name of the kernel [version branch](https://github.com/ophub/kernel/tree/main/pub), function reference `-v` |
 | kernel_repo        | [ophub/kernel](https://github.com/ophub/kernel/tree/main/pub) | Specify the name of the kernel Repository, function reference `-r` |
 | openwrt_size       | 1024             | Set the size of the firmware ROOTFS partition, function reference `-s` |
 | gh_token           | ""               | Optional. Set `${{ secrets.GH_TOKEN }}`, function reference `-g` |

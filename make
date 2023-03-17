@@ -81,7 +81,7 @@ script_repo="${script_repo//tree\/main/trunk}"
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 # Set the list of kernels used by default
-stable_kernel=("6.1.10" "5.15.50")
+stable_kernel=("6.1.15" "5.15.100")
 rk3588_kernel=("5.10.150")
 h6_kernel=("6.1.15")
 # Set to automatically use the latest kernel
@@ -315,10 +315,10 @@ query_version() {
             for kernel_var in ${down_kernel_list[*]}; do
                 echo -e "${INFO} (${x}.${i}) Auto query the latest kernel version of the same series for [ ${k} - ${kernel_var} ]"
 
-                # Identify the kernel <VERSION> and <PATCHLEVEL>, such as [ 5.10 ]
+                # Identify the kernel <VERSION> and <PATCHLEVEL>, such as [ 5.15 ]
                 kernel_verpatch="$(echo ${kernel_var} | awk -F '.' '{print $1"."$2}')"
 
-                # Check the kernel <SUBLEVEL>, such as [ 125 ]
+                # Check the kernel <SUBLEVEL>, such as [ 100 ]
                 if [[ -n "${gh_token}" ]]; then
                     kernel_sub="$(
                         curl -s "${server_kernel_url}/${k}" \
@@ -1008,7 +1008,6 @@ download_kernel
 
 # Show make settings
 echo -e "${INFO} [ ${#build_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${build_openwrt[*]} | xargs) ]"
-echo -e "${INFO} Use the latest kernel version: [ ${auto_kernel} ] \n"
 # Show server start information
 echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
 echo -e "${INFO} Server memory usage: \n$(free -h) \n"

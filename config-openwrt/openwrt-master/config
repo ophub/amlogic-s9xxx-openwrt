@@ -1,8 +1,3 @@
-#==================================================================================
-# https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Automatically Build OpenWrt for Amlogic s9xxx tv box
-# Source code repository: https://github.com/openwrt/openwrt / Branch: master
-#==================================================================================
 #
 # Automatically generated file; DO NOT EDIT.
 # OpenWrt Configuration
@@ -1914,10 +1909,6 @@ CONFIG_PACKAGE_wireless-regdb=y
 # end of Fonts
 
 #
-# Kernel
-#
-
-#
 # Kernel modules
 #
 
@@ -2084,6 +2075,7 @@ CONFIG_PACKAGE_kmod-hwmon-core=y
 # CONFIG_PACKAGE_kmod-hwmon-lm92 is not set
 # CONFIG_PACKAGE_kmod-hwmon-lm95241 is not set
 # CONFIG_PACKAGE_kmod-hwmon-ltc4151 is not set
+# CONFIG_PACKAGE_kmod-hwmon-max6642 is not set
 # CONFIG_PACKAGE_kmod-hwmon-mcp3021 is not set
 # CONFIG_PACKAGE_kmod-hwmon-nct7802 is not set
 # CONFIG_PACKAGE_kmod-hwmon-pwmfan is not set
@@ -2384,6 +2376,7 @@ CONFIG_PACKAGE_kmod-ifb=y
 # CONFIG_PACKAGE_kmod-ipvlan is not set
 # CONFIG_PACKAGE_kmod-ixgbe is not set
 # CONFIG_PACKAGE_kmod-ixgbevf is not set
+# CONFIG_PACKAGE_kmod-lan743x is not set
 CONFIG_PACKAGE_kmod-libphy=y
 CONFIG_PACKAGE_kmod-macvlan=y
 CONFIG_PACKAGE_kmod-mdio-devres=y
@@ -2938,6 +2931,7 @@ CONFIG_PACKAGE_lua=y
 # CONFIG_PACKAGE_lua-eco-http is not set
 # CONFIG_PACKAGE_lua-eco-log is not set
 # CONFIG_PACKAGE_lua-eco-mqtt is not set
+# CONFIG_PACKAGE_lua-eco-network is not set
 # CONFIG_PACKAGE_lua-eco-sha1 is not set
 # CONFIG_PACKAGE_lua-eco-socket is not set
 # CONFIG_PACKAGE_lua-eco-ssl is not set
@@ -3422,6 +3416,12 @@ CONFIG_PACKAGE_perlbase-xsloader=y
 # end of Ruby
 
 #
+# Rust
+#
+# CONFIG_PACKAGE_maturin is not set
+# end of Rust
+
+#
 # Tcl
 #
 # CONFIG_PACKAGE_tcl is not set
@@ -3445,6 +3445,12 @@ CONFIG_PACKAGE_ucode-mod-uci=y
 # CONFIG_PACKAGE_chicken-scheme-full is not set
 # CONFIG_PACKAGE_chicken-scheme-interpreter is not set
 # CONFIG_PACKAGE_python3-gensio is not set
+# CONFIG_PACKAGE_rust is not set
+CONFIG_RUST_OPTION_CHECKING=y
+CONFIG_RUST_ENABLE_NINJA=y
+CONFIG_RUST_MISSING_TOOLS=y
+CONFIG_RUST_OPTIMIZE_LLVM=y
+CONFIG_RUST_MANAGE_SUBMODULES=y
 # CONFIG_PACKAGE_slsh is not set
 # end of Languages
 
@@ -3484,7 +3490,6 @@ CONFIG_SQLITE3_DYNAMIC_EXTENSIONS=y
 CONFIG_SQLITE3_FTS3=y
 CONFIG_SQLITE3_FTS4=y
 CONFIG_SQLITE3_FTS5=y
-CONFIG_SQLITE3_JSON1=y
 CONFIG_SQLITE3_RTREE=y
 # CONFIG_SQLITE3_SESSION is not set
 # end of Configuration
@@ -4334,8 +4339,10 @@ CONFIG_PACKAGE_libdaemon=y
 # CONFIG_PACKAGE_libdb47xx is not set
 # CONFIG_PACKAGE_libdbi is not set
 CONFIG_PACKAGE_libdbus=y
+CONFIG_PACKAGE_libdeflate=y
 # CONFIG_PACKAGE_libdevmapper is not set
 # CONFIG_PACKAGE_libdevmapper-selinux is not set
+CONFIG_PACKAGE_libdht=y
 # CONFIG_PACKAGE_libdmapsharing is not set
 # CONFIG_PACKAGE_libdnet is not set
 # CONFIG_PACKAGE_libdrm is not set
@@ -4348,10 +4355,10 @@ CONFIG_PACKAGE_libdbus=y
 # CONFIG_PACKAGE_libev is not set
 # CONFIG_PACKAGE_libevdev is not set
 CONFIG_PACKAGE_libevent2=y
-# CONFIG_PACKAGE_libevent2-core is not set
+CONFIG_PACKAGE_libevent2-core=y
 # CONFIG_PACKAGE_libevent2-extra is not set
 # CONFIG_PACKAGE_libevent2-openssl is not set
-# CONFIG_PACKAGE_libevent2-pthreads is not set
+CONFIG_PACKAGE_libevent2-pthreads=y
 # CONFIG_PACKAGE_libexif is not set
 CONFIG_PACKAGE_libexpat=y
 # CONFIG_PACKAGE_libexslt is not set
@@ -4404,7 +4411,7 @@ CONFIG_PACKAGE_libgmp=y
 CONFIG_PACKAGE_libiconv-full=y
 # CONFIG_PACKAGE_libid3tag is not set
 # CONFIG_PACKAGE_libidn is not set
-# CONFIG_PACKAGE_libidn2 is not set
+CONFIG_PACKAGE_libidn2=y
 # CONFIG_PACKAGE_libiio is not set
 # CONFIG_PACKAGE_libinotifytools is not set
 # CONFIG_PACKAGE_libinput is not set
@@ -4527,7 +4534,7 @@ CONFIG_PACKAGE_libpng=y
 CONFIG_PACKAGE_libpopt=y
 # CONFIG_PACKAGE_libpri is not set
 # CONFIG_PACKAGE_libprotobuf-c is not set
-# CONFIG_PACKAGE_libpsl is not set
+CONFIG_PACKAGE_libpsl=y
 # CONFIG_PACKAGE_libqmi is not set
 # CONFIG_PACKAGE_libqrencode is not set
 # CONFIG_PACKAGE_libqrtr-glib is not set
@@ -4616,7 +4623,7 @@ CONFIG_PACKAGE_libucode=y
 # CONFIG_PACKAGE_libudns is not set
 # CONFIG_PACKAGE_libuecc is not set
 # CONFIG_PACKAGE_libugpio is not set
-# CONFIG_PACKAGE_libunistring is not set
+CONFIG_PACKAGE_libunistring=y
 # CONFIG_PACKAGE_libunwind is not set
 # CONFIG_PACKAGE_libupnp is not set
 # CONFIG_PACKAGE_libupnpp is not set
@@ -4627,6 +4634,7 @@ CONFIG_PACKAGE_libusb-compat=y
 # CONFIG_PACKAGE_libustream-mbedtls is not set
 # CONFIG_PACKAGE_libustream-openssl is not set
 CONFIG_PACKAGE_libustream-wolfssl=y
+CONFIG_PACKAGE_libutp=y
 CONFIG_PACKAGE_libuuid=y
 CONFIG_PACKAGE_libuv=y
 # CONFIG_PACKAGE_libuwifi is not set
@@ -4766,6 +4774,7 @@ CONFIG_PACKAGE_luci-lua-runtime=y
 CONFIG_PACKAGE_luci-mod-admin-full=y
 # CONFIG_PACKAGE_luci-mod-battstatus is not set
 # CONFIG_PACKAGE_luci-mod-dashboard is not set
+# CONFIG_PACKAGE_luci-mod-dsl is not set
 CONFIG_PACKAGE_luci-mod-network=y
 # CONFIG_PACKAGE_luci-mod-rpc is not set
 CONFIG_PACKAGE_luci-mod-status=y
@@ -4785,6 +4794,7 @@ CONFIG_PACKAGE_luci-app-amlogic=y
 # CONFIG_PACKAGE_luci-app-aria2 is not set
 CONFIG_PACKAGE_luci-app-attendedsysupgrade=y
 # CONFIG_PACKAGE_luci-app-babeld is not set
+# CONFIG_PACKAGE_luci-app-banip is not set
 # CONFIG_PACKAGE_luci-app-bcp38 is not set
 # CONFIG_PACKAGE_luci-app-bird1-ipv4 is not set
 # CONFIG_PACKAGE_luci-app-bird1-ipv6 is not set
@@ -4892,6 +4902,7 @@ CONFIG_PACKAGE_luci-proto-3g=y
 # CONFIG_PACKAGE_luci-proto-autoip is not set
 # CONFIG_PACKAGE_luci-proto-batman-adv is not set
 CONFIG_PACKAGE_luci-proto-bonding=y
+# CONFIG_PACKAGE_luci-proto-cni is not set
 # CONFIG_PACKAGE_luci-proto-gre is not set
 # CONFIG_PACKAGE_luci-proto-hnet is not set
 CONFIG_PACKAGE_luci-proto-ipip=y
@@ -6028,6 +6039,7 @@ CONFIG_PACKAGE_relayd=y
 # CONFIG_PACKAGE_eoip is not set
 # CONFIG_PACKAGE_fastd is not set
 # CONFIG_PACKAGE_libreswan is not set
+# CONFIG_PACKAGE_netbird is not set
 # CONFIG_PACKAGE_ocserv is not set
 CONFIG_PACKAGE_openconnect=y
 
@@ -6258,6 +6270,7 @@ CONFIG_PACKAGE_apcupsd-cgi=y
 # CONFIG_PACKAGE_bwping is not set
 CONFIG_PACKAGE_chat=y
 # CONFIG_PACKAGE_cifsmount is not set
+# CONFIG_PACKAGE_cni-protocol is not set
 # CONFIG_PACKAGE_cni-route-override is not set
 # CONFIG_PACKAGE_coap-server is not set
 # CONFIG_PACKAGE_conserver is not set
@@ -7182,7 +7195,6 @@ CONFIG_PACKAGE_jshn=y
 # CONFIG_PACKAGE_lcdproc-server is not set
 # CONFIG_PACKAGE_less is not set
 CONFIG_PACKAGE_libjson-script=y
-CONFIG_PACKAGE_libnetwork=y
 # CONFIG_PACKAGE_librespeed-cli is not set
 # CONFIG_PACKAGE_libxml2-utils is not set
 # CONFIG_PACKAGE_lm-sensors is not set
@@ -7279,6 +7291,7 @@ CONFIG_PACKAGE_pv=y
 CONFIG_PACKAGE_rename=y
 # CONFIG_PACKAGE_reptyr is not set
 # CONFIG_PACKAGE_restic is not set
+# CONFIG_PACKAGE_ripgrep is not set
 # CONFIG_PACKAGE_rng-tools is not set
 # CONFIG_PACKAGE_rtl-ais is not set
 # CONFIG_PACKAGE_rtl-sdr is not set

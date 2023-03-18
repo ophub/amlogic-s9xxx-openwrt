@@ -1,5 +1,5 @@
 #!/bin/bash
-#============================================================================
+#================================================================================================
 #
 # This file is licensed under the terms of the GNU General Public
 # License version 2. This program is licensed "as is" without any
@@ -9,13 +9,17 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
 # Description: Automatically Packaged OpenWrt for Amlogic and Rockchip
-# Copyright (C) 2020- https://github.com/unifreq
-# Copyright (C) 2020- https://github.com/ophub/amlogic-s9xxx-openwrt
+# Copyright (C) 2020~ https://github.com/openwrt/openwrt
+# Copyright (C) 2020~ https://github.com/coolsnowwolf/lede
+# Copyright (C) 2020~ https://github.com/immortalwrt/immortalwrt
+# Copyright (C) 2020~ https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021~ https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md
+# Copyright (C) 2020~ https://github.com/ophub/amlogic-s9xxx-openwrt
 #
 # Command: sudo ./make
 # Command optional parameters please refer to the source code repository
 #
-#============================== Functions list ==============================
+#======================================== Functions list ========================================
 #
 # error_msg          : Output error message
 # process_msg        : Output process message
@@ -38,7 +42,7 @@
 #
 # loop_make          : Loop to make OpenWrt files
 #
-#====================== Set make environment variables ======================
+#================================ Set make environment variables ================================
 #
 # Related file storage path
 current_path="${PWD}"
@@ -105,7 +109,7 @@ WARNING="[\033[93m WARNING \033[0m]"
 SUCCESS="[\033[92m SUCCESS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 #
-#============================================================================
+#================================================================================================
 
 error_msg() {
     echo -e "${ERROR} ${1}"

@@ -88,7 +88,7 @@ h6_kernel=("6.1.15")
 auto_kernel="true"
 
 # Initialize the build device
-build_board="all"
+make_board="all"
 
 # Set OpenWrt firmware size (Unit: MiB, boot_mb >= 256, root_mb >= 512)
 boot_mb="256"
@@ -133,7 +133,7 @@ init_var() {
         case "${1}" in
         -b | --Board)
             if [[ -n "${2}" ]]; then
-                build_board="${2}"
+                make_board="${2}"
                 shift
             else
                 error_msg "Invalid -b parameter [ ${2} ]!"
@@ -192,24 +192,25 @@ init_var() {
     # Get the list of devices built by default
     # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
     # 9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
-    if [[ "${build_board}" == "all" ]]; then
+    if [[ "${make_board}" == "all" ]]; then
         board_list=""
-        build_openwrt=($(
+        make_openwrt=($(
             cat ${model_conf} |
                 sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
                 grep -E "^[^#].*:yes$" | awk -F':' '{print $13}' |
                 sort | uniq | xargs
         ))
     else
-        board_list=":($(echo ${build_board} | sed -e 's/_/\|/g'))"
-        build_openwrt=($(echo ${build_board} | sed -e 's/_/ /g'))
+        board_list=":($(echo ${make_board} | sed -e 's/_/\|/g'))"
+        make_openwrt=($(echo ${make_board} | sed -e 's/_/ /g'))
     fi
+    [[ "${#make_openwrt[*]}" -eq "0" ]] && error_msg "The board is missing, stop making."
 
     # Set kernel download directory
     kernel_dir=($(
         cat ${model_conf} |
             sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
-            grep -E "^[^#].*${board_list}:yes$" | awk -F':' '{if ($9 ~ /^[a-z]/) print $9}' |
+            grep -E "^[^#].*${board_list}:yes$" | awk -F':' '{if ($9 ~ /^[a-zA-Z]/) print $9}' |
             sort | uniq | xargs
     ))
     [[ "${#kernel_dir[*]}" -eq "0" ]] && kernel_dir=("stable")
@@ -920,7 +921,7 @@ loop_make() {
     echo -e "${STEPS} Start making OpenWrt firmware..."
 
     j="1"
-    for b in ${build_openwrt[*]}; do
+    for b in ${make_openwrt[*]}; do
         {
 
             # Set specific configuration for building OpenWrt system
@@ -1007,7 +1008,7 @@ download_depends
 download_kernel
 
 # Show make settings
-echo -e "${INFO} [ ${#build_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${build_openwrt[*]} | xargs) ]"
+echo -e "${INFO} [ ${#make_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${make_openwrt[*]} | xargs) ]"
 # Show server start information
 echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
 echo -e "${INFO} Server memory usage: \n$(free -h) \n"

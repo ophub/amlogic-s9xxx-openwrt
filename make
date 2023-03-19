@@ -85,9 +85,9 @@ script_repo="${script_repo//tree\/main/trunk}"
 # Kernel files download repository
 kernel_repo="https://github.com/ophub/kernel/tree/main/pub"
 # Set the list of kernels used by default
-stable_kernel=("6.1.15" "5.15.100")
-rk3588_kernel=("5.10.150")
-h6_kernel=("6.1.15")
+stable_kernel=("6.1.1" "5.15.1")
+rk3588_kernel=("5.10.1")
+h6_kernel=("6.1.1")
 # Set to automatically use the latest kernel
 auto_kernel="true"
 
@@ -210,14 +210,32 @@ init_var() {
     fi
     [[ "${#make_openwrt[*]}" -eq "0" ]] && error_msg "The board is missing, stop making."
 
-    # Set kernel download directory
-    kernel_dir=($(
+    # In KERNEL_BRANCH, query the kernel download directory and specific kernel
+    kernel_down=($(
         cat ${model_conf} |
-            sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
-            grep -E "^[^#].*${board_list}:yes$" | awk -F':' '{if ($9 ~ /^[a-zA-Z]/) print $9}' |
+            sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' -e 's/\.y/\.1/g' |
+            grep -E "^[^#].*${board_list}:yes$" | awk -F':' '{print $9}' |
             sort | uniq | xargs
     ))
+    [[ "${#kernel_down[*]}" -eq "0" ]] && error_msg "Missing [ KERNEL_BRANCH ] settings, stop building."
+
+    # In KERNEL_BRANCH, the kernel directory name starts with the [ letter ]
+    kernel_dir=($(echo ${kernel_down[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[a-z]" | sort | uniq | xargs))
+    # In KERNEL_BRANCH, the [ specified kernel ] is downloaded from the [ stable ] directory
     [[ "${#kernel_dir[*]}" -eq "0" ]] && kernel_dir=("stable")
+
+    # In KERNEL_BRANCH, query the [ specified kernel ]
+    specify_kernel=($(echo ${kernel_down[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[0-9]+" | sort | uniq | xargs))
+    # Merge the [ specified kernel ] with [ stable kernel ]
+    [[ "${#specify_kernel[*]}" -ne "0" ]] && {
+        for sk in ${specify_kernel[*]}; do
+            [[ ! "${stable_kernel[*]}" =~ "$(echo ${sk} | awk -F'.' '{print $1"."$2"."}')" ]] && {
+                stable_kernel=(${stable_kernel[*]} ${sk})
+            }
+        done
+    }
+    # Remove duplicates
+    stable_kernel=($(awk -v RS=' ' '!a[$1]++' <<<${stable_kernel[*]}))
 
     # Convert kernel library address to svn format
     kernel_repo="${kernel_repo//tree\/main/trunk}"
@@ -374,7 +392,6 @@ query_version() {
 check_kernel() {
     [[ -n "${1}" ]] && check_path="${1}" || error_msg "Invalid kernel path to check."
     check_files=($(cat "${check_path}/sha256sums" | awk '{print $2}'))
-    m="1"
     for cf in ${check_files[*]}; do
         {
             # Check if file exists
@@ -383,7 +400,6 @@ check_kernel() {
             tmp_sha256sum="$(sha256sum "${check_path}/${cf}" | awk '{print $1}')"
             tmp_checkcode="$(cat ${check_path}/sha256sums | grep ${cf} | awk '{print $1}')"
             [[ "${tmp_sha256sum}" == "${tmp_checkcode}" ]] || error_msg "[ ${cf} ]: sha256sum verification failed."
-            let m++
         }
     done
     echo -e "${INFO} All [ ${#check_files[*]} ] kernel files are sha256sum checked to be complete.\n"
@@ -950,12 +966,12 @@ loop_make() {
                     kernel="${k}"
 
                     # Skip inapplicable kernels
-                    if { [[ "${KERNEL_BRANCH}" == "6.x.y" ]] && [[ "${kernel:0:2}" != "6." ]]; } ||
-                        { [[ "${KERNEL_BRANCH}" == "5.10.y" ]] && [[ "${kernel:0:5}" != "5.10." ]]; } ||
-                        { [[ "${KERNEL_BRANCH}" == "5.15.y" ]] && [[ "${kernel:0:5}" != "5.15." && "${kernel:0:4}" != "5.4." ]]; }; then
-                        echo -e "(${j}.${i}) ${TIPS} The [ ${board} ] device cannot use [ ${kd}/${kernel} ] kernel, skip."
-                        let i++
-                        continue
+                    if [[ "${KERNEL_BRANCH}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
+                        [[ "${kernel}" != "$(echo ${KERNEL_BRANCH} | awk -F'.' '{print $1"."$2"."}')"* ]] && {
+                            echo -e "(${j}.${i}) ${TIPS} The [ ${board} ] device cannot use [ ${kd}/${kernel} ] kernel, skip."
+                            let i++
+                            continue
+                        }
                     fi
 
                     # Check disk space size
@@ -1014,8 +1030,6 @@ download_kernel
 # Show make settings
 echo -e "${INFO} [ ${#make_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${make_openwrt[*]} | xargs) ]"
 # Show server start information
-echo -e "${INFO} Server CPU configuration information: \n$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
-echo -e "${INFO} Server memory usage: \n$(free -h) \n"
 echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${current_path}) \n"
 
 # Loop to make OpenWrt firmware

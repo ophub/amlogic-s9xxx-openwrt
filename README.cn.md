@@ -149,7 +149,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 |-------------------|-------------------|-------------------------------------------|
 | openwrt_path      | ""                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_board     | all               | 设置打包盒子的 `board` ，功能参考 `-b` |
-| openwrt_kernel    | 6.1.10_5.15.50    | 设置内核版本，功能参考 `-k` |
+| openwrt_kernel    | 6.1.1_5.15.1      | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | kernel_repo       | [ophub/kernel](https://github.com/ophub/kernel/tree/main/pub) | 指定内核仓库地址，功能参考 `-r` |
 | openwrt_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |

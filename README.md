@@ -150,7 +150,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 | ------------------ | ---------------- | ------------------------------- |
 | openwrt_path       | ""               | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_board      | all              | Set the `board` of the packaging TV Boxes, function reference `-b` |
-| openwrt_kernel     | 6.1.10_5.15.50   | Set the kernel version，function reference `-k` |
+| openwrt_kernel     | 6.1.1_5.15.1     | Set the kernel version，function reference `-k` |
 | auto_kernel        | true             | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
 | kernel_repo        | [ophub/kernel](https://github.com/ophub/kernel/tree/main/pub) | Specify the name of the kernel Repository, function reference `-r` |
 | openwrt_size       | 1024             | Set the size of the firmware ROOTFS partition, function reference `-s` |

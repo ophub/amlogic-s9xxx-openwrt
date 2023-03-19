@@ -13,11 +13,11 @@ inputs:
   openwrt_board:
     description: "Select device board."
     required: false
-    default: "s905d_s905x3"
+    default: "all"
   openwrt_kernel:
     description: "Select kernel version."
     required: false
-    default: "5.10.125_5.15.50"
+    default: "6.1.1_5.15.1"
   auto_kernel:
     description: "Auto use the latest kernel."
     required: false

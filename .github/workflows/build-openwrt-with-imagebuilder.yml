@@ -14,13 +14,15 @@ on:
       releases_branch:
         description: "Select the releases branch"
         required: false
-        default: "22.03.3"
+        default: "openwrt:22.03.3"
         type: choice
         options:
-          - 22.03.3
-          - 21.02.5
-          - 19.07.10
-          - 18.06.9
+          - openwrt:22.03.3
+          - openwrt:21.02.5
+          - openwrt:19.07.10
+          - openwrt:18.06.9
+          - immortalwrt:21.02.4
+          - immortalwrt:21.02.3
       openwrt_board:
         description: "Select device board"
         required: false
@@ -97,7 +99,7 @@ on:
 
 env:
   TZ: America/New_York
-  IMAGEBUILDER_SH: config-openwrt/openwrt-imagebuilder/imagebuilder.sh
+  IMAGEBUILDER_SH: config-openwrt/imagebuilder/imagebuilder.sh
 
 jobs:
   build:

@@ -733,6 +733,7 @@ refactor_rootfs() {
     mkdir -p .reserved boot run
 
     # Edit fstab
+    [[ -f "etc/fstab" && -f "etc/config/fstab" ]] || error_msg "The [ fstab ] files does not exist."
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" etc/fstab
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|g" etc/config/fstab
 
@@ -816,14 +817,18 @@ alias wifi brcmfmac
 EOF
 
     # Adjust startup settings
-    if ! grep -q 'ulimit -n' etc/init.d/boot; then
-        sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
-    fi
-    if ! grep -q '/tmp/update' etc/init.d/boot; then
-        sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/update' etc/init.d/boot
-    fi
-    sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
-    sed -i 's/ttyS0/tty0/' etc/inittab
+    [[ -f "etc/init.d/boot" ]] && {
+        if ! grep -q 'ulimit -n' etc/init.d/boot; then
+            sed -i '/kmodloader/i \\tulimit -n 51200\n' etc/init.d/boot
+        fi
+        if ! grep -q '/tmp/update' etc/init.d/boot; then
+            sed -i '/mkdir -p \/tmp\/.uci/a \\tmkdir -p \/tmp\/update' etc/init.d/boot
+        fi
+    }
+    [[ -f "etc/inittab" ]] && {
+        sed -i 's/ttyAMA0/ttyAML0/' etc/inittab
+        sed -i 's/ttyS0/tty0/' etc/inittab
+    }
 
     # Automatic expansion of the third and fourth partitions
     echo "yes" >root/.todo_rootfs_resize

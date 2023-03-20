@@ -9,11 +9,14 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
 # Description: Build OpenWrt with Image Builder
-# Copyright (C) 2021- https://github.com/unifreq/openwrt_packit
-# Copyright (C) 2021- https://github.com/ophub/amlogic-s9xxx-openwrt
+# Copyright (C) 2021~ https://github.com/unifreq/openwrt_packit
+# Copyright (C) 2021~ https://github.com/ophub/amlogic-s9xxx-openwrt
+# Copyright (C) 2021~ https://downloads.openwrt.org/releases
+# Copyright (C) 2023~ https://downloads.immortalwrt.org/releases
 #
 # Download from: https://downloads.openwrt.org/releases
 #                https://downloads.immortalwrt.org/releases
+#
 # Documentation: https://openwrt.org/docs/guide-user/additional-software/imagebuilder
 # Instructions:  Download OpenWrt firmware from the official OpenWrt,
 #                Use Image Builder to add packages, lib, theme, app and i18n, etc.

@@ -10,7 +10,7 @@ The latest version of the OpenWrt firmware can be downloaded in [Releases](https
 
 ## OpenWrt Firmware instructions
 
-| SoC  | Device | [Optional kernel](https://github.com/ophub/kernel/tree/main/pub/stable) | OpenWrt Firmware |
+| SoC  | Device | [Optional kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable) | OpenWrt Firmware |
 | ---- | ---- | ---- | ---- |
 | a311d | [Khadas-VIM3](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/99) | All | amlogic_a311d.img |
 | s922x | [Beelink-GT-King](https://github.com/ophub/amlogic-s9xxx-armbian/issues/370), [Beelink-GT-King-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/707), [Ugoos-AM6-Plus](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/213), [ODROID-N2](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/201), [X88-King](https://github.com/ophub/amlogic-s9xxx-armbian/issues/988), [Ali-CT2000](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1150) | All | amlogic_s922x.img |
@@ -26,9 +26,9 @@ The latest version of the OpenWrt firmware can be downloaded in [Releases](https
 | s905l3b | [M302A/M304A](https://github.com/ophub/amlogic-s9xxx-armbian/pull/615), [E900V22E](https://github.com/ophub/amlogic-s9xxx-armbian/issues/939), [Hisense-IP103H](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1154), [CM211-1](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1180) | All | amlogic_s905l3b.img |
 | s905lb | [Q96-mini](https://github.com/ophub/amlogic-s9xxx-armbian/issues/734), [BesTV-R3300L](https://github.com/ophub/amlogic-s9xxx-armbian/pull/993), [SumaVision-Q7](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1190) | All | amlogic_s905lb.img |
 | s905 | [Beelink-Mini-MX-2G](https://github.com/ophub/amlogic-s9xxx-armbian/issues/127), [Sunvell-T95M](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/337), [MXQ-Pro+4K](https://github.com/ophub/amlogic-s9xxx-armbian/issues/715), [SumaVision-Q5](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1175) | All | amlogic_s905.img |
-| rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/install), [HinLink-H88K](http://www.hinlink.com/index.php?id=151) | [rk3588](https://github.com/ophub/kernel/tree/main/pub/rk3588) | rockchip_boxname.img |
-| rk3568 | [FastRhino-R66S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1061), [FastRhino-R68S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/774), [HinLink-H66K](http://www.hinlink.com/index.php?id=137), [HinLink-H68K](http://www.hinlink.com/index.php?id=119), [Radxa-E25](https://wiki.radxa.com/Rock3/CM/CM3I/E25) | [6.x.y](https://github.com/ophub/kernel/tree/main/pub/stable) | rockchip_boxname.img |
-| rk3399 | [EAIDK-610](https://github.com/ophub/amlogic-s9xxx-armbian/pull/991), [KING3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1080), [TN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1094), [KYLIN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1132) | [6.x.y](https://github.com/ophub/kernel/tree/main/pub/stable) | rockchip_boxname.img |
+| rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/install), [HinLink-H88K](http://www.hinlink.com/index.php?id=151) | [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) | rockchip_boxname.img |
+| rk3568 | [FastRhino-R66S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1061), [FastRhino-R68S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/774), [HinLink-H66K](http://www.hinlink.com/index.php?id=137), [HinLink-H68K](http://www.hinlink.com/index.php?id=119), [Radxa-E25](https://wiki.radxa.com/Rock3/CM/CM3I/E25) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
+| rk3399 | [EAIDK-610](https://github.com/ophub/amlogic-s9xxx-armbian/pull/991), [KING3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1080), [TN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1094), [KYLIN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1132) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
 | rk3328 | [BeikeYun](https://github.com/ophub/amlogic-s9xxx-armbian/issues/852), [L1-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1007) | All | rockchip_boxname.img |
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [TQC-A01](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1111), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1120) | All | allwinner_boxname.img |
 
@@ -50,7 +50,7 @@ Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system men
 
 If you choose `Upload Updates Manually` [OpenWrt firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), You can upload the corresponding OpenWrt firmware package, such as openwrt_xxx_k5.15.50.img.gz (It is recommended to upload the compressed package, and the system will automatically decompress it. If you upload the decompressed xxx.img file, the upload may fail because the file is too large), After the upload is complete, the interface will display the `Update firmware` operation button, click to update.
 
-If you choose `Manually upload updates` [OpenWrt kernel](https://github.com/ophub/kernel/tree/main/pub/stable), You can upload the three kernel files `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` (Other kernel files are not required. If uploading at the same time does not affect the update, the system can accurately identify the required kernel files.)，After the upload is complete, the interface will display the `Update Kernel` operation button, click to update.
+If you choose `Manually upload updates` [OpenWrt kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable), You can upload the three kernel files `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` (Other kernel files are not required. If uploading at the same time does not affect the update, the system can accurately identify the required kernel files.)，After the upload is complete, the interface will display the `Update Kernel` operation button, click to update.
 
 If you choose `Online Download Update` OpenWrt firmware or kernel, it will be downloaded according to `Firmware download address` and `Kernel download address` in `Plugin Settings`, you can customize and modify the download source, For details, please refer to the compilation and usage instructions of [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic).
 
@@ -108,9 +108,9 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | Parameter | Meaning       | Description               |
 | --------- | ------------- | ------------------------- |
 | -b        | Board         | Specify the Build firmware type. Write the build firmware name individually, such as `-b s905x3` . Multiple firmware use `_` connect such as `-b s905x3_s905d` . Use `all` for all board models. The model code is detailed in the `BOARD` setting in [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf) file. |
-| -k        | Kernel        | Specify the [kernel version](https://github.com/ophub/kernel/tree/main/pub/stable), Such as `-k 5.10.125` . Multiple kernel use `_` connection such as `-k 5.10.125_5.15.50` . The kernel version freely specified by the `-k` parameter is only valid for the kernel in the [stable](https://github.com/ophub/kernel/tree/main/pub/stable) directory, and other kernels such as `rk3588` are specified by the [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf) file. |
+| -k        | Kernel        | Specify the [kernel version](https://github.com/ophub/kernel/releases/tag/kernel_stable), Such as `-k 5.10.125` . Multiple kernel use `_` connection such as `-k 5.10.125_5.15.50` . The kernel version freely specified by the `-k` parameter is only valid for the kernel in the `stable`, and other kernels such as `rk3588` are specified by the [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf) file. |
 | -a        | AutoKernel    | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 6.1.10 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
-| -r        | KernelRepo    | Specify the name of the kernel repository, Such as `-r https://github.com/ophub/kernel/tree/main/pub` |
+| -r        | KernelRepo    | Specifies the `<owner>/<repo>` of the github.com kernel repository, Such as `-r ophub/kernel` |
 | -s        | Size          | Set the ROOTFS partition size for firmware (MiB). The default is 1024 MiB, and the specified size must be greater than 512 MiB. Such as `-s 1024` |
 | -g        | GH_TOKEN      | Optional. Set `${{ secrets.GH_TOKEN }}` for [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) query. Default: `""` |
 
@@ -152,7 +152,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 | openwrt_board      | all              | Set the `board` of the packaging TV Boxes, function reference `-b` |
 | openwrt_kernel     | 6.1.1_5.15.1     | Set the kernel version，function reference `-k` |
 | auto_kernel        | true             | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
-| kernel_repo        | [ophub/kernel](https://github.com/ophub/kernel/tree/main/pub) | Specify the name of the kernel Repository, function reference `-r` |
+| kernel_repo        | ophub/kernel     | Specifies the `<owner>/<repo>` of the github.com kernel repository, function reference `-r` |
 | openwrt_size       | 1024             | Set the size of the firmware ROOTFS partition, function reference `-s` |
 | gh_token           | ""               | Optional. Set `${{ secrets.GH_TOKEN }}`, function reference `-g` |
 

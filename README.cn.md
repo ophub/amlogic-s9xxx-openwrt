@@ -10,7 +10,7 @@
 
 ## OpenWrt 固件说明
 
-| 芯片  | 设备 | [可选内核](https://github.com/ophub/kernel/tree/main/pub/stable) | OpenWrt 固件 |
+| 芯片  | 设备 | [可选内核](https://github.com/ophub/kernel/releases/tag/kernel_stable) | OpenWrt 固件 |
 | ---- | ---- | ---- | ---- |
 | a311d | [Khadas-VIM3](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/99) | 全部 | amlogic_a311d.img |
 | s922x | [Beelink-GT-King](https://github.com/ophub/amlogic-s9xxx-armbian/issues/370), [Beelink-GT-King-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/707), [Ugoos-AM6-Plus](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/213), [ODROID-N2](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/201), [X88-King](https://github.com/ophub/amlogic-s9xxx-armbian/issues/988), [Ali-CT2000](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1150) | 全部 | amlogic_s922x.img |
@@ -26,9 +26,9 @@
 | s905l3b | [M302A/M304A](https://github.com/ophub/amlogic-s9xxx-armbian/pull/615), [E900V22E](https://github.com/ophub/amlogic-s9xxx-armbian/issues/939), [Hisense-IP103H](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1154), [CM211-1](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1180) | 全部 | amlogic_s905l3b.img |
 | s905lb | [Q96-mini](https://github.com/ophub/amlogic-s9xxx-armbian/issues/734), [BesTV-R3300L](https://github.com/ophub/amlogic-s9xxx-armbian/pull/993), [SumaVision-Q7](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1190) | 全部 | amlogic_s905lb.img |
 | s905 | [Beelink-Mini-MX-2G](https://github.com/ophub/amlogic-s9xxx-armbian/issues/127), [Sunvell-T95M](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/337), [MXQ-Pro+4K](https://github.com/ophub/amlogic-s9xxx-armbian/issues/715), [SumaVision-Q5](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1175) | 全部 | amlogic_s905.img |
-| rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/install), [HinLink-H88K](http://www.hinlink.com/index.php?id=151) | [rk3588](https://github.com/ophub/kernel/tree/main/pub/rk3588) | rockchip_boxname.img |
-| rk3568 | [FastRhino-R66S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1061), [FastRhino-R68S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/774), [HinLink-H66K](http://www.hinlink.com/index.php?id=137), [HinLink-H68K](http://www.hinlink.com/index.php?id=119), [Radxa-E25](https://wiki.radxa.com/Rock3/CM/CM3I/E25) | [6.x.y](https://github.com/ophub/kernel/tree/main/pub/stable) | rockchip_boxname.img |
-| rk3399 | [EAIDK-610](https://github.com/ophub/amlogic-s9xxx-armbian/pull/991), [KING3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1080), [TN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1094), [KYLIN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1132) | [6.x.y](https://github.com/ophub/kernel/tree/main/pub/stable) | rockchip_boxname.img |
+| rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/install), [HinLink-H88K](http://www.hinlink.com/index.php?id=151) | [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) | rockchip_boxname.img |
+| rk3568 | [FastRhino-R66S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1061), [FastRhino-R68S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/774), [HinLink-H66K](http://www.hinlink.com/index.php?id=137), [HinLink-H68K](http://www.hinlink.com/index.php?id=119), [Radxa-E25](https://wiki.radxa.com/Rock3/CM/CM3I/E25) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
+| rk3399 | [EAIDK-610](https://github.com/ophub/amlogic-s9xxx-armbian/pull/991), [KING3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1080), [TN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1094), [KYLIN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1132) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
 | rk3328 | [BeikeYun](https://github.com/ophub/amlogic-s9xxx-armbian/issues/852), [L1-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1007) | 全部 | rockchip_boxname.img |
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [TQC-A01](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1111), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1120) | 全部 | allwinner_boxname.img |
 
@@ -50,7 +50,7 @@
 
 如果选择 `手动上传更新` [OpenWrt 固件](https://github.com/ophub/amlogic-s9xxx-openwrt/releases)，可以将编译好 OpenWrt 固件压缩包，如 openwrt_xxx_k5.15.50.img.gz 进行上传（推荐上传压缩包，系统会自动解压。如果上传解压缩后的 xxx.img 格式的文件，可能会因为文件太大而上传失败），上传完成后界面将显示 `更新固件` 的操作按钮，点击即可更新。
 
-如果选择 `手动上传更新` [OpenWrt 内核](https://github.com/ophub/kernel/tree/main/pub/stable)，可以将 `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` 这 3 个内核文件上传（其他内核文件不需要，如果同时上传也不影响更新，系统可以准确识别需要的内核文件），上传完成后界面将显示 `更新内核` 的操作按钮，点击即可更新。
+如果选择 `手动上传更新` [OpenWrt 内核](https://github.com/ophub/kernel/releases/tag/kernel_stable)，可以将 `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` 这 3 个内核文件上传（其他内核文件不需要，如果同时上传也不影响更新，系统可以准确识别需要的内核文件），上传完成后界面将显示 `更新内核` 的操作按钮，点击即可更新。
 
 如果选择 `在线下载更新` OpenWrt 固件或内核，将根据`插件设置`中的`固件下载地址`和`内核下载地址`进行下载，你可以自定义修改下载来源，具体操作方法详见 [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 的编译与使用说明。
 
@@ -108,9 +108,9 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | 参数  | 含义          | 说明               |
 | ---- | ------------- | ----------------- |
 | -b   | Board         | 指定电视盒子型号，如 `-b s905x3` . 多个型号使用 `_` 进行连接，如 `-b s905x3_s905d` . 使用 `all` 表示全部型号。型号代码详见 [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf) 中的 `BOARD` 设置。 |
-| -k   | Kernel        | 指定 [kernel](https://github.com/ophub/kernel/tree/main/pub/stable) 名称，如 `-k 6.1.10` . 多个内核使用 `_` 进行连接，如 `-k 6.1.10_5.15.50` 。通过 `-k` 参数自由指定的内核版本只对使用 `stable` 目录里的内核有效，其他例如 `rk3588` 等内核由 [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf) 文件指定。 |
+| -k   | Kernel        | 指定 [kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable) 名称，如 `-k 6.1.10` . 多个内核使用 `_` 进行连接，如 `-k 6.1.10_5.15.50` 。通过 `-k` 参数自由指定的内核版本只对使用 `stable` 的内核有效，其他例如 `rk3588` 等内核由 [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf) 文件指定。 |
 | -a   | AutoKernel    | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 6.1.10 的同系列是否有更新的版本，如有 6.1.10 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
-| -r   | KernelRepo    | 指定内核仓库地址，如 `-r https://github.com/ophub/kernel/tree/main/pub` |
+| -r   | KernelRepo    | 指定 github.com 内核仓库的 `<owner>/<repo>`，如 `ophub/kernel` |
 | -s   | Size          | 对固件的 ROOTFS 分区大小进行设置（MiB），默认大小为 1024 MiB, 固件大小必须大于 512 MiB. 例如： `-s 1024` |
 | -g   | GH_TOKEN      | 可选项。设置 `${{ secrets.GH_TOKEN }}`，用于 [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) 查询。默认值：`""` |
 
@@ -151,7 +151,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | openwrt_board     | all               | 设置打包盒子的 `board` ，功能参考 `-b` |
 | openwrt_kernel    | 6.1.1_5.15.1      | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
-| kernel_repo       | [ophub/kernel](https://github.com/ophub/kernel/tree/main/pub) | 指定内核仓库地址，功能参考 `-r` |
+| kernel_repo       | ophub/kernel      | 指定 github.com 内核仓库的 `<owner>/<repo>`，功能参考 `-r` |
 | openwrt_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
 | gh_token          | ""                | 可选项。设置 `${{ secrets.GH_TOKEN }}`。功能参考 `-g`      |
 

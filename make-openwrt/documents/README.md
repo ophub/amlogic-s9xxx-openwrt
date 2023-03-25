@@ -558,6 +558,6 @@ Utilities -> Compression -> bsdtar、pigz
                            e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
           -> Shells -> bash
           -> acpid、coremark、coreutils(-> coreutils-base64、coreutils-nohup)、gawk、getopt、
-             losetup、pv、tar、uuidgen
+             jq、losetup、pv、tar、uuidgen
 ```
 

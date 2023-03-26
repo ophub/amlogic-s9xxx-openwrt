@@ -21,12 +21,13 @@ on:
       openwrt_soc:
         description: "Select device board"
         required: false
-        default: "qemu_vplus_beikeyun_l1pro_rock5b_h66k_h68k_h88k_r66s_r68s_e25"
+        default: "all"
         type: choice
         options:
           - all
-          - qemu_vplus_beikeyun_l1pro_rock5b_h66k_h68k_h88k_r66s_r68s_e25
-          - s922x_s922x-n2_s905x3_s905x2_s912_s905d_s905
+          - rock5b_h66k_h68k_h88k_r66s_r68s_e25
+          - vplus_beikeyun_l1pro
+          - s922x_s905x3_s905d
           - qemu
           - vplus
           - beikeyun

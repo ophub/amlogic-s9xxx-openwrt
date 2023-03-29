@@ -28,7 +28,7 @@
 current_path="${PWD}"
 openwrt_path="${current_path}/openwrt"
 openwrt_rootfs_file="*rootfs.tar.gz"
-docker_rootfs_file="docker-armvirt-64-default-rootfs.tar.gz"
+docker_rootfs_file="openwrt-docker-armvirt-64-default-rootfs.tar.gz"
 docker_path="${current_path}/config-openwrt/docker"
 make_path="${current_path}/make-openwrt"
 common_files="${make_path}/openwrt-files/common-files"

@@ -64,10 +64,15 @@ do_checkdisk() {
     esac
     echo -e "${INFO} OpenWrt running: [ ${LB_PRE:0:-1} - /dev/${DISK_NAME} ]."
 
+    # Repair disk size
+    echo -e "${STEPS} Start repairing hard disk size..."
+    printf 'f\n' | parted ---pretend-input-tty /dev/${DISK_NAME} unit MiB print || repair_status="no"
+    [[ "${repair_status}" == "no" ]] && error_msg "Disk size repair failed, stop partitioning."
+
     # Check whether partition is required
     [[ -n "$(lsblk -l -o NAME | grep -oE "^${PT_PRE}4")" ]] && {
         # Delete auto-extending file
-        rm -f ${todo_rootfs_resize} 2>/dev/null
+        rm -f ${todo_rootfs_resize}
         echo -e "${TIPS} Partitioned, no operation required."
         exit 0
     }
@@ -82,11 +87,6 @@ create_new_part() {
     SHARED_UUID="$(cat /proc/sys/kernel/random/uuid)"
     [[ -z "${SHARED_UUID}" ]] && SHARED_UUID="$(uuidgen)"
     [[ -z "${ROOTFS_UUID}" || -z "${SHARED_UUID}" ]] && error_msg "The new UUID is invalid, cannot continue."
-
-    # Repair disk size
-    echo -e "${STEPS} Start repairing hard disk size..."
-    printf 'f\n' | parted ---pretend-input-tty /dev/${DISK_NAME} print || repair_status="no"
-    [[ "${repair_status}" == "no" ]] && error_msg "Disk size repair failed, stop partitioning."
 
     # Calculate partition positions
     echo -e "${STEPS} Start calculating partition location..."
@@ -152,7 +152,7 @@ EOF
     /etc/init.d/dockerd enable 2>/dev/null
 
     # Delete auto-extending file
-    rm -f ${todo_rootfs_resize} 2>/dev/null
+    rm -f ${todo_rootfs_resize}
 
     echo -e "${INFO} Current partition status: \n$(lsblk)"
     echo -e "${SUCCESS} Create partition successfully."

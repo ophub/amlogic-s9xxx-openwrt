@@ -96,6 +96,7 @@ adjust_settings() {
     echo -e "${INFO} Remove useless files."
     rm -rf ${tmp_path}/lib/firmware/*
     rm -rf ${tmp_path}/lib/modules/*
+    rm -f ${tmp_path}/root/.todo_rootfs_resize
     find ${tmp_path} -name '*.rej' -exec rm {} \;
     find ${tmp_path} -name '*.orig' -exec rm {} \;
     # Remove Amlogic Service

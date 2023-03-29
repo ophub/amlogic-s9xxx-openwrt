@@ -17,6 +17,7 @@
 #======================================== Functions list ========================================
 #
 # error_msg         : Output error message
+# check_depends     : Check dependencies
 # find_openwrt      : Find OpenWrt file (openwrt/*rootfs.tar.gz)
 # adjust_settings   : Adjust related file settings
 # make_dockerimg    : make docker image
@@ -46,6 +47,25 @@ ERROR="[\033[91m ERROR \033[0m]"
 error_msg() {
     echo -e "${ERROR} ${1}"
     exit 1
+}
+
+check_depends() {
+    # Check the necessary dependencies
+    is_dpkg="0"
+    dpkg_packages=("tar" "gzip")
+    i="1"
+    for package in ${dpkg_packages[*]}; do
+        [[ -n "$(dpkg -l | awk '{print $2}' | grep -w "^${package}$" 2>/dev/null)" ]] || is_dpkg="1"
+        let i++
+    done
+
+    # Install missing packages
+    if [[ "${is_dpkg}" -eq "1" ]]; then
+        echo -e "${STEPS} Start installing the necessary dependencies..."
+        sudo apt-get update
+        sudo apt-get install -y ${dpkg_packages[*]}
+        [[ "${?}" -ne "0" ]] && error_msg "Dependency installation failed."
+    fi
 }
 
 find_openwrt() {
@@ -158,6 +178,7 @@ make_dockerimg() {
 echo -e "${STEPS} Welcome to the Docker Image Maker Tool."
 echo -e "${INFO} Make path: [ ${PWD} ]"
 #
+check_depends
 find_openwrt
 adjust_settings
 make_dockerimg

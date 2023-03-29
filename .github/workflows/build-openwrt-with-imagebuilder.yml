@@ -22,6 +22,7 @@ on:
           - openwrt:21.02.5
           - openwrt:19.07.10
           - openwrt:18.06.9
+          - immortalwrt:21.02.5
           - immortalwrt:21.02.4
           - immortalwrt:21.02.3
       openwrt_board:

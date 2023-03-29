@@ -25,13 +25,14 @@
 #
 # Set default parameters
 current_path="${PWD}"
-tmp_path="${current_path}/tmp"
-out_path="${current_path}/out"
 openwrt_path="${current_path}/openwrt"
 openwrt_rootfs_file="*rootfs.tar.gz"
 docker_rootfs_file="docker-armvirt-64-default-rootfs.tar.gz"
+docker_path="${current_path}/config-openwrt/docker"
 make_path="${current_path}/make-openwrt"
 common_files="${make_path}/openwrt-files/common-files"
+tmp_path="${current_path}/tmp"
+out_path="${current_path}/out"
 
 # Set default parameters
 STEPS="[\033[95m STEPS \033[0m]"
@@ -58,6 +59,9 @@ find_openwrt() {
     else
         error_msg "There is no [ ${openwrt_rootfs_file} ] file in the [ ${openwrt_path} ] directory."
     fi
+
+    # Check whether the Dockerfile exists
+    [[ -f "${docker_path}/Dockerfile" ]] || error_msg "Missing Dockerfile."
 }
 
 adjust_settings() {
@@ -127,19 +131,27 @@ make_dockerimg() {
 
     # Make docker image
     tar -czf ${docker_rootfs_file} *
-    [[ "${?}" -eq "0" ]] || error_msg "docker image creation failed."
+    [[ "${?}" -eq "0" ]] || error_msg "Docker image creation failed."
 
     # Move the docker image to the output directory
     rm -rf ${out_path} && mkdir -p ${out_path}
     mv -f ${docker_rootfs_file} ${out_path}
-    [[ "${?}" -eq "0" ]] || error_msg "docker image move failed."
+    [[ "${?}" -eq "0" ]] || error_msg "Docker image move failed."
+    echo -e "${INFO} Docker image packaging succeeded."
 
-    echo -e "${INFO} The docker image was created successfully."
-    sync && sleep 3
+    cd ${current_path}
+
+    # Add Dockerfile
+    cp -f ${docker_path}/Dockerfile ${out_path}
+    [[ "${?}" -eq "0" ]] || error_msg "Dockerfile addition failed."
+    echo -e "${INFO} Dockerfile added successfully."
 
     # Remove temporary directory
-    cd ${current_path}
     rm -rf ${tmp_path}
+
+    sync && sleep 3
+    echo -e "${INFO} Docker files list: \n$(ls -l ${out_path})"
+    echo -e "${SUCCESS} Docker image successfully created."
 }
 
 # Show welcome message

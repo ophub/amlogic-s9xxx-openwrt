@@ -64,11 +64,6 @@ do_checkdisk() {
     esac
     echo -e "${INFO} OpenWrt running: [ ${LB_PRE:0:-1} - /dev/${DISK_NAME} ]."
 
-    # Repair disk size
-    echo -e "${STEPS} Start repairing hard disk size..."
-    printf 'f\n' | parted ---pretend-input-tty /dev/${DISK_NAME} unit MiB print || repair_status="no"
-    [[ "${repair_status}" == "no" ]] && error_msg "Disk size repair failed, stop partitioning."
-
     # Check whether partition is required
     [[ -n "$(lsblk -l -o NAME | grep -oE "^${PT_PRE}4")" ]] && {
         # Delete auto-extending file
@@ -76,10 +71,12 @@ do_checkdisk() {
         echo -e "${TIPS} Partitioned, no operation required."
         exit 0
     }
+
+    sync && sleep 3
 }
 
 # Create the 3rd and 4th partition
-create_new_part() {
+create_new_partition() {
     # Generate New UUID
     echo -e "${STEPS} Start generating new partition UUID..."
     ROOTFS_UUID="$(cat /proc/sys/kernel/random/uuid)"
@@ -88,21 +85,24 @@ create_new_part() {
     [[ -z "${SHARED_UUID}" ]] && SHARED_UUID="$(uuidgen)"
     [[ -z "${ROOTFS_UUID}" || -z "${SHARED_UUID}" ]] && error_msg "The new UUID is invalid, cannot continue."
 
+    # Repair disk size
+    echo -e "${INFO} Start repairing hard disk size..."
+    printf 'f\n' | parted ---pretend-input-tty /dev/${DISK_NAME} unit MiB print || repair_status="no"
+    [[ "${repair_status}" == "no" ]] && error_msg "Disk size repair failed, stop partitioning."
+
     # Calculate partition positions
-    echo -e "${STEPS} Start calculating partition location..."
+    echo -e "${INFO} Start calculating partition location..."
     END_P2="$(fdisk -l | grep "${ROOT_PTNAME}" | sed -n '$p' | awk '{print $3}' | xargs)"
     [[ -z "${END_P2}" || -z "$(echo ${END_P2} | sed -n "/^[0-9]\+$/p")" ]] && error_msg "Unable to get starting position!"
     START_P3="$(((END_P2 + 1) / 2048 + 1))"
 
     # Create the partition
-    echo -e "${STEPS} Start creating new partitions..."
+    echo -e "${INFO} Start creating new partitions..."
     ROOTFS_MB="1024"
     parted /dev/${DISK_NAME} mkpart primary btrfs $((START_P3))MiB $((START_P3 + ROOTFS_MB - 1))MiB 2>/dev/null
     parted /dev/${DISK_NAME} mkpart primary btrfs $((START_P3 + ROOTFS_MB))MiB 100% 2>/dev/null
-    # Show partition results
-    parted /dev/${DISK_NAME} unit MiB print
 
-    echo -e "${STEPS} Start formatting new partition..."
+    echo -e "${INFO} Start formatting new partition..."
     # Format the third partition
     mkdir -p /mnt/${PT_PRE}3
     umount -f /dev/${PT_PRE}3 2>/dev/null
@@ -120,7 +120,7 @@ create_new_part() {
     [[ "${?}" -eq "0" ]] || error_msg "Mount [ /mnt/${PT_PRE}4 ] failed!"
 
     # Adjust docker data storage location
-    echo -e "${STEPS} Start adjusting docker settings..."
+    echo -e "${INFO} Start adjusting docker settings..."
     /etc/init.d/dockerd stop 2>/dev/null
     /etc/init.d/dockerd disable 2>/dev/null
     rm -rf "/opt/docker" 2>/dev/null
@@ -153,19 +153,11 @@ EOF
 
     # Delete auto-extending file
     rm -f ${todo_rootfs_resize}
-
-    echo -e "${INFO} Current partition status: \n$(lsblk)"
     echo -e "${SUCCESS} Create partition successfully."
-    sync
-    exit 0
 }
 
 # Show welcome message
-echo -e "${STEPS} Welcome to use TF/SD/USB partition management tool."
-# Check script permission
-[[ -x "/usr/sbin/openwrt-tf" ]] || error_msg "Please grant execution permission: [ chmod +x /usr/sbin/openwrt-tf ]"
-#
-# Check disk
+echo -e "${STEPS} Welcome to Partition Creation Tool."
+
 do_checkdisk
-# Create the 3rd and 4th partition
-create_new_part
+create_new_partition

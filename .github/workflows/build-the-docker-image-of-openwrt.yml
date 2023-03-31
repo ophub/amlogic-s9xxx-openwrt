@@ -1,0 +1,93 @@
+#=====================================================================================
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: Build the Docker image of OpenWrt
+# Instructions: https://github.com/docker/build-push-action
+# Build and Push to: https://hub.docker.com/
+#=====================================================================================
+
+name: Build the Docker image of OpenWrt
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: "Select the source branch"
+        required: false
+        default: "lede"
+        type: choice
+        options:
+          - lede
+          - official
+      docker_img:
+        description: "Set the docker image"
+        required: false
+        default: "ophub/openwrt-aarch64:latest"
+
+env:
+  TZ: America/New_York
+  MAKE_DOCKER_SH: config-openwrt/docker/make_docker_image.sh
+  DOCKER_OUTPATH: out
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download OpenWrt rootfs file
+        id: down
+        if: (!cancelled())
+        run: |
+          # Get OpenWrt file
+          openwrt_url="$(curl \
+                            --header "authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+                            -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" |
+                            grep -o "OpenWrt_.*${{ inputs.source_branch }}.*/.*rootfs.tar.gz" |
+                            head -n 1
+                        )"
+          [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
+
+          [[ -d "openwrt" ]] || mkdir -p openwrt
+          wget -q "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}" -O "openwrt/openwrt-armvirt-64-default-rootfs.tar.gz"
+          [[ "${?}" -ne "0" ]] && echo "OpenWrt file download failed." && exit 1
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Build the Docker image
+        id: make
+        if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
+        run: |
+          chmod +x ${MAKE_DOCKER_SH}
+          ${MAKE_DOCKER_SH}
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Set up QEMU
+        id: qemu
+        if: ${{ steps.make.outputs.status }} == 'success' && !cancelled()
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        if: (!cancelled())
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        id: login
+        if: (!cancelled())
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Push to Docker Hub
+        id: push
+        if: (!cancelled())
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          platforms: linux/arm64
+          context: ${{ env.DOCKER_OUTPATH }}
+          tags: "${{ inputs.docker_img }}"

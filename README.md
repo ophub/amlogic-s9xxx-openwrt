@@ -112,7 +112,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -a        | AutoKernel    | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 6.1.10 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
 | -r        | KernelRepo    | Specifies the `<owner>/<repo>` of the github.com kernel repository, Such as `-r ophub/kernel` |
 | -s        | Size          | Set the ROOTFS partition size for firmware (MiB). The default is 1024 MiB, and the specified size must be greater than 512 MiB. Such as `-s 1024` |
-| -g        | GH_TOKEN      | Optional. Set `${{ secrets.GH_TOKEN }}` for [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) query. Default: `""` |
+| -g        | GH_TOKEN      | Optional. Set `${{ secrets.GH_TOKEN }}` for [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) query. Default: `None` |
 
 - `sudo ./make`: Compile latest kernel versions of openwrt for all board with the default configuration.
 - `sudo ./make -b s905x3 -k 6.1.10`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
@@ -148,13 +148,13 @@ The relevant parameters correspond to the `local packaging command`, please refe
 
 | Parameter          | Defaults         | Description                     |
 | ------------------ | ---------------- | ------------------------------- |
-| openwrt_path       | ""               | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
+| openwrt_path       | None             | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_board      | all              | Set the `board` of the packaging TV Boxes, function reference `-b` |
 | openwrt_kernel     | 6.1.1_5.15.1     | Set the kernel version，function reference `-k` |
 | auto_kernel        | true             | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
 | kernel_repo        | ophub/kernel     | Specifies the `<owner>/<repo>` of the github.com kernel repository, function reference `-r` |
 | openwrt_size       | 1024             | Set the size of the firmware ROOTFS partition, function reference `-s` |
-| gh_token           | ""               | Optional. Set `${{ secrets.GH_TOKEN }}`, function reference `-g` |
+| gh_token           | None             | Optional. Set `${{ secrets.GH_TOKEN }}`, function reference `-g` |
 
 - ### GitHub Actions Output variable description
 

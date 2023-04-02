@@ -112,7 +112,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -a   | AutoKernel    | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 6.1.10 的同系列是否有更新的版本，如有 6.1.10 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -r   | KernelRepo    | 指定 github.com 内核仓库的 `<owner>/<repo>`，如 `ophub/kernel` |
 | -s   | Size          | 对固件的 ROOTFS 分区大小进行设置（MiB），默认大小为 1024 MiB, 固件大小必须大于 512 MiB. 例如： `-s 1024` |
-| -g   | GH_TOKEN      | 可选项。设置 `${{ secrets.GH_TOKEN }}`，用于 [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) 查询。默认值：`""` |
+| -g   | GH_TOKEN      | 可选项。设置 `${{ secrets.GH_TOKEN }}`，用于 [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) 查询。默认值：`无` |
 
 - `sudo ./make` : 使用默认配置，使用内核库中的最新内核包，对全部型号的电视盒子进行打包。
 - `sudo ./make -b s905x3 -k 6.1.10` : 推荐使用. 使用默认配置进行相关内核打包。
@@ -147,13 +147,13 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 
 | 参数               | 默认值             | 说明                                        |
 |-------------------|-------------------|-------------------------------------------|
-| openwrt_path      | ""                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
+| openwrt_path      | 无                | 设置 `openwrt-armvirt-64-default-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_board     | all               | 设置打包盒子的 `board` ，功能参考 `-b` |
 | openwrt_kernel    | 6.1.1_5.15.1      | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | kernel_repo       | ophub/kernel      | 指定 github.com 内核仓库的 `<owner>/<repo>`，功能参考 `-r` |
 | openwrt_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
-| gh_token          | ""                | 可选项。设置 `${{ secrets.GH_TOKEN }}`。功能参考 `-g`      |
+| gh_token          | 无                | 可选项。设置 `${{ secrets.GH_TOKEN }}`。功能参考 `-g`      |
 
 - ### GitHub Actions 输出变量说明
 
@@ -184,7 +184,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | 默认账号 | root |
 | 默认密码 | password |
 | 默认 WIFI 名称 | OpenWrt |
-| 默认 WIFI 密码 | none |
+| 默认 WIFI 密码 | 无 |
 
 ## 编译内核
 

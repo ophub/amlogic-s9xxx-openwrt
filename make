@@ -194,7 +194,7 @@ init_var() {
 
     # Get the list of devices built by default
     # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
-    # 9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
+    # 9.KERNEL_TAGS  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
     if [[ "${make_board}" == "all" ]]; then
         board_list=""
         make_openwrt=($(
@@ -209,23 +209,23 @@ init_var() {
     fi
     [[ "${#make_openwrt[*]}" -eq "0" ]] && error_msg "The board is missing, stop making."
 
-    # In KERNEL_BRANCH, query the [ kernel directory ] and [ specific kernel ]
+    # In KERNEL_TAGS, query the [ kernel tags ] and [ specific kernel ]
     kernel_from=($(
         cat ${model_conf} |
             sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' -e 's/\.y/\.1/g' |
             grep -E "^[^#].*${board_list}:yes$" | awk -F':' '{print $9}' |
             sort | uniq | xargs
     ))
-    [[ "${#kernel_from[*]}" -eq "0" ]] && error_msg "Missing [ KERNEL_BRANCH ] settings, stop building."
+    [[ "${#kernel_from[*]}" -eq "0" ]] && error_msg "Missing [ KERNEL_TAGS ] settings, stop building."
 
-    # In KERNEL_BRANCH, query the [ specified kernel ], Start with the [ number ], such as 5.15.y, 6.1.y, etc.
+    # In KERNEL_TAGS, query the [ specified kernel ], Start with the [ number ], such as 5.15.y, 6.1.y, etc.
     specify_kernel=($(echo ${kernel_from[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[0-9]+" | sort | uniq | xargs))
 
-    # In KERNEL_BRANCH, the [ kernel directory ], Start with the [ letter ], such as stable, rk3588, h6, etc.
+    # In KERNEL_TAGS, the [ kernel tags ], Start with the [ letter ], such as stable, rk3588, h6, etc.
     kernel_dir=($(echo ${kernel_from[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[a-z]" | sort | uniq | xargs))
-    # Add the specified kernel directory
+    # Add the specified kernel tags
     [[ "${#specify_kernel[*]}" -ne "0" ]] && kernel_dir=(${kernel_dir[*]} "specify")
-    # Check the kernel directory
+    # Check the kernel tags
     [[ "${#kernel_dir[*]}" -eq "0" ]] && error_msg "The [ kernel_dir ] is missing, stop building."
 
     # Convert kernel library address to api format
@@ -468,7 +468,7 @@ confirm_version() {
     [[ -n "${board_conf}" ]] || error_msg "[ ${board} ] config is missing!"
 
     # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
-    # 9.KERNEL_BRANCH  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
+    # 9.KERNEL_TAGS  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
     # Column 5, called <UBOOT_OVERLOAD> in Amlogic, <TRUST_IMG> in Rockchip, Not used in Allwinner.
     SOC="$(echo ${board_conf} | awk -F':' '{print $3}')"
     FDTFILE="$(echo ${board_conf} | awk -F':' '{print $4}')"
@@ -476,7 +476,7 @@ confirm_version() {
     TRUST_IMG="${UBOOT_OVERLOAD}"
     MAINLINE_UBOOT="$(echo ${board_conf} | awk -F':' '{print $6}')" && MAINLINE_UBOOT="${MAINLINE_UBOOT##*/}"
     BOOTLOADER_IMG="$(echo ${board_conf} | awk -F':' '{print $7}')" && BOOTLOADER_IMG="${BOOTLOADER_IMG##*/}"
-    KERNEL_BRANCH="$(echo ${board_conf} | awk -F':' '{print $9}')"
+    KERNEL_TAGS="$(echo ${board_conf} | awk -F':' '{print $9}')"
     PLATFORM="$(echo ${board_conf} | awk -F':' '{print $10}')"
     FAMILY="$(echo ${board_conf} | awk -F':' '{print $11}')"
     BOOT_CONF="$(echo ${board_conf} | awk -F':' '{print $12}')"
@@ -747,9 +747,9 @@ refactor_rootfs() {
 
     # Edit Kernel download directory
     [[ -f "etc/config/amlogic" ]] && {
-        if [[ "${KERNEL_BRANCH}" == "rk3588" ]]; then
+        if [[ "${KERNEL_TAGS}" == "rk3588" ]]; then
             sed -i "s|pub\/stable|pub\/rk3588|g" etc/config/amlogic
-        elif [[ "${KERNEL_BRANCH}" == "h6" ]]; then
+        elif [[ "${KERNEL_TAGS}" == "h6" ]]; then
             sed -i "s|pub\/stable|pub\/h6|g" etc/config/amlogic
         fi
     }
@@ -859,7 +859,7 @@ EOF
 
     # Get random macaddr
     mac_hexchars="0123456789ABCDEF"
-    mac_end="$(for i in {1..6}; do echo -n ${mac_hexchars:$((${RANDOM} % 16)):1}; done | sed -e 's/\(..\)/:\1/g')"
+    mac_end=$(for i in {1..6}; do echo -n ${mac_hexchars:$((${RANDOM} % 16)):1}; done | sed -e 's/\(..\)/:\1/g')
     random_macaddr="9E:62${mac_end}"
 
     # Optimize wifi/bluetooth module
@@ -900,7 +900,7 @@ EOF
     echo "FAMILY='${FAMILY}'" >>${op_release}
     echo "BOARD='${board}'" >>${op_release}
     echo "KERNEL_VERSION='${kernel}'" >>${op_release}
-    echo "KERNEL_BRANCH='${KERNEL_BRANCH}'" >>${op_release}
+    echo "KERNEL_TAGS='${KERNEL_TAGS}'" >>${op_release}
     echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
     echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
@@ -965,12 +965,12 @@ loop_make() {
             confirm_version
 
             # Determine kernel branch
-            kd="${KERNEL_BRANCH}"
-            if [[ "${KERNEL_BRANCH}" == "rk3588" ]]; then
+            kd="${KERNEL_TAGS}"
+            if [[ "${KERNEL_TAGS}" == "rk3588" ]]; then
                 kernel_list=(${rk3588_kernel[*]})
-            elif [[ "${KERNEL_BRANCH}" == "h6" ]]; then
+            elif [[ "${KERNEL_TAGS}" == "h6" ]]; then
                 kernel_list=(${h6_kernel[*]})
-            elif [[ "${KERNEL_BRANCH}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
+            elif [[ "${KERNEL_TAGS}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
                 kernel_list=(${specify_kernel[*]})
                 kd="stable"
             else
@@ -983,8 +983,8 @@ loop_make() {
                     kernel="${k}"
 
                     # Skip inapplicable kernels
-                    if [[ "${KERNEL_BRANCH}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
-                        [[ "${kernel}" != "$(echo ${KERNEL_BRANCH} | awk -F'.' '{print $1"."$2"."}')"* ]] && {
+                    if [[ "${KERNEL_TAGS}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
+                        [[ "${kernel}" != "$(echo ${KERNEL_TAGS} | awk -F'.' '{print $1"."$2"."}')"* ]] && {
                             echo -e "(${j}.${i}) ${TIPS} The [ ${board} ] device cannot use [ ${kd}/${kernel} ] kernel, skip."
                             let i++
                             continue

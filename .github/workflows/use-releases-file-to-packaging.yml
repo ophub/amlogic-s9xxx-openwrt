@@ -145,7 +145,7 @@ jobs:
 
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Build OpenWrt firmware [ ${{ env.OPENWRT_RELEASE }} ]
+      - name: Build OpenWrt firmware [ ${{ ${{ inputs.source_branch }} }} ]
         if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:

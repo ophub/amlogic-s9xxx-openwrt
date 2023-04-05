@@ -86,7 +86,6 @@ kernel_repo="ophub/kernel"
 # Set the list of kernels used by default
 stable_kernel=("6.1.1" "5.15.1")
 rk3588_kernel=("5.10.1")
-h6_kernel=("6.1.1")
 # Set to automatically use the latest kernel
 auto_kernel="true"
 
@@ -223,7 +222,7 @@ init_var() {
     # The [ specified kernel ], Use the [ kernel version number ], such as 5.15.y, 6.1.y, etc. download from [ kernel_stable ].
     specify_kernel=($(echo ${kernel_from[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[0-9]+" | sort | uniq | xargs))
 
-    # The [ suffix ] of KERNEL_TAGS starts with a [ letter ], such as kernel_stable, kernel_rk3588, kernel_h6, etc.
+    # The [ suffix ] of KERNEL_TAGS starts with a [ letter ], such as kernel_stable, kernel_rk3588, etc.
     tags_list=($(echo ${kernel_from[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[a-z]" | sort | uniq | xargs))
     # Add the specified kernel to the list
     [[ "${#specify_kernel[*]}" -ne "0" ]] && tags_list=(${tags_list[*]} "specify")
@@ -316,8 +315,6 @@ query_version() {
             kd="${k}"
             if [[ "${k}" == "rk3588" ]]; then
                 down_kernel_list=(${rk3588_kernel[*]})
-            elif [[ "${k}" == "h6" ]]; then
-                down_kernel_list=(${h6_kernel[*]})
             elif [[ "${k}" == "specify" ]]; then
                 kd="stable"
                 down_kernel_list=(${specify_kernel[*]})
@@ -372,9 +369,6 @@ query_version() {
             if [[ "${k}" == "rk3588" ]]; then
                 unset rk3588_kernel
                 rk3588_kernel=(${tmp_arr_kernels[*]})
-            elif [[ "${k}" == "h6" ]]; then
-                unset h6_kernel
-                h6_kernel=(${tmp_arr_kernels[*]})
             elif [[ "${k}" == "specify" ]]; then
                 unset specify_kernel
                 specify_kernel=(${tmp_arr_kernels[*]})
@@ -415,8 +409,6 @@ download_kernel() {
             kd="${k}"
             if [[ "${k}" == "rk3588" ]]; then
                 down_kernel_list=(${rk3588_kernel[*]})
-            elif [[ "${k}" == "h6" ]]; then
-                down_kernel_list=(${h6_kernel[*]})
             elif [[ "${k}" == "specify" ]]; then
                 down_kernel_list=(${specify_kernel[*]})
                 kd="stable"
@@ -750,15 +742,6 @@ refactor_rootfs() {
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" etc/fstab
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|g" etc/config/fstab
 
-    # Edit Kernel download directory
-    [[ -f "etc/config/amlogic" ]] && {
-        if [[ "${KERNEL_TAGS}" == "rk3588" ]]; then
-            sed -i "s|pub\/stable|pub\/rk3588|g" etc/config/amlogic
-        elif [[ "${KERNEL_TAGS}" == "h6" ]]; then
-            sed -i "s|pub\/stable|pub\/h6|g" etc/config/amlogic
-        fi
-    }
-
     # Modify the default script to [ bash ] for [ cpustat ]
     [[ -x "bin/bash" ]] && {
         sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd
@@ -975,8 +958,6 @@ loop_make() {
             kd="${KERNEL_TAGS}"
             if [[ "${KERNEL_TAGS}" == "rk3588" ]]; then
                 kernel_list=(${rk3588_kernel[*]})
-            elif [[ "${KERNEL_TAGS}" == "h6" ]]; then
-                kernel_list=(${h6_kernel[*]})
             elif [[ "${KERNEL_TAGS}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
                 kernel_list=(${specify_kernel[*]})
                 kd="stable"

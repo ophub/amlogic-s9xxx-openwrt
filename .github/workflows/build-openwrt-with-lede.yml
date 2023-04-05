@@ -84,10 +84,6 @@ on:
         options:
           - ophub/kernel
           - breakings/OpenWrt
-      openwrt_size:
-        description: "Set the rootfs size(Unit: MiB)"
-        required: false
-        default: "1024"
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -199,7 +195,6 @@ jobs:
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}
           kernel_repo: ${{ inputs.kernel_repo }}
-          openwrt_size: ${{ inputs.openwrt_size }}
           gh_token: ${{ secrets.GH_TOKEN }}
 
       - name: Upload the packaged firmware to Release
@@ -219,4 +214,3 @@ jobs:
             Default WIFI name: OpenWrt
             Default WIFI password: none
             Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
-

@@ -300,8 +300,14 @@ download_depends() {
     # Download install/update and other related files
     svn export ${script_repo} ${common_files}/usr/sbin --force
     chmod +x ${common_files}/usr/sbin/*
-    # Convert text format profiles for install script(openwrt-install-amlogic)
-    cat ${model_conf} | sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' | grep -E "^[^#].*" >${model_txt}
+
+    # Convert ${model_conf} to text format profiles for install script(openwrt-install-amlogic)
+    {
+        cat ${model_conf} |
+            sed -e 's/NULL/NA/g' -e 's/[ ][ ]*//g' |
+            grep -E "^[^#ar].*" |
+            awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; print}' OFS=':'
+    } >${model_txt}
 }
 
 query_version() {
@@ -470,7 +476,7 @@ confirm_version() {
     SOC="$(echo ${board_conf} | awk -F':' '{print $3}')"
     FDTFILE="$(echo ${board_conf} | awk -F':' '{print $4}')"
     UBOOT_OVERLOAD="$(echo ${board_conf} | awk -F':' '{print $5}')"
-    TRUST_IMG="${UBOOT_OVERLOAD}"
+    TRUST_IMG="${UBOOT_OVERLOAD}" && TRUST_IMG="${TRUST_IMG##*/}"
     MAINLINE_UBOOT="$(echo ${board_conf} | awk -F':' '{print $6}')" && MAINLINE_UBOOT="${MAINLINE_UBOOT##*/}"
     BOOTLOADER_IMG="$(echo ${board_conf} | awk -F':' '{print $7}')" && BOOTLOADER_IMG="${BOOTLOADER_IMG##*/}"
     KERNEL_TAGS="$(echo ${board_conf} | awk -F':' '{print $9}')"

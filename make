@@ -196,12 +196,12 @@ init_var() {
     # 9.KERNEL_TAGS  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
     [[ -f "${model_conf}" ]] || error_msg "Missing model config file: [ ${model_conf} ]"
 
-    # Convert ${model_conf} to ${model_txt} for [ openwrt-install-amlogic ]
+    # Convert ${model_conf} to ${model_txt} for [ openwrt-install-amlogic ], Just the first 8 columns.
     {
         cat ${model_conf} |
             sed -e 's/NULL/NA/g' -e 's/[ ][ ]*//g' |
             grep -E "^[^#ar].*" |
-            awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; print}' OFS=':'
+            awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; NF = 8; print}' OFS=':'
     } >${model_txt}
 
     # Get a list of build devices

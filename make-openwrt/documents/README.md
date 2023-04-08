@@ -189,13 +189,11 @@ This repository provides a one-click production service. You only need to pass t
 
 ## 5. Compile the firmware
 
-The list of supported TV boxes is located in the configuration file of the `OpenWrt` system is [/etc/model_database.conf](../openwrt-files/common-files/etc/model_database.conf).
+The configuration information of the default system is recorded in the [/etc/model_database.conf](../openwrt-files/common-files/etc/model_database.conf) file, the `BOARD` name must be unique.
 
 Where the value of `BUILD` is `yes`, it is the system of some boxes packed by default, and these boxes can be used directly. The default value is `no`, and these unpacked boxes need to download the same `FAMILY` packaged system (it is recommended to download the `5.15/5.4` kernel system). After writing to `USB`, you can open the `boot partition on USB` on the computer, modify the `dtb name of FDT` in the `/boot/uEnv.txt` file, and other boxes in the adaptation list.
 
-For users who perform custom compilation in the `fork` source code repository, if their device is not in the default packaging list, they can modify `no` in `BUILD` to `yes`, and set `a unique value` for `BOARD` to directly package their own device. The `unique value` added to `BOARD` can be used independently when packaging system, for example, `./make -b s905x3` will generate the Armbian system corresponding to `s905x3` configuration, You need to add `BOARD` to [openwrt_board](../../.github/workflows/build-openwrt-with-lede.yml#L13) option in the workflow control file when compiling separately in `github Actions`. When building all, `BUILD` is `yes`, all will be packaged.
-
-The firmware compilation process is controlled in the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file. There are other `yml files` in the `workflows` directory to achieve other different functions. There are many ways to compile firmware, you can set timed compilation, manual compilation, or set some specific events to trigger compilation. Let's start with simple operations.
+It is specified by the `-b` parameter when compiling `locally`, and specified by the `openwrt_board` parameter when compiling in `Actions` of github.com. Use `-b all` to pack all devices where `BUILD` is `yes`. When packaging with the specified `BOARD` parameter, no matter `BUILD` is `yes` or `no`, it can be packaged, for example: `-b r68s_s905x3-tx3_s905l3a-cm311`
 
 ### 5.1 Manual compilation
 

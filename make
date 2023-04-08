@@ -206,7 +206,7 @@ init_var() {
 
     # Get a list of build devices
     if [[ "${make_board}" == "all" ]]; then
-        board_list=""
+        board_list=":(yes)"
         make_openwrt=($(
             cat ${model_conf} |
                 sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
@@ -214,7 +214,7 @@ init_var() {
                 sort | uniq | xargs
         ))
     else
-        board_list=":($(echo ${make_board} | sed -e 's/_/\|/g'))"
+        board_list=":($(echo ${make_board} | sed -e 's/_/\|/g')):(yes|no)"
         make_openwrt=($(echo ${make_board} | sed -e 's/_/ /g'))
     fi
     [[ "${#make_openwrt[*]}" -eq "0" ]] && error_msg "The board is missing, stop making."
@@ -223,7 +223,7 @@ init_var() {
     kernel_from=($(
         cat ${model_conf} |
             sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' -e 's/\.y/\.1/g' |
-            grep -E "^[^#].*${board_list}:yes$" | awk -F':' '{print $9}' |
+            grep -E "^[^#].*${board_list}$" | awk -F':' '{print $9}' |
             sort | uniq | xargs
     ))
     [[ "${#kernel_from[*]}" -eq "0" ]] && error_msg "Missing [ KERNEL_TAGS ] settings, stop building."
@@ -467,7 +467,7 @@ confirm_version() {
     board_conf="$(
         cat ${model_conf} |
             sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
-            grep -E "^[^#].*:${board}:yes$" |
+            grep -E "^[^#].*:${board}:(yes|no)$" |
             head -n 1
     )"
     [[ -n "${board_conf}" ]] || error_msg "[ ${board} ] config is missing!"

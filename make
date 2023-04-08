@@ -895,10 +895,10 @@ EOF
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
     echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
     echo "ANDROID_UBOOT='/lib/u-boot/${BOOTLOADER_IMG}'" >>${op_release}
-    if [[ "${PLATFORM}" == "amlogic" ]]; then
+    if [[ "${PLATFORM}" == "rockchip" ]]; then
+        echo "TRUST_IMG='/lib/u-boot/${TRUST_IMG}'" >>${op_release}
+    elif [[ "${PLATFORM}" == "amlogic" ]]; then
         echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
-    elif [[ "${PLATFORM}" == "rockchip" ]]; then
-        echo "TRUST_IMG='${TRUST_IMG}'" >>${op_release}
     fi
     if [[ "${PLATFORM}" == "rockchip" ]]; then
         echo "SHOW_INSTALL_MENU='no'" >>${op_release}

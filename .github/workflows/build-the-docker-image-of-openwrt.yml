@@ -41,7 +41,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download OpenWrt rootfs file
+      - name: Download OpenWrt rootfs file [ ${{ inputs.source_branch }} ]
         id: down
         if: (!cancelled())
         run: |

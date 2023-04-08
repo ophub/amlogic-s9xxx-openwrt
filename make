@@ -194,6 +194,15 @@ init_var() {
     # Columns of ${model_conf}:
     # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
     # 9.KERNEL_TAGS  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
+    [[ -f "${model_conf}" ]] || error_msg "Missing model config file: [ ${model_conf} ]"
+
+    # Convert ${model_conf} to ${model_txt} for [ openwrt-install-amlogic ]
+    {
+        cat ${model_conf} |
+            sed -e 's/NULL/NA/g' -e 's/[ ][ ]*//g' |
+            grep -E "^[^#ar].*" |
+            awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; print}' OFS=':'
+    } >${model_txt}
 
     # Get a list of build devices
     if [[ "${make_board}" == "all" ]]; then
@@ -300,14 +309,6 @@ download_depends() {
     # Download install/update and other related files
     svn export ${script_repo} ${common_files}/usr/sbin --force
     chmod +x ${common_files}/usr/sbin/*
-
-    # Convert ${model_conf} to text format profiles for install script(openwrt-install-amlogic)
-    {
-        cat ${model_conf} |
-            sed -e 's/NULL/NA/g' -e 's/[ ][ ]*//g' |
-            grep -E "^[^#ar].*" |
-            awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; print}' OFS=':'
-    } >${model_txt}
 }
 
 query_version() {
@@ -463,7 +464,6 @@ confirm_version() {
     # Column 5, called <UBOOT_OVERLOAD> in Amlogic, <TRUST_IMG> in Rockchip, Not used in Allwinner.
 
     # Find [ the first ] configuration information with [ the same BOARD name ] and [ BUILD as yes ] in the ${model_conf} file.
-    [[ -f "${model_conf}" ]] || error_msg "[ ${model_conf} ] file is missing!"
     board_conf="$(
         cat ${model_conf} |
             sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |

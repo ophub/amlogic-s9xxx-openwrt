@@ -14,6 +14,14 @@ inputs:
     description: "Select device board."
     required: false
     default: "all"
+  kernel_repo:
+    description: "Select kernel repository."
+    required: false
+    default: "ophub/kernel"
+  kernel_usage:
+    description: "Set the tags of the stable kernel."
+    required: false
+    default: "stable"
   openwrt_kernel:
     description: "Select kernel version."
     required: false
@@ -22,14 +30,6 @@ inputs:
     description: "Auto use the latest kernel."
     required: false
     default: "true"
-  kernel_repo:
-    description: "Select kernel repository."
-    required: false
-    default: "https://github.com/ophub/kernel"
-  kernel_usage:
-    description: "Set the tags of the stable kernel."
-    required: false
-    default: "stable"
   openwrt_size:
     description: "Set the rootfs size(Unit: MiB)."
     required: false
@@ -76,10 +76,10 @@ runs:
         echo -e "Start to make openwrt..."
         make_command=""
         [[ -n "${{ inputs.openwrt_board }}" ]] && make_command="${make_command} -b ${{ inputs.openwrt_board }}"
-        [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
-        [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [[ -n "${{ inputs.kernel_repo }}" ]] && make_command="${make_command} -r ${{ inputs.kernel_repo }}"
         [[ -n "${{ inputs.kernel_usage }}" ]] && make_command="${make_command} -u ${{ inputs.kernel_usage }}"
+        [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
+        [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
         [[ -n "${{ inputs.gh_token }}" ]] && make_command="${make_command} -g ${{ inputs.gh_token }}"
         sudo ./make ${make_command}

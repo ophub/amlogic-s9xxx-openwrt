@@ -131,7 +131,7 @@ init_var() {
     echo -e "${STEPS} Start Initializing Variables..."
 
     # If it is followed by [ : ], it means that the option requires a parameter value
-    get_all_ver="$(getopt "b:k:a:r:u:s:g:" "${@}")"
+    get_all_ver="$(getopt "b:r:u:k:a:s:g:" "${@}")"
 
     while [[ -n "${1}" ]]; do
         case "${1}" in
@@ -141,6 +141,22 @@ init_var() {
                 shift
             else
                 error_msg "Invalid -b parameter [ ${2} ]!"
+            fi
+            ;;
+        -r | --kernelRepository)
+            if [[ -n "${2}" ]]; then
+                kernel_repo="${2}"
+                shift
+            else
+                error_msg "Invalid -r parameter [ ${2} ]!"
+            fi
+            ;;
+        -u | --kernelUsage)
+            if [[ -n "${2}" ]]; then
+                kernel_usage="${2//kernel_/}"
+                shift
+            else
+                error_msg "Invalid -u parameter [ ${2} ]!"
             fi
             ;;
         -k | --Kernel)
@@ -160,22 +176,6 @@ init_var() {
                 shift
             else
                 error_msg "Invalid -a parameter [ ${2} ]!"
-            fi
-            ;;
-        -r | --kernelRepository)
-            if [[ -n "${2}" ]]; then
-                kernel_repo="${2}"
-                shift
-            else
-                error_msg "Invalid -r parameter [ ${2} ]!"
-            fi
-            ;;
-        -u | --kernelUsage)
-            if [[ -n "${2}" ]]; then
-                kernel_usage="${2//kernel_/}"
-                shift
-            else
-                error_msg "Invalid -u parameter [ ${2} ]!"
             fi
             ;;
         -s | --Size)

@@ -154,7 +154,7 @@ The relevant parameters correspond to the `local packaging command`, please refe
 | openwrt_kernel     | 6.1.1_5.15.1     | Set the kernel version，function reference `-k` |
 | auto_kernel        | true             | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
 | kernel_repo        | ophub/kernel     | Specifies the `<owner>/<repo>` of the github.com kernel repository, function reference `-r` |
-| kernel_usage       | ophub/kernel     | Set the tags suffix of [stable series kernel](https://github.com/ophub/kernel), function reference `-u` |
+| kernel_usage       | stable           | Set the tags suffix of [stable series kernel](https://github.com/ophub/kernel), function reference `-u` |
 | openwrt_size       | 1024             | Set the size of the firmware ROOTFS partition, function reference `-s` |
 | gh_token           | None             | Optional. Set `${{ secrets.GH_TOKEN }}`, function reference `-g` |
 

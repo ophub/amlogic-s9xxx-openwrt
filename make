@@ -322,7 +322,7 @@ download_depends() {
 }
 
 query_version() {
-    echo -e "${STEPS} Start querying the latest kernel version for [ $(echo ${tags_list[*]} | xargs) ]..."
+    echo -e "${STEPS} Start querying the latest kernel version..."
 
     # Check the version on the kernel repository
     x="1"
@@ -344,7 +344,7 @@ query_version() {
             tmp_arr_kernels=()
             i=1
             for kernel_var in ${down_kernel_list[*]}; do
-                echo -e "${INFO} (${x}.${i}) Auto query the latest kernel version of the same series for [ ${k} - ${kernel_var} ]"
+                echo -e "${INFO} (${x}.${i}) Auto query the latest kernel version for [ ${kd} - ${kernel_var} ]"
 
                 # Identify the kernel <VERSION> and <PATCHLEVEL>, such as [ 6.1 ]
                 kernel_verpatch="$(echo ${kernel_var} | awk -F '.' '{print $1"."$2}')"
@@ -378,7 +378,7 @@ query_version() {
                     tmp_arr_kernels[${i}]="${kernel_var}"
                 fi
 
-                echo -e "${INFO} (${x}.${i}) [ ${k} - ${tmp_arr_kernels[$i]} ] is latest kernel (${query_api}). \n"
+                echo -e "${INFO} (${x}.${i}) [ ${kd} - ${tmp_arr_kernels[$i]} ] is latest kernel (${query_api}). \n"
 
                 let i++
             done
@@ -418,7 +418,7 @@ check_kernel() {
 
 download_kernel() {
     cd ${current_path}
-    echo -e "${STEPS} Start downloading the kernel files for [ $(echo ${tags_list[*]} | xargs) ]..."
+    echo -e "${STEPS} Start downloading the kernel files..."
 
     x="1"
     for k in ${tags_list[*]}; do
@@ -440,7 +440,7 @@ download_kernel() {
             for kernel_var in ${down_kernel_list[*]}; do
                 if [[ ! -d "${kernel_path}/${kd}/${kernel_var}" ]]; then
                     kernel_down_from="https://github.com/${kernel_repo}/releases/download/kernel_${kd}/${kernel_var}.tar.gz"
-                    echo -e "${INFO} (${x}.${i}) [ ${k} - ${kernel_var} ] Kernel download from [ ${kernel_down_from} ]"
+                    echo -e "${INFO} (${x}.${i}) [ ${kd} - ${kernel_var} ] Kernel download from [ ${kernel_down_from} ]"
 
                     mkdir -p ${kernel_path}/${kd}
                     wget "${kernel_down_from}" -q -P "${kernel_path}/${kd}"
@@ -449,7 +449,7 @@ download_kernel() {
                     tar -xf "${kernel_path}/${kd}/${kernel_var}.tar.gz" -C "${kernel_path}/${kd}"
                     [[ "${?}" -ne "0" ]] && error_msg "[ ${kernel_var} ] kernel decompression failed."
                 else
-                    echo -e "${INFO} (${x}.${i}) [ ${k} - ${kernel_var} ] Kernel is in the local directory."
+                    echo -e "${INFO} (${x}.${i}) [ ${kd} - ${kernel_var} ] Kernel is in the local directory."
                 fi
 
                 # If the kernel contains the sha256sums file, check the files integrity
@@ -1053,6 +1053,7 @@ download_kernel
 
 # Show make settings
 echo -e "${INFO} [ ${#make_openwrt[*]} ] lists of OpenWrt board: [ $(echo ${make_openwrt[*]} | xargs) ]"
+echo -e "${INFO} Kernel Repo: [ ${kernel_repo} ], Kernel Usage: [ ${kernel_usage} ] \n"
 # Show server start information
 echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${current_path}) \n"
 

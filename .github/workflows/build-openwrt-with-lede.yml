@@ -83,7 +83,15 @@ on:
         type: choice
         options:
           - ophub/kernel
-          - breakings/OpenWrt
+      kernel_usage:
+        description: "Set the tags of the stable kernel."
+        required: false
+        default: "stable"
+        type: choice
+        options:
+          - stable
+          - flippy
+          - dev
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -195,6 +203,7 @@ jobs:
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}
           kernel_repo: ${{ inputs.kernel_repo }}
+          kernel_usage: ${{ inputs.kernel_usage }}
           gh_token: ${{ secrets.GH_TOKEN }}
 
       - name: Upload the packaged firmware to Release

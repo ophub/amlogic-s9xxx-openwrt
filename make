@@ -23,6 +23,7 @@
 #
 # error_msg          : Output error message
 # process_msg        : Output process message
+# mount_again        : Mount the image file, fail again
 # get_textoffset     : Get kernel TEXT_OFFSET
 #
 # init_var           : Initialize all variables
@@ -118,6 +119,37 @@ error_msg() {
 
 process_msg() {
     echo -e " [\033[1;92m ${board} - ${kernel} \033[0m] ${1}"
+}
+
+mount_again() {
+    # Check mount parameters
+    m_type="${1}"
+    m_dev="${2}"
+    m_target="${3}"
+    [[ -n "${m_type}" && -n "${m_dev}" && -n "${m_target}" ]] || {
+        error_msg "Mount parameter is missing: [ ${m_type}, ${m_dev}, ${m_target} ]"
+    }
+
+    i="1"
+    max_try="10"
+    while [[ "${i}" -le "${max_try}" ]]; do
+        # Mount according to the image partition format
+        if [[ "${m_type}" == "btrfs" ]]; then
+            mount -t ${m_type} -o discard,compress=zstd:6 ${m_dev} ${m_target}
+        else
+            mount -t ${m_type} -o discard ${m_dev} ${m_target}
+        fi
+
+        # Mount failed and continue trying
+        if [[ "${?}" -eq "0" ]]; then
+            break
+        else
+            sync && sleep 3
+            umount -f ${m_target} 2>/dev/null
+            i="$((i + 1))"
+        fi
+    done
+    [[ "${i}" -gt "${max_try}" ]] && error_msg "[ ${i} ] attempts to mount failed."
 }
 
 get_textoffset() {
@@ -620,15 +652,13 @@ extract_openwrt() {
 
     # Mount bootfs
     if [[ "${bootfs_type}" == "fat32" ]]; then
-        mount -t vfat -o discard ${loop_new}p1 ${tag_bootfs}
+        mount_again vfat ${loop_new}p1 ${tag_bootfs}
     else
-        mount -t ext4 -o discard ${loop_new}p1 ${tag_bootfs}
+        mount_again ext4 ${loop_new}p1 ${tag_bootfs}
     fi
-    [[ "${?}" -eq "0" ]] || error_msg "mount ${loop_new}p1 failed!"
 
     # Mount rootfs
-    mount -t btrfs -o discard,compress=zstd:6 ${loop_new}p2 ${tag_rootfs}
-    [[ "${?}" -eq "0" ]] || error_msg "mount ${loop_new}p2 failed!"
+    mount_again btrfs ${loop_new}p2 ${tag_rootfs}
 
     # Create snapshot directory
     btrfs subvolume create ${tag_rootfs}/etc >/dev/null 2>&1

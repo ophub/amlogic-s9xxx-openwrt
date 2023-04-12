@@ -27,6 +27,7 @@
 # get_textoffset     : Get kernel TEXT_OFFSET
 #
 # init_var           : Initialize all variables
+# check_data         : Check the validity of the data
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
 # download_depends   : Download the dependency files
 # query_version      : Query the latest kernel version
@@ -232,7 +233,9 @@ init_var() {
         esac
         shift
     done
+}
 
+check_data() {
     # Columns of ${model_conf}:
     # 1.ID  2.MODEL  3.SOC  4.FDTFILE  5.UBOOT_OVERLOAD  6.MAINLINE_UBOOT  7.BOOTLOADER_IMG  8.DESCRIPTION
     # 9.KERNEL_TAGS  10.PLATFORM  11.FAMILY  12.BOOT_CONF  13.BOARD  14.BUILD
@@ -1072,6 +1075,7 @@ echo -e "${INFO} Server running on Ubuntu: [ Release: ${host_release} / Host: ${
 
 # Initialize variables and download the kernel
 init_var "${@}"
+check_data
 # Find OpenWrt file
 find_openwrt
 # Download the dependency files

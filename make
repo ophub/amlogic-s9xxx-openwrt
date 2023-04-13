@@ -985,12 +985,13 @@ clean_tmp() {
     cd ${out_path}
 
     # Compress the OpenWrt image file
-    pigz -f *.img && sync
+    pigz -qf *.img || gzip -qf *.img
+    sync
 
     cd ${current_path}
 
     # Clear temporary files directory
-    rm -rf ${tmp_path}
+    rm -rf ${tmp_path} && sync
 }
 
 loop_make() {

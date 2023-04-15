@@ -242,12 +242,11 @@ check_data() {
     [[ -f "${model_conf}" ]] || error_msg "Missing model config file: [ ${model_conf} ]"
 
     # Convert ${model_conf} to ${model_txt} for [ openwrt-install-amlogic ], Just the first 8 columns.
-    {
-        cat ${model_conf} |
-            sed -e 's/NULL/NA/g' -e 's/[ ][ ]*//g' |
-            grep -E "^[^#ar].*" |
-            awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; NF = 8; print}' OFS=':'
-    } >${model_txt}
+    cat ${model_conf} |
+        sed -e 's/NULL/NA/g' -e 's/[ ][ ]*//g' |
+        grep -E "^[^#ar].*" |
+        awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; NF = 8; print}' OFS=':' \
+            >${model_txt}
 
     # Get a list of build devices
     if [[ "${make_board}" == "all" ]]; then

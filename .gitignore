@@ -1,5 +1,4 @@
 !.gitignore
-/make-openwrt/openwrt-files/platform-files
 /make-openwrt/kernel
 /make-openwrt/u-boot
 /openwrt

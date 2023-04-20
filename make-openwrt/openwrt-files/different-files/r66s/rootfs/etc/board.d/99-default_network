@@ -1,0 +1,47 @@
+# The phy interfaces for r66s is
+# eth0(2.5G) for lan
+# eth1(2.5G) for wan
+
+. /lib/functions/uci-defaults.sh
+. /lib/functions/system.sh
+
+board_config_update
+
+generate_mac()
+{
+        # https://gist.githubusercontent.com/aallan/b4bb86db86079509e6159810ae9bd3e4/raw/846ae1b646ab0f4d646af9115e47365f4118e5f6/mac-vendor.txt
+        # The MAC address range registered by realtek manufacturers is as follows:
+        local mac_grp_0="00:20:18:"
+        local mac_grp_1="00:4f:49:"
+        local mac_grp_2="00:60:52:"
+        local mac_grp_3="00:e0:4c:"
+        local mac_grp_4="52:54:00:"
+        local mac_grp_5="52:54:ab:"
+        local mac_grp_cnt=6
+
+	# get the sd/emmc unique id
+        local sd_hash=$(sha256sum /sys/class/block/mmcblk0/device/cid | cut -f1) 
+
+	# get mac address head
+        local dice=${mac_grp_cnt}$(echo $sd_hash | tr -d '[a-f]' | cut -b 1-6)
+        local idx=$((dice % mac_grp_cnt))
+        eval local mac_head="\$mac_grp_${idx}"
+
+	# get mac address tail
+        # sd_hash length: max 64
+        local mac_tail=$(echo $sd_hash|cut -b 16-17)":"$(echo $sd_hash|cut -b 26-27)":"$(echo $sd_hash|cut -b 42-43)
+
+        echo "${mac_head}${mac_tail}"
+}
+
+# Init LAN and WAN
+json_is_a network object && exit 0
+LAN_MAC=$(generate_mac)
+WAN_MAC=$(macaddr_add $LAN_MAC +1)
+ucidef_set_interfaces_lan_wan 'eth0' 'eth1'
+ucidef_set_interface_macaddr "lan" $LAN_MAC
+ucidef_set_interface_macaddr "wan" $WAN_MAC
+
+board_config_flush
+
+exit 0

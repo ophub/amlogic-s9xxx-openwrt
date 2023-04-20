@@ -25,20 +25,21 @@ on:
         type: choice
         options:
           - all
-          - rock5b_h66k_h68k_h88k_r66s_r68s_e25
-          - vplus_beikeyun_l1pro
-          - s922x_s905x3_s905d
-          - qemu
-          - vplus
-          - beikeyun
-          - l1pro
+          - s922x_s905x3_s905x2_s912_s905d_s905
+          - rock5b_h88k
+          - h66k_h68k_r66s_r68s_e25_photonicat
+          - beikeyun_l1pro
           - rock5b
+          - h88k
           - h66k
           - h68k
-          - h88k
           - r66s
           - r68s
           - e25
+          - photonicat
+          - beikeyun
+          - l1pro
+          - vplus
           - s922x
           - s922x-n2
           - s905x3
@@ -46,6 +47,7 @@ on:
           - s912
           - s905d
           - s905
+          - qemu
           - diy
       openwrt_kernel:
         description: "Select kernel version"

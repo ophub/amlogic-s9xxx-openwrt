@@ -319,22 +319,12 @@ download_depends() {
     echo -e "${STEPS} Start downloading dependency files..."
 
     # Download platform files
-    if [[ -d "${platform_files}" ]]; then
-        svn up ${platform_files} --force
-    else
-        svn co ${depends_repo}/armbian-files/platform-files ${platform_files} --force
-    fi
+    svn co ${depends_repo}/armbian-files/platform-files ${platform_files} --force
     # Remove the special files in the [ sbin ] directory of the Armbian system
     rm -rf $(find ${platform_files} -type d -name "sbin")
 
     # Download different files
-    if [[ -d "${different_files}" ]]; then
-        svn up ${different_files} --force
-    else
-        svn co ${depends_repo}/armbian-files/different-files ${different_files} --force
-    fi
-    # Remove the special files in the [ sbin ] directory of the Armbian system
-    rm -rf $(find ${different_files} -type d -name "sbin")
+    svn co ${depends_repo}/armbian-files/different-files ${different_files} --force
 
     # Download u-boot files
     if [[ -d "${uboot_path}" ]]; then
@@ -842,6 +832,8 @@ refactor_rootfs() {
     echo "mt7663u" >etc/modules.d/mt7663u
     echo "mt76x0u" >etc/modules.d/mt76x0u
     echo "mt76x2u" >etc/modules.d/mt76x2u
+    echo "mt76x2e" >etc/modules.d/mt76x2e
+    echo "mt7921e" >etc/modules.d/mt7921e
     # GPU Driver
     echo "panfrost" >etc/modules.d/panfrost
     # PWM Driver
@@ -850,8 +842,20 @@ refactor_rootfs() {
     echo "ath10k_core" >etc/modules.d/ath10k_core
     echo "ath10k_sdio" >etc/modules.d/ath10k_sdio
     echo "ath10k_usb" >etc/modules.d/ath10k_usb
+    echo "ath10k_pci" >etc/modules.d/ath10k-pci
+    echo "ath10k_core frame_mode=2" >etc/modules.d/ath10k
     # Enable watchdog driver
     echo "meson_gxbb_wdt" >etc/modules.d/watchdog
+    # For rk3588
+    echo "bifrost_kbase" >etc/modules.d/rk_gpu
+    echo "rknpu" >etc/modules.d/rk_npu
+    # For rk3568
+    echo "rockchipdrm" >etc/modules.d/drm-rockchip
+    echo "rk_crypto2" >etc/modules.d/rk_crypto
+    echo -e "snd_soc_simple_card_utils\nsnd_soc_simple_card\nsnd_soc_rockchip_i2s" >etc/modules.d/snd-rk3568
+    echo "pwm_fan" >etc/modules.d/pwm-fan
+    # For rk3328
+    echo -e "snd_soc_simple_card_utils\nsnd_soc_simple_card\nsnd_soc_rockchip_i2s" >etc/modules.d/snd-rk3328
 
     # Add blacklist
     mkdir -p etc/modprobe.d

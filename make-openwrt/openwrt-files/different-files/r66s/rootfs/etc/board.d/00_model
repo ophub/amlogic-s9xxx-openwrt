@@ -1,0 +1,13 @@
+# Copyright (C) 2015 OpenWrt.org
+# Copyright (C) 2016 Yousong Zhou <yszhou4tech@gmail.com>
+
+. /lib/functions/uci-defaults.sh
+
+board_config_update
+
+ucidef_set_board_id "rockchip"
+ucidef_set_model_name "FastRhino R66S"
+
+board_config_flush
+
+exit 0

@@ -1,0 +1,13 @@
+# Copyright (C) 2015 OpenWrt.org
+# Copyright (C) 2016 Yousong Zhou <yszhou4tech@gmail.com>
+
+. /lib/functions/uci-defaults.sh
+
+board_config_update
+
+ucidef_set_board_id "radxa,e25"
+ucidef_set_model_name "Radxa E25"
+
+board_config_flush
+
+exit 0

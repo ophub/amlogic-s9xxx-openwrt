@@ -209,7 +209,7 @@ copy_bootfs() {
     [[ -f "${uenv_conf_file}" ]] && {
         echo -e "${INFO} Update the [ uEnv.txt ] file."
         sed -i "s|root=.*console=ttyS0|root=${uenv_mount_string} console=ttyS0|g" ${uenv_conf_file}
-        sed -i "s|sun50i.*.dtb|${FDTFILE}|g" ${uenv_conf_file}
+        sed -i "s|sun.*.dtb|${FDTFILE}|g" ${uenv_conf_file}
     }
 
     # Update [ /boot/extlinux/extlinux.conf ] settings
@@ -217,7 +217,7 @@ copy_bootfs() {
     [[ -f "${boot_extlinux_file}" ]] && {
         echo -e "${INFO} Update the [ extlinux.conf ] file."
         sed -i "s|root=.*console=ttyS0|root=${uenv_mount_string} console=ttyS0|g" ${boot_extlinux_file}
-        sed -i "s|sun50i.*.dtb|${FDTFILE}|g" ${boot_extlinux_file}
+        sed -i "s|sun.*.dtb|${FDTFILE}|g" ${boot_extlinux_file}
     }
 
     # Replace eMMC boot files

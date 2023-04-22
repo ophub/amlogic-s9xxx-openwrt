@@ -122,6 +122,7 @@ on:
           - crrc
           - beikeyun
           - l1pro
+          - station-m1
           - vplus
           - tanix-tx6
       openwrt_kernel:

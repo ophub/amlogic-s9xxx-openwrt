@@ -23,7 +23,7 @@
 #
 # error_msg          : Output error message
 # process_msg        : Output process message
-# mount_again        : Mount the image file, fail again
+# mount_try          : Mount the image file, fail again
 # get_textoffset     : Get kernel TEXT_OFFSET
 #
 # init_var           : Initialize all variables
@@ -124,7 +124,7 @@ process_msg() {
     echo -e " [\033[1;92m ${board} - ${kernel} \033[0m] ${1}"
 }
 
-mount_again() {
+mount_try() {
     # Check mount parameters
     m_type="${1}"
     m_dev="${2}"
@@ -672,13 +672,13 @@ extract_openwrt() {
 
     # Mount bootfs
     if [[ "${bootfs_type}" == "fat32" ]]; then
-        mount_again vfat ${loop_new}p1 ${tag_bootfs}
+        mount_try vfat ${loop_new}p1 ${tag_bootfs}
     else
-        mount_again ext4 ${loop_new}p1 ${tag_bootfs}
+        mount_try ext4 ${loop_new}p1 ${tag_bootfs}
     fi
 
     # Mount rootfs
-    mount_again btrfs ${loop_new}p2 ${tag_rootfs}
+    mount_try btrfs ${loop_new}p2 ${tag_rootfs}
 
     # Create snapshot directory
     btrfs subvolume create ${tag_rootfs}/etc >/dev/null 2>&1

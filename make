@@ -87,6 +87,8 @@ script_repo="${script_repo//tree\/main/trunk}"
 kernel_repo="https://github.com/ophub/kernel"
 # Kernel tags(kernel_xxx) that can be replaced via the [ -u ] parameter
 kernel_replaceable="stable"
+# Set the tags of the specified kernel
+specify_tags="${kernel_replaceable}"
 # Set the list of kernels used by default
 rk3588_kernel=("5.10.1")
 flippy_kernel=("6.1.1" "5.15.1")
@@ -277,7 +279,7 @@ check_data() {
     [[ "${#kernel_from[*]}" -eq "0" ]] && error_msg "Missing [ KERNEL_TAGS ] settings, stop building."
     # Replace custom kernel tags
     [[ -n "${kernel_usage}" ]] && {
-        kernel_replaceable="${kernel_usage}"
+        specify_tags="${kernel_usage}"
         kernel_from=(${kernel_from[*]//${kernel_replaceable}/${kernel_usage}})
     }
 
@@ -372,7 +374,7 @@ query_version() {
             elif [[ "${k}" == "dev" ]]; then
                 down_kernel_list=(${dev_kernel[*]})
             elif [[ "${k}" == "specify" ]]; then
-                kd="${kernel_replaceable}"
+                kd="${specify_tags}"
                 down_kernel_list=(${specify_kernel[*]})
             else
                 error_msg "Invalid tags."
@@ -478,7 +480,7 @@ download_kernel() {
             elif [[ "${k}" == "dev" ]]; then
                 down_kernel_list=(${dev_kernel[*]})
             elif [[ "${k}" == "specify" ]]; then
-                kd="${kernel_replaceable}"
+                kd="${specify_tags}"
                 down_kernel_list=(${specify_kernel[*]})
             else
                 error_msg "Invalid tags."
@@ -1050,7 +1052,7 @@ loop_make() {
             elif [[ "${KERNEL_TAGS}" == "dev" ]]; then
                 kernel_list=(${dev_kernel[*]})
             elif [[ "${KERNEL_TAGS}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
-                kd="${kernel_replaceable}"
+                kd="${specify_tags}"
                 kernel_list=(${specify_kernel[*]})
             else
                 error_msg "Invalid tags."

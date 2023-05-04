@@ -30,7 +30,7 @@
 # check_data         : Check the validity of the data
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
 # download_depends   : Download the dependency files
-# query_version      : Query the latest kernel version
+# query_kernel       : Query the latest kernel version
 # check_kernel       : Check kernel files integrity
 # download_kernel    : Download the latest kernel
 #
@@ -356,7 +356,7 @@ download_depends() {
     chmod +x ${common_files}/usr/sbin/*
 }
 
-query_version() {
+query_kernel() {
     echo -e "${STEPS} Start querying the latest kernel version..."
 
     # Check the version on the kernel repository
@@ -1144,7 +1144,7 @@ find_openwrt
 # Download the dependency files
 download_depends
 # Query the latest kernel version
-[[ "${auto_kernel}" == "true" ]] && query_version
+[[ "${auto_kernel}" == "true" ]] && query_kernel
 # Download the kernel files
 download_kernel
 

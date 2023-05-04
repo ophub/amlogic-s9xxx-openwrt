@@ -864,6 +864,7 @@ refactor_rootfs() {
     # brcmfmac built-in wireless network card Driver
     echo "brcmfmac" >etc/modules.d/brcmfmac
     echo "brcmutil" >etc/modules.d/brcmutil
+    echo "bcmdhd" >etc/modules.d/bcmdhd
     # USB Realtek RTL8188EU Wireless LAN Driver
     echo "r8188eu" >etc/modules.d/rtl8188eu
     # Realtek RTL8189FS Wireless LAN Driver

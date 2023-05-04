@@ -90,10 +90,10 @@ default_tags="stable"
 # Set the tags(kernel_xxx) of the specified kernel, such as 5.15.y, 6.1.y, etc.
 specify_tags="${default_tags}"
 # Set the list of kernels used by default
-rk3588_kernel=("5.10.1")
-flippy_kernel=("6.1.1" "5.15.1")
 stable_kernel=("6.1.1" "5.15.1")
 dev_kernel=("6.1.1" "5.15.1")
+rk3588_kernel=("5.10.1")
+flippy_kernel=("6.1.1" "5.15.1")
 # Set to automatically use the latest kernel
 auto_kernel="true"
 
@@ -118,12 +118,12 @@ ERROR="[\033[91m ERROR \033[0m]"
 #================================================================================================
 
 error_msg() {
-    echo -e "${ERROR} ${1}"
+    echo -e " [💔] ${1}"
     exit 1
 }
 
 process_msg() {
-    echo -e " [\033[1;92m ${board} - ${kernel} \033[0m] ${1}"
+    echo -e " [🌿] ${1}"
 }
 
 mount_try() {
@@ -365,20 +365,25 @@ query_version() {
         {
             # Select the corresponding kernel directory and list
             kd="${k}"
-            if [[ "${k}" == "rk3588" ]]; then
-                down_kernel_list=(${rk3588_kernel[*]})
-            elif [[ "${k}" == "flippy" ]]; then
-                down_kernel_list=(${flippy_kernel[*]})
-            elif [[ "${k}" == "stable" ]]; then
+            case "${k}" in
+            stable)
                 down_kernel_list=(${stable_kernel[*]})
-            elif [[ "${k}" == "dev" ]]; then
+                ;;
+            dev)
                 down_kernel_list=(${dev_kernel[*]})
-            elif [[ "${k}" == "specify" ]]; then
-                kd="${specify_tags}"
+                ;;
+            rk3588)
+                down_kernel_list=(${rk3588_kernel[*]})
+                ;;
+            flippy)
+                down_kernel_list=(${flippy_kernel[*]})
+                ;;
+            specify)
                 down_kernel_list=(${specify_kernel[*]})
-            else
-                error_msg "Invalid tags."
-            fi
+                kd="${specify_tags}"
+                ;;
+            *) error_msg "Invalid tags." ;;
+            esac
 
             # Query the name of the latest kernel version
             tmp_arr_kernels=()
@@ -424,22 +429,29 @@ query_version() {
             done
 
             # Reset the kernel array to the latest kernel version
-            if [[ "${k}" == "rk3588" ]]; then
-                unset rk3588_kernel
-                rk3588_kernel=(${tmp_arr_kernels[*]})
-            elif [[ "${k}" == "flippy" ]]; then
-                unset flippy_kernel
-                flippy_kernel=(${tmp_arr_kernels[*]})
-            elif [[ "${k}" == "stable" ]]; then
+            case "${k}" in
+            stable)
                 unset stable_kernel
                 stable_kernel=(${tmp_arr_kernels[*]})
-            elif [[ "${k}" == "dev" ]]; then
+                ;;
+            dev)
                 unset dev_kernel
                 dev_kernel=(${tmp_arr_kernels[*]})
-            elif [[ "${k}" == "specify" ]]; then
+                ;;
+            rk3588)
+                unset rk3588_kernel
+                rk3588_kernel=(${tmp_arr_kernels[*]})
+                ;;
+            flippy)
+                unset flippy_kernel
+                flippy_kernel=(${tmp_arr_kernels[*]})
+                ;;
+            specify)
                 unset specify_kernel
                 specify_kernel=(${tmp_arr_kernels[*]})
-            fi
+                ;;
+            *) error_msg "Invalid tags." ;;
+            esac
 
             let x++
         }
@@ -471,20 +483,25 @@ download_kernel() {
         {
             # Set the kernel download list
             kd="${k}"
-            if [[ "${k}" == "rk3588" ]]; then
-                down_kernel_list=(${rk3588_kernel[*]})
-            elif [[ "${k}" == "flippy" ]]; then
-                down_kernel_list=(${flippy_kernel[*]})
-            elif [[ "${k}" == "stable" ]]; then
+            case "${k}" in
+            stable)
                 down_kernel_list=(${stable_kernel[*]})
-            elif [[ "${k}" == "dev" ]]; then
+                ;;
+            dev)
                 down_kernel_list=(${dev_kernel[*]})
-            elif [[ "${k}" == "specify" ]]; then
-                kd="${specify_tags}"
+                ;;
+            rk3588)
+                down_kernel_list=(${rk3588_kernel[*]})
+                ;;
+            flippy)
+                down_kernel_list=(${flippy_kernel[*]})
+                ;;
+            specify)
                 down_kernel_list=(${specify_kernel[*]})
-            else
-                error_msg "Invalid tags."
-            fi
+                kd="${specify_tags}"
+                ;;
+            *) error_msg "Invalid tags." ;;
+            esac
 
             # Download the kernel to the storage directory
             i="1"
@@ -558,7 +575,7 @@ confirm_version() {
 }
 
 make_image() {
-    process_msg " (1/6) Make OpenWrt image."
+    process_msg "(1/6) Make OpenWrt image."
     cd ${current_path}
 
     # Set Armbian image file parameters
@@ -664,7 +681,7 @@ make_image() {
 }
 
 extract_openwrt() {
-    process_msg " (2/6) Extract OpenWrt files."
+    process_msg "(2/6) Extract OpenWrt files."
     cd ${current_path}
 
     # Create OpenWrt mirror partition
@@ -715,7 +732,7 @@ extract_openwrt() {
 }
 
 replace_kernel() {
-    process_msg " (3/6) Replace the kernel."
+    process_msg "(3/6) Replace the kernel."
     cd ${current_path}
 
     # Determine custom kernel filename
@@ -747,7 +764,7 @@ replace_kernel() {
 }
 
 refactor_bootfs() {
-    process_msg " (4/6) Refactor bootfs files."
+    process_msg "(4/6) Refactor bootfs files."
     cd ${tag_bootfs}
 
     # Process Amlogic series boot partition files
@@ -803,7 +820,7 @@ refactor_bootfs() {
 }
 
 refactor_rootfs() {
-    process_msg " (5/6) Refactor rootfs files."
+    process_msg "(5/6) Refactor rootfs files."
     cd ${tag_rootfs}
 
     # Add directory
@@ -1002,7 +1019,7 @@ EOF
 }
 
 clean_tmp() {
-    process_msg " (6/6) Cleanup tmp files."
+    process_msg "(6/6) Cleanup tmp files."
     cd ${current_path}
 
     # Unmount the OpenWrt image file
@@ -1043,20 +1060,25 @@ loop_make() {
 
             # Determine kernel tags
             kd="${KERNEL_TAGS}"
-            if [[ "${KERNEL_TAGS}" == "rk3588" ]]; then
-                kernel_list=(${rk3588_kernel[*]})
-            elif [[ "${KERNEL_TAGS}" == "flippy" ]]; then
-                kernel_list=(${flippy_kernel[*]})
-            elif [[ "${KERNEL_TAGS}" == "stable" ]]; then
+            case "${KERNEL_TAGS}" in
+            stable)
                 kernel_list=(${stable_kernel[*]})
-            elif [[ "${KERNEL_TAGS}" == "dev" ]]; then
+                ;;
+            dev)
                 kernel_list=(${dev_kernel[*]})
-            elif [[ "${KERNEL_TAGS}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
-                kd="${specify_tags}"
+                ;;
+            rk3588)
+                kernel_list=(${rk3588_kernel[*]})
+                ;;
+            flippy)
+                kernel_list=(${flippy_kernel[*]})
+                ;;
+            [0-9]*)
                 kernel_list=(${specify_kernel[*]})
-            else
-                error_msg "Invalid tags."
-            fi
+                kd="${specify_tags}"
+                ;;
+            *) error_msg "Invalid tags." ;;
+            esac
 
             i="1"
             for k in ${kernel_list[*]}; do
@@ -1073,7 +1095,7 @@ loop_make() {
                     fi
 
                     # Check disk space size
-                    echo -ne "(${j}.${i}) Start making OpenWrt [ ${board} - ${kd}/${kernel} ]. "
+                    echo -ne "(${j}.${i}) Start making OpenWrt [\033[92m ${board} - ${kd}/${kernel} \033[0m]. "
                     now_remaining_space="$(df -Tk ${current_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                     if [[ "${now_remaining_space}" -le "3" ]]; then
                         echo -e "${WARNING} Remaining space is less than 3G, exit this build."

@@ -1,0 +1,63 @@
+# The default order of phy interfaces for ipc is
+# eth1(1G) eth0(2.5G) eth3(1G) eth2(2.5G)eth4(1G)eth5(1G)
+# Reset to 0 1 2 3 for intuitive
+
+. /lib/functions/uci-defaults.sh
+. /lib/functions/system.sh
+
+board_config_update
+
+generate_mac()
+{
+        # https://gist.githubusercontent.com/aallan/b4bb86db86079509e6159810ae9bd3e4/raw/846ae1b646ab0f4d646af9115e47365f4118e5f6/mac-vendor.txt
+        # The MAC address range registered by realtek manufacturers is as follows:
+        local mac_grp_0="00:20:18:"
+        local mac_grp_1="00:4f:49:"
+        local mac_grp_2="00:60:52:"
+        local mac_grp_3="00:e0:4c:"
+        local mac_grp_4="52:54:00:"
+        local mac_grp_5="52:54:ab:"
+        local mac_grp_cnt=6
+
+        # get the sd/emmc unique id
+        local sd_hash=$(sha256sum /sys/class/block/mmcblk1/device/cid | cut -f1) 
+
+        # get mac address head
+        local dice=${mac_grp_cnt}$(echo $sd_hash | tr -d '[a-f]' | cut -b 1-6)
+        local idx=$((dice % mac_grp_cnt))
+        eval local mac_head="\$mac_grp_${idx}"
+
+        # get mac address tail
+        # sd_hash length: max 64
+        local mac_tail=$(echo $sd_hash|cut -b 16-17)":"$(echo $sd_hash|cut -b 26-27)":"$(echo $sd_hash|cut -b 42-43)
+
+        echo "${mac_head}${mac_tail}"
+}
+
+swap_interface()
+{
+	local eth_a=$1
+	local eth_b=$2
+	ip link set dev $eth_a down
+	ip link set dev $eth_b down
+	ip link set $eth_a name eth-rename-tmp
+	ip link set $eth_b name $eth_a
+	ip link set eth-rename-tmp name $eth_b
+	ip link set dev $eth_a up
+	ip link set dev $eth_b up
+}
+
+# Swap eth0 & eth1, eth2 & eth3
+[ -d /sys/devices/platform/fe160000.pcie/pci0001:10/0001:10:00.0/0001:11:00.0/0001:12:01.0/0001:13:00.0/net/eth0 ] && swap_interface "eth0" "eth1"
+
+# Init LAN and WAN
+json_is_a network object && exit 0
+LAN_MAC=$(generate_mac)
+WAN_MAC=$(macaddr_add $LAN_MAC +1)
+ucidef_set_interfaces_lan_wan 'eth3 eth1 eth2 eth4 eth5' 'eth0'
+ucidef_set_interface_macaddr "lan" $LAN_MAC
+ucidef_set_interface_macaddr "wan" $WAN_MAC
+
+board_config_flush
+
+exit 0

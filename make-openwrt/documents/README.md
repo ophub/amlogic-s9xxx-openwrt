@@ -1,67 +1,67 @@
-# How to make and use OpenWrt
+# OpenWrt Production and Usage Guide
 
-View Chinese description  |  [查看中文说明](README.cn.md)
+View Chinese description | [查看中文说明](README.cn.md)
 
-How to use GitHub Actions cloud to compile OpenWrt, and many of the content in this documentation, from P3TERX, Flippy and many other technology innovators and resource sharers. Because of the dedication of everyone, let us use OpenWrt in TV Boxes So Easy.
+The method of using GitHub Actions to cloud compile OpenWrt, as well as many of the contents in this document, are from many technical innovators and resource sharers such as P3TERX and Flippy. Thanks to everyone's contribution, it has become so easy for us to use OpenWrt on boxes.
 
-`GitHub Actions` is a service launched by `Microsoft`. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. The public repository can be used for free without time limit, and the single compilation time is up to `6 hours`, which is enough for `compiling OpenWrt` (we can usually complete a compilation in about `3 hours`). Sharing is only for the exchange of experience. Please understand the deficiencies. Please do not initiate various bad attacks on the Internet, and do not maliciously use it.
+Github Actions is a service launched by Microsoft. It provides a virtual server environment with very good performance configuration. Based on it, projects can be built, tested, packaged, and deployed. For public repositories, it can be used for free without time limit, and the single compilation time can reach 6 hours, which is enough for compiling OpenWrt (we can usually complete one compilation work in about 3 hours). Sharing is just for exchanging experiences. Please understand the shortcomings, and do not launch various malicious attacks on the network or use GitHub Actions maliciously.
 
-# Tutorial directory
+# 目录
 
-- [How to make and use OpenWrt](#how-to-make-and-use-openwrt)
-- [Tutorial directory](#tutorial-directory)
-  - [1. Register your own GitHub account](#1-register-your-own-github-account)
-  - [2. Set the privacy variable GitHub\_TOKEN](#2-set-the-privacy-variable-github_token)
-  - [3. Fork repository and set GH\_TOKEN](#3-fork-repository-and-set-gh_token)
+- [OpenWrt Production and Usage Guide](#openwrt-production-and-usage-guide)
+- [目录](#目录)
+  - [1. Register your Github account](#1-register-your-github-account)
+  - [2. Set the privacy variable GITHUB\_TOKEN](#2-set-the-privacy-variable-github_token)
+  - [3. Fork the repository and set GH\_TOKEN](#3-fork-the-repository-and-set-gh_token)
   - [4. Personalized OpenWrt firmware customization file description](#4-personalized-openwrt-firmware-customization-file-description)
     - [4.1 .config file description](#41-config-file-description)
-      - [4.1.1 Let the firmware support the native language](#411-let-the-firmware-support-the-native-language)
-      - [4.1.2 Select the personalized software package](#412-select-the-personalized-software-package)
+      - [4.1.1 First, let the firmware support local language](#411-first-let-the-firmware-support-local-language)
+      - [4.1.2 Select personalized software packages](#412-select-personalized-software-packages)
     - [4.2 DIY script operation: diy-part1.sh and diy-part2.sh](#42-diy-script-operation-diy-part1sh-and-diy-part2sh)
-      - [Example 1, Add a third-party software package](#example-1-add-a-third-party-software-package)
-      - [Example 2: Replace the existing software package](#example-2-replace-the-existing-software-package)
-      - [Example 3: Modifying the code in the source code library](#example-3-modifying-the-code-in-the-source-code-library)
-    - [4.3 Make firmware with Image Builder](#43-make-firmware-with-image-builder)
-  - [5. Compile the firmware](#5-compile-the-firmware)
+      - [Example 1, adding a third-party software package](#example-1-adding-a-third-party-software-package)
+      - [Example 2, replacing a software package with the same name](#example-2-replacing-a-software-package-with-the-same-name)
+      - [Example 3, implementing certain requirements by modifying the code in the source code library](#example-3-implementing-certain-requirements-by-modifying-the-code-in-the-source-code-library)
+    - [4.3 Use Image Builder to create firmware](#43-use-image-builder-to-create-firmware)
+  - [5. Compiling Firmware](#5-compiling-firmware)
     - [5.1 Manual compilation](#51-manual-compilation)
-    - [5.2 Compile at the agreed time](#52-compile-at-the-agreed-time)
-  - [6. Save the firmware](#6-save-the-firmware)
-    - [6.1 Save to GitHub Actions](#61-save-to-github-actions)
+    - [5.2 Scheduled compilation](#52-scheduled-compilation)
+  - [6. Saving Firmware](#6-saving-firmware)
+    - [6.1 Save to Github Actions](#61-save-to-github-actions)
     - [6.2 Save to GitHub Releases](#62-save-to-github-releases)
-    - [6.3 Save to a third party](#63-save-to-a-third-party)
-  - [7. Download the firmware](#7-download-the-firmware)
-    - [7.1 Download from GitHub Actions](#71-download-from-github-actions)
-    - [7.2 Download from GitHub Releases](#72-download-from-github-releases)
-    - [7.3 Download from third parties](#73-download-from-third-parties)
-  - [8. Install the firmware](#8-install-the-firmware)
-    - [8.1 Method of integrating luci-app-amlogic at compile time](#81-method-of-integrating-luci-app-amlogic-at-compile-time)
-    - [8.2 Install using the operation panel](#82-install-using-the-operation-panel)
-  - [9. Update firmware](#9-update-firmware)
-  - [10. Personalized firmware customization update tutorial](#10-personalized-firmware-customization-update-tutorial)
-    - [10.1 Know the complete .config file](#101-know-the-complete-config-file)
-    - [10.2 Know the workflow file](#102-know-the-workflow-file)
-      - [10.2.1 Replacing source code repositories and branches](#1021-replacing-source-code-repositories-and-branches)
-      - [10.2.2 Change TV Boxes model and kernel version](#1022-change-tv-boxes-model-and-kernel-version)
-    - [10.3 Custom banner information](#103-custom-banner-information)
-    - [10.4 Custom feeds configuration file](#104-custom-feeds-configuration-file)
-    - [10.5 Custom software default configuration information](#105-custom-software-default-configuration-information)
-    - [10.6 Opkg Package Manager](#106-opkg-package-manager)
-    - [10.7 Manage packages using web interface](#107-manage-packages-using-web-interface)
-    - [10.8 How to restore the original Android TV system](#108-how-to-restore-the-original-android-tv-system)
-      - [10.8.1 Restoring using openwrt-ddbr backup](#1081-restoring-using-openwrt-ddbr-backup)
-      - [10.8.2 Restoring with Amlogic usb burning tool](#1082-restoring-with-amlogic-usb-burning-tool)
-    - [10.9 If you can’t startup after using the Mainline u-boot](#109-if-you-cant-startup-after-using-the-mainline-u-boot)
-    - [10.10 Set the box to boot from USB/TF/SD](#1010-set-the-box-to-boot-from-usbtfsd)
-    - [10.11 Required options for OpenWrt](#1011-required-options-for-openwrt)
+    - [6.3 Save to a Third-Party](#63-save-to-a-third-party)
+  - [7. Downloading Firmware](#7-downloading-firmware)
+    - [7.1 Download from Github Actions](#71-download-from-github-actions)
+    - [7.2 Download from Github Releases](#72-download-from-github-releases)
+    - [7.3 Download from a Third Party](#73-download-from-a-third-party)
+  - [8. Installing Firmware](#8-installing-firmware)
+    - [8.1 Integrate luci-app-amlogic Operation Panel during Compilation](#81-integrate-luci-app-amlogic-operation-panel-during-compilation)
+    - [8.2 Install using the Operation Panel](#82-install-using-the-operation-panel)
+  - [9. Upgrading Firmware](#9-upgrading-firmware)
+  - [10. Personalized Firmware Customization and Upgrade Tutorial](#10-personalized-firmware-customization-and-upgrade-tutorial)
+    - [10.1 Understanding the Complete .config File](#101-understanding-the-complete-config-file)
+    - [10.2 Understanding the Workflow File](#102-understanding-the-workflow-file)
+      - [10.2.1 Change the Address and Branch of the Compilation Source Code Repository](#1021-change-the-address-and-branch-of-the-compilation-source-code-repository)
+      - [10.2.2 Change the Box Model and Kernel Version Number](#1022-change-the-box-model-and-kernel-version-number)
+    - [10.3 Customizing Banner Information](#103-customizing-banner-information)
+    - [10.4 Customizing Feeds Configuration File](#104-customizing-feeds-configuration-file)
+    - [10.5 Customizing Default Software Configuration Information](#105-customizing-default-software-configuration-information)
+    - [10.6 Opkg Package Management](#106-opkg-package-management)
+    - [10.7 Managing Packages Using the Web Interface](#107-managing-packages-using-the-web-interface)
+    - [10.8 How to Restore the Original Android TV System](#108-how-to-restore-the-original-android-tv-system)
+      - [10.8.1 Using openwrt-ddbr Backup and Restore](#1081-using-openwrt-ddbr-backup-and-restore)
+      - [10.8.2 Using Amlogic Flashing Tool to Restore](#1082-using-amlogic-flashing-tool-to-restore)
+    - [10.9 Unable to Boot After Installing Mainline u-boot](#109-unable-to-boot-after-installing-mainline-u-boot)
+    - [10.10 Setting the Box to Boot from USB/TF/SD](#1010-setting-the-box-to-boot-from-usbtfsd)
+    - [10.11 OpenWrt Required Options](#1011-openwrt-required-options)
 
-## 1. Register your own GitHub account
+## 1. Register your Github account
 
-Register your own account, so that you can continue to customize the firmware. Click the `Sign up` button in the upper right corner of the `github.com` website and follow the prompts to `register your account`.
+Register your own account to continue with firmware customization. Click the `Sign up` button in the top right corner of the github.com website and follow the prompts to register your account.
 
-## 2. Set the privacy variable GitHub_TOKEN
+## 2. Set the privacy variable GITHUB_TOKEN
 
-Set the GitHub privacy variable `GitHub_TOKEN`. After the firmware is compiled, we need to upload the firmware to `GitHub Releases`. We set this variable according to the official requirements of GitHub. The method is as follows:
-`Personal center`: `Settings` > `Developer settings` > `Personal access tokens` > `Generate new token` ( Name: `GitHub_TOKEN`, Select: `public_repo` ). `Other options` can be selected according to your needs. Submit and save, copy the `Encrypted KEY Value` generated by the system, and `save it` to your computer's notepad first. This value will be used in the next step. The icons are as follows:
+Set the Github privacy variable `GITHUB_TOKEN`. After the firmware is compiled, we need to upload the firmware to Releases. We set this variable according to Github's official requirements, as follows:
+Personal center: Settings > Developer settings > Personal access tokens > Generate new token ( Name: GITHUB_TOKEN, Select: public_repo ). Other options can be selected based on your needs. Submit and save, copy the encrypted KEY generated by the system, save it to your computer's notepad first, and you will use this value in the next step. See the figure below for an illustration:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418474-85032b00-7a03-11eb-85a2-759b0320cc2a.jpg width="300" />
@@ -71,9 +71,9 @@ Set the GitHub privacy variable `GitHub_TOKEN`. After the firmware is compiled, 
 <img src=https://user-images.githubusercontent.com/68696949/109418485-93514700-7a03-11eb-848d-36de784a4438.jpg width="300" />
 </div>
 
-## 3. Fork repository and set GH_TOKEN
+## 3. Fork the repository and set GH_TOKEN
 
-Now you can `Fork` the `repository`, open the repository [https://github.com/ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt), click the `Fork` button on the `upper right`, Will copy a copy of the repository code to your account, `wait a few seconds`, and prompt the Fork to complete Later, go to your account to access `amlogic-s9xxx-openwrt` in `your repository`. In the upper right corner of `Settings` > `Secrets` > `Actions` > `New repostiory secret` (Name: `GH_TOKEN`, Value: `Fill in the value of GitHub_TOKEN` just now), `save it`. And select `Read and write permissions` under `Actions` > `General` > `Workflow permissions` in the left nav and save. The icons are as follows:
+Now you can fork the repository. Open the repository https://github.com/ophub/amlogic-s9xxx-openwrt, click the Fork button in the upper right corner, copy a repository code to your account, wait a few seconds, and when prompted that the Fork is complete, go to your account and access amlogic-s9xxx-openwrt in your repository. In the upper right corner, go to `Settings` > `Secrets` > `Actions` > `New repostiory secret` ( Name: `GH_TOKEN`, Value: `Fill in the value of GITHUB_TOKEN just now` ), save it. And under `Actions` > `General` > `Workflow permissions` on the left navigation bar, select `Read and write permissions` and save it. See the figure below for an illustration:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
@@ -85,119 +85,116 @@ Now you can `Fork` the `repository`, open the repository [https://github.com/oph
 
 ## 4. Personalized OpenWrt firmware customization file description
 
-After the previous 3 steps of preparation, let's start personalized firmware customization now. Have some files in the [config-openwrt/lede-master](../../config-openwrt/lede-master/) directory. The 3 files for customizing OpenWrt firmware. In this chapter, we only make the simplest instructions, so that you can experience the happiness of personalized customization with your hands. I put more complex customization operations in `Section 10`, which requires you to have a little foundation.
+After the preparation work of the previous three steps, let's start customizing personalized firmware. There are three files in the [config-openwrt/lede-master](../../config-openwrt/lede-master) directory for customizing OpenWrt firmware. In this chapter, we will only provide a simple explanation to allow you to experience the joy of personalized customization at your fingertips. More complicated customized operations are described in Section 10, which requires a little bit of foundation.
 
 ### 4.1 .config file description
 
-The `.config` file is the core file for personalized customization of the OpenWrt software package. It contains all the configuration information. Each line of code in the file represents a personalized configuration option. Although there are many projects, management is very simple. Let's get started.
+This file is the core file for customizing OpenWrt software package, which contains all configuration information. Each line of code in the file represents a personalized configuration option. Although there are many items, management is very simple. Let's get started.
 
-#### 4.1.1 Let the firmware support the native language
+#### 4.1.1 First, let the firmware support local language
 
-in `# National language packs, luci-i18n-base:` Take France as an example, if you enable French language support, just put
+In # National language packs, luci-i18n-base: Taking French as an example, to enable French support, just change
 
-```yaml
+```shell
 # CONFIG_PACKAGE_luci-i18n-base-fr is not set
 ```
 
-change into
+to
 
-```yaml
+```shell
 CONFIG_PACKAGE_luci-i18n-base-fr=y
 ```
 
-All the personalized customization in the `.config` file can be done in this way. For items you don't need, fill in `#` at the beginning of the line, and change `=y` to `is not set` at the end of the line. For the items you need, remove the `#` at the beginning of the line and change `is not set` to `=y` at the end
+This is how to customize all items in the .config file. For items that you do not need, add `#` at the beginning of the line, and change `=y` at the end to `is not set`. For items that you need, remove the `#` at the beginning of the line, and change `is not set` at the end to `=y`.
 
-#### 4.1.2 Select the personalized software package
+#### 4.1.2 Select personalized software packages
 
-in `#LuCI-app:` The practice of enabling and deleting the default software package is the same as above. This time we delete the `luci-app-zerotier` plug-in in the default software package, just put
+In `#LuCI-app:`, enabling and deleting default software packages is done in the same way as above. This time, let's remove the `luci-app-zerotier` plugin from the default software package. Change
 
-```yaml
+```shell
 CONFIG_PACKAGE_luci-app-zerotier=y
 ```
-change into
 
-```yaml
+to
+
+```shell
 # CONFIG_PACKAGE_luci-app-zerotier is not set
 ```
 
-I think you already know how to personalize the configuration. Each line of the `.config` file represents a configuration item. You can use this method to enable or delete the default configuration in the firmware. The complete content of this file has several thousand lines, I provide This is only a simplified version. How to obtain a complete configuration file for more complex and personalized customization is introduced in `Section 10`.
+I think you should already understand how to customize the configuration. Each line in the .config file represents a configuration item, and you can use this method to enable or delete default configurations in the firmware. The complete content of this file has several thousand lines. I provide only the simplified version here. How to obtain the complete configuration file and perform more complex personalized customization will be introduced in Section 10.
 
 ### 4.2 DIY script operation: diy-part1.sh and diy-part2.sh
 
-The scripts `diy-part1.sh` and `diy-part2.sh` are executed `before and after` the `update and installation` of `feeds` respectively. When we introduce the OpenWrt source code library for personalized firmware compilation, sometimes we want to rewrite part of the code in the source code library, or add Some third-party software packages, delete or replace some software packages in the source code library, such as `modifying the default IP, host name, theme, adding/deleting software packages`, etc., these `modification instructions` to the source code library can be written to these two Script. Let's take the `OpenWrt` source code library provided by `coolsnowwolf` as the compilation object, to give a few examples.
+The scripts diy-part1.sh and diy-part2.sh are executed before and after updating and installing feeds. When we introduce OpenWrt's source code library for personalized firmware compilation, sometimes we want to rewrite some of the code in the source code library, or add some third-party provided software packages, delete or replace some software packages in the source code library, such as modifying the default IP, host name, theme, adding/deleting software packages, etc. These instructions for modifying the source code library can be written to these 2 scripts. We take the OpenWrt source code library provided by coolsnowwolf as an example and illustrate a few examples.
 
-Our following operations are based on this source code library: [https://github.com/coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
+All of our operations below are based on this source code library: [https://github.com/coolsnowwolf/lede](https://github.com/coolsnowwolf/lede).
 
-#### Example 1, Add a third-party software package
+#### Example 1, adding a third-party software package
 
-The first step is to add the following code to `diy-part2.sh`:
+Step 1: Add the following code to diy-part2.sh:
 
-```yaml
+```shell
 git clone https://github.com/jerrykuku/luci-app-ttnode.git package/lean/luci-app-ttnode
 ```
 
-The second step is to add the activation code of this third-party software package to the `.config` file
+Step 2: Add the enable code for the third-party software package to the .config file:
 
-```yaml
+```shell
 CONFIG_PACKAGE_luci-app-ttnode=y
 ```
 
-This completes the integration of third-party software packages and expands the software packages that are not in the current source code repository.
+This completes the integration of the third-party software package and expands the software packages that are not currently available in the source code library.
 
-#### Example 2: Replace the existing software package
+#### Example 2, replacing a software package with the same name
 
-Replace the existing software package with the same name in the current source code library with a third-party software package. The first step is to add the following code to `diy-part2.sh`:
+Step 1: Add the following code to diy-part2.sh: Use the first line of code to delete the original software from the source code library, and then use the second line to introduce the third-party software package with the same name.
 
-First delete the original software package in the source code library, and Introduce a third-party package of the same name.
-
-```yaml
+```shell
 rm -rf package/lean/luci-theme-argon
 git clone https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
 ```
 
-The second step is to add third-party software packages to the `.config` file.
+Step 2: Add the third-party software package to the .config file:
 
-```yaml
+```shell
 CONFIG_PACKAGE_luci-theme-argon=y
 ```
 
-This realizes the use of a third-party software package to replace the existing software package with the same name in the current source code library.
+This replaces the existing software package in the current source code library with a third-party one with the same name.
 
-#### Example 3: Modifying the code in the source code library
+#### Example 3, implementing certain requirements by modifying the code in the source code library
 
-To achieve certain requirements by modifying the code in the source code library. We have added `luci-app-cpufreq` support for `aarch64` so that it can be used in our firmware (some modifications need to be cautious, you must know what you are doing).
+We add support for `aarch64` to `luci-app-cpufreq` so that we can use it in our firmware (some modifications should be made with caution, you must know what you are doing).
 
-Source file address: [luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/lede/blob/master/package/lean/luci-app-cpufreq/Makefile)
+Source file address: [luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/lede/blob/master/package/lean/luci-app-cpufreq/Makefile). Modify the code to add support for aarch64:
 
-```yaml
+```shell
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
 ```
 
-This realizes the modification of the source code.
+This completes the modification of the source code. Through the two scripts diy-part1.sh and diy-part2.sh, we added some operating commands to make the compiled firmware more in line with our personalized needs.
 
-Through `diy-part1.sh` and `diy-part2.sh` two scripts, we add operation commands to make more powerful functions.
+### 4.3 Use Image Builder to create firmware
 
-### 4.3 Make firmware with Image Builder
+The OpenWrt official website provides a pre-made openwrt-imagebuilder-*-armvirt-64.Linux-x86_64.tar.xz file (download address: [https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)), which can be used with the official Image Builder to add software packages and plugins to this file. Usually, it only takes a few minutes to create an openwrt-rootfs.tar.gz file. The production method can refer to the official document: [Using Image Builder](https://openwrt.org/zh/docs/guide-user/additional-software/imagebuilder).
 
-The official website of OpenWrt provides the prepared openwrt-imagebuilder-*-armvirt-64.Linux-x86_64.tar.xz file (download address: [https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)), you can use the official Image Builder to add packages and plug-ins to this file, usually Create an openwrt-rootfs.tar.gz file in just a few minutes. For the production method, please refer to the official document: [Using the Image Builder](https://openwrt.org/docs/guide-user/additional-software/imagebuilder)
+This repository provides a one-click production service. You only need to pass the branch parameter into the [imagebuilder script](imagebuilder/imagebuilder.sh) to complete the production.
 
-This repository provides a one-click production service. You only need to pass the branch parameters into the [imagebuilder script](imagebuilder/imagebuilder.sh) to complete the production.
+- Local production command: You can run the `sudo ./config-openwrt/imagebuilder/imagebuilder.sh openwrt:21.02.3` command in the `~/amlogic-s9xxx-openwrt` root directory to generate it. The parameter `21.02.3` is the current version number of the `releases` that can be [downloaded](https://downloads.openwrt.org/releases). The generated file is located in the `openwrt/bin/targets/armvirt/64` directory.
 
-- Localized make command: You can run the `sudo ./config-openwrt/imagebuilder/imagebuilder.sh openwrt:21.02.3` command in the `~/amlogic-s9xxx-openwrt` root directory to generate it. The parameter `21.02.3` is the version number of `releases` currently available for [download](https://downloads.openwrt.org/releases). The generated files are in the `openwrt/bin/targets/armvirt/64` directory.
+- Use `Actions` on github.com to produce: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
 
-- Use github.com's `Actions` to make: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
+## 5. Compiling Firmware
 
-## 5. Compile the firmware
+The default system configuration information is recorded in the [/etc/model_database.conf](../openwrt-files/common-files/etc/model_database.conf) file, and the name of `BOARD` requires uniqueness.
 
-The configuration information of the default system is recorded in the [/etc/model_database.conf](../openwrt-files/common-files/etc/model_database.conf) file, the `BOARD` name must be unique.
+Among them, the value of `BUILD` that is `yes` is the default system for some boxed systems that are packaged and can be used directly. The default value of `no` is not packaged. These un-packaged boxes need to download the packaged system of the same `FAMILY` (recommended to download the system with kernel `5.15/5.4`). After writing to `USB`, you can open the `boot partition in USB ` on the computer, modify the `dtb name of FDT` in the `/boot/uEnv.txt` file, and adapt to other boxes in the compatibility list.
 
-Where the value of `BUILD` is `yes`, it is the system of some boxes packed by default, and these boxes can be used directly. The default value is `no`, and these unpacked boxes need to download the same `FAMILY` packaged system (it is recommended to download the `5.15/5.4` kernel system). After writing to `USB`, you can open the `boot partition on USB` on the computer, modify the `dtb name of FDT` in the `/boot/uEnv.txt` file, and other boxes in the adaptation list.
-
-It is specified by the `-b` parameter when compiling `locally`, and specified by the `openwrt_board` parameter when compiling in `Actions` of github.com. Use `-b all` to pack all devices where `BUILD` is `yes`. When packaging with the specified `BOARD` parameter, no matter `BUILD` is `yes` or `no`, it can be packaged, for example: `-b r68s_s905x3-tx3_s905l3a-cm311`
+When compiling locally, specify it with the `-b` parameter, and specify it with the `openwrt_board` parameter in github.com's Actions. Use `-b all` to package all devices where `BUILD` is `yes`. When packaging with a specified `BOARD` parameter, it can be packaged regardless of whether `BUILD` is `yes` or `no`. For example: `-b r68s_s905x3-tx3_s905l3a-cm311`
 
 ### 5.1 Manual compilation
 
-In the `navigation bar of your repository`, click the `Actions` button, and then click `Build OpenWrt` > `Run workflow` > `Run workflow` to start the compilation, wait about `3 hours`, and complete the compilation after all the processes are over. The icons are as follows:
+In your repository's navigation bar, click the Actions button, and then click Build OpenWrt > Run workflow > Run workflow in turn to start compiling. It takes about 3 hours to complete the entire process after all processes are completed. The diagram is as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418662-a0226a80-7a04-11eb-97f6-aeb893336e8c.jpg width="300" />
@@ -205,22 +202,22 @@ In the `navigation bar of your repository`, click the `Actions` button, and then
 <img src=https://user-images.githubusercontent.com/68696949/109418666-a7497880-7a04-11eb-9ed0-be738e22f7ae.jpg width="300" />
 </div>
 
-### 5.2 Compile at the agreed time
+### 5.2 Scheduled compilation
 
-In the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file, use `cron` to set the timing compilation. The 5 different positions represent min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday). Set the time by modifying the values of different positions. The system uses `UTC standard time` by default, please convert it according to the time zone of your country.
+In the .github/workflows/build-openwrt-with-lede.yml file, use Cron to set the scheduled compilation, and the five different positions represent the meaning of minutes (0-59)/hours (0-23)/date (1-31)/month (1-12)/day of the week (0-6) (Sunday-Saturday). Modify the numerical value in different locations to set the time. The system uses UTC standard time by default, please convert it according to the time zone of your country.
 
-```yaml
+```shell
 schedule:
   - cron: '0 17 * * *'
 ```
 
-## 6. Save the firmware
+## 6. Saving Firmware
 
-The settings saved by the firmware are also controlled in the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file. We will automatically upload the compiled firmware to the `Actions` and `Releases` officially provided by `GitHub` through scripts, or upload it to a `third party` (such as WeTransfer).
+The firmware saving settings are also controlled in the .github/workflows/build-openwrt-with-lede.yml file. We automatically upload the compiled firmware to Actions and Releases provided by GitHub through scripts, or upload them to third-party services (such as WeTransfer).
 
-Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is permanent`, and third parties such as WeTransfer are 7 days. First of all, we thank these service providers for their free support, but we also ask you to use it sparingly. We advocate the reasonable use of free services.
+The maximum retention period of Actions in Github is now 90 days, Releases is permanent, and third parties such as WeTransfer are 7 days. First of all, we thank these service providers for their free support, but please use them sparingly. We advocate reasonable use of free services.
 
-### 6.1 Save to GitHub Actions
+### 6.1 Save to Github Actions
 
 ```yaml
 - name: Upload artifact to Actions
@@ -251,7 +248,7 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
       Default WIFI password: none
       Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
 ```
-### 6.3 Save to a third party
+### 6.3 Save to a Third-Party
 
 ```yaml
 - name: Upload OpenWrt Firmware to WeTransfer
@@ -262,98 +259,99 @@ Now the longest storage period of `Actions in GitHub is 90 days`, `Releases is p
     echo "WET_URL=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_ENV
 ```
 
-## 7. Download the firmware
+## 7. Downloading Firmware
 
-Download our compiled openwrt firmware.
+Download the OpenWrt firmware we have compiled and uploaded to the relevant storage location.
 
-### 7.1 Download from GitHub Actions
+### 7.1 Download from Github Actions
 
-Click the `Actions` button in the `repository navigation bar`. In the `All workflows` list, click the compiled firmware list. In the firmware list inside, select the firmware corresponding to the model of your `Amlogic s9xxx TV Boxes`. The icons are as follows:
+Click the Actions button in the repository navigation bar, click the compiled firmware list in the All workflows list, and select the firmware corresponding to your box model in the firmware list. The figure is as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418782-08714c00-7a05-11eb-9556-91575640a4bb.jpg width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/109418785-0ad3a600-7a05-11eb-9fdd-519835a14eaa.jpg width="300" />
 </div>
 
-### 7.2 Download from GitHub Releases
+### 7.2 Download from Github Releases
 
-Enter from the GitHub `Releases` section at the bottom right corner of the `repository homepage`, and select the firmware corresponding to the model of your `Amlogic s9xxx TV Boxes`. The icons are as follows:
+Enter the Release section in the lower right corner of the repository homepage and select the firmware corresponding to your box model. The figure is as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418828-466e7000-7a05-11eb-8f69-a89a1d158a4b.jpg width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/109418841-55edb900-7a05-11eb-9650-7100ebd6042c.jpg width="300" />
 </div>
 
-### 7.3 Download from third parties
+### 7.3 Download from a Third Party
 
-In the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file, upload to the third party is closed by default. If you need, change `false` to `true`, and upload to the third party when the compilation is completed next time. The third-party URL can be seen `in the log` of the firmware compilation process, and can also be output to the compilation information.
+In the .github/workflows/build-openwrt-with-lede.yml file, we have disabled the option to upload to third parties by default. If you need it, change false to true, and it will be uploaded to the third party after the next compilation is completed. The third-party website can be seen in the firmware compilation process logs, or output to the compilation information.
 
-```yaml
+```shell
 UPLOAD_COWTRANSFER: false
 UPLOAD_WETRANSFER: false
 ```
 
-The support for uploading to a third party comes from [Mikubill/transfer](https://github.com/Mikubill/transfer). If you need it, you can add more third-party support according to his instructions (control your creativity and don't waste too many free resources). The icons are as follows:
+Support for uploading to third parties comes from https://github.com/Mikubill/transfer. If you need it, you can add more third-party support according to their instructions (control your creativity and don't waste too much free resources). The figure is as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418921-b5e45f80-7a05-11eb-80ba-02edb0698270.jpg width="300" />
 </div>
 
-## 8. Install the firmware
+## 8. Installing Firmware
 
-### 8.1 Method of integrating luci-app-amlogic at compile time
+### 8.1 Integrate luci-app-amlogic Operation Panel during Compilation
 
 1. `svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic`
-2. Execute make `menuconfig` and select `luci-app-amlogic` under `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
+2. After executing `menuconfig`, you can choose the plugin `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
 
-For more instructions on the plug-in, see：[https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)
+For more explanation of the plugin, please see: [https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)
 
-Choose the corresponding firmware according to your box. Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the box.
+### 8.2 Install using the Operation Panel
 
-### 8.2 Install using the operation panel
+1. For the `Rockchip` platform installation method, please refer to Chapter 8 in the documentation for the same installation method as Armbian.
 
-1. For the installation method of the `Rockchip` platform, please refer to [Section 8](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents) in the documentation. The installation method is the same as Armbian.
+2. For the `Amlogic` and `Allwinner` platforms, use tools such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/) to write the firmware into the USB, and then insert the USB with the written firmware into the box. Access OpenWrt's default IP from the browser: 192.168.1.1 → `Login to OpenWrt with default account` → `System Menu` → `Amlogic Service` → `Install OpenWrt`.
 
-2. `Amlogic` and `Allwinner` platform，Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the box. `Log in to the default IP: 192.168.1.1` → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`
+## 9. Upgrading Firmware
 
-## 9. Update firmware
+Access the OpenWrt system from the browser, select `Amlogic Service` in the `System` menu, and select `Upgrade OpenWrt firmware` or `Replace OpenWrt kernel` to upgrade. (You can upgrade from a higher version like 5.15.50 to a lower version like 5.10.125, or from a lower version like 5.10.125 to a higher version like 5.15.50. The high and low versions of the kernel version do not affect the upgrade, and you can freely upgrade/downgrade).
 
-`Log in to your OpenWrt system`, under the `System` menu, select the `Amlogic Service`, select the `Update OpenWrt firmware` or `Replace OpenWrt Kernel` to update. (You can update from a higher version such as 5.15.50 to a lower version such as 5.10.125, or from a lower version such as 5.10.125 to a higher version such as 5.15.50. The kernel version number does not affect the update, and `you can freely update/downgrade`.)
+## 10. Personalized Firmware Customization and Upgrade Tutorial
 
-## 10. Personalized firmware customization update tutorial
+If you have followed this tutorial to this step, I believe you already know how to play with OpenWrt. But if you continue to explore deeper, you will embark on an extraordinary journey of tinkering. You will encounter many problems, which require you to have a mentality of continuous exploration, be good at using search engines to solve problems, and spend some time learning in the OpenWrt community.
 
-If you see this step in the tutorial, I believe you already know how to play happily. If you don’t continue to read what is said later, I believe you will not be at ease. But, but ah, if you continue to explore in depth, you will start an extraordinary journey of tossing. You will encounter a lot of problems. This requires you to be prepared for continuous exploration, and you must be good at using `search engines` to solve problems. The time can go to various `OpenWrt communities` to learn.
+### 10.1 Understanding the Complete .config File
 
-### 10.1 Know the complete .config file
+Use the official OpenWrt source code repository or other branch repositories for local compilation. For example, select the source code repository https://github.com/coolsnowwolf/lede and install Ubuntu locally according to its compilation instructions. The environment is deployed and a local compilation is completed. In the local compilation configuration interface, you can also see many rich explanations, which will strengthen your understanding of the OpenWrt compilation process.
 
-Use the official source code library of `OpenWrt` or the source code library of other branches to perform a `localized compilation`. For example, select the source code library of [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede), and install the `Ubuntu system` locally and deploy the environment according to its compilation instructions. And `complete a local compilation`. In the local compilation configuration interface, you can also see a lot of rich instructions, which will strengthen your understanding of the OpenWrt compilation process.
+After you complete the OpenWrt personalized configuration locally, save and exit the configuration interface. You can find the .config file in the root directory of the local OpenWrt source code repository (enter the command `ls -a` in the root directory of the code repository to view all hidden files). You can directly upload this file to your repository on github.com and replace the file config-openwrt/lede-master/config.
 
-After you complete the `OpenWrt personalized configuration` locally, `save and exit` the configuration interface. You can find the `.config` file in the root directory of the local OpenWrt source code library. You can upload this file directly to `your repository on github.com`, Replace the `config-openwrt/lede-master/config` file.
+### 10.2 Understanding the Workflow File
 
-### 10.2 Know the workflow file
+GitHub provides detailed instructions on the use of GitHub Actions. You can start learning it from here: [GitHub Actions Quick Start](https://docs.github.com/en/actions/quickstart)
 
-The official GitHub gave a detailed explanation. Regarding the use of `GitHub Actions`, you can start to get to know it from here: [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart)
+Let's take the workflow control file currently used in this repository as an example to briefly introduce it: [build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml)
 
-Let’s make a few brief introductions based on the files being used in the repository: [build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml)
-
-#### 10.2.1 Replacing source code repositories and branches
+#### 10.2.1 Change the Address and Branch of the Compilation Source Code Repository
 
 ```yaml
-#On Line 63: Source code library address
+# On line 63: Specifies the address of the OpenWrt compilation source code
 REPO_URL: https://github.com/coolsnowwolf/lede
 
-#On Line 64: Branch name
+# On line 64: Specifies the name of the branch
 REPO_BRANCH: master
 ```
-You can modify it to other, such as official:
+
+You can modify it to the address of other source code repositories, such as using the official source code repository and its `openwrt-21.02` branch:
+
 ```yaml
 REPO_URL: https://github.com/openwrt/openwrt
 REPO_BRANCH: openwrt-21.02
 ```
 
-#### 10.2.2 Change TV Boxes model and kernel version
+#### 10.2.2 Change the Box Model and Kernel Version Number
 
-Near line 139, find `Build OpenWrt firmware`, Code snippet like this:
+Near line 139, find the compilation step with the title `Build OpenWrt firmware`, and its code block is similar to this:
+
 ```yaml
 - name: Build OpenWrt firmware
   if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
@@ -366,16 +364,18 @@ Near line 139, find `Build OpenWrt firmware`, Code snippet like this:
     openwrt_size: ${{ inputs.openwrt_size }}
     gh_token: ${{ secrets.GH_TOKEN }}
 ```
-Refer to the related [parameter description](https://github.com/ophub/amlogic-s9xxx-openwrt#github-actions-input-parameter-description) of the packaging command. The above setting options can be set by writing fixed values, or they can be selected through the `Actions` panel:
+
+Refer to the related [parameter description](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.md#input-parameters-for-github-actions) of the packaging command. The above settings options can be set by writing fixed values or by selecting through the `Actions` panel:
+
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/181870674-1816aa21-ece4-4149-83ce-6ec7f95ece68.png width="700" />
 </div>
 
-### 10.3 Custom banner information
+### 10.3 Customizing Banner Information
 
-The default [/etc/banner](../openwrt-files/common-files/etc/banner) information is as follows, you can use the [banner generator](https://www.bootschool.net/ascii) Customize your own personalized banner information(The style below is `slant`), just overwrite the file with the same name.
+The default [/etc/banner](../openwrt-files/common-files/etc/banner) information is as follows. You can use the [banner generator](https://www.bootschool.net/ascii) to customize your own personalized banner information (the style below is `slant`). Overwrite the file with the same name to replace it.
 
-```yaml
+```shell
       ____                 _       __     __        ____
      / __ \____  ___  ____| |     / /____/ /_      / __ )____  _  __
     / / / / __ \/ _ \/ __ \ | /| / / ___/ __/_____/ __  / __ \| |/_/
@@ -385,13 +385,13 @@ The default [/etc/banner](../openwrt-files/common-files/etc/banner) information 
 ───────────────────────────────────────────────────────────────────────
 ```
 
-### 10.4 Custom feeds configuration file
+### 10.4 Customizing Feeds Configuration File
 
-When you look at the `feeds.conf.default` file in the `source code repository`, do you find that there are a lot of package libraries introduced here? You understand that right, we can find the source code library officially provided by OpenWrt on GitHub, as well as the branches of OpenWrt shared by many people. If you know them, you can add them from here. For example, [feeds.conf.default](https://github.com/coolsnowwolf/lede/blob/master/feeds.conf.default) in the `coolsnowwolf` source code library.
+When you view the feeds.conf.default file in the source code repository, do you find that it imports many software package repositories? Yes, we can find the source code repositories provided by OpenWrt and many people's branches and software packages on GitHub. If you know them, you can add them here. For example, the [feeds.conf.default](https://github.com/coolsnowwolf/lede/blob/master/feeds.conf.default) in the coolsnowwolf repository.
 
-### 10.5 Custom software default configuration information
+### 10.5 Customizing Default Software Configuration Information
 
-When we use `OpenWrt`, we have already configured many software. Most of the `configuration information` of these software is stored in your OpenWrt's `/etc/config/` and other related directories. Copy the storage files of these configuration information to In the `files` folder under the root directory of the `repository in GitHub`, please `keep the directory structure and files the same`. During OpenWrt compilation, the storage files of these configuration information will be compiled into your firmware. The specific method is in the [.github/workflows/build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml) file. Let's take a look at this code together:
+We have already configured many software when using OpenWrt. Most of the configuration information of these software is saved in the /etc/config/ related directories of your OpenWrt. Copy these storage files of configuration information to the files folder in the root directory of your GitHub repository, please keep the directory structure and file names the same. During OpenWrt compilation, these configuration information storage files will be compiled into your firmware. The specific method is in the .github/workflows/build-openwrt-with-lede.yml file. Let's take a look at this code together:
 
 ```yaml
 - name: Load custom configuration
@@ -403,132 +403,125 @@ When we use `OpenWrt`, we have already configured many software. Most of the `co
     ${GITHUB_WORKSPACE}/${DIY_P2_SH}
 ```
 
-Please do not copy the configuration information files that `involve privacy`. If `your repository is public`, then the files you put in the `files` directory are also `public`. Do not disclose the secrets. Some passwords and other information can be used using the `private key settings` you just learned in [Quickstart for GitHub Actions](https://docs.github.com/en/Actions/quickstart). You must understand what you are doing.
+Please do not copy configuration information files involving privacy. If your repository is public, the files you put in the files folder are also public. Do not disclose secrets publicly. Some password and other information can be encrypted and used with methods such as private key settings learned in the GitHub Actions Quick Start guide you just learned. You must understand what you are doing.
 
-### 10.6 Opkg Package Manager
+### 10.6 Opkg Package Management
 
-Like most Linux distributions (or mobile device operating systems like say Android or iOS), the functionality of the system can be upgraded rather significantly by downloading and installing pre-made packages from package repositories (local or on the Internet).
+Like most Linux distributions (or mobile device operating systems such as Android or iOS), system functionality can be upgraded by downloading and installing packages from software repositories (local or Internet). The opkg utility is a lightweight package manager used for this task, intended to add software to firmware on embedded devices. Opkg is a full package manager for the root file system, including kernel modules and drivers. The software package manager opkg attempts to resolve dependencies for packages in the repository, and if it fails, it reports an error and aborts the installation of that package. Third-party packages may lack dependencies and can be obtained from the source of the package. To ignore dependency errors, pass the `--force-depends` parameter.
 
-The opkg utility is the lightweight package manager used for this job. which is designed to add software to stock firmware of embedded devices. Opkg is a full package manager for the root file system, including kernel modules and drivers.
+- If you are using a snapshot/trunk/latest version, installing a package may fail if the kernel version used by the package in the repository is newer than the kernel version you have. In this case, you will receive an error message such as `Unable to satisfy the following dependencies...`. For this usage of the OpenWrt firmware, it is strongly recommended that you directly integrate the required packages into the OpenWrt firmware during compilation.
 
-The package manager opkg attempts to resolve dependencies with packages in the repositories - if this fails, it will report an error and abort the installation of that package.
+- Non-official plugins of openwrt.org, such as `luci-app-uugamebooster`, `luci-app-xlnetacc`, etc., need to be directly integrated and compiled during firmware compilation. These packages cannot be installed directly from the mirror server using opkg, but you can manually upload these packages to OpenWrt and install them using opkg.
 
-Missing dependencies with third-party packages are probably available from the source of the package.
-To ignore dependency errors, pass the `--force-depends` flag.
-
-- If you are using a snapshot / trunk / bleeding edge version, installing packages may fail if the package in the repository is for a newer kernel version than the kernel version you have.
-In this case, you will get the error message “Cannot satisfy the following dependencies for…”.
-For such usage of OpenWrt firmware, **`it's warmly recommended to use the Image Builder to make a flashable image containing all packages you need`**.
-
-- Non-openwrt.org official plug-ins, such as `luci-app-uugamebooster`, `luci-app-xlnetacc`, etc., need to be personalized during firmware compilation. These packages cannot be directly installed from the mirror server using opkg, But you can manually `upload to openwrt and use opkg to install`.
-
-- When on trunk/snapshot, kernel and kmod packages are flagged as hold, the `opkg upgrade` command won't attempt to update them.
+- On the trunk/snapshot, kernel and kmod packages are marked as reserved, and the `opkg upgrade` command will not attempt to update them.
 
 Common commands:
-```
-opkg update                                   #Update list of available packages
-opkg upgrade <pkgs>                           #Upgrade packages
-opkg install <pkgs>                           #Install package(s)
-opkg install --force-reinstall <pkgs>         #Force reinstall package(s)
-opkg configure <pkgs>                         #Configure unpacked package(s)
-opkg remove <pkgs | regexp>                   #Remove package(s)
-opkg list                                     #List available packages
-opkg list-installed                           #List installed packages
-opkg list-upgradable                          #List installed and upgradable packages
-opkg list | grep <pkgs>                       #Find similar packages names
-```
-[For more instructions please see: opkg](https://openwrt.org/docs/guide-user/additional-software/opkg)
-
-### 10.7 Manage packages using web interface
-
-After you have flashed the OpenWrt firmware to your device, you can install additional software packages via WebUI.
-
-1. Navigate to LuCI → System → Software.
-2. Click Update lists button to fetch a list of available packages.
-3. Fill in Filter field and click Find package button to search for a specific package.
-4. Switch to Available packages tab to show and install available packages.
-5. Switch to Installed packages tab to show and remove installed packages.
-
-Search and install `luci-app-*` packages if you want to configure services using LuCI.
-
-[For more instructions please see: packages](https://openwrt.org/packages/start)
-
-### 10.8 How to restore the original Android TV system
-
-Usually use openwrt-ddbr backup to restore, or use Amlogic usb burning tool to restore the original Android TV system.
-
-#### 10.8.1 Restoring using openwrt-ddbr backup
-
-It is recommended that you make a backup of the original Android TV system that comes with the current box before installing the OpenWrt system in a new box, so that you can use it when you need to restore the system. Please boot the OpenWrt system from `TF/SD/USB`, enter the `openwrt-ddbr` command, and then enter `b` according to the prompts to backup the system. The backup file is stored in the path `/ddbr/BACKUP-arm-64-emmc. img.gz` , please download and save. When you need to restore the Android TV system, upload the previously backed up files to the same path of the `TF/SD/USB` device, enter the `openwrt-ddbr` command, and then enter `r` according to the prompt to restore the system.
-
-#### 10.8.2 Restoring with Amlogic usb burning tool
-
-- Under normal circumstances, re-insert the USB hard disk and install it again.
-
-- If you cannot start the OpenWrt system from the USB hard disk again, connect the Amlogic s9xxx TV Boxes to the computer monitor. If the screen is completely black and there is nothing, you need to restore the Amlogic s9xxx TV Boxes to factory settings first, and then reinstall it. First download the [amlogic_usb_burning_tool](https://github.com/ophub/kernel/releases/tag/tools) system recovery tool and install it. Prepare a [USB dual male data cable](https://user-images.githubusercontent.com/68696949/159267576-74ad69a5-b6fc-489d-b1a6-0f8f8ff28634.png), Prepare a [paper clip](https://user-images.githubusercontent.com/68696949/159267790-38cf4681-6827-4cb6-86b2-19c7f1943342.png).
-
-- Take x96max+ as an example. Find the two [short-circuit points](https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg) on the motherboard, Download the [Android TV firmware](https://github.com/ophub/kernel/releases/tag/tools). The Android TV system firmware of other common devices and the corresponding short circuit diagrams can also be [downloaded and viewed here](https://github.com/ophub/kernel/releases/tag/tools).
 
 ```
-Operation method:
-
-1. Open the USB Burning Tool:
-   [ File → Import image ]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
-   [ Check ]：Erase flash
-   [ Check ]：Erase bootloader
-   Click the [ Start ] button
-2. Use a [ paper clip ] to connect the [ two shorting points ] on the main board of the box,
-   and use a [ USB dual male data cable ] to connect the [ box ] to the [ computer ] at the same time.
-3. Loosen the short contact after seeing the [ progress bar moving ].
-4. After the [ progress bar is 100% ], the restoration of the original Android TV system is completed.
-   Click [ stop ], unplug the [ USB male-to-male data cable ] and [ power ].
-5. If the progress bar is interrupted, repeat the above steps until it succeeds.
-   If the progress bar does not respond after the short-circuit, plug in the [ power ] supply after the short-circuit.
-   Generally, there is no need to plug in the power supply.
+opkg update                                       # Update the list of available packages
+opkg upgrade <pkgs>                               # Upgrade packages
+opkg install <pkgs>                               # Install packages
+opkg install --force-reinstall <pkgs>             # Force reinstallation of packages
+opkg configure <pkgs>                             # Configure unpacked packages
+opkg remove <pkgs | regexp>                       # Remove packages
+opkg list                                         # List available packages
+opkg list-installed                               # List installed packages
+opkg list-upgradable                              # List installed and upgradable packages
+opkg list | grep <pkgs>                           # Find packages matching keyword
 ```
 
-When the factory reset is completed, the box has been restored to the Android TV system, and other operations to install the OpenWrt system are the same as the requirements when you installed the system for the first time before, just do it again.
+For more help, please refer to [opkg](https://openwrt.org/docs/guide-user/additional-software/opkg).
 
-### 10.9 If you can’t startup after using the Mainline u-boot
+### 10.7 Managing Packages Using the Web Interface
 
-- A very small number of devices may fail to boot after choosing to write to the main line `u-boot`. The fault phenomenon is usually the `=>` prompt of u-boot automatically. The reason is that TTL lacks a pull-up resistor or pull-down resistor and is easily interfered by surrounding electromagnetic signals. The solution is to solder a 5K-10K resistor (pull-down) between TTL RX and GND, or solder a resistor between RX and 3.3V. A resistance of 5K-10K (pull-up).
+After installing OpenWrt firmware on a device, you can use the WebUI to install other software packages.
 
-If you choose to use the `mainline u-boot` during installation and it fails to start, please connect the Amlogic S905x3 box to the monitor. If the screen shows the following prompt:
+1. Log in to OpenWrt → `System` → `Software`.
+2. Click the `Update lists` button to update.
+3. Fill in the `Filter` field and click the `Find package` button to search for specific software packages.
+4. Switch to the `Available packages` tab to display available software packages that can be installed.
+5. Switch to the `Installed packages` tab to display and remove installed packages.
+
+If you want to use LuCI to configure services, search for and install `luci-app-*` packages.
+
+For more help, please refer to [packages](https://openwrt.org/packages/start).
+
+### 10.8 How to Restore the Original Android TV System
+
+Generally, openwrt-ddbr backup and restore or the Amlogic flashing tool can be used to restore the original Android TV system.
+
+#### 10.8.1 Using openwrt-ddbr Backup and Restore
+
+Before installing the OpenWrt system on a new box, it is recommended that you back up the original Android TV system that comes with the current box so that you can use it when you need to restore the system. Boot the OpenWrt system from `TF/SD/USB`, enter the `openwrt-ddbr` command, and then follow the prompts to enter `b` to back up the system. The backup file is stored in `/ddbr/BACKUP-arm-64-emmc.img.gz`, please download and save it. When you need to restore the Android TV system, upload the previously backed up file to the same path of the `TF/SD/USB` device, enter the `openwrt-ddbr` command, and then follow the prompts to enter `r` for system restoration.
+
+#### 10.8.2 Using Amlogic Flashing Tool to Restore
+
+- Generally, if you re-insert the power supply and can boot from USB, just reinstall it. Try several times.
+
+- If the screen is black and cannot boot from USB after connecting to the display, you need to short-circuit the box for initialization. First, restore the box to the original Android system and then re-flash the OpenWrt system. First, download the [amlogic_usb_burning_tool](https://github.com/ophub/kernel/releases/tag/tools) system recovery tool and install it. Prepare a [USB dual male head data cable](https://user-images.githubusercontent.com/68696949/159267576-74ad69a5-b6fc-489d-b1a6-0f8f8ff28634.png) and a [paperclip](https://user-images.githubusercontent.com/68696949/159267790-38cf4681-6827-4cb6-86b2-19c7f1943342.png).
+
+- Taking x96max+ as an example, confirm the position of the [short circuit point](https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg) on the mainboard of the box, and download the [Android TV firmware package](https://github.com/ophub/kernel/releases/tag/tools) for the box. The schematic diagram of the short-circuit point for the Android TV system firmware of other common devices and its corresponding download can also be viewed and downloaded from here.
+
+```shell
+Operation:
+
+1. Open the flashing software USB Burning Tool:
+   [ Files → Import firmware package]: X96Max_Plus2_20191213-1457_ATV9_davietPDA_v1.5.img
+   [ Select]: Erase flash
+   [ Select]: Erase bootloader
+   Click the [Start] button.
+2. Use a [paperclip] to [short-circuit the two short-circuit points] on the mainboard of the box
+   and at the same time use a [USB dual male head data cable] to connect the [box] to the [computer].
+3. When you see the [progress bar start to move], remove the paper clip and no longer short-circuit it.
+4. When you see the [progress bar 100%], the flashing is complete, and the box has been restored to the Android TV system.
+   Click the [Stop] button, unplug the [USB dual male head data cable] between the [box] and the [computer].
+5. If any of the above steps fail, do it again until successful.
+   If the progress bar does not move, try plugging in the power supply. In general, power supply support is not required, only USB dual male head power supply can meet the flashing requirements.
 ```
+
+When the factory settings are restored, the box has been restored to the Android TV system, and other operations for installing the OpenWrt system are the same as the requirements when you first installed the system. Just go through the process again.
+
+### 10.9 Unable to Boot After Installing Mainline u-boot
+
+- A few devices may fail to boot after installing the mainline `u-boot`, and you may see a section of code ending with the `=>` symbol in the display. In this case, you need to solder a 5-10 K pull-up or pull-down resistor on the TTL interface to solve the problem that the box is easily affected by surrounding electromagnetic signals and cannot be started, and then you can start from EMMC.
+
+If you choose to install the mainline `u-boot` and cannot boot, please connect the box to the screen to see if you get the following prompt:
+
+```shell
 Net: eth0: ethernet0ff3f0000
 Hit any key to stop autoboot: 0
 =>
 ```
 
-You need to install a resistor on the TTL: [X96 Max Plus's V4.0 Motherboard](https://user-images.githubusercontent.com/68696949/110910162-ec967000-834b-11eb-8fa6-64727ccbe4af.jpg)
+If your phenomenon is as shown above, then you need to solder a resistor on the TTL interface: [X96 Max Plus's V4.0 motherboard diagram](https://user-images.githubusercontent.com/68696949/110910162-ec967000-834b-11eb-8fa6-64727ccbe4af.jpg).
 
+```shell
+#######################################################        ########################################################
+#                                                     #        #                                                      #
+#   Pull-Up Resistor: Solder between TTL RX and GND   #        #  Pull-Down Resistor: Solder between TTL 3.3V and RX  #
+#                                                     #        #                                                      #
+#            3.3V   RX       TX       GND             #   OR   #        3.3V               RX     TX     GND          #
+#                    ┖————█████████————┚              #        #         ┖————█████████————┚                          #
+#                      (5~10kΩ)                       #        #                  (5~10kΩ)                            #
+#                                                     #        #                                                      #
+#######################################################        ########################################################
 ```
-#######################################################            #####################################################
-#                                                     #            #                                                   #
-#   Resistor (pull-down): between TTL's RX and GND    #            #   Resistor (pull-up): between TTL's 3.3V and RX   #
-#                                                     #            #                                                   #
-#            3.3V   RX       TX       GND             #     OR     #        3.3V               RX     TX     GND       #
-#                    ┖————█████████————┚              #            #         ┖————█████████————┚                       #
-#                      Resistor (5~10K)               #            #           Resistor (5~10K)                        #
-#                                                     #            #                                                   #
-#######################################################            #####################################################
-```
 
-### 10.10 Set the box to boot from USB/TF/SD
+### 10.10 Setting the Box to Boot from USB/TF/SD
 
-- Write the firmware to USB/TF/SD, insert it into the box after writing.
-- Open the developer mode: Settings → About this machine → Version number (for example: X96max plus...), click on the version number for 5 times in quick succession, See the prompt of `Enable Developer Mode` displayed by the system.
-- Turn on USB debugging: System → Advanced options → Developer options again (after entering, confirm that the status is on, and the `USB debugging` status in the list is also on). Enable `ADB` debugging.
-- Install ADB tools: Download [adb](https://github.com/ophub/kernel/releases/tag/tools) and unzip it, copy the three files `adb.exe`, `AdbWinApi.dll`, and `AdbWinUsbApi.dll` to the two files `system32` and `syswow64` under the directory of `c://windows/` Folder, then open the `cmd` command panel, use `adb --version` command, if it is displayed, it is ready to use.
-- Enter the `cmd` command mode. Enter the `adb connect 192.168.1.137` command (the ip is modified according to your box, and you can check it in the router device connected to the box), If the link is successful, it will display `connected to 192.168.1.137:5555`
-- Enter the `adb shell reboot update` command, the box will restart and boot from the USB/TF/SD you inserted, access the firmware IP address from a browser, or SSH to enter the firmware.
-- Log in to the system: Connect the computer and the s9xxx box with a network interface → turn off the wireless wifi on the computer → enable the wired connection → manually set the computer ip to the same network segment ip as openwrt, ipaddr such as `192.168.1.2`. The netmask is `255.255.255.0`, and others are not filled in. You can log in to the openwrt system from the browser, Enter OpwnWrt's IP Address: `192.168.1.1`, Account: `root`, Password: `password`, and then log in OpenWrt system.
+- Insert the USB/TF/SD card with the firmware into the box.
+- Enable Developer Options: go to Settings → About Device → Version (such as X96max plus...), quickly click the left mouse button five times on the version number, and you will see a prompt "Developer mode enabled".
+- Enable USB Debugging: go to System → Advanced Options → Developer Options (set "Enable USB debugging" to enabled) and enable ADB debugging.
+- Install ADB Tools: download [adb](https://github.com/ophub/kernel/releases/tag/tools) and extract it. Copy the three files `adb.exe`, `AdbWinApi.dll`, and `AdbWinUsbApi.dll` to the `system32` and `syswow64` folders under `c://windows/`. Then open the `cmd` command panel and use the `adb --version` command. If something is displayed, it means you can use it.
+- Enter the `cmd` command mode. Enter the command `adb connect 192.168.1.137` (replace the IP address with your box's IP address, which can be found in the router device that the box is connected to). If the connection is successful, it will display "connected to 192.168.1.137:5555".
+- Enter the command `adb shell reboot update`. The box will restart and boot from the USB/TF/SD inserted. Access the firmware's IP address from the browser or SSH to enter the firmware.
+- Log in to OpenWrt: Connect your box directly to your computer → Disable Wi-Fi on your computer and only use wired Ethernet → Set the network settings of the wired Ethernet to the same subnet as OpenWrt. If the default IP of OpenWrt is `192.168.1.1`, you can set the IP of your computer to `192.168.1.2` and the subnet mask to `255.255.255.0`. You do not need to set any other options. Then you can enter OpenWrt from the browser, with the default IP being `192.168.1.1`, default username: `root`, and default password: `password`.
 
-### 10.11 Required options for OpenWrt
+### 10.11 OpenWrt Required Options
 
-This list is organized based on the development guide of [unifreq](https://github.com/unifreq/openwrt_packit). In order to ensure that scripts such as installation/update can run normally in OpenWrt, when using `make menuconfig` to configure, you need to add the following mandatory options:
+This list is based on the development guidelines of [unifreq](https://github.com/unifreq/openwrt_packit). To ensure that installation/update scripts can run smoothly in OpenWrt, the following required options need to be added when configuring with `make menuconfig`:
 
-```
+```shell
 Target System  -> QEMU ARM Virtual Machine
 Subtarget      -> QEMU ARMv8 Virtual Machine (cortex-a53)
 Target Profile -> Default

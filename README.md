@@ -1,16 +1,16 @@
 # OpenWrt
 
-View Chinese description  |  [查看中文说明](README.cn.md)
+View Chinese description | [查看中文说明](README.cn.md)
 
-The [OpenWrt](https://openwrt.org/) Project is a Linux router operating system targeting embedded devices. Instead of trying to create a single, static firmware, OpenWrt provides a fully writable filesystem with package management. Allows you to freely choose the software package you need to customize your router system. For developers, OpenWrt is the framework to build an application without having to build a complete firmware around it; for users this means the ability for full customization, to use the device in ways never envisioned. It has more than 3000+ standardized application packages and a very rich third-party plug-in support, so you can easily replicate the same setup on any supported device.
+[OpenWrt](https://openwrt.org/) is a Linux-based router operating system designed for embedded devices. Unlike a single, unmodifiable firmware, OpenWrt provides a fully writable file system with package management capabilities, allowing users to freely choose the software packages they need to customize their router system. For developers, OpenWrt is a framework that allows them to develop applications without having to build a complete firmware around it. For regular users, this means having the ability to fully customize and use the device in unexpected ways. It offers over 3000 standardized application software packages and extensive third-party plugin support, making it easy to apply them to various supported devices.
 
-Now you can replace the Android TV system of the TV box with the OpenWrt system, making it a powerful router. This project builds OpenWrt system for `Amlogic`, `Rockchip` and `Allwinner` boxes. including install to eMMC and update kernel related functions. Please refer to the [OpenWrt Documentation](./make-openwrt/documents) for the usage method.
+Now you can replace the Android TV system on your TV box with OpenWrt, turning it into a powerful router. This project builds OpenWrt systems for `Amlogic`, `Rockchip`, and `Allwinner` boxes. It supports writing to eMMC and updating the kernel, among other features. For detailed instructions on how to use it, please refer to the [OpenWrt Documentation](./make-openwrt/documents).
 
-The latest version of the OpenWrt firmware can be downloaded in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). Welcome to use `Fork` for personalized OpenWrt firmware configuration. If you like it, Please click the `Star`.
+The latest firmware can be downloaded from [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). You are welcome to `Fork` and customize the software package according to your needs. If it is useful to you, please click `Star` in the upper right corner of the repository to show your support.
 
-## OpenWrt Firmware instructions
+## OpenWrt System Description
 
-| SoC  | Device | [Optional kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable) | OpenWrt Firmware |
+| SoC  | Device | [Kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable) | OpenWrt |
 | ---- | ---- | ---- | ---- |
 | a311d | [Khadas-VIM3](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/99) | All | amlogic_a311d.img |
 | s922x | [Beelink-GT-King](https://github.com/ophub/amlogic-s9xxx-armbian/issues/370), [Beelink-GT-King-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/707), [Ugoos-AM6-Plus](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/213), [ODROID-N2](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/201), [X88-King](https://github.com/ophub/amlogic-s9xxx-armbian/issues/988), [Ali-CT2000](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1150) | All | amlogic_s922x.img |
@@ -33,107 +33,107 @@ The latest version of the OpenWrt firmware can be downloaded in [Releases](https
 | rk3328 | [BeikeYun](https://github.com/ophub/amlogic-s9xxx-armbian/issues/852), [L1-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1007), [Station-M1](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1313), [Bqeel-MVR9](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1313) | All | rockchip_boxname.img |
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1120) | All | allwinner_boxname.img |
 
-💡Tip: Currently [s905 Boxes](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used in `TF/SD/USB`, Other models of boxes support writing to `eMMC` for use. For more information, please refer to [Description of Supported Device List](make-openwrt/openwrt-files/common-files/etc/model_database.conf). You can refer to the method in Section 12.15 of the documentation to [add new support devices](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/README.md#1215-how-to-add-new-supported-devices).
+💡Note: Currently, [s905 boxes](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used with `TF/SD/USB`, while other models of boxes can support writing to `EMMC`. For more information, please refer to the [Supported Device List Description](make-openwrt/openwrt-files/common-files/etc/model_database.conf). You can refer to Chapter 12.15 of the documentation for the method on [Adding New Supported Devices](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/README.md#1215-how-to-add-new-supported-devices).
 
-## Install to EMMC and update instructions
+## Installation and Upgrade Instructions
 
-Choose the corresponding firmware according to your box. See the corresponding instructions for the use of different devices.
+Select the OpenWrt image that corresponds to your TV box model and refer to the corresponding instructions for usage of different devices.
 
 - ### Install OpenWrt
 
-1. For the installation method of the `Rockchip` platform, please refer to [Section 8](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents) in the documentation. The installation method is the same as Armbian.
+1. For installation instructions on the `Rockchip` platform, please refer to Chapter 8 in the [Documentation](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents). The installation process is the same as that for Armbian.
 
-2. `Amlogic` and `Allwinner` platform，Then write the IMG file to the USB hard disk through software such as [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/). Insert the USB hard disk into the box. Log in to the default IP: 192.168.1.1 → `Login in to openwrt` → `system menu` → `Amlogic Service` → `Install OpenWrt`, Select your box in the Supported Devices drop-down list and click the `Install OpenWrt` button to install it.
+2. For the `Amlogic` and `Allwinner` platforms, use tools such as Rufus or balenaEtcher to write the firmware into a USB drive, then insert the USB into the device. Access OpenWrt's default IP address from your browser: 192.168.1.1 → `log in to OpenWrt using the default credentials` → `System Menu` → `Amlogic Service` → `Install OpenWrt`. Select your device from the list of supported devices, and click the `Install OpenWrt` button to start the installation process.
 
 - ### Update OpenWrt
 
-Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `Amlogic Service` → `Upload updates manually / Download updates online`
+Access OpenWrt's IP address from your browser, such as 192.168.1.1 → `Log in to OpenWrt using the account` → `System Menu` → `Amlogic Service` → `Manually Upload Update / Download Update Online`. From there, you can choose to manually upload an update or download an update online.
 
-If you choose `Upload Updates Manually` [OpenWrt firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), You can upload the corresponding OpenWrt firmware package, such as openwrt_xxx_k5.15.50.img.gz (It is recommended to upload the compressed package, and the system will automatically decompress it. If you upload the decompressed xxx.img file, the upload may fail because the file is too large), After the upload is complete, the interface will display the `Update firmware` operation button, click to update.
+If you choose to `Manually Upload Update`, you can upload the compiled OpenWrt firmware package, such as openwrt_xxx_k5.15.50.img.gz (it is recommended to upload the compressed package, as the system will automatically decompress it). If you upload a xxx.img format file that has been decompressed, the upload may fail due to its large size. Once the upload is complete, the interface will display an `Update Firmware` button. Click this button to update the firmware.
 
-If you choose `Manually upload updates` [OpenWrt kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable), You can upload the three kernel files `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` (Other kernel files are not required. If uploading at the same time does not affect the update, the system can accurately identify the required kernel files.)，After the upload is complete, the interface will display the `Update Kernel` operation button, click to update.
+If you choose to `Manually Upload Update`, you can upload the 3 kernel files `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, and `modules-xxx.tar.gz` (other kernel files are not required, but uploading them will not affect the update, as the system can accurately identify the necessary kernel files). Once the upload is complete, the interface will display an `Update Kernel` button. Click this button to update the kernel.
 
-If you choose `Online Download Update` OpenWrt firmware or kernel, it will be downloaded according to `Firmware download address` and `Kernel download address` in `Plugin Settings`, you can customize and modify the download source, For details, please refer to the compilation and usage instructions of [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic).
+If you choose to `Download Update Online` for OpenWrt firmware or kernel, it will be downloaded based on the `Firmware Download Address` and `Kernel Download Address` settings in the plugin. You can customize and modify the download source. For detailed instructions on how to do this, please refer to the compilation and usage instructions of [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic).
 
-- ### Create swap for openwrt system
+- ### Creating swap for OpenWrt
 
-If you feel that the memory of the current box is not enough when you are using applications with a large memory footprint such as `docker`, you can create a `swap` virtual memory partition, Change the disk space of `/mnt/*4` A certain capacity is virtualized into memory for use. The unit of the input parameter of the following command is `GB`, and the default is `1`.
+If you are using memory-intensive applications such as `docker` and find that the current box doesn't have enough memory, you can create a `swap` virtual memory partition that virtualizes a certain capacity of `/mnt/*4` disk space to use as memory. The unit used in the following command input parameters is `GB`, and the default is `1`.
 
-Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
+Access OpenWrt's default IP 192.168.1.1 from your browser → `Log in to OpenWrt using the default account` → `System Menu` → `TTYD Terminal` → Enter the following command:
 
 ```yaml
 openwrt-swap 1
 ```
 
-- ### Backup/restore the original EMMC system
+- ### Backing up/Restoring eMMC Original System
 
-Supports backup/restore of the box's `EMMC` partition in `TF/SD/USB`. It is recommended that you back up the Android TV system that comes with the current box before installing the OpenWrt system in a brand new box, so that you can use it in the future when restoring the TV system.
+Support for backing up/restoring eMMC partitions using `TF/SD/USB`. Before installing OpenWrt on your box, it is recommended to backup the pre-installed Android TV system in case you need to restore it later.
 
-Please start the OpenWrt system from `TF/SD/USB`, Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
+Boot the OpenWrt system from `TF/SD/USB`, access OpenWrt's default IP 192.168.1.1 from your browser → `Log in to OpenWrt using the default account` → `System Menu` → `TTYD Terminal` → Enter the following command:
 
 ```yaml
 openwrt-ddbr
 ```
 
-According to the prompt, enter `b` to perform system backup, and enter `r` to perform system recovery.
+Follow the prompt to enter `b` to backup the system or `r` to restore the system.
 
 - ### Controlling the LED display
 
-Log in to the default IP: 192.168.1.1 →  `Login in to openwrt` → `system menu` → `TTYD terminal` → input command
+Access OpenWrt's default IP 192.168.1.1 from your browser → `Log in to OpenWrt using the default account` → `System Menu` → `TTYD Terminal` → Enter the following command:
 
 ```yaml
 openwrt-openvfd
 ```
 
-Debug according to [LED screen display control instructions](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/led_screen_display_control.md).
+Follow the [LED Screen Display Control Instructions](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/led_screen_display_control.md) for debugging.
 
-- ### More instructions for use
+- ### More usage instructions
 
-Use the `firstboot` command to restore the system to its initial state. In the use of OpenWrt, please refer to [documents](./make-openwrt/documents) for some common problems that may be encountered.
+Using the `firstboot` command allows you to restore the system to its initial state. For common issues that may be encountered when using OpenWrt, please refer to the [documentation](./make-openwrt/documents).
 
 ## Local build instructions
 
-1. Install the necessary packages (E.g Ubuntu 22.04 LTS user)
+1. Installing necessary build dependencies (for Ubuntu 22.04 LTS users)
 ```yaml
 sudo apt-get update -y
 sudo apt-get full-upgrade -y
 # For Ubuntu-22.04
 sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 ```
-2. Clone the repository to the local. `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
-3. Create a `openwrt-armvirt` folder, and upload the OpenWrt firmware of the ARM kernel ( Eg: `openwrt-armvirt-64-default-rootfs.tar.gz` ) to this `~/amlogic-s9xxx-openwrt/openwrt-armvirt` directory.
-4. Enter the `~/amlogic-s9xxx-openwrt` root directory. And run Eg: `sudo ./make -b s905x3 -k 6.1.10`. The generated OpenWrt firmware is in the `out` directory under the root directory.
+2. Clone the repository to your local machine using `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`.
+3. Create a `openwrt-armvirt` folder in the root directory of `~/amlogic-s9xxx-openwrt` and upload the `openwrt-armvirt-64-default-rootfs.tar.gz` file to this directory.
+4. In the root directory of `~/amlogic-s9xxx-openwrt`, enter the packaging command, such as `sudo ./make -b s905x3 -k 6.1.10`. The OpenWrt firmware generated by the packaging process will be placed in the `out` folder in the root directory.
 
-- ### Description of localized packaging parameters
+- ### Local packaging parameters
 
 | Parameter | Meaning       | Description               |
 | --------- | ------------- | ------------------------- |
-| -b       | Board      | Specify the Build system type. Write the build system name individually, such as `-b s905x3` . Multiple system use `_` connect such as `-b s905x3_s905d` . Use `all` for all board models. The model code is detailed in the `BOARD` setting in [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf) file. Default value: `all` |
-| -r       | KernelRepo | Specifies the `<owner>/<repo>` of the github.com kernel repository. Default value: `ophub/kernel` |
-| -u       | kernelUsage | Set the `tags suffix` of the kernel used, such as [stable](https://github.com/ophub/kernel/releases/tag/kernel_stable), [flippy](https://github.com/ophub/kernel/releases/tag/kernel_flippy), [dev](https://github.com/ophub/kernel/releases/tag/kernel_dev). Default value: `stable` |
-| -k       | Kernel     | Specify the [kernel version](https://github.com/ophub/kernel/releases/tag/kernel_stable), Such as `-k 5.10.125` . Multiple kernel use `_` connection such as `-k 5.10.125_5.15.50` . The kernel version freely specified by the `-k` parameter is only valid for the kernel in the `stable/flippy/dev`. Other kernel families such as [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) can only use specific kernels. |
-| -a       | AutoKernel | Set whether to automatically adopt the latest version of the kernel of the same series. When it is `true`, it will automatically find in the kernel library whether there is an updated version of the kernel specified in `-k` such as 5.10.125 version. If there is the latest version of same series, it will automatically Replace with the latest version. When set to `false`, the specified version of the kernel will be compiled. Default value: `true` |
-| -s       | Size       | Specify the ROOTFS partition size for the system, and the specified size must be greater than 2048MiB. Such as `-s 2560`, Default value: `2560` |
-| -g        | GH_TOKEN      | Optional. Set `${{ secrets.GH_TOKEN }}` for [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) query. Default: `None` |
+| -b       | Board      | Specify the TV box model using `-b`, such as `-b s905x3`. Multiple models can be specified using `_`, such as `-b s905x3_s905d`. Use `all` to indicate all models. Model codes can be found in the `BOARD` setting of [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf). The default value is `all`. |
+| -r       | KernelRepo | Specify the `<owner>/<repo>` of the kernel repository on github.com. The default value is `ophub/kernel`. |
+| -u       | kernelUsage | Set the `tags suffix` of the kernel to be used, such as [stable](https://github.com/ophub/kernel/releases/tag/kernel_stable), [flippy](https://github.com/ophub/kernel/releases/tag/kernel_flippy), [dev](https://github.com/ophub/kernel/releases/tag/kernel_dev). The default value is `stable`. |
+| -k       | Kernel     | Specify the kernel name, such as `-k 5.10.125`. Multiple kernels can be specified using `_`, such as `-k 5.10.125_5.15.50`. The kernel version specified by the `-k` parameter is only valid for the `stable/flippy/dev` kernel series. Other kernel series such as [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) can only use specific kernels. |
+| -a       | AutoKernel | Set whether to automatically use the latest version of the same series kernel. When set to `true`, it will automatically search for newer versions of the same series specified in `-k`, such as version 5.10.125, and if there is a newer version after 5.10.125, it will be replaced with the latest version automatically. When set to `false`, the specified version of the kernel will be compiled. The default value is `true`. |
+| -s       | Size       | Set the size of the ROOTFS partition of the system, which must be greater than 2048MiB. For example: `-s 2560`. The default value is `2560`. |
+| -g        | GH_TOKEN      | Optional. Set `${{ secrets.GH_TOKEN }}` for querying [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts). The default value is `none`. |
 
 
-- `sudo ./make`: Compile latest kernel versions of openwrt for all board with the default configuration.
-- `sudo ./make -b s905x3 -k 6.1.10`: recommend. Use the default configuration, specify a kernel and a firmware for compilation.
-- `sudo ./make -b s905x3_s905d -k 6.1.10_5.15.50`: Use the default configuration, specify multiple cores, and multiple firmware for compilation. use `_` to connect.
-- `sudo ./make -b s905x3 -k 6.1.10 -s 1024`: Using the default configuration, one kernel is specified, one model is packaged, and the firmware size is set to 1024 MiB.
-- `sudo ./make -b s905x3_s905d`: Use the default configuration, specify multiple firmware, use `_` to connect. compile all kernels.
-- `sudo ./make -k 6.1.10_5.15.50`: Use the default configuration. Specify multiple cores, use `_` to connect.
-- `sudo ./make -k 6.1.10_5.15.50 -a true`: Use the default configuration. Specify multiple cores, use `_` to connect. Auto update to the latest kernel of the same series.
-- `sudo ./make -s 1024 -k 6.1.10`: Use the default configuration and set the partition size to 1024 MiB, and only compile the openwrt firmware with the kernel version 6.1.10.
+- `sudo ./make`: Package for all TV box models using the latest kernel package in the kernel library with default configuration.
+- `sudo ./make -b s905x3 -k 6.1.10`: Package for a specific model (`s905x3`) and kernel version (`6.1.10`) with default configuration (recommended).
+- `sudo ./make -b s905x3_s905d -k 6.1.10_5.15.50`: Package for multiple models (`s905x3` and `s905d`) and kernels (`6.1.10` and `5.15.50`) simultaneously with default configuration.
+- `sudo ./make -b s905x3 -k 6.1.10 -s 1024`: Package for a specific model (`s905x3`) and kernel version (`6.1.10`) with default configuration, and set the firmware size to 1024 MiB.
+- `sudo ./make -b s905x3_s905d`: Package for all models (`s905x3` and `s905d`) with default configuration and all available kernels.
+- `sudo ./make -k 6.1.10_5.15.50`: Package for all TV box models with multiple specified kernel versions (`6.1.10` and `5.15.50`) with default configuration.
+- `sudo ./make -k 6.1.10_5.15.50 -a true`: Package for all TV box models with multiple specified kernel versions (`6.1.10` and `5.15.50`) with default configuration, and automatically upgrade to the latest version of the same series kernel if available.
+- `sudo ./make -s 1024 -k 6.1.10`: Package for all TV box models with a specific kernel version (`6.1.10`) and set the firmware size to 1024 MiB with default configuration.
 
-## Use GitHub Actions to build
+## Compiling with GitHub Actions
 
-You can modify the configuration file in the [config-openwrt](config-openwrt) directory and `.yml` file, customize the OpenWrt firmware, and complete the packaging online through `Actions`, and complete all the compilation of OpenWrt firmware in github.com One-stop.
+You can customize and compile OpenWrt firmware that suits you by modifying the personalized firmware configuration files in the [config-openwrt](config-openwrt) directory, as well as the [.yml](.github/workflows) files. The firmware can be uploaded to `Actions` and `Releases` on github.com.
 
-1. Personalized plug-in configuration in [documents](./make-openwrt/documents) directory. Workflows configuration in [.yml](.github/workflows) file.
-2. New compilation: Select ***`Build OpenWrt`*** on the [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page. Click the ***`Run workflow`*** button.
-3. Compile again: If there is an `openwrt-armvirt-64-default-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), you do not need to compile it completely, you can directly use this file to `build openwrt` of different board. Select ***`Use Releases file to Packaging`*** on the [Actions](https://github.com/ophub/amlogic-s9xxx-armbian/openwrt) page. Click the ***`Run workflow`*** button.
-4. More support: The compiled `openwrt-armvirt-64-default-rootfs.tar.gz` file is a common file for making various board firmware, and it is also suitable for making OpenWrt firmware using [unifreq's packaging script](https://github.com/unifreq/openwrt_packit). As the pioneer of using OpenWrt and Armbian system in the box, he has supported more devices, such as OpenWrt ([QEMU Version](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md)) as used by `KVM` virtual machine on [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system, Amlogic, and Rockchip, and Allwinner series, etc. For details on the packaging method, please refer to his source code repository description. In Actions, you can use [packaging-openwrt-for-qemu-etc.yml](.github/workflows/packaging-openwrt-for-qemu-etc.yml) to call his packaging script to make more firmware.
+1. You can find personalized firmware configuration instructions in the [documentation](./make-openwrt/documents). The workflow control file is [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml).
+2. Freshly compile: On github.com's [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page, select ***`Build OpenWrt`***. Click the ***`Run workflow`*** button to perform one-stop firmware compilation and packaging.
+3. Re-compile: If there is already a compiled `openwrt-armvirt-64-default-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), and you only want to make another box of a different board, you can skip compiling the OpenWrt source file and go directly to the secondary production. On the [Actions](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page, select ***`Use Releases file to Packaging`*** and click the ***`Run workflow`*** button to re-compile.
+4. More support: The compiled `openwrt-armvirt-64-default-rootfs.tar.gz` file is a universal file for making various board firmware. It is also suitable for making OpenWrt firmware using [unifreq](https://github.com/unifreq/openwrt_packit)'s packaging script. As the pioneer of using OpenWrt and Armbian systems in boxes, it supports more devices, such as OpenWrt used in [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system through `KVM` virtual machine ([QEMU version](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md)), Amlogic, Rockchip, and Allwinner series. For packaging methods, please refer to its repository instructions. You can call his packaging script to make more firmware through [packaging-openwrt-for-qemu-etc.yml](.github/workflows/packaging-openwrt-for-qemu-etc.yml) in Actions.
 
 ```yaml
 - name: Package Armvirt as OpenWrt
@@ -145,24 +145,24 @@ You can modify the configuration file in the [config-openwrt](config-openwrt) di
     gh_token: ${{ secrets.GH_TOKEN }}
 ```
 
-- ### GitHub Actions Input parameter description
+- ### GitHub Actions Input Parameter Description
 
-The relevant parameters correspond to the `local packaging command`, please refer to the above description.
+The related parameters correspond to the `local packaging command`, please refer to the above instructions.
 
 | Parameter          | Defaults         | Description                     |
 | ------------------ | ---------------- | ------------------------------- |
-| openwrt_path       | None             | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` , you can use a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or the network file download address. E.g `https://github.com/*/releases/*/*rootfs.tar.gz` |
-| openwrt_board      | all              | Set the `board` of the packaging TV Boxes, function reference `-b` |
-| kernel_repo        | ophub/kernel     | Specifies the `<owner>/<repo>` of the github.com kernel repository, function reference `-r` |
-| kernel_usage       | stable           | Set the `tags suffix` of the kernel used, function reference `-u` |
-| openwrt_kernel     | 6.1.1_5.15.1     | Set the kernel version，function reference `-k` |
-| auto_kernel        | true             | Set whether to automatically adopt the latest version of the kernel of the same series. function reference `-a`  |
-| openwrt_size       | 1024             | Set the size of the firmware ROOTFS partition, function reference `-s` |
-| gh_token           | None             | Optional. Set `${{ secrets.GH_TOKEN }}`, function reference `-g` |
+| openwrt_path       | None             | You can set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz` using a relative path such as `openwrt/bin/targets/*/*/*rootfs.tar.gz` or a network file download address such as `https://github.com/*/releases/*/*rootfs.tar.gz`. |
+| openwrt_board      | all              | You can set the `board` for packaging the box, which is equivalent to using `-b` function. |
+| kernel_repo        | ophub/kernel     | You can specify the `<owner>/<repo>` of the GitHub kernel repository, which is equivalent to using the `-r` function. |
+| kernel_usage       | stable           | You can set the `tags suffix` of the kernel used, which is equivalent to using the `-u` function. |
+| openwrt_kernel     | 6.1.1_5.15.1     | You can set the kernel version, which is equivalent to using the `-k` function. |
+| auto_kernel        | true             | You can set whether to automatically use the latest kernel version in the same series, which is equivalent to using the `-a` function. |
+| openwrt_size       | 1024             | You can set the size of the firmware rootfs partition, which is equivalent to using the `-s` function. |
+| gh_token           | None             | This is an optional parameter. You can set `${{ secrets.GH_TOKEN }}`, which is equivalent to using the `-g` function. |
 
-- ### GitHub Actions Output variable description
+- ### GitHub Actions Output Variable Description
 
-To upload to `Releases`, you need to add `${{ secrets.GITHUB_TOKEN }}` and `${{ secrets.GH_TOKEN }}` to the repository and set `Workflow read and write permissions`, see the [instructions for details](./make-openwrt/documents/README.md#2-set-the-privacy-variable-github_token).
+To upload to `Releases`, you need to add `${{ secrets.GITHUB_TOKEN }}` and `${{ secrets.GH_TOKEN }}` to the repository and set `Workflow read/write permissions`. For more information, please refer to [the usage instructions](./make-openwrt/documents/README.md#2-set-the-privacy-variable-github_token).
 
 | Parameter                                | For example         | Description                         |
 |------------------------------------------|---------------------|-------------------------------------|
@@ -193,7 +193,7 @@ For more instructions please see: [documents](./make-openwrt/documents)
 
 ## Compile the kernel
 
-For the compilation method of the kernel, see [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel)
+For more information on how to compile the kernel, please refer to [compile-kernel](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/compile-kernel).
 
 ```yaml
 - name: Compile the kernel
@@ -207,14 +207,14 @@ For the compilation method of the kernel, see [compile-kernel](https://github.co
 
 ## Resource Description
 
-When making an OpenWrt system, the [kernel](https://github.com/ophub/kernel) and [u-boot](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/u-boot) files used are the same files used to make an [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system. In order to avoid repeated maintenance, the relevant content is classified and placed in the corresponding resource repository, and it will be automatically downloaded from the relevant repository when it is used.
+When making the OpenWrt system, the [kernel](https://github.com/ophub/kernel) and [u-boot](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/u-boot) files used are the same as those used to make the [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system. In order to avoid duplicate maintenance, the relevant content is classified and placed in the corresponding resource repository, and will be automatically downloaded from the relevant repository when used.
 
-The `kernel` / `u-boot` and other resources used by this system are mainly copied from the project of [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit), Some files are shared by users in [Pull](https://github.com/ophub/amlogic-s9xxx-openwrt/pulls) and [Issues](https://github.com/ophub/amlogic-s9xxx-openwrt/issues) of [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) / [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) / [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) / [kernel](https://github.com/ophub/kernel) and other projects. `unifreq` opened the door for us to use OpenWrt in TV Boxes, and was deeply influenced by him. My firmware has inherited his consistent standards in production and use. To thank these pioneers and sharers, I have recorded them in [CONTRIBUTORS.md](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md). Thanks again everyone for giving new life and meaning to the Boxes.
+The `kernel` / `u-boot` and other resources used by this system are mainly copied from the [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit) project, and some files are shared by users in the [Pulls](https://github.com/ophub/amlogic-s9xxx-openwrt/pulls) and [Issues](https://github.com/ophub/amlogic-s9xxx-openwrt/issues) of projects such as [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) / [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) / [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) / [kernel](https://github.com/ophub/kernel). `Unifreq` opened the door for us to use OpenWrt on TV boxes, and my firmware inherited his consistent standards in production and use. In order to thank these pioneers and sharers, I have recorded them in [CONTRIBUTORS.md](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md). Thank you again for giving new life and meaning to the box.
 
 ## Other distributions
 
-- [unifreq](https://github.com/unifreq/openwrt_packit) has made `OpenWrt` system for more boxes such as `Amlogic`, `Rockchip` and `Allwinner`, which is a benchmark in the box circle and is recommended for use.
-- The [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) project provides the `Armbian` system used in the box, which is also applicable to the relevant devices that support OpenWrt.
+- [Unifreq](https://github.com/unifreq/openwrt_packit) has created `OpenWrt` systems for more boxes such as Amlogic, Rockchip, and Allwinner, which is a benchmark in the box community and recommended for use.
+- The [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) project provides the `Armbian` system for use on boxes, which is also applicable to related devices that support OpenWrt.
 
 ## Links
 

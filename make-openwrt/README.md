@@ -1,22 +1,22 @@
 # Directory Description
 
-View Chinese description  |  [查看中文说明](README.cn.md)
+View Chinese description | [查看中文说明](README.cn.md)
 
-Some files required to make OpenWrt are stored in the relevant directory.
+Some files required for compiling OpenWrt are stored in the relevant directories.
 
 ## openwrt-files
 
-The files stored here are related files that need to be used when packaging OpenWrt. Among them, the `common-files` directory contains common files, the `platform-files` directory contains files for each platform, and the `different-files` directory contains differentiated files for different devices.
+The files stored here are the relevant files required for packaging OpenWrt. The files under the `common-files` directory are common files, those under the `platform-files` directory are platform-specific files, and those under the `different-files` directory are device-specific differential files.
 
-- The required system files will be automatically downloaded from the [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/armbian-files) repository into the `platform-files` and `different-files` directories.
+- System files will be automatically downloaded from the [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/armbian-files) repository to the `platform-files` and `different-files` directories.
 
-- The required firmware will be automatically downloaded from the [ophub/firmware](https://github.com/ophub/firmware) repository to the `common-files/lib/firmware` directory.
+- Required firmware will be automatically downloaded from the [ophub/firmware](https://github.com/ophub/firmware) repository to the `common-files/lib/firmware` directory.
 
-- The required install/update scripts will be automatically downloaded from the [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) repository to the `common-files/usr/sbin` directory .
+- Required installation/update scripts and other related files will be automatically downloaded from the [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) repository to the `common-files/usr/sbin` directory.
 
 ## documents
 
-Here is the OpenWrt usage documentation.
+The OpenWrt usage documents are stored here.
 
 ## kernel
 
@@ -24,5 +24,5 @@ The required kernel will be automatically downloaded from the [ophub/kernel](htt
 
 ## u-boot
 
-The required u-boot will be automatically downloaded from the [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/u-boot) repository to` u-boot` directory.
+The required u-boot will be automatically downloaded from the [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/u-boot) repository to the `u-boot` directory.
 

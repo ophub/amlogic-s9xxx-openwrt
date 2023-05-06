@@ -956,7 +956,7 @@ EOF
 
     # Optimize wifi/bluetooth module
     [[ -d "lib/firmware/brcm" ]] && (
-        cd lib/firmware/brcm/ && mv -f ../*.hcd . 2>/dev/null
+        cd lib/firmware/brcm/ && rm -f ../*.hcd
 
         # gtking/gtking pro is bcm4356 wifi/bluetooth, wifi5 module AP6356S
         sed -e "s/macaddr=.*/macaddr=${random_macaddr}:00/" "brcmfmac4356-sdio.txt" >"brcmfmac4356-sdio.azw,gtking.txt"

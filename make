@@ -713,13 +713,13 @@ extract_openwrt() {
     # Copy the platform files
     platform_bootfs="${platform_files}/${PLATFORM}/bootfs"
     platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
-    [[ -d "${platform_bootfs}" ]] && cp -af ${platform_bootfs}/* ${tag_bootfs}
+    [[ -d "${platform_bootfs}" ]] && cp -rf ${platform_bootfs}/* ${tag_bootfs}
     [[ -d "${platform_rootfs}" ]] && cp -af ${platform_rootfs}/* ${tag_rootfs}
 
     # Copy the different files
     different_bootfs="${different_files}/${board}/bootfs"
     different_rootfs="${different_files}/${board}/rootfs"
-    [[ -d "${different_bootfs}" ]] && cp -af ${different_bootfs}/* ${tag_bootfs}
+    [[ -d "${different_bootfs}" ]] && cp -rf ${different_bootfs}/* ${tag_bootfs}
     [[ -d "${different_rootfs}" ]] && cp -af ${different_rootfs}/* ${tag_rootfs}
 
     # Copy the bootloader files
@@ -728,7 +728,7 @@ extract_openwrt() {
     [[ -d "${bootloader_path}" ]] && cp -af ${bootloader_path}/* ${tag_rootfs}/lib/u-boot
 
     # Copy the overload files
-    [[ "${PLATFORM}" == "amlogic" ]] && cp -af ${uboot_path}/${PLATFORM}/overload/* ${tag_bootfs}
+    [[ "${PLATFORM}" == "amlogic" ]] && cp -rf ${uboot_path}/${PLATFORM}/overload/* ${tag_bootfs}
 }
 
 replace_kernel() {

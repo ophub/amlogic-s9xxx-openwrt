@@ -95,13 +95,13 @@ Personal center: Settings > Developer settings > Personal access tokens > Genera
 
 在# National language packs, luci-i18n-base: 以法国为例，启用法语支持，就把
 
-```yaml
+```shell
 # CONFIG_PACKAGE_luci-i18n-base-fr is not set
 ```
 
 修改为
 
-```yaml
+```shell
 CONFIG_PACKAGE_luci-i18n-base-fr=y
 ```
 
@@ -111,12 +111,12 @@ CONFIG_PACKAGE_luci-i18n-base-fr=y
 
 在 `#LuCI-app:` 启用和删除默认软件包的做法和上面一样,这次我们删除默认软件包里的 `luci-app-zerotier` 这个插件，就把
 
-```yaml
+```shell
 CONFIG_PACKAGE_luci-app-zerotier=y
 ```
 修改为
 
-```yaml
+```shell
 # CONFIG_PACKAGE_luci-app-zerotier is not set
 ```
 
@@ -132,13 +132,13 @@ CONFIG_PACKAGE_luci-app-zerotier=y
 
 第一步，在 diy-part2.sh 里加入以下代码：
 
-```yaml
+```shell
 git clone https://github.com/jerrykuku/luci-app-ttnode.git package/lean/luci-app-ttnode
 ```
 
 第二步，到 .config 文件里添加这个第三方软件包的启用代码：
 
-```yaml
+```shell
 CONFIG_PACKAGE_luci-app-ttnode=y
 ```
 
@@ -148,14 +148,14 @@ CONFIG_PACKAGE_luci-app-ttnode=y
 
 第一步，在 diy-part2.sh 里加入以下代码：用第一行代码先删除源码库中原来的软件，再用第二行代码引入第三方的同名软件包。
 
-```yaml
+```shell
 rm -rf package/lean/luci-theme-argon
 git clone https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
 ```
 
 第二步，到 .config 文件里添加第三方软件包
 
-```yaml
+```shell
 CONFIG_PACKAGE_luci-theme-argon=y
 ```
 
@@ -165,9 +165,9 @@ CONFIG_PACKAGE_luci-theme-argon=y
 
 我们增加 `luci-app-cpufreq` 对 `aarch64` 的支持，以便在我们的固件中使用（有些修改要谨慎，你必须知道你在做什么）。
 
-源文件地址： [luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/lede/blob/master/package/lean/luci-app-cpufreq/Makefile) 。修改代码加入对 aarch64 的支持：
+源文件地址： [luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/luci/blob/master/applications/luci-app-cpufreq/Makefile) 。修改代码加入对 aarch64 的支持：
 
-```yaml
+```shell
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
 ```
 
@@ -369,7 +369,7 @@ REPO_BRANCH: openwrt-21.02
 
 默认的 [/etc/banner](../openwrt-files/common-files/etc/banner) 信息如下，你可以使用 [banner 生成器](https://www.bootschool.net/ascii) 定制专属自己的个性化 banner 信息（下面的样式为 `slant`），覆盖同名文件即可。
 
-```yaml
+```shell
       ____                 _       __     __        ____
      / __ \____  ___  ____| |     / /____/ /_      / __ )____  _  __
     / / / / __ \/ _ \/ __ \ | /| / / ___/ __/_____/ __  / __ \| |/_/
@@ -410,7 +410,7 @@ REPO_BRANCH: openwrt-21.02
 - 在主干/快照上时，内核和kmod软件包被标记为保留，`opkg upgrade` 命令将不会尝试更新它们。
 
 Common commands:
-```
+```shell
 opkg update                                       #更新可用的软件包列表
 opkg upgrade <pkgs>                               #升级软件包
 opkg install <pkgs>                               #安装软件包
@@ -454,7 +454,7 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 
 - 以 x96max+ 为例，在盒子的主板上确认 [短接点](https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg) 的位置，下载盒子的 [Android TV 固件包](https://github.com/ophub/kernel/releases/tag/tools)。其他常见设备的安卓 TV 系统固件及对应的短接点示意图也可以在此[下载查看](https://github.com/ophub/kernel/releases/tag/tools)。
 
-```
+```shell
 操作方法：
 
 1. 打开刷机软件 USB Burning Tool:
@@ -479,7 +479,7 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 
 如果你选择安装了主线 `u-boot` 并且无法启动，请将盒子接入屏幕，查看是否为这样的提示：
 
-```
+```shell
 Net: eth0: ethernet0ff3f0000
 Hit any key to stop autoboot: 0
 =>
@@ -487,7 +487,7 @@ Hit any key to stop autoboot: 0
 
 如果你的现象如上所示，那么你需要在 TTL 上焊接一个电阻了: [X96 Max Plus's V4.0 主板示意图](https://user-images.githubusercontent.com/68696949/110910162-ec967000-834b-11eb-8fa6-64727ccbe4af.jpg)
 
-```
+```shell
 #######################################################           #####################################################
 #                                                     #           #                                                   #
 #   上拉电阻: 在 TTL 的 RX 和 GND 之间焊接                #           #   下拉电阻: 在 TTL 的 3.3V 和 RX 之间焊接            #
@@ -513,7 +513,7 @@ Hit any key to stop autoboot: 0
 
 此列表以 [unifreq](https://github.com/unifreq/openwrt_packit) 的开发指南为基础进行整理。为保障安装/更新等脚本在 OpenWrt 中可以正常运行，当使用 `make menuconfig` 进行配置时，需要添加以下必选项：
 
-```
+```shell
 Target System  -> QEMU ARM Virtual Machine
 Subtarget      -> QEMU ARMv8 Virtual Machine (cortex-a53)
 Target Profile -> Default

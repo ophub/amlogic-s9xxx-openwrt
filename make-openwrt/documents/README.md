@@ -166,7 +166,7 @@ This replaces the existing software package in the current source code library w
 
 We add support for `aarch64` to `luci-app-cpufreq` so that we can use it in our firmware (some modifications should be made with caution, you must know what you are doing).
 
-Source file address: [luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/lede/blob/master/package/lean/luci-app-cpufreq/Makefile). Modify the code to add support for aarch64:
+Source file address: [luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/luci/blob/master/applications/luci-app-cpufreq/Makefile). Modify the code to add support for aarch64:
 
 ```shell
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
@@ -206,7 +206,7 @@ In your repository's navigation bar, click the Actions button, and then click Bu
 
 In the .github/workflows/build-openwrt-with-lede.yml file, use Cron to set the scheduled compilation, and the five different positions represent the meaning of minutes (0-59)/hours (0-23)/date (1-31)/month (1-12)/day of the week (0-6) (Sunday-Saturday). Modify the numerical value in different locations to set the time. The system uses UTC standard time by default, please convert it according to the time zone of your country.
 
-```shell
+```yaml
 schedule:
   - cron: '0 17 * * *'
 ```
@@ -285,7 +285,7 @@ Enter the Release section in the lower right corner of the repository homepage a
 
 In the .github/workflows/build-openwrt-with-lede.yml file, we have disabled the option to upload to third parties by default. If you need it, change false to true, and it will be uploaded to the third party after the next compilation is completed. The third-party website can be seen in the firmware compilation process logs, or output to the compilation information.
 
-```shell
+```yaml
 UPLOAD_COWTRANSFER: false
 UPLOAD_WETRANSFER: false
 ```
@@ -365,7 +365,7 @@ Near line 139, find the compilation step with the title `Build OpenWrt firmware`
     gh_token: ${{ secrets.GH_TOKEN }}
 ```
 
-Refer to the related [parameter description](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.md#input-parameters-for-github-actions) of the packaging command. The above settings options can be set by writing fixed values or by selecting through the `Actions` panel:
+Refer to the related [parameter description](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.md#github-actions-input-parameter-description) of the packaging command. The above settings options can be set by writing fixed values or by selecting through the `Actions` panel:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/181870674-1816aa21-ece4-4149-83ce-6ec7f95ece68.png width="700" />
@@ -417,7 +417,7 @@ Like most Linux distributions (or mobile device operating systems such as Androi
 
 Common commands:
 
-```
+```shell
 opkg update                                       # Update the list of available packages
 opkg upgrade <pkgs>                               # Upgrade packages
 opkg install <pkgs>                               # Install packages

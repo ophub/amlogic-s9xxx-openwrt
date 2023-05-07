@@ -33,7 +33,7 @@ The latest firmware can be downloaded from [Releases](https://github.com/ophub/a
 | rk3328 | [BeikeYun](https://github.com/ophub/amlogic-s9xxx-armbian/issues/852), [L1-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1007), [Station-M1](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1313), [Bqeel-MVR9](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1313) | All | rockchip_boxname.img |
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1120) | All | allwinner_boxname.img |
 
-💡Note: Currently, [s905 boxes](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used with `TF/SD/USB`, while other models of boxes can support writing to `EMMC`. For more information, please refer to the [Supported Device List Description](make-openwrt/openwrt-files/common-files/etc/model_database.conf). You can refer to Chapter 12.15 of the documentation for the method on [Adding New Supported Devices](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/README.md#1215-how-to-add-new-supported-devices).
+💡Note: Currently, [s905 boxes](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used with `TF/SD/USB`, while other models of boxes can support writing to `EMMC`. For more information, please refer to the [Supported Device List Description](make-openwrt/openwrt-files/common-files/etc/model_database.conf). You can refer to Chapter 12.15 of the documentation for the method on [Adding New Supported Devices](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents/README.md#1215-how-to-add-support-for-new-devices).
 
 ## Installation and Upgrade Instructions
 
@@ -41,7 +41,7 @@ Select the OpenWrt image that corresponds to your TV box model and refer to the 
 
 - ### Install OpenWrt
 
-1. For installation instructions on the `Rockchip` platform, please refer to Chapter 8 in the [Documentation](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/build-armbian/documents). The installation process is the same as that for Armbian.
+1. For installation instructions on the `Rockchip` platform, please refer to Chapter 8 in the [Documentation](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/documents#8-install-armbian-to-emmc). The installation process is the same as that for Armbian.
 
 2. For the `Amlogic` and `Allwinner` platforms, use tools such as Rufus or balenaEtcher to write the firmware into a USB drive, then insert the USB into the device. Access OpenWrt's default IP address from your browser: 192.168.1.1 → `log in to OpenWrt using the default credentials` → `System Menu` → `Amlogic Service` → `Install OpenWrt`. Select your device from the list of supported devices, and click the `Install OpenWrt` button to start the installation process.
 

@@ -729,6 +729,9 @@ extract_openwrt() {
 
     # Copy the overload files
     [[ "${PLATFORM}" == "amlogic" ]] && cp -rf ${uboot_path}/${PLATFORM}/overload/* ${tag_bootfs}
+
+    # Remove the .svn and .git directories
+    rm -rf $(find ${tmp_path} -type d -name '.svn' -o -name '.git')
 }
 
 replace_kernel() {

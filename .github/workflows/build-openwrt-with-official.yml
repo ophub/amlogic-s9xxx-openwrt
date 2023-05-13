@@ -147,6 +147,14 @@ on:
           - stable
           - flippy
           - dev
+      openwrt_storage:
+        description: "Select OpenWrt image storage time."
+        required: false
+        default: "lts"
+        type: choice
+        options:
+          - lts
+          - tmp
 
 env:
   REPO_URL: https://github.com/openwrt/openwrt
@@ -230,7 +238,7 @@ jobs:
           cd openwrt/
           echo -e "$(nproc) thread compile"
           make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
-          echo "build_tag=OpenWrt_official_$(date +"%m.%d.%H%M")" >> ${GITHUB_OUTPUT}
+          echo "build_tag=OpenWrt_official_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Upload OpenWrt Firmware to Release

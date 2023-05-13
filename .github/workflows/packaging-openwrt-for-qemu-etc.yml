@@ -126,7 +126,7 @@ jobs:
                               -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
                               https://api.github.com/repos/${GITHUB_REPOSITORY}/releases |
                               jq '.[]' |
-                              jq -s --arg RTK "OpenWrt_${{ inputs.set_release }}_" '.[] | select(.tag_name | contains($RTK))' |
+                              jq -s --arg RTK "OpenWrt_${{ inputs.source_branch }}_" '.[] | select(.tag_name | contains($RTK))' |
                               jq -s '.[].assets[] | {data:.updated_at, url:.browser_download_url}' |
                               jq -s --arg BOARD "-rootfs.tar.gz" '.[] | select((.url | contains($BOARD)))' |
                               jq -s 'sort_by(.data)|reverse[]' |

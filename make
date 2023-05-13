@@ -597,7 +597,8 @@ make_image() {
 
     # Set OpenWrt filename
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
-    build_image_file="${out_path}/openwrt${source_codename}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
+    openwrt_filename="openwrt${source_codename}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
+    build_image_file="${out_path}/${openwrt_filename}"
     rm -f ${build_image_file}
 
     IMG_SIZE="$((skip_mb + boot_mb + root_mb))"
@@ -1041,8 +1042,9 @@ clean_tmp() {
     cd ${out_path}
 
     # Compress the OpenWrt image file
-    pigz -qf *.img || gzip -qf *.img
-    sync
+    pigz -qf ${openwrt_filename} || gzip -qf ${openwrt_filename}
+    # Generate independent sha256sum verification file for each Armbian image
+    sha256sum ${openwrt_filename}.gz >${openwrt_filename}.gz.sha && sync
 
     cd ${current_path}
 
@@ -1131,7 +1133,7 @@ loop_make() {
     cp -f ${openwrt_path}/${openwrt_file_name} .
 
     # Generate sha256sum check file
-    sha256sum * >sha256sums && sync
+    sha256sum ${openwrt_file_name} >${openwrt_file_name}.gz.sha && sync
 }
 
 # Show welcome message

@@ -18,6 +18,7 @@ on:
         options:
           - lede
           - official
+          - immortalwrt
       openwrt_soc:
         description: "Select device board"
         required: false
@@ -74,6 +75,14 @@ on:
         required: false
         default: true
         type: boolean
+      openwrt_storage:
+        description: "Select OpenWrt image storage time."
+        required: false
+        default: "lts"
+        type: choice
+        options:
+          - lts
+          - tmp
 
 env:
   TZ: America/New_York
@@ -109,19 +118,29 @@ jobs:
         id: down
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          openwrt_url="$(curl \
-                            --header "authorization: Bearer ${{ secrets.GH_TOKEN }}" \
-                            -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" |
-                            grep -o "OpenWrt_.*${{ inputs.source_branch }}.*/.*rootfs.tar.gz" |
-                            head -n 1
-                        )"
-          [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
-          #
           armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
           [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
-          #
-          wget -q -P "${armvirt_tarfile_path}" "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}"
-          [[ "${?}" -ne "0" ]] && echo -e "The armvirt file download failed!" && exit 1
+
+          latest_version="$(curl -s \
+                              -H "Accept: application/vnd.github+json" \
+                              -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+                              https://api.github.com/repos/${GITHUB_REPOSITORY}/releases |
+                              jq '.[]' |
+                              jq -s --arg RTK "OpenWrt_${{ inputs.set_release }}_" '.[] | select(.tag_name | contains($RTK))' |
+                              jq -s '.[].assets[] | {data:.updated_at, url:.browser_download_url}' |
+                              jq -s --arg BOARD "-rootfs.tar.gz" '.[] | select((.url | contains($BOARD)))' |
+                              jq -s 'sort_by(.data)|reverse[]' |
+                              jq -s '.[0]' -c
+                          )"
+
+          [[ "${latest_version}" == "null" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
+          latest_updated_at="$(echo ${latest_version} | jq -r '.data')"
+          latest_url="$(echo ${latest_version} | jq -r '.url')"
+
+          wget -q -P "${armvirt_tarfile_path}" "${latest_url}"
+          [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
+
+          echo "build_tag=OpenWrt_aarch64_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Packaging OpenWrt [ ${{ inputs.source_branch }} ]
@@ -139,7 +158,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
-          tag: OpenWrt_aarch64_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: ${{ steps.down.outputs.build_tag }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           token: ${{ secrets.GH_TOKEN }}

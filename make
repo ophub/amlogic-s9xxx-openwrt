@@ -303,9 +303,9 @@ find_openwrt() {
     echo -e "${STEPS} Start searching for OpenWrt file..."
 
     # Find whether the OpenWrt file exists
-    openwrt_file_name="$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')"
-    if [[ -n "${openwrt_file_name}" ]]; then
-        echo -e "${INFO} OpenWrt file: [ ${openwrt_file_name} ]"
+    openwrt_default_file="$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')"
+    if [[ -n "${openwrt_default_file}" ]]; then
+        echo -e "${INFO} OpenWrt file: [ ${openwrt_default_file} ]"
     else
         error_msg "There is no [ ${openwrt_rootfs_file} ] file in the [ ${openwrt_path} ] directory."
     fi
@@ -314,7 +314,7 @@ find_openwrt() {
     source_codename=""
     source_release_file="etc/openwrt_release"
     temp_dir="$(mktemp -d)"
-    (cd ${temp_dir} && tar -xzf "${openwrt_path}/${openwrt_file_name}" "./${source_release_file}" 2>/dev/null)
+    (cd ${temp_dir} && tar -xzf "${openwrt_path}/${openwrt_default_file}" "./${source_release_file}" 2>/dev/null)
     # Find custom DISTRIB_SOURCECODE, such as [ official/lede ]
     [[ -f "${temp_dir}/${source_release_file}" ]] && {
         source_codename="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCECODE=.*" | head -n 1 | cut -d"'" -f2)"
@@ -704,7 +704,7 @@ extract_openwrt() {
     btrfs subvolume create ${tag_rootfs}/etc >/dev/null 2>&1
 
     # Unzip the OpenWrt rootfs file
-    tar -xzf ${openwrt_path}/${openwrt_file_name} -C ${tag_rootfs}
+    tar -xzf ${openwrt_path}/${openwrt_default_file} -C ${tag_rootfs}
     rm -rf ${tag_rootfs}/lib/modules/*
     rm -f ${tag_rootfs}/rom/sbin/firstboot
 
@@ -1130,10 +1130,10 @@ loop_make() {
     cd ${out_path}
 
     # Backup the OpenWrt file
-    cp -f ${openwrt_path}/${openwrt_file_name} .
+    cp -f ${openwrt_path}/${openwrt_default_file} .
 
     # Generate sha256sum check file
-    sha256sum ${openwrt_file_name} >${openwrt_file_name}.gz.sha && sync
+    sha256sum ${openwrt_default_file} >${openwrt_default_file}.gz.sha && sync
 }
 
 # Show welcome message

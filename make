@@ -1040,14 +1040,10 @@ clean_tmp() {
     losetup -D
 
     cd ${out_path}
-
     # Compress the OpenWrt image file
     pigz -qf ${openwrt_filename} || gzip -qf ${openwrt_filename}
-    # Generate independent sha256sum verification file for each Armbian image
-    sha256sum ${openwrt_filename}.gz >${openwrt_filename}.gz.sha && sync
 
     cd ${current_path}
-
     # Clear temporary files directory
     rm -rf ${tmp_path} && sync
 }
@@ -1128,12 +1124,10 @@ loop_make() {
     done
 
     cd ${out_path}
-
     # Backup the OpenWrt file
     cp -f ${openwrt_path}/${openwrt_default_file} .
-
-    # Generate sha256sum check file
-    sha256sum ${openwrt_default_file} >${openwrt_default_file}.gz.sha && sync
+    # Generate a sha256sum verification file for each OpenWrt image file
+    for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
 }
 
 # Show welcome message

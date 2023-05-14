@@ -10,15 +10,6 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      source_branch:
-        description: "Select the source branch"
-        required: false
-        default: "lede"
-        type: choice
-        options:
-          - lede
-          - official
-          - immortalwrt
       openwrt_soc:
         description: "Select device board"
         required: false
@@ -118,15 +109,18 @@ jobs:
         id: down
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
+          armvirt_tarfile_repo="ophub/amlogic-s9xxx-openwrt"
+          releases_tag_keywords="OpenWrt_lede_"
+
           armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
           [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
 
           latest_version="$(curl -s \
                               -H "Accept: application/vnd.github+json" \
                               -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
-                              https://api.github.com/repos/${GITHUB_REPOSITORY}/releases |
+                              https://api.github.com/repos/${armvirt_tarfile_repo}/releases |
                               jq '.[]' |
-                              jq -s --arg RTK "OpenWrt_${{ inputs.source_branch }}_" '.[] | select(.tag_name | contains($RTK))' |
+                              jq -s --arg RTK "${releases_tag_keywords}" '.[] | select(.tag_name | contains($RTK))' |
                               jq -s '.[].assets[] | {data:.updated_at, url:.browser_download_url}' |
                               jq -s --arg BOARD "-rootfs.tar.gz" '.[] | select(.url | endswith($BOARD))' |
                               jq -s 'sort_by(.data)|reverse[]' |
@@ -143,7 +137,7 @@ jobs:
           echo "build_tag=OpenWrt_aarch64_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Packaging OpenWrt [ ${{ inputs.source_branch }} ]
+      - name: Packaging OpenWrt
         uses: ophub/flippy-openwrt-actions@main
         if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
         env:

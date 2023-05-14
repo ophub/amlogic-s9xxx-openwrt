@@ -1126,8 +1126,6 @@ loop_make() {
     cd ${out_path}
     # Backup the OpenWrt file
     cp -f ${openwrt_path}/${openwrt_default_file} .
-    # Generate a sha256sum verification file for each OpenWrt image file
-    for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
 }
 
 # Show welcome message

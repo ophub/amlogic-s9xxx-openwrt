@@ -84,6 +84,13 @@ runs:
         [[ -n "${{ inputs.gh_token }}" ]] && make_command="${make_command} -g ${{ inputs.gh_token }}"
         sudo ./make ${make_command}
 
+        cd ${GITHUB_ACTION_PATH}/${openwrt_outpath}
+        # Compress OpenWrt image file
+        pigz -qf *.img || gzip -qf *.img
+        # Generate a sha256sum verification file for each OpenWrt image file
+        for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
+        sync && sleep 3
+
         cd ${GITHUB_ACTION_PATH}
         echo -e "Output environment variables."
         echo "PACKAGED_OUTPUTPATH=${PWD}/${openwrt_outpath}" >> ${GITHUB_ENV}

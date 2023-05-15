@@ -85,6 +85,8 @@ runs:
         sudo ./make ${make_command}
 
         cd ${GITHUB_ACTION_PATH}/${openwrt_outpath}
+        # Copy and save an original rootfs.tar.gz file
+        cp -f ../${openwrt_savepath}/*rootfs.tar.gz .
         # Generate a sha256sum verification file for each OpenWrt image file
         for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
         sync && sleep 3

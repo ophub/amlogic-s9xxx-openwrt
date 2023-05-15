@@ -1122,10 +1122,6 @@ loop_make() {
             let j++
         }
     done
-
-    cd ${out_path}
-    # Backup the OpenWrt file
-    cp -f ${openwrt_path}/${openwrt_default_file} .
 }
 
 # Show welcome message

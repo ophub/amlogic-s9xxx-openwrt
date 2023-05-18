@@ -79,7 +79,7 @@ firmware_repo="https://github.com/ophub/firmware/tree/main/firmware"
 firmware_repo="${firmware_repo//tree\/main/trunk}"
 
 # Install/Update script files download repository
-script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic/root/usr/sbin"
+script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic"
 # Convert script repository address to svn format
 script_repo="${script_repo//tree\/main/trunk}"
 
@@ -352,8 +352,10 @@ download_depends() {
     svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${common_files}/etc --force
 
     # Download install/update and other related files
-    svn export ${script_repo} ${common_files}/usr/sbin --force
+    svn export ${script_repo}/root/usr/sbin ${common_files}/usr/sbin --force
     chmod +x ${common_files}/usr/sbin/*
+    svn export ${script_repo}/root/usr/share/amlogic ${common_files}/usr/share/amlogic --force
+    chmod +x ${common_files}/usr/share/amlogic/*
 }
 
 query_kernel() {

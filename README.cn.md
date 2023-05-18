@@ -2,11 +2,9 @@
 
 查看英文说明 | [View English description](README.md)
 
-[OpenWrt](https://openwrt.org/) 项目是一个针对嵌入式设备的 Linux 路由器操作系统。OpenWrt 不是一个单一且不可更改的固件，而是提供了具有软件包管理功能的完全可写的文件系统，让您可以自由选择需要的软件包来定制路由器系统。对于开发人员来说，OpenWrt 是一个无需围绕它构建完整固件就能开发应用程序的框架；对于普通用户来说，这意味着拥有了完全定制的能力，能以意想不到的方式使用该设备。它拥有超过 3000+ 个标准化应用软件包和非常丰富的第三方插件支持，让您可以轻松地将他们应用于各种支持的设备。
+[OpenWrt](https://openwrt.org/) 项目是一个针对嵌入式设备的 Linux 路由器操作系统。OpenWrt 不是一个单一且不可更改的固件，而是提供了具有软件包管理功能的完全可写的文件系统，让您可以自由选择需要的软件包来定制路由器系统。对于开发人员来说，OpenWrt 是一个无需围绕它构建完整固件就能开发应用程序的框架；对于普通用户来说，这意味着拥有了完全定制的能力，能以意想不到的方式使用该设备。它拥有超过 3000+ 个标准化应用软件包和非常丰富的第三方插件支持，让您可以轻松地将他们应用于各种支持的设备。现在你可以将电视盒子的安卓 TV 系统更换为 OpenWrt 系统，让他成为一台功能强大的路由器。
 
-现在你可以将电视盒子的安卓 TV 系统更换为 OpenWrt 系统，让他成为一台功能强大的路由器。本项目为 `Amlogic`，`Rockchip` 和 `Allwinner` 盒子构建 OpenWrt 系统。支持写入 eMMC 中使用，支持更新内核等功能。使用方法详见[OpenWrt 使用文档](./make-openwrt/documents/README.cn.md)。
-
-最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。欢迎你 `Fork` 并进行个性化软件包定制。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
+本项目托众多的[贡献者](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md)，为 `Amlogic`，`Rockchip` 和 `Allwinner` 盒子构建 OpenWrt 系统。支持写入 eMMC 中使用，支持更新内核等功能，使用方法详见 [OpenWrt 使用文档](./make-openwrt/documents/README.cn.md)。最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。欢迎你 `Fork` 并进行个性化软件包定制。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
 
 ## OpenWrt 固件说明
 

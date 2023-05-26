@@ -314,7 +314,7 @@ find_openwrt() {
     source_codename=""
     source_release_file="etc/openwrt_release"
     temp_dir="$(mktemp -d)"
-    (cd ${temp_dir} && tar -xzf "${openwrt_path}/${openwrt_default_file}" "./${source_release_file}" 2>/dev/null)
+    (cd ${temp_dir} && tar -xzf "${openwrt_path}/${openwrt_default_file}" --touch "./${source_release_file}" 2>/dev/null)
     # Find custom DISTRIB_SOURCECODE, such as [ official/lede ]
     [[ -f "${temp_dir}/${source_release_file}" ]] && {
         source_codename="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCECODE=.*" | head -n 1 | cut -d"'" -f2)"
@@ -516,7 +516,7 @@ download_kernel() {
                     wget "${kernel_down_from}" -q -P "${kernel_path}/${kd}"
                     [[ "${?}" -ne "0" ]] && error_msg "Failed to download the kernel files from the server."
 
-                    tar -xf "${kernel_path}/${kd}/${kernel_var}.tar.gz" -C "${kernel_path}/${kd}"
+                    tar -xzf "${kernel_path}/${kd}/${kernel_var}.tar.gz" --touch -C "${kernel_path}/${kd}"
                     [[ "${?}" -ne "0" ]] && error_msg "[ ${kernel_var} ] kernel decompression failed."
                 else
                     echo -e "${INFO} (${x}.${i}) [ ${k} - ${kernel_var} ] Kernel is in the local directory."
@@ -706,7 +706,7 @@ extract_openwrt() {
     btrfs subvolume create ${tag_rootfs}/etc >/dev/null 2>&1
 
     # Unzip the OpenWrt rootfs file
-    tar -xzf ${openwrt_path}/${openwrt_default_file} -C ${tag_rootfs}
+    tar -xzf ${openwrt_path}/${openwrt_default_file} --touch -C ${tag_rootfs}
     rm -rf ${tag_rootfs}/lib/modules/*
     rm -f ${tag_rootfs}/rom/sbin/firstboot
 
@@ -750,7 +750,7 @@ replace_kernel() {
     [[ -s "${kernel_boot}" && -s "${kernel_dtb}" && -s "${kernel_modules}" ]] || error_msg "The 3 kernel missing."
 
     # 01. For /boot five files
-    tar -xzf ${kernel_boot} -C ${tag_bootfs}
+    tar -xzf ${kernel_boot} --touch -C ${tag_bootfs}
     [[ "${PLATFORM}" == "amlogic" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
     [[ "${PLATFORM}" == "rockchip" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
     [[ "${PLATFORM}" == "allwinner" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} Image)
@@ -759,12 +759,12 @@ replace_kernel() {
 
     # 02. For /boot/dtb/${PLATFORM}/*
     [[ -d "${tag_bootfs}/dtb/${PLATFORM}" ]] || mkdir -p ${tag_bootfs}/dtb/${PLATFORM}
-    tar -xzf ${kernel_dtb} -C ${tag_bootfs}/dtb/${PLATFORM}
+    tar -xzf ${kernel_dtb} --touch -C ${tag_bootfs}/dtb/${PLATFORM}
     [[ "${PLATFORM}" == "rockchip" ]] && ln -sf dtb ${tag_bootfs}/dtb-${kernel_name}
     [[ "$(ls ${tag_bootfs}/dtb/${PLATFORM} -l 2>/dev/null | grep "^-" | wc -l)" -ge "2" ]] || error_msg "/boot/dtb/${PLATFORM} files is missing."
 
     # 03. For /lib/modules/${kernel_name}
-    tar -xzf ${kernel_modules} -C ${tag_rootfs}/lib/modules
+    tar -xzf ${kernel_modules} --touch -C ${tag_rootfs}/lib/modules
     (cd ${tag_rootfs}/lib/modules/${kernel_name}/ && rm -f build source *.ko 2>/dev/null && find ./ -type f -name '*.ko' -exec ln -s {} ./ \;)
     [[ "$(ls ${tag_rootfs}/lib/modules/${kernel_name} -l 2>/dev/null | grep "^d" | wc -l)" -eq "1" ]] || error_msg "/usr/lib/modules kernel folder is missing."
 }

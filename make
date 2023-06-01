@@ -261,7 +261,7 @@ check_data() {
             cat ${model_conf} |
                 sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' |
                 grep -E "^[^#].*:yes$" | awk -F':' '{print $13}' |
-                sort | uniq | xargs
+                sort -u | xargs
         ))
     else
         board_list=":($(echo ${make_board} | sed -e 's/_/\|/g')):(yes|no)"
@@ -274,7 +274,7 @@ check_data() {
         cat ${model_conf} |
             sed -e 's/NA//g' -e 's/NULL//g' -e 's/[ ][ ]*//g' -e 's/\.y/\.1/g' |
             grep -E "^[^#].*${board_list}$" | awk -F':' '{print $9}' |
-            sort | uniq | xargs
+            sort -u | xargs
     ))
     [[ "${#kernel_from[*]}" -eq "0" ]] && error_msg "Missing [ KERNEL_TAGS ] settings, stop building."
     # Replace custom kernel tags
@@ -284,10 +284,10 @@ check_data() {
     }
 
     # The [ specific kernel ], Use the [ kernel version number ], such as 5.15.y, 6.1.y, etc. download from [ kernel_stable ].
-    specific_kernel=($(echo ${kernel_from[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[0-9]+" | sort | uniq | xargs))
+    specific_kernel=($(echo ${kernel_from[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[0-9]+" | sort -u | xargs))
 
     # The [ suffix ] of KERNEL_TAGS starts with a [ letter ], such as kernel_stable, kernel_rk3588, etc.
-    tags_list=($(echo ${kernel_from[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[a-z]" | sort | uniq | xargs))
+    tags_list=($(echo ${kernel_from[*]} | sed -e 's/[ ][ ]*/\n/g' | grep -E "^[a-z]" | sort -u | xargs))
     # Add the specific kernel to the list
     [[ "${#specific_kernel[*]}" -ne "0" ]] && tags_list=(${tags_list[*]} "specific")
     # Check the kernel list
@@ -1030,16 +1030,11 @@ clean_tmp() {
     cd ${current_path}
 
     # Unmount the OpenWrt image file
+    fstrim ${tag_bootfs} 2>/dev/null
+    fstrim ${tag_rootfs} 2>/dev/null
     umount -f ${tag_bootfs} 2>/dev/null
     umount -f ${tag_rootfs} 2>/dev/null
     losetup -d ${loop_new} 2>/dev/null
-
-    # Loop to cancel other mounts
-    for x in $(lsblk | grep $(pwd) | grep -oE 'loop[0-9]+' | sort | uniq); do
-        umount -f /dev/${x}p* 2>/dev/null
-        losetup -d /dev/${x} 2>/dev/null
-    done
-    losetup -D
 
     cd ${out_path}
     # Compress the OpenWrt image file

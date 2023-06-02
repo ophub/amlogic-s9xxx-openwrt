@@ -157,6 +157,7 @@ on:
           - stable
           - flippy
           - dev
+          - beta
       openwrt_storage:
         description: "Select OpenWrt image storage time."
         required: false

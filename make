@@ -93,6 +93,7 @@ specific_tags="${default_tags}"
 stable_kernel=("6.1.1" "5.15.1")
 flippy_kernel=("6.1.1" "5.15.1")
 dev_kernel=("6.1.1" "5.15.1")
+beta_kernel=("6.1.1" "5.15.1")
 rk3588_kernel=("5.10.1")
 # Set to automatically use the latest kernel
 auto_kernel="true"
@@ -203,6 +204,7 @@ init_var() {
                 flippy_kernel=(${2})
                 stable_kernel=(${2})
                 dev_kernel=(${2})
+                beta_kernel=(${2})
                 IFS="${oldIFS}"
                 shift
             else
@@ -377,6 +379,9 @@ query_kernel() {
             dev)
                 down_kernel_list=(${dev_kernel[*]})
                 ;;
+            beta)
+                down_kernel_list=(${beta_kernel[*]})
+                ;;
             rk3588)
                 down_kernel_list=(${rk3588_kernel[*]})
                 ;;
@@ -444,6 +449,10 @@ query_kernel() {
                 unset dev_kernel
                 dev_kernel=(${tmp_arr_kernels[*]})
                 ;;
+            beta)
+                unset beta_kernel
+                beta_kernel=(${tmp_arr_kernels[*]})
+                ;;
             rk3588)
                 unset rk3588_kernel
                 rk3588_kernel=(${tmp_arr_kernels[*]})
@@ -494,6 +503,9 @@ download_kernel() {
                 ;;
             dev)
                 down_kernel_list=(${dev_kernel[*]})
+                ;;
+            beta)
+                down_kernel_list=(${beta_kernel[*]})
                 ;;
             rk3588)
                 down_kernel_list=(${rk3588_kernel[*]})
@@ -1052,7 +1064,6 @@ loop_make() {
     j="1"
     for b in ${make_openwrt[*]}; do
         {
-
             # Set specific configuration for building OpenWrt system
             board="${b}"
             confirm_version
@@ -1068,6 +1079,9 @@ loop_make() {
                 ;;
             dev)
                 kernel_list=(${dev_kernel[*]})
+                ;;
+            beta)
+                kernel_list=(${beta_kernel[*]})
                 ;;
             rk3588)
                 kernel_list=(${rk3588_kernel[*]})

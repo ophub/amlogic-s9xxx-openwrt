@@ -19,7 +19,7 @@ on:
           - all
           - s922x_s905x3_s905x2_s912_s905d_s905
           - rock5b_h88k
-          - h66k_h68k_r66s_r68s_e25_photonicat
+          - h66k_h68k_h69k_r66s_r68s_e25
           - beikeyun_l1pro
           - rock5b
           - h88k

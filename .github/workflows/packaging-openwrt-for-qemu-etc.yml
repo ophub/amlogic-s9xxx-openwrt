@@ -69,13 +69,13 @@ on:
         default: true
         type: boolean
       openwrt_storage:
-        description: "Select OpenWrt image storage time."
+        description: "Select image storage type."
         required: false
-        default: "lts"
+        default: "save"
         type: choice
         options:
-          - lts
-          - tmp
+          - save
+          - temp
 
 env:
   TZ: America/New_York

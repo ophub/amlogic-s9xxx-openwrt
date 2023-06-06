@@ -902,6 +902,8 @@ refactor_rootfs() {
     echo "mt76x2u" >etc/modules.d/mt76x2u
     echo "mt76x2e" >etc/modules.d/mt76x2e
     echo "mt7921e" >etc/modules.d/mt7921e
+    echo "mt7915e" >etc/modules.d/mt7915e
+
     # GPU Driver
     echo "panfrost" >etc/modules.d/panfrost
     # PWM Driver
@@ -922,6 +924,7 @@ refactor_rootfs() {
     echo "rk_crypto2" >etc/modules.d/rk_crypto
     echo -e "snd_soc_simple_card_utils\nsnd_soc_simple_card\nsnd_soc_rockchip_i2s" >etc/modules.d/snd-rk3568
     echo "pwm_fan" >etc/modules.d/pwm-fan
+    echo "option" >etc/modules.d/usb-serial-option
     # For rk3328
     echo -e "snd_soc_simple_card_utils\nsnd_soc_simple_card\nsnd_soc_rockchip_i2s" >etc/modules.d/snd-rk3328
 

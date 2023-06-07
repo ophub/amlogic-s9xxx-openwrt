@@ -236,6 +236,7 @@ CONFIG_KERNEL_KALLSYMS=y
 CONFIG_KERNEL_DEBUG_KERNEL=y
 CONFIG_KERNEL_DEBUG_INFO=y
 CONFIG_KERNEL_DEBUG_INFO_REDUCED=y
+CONFIG_KERNEL_FRAME_WARN=2048
 # CONFIG_KERNEL_DEBUG_VIRTUAL is not set
 # CONFIG_KERNEL_DYNAMIC_DEBUG is not set
 # CONFIG_KERNEL_KPROBES is not set
@@ -2067,6 +2068,7 @@ CONFIG_PACKAGE_kmod-crypto-arc4=y
 CONFIG_PACKAGE_kmod-crypto-authenc=y
 CONFIG_PACKAGE_kmod-crypto-cbc=y
 CONFIG_PACKAGE_kmod-crypto-ccm=y
+# CONFIG_PACKAGE_kmod-crypto-chacha20poly1305 is not set
 CONFIG_PACKAGE_kmod-crypto-cmac=y
 CONFIG_PACKAGE_kmod-crypto-crc32=y
 CONFIG_PACKAGE_kmod-crypto-crc32c=y
@@ -2077,6 +2079,7 @@ CONFIG_PACKAGE_kmod-crypto-des=y
 CONFIG_PACKAGE_kmod-crypto-ecb=y
 # CONFIG_PACKAGE_kmod-crypto-ecdh is not set
 # CONFIG_PACKAGE_kmod-crypto-echainiv is not set
+# CONFIG_PACKAGE_kmod-crypto-essiv is not set
 # CONFIG_PACKAGE_kmod-crypto-fcrypt is not set
 CONFIG_PACKAGE_kmod-crypto-gcm=y
 CONFIG_PACKAGE_kmod-crypto-gf128=y
@@ -2132,7 +2135,6 @@ CONFIG_PACKAGE_kmod-fs-msdos=y
 CONFIG_PACKAGE_kmod-fs-nfs=y
 CONFIG_PACKAGE_kmod-fs-nfs-common=y
 CONFIG_PACKAGE_kmod-fs-nfs-common-rpcsec=y
-CONFIG_PACKAGE_kmod-fs-nfs-ssc=y
 CONFIG_PACKAGE_kmod-fs-nfs-v3=y
 CONFIG_PACKAGE_kmod-fs-nfs-v4=y
 CONFIG_PACKAGE_kmod-fs-nfsd=y
@@ -2154,6 +2156,11 @@ CONFIG_PACKAGE_kmod-fuse=y
 # end of FireWire support
 
 #
+# GPIO support
+#
+# end of GPIO support
+
+#
 # Hardware Monitoring Support
 #
 # CONFIG_PACKAGE_kmod-gl-mifi-mcu is not set
@@ -2164,12 +2171,14 @@ CONFIG_PACKAGE_kmod-fuse=y
 # CONFIG_PACKAGE_kmod-hwmon-core is not set
 # CONFIG_PACKAGE_kmod-hwmon-dme1737 is not set
 # CONFIG_PACKAGE_kmod-hwmon-drivetemp is not set
+# CONFIG_PACKAGE_kmod-hwmon-g762 is not set
 # CONFIG_PACKAGE_kmod-hwmon-gpiofan is not set
 # CONFIG_PACKAGE_kmod-hwmon-gsc is not set
 # CONFIG_PACKAGE_kmod-hwmon-ina209 is not set
 # CONFIG_PACKAGE_kmod-hwmon-ina2xx is not set
 # CONFIG_PACKAGE_kmod-hwmon-it87 is not set
 # CONFIG_PACKAGE_kmod-hwmon-lm63 is not set
+# CONFIG_PACKAGE_kmod-hwmon-lm70 is not set
 # CONFIG_PACKAGE_kmod-hwmon-lm75 is not set
 # CONFIG_PACKAGE_kmod-hwmon-lm77 is not set
 # CONFIG_PACKAGE_kmod-hwmon-lm85 is not set
@@ -2179,6 +2188,7 @@ CONFIG_PACKAGE_kmod-fuse=y
 # CONFIG_PACKAGE_kmod-hwmon-ltc4151 is not set
 # CONFIG_PACKAGE_kmod-hwmon-max6642 is not set
 # CONFIG_PACKAGE_kmod-hwmon-mcp3021 is not set
+# CONFIG_PACKAGE_kmod-hwmon-nct7802 is not set
 # CONFIG_PACKAGE_kmod-hwmon-pwmfan is not set
 # CONFIG_PACKAGE_kmod-hwmon-sch5627 is not set
 # CONFIG_PACKAGE_kmod-hwmon-sht21 is not set
@@ -2186,6 +2196,7 @@ CONFIG_PACKAGE_kmod-fuse=y
 # CONFIG_PACKAGE_kmod-hwmon-tmp102 is not set
 # CONFIG_PACKAGE_kmod-hwmon-tmp103 is not set
 # CONFIG_PACKAGE_kmod-hwmon-tmp421 is not set
+# CONFIG_PACKAGE_kmod-hwmon-tps23861 is not set
 # CONFIG_PACKAGE_kmod-hwmon-vid is not set
 # CONFIG_PACKAGE_kmod-hwmon-w83793 is not set
 # CONFIG_PACKAGE_kmod-pmbus-core is not set
@@ -2254,8 +2265,8 @@ CONFIG_PACKAGE_kmod-input-core=y
 CONFIG_PACKAGE_kmod-input-evdev=y
 # CONFIG_PACKAGE_kmod-input-joydev is not set
 # CONFIG_PACKAGE_kmod-input-matrixkmap is not set
-# CONFIG_PACKAGE_kmod-input-polldev is not set
 # CONFIG_PACKAGE_kmod-input-touchscreen-ads7846 is not set
+# CONFIG_PACKAGE_kmod-input-touchscreen-edt-ft5x06 is not set
 # CONFIG_PACKAGE_kmod-input-uinput is not set
 # end of Input modules
 
@@ -2273,6 +2284,7 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 # CONFIG_PACKAGE_kmod-ledtrig-oneshot is not set
 # CONFIG_PACKAGE_kmod-ledtrig-pattern is not set
 # CONFIG_PACKAGE_kmod-ledtrig-transient is not set
+# CONFIG_PACKAGE_kmod-ledtrig-tty is not set
 # end of LED modules
 
 #
@@ -2280,6 +2292,7 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 #
 CONFIG_PACKAGE_kmod-asn1-decoder=y
 CONFIG_PACKAGE_kmod-asn1-encoder=y
+# CONFIG_PACKAGE_kmod-lib-842 is not set
 # CONFIG_PACKAGE_kmod-lib-cordic is not set
 CONFIG_PACKAGE_kmod-lib-crc-ccitt=y
 # CONFIG_PACKAGE_kmod-lib-crc-itu-t is not set
@@ -2297,6 +2310,12 @@ CONFIG_PACKAGE_kmod-lib-zlib-inflate=y
 CONFIG_PACKAGE_kmod-lib-zstd=y
 CONFIG_PACKAGE_kmod-oid-registry=y
 # end of Libraries
+
+#
+# Multiplexer Support
+#
+# CONFIG_PACKAGE_kmod-mux-core is not set
+# end of Multiplexer Support
 
 #
 # Native Language Support
@@ -2416,6 +2435,7 @@ CONFIG_PACKAGE_kmod-nfnetlink=y
 # CONFIG_PACKAGE_kmod-nft-arp is not set
 # CONFIG_PACKAGE_kmod-nft-bridge is not set
 # CONFIG_PACKAGE_kmod-nft-compat is not set
+# CONFIG_PACKAGE_kmod-nft-connlimit is not set
 # CONFIG_PACKAGE_kmod-nft-core is not set
 # CONFIG_PACKAGE_kmod-nft-fib is not set
 # CONFIG_PACKAGE_kmod-nft-nat is not set
@@ -2519,6 +2539,7 @@ CONFIG_PACKAGE_kmod-phylink=y
 # CONFIG_PACKAGE_kmod-spi-ks8995 is not set
 CONFIG_PACKAGE_kmod-stmmac-core=y
 # CONFIG_PACKAGE_kmod-swconfig is not set
+# CONFIG_PACKAGE_kmod-switch-ar8xxx is not set
 # CONFIG_PACKAGE_kmod-switch-bcm53xx is not set
 # CONFIG_PACKAGE_kmod-switch-bcm53xx-mdio is not set
 # CONFIG_PACKAGE_kmod-switch-ip17xx is not set
@@ -2555,17 +2576,14 @@ CONFIG_PACKAGE_kmod-ipip=y
 CONFIG_PACKAGE_kmod-iptunnel=y
 CONFIG_PACKAGE_kmod-iptunnel4=y
 # CONFIG_PACKAGE_kmod-iptunnel6 is not set
-# CONFIG_PACKAGE_kmod-isdn4linux is not set
 # CONFIG_PACKAGE_kmod-jool-netfilter is not set
 # CONFIG_PACKAGE_kmod-l2tp is not set
 # CONFIG_PACKAGE_kmod-l2tp-eth is not set
 # CONFIG_PACKAGE_kmod-l2tp-ip is not set
+# CONFIG_PACKAGE_kmod-macremapper is not set
 # CONFIG_PACKAGE_kmod-macsec is not set
 # CONFIG_PACKAGE_kmod-misdn is not set
 # CONFIG_PACKAGE_kmod-mpls is not set
-# CONFIG_PACKAGE_kmod-mptcp is not set
-# CONFIG_PACKAGE_kmod-macremapper is not set
-# CONFIG_PACKAGE_kmod-mptcp_ipv6 is not set
 # CONFIG_PACKAGE_kmod-nat46 is not set
 # CONFIG_PACKAGE_kmod-netconsole is not set
 # CONFIG_PACKAGE_kmod-netem is not set
@@ -2590,15 +2608,23 @@ CONFIG_PACKAGE_kmod-pppox=y
 # CONFIG_PACKAGE_kmod-qrtr-mhi is not set
 # CONFIG_PACKAGE_kmod-qrtr-tun is not set
 # CONFIG_PACKAGE_kmod-sched is not set
+# CONFIG_PACKAGE_kmod-sched-act-ipt is not set
+# CONFIG_PACKAGE_kmod-sched-act-police is not set
+# CONFIG_PACKAGE_kmod-sched-act-sample is not set
 # CONFIG_PACKAGE_kmod-sched-act-vlan is not set
 # CONFIG_PACKAGE_kmod-sched-bpf is not set
 # CONFIG_PACKAGE_kmod-sched-cake is not set
 # CONFIG_PACKAGE_kmod-sched-connmark is not set
 # CONFIG_PACKAGE_kmod-sched-core is not set
 # CONFIG_PACKAGE_kmod-sched-ctinfo is not set
+# CONFIG_PACKAGE_kmod-sched-drr is not set
 # CONFIG_PACKAGE_kmod-sched-flower is not set
+# CONFIG_PACKAGE_kmod-sched-fq-pie is not set
 # CONFIG_PACKAGE_kmod-sched-ipset is not set
 # CONFIG_PACKAGE_kmod-sched-mqprio is not set
+# CONFIG_PACKAGE_kmod-sched-pie is not set
+# CONFIG_PACKAGE_kmod-sched-prio is not set
+# CONFIG_PACKAGE_kmod-sched-red is not set
 # CONFIG_PACKAGE_kmod-sctp is not set
 CONFIG_PACKAGE_kmod-shortcut-fe=y
 CONFIG_PACKAGE_kmod-shortcut-fe-cm=y
@@ -2607,6 +2633,7 @@ CONFIG_PACKAGE_kmod-slhc=y
 # CONFIG_PACKAGE_kmod-slip is not set
 CONFIG_PACKAGE_kmod-tcp-bbr=y
 # CONFIG_PACKAGE_kmod-tcp-hybla is not set
+# CONFIG_PACKAGE_kmod-tcp-scalable is not set
 # CONFIG_PACKAGE_kmod-tls is not set
 # CONFIG_PACKAGE_kmod-trelay is not set
 CONFIG_PACKAGE_kmod-tun=y
@@ -2624,6 +2651,7 @@ CONFIG_PACKAGE_kmod-veth=y
 # CONFIG_PACKAGE_kmod-bluetooth is not set
 # CONFIG_PACKAGE_kmod-bluetooth-6lowpan is not set
 # CONFIG_PACKAGE_kmod-btmrvl is not set
+# CONFIG_PACKAGE_kmod-btsdio is not set
 # CONFIG_PACKAGE_kmod-button-hotplug is not set
 # CONFIG_PACKAGE_kmod-echo is not set
 # CONFIG_PACKAGE_kmod-eeprom-93cx6 is not set
@@ -2632,13 +2660,14 @@ CONFIG_PACKAGE_kmod-veth=y
 # CONFIG_PACKAGE_kmod-gpio-beeper is not set
 # CONFIG_PACKAGE_kmod-gpio-button-hotplug is not set
 # CONFIG_PACKAGE_kmod-gpio-nxp-74hc164 is not set
+# CONFIG_PACKAGE_kmod-i6300esb-wdt is not set
 CONFIG_PACKAGE_kmod-ikconfig=y
 # CONFIG_PACKAGE_kmod-imx2-wdt is not set
 # CONFIG_PACKAGE_kmod-imx7-ulp-wdt is not set
-# CONFIG_PACKAGE_kmod-it87-wdt is not set
 # CONFIG_PACKAGE_kmod-itco-wdt is not set
 CONFIG_PACKAGE_kmod-keys-encrypted=y
 CONFIG_PACKAGE_kmod-keys-trusted=y
+# CONFIG_PACKAGE_kmod-lkdtm is not set
 # CONFIG_PACKAGE_kmod-lp is not set
 # CONFIG_PACKAGE_kmod-mhi-bus is not set
 # CONFIG_PACKAGE_kmod-mhi-pci-generic is not set
@@ -2653,8 +2682,8 @@ CONFIG_PACKAGE_kmod-pps=y
 # CONFIG_PACKAGE_kmod-pps-gpio is not set
 # CONFIG_PACKAGE_kmod-pps-ldisc is not set
 CONFIG_PACKAGE_kmod-ptp=y
-# CONFIG_PACKAGE_kmod-qcom-qmi-helpers is not set
 CONFIG_PACKAGE_kmod-random-core=y
+# CONFIG_PACKAGE_kmod-reed-solomon is not set
 # CONFIG_PACKAGE_kmod-rtc-ds1307 is not set
 # CONFIG_PACKAGE_kmod-rtc-ds1374 is not set
 # CONFIG_PACKAGE_kmod-rtc-ds1672 is not set
@@ -2663,7 +2692,6 @@ CONFIG_PACKAGE_kmod-random-core=y
 # CONFIG_PACKAGE_kmod-rtc-pcf2123 is not set
 # CONFIG_PACKAGE_kmod-rtc-pcf2127 is not set
 # CONFIG_PACKAGE_kmod-rtc-pcf8563 is not set
-# CONFIG_PACKAGE_kmod-rtc-pt7c4338 is not set
 # CONFIG_PACKAGE_kmod-rtc-rs5c372a is not set
 # CONFIG_PACKAGE_kmod-rtc-rx8025 is not set
 # CONFIG_PACKAGE_kmod-rtc-s35390a is not set
@@ -2676,7 +2704,6 @@ CONFIG_PACKAGE_kmod-random-core=y
 CONFIG_PACKAGE_kmod-tpm=y
 # CONFIG_PACKAGE_kmod-tpm-i2c-atmel is not set
 # CONFIG_PACKAGE_kmod-tpm-i2c-infineon is not set
-# CONFIG_PACKAGE_kmod-w83627hf-wdt is not set
 # CONFIG_PACKAGE_kmod-zram is not set
 CONFIG_ZRAM_DEF_COMP_LZORLE=y
 # CONFIG_ZRAM_DEF_COMP_LZO is not set
@@ -2717,7 +2744,6 @@ CONFIG_PACKAGE_kmod-usb-dwc2=y
 CONFIG_PACKAGE_kmod-usb-dwc3=y
 CONFIG_PACKAGE_kmod-usb-ehci=y
 CONFIG_PACKAGE_kmod-usb-hid=y
-# CONFIG_PACKAGE_kmod-usb-hid-cp2112 is not set
 # CONFIG_PACKAGE_kmod-usb-ledtrig-usbport is not set
 CONFIG_PACKAGE_kmod-usb-net=y
 # CONFIG_PACKAGE_kmod-usb-net-aqc111 is not set
@@ -2805,8 +2831,8 @@ CONFIG_PACKAGE_kmod-usbmon=y
 # CONFIG_PACKAGE_kmod-fb-sys-fops is not set
 # CONFIG_PACKAGE_kmod-fb-sys-ram is not set
 # CONFIG_PACKAGE_kmod-multimedia-input is not set
-# CONFIG_PACKAGE_kmod-v4l2loopback is not set
 # CONFIG_PACKAGE_kmod-video-core is not set
+# CONFIG_PACKAGE_kmod-v4l2loopback is not set
 # end of Video Support
 
 #

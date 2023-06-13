@@ -514,6 +514,13 @@ Hit any key to stop autoboot: 0
 此列表以 [unifreq](https://github.com/unifreq/openwrt_packit) 的开发指南为基础进行整理。为保障安装/更新等脚本在 OpenWrt 中可以正常运行，当使用 `make menuconfig` 进行配置时，需要添加以下必选项：
 
 ```shell
+Target System  -> Arm SystemReady (EFI) compliant
+Subtarget      -> 64-bit (armv8) machines
+Target Profile -> Generic EFI Boot
+Target Images  -> tar.gz
+
+OR
+
 Target System  -> QEMU ARM Virtual Machine
 Subtarget      -> QEMU ARMv8 Virtual Machine (cortex-a53)
 Target Profile -> Default

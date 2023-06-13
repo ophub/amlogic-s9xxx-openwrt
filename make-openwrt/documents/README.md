@@ -522,6 +522,13 @@ If your phenomenon is as shown above, then you need to solder a resistor on the 
 This list is based on the development guidelines of [unifreq](https://github.com/unifreq/openwrt_packit). To ensure that installation/update scripts can run smoothly in OpenWrt, the following required options need to be added when configuring with `make menuconfig`:
 
 ```shell
+Target System  -> Arm SystemReady (EFI) compliant
+Subtarget      -> 64-bit (armv8) machines
+Target Profile -> Generic EFI Boot
+Target Images  -> tar.gz
+
+OR
+
 Target System  -> QEMU ARM Virtual Machine
 Subtarget      -> QEMU ARMv8 Virtual Machine (cortex-a53)
 Target Profile -> Default

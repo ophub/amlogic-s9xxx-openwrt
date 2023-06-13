@@ -171,10 +171,10 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 ## openwrt-*-rootfs.tar.gz 用于打包的文件编译选项
 
 | Option | Value |
-| ---- | ---- |
-| Target System | QEMU ARM Virtual Machine |
-| Subtarget | QEMU ARMv8 Virtual Machine(cortex-a53) |
-| Target Profile | Default |
+| ------ | ----- |
+| Target System | Arm SystemReady (EFI) compliant |
+| Subtarget | 64-bit (armv8) machines |
+| Target Profile | Generic EFI Boot |
 | Target Images | tar.gz |
 
 更多信息请查阅 [使用文档](./make-openwrt/documents/README.cn.md)

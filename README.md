@@ -171,10 +171,10 @@ To upload to `Releases`, you need to add `${{ secrets.GITHUB_TOKEN }}` and `${{ 
 ## openwrt-*-rootfs.tar.gz Firmware compilation parameters
 
 | Option | Value |
-| ---- | ---- |
-| Target System | QEMU ARM Virtual Machine |
-| Subtarget | QEMU ARMv8 Virtual Machine(cortex-a53) |
-| Target Profile | Default |
+| ------ | ----- |
+| Target System | Arm SystemReady (EFI) compliant |
+| Subtarget | 64-bit (armv8) machines |
+| Target Profile | Generic EFI Boot |
 | Target Images | tar.gz |
 
 For more instructions please see: [documents](./make-openwrt/documents)

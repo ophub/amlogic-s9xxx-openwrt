@@ -535,9 +535,10 @@ Languages -> Perl
              -> perlbase-utf8
 
 
-Network -> WirelessAPD -> hostapd-common
-                       -> wpa-cli
-                       -> wpad-basic
+Network -> File Transfer -> curl、wget-ssl
+        -> WirelessAPD   -> hostapd-common
+                         -> wpa-cli
+                         -> wpad-basic
         -> iw
 
 

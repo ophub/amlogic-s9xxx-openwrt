@@ -546,6 +546,7 @@ Utilities -> Compression -> bsdtar、pigz
           -> Filesystem -> attr、btrfs-progs(Build with zstd support)、chattr、dosfstools、
                            e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
           -> Shells -> bash
+          -> Time Zone info -> zoneinfo-america、zoneinfo-asia、zoneinfo-core、zoneinfo-europe (other)
           -> acpid、coremark、coreutils(-> coreutils-base64、coreutils-nohup)、gawk、getopt、
              jq、losetup、pv、tar、uuidgen
 ```

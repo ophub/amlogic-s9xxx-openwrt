@@ -227,6 +227,7 @@ jobs:
               echo "Unknown source code repository."
               exit 1
           fi
+          echo -e "REPO_URL: [ ${REPO_URL} ]\nREPO_BRANCH: [ ${REPO_BRANCH} ]\nTAGS_NAME: [ ${TAGS_NAME} ]"
 
           # Clone source code
           git clone -q --single-branch --depth 1 ${REPO_URL} -b ${REPO_BRANCH} openwrt
@@ -264,7 +265,7 @@ jobs:
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
 
-      - name: Compile the firmware
+      - name: Compile the OpenWrt
         id: compile
         run: |
           cd openwrt/
@@ -273,7 +274,7 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Clean up server space
-        id: output
+        id: clean
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         run: |
           cd openwrt/
@@ -285,9 +286,9 @@ jobs:
           for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Upload OpenWrt Firmware to Release
+      - name: Upload OpenWrt to Release
         uses: ncipollo/release-action@main
-        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
         with:
           tag: ${{ steps.codes.outputs.build_tag }}
           artifacts: openwrt/output/*
@@ -296,8 +297,8 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.GH_TOKEN }}
 
-      - name: Build OpenWrt firmware
-        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
+      - name: Rebuild OpenWrt
+        if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
           openwrt_path: openwrt/output/*rootfs.tar.gz
@@ -308,7 +309,7 @@ jobs:
           kernel_usage: ${{ inputs.kernel_usage }}
           gh_token: ${{ secrets.GH_TOKEN }}
 
-      - name: Upload the packaged firmware to Release
+      - name: Upload the packaged OpenWrt to Release
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:

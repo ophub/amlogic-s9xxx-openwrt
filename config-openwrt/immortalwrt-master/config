@@ -7956,7 +7956,7 @@ CONFIG_PACKAGE_uuidgen=y
 # CONFIG_PACKAGE_viewadsb is not set
 # CONFIG_PACKAGE_watchcat is not set
 CONFIG_PACKAGE_whereis=y
-CONFIG_PACKAGE_which=y
+# CONFIG_PACKAGE_which is not set
 # CONFIG_PACKAGE_whiptail is not set
 # CONFIG_PACKAGE_whois is not set
 # CONFIG_PACKAGE_wifitoggle is not set

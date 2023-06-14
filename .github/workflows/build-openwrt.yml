@@ -202,7 +202,6 @@ jobs:
           sudo mkdir -p /workdir
           sudo chown ${USER}:${GROUPS} /workdir
           sudo timedatectl set-timezone "${TZ}"
-          df -hT ${PWD}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Clone source code [ ${{ inputs.source_branch }} ]
@@ -228,6 +227,7 @@ jobs:
               exit 1
           fi
           echo -e "REPO_URL: [ ${REPO_URL} ]\nREPO_BRANCH: [ ${REPO_BRANCH} ]\nTAGS_NAME: [ ${TAGS_NAME} ]"
+          df -hT ${PWD}
 
           # Clone source code
           git clone -q --single-branch --depth 1 ${REPO_URL} -b ${REPO_BRANCH} openwrt

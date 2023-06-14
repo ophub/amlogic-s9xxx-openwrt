@@ -204,7 +204,7 @@ In your repository's navigation bar, click the Actions button, and then click Bu
 
 ### 5.2 Scheduled compilation
 
-In the .github/workflows/build-openwrt-with-lede.yml file, use Cron to set the scheduled compilation, and the five different positions represent the meaning of minutes (0-59)/hours (0-23)/date (1-31)/month (1-12)/day of the week (0-6) (Sunday-Saturday). Modify the numerical value in different locations to set the time. The system uses UTC standard time by default, please convert it according to the time zone of your country.
+In the .github/workflows/build-openwrt.yml file, use Cron to set the scheduled compilation, and the five different positions represent the meaning of minutes (0-59)/hours (0-23)/date (1-31)/month (1-12)/day of the week (0-6) (Sunday-Saturday). Modify the numerical value in different locations to set the time. The system uses UTC standard time by default, please convert it according to the time zone of your country.
 
 ```yaml
 schedule:
@@ -213,7 +213,7 @@ schedule:
 
 ## 6. Saving Firmware
 
-The firmware saving settings are also controlled in the .github/workflows/build-openwrt-with-lede.yml file. We automatically upload the compiled firmware to Actions and Releases provided by GitHub through scripts, or upload them to third-party services (such as WeTransfer).
+The firmware saving settings are also controlled in the .github/workflows/build-openwrt.yml file. We automatically upload the compiled firmware to Actions and Releases provided by GitHub through scripts, or upload them to third-party services (such as WeTransfer).
 
 The maximum retention period of Actions in Github is now 90 days, Releases is permanent, and third parties such as WeTransfer are 7 days. First of all, we thank these service providers for their free support, but please use them sparingly. We advocate reasonable use of free services.
 
@@ -283,7 +283,7 @@ Enter the Release section in the lower right corner of the repository homepage a
 
 ### 7.3 Download from a Third Party
 
-In the .github/workflows/build-openwrt-with-lede.yml file, we have disabled the option to upload to third parties by default. If you need it, change false to true, and it will be uploaded to the third party after the next compilation is completed. The third-party website can be seen in the firmware compilation process logs, or output to the compilation information.
+In the .github/workflows/build-openwrt.yml file, we have disabled the option to upload to third parties by default. If you need it, change false to true, and it will be uploaded to the third party after the next compilation is completed. The third-party website can be seen in the firmware compilation process logs, or output to the compilation information.
 
 ```yaml
 UPLOAD_COWTRANSFER: false
@@ -329,7 +329,7 @@ After you complete the OpenWrt personalized configuration locally, save and exit
 
 GitHub provides detailed instructions on the use of GitHub Actions. You can start learning it from here: [GitHub Actions Quick Start](https://docs.github.com/en/actions/quickstart)
 
-Let's take the workflow control file currently used in this repository as an example to briefly introduce it: [build-openwrt-with-lede.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-with-lede.yml)
+Let's take the workflow control file currently used in this repository as an example to briefly introduce it: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
 
 #### 10.2.1 Change the Address and Branch of the Compilation Source Code Repository
 
@@ -391,7 +391,7 @@ When you view the feeds.conf.default file in the source code repository, do you 
 
 ### 10.5 Customizing Default Software Configuration Information
 
-We have already configured many software when using OpenWrt. Most of the configuration information of these software is saved in the /etc/config/ related directories of your OpenWrt. Copy these storage files of configuration information to the files folder in the root directory of your GitHub repository, please keep the directory structure and file names the same. During OpenWrt compilation, these configuration information storage files will be compiled into your firmware. The specific method is in the .github/workflows/build-openwrt-with-lede.yml file. Let's take a look at this code together:
+We have already configured many software when using OpenWrt. Most of the configuration information of these software is saved in the /etc/config/ related directories of your OpenWrt. Copy these storage files of configuration information to the files folder in the root directory of your GitHub repository, please keep the directory structure and file names the same. During OpenWrt compilation, these configuration information storage files will be compiled into your firmware. The specific method is in the .github/workflows/build-openwrt.yml file. Let's take a look at this code together:
 
 ```yaml
 - name: Load custom configuration

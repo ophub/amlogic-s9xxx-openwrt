@@ -107,7 +107,7 @@ jobs:
           sudo timedatectl set-timezone "${TZ}"
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Download armvirt file
+      - name: Download OpenWrt
         id: down
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
@@ -150,7 +150,7 @@ jobs:
           KERNEL_AUTO_LATEST: ${{ inputs.auto_kernel }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Upload OpenWrt Firmware to Release
+      - name: Upload the packaged OpenWrt
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:

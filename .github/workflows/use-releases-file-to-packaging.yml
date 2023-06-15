@@ -198,7 +198,7 @@ jobs:
           sudo timedatectl set-timezone "${TZ}"
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Download OpenWrt Armvirt firmware [ ${{ inputs.source_branch }} ]
+      - name: Download OpenWrt [ ${{ inputs.source_branch }} ]
         id: down
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
@@ -225,9 +225,10 @@ jobs:
           [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
 
           echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
+          df -hT ${PWD}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Build OpenWrt firmware
+      - name: Packaging OpenWrt
         if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
@@ -239,7 +240,7 @@ jobs:
           kernel_usage: ${{ inputs.kernel_usage }}
           gh_token: ${{ secrets.GH_TOKEN }}
 
-      - name: Upload OpenWrt Firmware to Release
+      - name: Upload the packaged OpenWrt
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:

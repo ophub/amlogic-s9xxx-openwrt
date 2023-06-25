@@ -330,7 +330,18 @@ find_openwrt() {
     # Find custom DISTRIB_SOURCECODE, such as [ official/lede ]
     [[ -f "${temp_dir}/${source_release_file}" ]] && {
         source_codename="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCECODE=.*" | head -n 1 | cut -d"'" -f2)"
-        [[ -n "${source_codename}" && "${source_codename:0:1}" != "_" ]] && source_codename="_${source_codename}"
+        [[ -n "${source_codename}" ]] && {
+            # Record OpenWrt source codes repository
+            case "${source_codename}" in
+            official) OPENWRT_SOURCECODE="https://github.com/openwrt/openwrt" ;;
+            lede) OPENWRT_SOURCECODE="https://github.com/coolsnowwolf/lede" ;;
+            immortalwrt) OPENWRT_SOURCECODE="https://github.com/immortalwrt/immortalwrt" ;;
+            *) OPENWRT_SOURCECODE="" ;;
+            esac
+
+            # Complete filename
+            [[ "${source_codename:0:1}" != "_" ]] && source_codename="_${source_codename}"
+        }
         echo -e "${INFO} The source_codename: [ ${source_codename} ]"
     }
     # Remove temporary directory
@@ -1040,8 +1051,9 @@ EOF
     else
         echo "SHOW_INSTALL_MENU='yes'" >>${op_release}
     fi
-    echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
+    echo "OPENWRT_SOURCECODE='${OPENWRT_SOURCECODE}'" >>${op_release}
     echo "BUILDER_NAME='${builder_name}'" >>${op_release}
+    echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
 
     cd ${current_path}

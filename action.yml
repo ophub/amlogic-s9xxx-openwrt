@@ -34,6 +34,10 @@ inputs:
     description: "Set the rootfs size(Unit: MiB)."
     required: false
     default: "1024"
+  builder_name:
+    description: "Set OpenWrt builder signature."
+    required: false
+    default: ""
   gh_token:
     description: "Set the token."
     required: false
@@ -81,6 +85,7 @@ runs:
         [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
         [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
+        [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
         [[ -n "${{ inputs.gh_token }}" ]] && make_command="${make_command} -g ${{ inputs.gh_token }}"
         sudo ./make ${make_command}
 

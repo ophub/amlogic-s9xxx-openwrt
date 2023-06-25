@@ -1041,7 +1041,7 @@ EOF
         echo "SHOW_INSTALL_MENU='yes'" >>${op_release}
     fi
     echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
-    echo "BUILDER_NAME='${builder_name}'" >>${ophub_release_file}
+    echo "BUILDER_NAME='${builder_name}'" >>${op_release}
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
 
     cd ${current_path}

@@ -113,6 +113,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -k       | Kernel     | Specify the kernel name, such as `-k 5.10.125`. Multiple kernels can be specified using `_`, such as `-k 5.10.125_5.15.50`. The kernel version specified by the `-k` parameter is only valid for the `stable/flippy/dev` kernel series. Other kernel series such as [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) can only use specific kernels. |
 | -a       | AutoKernel | Set whether to automatically use the latest version of the same series kernel. When set to `true`, it will automatically search for newer versions of the same series specified in `-k`, such as version 5.10.125, and if there is a newer version after 5.10.125, it will be replaced with the latest version automatically. When set to `false`, the specified version of the kernel will be compiled. The default value is `true`. |
 | -s       | Size       | Set the size of the ROOTFS partition of the system, which must be greater than 2048MiB. For example: `-s 2560`. The default value is `2560`. |
+| -n       | BuilderName | Set OpenWrt builder signature. Please do not include spaces in the signature. Default value: `None` |
 | -g        | GH_TOKEN      | Optional. Set `${{ secrets.GH_TOKEN }}` for querying [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts). The default value is `none`. |
 
 
@@ -157,6 +158,7 @@ The related parameters correspond to the `local packaging command`, please refer
 | openwrt_kernel     | 6.1.1_5.15.1     | You can set the kernel version, which is equivalent to using the `-k` function. |
 | auto_kernel        | true             | You can set whether to automatically use the latest kernel version in the same series, which is equivalent to using the `-a` function. |
 | openwrt_size       | 1024             | You can set the size of the firmware rootfs partition, which is equivalent to using the `-s` function. |
+| builder_name       | None             | Set OpenWrt builder signature, function reference `-n` |
 | gh_token           | None             | This is an optional parameter. You can set `${{ secrets.GH_TOKEN }}`, which is equivalent to using the `-g` function. |
 
 - ### GitHub Actions Output Variable Description

@@ -577,6 +577,7 @@ confirm_version() {
     PLATFORM="$(echo ${board_conf} | awk -F':' '{print $10}')"
     FAMILY="$(echo ${board_conf} | awk -F':' '{print $11}')"
     BOOT_CONF="$(echo ${board_conf} | awk -F':' '{print $12}')"
+    CONTRIBUTORS="$(echo ${board_conf} | awk -F':' '{print $13}')"
 
     # Check whether the key parameters are correct
     [[ -n "${PLATFORM}" ]] || error_msg "Invalid PLATFORM parameter: [ ${PLATFORM} ]"
@@ -1017,7 +1018,6 @@ EOF
     echo "KERNEL_VERSION='${kernel}'" >>${op_release}
     echo "KERNEL_TAGS='${KERNEL_TAGS}'" >>${op_release}
     echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
-    echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
     echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}
     echo "ANDROID_UBOOT='/lib/u-boot/${BOOTLOADER_IMG}'" >>${op_release}
     if [[ "${PLATFORM}" == "rockchip" ]]; then
@@ -1030,6 +1030,8 @@ EOF
     else
         echo "SHOW_INSTALL_MENU='yes'" >>${op_release}
     fi
+    echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
+    echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
 
     cd ${current_path}
 

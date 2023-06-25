@@ -104,6 +104,8 @@ make_board="all"
 # Set OpenWrt firmware size (Unit: MiB, boot_mb >= 256, root_mb >= 512)
 boot_mb="256"
 root_mb="1024"
+# Set OpenWrt builder signature
+builder_name=""
 
 # Get gh_token for api.github.com
 gh_token=""
@@ -169,7 +171,7 @@ init_var() {
     echo -e "${STEPS} Start Initializing Variables..."
 
     # If it is followed by [ : ], it means that the option requires a parameter value
-    get_all_ver="$(getopt "b:r:u:k:a:s:g:" "${@}")"
+    get_all_ver="$(getopt "b:r:u:k:a:s:n:g:" "${@}")"
 
     while [[ -n "${1}" ]]; do
         case "${1}" in
@@ -225,6 +227,14 @@ init_var() {
                 shift
             else
                 error_msg "Invalid -s parameter [ ${2} ]!"
+            fi
+            ;;
+        -n | --BuilderName)
+            if [[ -n "${2}" ]]; then
+                builder_name="${2// /}"
+                shift
+            else
+                error_msg "Invalid -n parameter [ ${2} ]!"
             fi
             ;;
         -g | --Gh_token)
@@ -1005,7 +1015,7 @@ EOF
         echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
         echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
         echo " Board: ${board} | OpenWrt Kernel: ${kernel_name}" >>etc/banner
-        echo " Production Date: $(date +%Y-%m-%d)" >>etc/banner
+        echo " BuilderName: ${builder_name} | Production Date: $(date +%Y-%m-%d)" >>etc/banner
         echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
     }
 
@@ -1031,6 +1041,7 @@ EOF
         echo "SHOW_INSTALL_MENU='yes'" >>${op_release}
     fi
     echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
+    echo "BUILDER_NAME='${builder_name}'" >>${ophub_release_file}
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
 
     cd ${current_path}

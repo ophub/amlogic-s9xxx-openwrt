@@ -113,6 +113,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -k   | Kernel     | 指定 [kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable) 名称，如 `-k 5.10.125` . 多个内核使用 `_` 进行连接，如 `-k 5.10.125_5.15.50` 。通过 `-k` 参数自由指定的内核版本只对使用 `stable/flippy/dev` 的内核有效。其他内核系列例如 [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) 等只能使用特定内核。  |
 | -a   | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.10.125 的同系列是否有更新的版本，如有 5.10.125 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -s   | Size       | 对系统的 ROOTFS 分区大小进行设置，系统大小必须大于 2048MiB. 例如： `-s 2560`。默认值：`2560` |
+| -n   | BuilderName | 设置 OpenWrt 系统构建者签名。设置签名时请勿包含空格。默认值：`无` |
 | -g   | GH_TOKEN   | 可选项。设置 `${{ secrets.GH_TOKEN }}`，用于 [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts) 查询。默认值：`无` |
 
 
@@ -156,6 +157,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | openwrt_kernel    | 6.1.1_5.15.1      | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | openwrt_size      | 1024              | 设置固件 ROOTFS 分区的大小，功能参考 `-s`      |
+| builder_name      | 无                | 设置 OpenWrt 系统构建者签名，功能参考 `-n`     |
 | gh_token          | 无                | 可选项。设置 `${{ secrets.GH_TOKEN }}`。功能参考 `-g`      |
 
 

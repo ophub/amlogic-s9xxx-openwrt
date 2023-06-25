@@ -342,7 +342,7 @@ find_openwrt() {
             # Complete filename
             [[ "${source_codename:0:1}" != "_" ]] && source_codename="_${source_codename}"
         }
-        echo -e "${INFO} The source_codename: [ ${source_codename} ]"
+        echo -e "${INFO} The source_codename: [ ${source_codename} ], OpenWrt source code repository: [ ${OPENWRT_SOURCECODE} ]"
     }
     # Remove temporary directory
     rm -rf ${temp_dir}

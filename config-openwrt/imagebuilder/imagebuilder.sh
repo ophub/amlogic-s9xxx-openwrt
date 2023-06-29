@@ -65,9 +65,17 @@ download_imagebuilder() {
 
     # Downloading imagebuilder files
     if [[ "${op_sourse}" == "openwrt" ]]; then
-        download_file="https://downloads.openwrt.org/releases/${op_branch}/targets/armvirt/64/openwrt-imagebuilder-${op_branch}-armvirt-64.Linux-x86_64.tar.xz"
+        if [[ "${op_branch:0:2}" -ge "23" && "${op_branch:3:2}" -ge "05" ]]; then
+            download_file="https://downloads.openwrt.org/releases/${op_branch}/targets/armsr/armv8/openwrt-imagebuilder-${op_branch}-armsr-armv8.Linux-x86_64.tar.xz"
+        else
+            download_file="https://downloads.openwrt.org/releases/${op_branch}/targets/armvirt/64/openwrt-imagebuilder-${op_branch}-armvirt-64.Linux-x86_64.tar.xz"
+        fi
     else
-        download_file="https://downloads.immortalwrt.org/releases/${op_branch}/targets/armvirt/64/immortalwrt-imagebuilder-${op_branch}-armvirt-64.Linux-x86_64.tar.xz"
+        if [[ "${op_branch:0:2}" -ge "23" && "${op_branch:3:2}" -ge "05" ]]; then
+            download_file="https://downloads.immortalwrt.org/releases/${op_branch}/targets/armsr/armv8/immortalwrt-imagebuilder-${op_branch}-armsr-armv8.Linux-x86_64.tar.xz"
+        else
+            download_file="https://downloads.immortalwrt.org/releases/${op_branch}/targets/armvirt/64/immortalwrt-imagebuilder-${op_branch}-armvirt-64.Linux-x86_64.tar.xz"
+        fi
     fi
     wget -q ${download_file}
     [[ "${?}" -eq "0" ]] || error_msg "Wget download failed: [ ${download_file} ]"

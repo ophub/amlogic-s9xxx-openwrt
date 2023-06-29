@@ -12,11 +12,11 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "lede"
+        default: "official"
         type: choice
         options:
-          - lede
           - official
+          - lede
           - immortalwrt
       openwrt_board:
         description: "Select device board"

@@ -15,20 +15,16 @@ on:
       releases_branch:
         description: "Select the releases branch"
         required: false
-        default: "openwrt:22.03.3"
+        default: "openwrt:22.03.5"
         type: choice
         options:
+          - openwrt:23.05.0-rc2
           - openwrt:22.03.5
-          - openwrt:22.03.4
-          - openwrt:22.03.3
           - openwrt:21.02.7
-          - openwrt:21.02.6
-          - openwrt:21.02.5
           - openwrt:19.07.10
           - openwrt:18.06.9
+          - immortalwrt:23.05.0-rc2
           - immortalwrt:21.02.6
-          - immortalwrt:21.02.5
-          - immortalwrt:21.02.4
       openwrt_board:
         description: "Select device board"
         required: false

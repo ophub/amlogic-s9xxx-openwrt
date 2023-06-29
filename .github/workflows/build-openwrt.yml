@@ -12,7 +12,7 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "lede-master"
+        default: "openwrt-main"
         type: choice
         options:
           - openwrt-main

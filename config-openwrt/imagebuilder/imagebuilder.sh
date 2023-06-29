@@ -63,20 +63,19 @@ download_imagebuilder() {
     cd ${make_path}
     echo -e "${STEPS} Start downloading OpenWrt files..."
 
-    # Downloading imagebuilder files
-    if [[ "${op_sourse}" == "openwrt" ]]; then
-        if [[ "${op_branch:0:2}" -ge "23" && "${op_branch:3:2}" -ge "05" ]]; then
-            download_file="https://downloads.openwrt.org/releases/${op_branch}/targets/armsr/armv8/openwrt-imagebuilder-${op_branch}-armsr-armv8.Linux-x86_64.tar.xz"
-        else
-            download_file="https://downloads.openwrt.org/releases/${op_branch}/targets/armvirt/64/openwrt-imagebuilder-${op_branch}-armvirt-64.Linux-x86_64.tar.xz"
-        fi
+    # Determine the target system (Imagebuilder files naming has changed since 23.05.0)
+    if [[ "${op_branch:0:2}" -ge "23" && "${op_branch:3:2}" -ge "05" ]]; then
+        target_system="armsr/armv8"
+        target_name="armsr-armv8"
+        target_profile=""
     else
-        if [[ "${op_branch:0:2}" -ge "23" && "${op_branch:3:2}" -ge "05" ]]; then
-            download_file="https://downloads.immortalwrt.org/releases/${op_branch}/targets/armsr/armv8/immortalwrt-imagebuilder-${op_branch}-armsr-armv8.Linux-x86_64.tar.xz"
-        else
-            download_file="https://downloads.immortalwrt.org/releases/${op_branch}/targets/armvirt/64/immortalwrt-imagebuilder-${op_branch}-armvirt-64.Linux-x86_64.tar.xz"
-        fi
+        target_system="armvirt/64"
+        target_name="armvirt-64"
+        target_profile="Default"
     fi
+
+    # Downloading imagebuilder files
+    download_file="https://downloads.${op_sourse}.org/releases/${op_branch}/targets/${target_system}/${op_sourse}-imagebuilder-${op_branch}-${target_name}.Linux-x86_64.tar.xz"
     wget -q ${download_file}
     [[ "${?}" -eq "0" ]] || error_msg "Wget download failed: [ ${download_file} ]"
 
@@ -211,10 +210,10 @@ rebuild_firmware() {
         "
 
     # Rebuild firmware
-    make image PROFILE="Default" PACKAGES="${my_packages}" FILES="files"
+    make image PROFILE="${target_profile}" PACKAGES="${my_packages}" FILES="files"
 
     sync && sleep 3
-    echo -e "${INFO} [ openwrt/bin/targets/armvirt/64 ] directory status: $(ls bin/targets/*/* -l 2>/dev/null)"
+    echo -e "${INFO} [ openwrt/bin/targets/*/* ] directory status: $(ls bin/targets/*/* -l 2>/dev/null)"
     echo -e "${SUCCESS} The rebuild is successful, the current path: [ ${PWD} ]"
 }
 

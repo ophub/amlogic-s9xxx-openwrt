@@ -873,6 +873,11 @@ refactor_rootfs() {
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" etc/fstab
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|g" etc/config/fstab
 
+    # Set the keyword for tags in Releases
+    [[ -n "${source_codename}" ]] && {
+        sed -i "s|option amlogic_firmware_tag.*|option amlogic_firmware_tag '${source_codename}'|g" etc/config/amlogic
+    }
+
     # Modify the default script to [ bash ] for [ cpustat ]
     [[ -x "bin/bash" ]] && {
         sed -i "s/\/bin\/ash/\/bin\/bash/" etc/passwd

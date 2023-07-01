@@ -58,7 +58,7 @@ on:
       kernel_repo:
         description: "Set the kernel repository"
         required: false
-        default: "breakings/OpenWrt"
+        default: "ophub/kernel"
         type: choice
         options:
           - ophub/kernel

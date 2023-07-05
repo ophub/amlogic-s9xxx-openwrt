@@ -333,9 +333,9 @@ find_openwrt() {
         [[ -n "${source_codename}" ]] && {
             # Record OpenWrt source codes repository
             case "${source_codename}" in
-            official) OPENWRT_SOURCECODE="https://github.com/openwrt/openwrt" ;;
-            lede) OPENWRT_SOURCECODE="https://github.com/coolsnowwolf/lede" ;;
-            immortalwrt) OPENWRT_SOURCECODE="https://github.com/immortalwrt/immortalwrt" ;;
+            official) OPENWRT_SOURCECODE="github.com/openwrt/openwrt" ;;
+            lede) OPENWRT_SOURCECODE="github.com/coolsnowwolf/lede" ;;
+            immortalwrt) OPENWRT_SOURCECODE="github.com/immortalwrt/immortalwrt" ;;
             *) OPENWRT_SOURCECODE="unknown" ;;
             esac
 

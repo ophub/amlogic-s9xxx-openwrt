@@ -718,6 +718,7 @@ extract_openwrt() {
     tag_bootfs="${tmp_path}/${kernel}/${board}/bootfs"
     tag_rootfs="${tmp_path}/${kernel}/${board}/rootfs"
     mkdir -p ${tag_bootfs} ${tag_rootfs}
+    chown root:root ${tag_bootfs} ${tag_rootfs}
 
     # Mount bootfs
     if [[ "${bootfs_type}" == "fat32" ]]; then

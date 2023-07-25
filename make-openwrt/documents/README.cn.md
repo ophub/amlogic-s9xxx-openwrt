@@ -33,10 +33,10 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
     - [7.1 从 Github Actions 下载](#71-从-github-actions-下载)
     - [7.2 从 Github Releases 下载](#72-从-github-releases-下载)
     - [7.3 从第三方下载](#73-从第三方下载)
-  - [8. 安装固件](#8-安装固件)
+  - [8. 安装 OpenWrt](#8-安装-openwrt)
     - [8.1 在编译时集成 luci-app-amlogic 操作面板](#81-在编译时集成-luci-app-amlogic-操作面板)
     - [8.2 使用操作面板安装](#82-使用操作面板安装)
-  - [9. 升级固件](#9-升级固件)
+  - [9. 升级 OpenWrt](#9-升级-openwrt)
   - [10. 个性化固件定制晋级教程](#10-个性化固件定制晋级教程)
     - [10.1 认识完整的 .config 文件](#101-认识完整的-config-文件)
     - [10.2 认识 workflow 文件](#102-认识-workflow-文件)
@@ -295,7 +295,7 @@ UPLOAD_WETRANSFER: false
 <img src=https://user-images.githubusercontent.com/68696949/109418921-b5e45f80-7a05-11eb-80ba-02edb0698270.jpg width="300" />
 </div>
 
-## 8. 安装固件
+## 8. 安装 OpenWrt
 
 ### 8.1 在编译时集成 luci-app-amlogic 操作面板
 
@@ -310,7 +310,7 @@ UPLOAD_WETRANSFER: false
 
 2. `Amlogic` 和 `Allwinner` 平台，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入 USB 里，然后把写好固件的 USB 插入盒子。从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` 。
 
-## 9. 升级固件
+## 9. 升级 OpenWrt
 
 从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 或 `更换 OpenWrt 内核` 功能进行升级。（你可以从高版本如 5.15.50 升级到低版本如 5.10.125 ，也可以从低版本如 5.10.125 升级到高版本如 5.15.50 。内核版本号的高低不影响升级，可自由升级/降级）。
 

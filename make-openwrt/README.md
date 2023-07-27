@@ -14,10 +14,6 @@ The files stored here are related files needed when packaging OpenWrt. Among the
 
 - The necessary installation/update scripts will be automatically downloaded from the [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) repository to the `common-files/usr/sbin` directory.
 
-## documents
-
-The OpenWrt usage documentation is stored here.
-
 ## kernel
 
 The necessary kernel will be automatically downloaded from the [ophub/kernel](https://github.com/ophub/kernel) repository to the `kernel` directory.

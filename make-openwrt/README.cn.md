@@ -14,10 +14,6 @@
 
 - 需要的安装/更新等脚本将从 [ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 仓库自动下载至 `common-files/usr/sbin` 目录。
 
-## documents
-
-这里存放的是 OpenWrt 使用文档。
-
 ## kernel
 
 需要的内核将从 [ophub/kernel](https://github.com/ophub/kernel) 仓库自动下载至 `kernel` 目录。

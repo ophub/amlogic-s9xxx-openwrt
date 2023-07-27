@@ -4927,6 +4927,7 @@ CONFIG_PACKAGE_luci-app-qbittorrent_static=y
 # CONFIG_PACKAGE_luci-app-qbittorrent-simple_static is not set
 CONFIG_PACKAGE_luci-app-qbittorrent-simple_dynamic=y
 # CONFIG_PACKAGE_luci-app-qos is not set
+CONFIG_PACKAGE_luci-app-quickstart=y
 # CONFIG_PACKAGE_luci-app-radicale is not set
 CONFIG_PACKAGE_luci-app-ramfree=y
 CONFIG_PACKAGE_luci-app-rclone=y
@@ -4949,6 +4950,7 @@ CONFIG_PACKAGE_luci-app-samba4=y
 # CONFIG_PACKAGE_luci-app-squid is not set
 # CONFIG_PACKAGE_luci-app-ssrserver-python is not set
 # CONFIG_PACKAGE_luci-app-statistics is not set
+CONFIG_PACKAGE_luci-app-istorex=y
 CONFIG_PACKAGE_luci-app-syncdial=y
 # CONFIG_PACKAGE_luci-app-tinyproxy is not set
 CONFIG_PACKAGE_luci-app-transmission=y

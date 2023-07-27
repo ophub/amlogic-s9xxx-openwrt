@@ -5,10 +5,10 @@
 # License version 2. This program is licensed "as is" without any
 # warranty of any kind, whether express or implied.
 #
-# This file is a part of the make OpenWrt for Amlogic and Rockchip
+# This file is a part of the make OpenWrt
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Description: Automatically Packaged OpenWrt for Amlogic and Rockchip
+# Description: Automatically Packaged OpenWrt
 # Copyright (C) 2020~ https://github.com/openwrt/openwrt
 # Copyright (C) 2020~ https://github.com/coolsnowwolf/lede
 # Copyright (C) 2020~ https://github.com/immortalwrt/immortalwrt

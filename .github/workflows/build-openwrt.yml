@@ -181,10 +181,10 @@ on:
           - yourname
 
 env:
-  FEEDS_CONF: config-openwrt/${{ inputs.source_branch }}/feeds.conf.default
-  CONFIG_FILE: config-openwrt/${{ inputs.source_branch }}/config
-  DIY_P1_SH: config-openwrt/${{ inputs.source_branch }}/diy-part1.sh
-  DIY_P2_SH: config-openwrt/${{ inputs.source_branch }}/diy-part2.sh
+  FEEDS_CONF: config/${{ inputs.source_branch }}/feeds.conf.default
+  CONFIG_FILE: config/${{ inputs.source_branch }}/config
+  DIY_P1_SH: config/${{ inputs.source_branch }}/diy-part1.sh
+  DIY_P2_SH: config/${{ inputs.source_branch }}/diy-part2.sh
   TZ: America/New_York
 
 jobs:

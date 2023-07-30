@@ -29,7 +29,7 @@ on:
 
 env:
   TZ: America/New_York
-  MAKE_DOCKER_SH: config-openwrt/docker/make_docker_image.sh
+  MAKE_DOCKER_SH: config/docker/make_docker_image.sh
   DOCKER_OUTPATH: out
 
 jobs:

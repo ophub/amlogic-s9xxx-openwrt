@@ -179,7 +179,7 @@ on:
 
 env:
   TZ: America/New_York
-  IMAGEBUILDER_SH: config-openwrt/imagebuilder/imagebuilder.sh
+  IMAGEBUILDER_SH: config/imagebuilder/imagebuilder.sh
 
 jobs:
   build:

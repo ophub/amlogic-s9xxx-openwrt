@@ -85,7 +85,7 @@ Now you can Fork the repository. Open the repository https://github.com/ophub/am
 
 ## 4. Personalized OpenWrt Firmware Customization File Description
 
-After the first 3 steps of preparation, start personalizing the firmware customization now. The 3 files under the [config/lede-master](../../config/lede-master) directory are for customizing the OpenWrt firmware. In this chapter, we only make the simplest explanation, let you experience the joy of personalized customization as soon as you start, and I put more complex customization operations in the 10th section, which requires you to have a little foundation.
+After the first 3 steps of preparation, start personalizing the firmware customization now. The 3 files under the [config/lede-master](../config/lede-master) directory are for customizing the OpenWrt firmware. In this chapter, we only make the simplest explanation, let you experience the joy of personalized customization as soon as you start, and I put more complex customization operations in the 10th section, which requires you to have a little foundation.
 
 ### 4.1 .config File Description
 
@@ -327,7 +327,7 @@ If you have followed the tutorial to this step, I believe you already know how t
 
 Use OpenWrt's official source code repository, or other branch source code repositories, to conduct a local compilation once, such as choosing the source code repository at https://github.com/coolsnowwolf/lede. Following its compilation instructions, install the Ubuntu system locally, deploy the environment, and complete a local compilation. In the local compilation configuration interface, you can also see a lot of rich descriptions, which will strengthen your understanding of the OpenWrt compilation process.
 
-After you complete the personalized configuration of OpenWrt locally, save and exit the configuration interface. You can find the .config file in the root directory of the local OpenWrt source code repository (enter the `ls -a` command in the root directory of the code repository to view all hidden files). You can upload this file directly to your repository on github.com and replace the file at config/lede-master/config.
+After you complete the personalized configuration of OpenWrt locally, save and exit the configuration interface. You can find the .config file in the root directory of the local OpenWrt source code repository (enter the `ls -a` command in the root directory of the code repository to view all hidden files). You can upload this file directly to your repository on github.com and replace the file at `config/lede-master/config`.
 
 ### 10.2 Understanding Workflow Files
 
@@ -365,7 +365,7 @@ Around line 139, look for the compile step titled `Build OpenWrt firmware`, and 
     openwrt_size: ${{ inputs.openwrt_size }}
     gh_token: ${{ secrets.GH_TOKEN }}
 ```
-Refer to the [parameter instructions](../../README.md#gitHub-actions-input-parameters-explanation) related to the packaging command. The above setting options can be set by writing in fixed values, or they can be selected through the `Actions` panel:
+Refer to the [parameter instructions](../README.md#gitHub-actions-input-parameters-explanation) related to the packaging command. The above setting options can be set by writing in fixed values, or they can be selected through the `Actions` panel:
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/181870674-1816aa21-ece4-4149-83ce-6ec7f95ece68.png width="700" />
 </div>

@@ -73,6 +73,11 @@ depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-arm
 # Convert depends repository address to svn format
 depends_repo="${depends_repo//tree\/main/trunk}"
 
+# U-BOOT files download repository
+uboot_repo="https://github.com/ophub/u-boot/tree/main/u-boot"
+# Convert firmware repository address to svn format
+uboot_repo="${uboot_repo//tree\/main/trunk}"
+
 # Firmware files download repository
 firmware_repo="https://github.com/ophub/firmware/tree/main/firmware"
 # Convert firmware repository address to svn format
@@ -360,12 +365,8 @@ download_depends() {
     # Download different files
     svn co ${depends_repo}/armbian-files/different-files ${different_files} --force
 
-    # Download u-boot files
-    if [[ -d "${uboot_path}" ]]; then
-        svn up ${uboot_path} --force
-    else
-        svn co ${depends_repo}/u-boot ${uboot_path} --force
-    fi
+    # Download Armbian u-boot files
+    svn co ${uboot_repo} ${uboot_path} --force
 
     # Download Armbian firmware files
     svn co ${firmware_repo} ${firmware_path} --force

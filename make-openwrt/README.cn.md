@@ -20,5 +20,5 @@
 
 ## u-boot
 
-需要的 u-boot 将从 [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/u-boot) 仓库自动下载至 `u-boot` 目录。
+需要的 u-boot 将从 [ophub/u-boot](https://github.com/ophub/u-boot) 仓库自动下载至 `u-boot` 目录。
 

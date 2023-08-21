@@ -73,6 +73,11 @@ depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-arm
 # Convert depends repository address to svn format
 depends_repo="${depends_repo//tree\/main/trunk}"
 
+# U-BOOT files download repository
+uboot_repo="https://github.com/ophub/u-boot/tree/main/u-boot"
+# Convert firmware repository address to svn format
+uboot_repo="${uboot_repo//tree\/main/trunk}"
+
 # Firmware files download repository
 firmware_repo="https://github.com/ophub/firmware/tree/main/firmware"
 # Convert firmware repository address to svn format
@@ -353,31 +358,34 @@ download_depends() {
     echo -e "${STEPS} Start downloading dependency files..."
 
     # Download platform files
-    svn co ${depends_repo}/armbian-files/platform-files ${platform_files} --force
+    svn co ${depends_repo}/armbian-files/platform-files ${platform_files} --force --quiet
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} platform-files download completed." || error_msg "platform-files download failed."
     # Remove the special files in the [ sbin ] directory of the Armbian system
     rm -rf $(find ${platform_files} -type d -name "sbin")
 
     # Download different files
-    svn co ${depends_repo}/armbian-files/different-files ${different_files} --force
+    svn co ${depends_repo}/armbian-files/different-files ${different_files} --force --quiet
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} different-files download completed." || error_msg "different-files download failed."
 
-    # Download u-boot files
-    if [[ -d "${uboot_path}" ]]; then
-        svn up ${uboot_path} --force
-    else
-        svn co ${depends_repo}/u-boot ${uboot_path} --force
-    fi
+    # Download Armbian u-boot files
+    svn co ${uboot_repo} ${uboot_path} --force --quiet
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} u-boot download completed." || error_msg "u-boot download failed."
 
     # Download Armbian firmware files
-    svn co ${firmware_repo} ${firmware_path} --force
+    svn co ${firmware_repo} ${firmware_path} --force --quiet
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} firmware download completed." || error_msg "firmware download failed."
 
     # Download balethirq related files
     svn export ${depends_repo}/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/usr/sbin --force
     svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${common_files}/etc --force
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} balethirq download completed." || error_msg "balethirq download failed."
 
     # Download install/update and other related files
-    svn export ${script_repo}/root/usr/sbin ${common_files}/usr/sbin --force
+    svn export ${script_repo}/root/usr/sbin ${common_files}/usr/sbin --force --quiet
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} app/sbin download completed." || error_msg "app/sbin download failed."
     chmod +x ${common_files}/usr/sbin/*
-    svn export ${script_repo}/root/usr/share/amlogic ${common_files}/usr/share/amlogic --force
+    svn export ${script_repo}/root/usr/share/amlogic ${common_files}/usr/share/amlogic --force --quiet
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} app/share download completed." || error_msg "app/share download failed."
     chmod +x ${common_files}/usr/share/amlogic/*
 }
 

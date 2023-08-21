@@ -20,4 +20,4 @@ The necessary kernel will be automatically downloaded from the [ophub/kernel](ht
 
 ## u-boot
 
-The necessary u-boot will be automatically downloaded from the [ophub/amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian/u-boot) repository to the `u-boot` directory.
+The necessary u-boot will be automatically downloaded from the [ophub/u-boot](https://github.com/ophub/u-boot) repository to the `u-boot` directory.

@@ -5009,6 +5009,7 @@ CONFIG_PACKAGE_luci-proto-bonding=y
 CONFIG_PACKAGE_luci-proto-ipip=y
 CONFIG_PACKAGE_luci-proto-ipv6=y
 # CONFIG_PACKAGE_luci-proto-mbim is not set
+# CONFIG_PACKAGE_luci-proto-modemmanager is not set
 CONFIG_PACKAGE_luci-proto-ncm=y
 CONFIG_PACKAGE_luci-proto-openconnect=y
 CONFIG_PACKAGE_luci-proto-ppp=y

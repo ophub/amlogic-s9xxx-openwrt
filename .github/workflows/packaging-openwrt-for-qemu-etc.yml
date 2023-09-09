@@ -21,30 +21,30 @@ on:
           - rock5b_h88k_h88k-v3_ak88
           - h66k_h68k_h69k_r66s_r68s_e25
           - beikeyun_l1pro
-          - rock5b
-          - h88k
-          - h88k-v3
           - ak88
+          - beikeyun
+          - cm3
+          - e25
           - h66k
           - h68k
           - h69k
           - h69k-max
+          - h88k
+          - h88k-v3
+          - l1pro
+          - photonicat
+          - qemu
           - r66s
           - r68s
-          - e25
-          - photonicat
-          - cm3
-          - beikeyun
-          - l1pro
-          - vplus
+          - rock5b
+          - s905
+          - s905d
+          - s905x2
+          - s905x3
+          - s912
           - s922x
           - s922x-n2
-          - s905x3
-          - s905x2
-          - s912
-          - s905d
-          - s905
-          - qemu
+          - vplus
           - diy
       openwrt_kernel:
         description: "Select kernel version"

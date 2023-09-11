@@ -81,6 +81,7 @@ on:
           - s905w-x96w
           - s905x
           - s905x-b860h
+          - s905x-nexbox-a95x
           - s905x-t95
           - s905x-tbee
           - s905x-tx9

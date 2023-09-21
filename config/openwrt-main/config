@@ -2547,6 +2547,7 @@ CONFIG_PACKAGE_kmod-vmxnet3=y
 # Network Support
 #
 # CONFIG_PACKAGE_kmod-9pnet is not set
+# CONFIG_PACKAGE_kmod-9pvirtio is not set
 # CONFIG_PACKAGE_kmod-atm is not set
 # CONFIG_PACKAGE_kmod-ax25 is not set
 # CONFIG_PACKAGE_kmod-batman-adv is not set
@@ -2824,6 +2825,8 @@ CONFIG_PACKAGE_kmod-usbmon=y
 # Video Support
 #
 # CONFIG_PACKAGE_kmod-backlight-pwm is not set
+# CONFIG_PACKAGE_kmod-drm-buddy is not set
+# CONFIG_PACKAGE_kmod-drm-display-helper is not set
 # CONFIG_PACKAGE_kmod-drm-kms-helper is not set
 # CONFIG_PACKAGE_kmod-drm-ttm is not set
 # CONFIG_PACKAGE_kmod-fb is not set
@@ -2947,6 +2950,9 @@ CONFIG_PACKAGE_kmod-mt76x2u=y
 # CONFIG_PACKAGE_kmod-mt7921e is not set
 # CONFIG_PACKAGE_kmod-mt7921s is not set
 # CONFIG_PACKAGE_kmod-mt7921u is not set
+# CONFIG_PACKAGE_kmod-mt7925e is not set
+# CONFIG_PACKAGE_kmod-mt7925u is not set
+# CONFIG_PACKAGE_kmod-mt7996e is not set
 # CONFIG_PACKAGE_kmod-mwifiex-pcie is not set
 # CONFIG_PACKAGE_kmod-mwifiex-sdio is not set
 # CONFIG_PACKAGE_kmod-mwl8k is not set
@@ -3566,7 +3572,6 @@ CONFIG_PACKAGE_perlbase-xsloader=y
 # Rust
 #
 # CONFIG_PACKAGE_maturin is not set
-# CONFIG_PACKAGE_rust is not set
 # end of Rust
 
 #
@@ -7074,10 +7079,6 @@ CONFIG_PACKAGE_acpid=y
 # CONFIG_PACKAGE_augeas is not set
 # CONFIG_PACKAGE_augeas-lenses is not set
 # CONFIG_PACKAGE_augeas-lenses-tests is not set
-# CONFIG_PACKAGE_bandwidthd is not set
-# CONFIG_PACKAGE_bandwidthd-pgsql is not set
-# CONFIG_PACKAGE_bandwidthd-php is not set
-# CONFIG_PACKAGE_bandwidthd-sqlite is not set
 # CONFIG_PACKAGE_banhostlist is not set
 # CONFIG_PACKAGE_base16384 is not set
 # CONFIG_PACKAGE_bc is not set

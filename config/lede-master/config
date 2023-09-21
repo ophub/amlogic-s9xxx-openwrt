@@ -1804,11 +1804,6 @@ CONFIG_PACKAGE_libiwinfo-data=y
 #
 # end of ath10k Board-Specific Overrides
 
-#
-# ath11k Board-Specific Overrides
-#
-# end of ath11k Board-Specific Overrides
-
 # CONFIG_PACKAGE_aircard-pcmcia-firmware is not set
 # CONFIG_PACKAGE_amdgpu-firmware is not set
 # CONFIG_PACKAGE_ar3k-firmware is not set
@@ -1845,7 +1840,6 @@ CONFIG_PACKAGE_ath10k-firmware-qca9377=y
 # CONFIG_PACKAGE_ath10k-firmware-qca99x0-ct is not set
 # CONFIG_PACKAGE_ath10k-firmware-qca99x0-ct-full-htt is not set
 # CONFIG_PACKAGE_ath10k-firmware-qca99x0-ct-htt is not set
-# CONFIG_PACKAGE_ath11k-firmware-ipq6018 is not set
 # CONFIG_PACKAGE_ath11k-firmware-ipq8074 is not set
 # CONFIG_PACKAGE_ath11k-firmware-qca6390 is not set
 # CONFIG_PACKAGE_ath11k-firmware-qcn9074 is not set
@@ -2562,6 +2556,7 @@ CONFIG_PACKAGE_kmod-thunderx-net=y
 # Network Support
 #
 # CONFIG_PACKAGE_kmod-9pnet is not set
+# CONFIG_PACKAGE_kmod-9pvirtio is not set
 # CONFIG_PACKAGE_kmod-atm is not set
 # CONFIG_PACKAGE_kmod-ax25 is not set
 # CONFIG_PACKAGE_kmod-batman-adv is not set
@@ -4198,8 +4193,8 @@ CONFIG_OPENSSL_ENGINE_BUILTIN=y
 CONFIG_OPENSSL_ENGINE_BUILTIN_AFALG=y
 CONFIG_OPENSSL_ENGINE_BUILTIN_DEVCRYPTO=y
 CONFIG_PACKAGE_libopenssl-conf=y
-# CONFIG_PACKAGE_libopenssl-devcrypto is not set
 # CONFIG_PACKAGE_libopenssl-gost_engine is not set
+# CONFIG_PACKAGE_libopenssl-legacy is not set
 # CONFIG_PACKAGE_libpolarssl is not set
 # CONFIG_PACKAGE_libwolfssl is not set
 

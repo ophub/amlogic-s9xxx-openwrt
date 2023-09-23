@@ -31,6 +31,7 @@ on:
           - h69k-max
           - h88k
           - h88k-v3
+          - h28k
           - l1pro
           - photonicat
           - qemu

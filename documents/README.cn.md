@@ -540,6 +540,10 @@ Languages -> Perl
              -> perlbase-time
              -> perlbase-unicode
              -> perlbase-utf8
+          -> Python
+             -> Python3-logging
+             -> Python3-ctypes
+             -> Python3-yaml
 
 
 Network -> File Transfer -> curl、wget-ssl
@@ -555,7 +559,7 @@ Utilities -> Compression -> bsdtar、pigz
                            e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
           -> Shells -> bash
           -> Time Zone info -> zoneinfo-america、zoneinfo-asia、zoneinfo-core、zoneinfo-europe (other)
-          -> acpid、coremark、coreutils(-> coreutils-base64、coreutils-nohup)、gawk、getopt、
-             jq、losetup、pv、tar、uuidgen
+          -> acpid、coremark、coreutils(-> coreutils-base64、coreutils-nohup、coreutils-timeout)、gawk、getopt、
+             jq、lm-sensors、losetup、pv、tar、uuidgen
 ```
 

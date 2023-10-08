@@ -16,7 +16,7 @@
 #
 # CONFIG_PACKAGE_luci-app-acl is not set
 # CONFIG_PACKAGE_luci-app-acme is not set
-# CONFIG_PACKAGE_luci-app-adblock is not set
+CONFIG_PACKAGE_luci-app-adblock=y
 # CONFIG_PACKAGE_luci-app-advanced-reboot is not set
 # CONFIG_PACKAGE_luci-app-ahcp is not set
 # CONFIG_PACKAGE_luci-app-aria2 is not set
@@ -36,7 +36,7 @@
 CONFIG_PACKAGE_luci-app-ddns=y
 # CONFIG_PACKAGE_luci-app-diag-core is not set
 # CONFIG_PACKAGE_luci-app-dnscrypt-proxy is not set
-CONFIG_PACKAGE_luci-app-dockerman=y
+# CONFIG_PACKAGE_luci-app-dockerman is not set
 # CONFIG_PACKAGE_luci-app-dump1090 is not set
 # CONFIG_PACKAGE_luci-app-dynapoint is not set
 # CONFIG_PACKAGE_luci-app-eoip is not set
@@ -55,7 +55,7 @@ CONFIG_PACKAGE_luci-app-frps=y
 # CONFIG_PACKAGE_luci-app-lxc is not set
 # CONFIG_PACKAGE_luci-app-minidlna is not set
 # CONFIG_PACKAGE_luci-app-mjpg-streamer is not set
-# CONFIG_PACKAGE_luci-app-mwan3 is not set
+CONFIG_PACKAGE_luci-app-mwan3=y
 # CONFIG_PACKAGE_luci-app-nextdns is not set
 # CONFIG_PACKAGE_luci-app-nft-qos is not set
 # CONFIG_PACKAGE_luci-app-nlbwmon is not set
@@ -114,8 +114,8 @@ CONFIG_PACKAGE_luci-app-wol=y
 #
 # 2. Themes
 #
-# CONFIG_PACKAGE_luci-theme-bootstrap is not set
-CONFIG_PACKAGE_luci-theme-material=y
+CONFIG_PACKAGE_luci-theme-bootstrap=y
+# CONFIG_PACKAGE_luci-theme-material is not set
 # CONFIG_PACKAGE_luci-theme-openwrt is not set
 # CONFIG_PACKAGE_luci-theme-openwrt-2020 is not set
 # end of 2. Themes

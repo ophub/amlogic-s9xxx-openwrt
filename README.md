@@ -115,7 +115,6 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -a        | AutoKernel    | Set whether to automatically adopt the latest version of the same series of kernels. When set to `true`, it will automatically search the kernel library for updates of the same series as the kernel specified in `-k`, such as 5.10.125, and will automatically switch to the latest version if there is a version later than 5.10.125. When set to `false`, it will compile the specified version of the kernel. Default: `true` |
 | -s        | Size          | Set the size of the system's ROOTFS partition. The system size must be greater than 2048MiB. For example: `-s 2560`. Default: `2560` |
 | -n        | BuilderName   | Set the signature of the OpenWrt system builder. Do not include spaces when setting signatures. Default: `none` |
-| -g        | GH_TOKEN      | Optional. Set `${{ secrets.GH_TOKEN }}` for querying [api.github.com](https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#requests-from-personal-accounts). Default: `none` |
 
 - `sudo ./make` : Use default configuration, use the latest kernel package in the kernel library, and package all models of TV boxes.
 - `sudo ./make -b s905x3 -k 6.1.10` : Recommended. Use default configuration for related kernel packaging.
@@ -142,7 +141,6 @@ You can modify the related personalized firmware configuration files in the [con
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     openwrt_board: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
     openwrt_kernel: 6.1.10_5.15.50
-    gh_token: ${{ secrets.GH_TOKEN }}
 ```
 
 - ### GitHub Actions Input Parameters Explanation
@@ -159,7 +157,6 @@ These parameters correspond to the `local packaging command`, please refer to th
 | auto_kernel | true | Set whether to automatically adopt the latest version of the same series of kernels, functionality refers to `-a` |
 | openwrt_size | 1024 | Set the size of the firmware ROOTFS partition, functionality refers to `-s` |
 | builder_name | None | Set the signature of the OpenWrt system builder, functionality refers to `-n` |
-| gh_token | None | Optional. Set `${{ secrets.GH_TOKEN }}`, functionality refers to `-g` |
 
 - ### GitHub Actions Output Variables Explanation
 

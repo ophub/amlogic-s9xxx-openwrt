@@ -151,7 +151,6 @@ jobs:
           KERNEL_VERSION_NAME: ${{ inputs.openwrt_kernel }}
           KERNEL_AUTO_LATEST: ${{ inputs.auto_kernel }}
           WHOAMI: ${{ inputs.builder_name }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Upload the packaged OpenWrt
         uses: ncipollo/release-action@main

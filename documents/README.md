@@ -363,7 +363,6 @@ Around line 139, look for the compile step titled `Build OpenWrt firmware`, and 
     openwrt_kernel: ${{ inputs.openwrt_kernel }}
     auto_kernel: ${{ inputs.auto_kernel }}
     openwrt_size: ${{ inputs.openwrt_size }}
-    gh_token: ${{ secrets.GH_TOKEN }}
 ```
 Refer to the [parameter instructions](../README.md#gitHub-actions-input-parameters-explanation) related to the packaging command. The above setting options can be set by writing in fixed values, or they can be selected through the `Actions` panel:
 <div style="width:100%;margin-top:40px;margin:5px;">

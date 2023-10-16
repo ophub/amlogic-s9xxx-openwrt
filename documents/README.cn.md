@@ -358,7 +358,6 @@ REPO_BRANCH: openwrt-21.02
     openwrt_kernel: ${{ inputs.openwrt_kernel }}
     auto_kernel: ${{ inputs.auto_kernel }}
     openwrt_size: ${{ inputs.openwrt_size }}
-    gh_token: ${{ secrets.GH_TOKEN }}
 ```
 参考打包命令的相关[参数说明](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/README.cn.md#github-actions-输入参数说明)。以上设置选项可以通过写入固定值来设置，也可以通过 `Actions` 面板进行选择：
 <div style="width:100%;margin-top:40px;margin:5px;">

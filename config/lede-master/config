@@ -7120,7 +7120,7 @@ CONFIG_PACKAGE_jshn=y
 # CONFIG_PACKAGE_less is not set
 CONFIG_PACKAGE_less-wide=y
 CONFIG_PACKAGE_libjson-script=y
-CONFIG_PACKAGE_libnetwork=y
+# CONFIG_PACKAGE_libnetwork is not set
 # CONFIG_PACKAGE_librespeed-cli is not set
 # CONFIG_PACKAGE_libucode is not set
 # CONFIG_PACKAGE_libxml2-utils is not set

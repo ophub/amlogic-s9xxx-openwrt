@@ -40,6 +40,12 @@ openvfd_boxid="15"
     echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The LED of Vplus is enabled successfully." >>${custom_log}
 }
 
+# For fan control service
+[[ -x "/usr/bin/pwm-fan.pl" ]] && {
+    perl /usr/bin/pwm-fan.pl 2>/dev/null &
+    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The fan control service enabled successfully." >>${custom_log}
+}
+
 # Automatic expansion of the third and fourth partitions
 todo_rootfs_resize="/root/.todo_rootfs_resize"
 [[ -f "${todo_rootfs_resize}" && "$(cat ${todo_rootfs_resize} 2>/dev/null | xargs)" == "yes" ]] && {

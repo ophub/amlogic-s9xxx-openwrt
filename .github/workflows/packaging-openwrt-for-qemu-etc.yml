@@ -36,6 +36,7 @@ on:
           - s922x
           - s922x-n2
           - vplus
+          - zcube1-max
           - diy
       openwrt_kernel:
         description: "Select kernel version"

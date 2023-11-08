@@ -44,7 +44,6 @@ on:
           - emb3531
           - fine3399
           - firefly
-          - hugsun-zm
           - ipc-r
           - king3399
           - kylin3399
@@ -139,6 +138,7 @@ on:
           - tvi3315a
           - vplus
           - xiaobao
+          - zcube1-max
           - zysj
       openwrt_kernel:
         description: "Select kernel version"

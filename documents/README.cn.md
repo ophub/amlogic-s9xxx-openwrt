@@ -185,7 +185,7 @@ OpenWrt 官方网站提供了制作好的 openwrt-imagebuilder-*-armvirt-64.Linu
 
 ## 5. 编译固件
 
-默认系统的配置信息记录在 [/etc/model_database.conf](../openwrt-files/common-files/etc/model_database.conf) 文件里，其中的 `BOARD` 名字要求唯一。
+默认系统的配置信息记录在 [/etc/model_database.conf](../make-openwrt/openwrt-files/common-files/etc/model_database.conf) 文件里，其中的 `BOARD` 名字要求唯一。
 
 其中 `BUILD` 的值是 `yes` 的是默认打包的部分盒子的系统，这些盒子可以直接使用。默认值是 `no` 的没有打包，这些没有打包的盒子使用时需要下载相同 `FAMILY` 的打包好的系统（推荐下载 `5.15/5.4` 内核的系统），在写入 `USB` 后，可以在电脑上打开 `USB 中的 boot 分区`，修改 `/boot/uEnv.txt` 文件中 `FDT 的 dtb 名称`，适配列表中的其他盒子。
 

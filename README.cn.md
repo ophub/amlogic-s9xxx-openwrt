@@ -77,6 +77,8 @@ openwrt-ddbr
 
 根据提示输入 `b` 进行系统备份，输入 `r` 进行系统恢复。
 
+除此之外也可以通过线刷的方法，将安卓系统刷入 eMMC 中，安卓系统的下载镜像可在 [Tools](https://github.com/ophub/kernel/releases/tag/tools) 中查找。
+
 - ### 控制 LED 显示
 
 从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令

@@ -444,8 +444,9 @@ For more help, please check [packages](https://openwrt.org/packages/start)
 
 ### 10.8 How to restore the original Android TV system
 
-Usually use openwrt-ddbr for backup and recovery, or use Amlogic flashing tool to restore the original Android TV system.
+The Android TV system on the device is usually backed up and restored using `openwrt-ddbr`.
 
+In addition, the Android system can also be flashed into eMMC using the method of flashing via a cable. The download image of the Android system can be found in [Tools](https://github.com/ophub/kernel/releases/tag/tools).
 
 #### 10.8.1 Backup and Recovery Using openwrt-ddbr
 

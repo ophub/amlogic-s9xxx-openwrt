@@ -77,6 +77,8 @@ openwrt-ddbr
 
 Follow the prompts to enter `b` to backup the system, or enter `r` to restore the system.
 
+In addition, the Android system can also be flashed into eMMC using the method of flashing via a cable. The download image of the Android system can be found in [Tools](https://github.com/ophub/kernel/releases/tag/tools).
+
 - ### Control LED Display
 
 From the browser, access the default IP of OpenWrt: 192.168.1.1 → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command

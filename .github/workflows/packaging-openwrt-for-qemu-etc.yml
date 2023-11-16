@@ -26,6 +26,7 @@ on:
           - qemu
           - r66s
           - r68s
+          - jp-tvbox
           - watermelon-pi
           - rock5b
           - s905

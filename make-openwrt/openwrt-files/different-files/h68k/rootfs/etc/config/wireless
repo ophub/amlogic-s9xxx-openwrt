@@ -1,0 +1,19 @@
+
+config wifi-device 'radio0'
+        option type 'mac80211'
+        option path '3c0000000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0'
+        option band '5g'
+        option country 'US'
+        option legacy_rates '1'
+        option mu_beamformer '0'
+        option channel '36'
+        option htmode 'HE80'
+
+config wifi-iface 'default_radio0'
+        option device 'radio0'
+        option network 'lan'
+        option mode 'ap'
+        option ssid 'H68K_Wireless'
+        option encryption 'psk2'
+        option key 'password'
+

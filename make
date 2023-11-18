@@ -96,6 +96,7 @@ default_tags="stable"
 specific_tags="${default_tags}"
 # Set the list of kernels used by default
 rk3588_kernel=("5.10.1")
+rk35xx_kernel=("5.10.1")
 h6_kernel=("6.5.1")
 stable_kernel=("6.1.1" "5.15.1")
 flippy_kernel=(${stable_kernel[@]})
@@ -398,6 +399,7 @@ query_kernel() {
             dev) down_kernel_list=(${dev_kernel[@]}) ;;
             beta) down_kernel_list=(${beta_kernel[@]}) ;;
             rk3588) down_kernel_list=(${rk3588_kernel[@]}) ;;
+            rk35xx) down_kernel_list=(${rk35xx_kernel[@]}) ;;
             h6) down_kernel_list=(${h6_kernel[@]}) ;;
             specific)
                 down_kernel_list=(${specific_kernel[@]})
@@ -441,6 +443,7 @@ query_kernel() {
             dev) dev_kernel=(${tmp_arr_kernels[@]}) ;;
             beta) beta_kernel=(${tmp_arr_kernels[@]}) ;;
             rk3588) rk3588_kernel=(${tmp_arr_kernels[@]}) ;;
+            rk35xx) rk35xx_kernel=(${tmp_arr_kernels[@]}) ;;
             h6) h6_kernel=(${tmp_arr_kernels[@]}) ;;
             specific)
                 specific_kernel=(${tmp_arr_kernels[@]})
@@ -484,6 +487,7 @@ download_kernel() {
             dev) down_kernel_list=(${dev_kernel[@]}) ;;
             beta) down_kernel_list=(${beta_kernel[@]}) ;;
             rk3588) down_kernel_list=(${rk3588_kernel[@]}) ;;
+            rk35xx) down_kernel_list=(${rk35xx_kernel[@]}) ;;
             h6) down_kernel_list=(${h6_kernel[@]}) ;;
             specific)
                 down_kernel_list=(${specific_kernel[@]})
@@ -1069,6 +1073,7 @@ loop_make() {
             dev) kernel_list=(${dev_kernel[@]}) ;;
             beta) kernel_list=(${beta_kernel[@]}) ;;
             rk3588) kernel_list=(${rk3588_kernel[@]}) ;;
+            rk35xx) kernel_list=(${rk35xx_kernel[@]}) ;;
             h6) kernel_list=(${h6_kernel[@]}) ;;
             [0-9]*)
                 kernel_list=(${specific_kernel[@]})

@@ -18,6 +18,7 @@ on:
         options:
           - all
           - s922x_s905x3_s905x2_s912_s905d_s905
+          - ak88
           - beikeyun
           - cm3
           - e25
@@ -27,6 +28,13 @@ on:
           - r66s
           - r68s
           - jp-tvbox
+          - h28k
+          - h66k
+          - h68k
+          - h69k
+          - h69k-max
+          - h88k
+          - h88k-v3
           - watermelon-pi
           - rock5b
           - s905

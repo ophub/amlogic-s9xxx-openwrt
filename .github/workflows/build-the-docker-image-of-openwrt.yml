@@ -14,11 +14,12 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "lede"
+        default: "official"
         type: choice
         options:
-          - lede
           - official
+          - lede
+          - immortalwrt
       docker_img:
         description: "Set the docker image"
         required: false

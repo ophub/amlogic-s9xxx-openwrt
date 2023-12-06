@@ -29,6 +29,7 @@
 # init_var           : Initialize all variables
 # check_data         : Check the validity of the data
 # find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
+# git_pull_dir       : Download the files from the git repository
 # download_depends   : Download the dependency files
 # query_kernel       : Query the latest kernel version
 # check_kernel       : Check kernel files integrity
@@ -69,25 +70,13 @@ host_release="$(cat /etc/os-release | grep '^VERSION_CODENAME=.*' | cut -d'=' -f
 op_release="etc/flippy-openwrt-release"
 
 # Dependency files download repository
-#depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
-# Convert depends repository address to svn format
-#depends_repo="${depends_repo//tree\/main/trunk}"
-wget_path="https://raw.githubusercontent.com/ophub/amlogic-s9xxx-armbian/main/build-armbian"
-
+depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian"
 # U-BOOT files download repository
 uboot_repo="https://github.com/ophub/u-boot"
-# Convert firmware repository address to svn format
-#uboot_repo="${uboot_repo//tree\/main/trunk}"
-
 # Firmware files download repository
 firmware_repo="https://github.com/ophub/firmware"
-# Convert firmware repository address to svn format
-#firmware_repo="${firmware_repo//tree\/main/trunk}"
-
 # Install/Update script files download repository
-script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic"
-# Convert script repository address to svn format
-script_repo="${script_repo//tree\/main/trunk}"
+script_repo="https://github.com/ophub/luci-app-amlogic"
 
 # Set the kernel download repository from github.com
 kernel_repo="https://github.com/ophub/kernel"
@@ -349,47 +338,77 @@ find_openwrt() {
     rm -rf ${temp_dir}
 }
 
+git_pull_dir() {
+    cd ${current_path}
+
+    # Check git_pull_dir parameters
+    git_repo="${1}"
+    git_branch="${2}"
+    git_path="${3}"
+    [[ -n "${git_repo}" && -n "${git_branch}" && -n "${git_path}" ]] || {
+        error_msg "git_pull_dir parameter is missing: [ ${git_repo}, ${git_branch}, ${git_path} ]"
+    }
+
+    # Git clone the repository to the temporary directory
+    git clone --quiet --single-branch --depth=1 --branch=${git_branch} ${git_repo} ${git_path}
+    [[ "${?}" -eq "0" ]] || error_msg "Failed to clone the [ ${git_repo} ] repository."
+}
+
 download_depends() {
     cd ${current_path}
     echo -e "${STEPS} Start downloading dependency files..."
 
-    # Download platform files
-    git clone --depth=1 https://github.com/ophub/amlogic-s9xxx-armbian tmp_armbian
-    cp -R tmp_armbian/build-armbian/armbian-files/platform-files/* ${platform_files}
-    [[ "${?}" -eq "0" ]] && echo -e "${INFO} platform-files download completed." || error_msg "platform-files download failed."
-    # Remove the special files in the [ sbin ] directory of the Armbian system
-    rm -rf $(find ${platform_files} -type d -name "sbin")
-
-    # Download different files
-    cp -R tmp_armbian/build-armbian/armbian-files/different-files/* ${different_files}
-    [[ "${?}" -eq "0" ]] && echo -e "${INFO} different-files download completed." || error_msg "different-files download failed."
-
     # Download Armbian u-boot files
-    git clone --depth=1 ${uboot_repo} tmp_uboot
+    git_path="$(mktemp -d)"
+    git_pull_dir ${uboot_repo} main ${git_path}
+    # Move the files to the storage directory
     mkdir -p ${uboot_path}
-    cp -R tmp_uboot/u-boot/* ${uboot_path}
-    [[ "${?}" -eq "0" ]] && echo -e "${INFO} u-boot download completed." || error_msg "u-boot download failed."
+    cp -rf ${git_path}/u-boot/* ${uboot_path}
+    [[ "${?}" -eq "0" ]] || error_msg "Failed to move the [ u-boot ] files to the [ ${uboot_path} ] directory."
+    # Delete temporary files
+    rm -rf ${git_path}
 
     # Download Armbian firmware files
-    git clone --depth=1 ${firmware_repo} tmp_firmware
+    git_path="$(mktemp -d)"
+    git_pull_dir ${firmware_repo} main ${git_path}
+    # Move the files to the storage directory
     mkdir -p ${firmware_path}
-    cp -R tmp_firmware/firmware/* ${firmware_path}
+    cp -rf ${git_path}/firmware/* ${firmware_path}
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} firmware download completed." || error_msg "firmware download failed."
+    # Delete temporary files
+    rm -rf ${git_path}
 
+    # Download platform files
+    git_path="$(mktemp -d)"
+    git_pull_dir ${depends_repo} main ${git_path}
+    # Move the files to the storage directory
+    cp -rf ${git_path}/build-armbian/armbian-files/platform-files/* ${platform_files}
+    # Remove the special files in the [ sbin ] directory of the Armbian system
+    rm -rf $(find ${platform_files} -type d -name "sbin")
+    # Download different files
+    cp -rf ${git_path}/build-armbian/armbian-files/different-files/* ${different_files}
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} different-files download completed." || error_msg "different-files download failed."
     # Download balethirq related files
-    wget ${wget_path}/armbian-files/common-files/usr/sbin/balethirq.pl -O ${common_files}/usr/sbin/balethirq.pl
-    wget ${wget_path}/armbian-files/common-files/etc/balance_irq -O ${common_files}/etc/balance_irq
+    cp -f ${git_path}/build-armbian/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/usr/sbin
+    cp -f ${git_path}/build-armbian/armbian-files/common-files/etc/balance_irq ${common_files}/etc
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} balethirq download completed." || error_msg "balethirq download failed."
+    # Delete temporary files
+    rm -rf ${git_path}
 
     # Download install/update and other related files
-    git clone --depth=1 https://github.com/ophub/luci-app-amlogic tmp_amlogic
-    cp -R tmp_amlogic/luci-app-amlogic/root/usr/sbin/* ${common_files}/usr/sbin
+    git_path="$(mktemp -d)"
+    git_pull_dir ${script_repo} main ${git_path}
+    # Move the files to the storage directory
+    cp -rf ${git_path}/luci-app-amlogic/root/usr/sbin/* ${common_files}/usr/sbin
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} app/sbin download completed." || error_msg "app/sbin download failed."
     chmod +x ${common_files}/usr/sbin/*
+    # Move the files to the storage directory
     mkdir -p ${common_files}/usr/share/amlogic
-    cp -R tmp_amlogic/luci-app-amlogic/root/usr/share/amlogic/* ${common_files}/usr/share/amlogic
+    cp -rf ${git_path}/luci-app-amlogic/root/usr/share/amlogic ${common_files}/usr/share/amlogic
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} app/share download completed." || error_msg "app/share download failed."
     chmod +x ${common_files}/usr/share/amlogic/*
+    # Delete temporary files
+    rm -rf ${git_path}
 }
 
 query_kernel() {
@@ -736,8 +755,8 @@ extract_openwrt() {
     # Copy the overload files
     [[ "${PLATFORM}" == "amlogic" ]] && cp -rf ${uboot_path}/${PLATFORM}/overload/* ${tag_bootfs}
 
-    # Remove the .svn and .git directories
-    rm -rf $(find ${tmp_path} -type d -name '.svn' -o -name '.git')
+    # Remove the .git directories
+    rm -rf $(find ${tmp_path} -type d -name '.git')
 }
 
 replace_kernel() {

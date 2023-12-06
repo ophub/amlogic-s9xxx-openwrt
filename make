@@ -363,7 +363,7 @@ download_depends() {
     git_pull_dir ${uboot_repo} main ${git_path}
     # Move the files to the storage directory
     mkdir -p ${uboot_path}
-    cp -rf ${git_path}/u-boot/* ${uboot_path}
+    cp -af --no-preserve=ownership ${git_path}/u-boot/* ${uboot_path}
     [[ "${?}" -eq "0" ]] || error_msg "Failed to move the [ u-boot ] files to the [ ${uboot_path} ] directory."
     # Delete temporary files
     rm -rf ${git_path}
@@ -373,7 +373,7 @@ download_depends() {
     git_pull_dir ${firmware_repo} main ${git_path}
     # Move the files to the storage directory
     mkdir -p ${firmware_path}
-    cp -rf ${git_path}/firmware/* ${firmware_path}
+    cp -af --no-preserve=ownership ${git_path}/firmware/* ${firmware_path}
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} firmware download completed." || error_msg "firmware download failed."
     # Delete temporary files
     rm -rf ${git_path}
@@ -382,15 +382,15 @@ download_depends() {
     git_path="$(mktemp -d)"
     git_pull_dir ${depends_repo} main ${git_path}
     # Move the files to the storage directory
-    cp -rf ${git_path}/build-armbian/armbian-files/platform-files/* ${platform_files}
+    cp -af --no-preserve=ownership ${git_path}/build-armbian/armbian-files/platform-files/* ${platform_files}
     # Remove the special files in the [ sbin ] directory of the Armbian system
     rm -rf $(find ${platform_files} -type d -name "sbin")
     # Download different files
-    cp -rf ${git_path}/build-armbian/armbian-files/different-files/* ${different_files}
+    cp -af --no-preserve=ownership ${git_path}/build-armbian/armbian-files/different-files/* ${different_files}
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} different-files download completed." || error_msg "different-files download failed."
     # Download balethirq related files
-    cp -f ${git_path}/build-armbian/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/usr/sbin
-    cp -f ${git_path}/build-armbian/armbian-files/common-files/etc/balance_irq ${common_files}/etc
+    cp -f --no-preserve=ownership ${git_path}/build-armbian/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/usr/sbin
+    cp -f --no-preserve=ownership ${git_path}/build-armbian/armbian-files/common-files/etc/balance_irq ${common_files}/etc
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} balethirq download completed." || error_msg "balethirq download failed."
     # Delete temporary files
     rm -rf ${git_path}
@@ -399,12 +399,12 @@ download_depends() {
     git_path="$(mktemp -d)"
     git_pull_dir ${script_repo} main ${git_path}
     # Move the files to the storage directory
-    cp -rf ${git_path}/luci-app-amlogic/root/usr/sbin/* ${common_files}/usr/sbin
+    cp -af --no-preserve=ownership ${git_path}/luci-app-amlogic/root/usr/sbin/* ${common_files}/usr/sbin
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} app/sbin download completed." || error_msg "app/sbin download failed."
     chmod +x ${common_files}/usr/sbin/*
     # Move the files to the storage directory
     mkdir -p ${common_files}/usr/share/amlogic
-    cp -rf ${git_path}/luci-app-amlogic/root/usr/share/amlogic ${common_files}/usr/share/amlogic
+    cp -af --no-preserve=ownership ${git_path}/luci-app-amlogic/root/usr/share/amlogic ${common_files}/usr/share/amlogic
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} app/share download completed." || error_msg "app/share download failed."
     chmod +x ${common_files}/usr/share/amlogic/*
     # Delete temporary files

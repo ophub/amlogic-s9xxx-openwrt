@@ -69,19 +69,20 @@ host_release="$(cat /etc/os-release | grep '^VERSION_CODENAME=.*' | cut -d'=' -f
 op_release="etc/flippy-openwrt-release"
 
 # Dependency files download repository
-depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
+#depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian/tree/main/build-armbian"
 # Convert depends repository address to svn format
-depends_repo="${depends_repo//tree\/main/trunk}"
+#depends_repo="${depends_repo//tree\/main/trunk}"
+wget_path="https://raw.githubusercontent.com/ophub/amlogic-s9xxx-armbian/main/build-armbian"
 
 # U-BOOT files download repository
-uboot_repo="https://github.com/ophub/u-boot/tree/main/u-boot"
+uboot_repo="https://github.com/ophub/u-boot"
 # Convert firmware repository address to svn format
-uboot_repo="${uboot_repo//tree\/main/trunk}"
+#uboot_repo="${uboot_repo//tree\/main/trunk}"
 
 # Firmware files download repository
-firmware_repo="https://github.com/ophub/firmware/tree/main/firmware"
+firmware_repo="https://github.com/ophub/firmware"
 # Convert firmware repository address to svn format
-firmware_repo="${firmware_repo//tree\/main/trunk}"
+#firmware_repo="${firmware_repo//tree\/main/trunk}"
 
 # Install/Update script files download repository
 script_repo="https://github.com/ophub/luci-app-amlogic/tree/main/luci-app-amlogic"
@@ -353,33 +354,40 @@ download_depends() {
     echo -e "${STEPS} Start downloading dependency files..."
 
     # Download platform files
-    svn co ${depends_repo}/armbian-files/platform-files ${platform_files} --force --quiet
+    git clone --depth=1 https://github.com/ophub/amlogic-s9xxx-armbian tmp_armbian
+    cp -R tmp_armbian/build-armbian/armbian-files/platform-files/* ${platform_files}
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} platform-files download completed." || error_msg "platform-files download failed."
     # Remove the special files in the [ sbin ] directory of the Armbian system
     rm -rf $(find ${platform_files} -type d -name "sbin")
 
     # Download different files
-    svn co ${depends_repo}/armbian-files/different-files ${different_files} --force --quiet
+    cp -R tmp_armbian/build-armbian/armbian-files/different-files/* ${different_files}
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} different-files download completed." || error_msg "different-files download failed."
 
     # Download Armbian u-boot files
-    svn co ${uboot_repo} ${uboot_path} --force --quiet
+    git clone --depth=1 ${uboot_repo} tmp_uboot
+    mkdir -p ${uboot_path}
+    cp -R tmp_uboot/u-boot/* ${uboot_path}
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} u-boot download completed." || error_msg "u-boot download failed."
 
     # Download Armbian firmware files
-    svn co ${firmware_repo} ${firmware_path} --force --quiet
+    git clone --depth=1 ${firmware_repo} tmp_firmware
+    mkdir -p ${firmware_path}
+    cp -R tmp_firmware/firmware/* ${firmware_path}
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} firmware download completed." || error_msg "firmware download failed."
 
     # Download balethirq related files
-    svn export ${depends_repo}/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/usr/sbin --force
-    svn export ${depends_repo}/armbian-files/common-files/etc/balance_irq ${common_files}/etc --force
+    wget ${wget_path}/armbian-files/common-files/usr/sbin/balethirq.pl -O ${common_files}/usr/sbin/balethirq.pl
+    wget ${wget_path}/armbian-files/common-files/etc/balance_irq -O ${common_files}/etc/balance_irq
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} balethirq download completed." || error_msg "balethirq download failed."
 
     # Download install/update and other related files
-    svn export ${script_repo}/root/usr/sbin ${common_files}/usr/sbin --force --quiet
+    git clone --depth=1 https://github.com/ophub/luci-app-amlogic tmp_amlogic
+    cp -R tmp_amlogic/luci-app-amlogic/root/usr/sbin/* ${common_files}/usr/sbin
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} app/sbin download completed." || error_msg "app/sbin download failed."
     chmod +x ${common_files}/usr/sbin/*
-    svn export ${script_repo}/root/usr/share/amlogic ${common_files}/usr/share/amlogic --force --quiet
+    mkdir -p ${common_files}/usr/share/amlogic
+    cp -R tmp_amlogic/luci-app-amlogic/root/usr/share/amlogic/* ${common_files}/usr/share/amlogic
     [[ "${?}" -eq "0" ]] && echo -e "${INFO} app/share download completed." || error_msg "app/share download failed."
     chmod +x ${common_files}/usr/share/amlogic/*
 }

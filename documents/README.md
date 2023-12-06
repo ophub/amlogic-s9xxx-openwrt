@@ -308,7 +308,7 @@ The support for uploading to third parties comes from https://github.com/Mikubil
 1. Get the source code of the plugin `luci-app-amlogic`:
 ```shell
 rm -rf package/luci-app-amlogic
-git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic`
+git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 ```
 2. After executing `menuconfig`, you can select the plugin `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
 

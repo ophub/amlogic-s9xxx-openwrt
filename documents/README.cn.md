@@ -304,7 +304,7 @@ UPLOAD_WETRANSFER: false
 1. 获得 luci-app-amlogic 源码，把源码放到 package 目录下，方法如下：
 ```shell
 rm -rf package/luci-app-amlogic
-git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic`
+git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 ```
 2. 在执行 `menuconfig` 后，可以选择插件 `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
 

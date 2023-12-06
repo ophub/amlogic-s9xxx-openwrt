@@ -305,7 +305,11 @@ The support for uploading to third parties comes from https://github.com/Mikubil
 
 ### 8.1 Integrating luci-app-amlogic Operation Panel at Compilation Time
 
-1. `svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic`
+1. Get the source code of the plugin `luci-app-amlogic`:
+```shell
+rm -rf package/luci-app-amlogic
+git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic`
+```
 2. After executing `menuconfig`, you can select the plugin `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
 
 For more instructions on the plugin, see: [https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)

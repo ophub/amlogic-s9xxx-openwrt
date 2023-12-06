@@ -301,7 +301,11 @@ UPLOAD_WETRANSFER: false
 
 ### 8.1 在编译时集成 luci-app-amlogic 操作面板
 
-1. `svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic`
+1. 获得 luci-app-amlogic 源码，把源码放到 package 目录下，方法如下：
+```shell
+rm -rf package/luci-app-amlogic
+git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic`
+```
 2. 在执行 `menuconfig` 后，可以选择插件 `LuCI ---> 3. Applications  ---> <*> luci-app-amlogic`
 
 插件的更多说明详见：[https://github.com/ophub/luci-app-amlogic](https://github.com/ophub/luci-app-amlogic)

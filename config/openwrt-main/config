@@ -1767,6 +1767,7 @@ CONFIG_PACKAGE_u-boot-qemu_armv8=y
 # CONFIG_PACKAGE_patch is not set
 # CONFIG_PACKAGE_pkg-config is not set
 # CONFIG_PACKAGE_pkgconf is not set
+# CONFIG_PACKAGE_tmon is not set
 # CONFIG_PACKAGE_trace-cmd is not set
 # CONFIG_PACKAGE_trace-cmd-extra is not set
 # CONFIG_PACKAGE_valgrind is not set
@@ -4589,7 +4590,6 @@ CONFIG_PACKAGE_libinih=y
 # CONFIG_PACKAGE_libinput is not set
 # CONFIG_PACKAGE_libintl-full is not set
 CONFIG_PACKAGE_libiperf3=y
-# CONFIG_PACKAGE_libiperf3-mt is not set
 # CONFIG_PACKAGE_libiw is not set
 CONFIG_PACKAGE_libiwinfo=y
 # CONFIG_PACKAGE_libjaylink is not set
@@ -4757,6 +4757,7 @@ CONFIG_PACKAGE_libsensors=y
 CONFIG_PACKAGE_libsmartcols=y
 # CONFIG_PACKAGE_libsndfile is not set
 # CONFIG_PACKAGE_libsoc is not set
+# CONFIG_PACKAGE_libsocketcan is not set
 # CONFIG_PACKAGE_libsocks is not set
 # CONFIG_PACKAGE_libsodium is not set
 # CONFIG_PACKAGE_libsoup is not set
@@ -4868,9 +4869,12 @@ CONFIG_PACKAGE_terminfo=y
 # CONFIG_PACKAGE_tinycdb is not set
 # CONFIG_PACKAGE_totem-pl-parser is not set
 # CONFIG_PACKAGE_uw-imap is not set
-# CONFIG_PACKAGE_xmlrpc-c is not set
+# CONFIG_PACKAGE_xmlrpc-c-abyss is not set
 # CONFIG_PACKAGE_xmlrpc-c-client is not set
+# CONFIG_PACKAGE_xmlrpc-c-internal is not set
+# CONFIG_PACKAGE_xmlrpc-c-libxml2 is not set
 # CONFIG_PACKAGE_xmlrpc-c-server is not set
+# CONFIG_PACKAGE_xmlrpc-c-server-abyss is not set
 # CONFIG_PACKAGE_yajl is not set
 # CONFIG_PACKAGE_yubico-pam is not set
 CONFIG_PACKAGE_zlib=y
@@ -4979,6 +4983,7 @@ CONFIG_PACKAGE_luci-app-amlogic=y
 # CONFIG_PACKAGE_luci-app-cjdns is not set
 # CONFIG_PACKAGE_luci-app-clamav is not set
 # CONFIG_PACKAGE_luci-app-commands is not set
+# CONFIG_PACKAGE_luci-app-crowdsec-firewall-bouncer is not set
 # CONFIG_PACKAGE_luci-app-cshark is not set
 # CONFIG_PACKAGE_luci-app-dawn is not set
 # CONFIG_PACKAGE_luci-app-dcwapd is not set
@@ -5044,8 +5049,10 @@ CONFIG_PACKAGE_luci-app-samba4=y
 # CONFIG_PACKAGE_luci-app-splash is not set
 # CONFIG_PACKAGE_luci-app-sqm is not set
 # CONFIG_PACKAGE_luci-app-squid is not set
+# CONFIG_PACKAGE_luci-app-sshtunnel is not set
 # CONFIG_PACKAGE_luci-app-statistics is not set
 # CONFIG_PACKAGE_luci-app-tinyproxy is not set
+# CONFIG_PACKAGE_luci-app-tor is not set
 CONFIG_PACKAGE_luci-app-transmission=y
 # CONFIG_PACKAGE_luci-app-travelmate is not set
 CONFIG_PACKAGE_luci-app-ttyd=y
@@ -5061,7 +5068,6 @@ CONFIG_PACKAGE_luci-app-upnp=y
 # CONFIG_PACKAGE_luci-app-wol is not set
 # CONFIG_PACKAGE_luci-app-xfrpc is not set
 # CONFIG_PACKAGE_luci-app-xinetd is not set
-# CONFIG_PACKAGE_luci-app-yggdrasil is not set
 # end of 3. Applications
 
 #
@@ -5623,6 +5629,8 @@ CONFIG_PACKAGE_transmission-daemon=y
 # CONFIG_PACKAGE_mesh11sd is not set
 # CONFIG_PACKAGE_nodogsplash is not set
 # CONFIG_PACKAGE_opennds is not set
+# CONFIG_PACKAGE_uspot is not set
+# CONFIG_PACKAGE_uspot-www is not set
 # CONFIG_PACKAGE_wifidog is not set
 # CONFIG_PACKAGE_wifidog-tls is not set
 # end of Captive Portals
@@ -6506,8 +6514,6 @@ CONFIG_PACKAGE_iftop=y
 # CONFIG_PACKAGE_iiod is not set
 # CONFIG_PACKAGE_iperf is not set
 CONFIG_PACKAGE_iperf3=y
-# CONFIG_PACKAGE_iperf3-mt is not set
-# CONFIG_PACKAGE_iperf3-mt-ssl is not set
 # CONFIG_PACKAGE_iperf3-ssl is not set
 CONFIG_PACKAGE_ipip=y
 CONFIG_PACKAGE_ipset=y
@@ -6699,6 +6705,7 @@ CONFIG_PACKAGE_uclient-fetch=y
 # CONFIG_PACKAGE_unetd is not set
 # CONFIG_PACKAGE_uradvd is not set
 # CONFIG_PACKAGE_usbip is not set
+# CONFIG_PACKAGE_uspotfilter is not set
 # CONFIG_PACKAGE_usteer is not set
 # CONFIG_PACKAGE_ustp is not set
 # CONFIG_PACKAGE_v2ray-core is not set
@@ -7159,6 +7166,7 @@ CONFIG_PACKAGE_acpid=y
 # CONFIG_PACKAGE_checksec is not set
 # CONFIG_PACKAGE_checksec_automator is not set
 # CONFIG_PACKAGE_chkcon is not set
+# CONFIG_PACKAGE_cligen is not set
 # CONFIG_PACKAGE_clocate is not set
 # CONFIG_PACKAGE_cmdpad is not set
 # CONFIG_PACKAGE_cni is not set

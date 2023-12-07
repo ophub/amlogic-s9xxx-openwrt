@@ -530,8 +530,8 @@ download_kernel() {
                     kernel_down_from="https://github.com/${kernel_repo}/releases/download/kernel_${kd}/${kernel_var}.tar.gz"
                     echo -e "${INFO} (${x}.${i}) [ ${k} - ${kernel_var} ] Kernel download from [ ${kernel_down_from} ]"
 
-                    mkdir -p ${kernel_path}/${kd}
-                    wget "${kernel_down_from}" -q -P "${kernel_path}/${kd}"
+                    [[ -d "${kernel_path}/${kd}" ]] || mkdir -p ${kernel_path}/${kd}
+                    curl -fsSL "${kernel_down_from}" -o "${kernel_path}/${kd}/${kernel_var}.tar.gz"
                     [[ "${?}" -ne "0" ]] && error_msg "Failed to download the kernel files from the server."
 
                     tar -mxzf "${kernel_path}/${kd}/${kernel_var}.tar.gz" -C "${kernel_path}/${kd}"

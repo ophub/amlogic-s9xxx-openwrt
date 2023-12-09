@@ -56,7 +56,7 @@ jobs:
           [[ -z "${openwrt_url}" ]] && echo -e "OpenWrt file not found!" && exit 1
 
           [[ -d "openwrt" ]] || mkdir -p openwrt
-          wget -q "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}" -O "openwrt/openwrt-armvirt-64-default-rootfs.tar.gz"
+          curl -fsSL "https://github.com/${GITHUB_REPOSITORY}/releases/download/${openwrt_url}" -o "openwrt/openwrt-armvirt-64-default-rootfs.tar.gz"
           [[ "${?}" -ne "0" ]] && echo "OpenWrt file download failed." && exit 1
           echo "status=success" >> ${GITHUB_OUTPUT}
 

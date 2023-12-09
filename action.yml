@@ -56,8 +56,9 @@ runs:
         [[ -d "${openwrt_outpath}" ]] || mkdir -p ${openwrt_outpath}
 
         if [[ "${openwrt_filename}" == http* ]]; then
-            echo -e "Use wget to download file: [ ${openwrt_filename} ]"
-            wget ${openwrt_filename} -q -P ${openwrt_savepath} 2>/dev/null
+            echo -e "Download file: [ ${openwrt_filename} ]"
+            openwrt_savefile="${openwrt_filename##*/}"
+            curl -fsSL "${openwrt_filename}" -o "${openwrt_savepath}/${openwrt_savefile}"
         else
             echo -e "Copy OpenWrt rootfs file: [ ${openwrt_filename} ]"
             cp -vf ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null

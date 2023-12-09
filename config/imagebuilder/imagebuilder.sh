@@ -76,8 +76,8 @@ download_imagebuilder() {
 
     # Downloading imagebuilder files
     download_file="https://downloads.${op_sourse}.org/releases/${op_branch}/targets/${target_system}/${op_sourse}-imagebuilder-${op_branch}-${target_name}.Linux-x86_64.tar.xz"
-    wget -q ${download_file}
-    [[ "${?}" -eq "0" ]] || error_msg "Wget download failed: [ ${download_file} ]"
+    curl -fsSOL ${download_file}
+    [[ "${?}" -eq "0" ]] || error_msg "Download failed: [ ${download_file} ]"
 
     # Unzip and change the directory name
     tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
@@ -120,19 +120,20 @@ custom_packages() {
 
     # Create a [ packages ] directory
     [[ -d "packages" ]] || mkdir packages
+    cd packages
 
     # Download luci-app-amlogic
     amlogic_api="https://api.github.com/repos/ophub/luci-app-amlogic/releases"
     #
     amlogic_file="luci-app-amlogic"
     amlogic_file_down="$(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*${amlogic_name}.*.ipk" | head -n 1)"
-    wget ${amlogic_file_down} -q -P packages
+    curl -fsSOJL ${amlogic_file_down}
     [[ "${?}" -eq "0" ]] || error_msg "[ ${amlogic_file} ] download failed!"
     echo -e "${INFO} The [ ${amlogic_file} ] is downloaded successfully."
     #
     amlogic_i18n="luci-i18n-amlogic"
     amlogic_i18n_down="$(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*${amlogic_i18n}.*.ipk" | head -n 1)"
-    wget ${amlogic_i18n_down} -q -P packages
+    curl -fsSOJL ${amlogic_i18n_down}
     [[ "${?}" -eq "0" ]] || error_msg "[ ${amlogic_i18n} ] download failed!"
     echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
 

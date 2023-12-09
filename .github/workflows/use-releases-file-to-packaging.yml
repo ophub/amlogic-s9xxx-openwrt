@@ -251,7 +251,8 @@ jobs:
           latest_updated_at="$(echo ${latest_version} | jq -r '.data')"
           latest_url="$(echo ${latest_version} | jq -r '.url')"
 
-          wget -q -P "${armvirt_tarfile_path}" "${latest_url}"
+          openwrt_filename="${latest_url##*/}"
+          curl -fsSL "${latest_url}" -o "${armvirt_tarfile_path}/${openwrt_filename}"
           [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
 
           echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}

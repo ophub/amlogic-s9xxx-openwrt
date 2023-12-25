@@ -562,8 +562,8 @@ Languages -> Perl
              -> perlbase-unicode
              -> perlbase-utf8
           -> Python
-             -> Python3-logging
              -> Python3-ctypes
+             -> Python3-logging
              -> Python3-yaml
 
 
@@ -577,6 +577,7 @@ Network -> File Transfer -> curl、wget-ssl
 
 Utilities -> Compression -> bsdtar、pigz
           -> Disc -> blkid、fdisk、lsblk、parted
+          -> Editors -> nano、vim
           -> Filesystem -> attr、btrfs-progs(Build with zstd support)、chattr、dosfstools、
                            e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
           -> Shells -> bash
@@ -584,4 +585,3 @@ Utilities -> Compression -> bsdtar、pigz
           -> acpid、coremark、coreutils(-> coreutils-base64、coreutils-nohup、coreutils-timeout)、gawk、getopt、
              jq、lm-sensors、losetup、pv、tar、uuidgen
 ```
-

@@ -29,11 +29,11 @@ inputs:
   auto_kernel:
     description: "Auto use the latest kernel."
     required: false
-    default: "true"
+    default: "false"
   openwrt_size:
     description: "Set the rootfs size(Unit: MiB)."
     required: false
-    default: "1024"
+    default: "4096"
   builder_name:
     description: "Set OpenWrt builder signature."
     required: false

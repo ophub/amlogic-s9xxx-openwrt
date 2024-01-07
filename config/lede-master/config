@@ -41,6 +41,7 @@ CONFIG_TARGET_armvirt=y
 # CONFIG_TARGET_ipq60xx is not set
 # CONFIG_TARGET_ipq806x is not set
 # CONFIG_TARGET_ipq807x is not set
+# CONFIG_TARGET_ipq95xx is not set
 # CONFIG_TARGET_realtek is not set
 # CONFIG_TARGET_rockchip is not set
 # CONFIG_TARGET_sifiveu is not set
@@ -4923,9 +4924,6 @@ CONFIG_PACKAGE_luci-app-openvpn-server=y
 # CONFIG_PACKAGE_luci-app-qbittorrent is not set
 CONFIG_PACKAGE_luci-app-qbittorrent_static=y
 # CONFIG_PACKAGE_luci-app-qbittorrent_dynamic is not set
-# CONFIG_PACKAGE_luci-app-qbittorrent-simple is not set
-# CONFIG_PACKAGE_luci-app-qbittorrent-simple_static is not set
-CONFIG_PACKAGE_luci-app-qbittorrent-simple_dynamic=y
 # CONFIG_PACKAGE_luci-app-qos is not set
 # CONFIG_PACKAGE_luci-app-radicale is not set
 CONFIG_PACKAGE_luci-app-ramfree=y

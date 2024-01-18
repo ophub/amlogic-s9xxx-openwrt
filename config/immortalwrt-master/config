@@ -7697,8 +7697,8 @@ CONFIG_PACKAGE_coreutils-base64=y
 # CONFIG_PACKAGE_coreutils-csplit is not set
 # CONFIG_PACKAGE_coreutils-cut is not set
 # CONFIG_PACKAGE_coreutils-date is not set
-# CONFIG_PACKAGE_coreutils-dd is not set
-# CONFIG_PACKAGE_coreutils-df is not set
+CONFIG_PACKAGE_coreutils-dd=y
+CONFIG_PACKAGE_coreutils-df=y
 # CONFIG_PACKAGE_coreutils-dir is not set
 # CONFIG_PACKAGE_coreutils-dircolors is not set
 # CONFIG_PACKAGE_coreutils-dirname is not set
@@ -7764,14 +7764,14 @@ CONFIG_PACKAGE_coreutils-nohup=y
 # CONFIG_PACKAGE_coreutils-sum is not set
 # CONFIG_PACKAGE_coreutils-sync is not set
 # CONFIG_PACKAGE_coreutils-tac is not set
-# CONFIG_PACKAGE_coreutils-tail is not set
+CONFIG_PACKAGE_coreutils-tail=y
 # CONFIG_PACKAGE_coreutils-tee is not set
 # CONFIG_PACKAGE_coreutils-test is not set
-# CONFIG_PACKAGE_coreutils-timeout is not set
-# CONFIG_PACKAGE_coreutils-touch is not set
-# CONFIG_PACKAGE_coreutils-tr is not set
+CONFIG_PACKAGE_coreutils-timeout=y
+CONFIG_PACKAGE_coreutils-touch=y
+CONFIG_PACKAGE_coreutils-tr=y
 # CONFIG_PACKAGE_coreutils-true is not set
-# CONFIG_PACKAGE_coreutils-truncate is not set
+CONFIG_PACKAGE_coreutils-truncate=y
 # CONFIG_PACKAGE_coreutils-tsort is not set
 # CONFIG_PACKAGE_coreutils-tty is not set
 # CONFIG_PACKAGE_coreutils-uname is not set

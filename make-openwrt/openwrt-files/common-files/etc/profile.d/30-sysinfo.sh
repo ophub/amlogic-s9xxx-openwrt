@@ -16,32 +16,28 @@ SHOW_IP_PATTERN="^[ewr].*|^br.*|^lt.*|^umts.*"
 }
 
 # find the partition where root is located
-ROOT_PTNAME="$(df / | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
-if [[ -z "${ROOT_PTNAME}" ]]; then
-	echo "Cannot find the partition corresponding to the root file system!"
-	exit 1
+ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
+if [[ -n "${ROOT_PTNAME}" ]]; then
+	# find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
+	case "${ROOT_PTNAME}" in
+	mmcblk?p[1-4])
+		DISK_NAME="${ROOT_PTNAME:0:-2}"
+		PARTITION_NAME="p"
+		;;
+	[hsv]d[a-z][1-4])
+		DISK_NAME="${ROOT_PTNAME:0:-1}"
+		PARTITION_NAME=""
+		;;
+	nvme?n?p[1-4])
+		DISK_NAME="${ROOT_PTNAME:0:-2}"
+		PARTITION_NAME="p"
+		;;
+	*)
+		echo "Unable to recognize the disk type of ${ROOT_PTNAME}!"
+		;;
+	esac
+	PARTITION_PATH="/mnt/${DISK_NAME}${PARTITION_NAME}4"
 fi
-
-# find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
-case "${ROOT_PTNAME}" in
-mmcblk?p[1-4])
-	DISK_NAME="${ROOT_PTNAME:0:-2}"
-	PARTITION_NAME="p"
-	;;
-[hsv]d[a-z][1-4])
-	DISK_NAME="${ROOT_PTNAME:0:-1}"
-	PARTITION_NAME=""
-	;;
-nvme?n?p[1-4])
-	DISK_NAME="${ROOT_PTNAME:0:-2}"
-	PARTITION_NAME="p"
-	;;
-*)
-	echo "Unable to recognize the disk type of ${ROOT_PTNAME}!"
-	exit 1
-	;;
-esac
-PARTITION_PATH="/mnt/${DISK_NAME}${PARTITION_NAME}4"
 
 # don't edit below here
 function display() {

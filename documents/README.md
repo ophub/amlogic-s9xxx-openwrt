@@ -582,6 +582,7 @@ Utilities -> Compression -> bsdtar、pigz
                            e2fsprogs、f2fs-tools、f2fsck、lsattr、mkf2fs、xfs-fsck、xfs-mkfs
           -> Shells -> bash
           -> Time Zone info -> zoneinfo-america、zoneinfo-asia、zoneinfo-core、zoneinfo-europe (other)
-          -> acpid、coremark、coreutils(-> coreutils-base64、coreutils-nohup、coreutils-timeout)、gawk、getopt、
-             jq、lm-sensors、losetup、pv、tar、uuidgen
+          -> acpid、coremark、coreutils(-> coreutils-base64、coreutils-dd、coreutils-df、coreutils-nohup、
+             coreutils-tail、coreutils-timeout、coreutils-touch、coreutils-tr、coreutils-truncate)、
+             gawk、getopt、jq、lm-sensors、losetup、pv、tar、uuidgen
 ```

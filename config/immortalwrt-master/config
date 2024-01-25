@@ -392,6 +392,7 @@ CONFIG_PKG_ASLR_PIE_REGULAR=y
 # CONFIG_PKG_CC_STACKPROTECTOR_NONE is not set
 CONFIG_PKG_CC_STACKPROTECTOR_REGULAR=y
 # CONFIG_PKG_CC_STACKPROTECTOR_STRONG is not set
+# CONFIG_PKG_CC_STACKPROTECTOR_ALL is not set
 # CONFIG_KERNEL_CC_STACKPROTECTOR_NONE is not set
 CONFIG_KERNEL_CC_STACKPROTECTOR_REGULAR=y
 # CONFIG_KERNEL_CC_STACKPROTECTOR_STRONG is not set
@@ -917,7 +918,7 @@ CONFIG_BUSYBOX_DEFAULT_FEATURE_SHADOWPASSWDS=y
 # CONFIG_BUSYBOX_DEFAULT_USE_BB_PWD_GRP is not set
 # CONFIG_BUSYBOX_DEFAULT_USE_BB_SHADOW is not set
 # CONFIG_BUSYBOX_DEFAULT_USE_BB_CRYPT is not set
-# CONFIG_BUSYBOX_DEFAULT_USE_BB_CRYPT_SHA is not set
+CONFIG_BUSYBOX_DEFAULT_USE_BB_CRYPT_SHA=y
 # CONFIG_BUSYBOX_DEFAULT_ADD_SHELL is not set
 # CONFIG_BUSYBOX_DEFAULT_REMOVE_SHELL is not set
 # CONFIG_BUSYBOX_DEFAULT_ADDGROUP is not set
@@ -928,7 +929,7 @@ CONFIG_BUSYBOX_DEFAULT_LAST_ID=0
 CONFIG_BUSYBOX_DEFAULT_FIRST_SYSTEM_ID=0
 CONFIG_BUSYBOX_DEFAULT_LAST_SYSTEM_ID=0
 # CONFIG_BUSYBOX_DEFAULT_CHPASSWD is not set
-CONFIG_BUSYBOX_DEFAULT_FEATURE_DEFAULT_PASSWD_ALGO="md5"
+CONFIG_BUSYBOX_DEFAULT_FEATURE_DEFAULT_PASSWD_ALGO="sha256"
 # CONFIG_BUSYBOX_DEFAULT_CRYPTPW is not set
 # CONFIG_BUSYBOX_DEFAULT_MKPASSWD is not set
 # CONFIG_BUSYBOX_DEFAULT_DELUSER is not set
@@ -2283,6 +2284,8 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 #
 # CONFIG_PACKAGE_kmod-input-leds is not set
 # CONFIG_PACKAGE_kmod-leds-gpio is not set
+# CONFIG_PACKAGE_kmod-leds-lp5562 is not set
+# CONFIG_PACKAGE_kmod-leds-lp55xx-common is not set
 # CONFIG_PACKAGE_kmod-leds-mlxcpld is not set
 # CONFIG_PACKAGE_kmod-leds-pca955x is not set
 # CONFIG_PACKAGE_kmod-leds-pca963x is not set
@@ -2421,7 +2424,7 @@ CONFIG_PACKAGE_kmod-ipt-physdev=y
 # CONFIG_PACKAGE_kmod-ipt-sysrq is not set
 # CONFIG_PACKAGE_kmod-ipt-tarpit is not set
 # CONFIG_PACKAGE_kmod-ipt-tee is not set
-# CONFIG_PACKAGE_kmod-ipt-tproxy is not set
+CONFIG_PACKAGE_kmod-ipt-tproxy=y
 # CONFIG_PACKAGE_kmod-ipt-u32 is not set
 # CONFIG_PACKAGE_kmod-netatop is not set
 CONFIG_PACKAGE_kmod-nf-conntrack=y
@@ -2442,7 +2445,7 @@ CONFIG_PACKAGE_kmod-nf-nat6=y
 CONFIG_PACKAGE_kmod-nf-reject=y
 CONFIG_PACKAGE_kmod-nf-reject6=y
 # CONFIG_PACKAGE_kmod-nf-socket is not set
-# CONFIG_PACKAGE_kmod-nf-tproxy is not set
+CONFIG_PACKAGE_kmod-nf-tproxy=y
 CONFIG_PACKAGE_kmod-nfnetlink=y
 # CONFIG_PACKAGE_kmod-nfnetlink-log is not set
 # CONFIG_PACKAGE_kmod-nfnetlink-queue is not set
@@ -3263,7 +3266,6 @@ CONFIG_NODEJS_NPM_CACHE_DIR=""
 # CONFIG_PACKAGE_node-homebridge is not set
 # CONFIG_PACKAGE_node-homebridge-camera-ffmpeg is not set
 # CONFIG_PACKAGE_node-homebridge-cmd4 is not set
-# CONFIG_PACKAGE_node-homebridge-config-ui-x is not set
 # CONFIG_PACKAGE_node-homebridge-eufy-security is not set
 # CONFIG_PACKAGE_node-homebridge-hue is not set
 # CONFIG_PACKAGE_node-homebridge-mqttthing is not set
@@ -5628,6 +5630,7 @@ CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-frpc-lt is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-mr is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-ms is not set
+# CONFIG_PACKAGE_luci-i18n-frpc-nl is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-no is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-pl is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-pt is not set
@@ -5661,6 +5664,7 @@ CONFIG_PACKAGE_luci-i18n-frpc-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-frps-lt is not set
 # CONFIG_PACKAGE_luci-i18n-frps-mr is not set
 # CONFIG_PACKAGE_luci-i18n-frps-ms is not set
+# CONFIG_PACKAGE_luci-i18n-frps-nl is not set
 # CONFIG_PACKAGE_luci-i18n-frps-no is not set
 # CONFIG_PACKAGE_luci-i18n-frps-pl is not set
 # CONFIG_PACKAGE_luci-i18n-frps-pt is not set
@@ -5762,6 +5766,7 @@ CONFIG_PACKAGE_luci-i18n-openvpn-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-opkg-lt is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-mr is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-ms is not set
+# CONFIG_PACKAGE_luci-i18n-opkg-nl is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-no is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-pl is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-pt is not set
@@ -5863,6 +5868,7 @@ CONFIG_PACKAGE_luci-i18n-transmission-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-ttyd-lt is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-mr is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-ms is not set
+# CONFIG_PACKAGE_luci-i18n-ttyd-nl is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-no is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-pl is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-pt is not set
@@ -5896,6 +5902,7 @@ CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-upnp-lt is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-mr is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-ms is not set
+# CONFIG_PACKAGE_luci-i18n-upnp-nl is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-no is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-pl is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-pt is not set
@@ -6679,7 +6686,6 @@ CONFIG_OPENCONNECT_GNUTLS=y
 # CONFIG_PACKAGE_sstp-client is not set
 # CONFIG_PACKAGE_strongswan is not set
 # CONFIG_PACKAGE_tailscale is not set
-# CONFIG_PACKAGE_tailscaled is not set
 # CONFIG_PACKAGE_tinc is not set
 # CONFIG_PACKAGE_tinyfecvpn is not set
 # CONFIG_PACKAGE_uanytun is not set
@@ -6949,6 +6955,7 @@ CONFIG_PACKAGE_etherwake=y
 # CONFIG_PACKAGE_etherwake-nfqueue is not set
 CONFIG_PACKAGE_ethtool=y
 # CONFIG_PACKAGE_ethtool-full is not set
+# CONFIG_PACKAGE_evilginx2 is not set
 # CONFIG_PACKAGE_external-protocol is not set
 # CONFIG_PACKAGE_fail2ban is not set
 # CONFIG_PACKAGE_fakeidentd is not set
@@ -7082,8 +7089,8 @@ CONFIG_PACKAGE_odhcpd_ipv6only_ext_cer_id=0
 # CONFIG_PACKAGE_open-iscsi is not set
 # CONFIG_PACKAGE_openelp is not set
 # CONFIG_PACKAGE_openthread-br is not set
-# CONFIG_PACKAGE_oping is not set
 # CONFIG_PACKAGE_oscam is not set
+# CONFIG_PACKAGE_oping is not set
 # CONFIG_PACKAGE_ostiary is not set
 # CONFIG_PACKAGE_pagekitec is not set
 # CONFIG_PACKAGE_pcapplusplus is not set

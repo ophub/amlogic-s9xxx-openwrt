@@ -108,8 +108,8 @@ builder_name=""
 # Set font color
 STEPS="[\033[95m STEPS \033[0m]"
 INFO="[\033[94m INFO \033[0m]"
-TIPS="[\033[93m TIPS \033[0m]"
-PROMPT="[\033[93m PROMPT \033[0m]"
+NOTE="[\033[93m NOTE \033[0m]"
+WARNING="[\033[93m WARNING \033[0m]"
 SUCCESS="[\033[92m SUCCESS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 #
@@ -1117,7 +1117,7 @@ loop_make() {
                     # Skip inapplicable kernels
                     if [[ "${KERNEL_TAGS}" =~ ^[0-9]{1,2}\.[0-9]+ ]]; then
                         [[ "${kernel}" != "$(echo ${KERNEL_TAGS} | awk -F'.' '{print $1"."$2"."}')"* ]] && {
-                            echo -e "(${j}.${i}) ${TIPS} The [ ${board} ] device cannot use [ ${kd}/${kernel} ] kernel, skip."
+                            echo -e "(${j}.${i}) ${NOTE} The [ ${board} ] device cannot use [ ${kd}/${kernel} ] kernel, skip."
                             let i++
                             continue
                         }
@@ -1127,7 +1127,7 @@ loop_make() {
                     echo -ne "(${j}.${i}) Start making OpenWrt [\033[92m ${board} - ${kd}/${kernel} \033[0m]. "
                     now_remaining_space="$(df -Tk ${current_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                     if [[ "${now_remaining_space}" -le "3" ]]; then
-                        echo -e "${PROMPT} Remaining space is less than 3G, exit this build."
+                        echo -e "${WARNING} Remaining space is less than 3G, exit this build."
                         break
                     else
                         echo "Remaining space is ${now_remaining_space}G."

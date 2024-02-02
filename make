@@ -172,7 +172,7 @@ init_var() {
         case "${1}" in
         -b | --Board)
             if [[ -n "${2}" ]]; then
-                make_board="${2}"
+                make_board="${2// /}"
                 shift
             else
                 error_msg "Invalid -b parameter [ ${2} ]!"

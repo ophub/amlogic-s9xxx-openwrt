@@ -25,6 +25,7 @@ Github Actions is a service launched by Microsoft. It provides a very well-confi
   - [5. Firmware Compilation](#5-firmware-compilation)
     - [5.1 Manual Compilation](#51-manual-compilation)
     - [5.2 Scheduled Compilation](#52-scheduled-compilation)
+    - [5.3 Expanding Github Actions Compilation Space Using Logical Volumes](#53-expanding-github-actions-compilation-space-using-logical-volumes)
   - [6. Saving Firmware](#6-saving-firmware)
     - [6.1 Save to Github Actions](#61-save-to-github-actions)
     - [6.2 Save to GitHub Releases](#62-save-to-github-releases)
@@ -212,6 +213,30 @@ In the .github/workflows/build-openwrt.yml file, use Cron to set up scheduled co
 ```yaml
 schedule:
   - cron: '0 17 * * *'
+```
+
+### 5.3 Expanding Github Actions Compilation Space Using Logical Volumes
+
+The default compile space for Github Actions is 84G, with about 50G available after considering the system and necessary software packages. When compiling all firmware, you may encounter an issue with insufficient space, which can be addressed by using logical volumes to expand the compile space to approximately 110G. Refer to the method in the [.github/workflows/build-openwrt.yml](../.github/workflows/build-openwrt.yml) file, and use the commands below to create a logical volume. Then, use the path of the logical volume during the compilation process.
+
+```yaml
+- name: Create simulated physical disk
+  run: |
+    mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+    root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+    sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+    sudo truncate -s "${root_size}"G /root.img
+    sudo losetup /dev/loop6 /mnt/mnt.img
+    sudo losetup /dev/loop7 /root.img
+    sudo pvcreate /dev/loop6
+    sudo pvcreate /dev/loop7
+    sudo vgcreate github /dev/loop6 /dev/loop7
+    sudo lvcreate -n runner -l 100%FREE github
+    sudo mkfs.xfs /dev/github/runner
+    sudo mkdir -p /builder
+    sudo mount /dev/github/runner /builder
+    sudo chown -R runner.runner /builder
+    df -Th
 ```
 
 ## 6. Saving Firmware

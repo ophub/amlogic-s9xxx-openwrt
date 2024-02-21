@@ -25,6 +25,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
   - [5. 编译固件](#5-编译固件)
     - [5.1 手动编译](#51-手动编译)
     - [5.2 定时编译](#52-定时编译)
+    - [5.3 使用逻辑卷扩大 Github Actions 编译空间](#53-使用逻辑卷扩大-github-actions-编译空间)
   - [6. 保存固件](#6-保存固件)
     - [6.1 保存到 Github Actions](#61-保存到-github-actions)
     - [6.2 保存到 GitHub Releases](#62-保存到-github-releases)
@@ -210,6 +211,30 @@ OpenWrt 官方网站提供了制作好的 openwrt-imagebuilder-*-armvirt-64.Linu
 ```yaml
 schedule:
   - cron: '0 17 * * *'
+```
+
+### 5.3 使用逻辑卷扩大 Github Actions 编译空间
+
+Github Actions 编译空间默认是 84G，除去系统和必要软件包外，可用空间在 50G 左右，当编译全部固件时会遇到空间不足的问题，可以使用逻辑卷扩大编译空间至 110G 左右。参考 [.github/workflows/build-openwrt.yml](../.github/workflows/build-openwrt.yml) 文件里的方法，使用下面的命令创建逻辑卷。并在编译时使用逻辑卷的路径。
+
+```yaml
+- name: Create simulated physical disk
+  run: |
+    mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+    root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+    sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+    sudo truncate -s "${root_size}"G /root.img
+    sudo losetup /dev/loop6 /mnt/mnt.img
+    sudo losetup /dev/loop7 /root.img
+    sudo pvcreate /dev/loop6
+    sudo pvcreate /dev/loop7
+    sudo vgcreate github /dev/loop6 /dev/loop7
+    sudo lvcreate -n runner -l 100%FREE github
+    sudo mkfs.xfs /dev/github/runner
+    sudo mkdir -p /builder
+    sudo mount /dev/github/runner /builder
+    sudo chown -R runner.runner /builder
+    df -Th
 ```
 
 ## 6. 保存固件

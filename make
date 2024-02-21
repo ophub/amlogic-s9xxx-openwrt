@@ -49,19 +49,21 @@
 #
 # Related file storage path
 current_path="${PWD}"
-tmp_path="${current_path}/tmp"
-out_path="${current_path}/out"
+make_path="${current_path}/openwrt"
+tmp_path="${make_path}/tmp"
+out_path="${make_path}/out"
 openwrt_path="${current_path}/openwrt-armvirt"
 openwrt_rootfs_file="*rootfs.tar.gz"
-make_path="${current_path}/make-openwrt"
-kernel_path="${make_path}/kernel"
-uboot_path="${make_path}/u-boot"
-common_files="${make_path}/openwrt-files/common-files"
-platform_files="${make_path}/openwrt-files/platform-files"
-different_files="${make_path}/openwrt-files/different-files"
+resource_path="${current_path}/make-openwrt"
+kernel_path="${resource_path}/kernel"
+uboot_path="${resource_path}/u-boot"
+common_files="${resource_path}/openwrt-files/common-files"
+platform_files="${resource_path}/openwrt-files/platform-files"
+different_files="${resource_path}/openwrt-files/different-files"
 firmware_path="${common_files}/lib/firmware"
 model_conf="${common_files}/etc/model_database.conf"
 model_txt="${common_files}/etc/model_database.txt"
+[[ -d "${make_path}" ]] || mkdir -p ${make_path}
 
 # System operation environment
 arch_info="$(uname -m)"
@@ -1125,7 +1127,7 @@ loop_make() {
 
                     # Check disk space size
                     echo -ne "(${j}.${i}) Start making OpenWrt [\033[92m ${board} - ${kd}/${kernel} \033[0m]. "
-                    now_remaining_space="$(df -Tk ${current_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
+                    now_remaining_space="$(df -Tk ${make_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                     if [[ "${now_remaining_space}" -le "3" ]]; then
                         echo -e "${WARNING} Remaining space is less than 3G, exit this build."
                         break
@@ -1173,13 +1175,13 @@ download_kernel
 echo -e "${INFO} [ ${#make_openwrt[@]} ] lists of OpenWrt board: [ $(echo ${make_openwrt[@]} | xargs) ]"
 echo -e "${INFO} Kernel Repo: [ ${kernel_repo} ], Kernel Usage: [ ${kernel_usage} ] \n"
 # Show server start information
-echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${current_path}) \n"
+echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${make_path}) \n"
 
 # Loop to make OpenWrt firmware
 loop_make
 
 # Show server end information
-echo -e "${STEPS} Server space usage after compilation: \n$(df -hT ${current_path}) \n"
+echo -e "${STEPS} Server space usage after compilation: \n$(df -hT ${make_path}) \n"
 echo -e "${SUCCESS} All process completed successfully."
 # All process completed
 wait

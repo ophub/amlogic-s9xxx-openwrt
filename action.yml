@@ -45,11 +45,12 @@ runs:
     - shell: bash
       run: |
         cd ${GITHUB_ACTION_PATH}
-        echo -e "ophub package actions path: ${PWD}"
+        echo -e "ophub package actions path: [ ${PWD} ]"
 
         openwrt_filename="${{ inputs.openwrt_path }}"
+        openwrt_savefile="${openwrt_filename##*/}"
         openwrt_savepath="openwrt-armvirt"
-        openwrt_outpath="out"
+        openwrt_outpath="openwrt/out"
         echo -e "Get openwrt file input parameters: [ ${openwrt_filename} ]"
         [[ -z "${openwrt_filename}" ]] && echo -e "The [ openwrt_path ] variable must be specified." && exit 1
         [[ -d "${openwrt_savepath}" ]] || mkdir -p ${openwrt_savepath}
@@ -57,21 +58,17 @@ runs:
 
         if [[ "${openwrt_filename}" == http* ]]; then
             echo -e "Download file: [ ${openwrt_filename} ]"
-            openwrt_savefile="${openwrt_filename##*/}"
             curl -fsSL "${openwrt_filename}" -o "${openwrt_savepath}/${openwrt_savefile}"
         else
-            echo -e "Copy OpenWrt rootfs file: [ ${openwrt_filename} ]"
-            cp -vf ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
-
-            # If the .config file exists, save it to the out directory
-            config_file="${GITHUB_WORKSPACE}/${openwrt_filename%%/*}/.config"
-            [[ -s "${config_file}" ]] && {
-                echo -e "Copy OpenWrt .config file: [ ${config_file} ]"
-                cp -vf ${config_file} ${openwrt_outpath}/config 2>/dev/null
-            }
+            if [[ -z "$(ls ${openwrt_savepath}/${openwrt_savefile} 2>/dev/null)" ]]; then
+                echo -e "Copy OpenWrt rootfs file: [ ${openwrt_filename} ]"
+                cp -vf ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
+            else
+                echo -e "The [ ${openwrt_savepath}/${openwrt_savefile} ] file already exists, skipping."
+            fi
         fi
         sync
-        echo -e "About the ${openwrt_savepath} directory: \n$(ls -l ${openwrt_savepath} 2>/dev/null)"
+        echo -e "About the [ ${openwrt_savepath} ] directory: \n$(ls -l ${openwrt_savepath} 2>/dev/null)"
 
         cd ${GITHUB_ACTION_PATH}
         echo -e "Start to make openwrt..."
@@ -86,10 +83,9 @@ runs:
         sudo ./make ${make_command}
 
         cd ${GITHUB_ACTION_PATH}/${openwrt_outpath}
-        # Copy and save an original rootfs.tar.gz file
-        cp -f ../${openwrt_savepath}/*rootfs.tar.gz .
         # Generate a sha256sum verification file for each OpenWrt image file
         for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
+        rm -f *.sha.sha 2>/dev/null
         sync && sleep 3
 
         cd ${GITHUB_ACTION_PATH}

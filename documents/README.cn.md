@@ -12,7 +12,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
 - [目录](#目录)
   - [1. 注册自己的 Github 的账户](#1-注册自己的-github-的账户)
   - [2. 设置隐私变量 GITHUB\_TOKEN](#2-设置隐私变量-github_token)
-  - [3. Fork 仓库并设置 GH\_TOKEN](#3-fork-仓库并设置-gh_token)
+  - [3. Fork 仓库并设置工作流权限](#3-fork-仓库并设置工作流权限)
   - [4. 个性化 OpenWrt 固件定制文件说明](#4-个性化-openwrt-固件定制文件说明)
     - [4.1 .config 文件说明](#41-config-文件说明)
       - [4.1.1 首先让固件支持本国语言](#411-首先让固件支持本国语言)
@@ -74,15 +74,13 @@ Personal center: Settings > Developer settings > Personal access tokens > Genera
 <img src=https://user-images.githubusercontent.com/68696949/109418485-93514700-7a03-11eb-848d-36de784a4438.jpg width="300" />
 </div>
 
-## 3. Fork 仓库并设置 GH_TOKEN
+## 3. Fork 仓库并设置工作流权限
 
-现在可以 Fork 仓库了，打开仓库 https://github.com/ophub/amlogic-s9xxx-openwrt ，点击右上的 Fork 按钮，复制一份仓库代码到自己的账户下，稍等几秒钟，提示 Fork 完成后，到自己的账户下访问自己仓库里的 amlogic-s9xxx-openwrt 。在右上角的 `Settings` > `Secrets` > `Actions` > `New repostiory secret` ( Name: `GH_TOKEN`, Value: `填写刚才GITHUB_TOKEN的值` )，保存。并在左侧导航栏的 `Actions` > `General` > `Workflow permissions` 下选择 `Read and write permissions` 并保存。图示如下：
+现在可以 Fork 仓库了，打开仓库 https://github.com/ophub/amlogic-s9xxx-openwrt ，点击右上的 Fork 按钮，复制一份仓库代码到自己的账户下，稍等几秒钟，提示 Fork 完成后，到自己的账户下访问自己仓库里的 amlogic-s9xxx-openwrt 。在右上角的 `Settings` > `Secrets` > `Actions` > `General` > `Workflow permissions` 下选择 `Read and write permissions` 并保存。图示如下：
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/163203032-f044c63f-d113-4076-bf94-41f86c7dd0ce.png width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418573-15417000-7a04-11eb-97a7-93973d7479c2.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/167579714-fdb331f3-5198-406f-b850-13da0024b245.png width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/167585338-841d3b05-8d98-4d73-ba72-475aad4a95a9.png width="300" />
 </div>
 
@@ -263,7 +261,7 @@ Github Actions 编译空间默认是 84G，除去系统和必要软件包外，�
     tag: openwrt_amlogic_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
     artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
     allowUpdates: true
-    token: ${{ secrets.GH_TOKEN }}
+    token: ${{ secrets.GITHUB_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information

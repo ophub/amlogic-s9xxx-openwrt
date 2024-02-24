@@ -12,7 +12,7 @@ Github Actions is a service launched by Microsoft. It provides a very well-confi
 - [Table of Contents](#table-of-contents)
   - [1. Register Your Own Github Account](#1-register-your-own-github-account)
   - [2. Set Privacy Variable GITHUB\_TOKEN](#2-set-privacy-variable-github_token)
-  - [3. Fork Repository and Set GH\_TOKEN](#3-fork-repository-and-set-gh_token)
+  - [3. Fork the repository and set Workflow permissions](#3-fork-the-repository-and-set-workflow-permissions)
   - [4. Personalized OpenWrt Firmware Customization File Description](#4-personalized-openwrt-firmware-customization-file-description)
     - [4.1 .config File Description](#41-config-file-description)
       - [4.1.1 First, Let the Firmware Support the National Language](#411-first-let-the-firmware-support-the-national-language)
@@ -74,15 +74,13 @@ Personal center: Settings > Developer settings > Personal access tokens > Genera
 <img src=https://user-images.githubusercontent.com/68696949/109418485-93514700-7a03-11eb-848d-36de784a4438.jpg width="300" />
 </div>
 
-## 3. Fork Repository and Set GH_TOKEN
+## 3. Fork the repository and set Workflow permissions
 
-Now you can Fork the repository. Open the repository https://github.com/ophub/amlogic-s9xxx-openwrt, click the Fork button in the upper right, and copy a copy of the repository code to your own account. Wait a few seconds, after the Fork is completed, visit amlogic-s9xxx-openwrt in your own repository under your own account. In the upper right corner `Settings` > `Secrets` > `Actions` > `New repository secret` ( Name: `GH_TOKEN`, Value: `Enter the GITHUB_TOKEN value you just got` ), save. And under `Actions` > `General` > `Workflow permissions` in the left navigation bar, select `Read and write permissions` and save. The illustration is as follows:
+Now you can Fork the repository. Open the repository https://github.com/ophub/amlogic-s9xxx-openwrt, click the Fork button in the upper right, and copy a copy of the repository code to your own account. Wait a few seconds, after the Fork is completed, visit amlogic-s9xxx-openwrt in your own repository under your own account. In the upper right corner `Settings` > `Actions` > `General` > `Workflow permissions` in the left navigation bar, select `Read and write permissions` and save. The illustration is as follows:
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/163203032-f044c63f-d113-4076-bf94-41f86c7dd0ce.png width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418573-15417000-7a04-11eb-97a7-93973d7479c2.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/167579714-fdb331f3-5198-406f-b850-13da0024b245.png width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/167585338-841d3b05-8d98-4d73-ba72-475aad4a95a9.png width="300" />
 </div>
 
@@ -265,7 +263,7 @@ Currently, the longest storage period in Actions on github is 90 days, Releases 
     tag: openwrt_amlogic_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
     artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
     allowUpdates: true
-    token: ${{ secrets.GH_TOKEN }}
+    token: ${{ secrets.GITHUB_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information

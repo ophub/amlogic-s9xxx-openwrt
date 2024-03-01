@@ -86,7 +86,6 @@ CONFIG_DEFAULT_iptables=y
 CONFIG_DEFAULT_iptables-mod-extra=y
 CONFIG_DEFAULT_iptables-mod-tproxy=y
 CONFIG_DEFAULT_kmod-amazon-ena=y
-CONFIG_DEFAULT_kmod-crypto-sha512=y
 CONFIG_DEFAULT_kmod-dwmac-imx=y
 CONFIG_DEFAULT_kmod-e1000e=y
 CONFIG_DEFAULT_kmod-fsl-dpaa2-net=y
@@ -1857,15 +1856,14 @@ CONFIG_PACKAGE_ath9k-htc-firmware=y
 # CONFIG_PACKAGE_bnx2x-firmware is not set
 CONFIG_PACKAGE_brcmfmac-firmware-4329-sdio=y
 # CONFIG_PACKAGE_brcmfmac-firmware-4339-sdio is not set
-CONFIG_PACKAGE_brcmfmac-firmware-43430-sdio-rpi-3b=y
-CONFIG_PACKAGE_brcmfmac-firmware-43430-sdio-rpi-zero-w=y
 CONFIG_PACKAGE_brcmfmac-firmware-43430a0-sdio=y
-CONFIG_PACKAGE_brcmfmac-firmware-43455-sdio-rpi-3b-plus=y
-CONFIG_PACKAGE_brcmfmac-firmware-43455-sdio-rpi-4b=y
 # CONFIG_PACKAGE_brcmfmac-firmware-43602a1-pcie is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-4366b1-pcie is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-4366c0-pcie is not set
 CONFIG_PACKAGE_brcmfmac-firmware-usb=y
+# CONFIG_PACKAGE_brcmfmac-nvram-43430-sdio is not set
+# CONFIG_PACKAGE_brcmfmac-nvram-43455-sdio is not set
+# CONFIG_PACKAGE_brcmfmac-nvram-4356-sdio is not set
 # CONFIG_PACKAGE_brcmsmac-firmware is not set
 CONFIG_PACKAGE_carl9170-firmware=y
 # CONFIG_PACKAGE_cypress-firmware-43012-sdio is not set
@@ -1873,14 +1871,21 @@ CONFIG_PACKAGE_carl9170-firmware=y
 # CONFIG_PACKAGE_cypress-firmware-43362-sdio is not set
 CONFIG_PACKAGE_cypress-firmware-4339-sdio=y
 # CONFIG_PACKAGE_cypress-firmware-43430-sdio is not set
+# CONFIG_PACKAGE_cypress-firmware-43439-sdio is not set
 # CONFIG_PACKAGE_cypress-firmware-43455-sdio is not set
 # CONFIG_PACKAGE_cypress-firmware-4354-sdio is not set
 # CONFIG_PACKAGE_cypress-firmware-4356-pcie is not set
 # CONFIG_PACKAGE_cypress-firmware-4356-sdio is not set
 # CONFIG_PACKAGE_cypress-firmware-43570-pcie is not set
+# CONFIG_PACKAGE_cypress-firmware-4373-pcie is not set
 # CONFIG_PACKAGE_cypress-firmware-4373-sdio is not set
 # CONFIG_PACKAGE_cypress-firmware-4373-usb is not set
 # CONFIG_PACKAGE_cypress-firmware-54591-pcie is not set
+# CONFIG_PACKAGE_cypress-firmware-54591-sdio is not set
+# CONFIG_PACKAGE_cypress-firmware-55560-pcie is not set
+# CONFIG_PACKAGE_cypress-firmware-55572-pcie is not set
+# CONFIG_PACKAGE_cypress-firmware-55572-sdio is not set
+# CONFIG_PACKAGE_cypress-nvram-4339-sdio is not set
 # CONFIG_PACKAGE_e100-firmware is not set
 CONFIG_PACKAGE_edgeport-firmware=y
 # CONFIG_PACKAGE_eip197-mini-firmware is not set
@@ -1932,7 +1937,6 @@ CONFIG_PACKAGE_mt7601u-firmware=y
 # CONFIG_PACKAGE_p54-pci-firmware is not set
 # CONFIG_PACKAGE_p54-spi-firmware is not set
 CONFIG_PACKAGE_p54-usb-firmware=y
-# CONFIG_PACKAGE_panther-x2-firmware is not set
 # CONFIG_PACKAGE_qed-firmware is not set
 # CONFIG_PACKAGE_qtn-firmware is not set
 # CONFIG_PACKAGE_qtn-proto is not set
@@ -1963,7 +1967,6 @@ CONFIG_PACKAGE_p54-usb-firmware=y
 CONFIG_PACKAGE_r8152-firmware=y
 # CONFIG_PACKAGE_r8169-firmware is not set
 # CONFIG_PACKAGE_radeon-firmware is not set
-# CONFIG_PACKAGE_rongpin-king3399-firmware is not set
 CONFIG_PACKAGE_rs9113-firmware=y
 # CONFIG_PACKAGE_rt2800-pci-firmware is not set
 CONFIG_PACKAGE_rt2800-usb-firmware=y
@@ -1989,7 +1992,6 @@ CONFIG_PACKAGE_rtl8821ae-firmware=y
 # CONFIG_PACKAGE_rtl8852ae-firmware is not set
 # CONFIG_PACKAGE_rtl8852be-firmware is not set
 # CONFIG_PACKAGE_rtl8852ce-firmware is not set
-# CONFIG_PACKAGE_station-p2-firmware is not set
 # CONFIG_PACKAGE_ti-3410-firmware is not set
 # CONFIG_PACKAGE_ti-5052-firmware is not set
 # CONFIG_PACKAGE_wil6210-firmware is not set
@@ -2848,8 +2850,8 @@ CONFIG_PACKAGE_kmod-usbmon=y
 # CONFIG_PACKAGE_kmod-fb-sys-fops is not set
 # CONFIG_PACKAGE_kmod-fb-sys-ram is not set
 # CONFIG_PACKAGE_kmod-multimedia-input is not set
-# CONFIG_PACKAGE_kmod-v4l2loopback is not set
 # CONFIG_PACKAGE_kmod-video-core is not set
+# CONFIG_PACKAGE_kmod-v4l2loopback is not set
 # end of Video Support
 
 #
@@ -4479,6 +4481,8 @@ CONFIG_PACKAGE_libiconv-full=y
 # CONFIG_PACKAGE_libidn is not set
 # CONFIG_PACKAGE_libidn2 is not set
 # CONFIG_PACKAGE_libiio is not set
+CONFIG_PACKAGE_libinih=y
+# CONFIG_PACKAGE_libinireader is not set
 # CONFIG_PACKAGE_libinotifytools is not set
 # CONFIG_PACKAGE_libinput is not set
 # CONFIG_PACKAGE_libintl-full is not set
@@ -4708,7 +4712,7 @@ CONFIG_PACKAGE_libuclient=y
 # CONFIG_PACKAGE_libunwind is not set
 # CONFIG_PACKAGE_libupnp is not set
 # CONFIG_PACKAGE_libupnpp is not set
-# CONFIG_PACKAGE_liburcu is not set
+CONFIG_PACKAGE_liburcu=y
 CONFIG_PACKAGE_liburing=y
 CONFIG_PACKAGE_libusb-1.0=y
 CONFIG_PACKAGE_libusb-compat=y

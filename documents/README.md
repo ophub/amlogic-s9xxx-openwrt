@@ -37,7 +37,7 @@ Github Actions is a service launched by Microsoft. It provides a very well-confi
   - [8. Install OpenWrt](#8-install-openwrt)
     - [8.1 Integrating luci-app-amlogic Operation Panel at Compilation Time](#81-integrating-luci-app-amlogic-operation-panel-at-compilation-time)
     - [8.2 Install Using the Operation Panel](#82-install-using-the-operation-panel)
-  - [9. Update OpenWrt](#9-update-openwrt)
+  - [9. Update OpenWrt system or kernel](#9-update-openwrt-system-or-kernel)
   - [10. Advanced Tutorial on Personalized Firmware Customization](#10-advanced-tutorial-on-personalized-firmware-customization)
     - [10.1 Getting to Know the Complete .config File](#101-getting-to-know-the-complete-config-file)
     - [10.2 Understanding Workflow Files](#102-understanding-workflow-files)
@@ -334,9 +334,28 @@ For more instructions on the plugin, see: [https://github.com/ophub/luci-app-aml
 
 2. For the `Amlogic` and `Allwinner` platforms, use tools like [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/) to write the firmware into the USB, then insert the USB with the firmware into the box. Access the default IP of OpenWrt from the browser: 192.168.1.1 → `Log in to OpenWrt using the default account` → `System Menu` → `Amlogic Treasure Box` → `Install OpenWrt`.
 
-## 9. Update OpenWrt
+## 9. Update OpenWrt system or kernel
 
 Access the OpenWrt system from the browser, in the `System` menu, choose `Amlogic Treasure Box`, choose `Upgrade OpenWrt Firmware` or `Change OpenWrt Kernel` feature to upgrade. (You can upgrade from a higher version like 5.15.50 to a lower version like 5.10.125, or you can upgrade from a lower version like 5.10.125 to a higher version like 5.15.50. The level of the kernel version number does not affect the upgrade, you can freely upgrade/downgrade).
+
+[SOS]: In case of incomplete kernel updates due to special reasons, causing the system to be unable to boot from eMMC/NVMe/sdX, you can boot from other disks such as USB into any version of the OpenWrt system. Then, by running the `openwer-kernel -s` command, you can update the system kernel on the USB to eMMC/NVMe/sdX, achieving the purpose of rescue. When the disk parameter is not specified, it defaults to recovering the kernel in eMMC/NVMe/sdX from the USB device. If there are multiple disks in the device, you can specify the exact disk name that needs to be recovered. Examples are as follows:
+
+```shell
+# To recover the kernel in eMMC
+openwer-kernel -s mmcblk1
+
+# To recover the kernel in NVMe
+openwer-kernel -s nvme0n1
+
+# To recover the kernel in a removable storage device
+openwer-kernel -s sda
+
+# Disk names can be abbreviated as mmcblk0/mmcblk1/nvme0n1/nvme1n1/sda/sdb/sdc, etc., or use the full name, such as /dev/sda
+openwer-kernel -s /dev/sda
+
+# When the device has only one built-in storage among eMMC/NVMe/sdX, the disk name parameter can be omitted
+openwer-kernel -s
+```
 
 ## 10. Advanced Tutorial on Personalized Firmware Customization
 

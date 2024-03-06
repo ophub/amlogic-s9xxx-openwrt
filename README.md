@@ -48,13 +48,13 @@ Choose the OpenWrt firmware corresponding to your TV box model, and refer to the
 
 2. For the `Amlogic` and `Allwinner` platforms, use tools like [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/) to write the firmware to USB, then insert the USB with the written firmware into the box. From the browser, access the default IP of OpenWrt: 192.168.1.1 → `Log in to OpenWrt with the default account` → `System Menu` → `Amlogic Treasure Box` → `Install OpenWrt`, select your box from the dropdown list of supported devices, click `Install OpenWrt` button to install.
 
-- ### Update OpenWrt
+- ### Update OpenWrt system or kernel
 
 From your browser, access OpenWrt's IP, e.g.: 192.168.1.1 → `Log in to OpenWrt with your account` → `System Menu` → `Amlogic Treasure Box` → `Manually Upload Update / Online Download Update`
 
 If you select `Manually Upload Update` [OpenWrt Firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), you can upload the compressed package of the compiled OpenWrt firmware, such as openwrt_xxx_k5.15.50.img.gz (recommended to upload the compressed package, the system will automatically decompress. If you upload the decompressed xxx.img format file, it may fail due to the large file size). After the upload is complete, the interface will display the operation button of `Update Firmware`, click to update.
 
-If you select `Manually Upload Update` [OpenWrt Kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable), you can upload the three kernel files: `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` (other kernel files are not needed, if uploaded simultaneously, it does not affect the update, the system can accurately identify the needed kernel files). After the upload is complete, the interface will display the operation button of `Update Kernel`, click to update.
+If you select `Manually Upload Update` [OpenWrt Kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable), you can upload the three kernel files: `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` (other kernel files are not needed, if uploaded simultaneously, it does not affect the update, the system can accurately identify the needed kernel files). After the upload is complete, the interface will display the operation button of `Update Kernel`, click to update. When a kernel update failure causes the system to be unbootable, you can use the `openwrt-kernel -s` command for kernel recovery. For the method, see [Kernel Recovery](documents/README.md#9-update-openwrt-system-or-kernel).
 
 If you select `Online Download Update` for OpenWrt firmware or kernel, it will be downloaded according to the `firmware download address` and `kernel download address` in the `Plugin Settings`. You can customize the download source. For specific operation methods, please refer to the compilation and usage instructions of [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic).
 

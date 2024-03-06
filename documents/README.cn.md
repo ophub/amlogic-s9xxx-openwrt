@@ -37,7 +37,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
   - [8. 安装 OpenWrt](#8-安装-openwrt)
     - [8.1 在编译时集成 luci-app-amlogic 操作面板](#81-在编译时集成-luci-app-amlogic-操作面板)
     - [8.2 使用操作面板安装](#82-使用操作面板安装)
-  - [9. 升级 OpenWrt](#9-升级-openwrt)
+  - [9. 升级 OpenWrt 系统或内核](#9-升级-openwrt-系统或内核)
   - [10. 个性化固件定制晋级教程](#10-个性化固件定制晋级教程)
     - [10.1 认识完整的 .config 文件](#101-认识完整的-config-文件)
     - [10.2 认识 workflow 文件](#102-认识-workflow-文件)
@@ -330,9 +330,28 @@ git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 
 2. `Amlogic` 和 `Allwinner` 平台，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入 USB 里，然后把写好固件的 USB 插入盒子。从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` 。
 
-## 9. 升级 OpenWrt
+## 9. 升级 OpenWrt 系统或内核
 
 从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 或 `更换 OpenWrt 内核` 功能进行升级。（你可以从高版本如 5.15.50 升级到低版本如 5.10.125 ，也可以从低版本如 5.10.125 升级到高版本如 5.15.50 。内核版本号的高低不影响升级，可自由升级/降级）。
+
+[SOS]：因特殊原因导致的内核更新不完整等问题，造成系统无法从 eMMC/NVMe/sdX 启动时，可以从 USB 等其他磁盘启动任意内核版本的 OpenWrt 系统，然后运行 `openwer-kernel -s` 命令可以把 USB 中的系统内核更新至 eMMC/NVMe/sdX 中，实现救援的目的。不指定磁盘参数时，默认将从 USB 设备恢复 eMMC/NVMe/sdX 中的内核，如果设备有多个磁盘，可以准确指定需要恢复的磁盘名称，举例如下：
+
+```shell
+# 恢复 eMMC 中的内核
+openwer-kernel -s mmcblk1
+
+# 恢复 NVMe 中的内核
+openwer-kernel -s nvme0n1
+
+# 恢复移动存储设备中的内核
+openwer-kernel -s sda
+
+# 磁盘名称可以简写为 mmcblk0/mmcblk1/nvme0n1/nvme1n1/sda/sdb/sdc 等，也可以使用完整的名称，如 /dev/sda
+openwer-kernel -s /dev/sda
+
+# 当设备只有 eMMC/NVMe/sdX 中的一个内置存储时，可以省略磁盘名称参数
+openwer-kernel -s
+```
 
 ## 10. 个性化固件定制晋级教程
 

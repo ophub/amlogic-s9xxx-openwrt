@@ -334,7 +334,7 @@ git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 
 从浏览器访问 openwrt 系统，在 `系统` 菜单下，选择 `晶晨宝盒`，选择 `升级 OpenWrt 固件` 或 `更换 OpenWrt 内核` 功能进行升级。（你可以从高版本如 5.15.50 升级到低版本如 5.10.125 ，也可以从低版本如 5.10.125 升级到高版本如 5.15.50 。内核版本号的高低不影响升级，可自由升级/降级）。
 
-[SOS]：因特殊原因导致的内核更新不完整等问题，造成系统无法从 eMMC/NVMe/sdX 启动时，可以从 USB 等其他磁盘启动任意内核版本的 OpenWrt 系统，然后运行 `openwer-kernel -s` 命令可以把 USB 中的系统内核更新至 eMMC/NVMe/sdX 中，实现救援的目的。不指定磁盘参数时，默认将从 USB 设备恢复 eMMC/NVMe/sdX 中的内核，如果设备有多个磁盘，可以准确指定需要恢复的磁盘名称，举例如下：
+[SOS]：因特殊原因导致的内核更新不完整等问题，造成系统无法从 eMMC/NVMe/sdX 启动时，可以从 USB 等其他磁盘启动任意内核版本的 OpenWrt 系统，在 `系统菜单` > `晶晨宝盒` > `在线下载更新` > `救援内核` 里进行内核救援，恢复原系统的正常使用；也可以在 `TTYD 终端` 里使用 `openwer-kernel -s` 命令进行内核救援。不指定磁盘参数时，默认将从 USB 设备恢复 eMMC/NVMe/sdX 中的内核，如果设备有多个磁盘，可以准确指定需要恢复的磁盘名称，举例如下：
 
 ```shell
 # 恢复 eMMC 中的内核

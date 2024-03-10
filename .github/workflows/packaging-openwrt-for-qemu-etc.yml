@@ -56,10 +56,12 @@ on:
         options:
           - 5.4.1_5.10.1
           - 5.15.1_6.1.1
+          - 6.1.1_6.6.1
           - 5.4.1
           - 5.10.1
           - 5.15.1
           - 6.1.1
+          - 6.6.1
       kernel_repo:
         description: "Set the kernel repository"
         required: false

@@ -293,6 +293,8 @@ jobs:
           echo "build_tag=OpenWrt_${TAGS_NAME}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
           echo -e "REPO_URL: [ ${REPO_URL} ]\nREPO_BRANCH: [ ${REPO_BRANCH} ]\nTAGS_NAME: [ ${TAGS_NAME} ]"
           df -hT ${PWD}
+          echo "REPO_URL=${REPO_URL}" >> ${GITHUB_OUTPUT}
+          echo "TAGS_NAME=${TAGS_NAME}" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Load custom feeds
@@ -394,5 +396,7 @@ jobs:
             - Default WIFI password: none
             ### Install to EMMC
             - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
+            ### OpenWrt source code
+            - [${{ steps.codes.outputs.TAGS_NAME }}](${{ steps.codes.outputs.REPO_URL }})
             ### OpenWrt Image Verification
             - sha256sum

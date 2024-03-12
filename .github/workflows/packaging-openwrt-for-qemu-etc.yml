@@ -221,5 +221,7 @@ jobs:
             - Default WIFI password: none
             ### Install to EMMC
             - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
+            ### OpenWrt source code
+            - [lede](https://github.com/coolsnowwolf/lede)
             ### OpenWrt Image Verification
             - sha256sum

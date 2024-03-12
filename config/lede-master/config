@@ -6302,6 +6302,7 @@ CONFIG_PACKAGE_iftop=y
 CONFIG_PACKAGE_iperf3=y
 # CONFIG_PACKAGE_iperf3-ssl is not set
 CONFIG_PACKAGE_ipip=y
+# CONFIG_PACKAGE_ipip6 is not set
 CONFIG_PACKAGE_ipset=y
 # CONFIG_PACKAGE_ipset-dns is not set
 # CONFIG_PACKAGE_iptraf-ng is not set

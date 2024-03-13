@@ -131,7 +131,6 @@ CONFIG_PACKAGE_luci-theme-material=y
 # CONFIG_PACKAGE_luci-i18n-base-da is not set
 # CONFIG_PACKAGE_luci-i18n-base-de is not set
 # CONFIG_PACKAGE_luci-i18n-base-el is not set
-CONFIG_PACKAGE_luci-i18n-base-en=y
 # CONFIG_PACKAGE_luci-i18n-base-es is not set
 # CONFIG_PACKAGE_luci-i18n-base-fi is not set
 # CONFIG_PACKAGE_luci-i18n-base-fr is not set
@@ -165,7 +164,6 @@ CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-ddns-da is not set
 # CONFIG_PACKAGE_luci-i18n-ddns-de is not set
 # CONFIG_PACKAGE_luci-i18n-ddns-el is not set
-CONFIG_PACKAGE_luci-i18n-ddns-en=y
 # CONFIG_PACKAGE_luci-i18n-ddns-es is not set
 # CONFIG_PACKAGE_luci-i18n-ddns-fi is not set
 # CONFIG_PACKAGE_luci-i18n-ddns-fr is not set
@@ -198,7 +196,6 @@ CONFIG_PACKAGE_luci-i18n-ddns-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-dockerman-da is not set
 # CONFIG_PACKAGE_luci-i18n-dockerman-de is not set
 # CONFIG_PACKAGE_luci-i18n-dockerman-el is not set
-CONFIG_PACKAGE_luci-i18n-dockerman-en=y
 # CONFIG_PACKAGE_luci-i18n-dockerman-es is not set
 # CONFIG_PACKAGE_luci-i18n-dockerman-fa is not set
 # CONFIG_PACKAGE_luci-i18n-dockerman-fi is not set
@@ -234,7 +231,6 @@ CONFIG_PACKAGE_luci-i18n-dockerman-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-firewall-da is not set
 # CONFIG_PACKAGE_luci-i18n-firewall-de is not set
 # CONFIG_PACKAGE_luci-i18n-firewall-el is not set
-CONFIG_PACKAGE_luci-i18n-firewall-en=y
 # CONFIG_PACKAGE_luci-i18n-firewall-es is not set
 # CONFIG_PACKAGE_luci-i18n-firewall-fa is not set
 # CONFIG_PACKAGE_luci-i18n-firewall-fi is not set
@@ -271,7 +267,6 @@ CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-frpc-da is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-de is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-el is not set
-CONFIG_PACKAGE_luci-i18n-frpc-en=y
 # CONFIG_PACKAGE_luci-i18n-frpc-es is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-fi is not set
 # CONFIG_PACKAGE_luci-i18n-frpc-fr is not set
@@ -304,7 +299,6 @@ CONFIG_PACKAGE_luci-i18n-frpc-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-frps-da is not set
 # CONFIG_PACKAGE_luci-i18n-frps-de is not set
 # CONFIG_PACKAGE_luci-i18n-frps-el is not set
-CONFIG_PACKAGE_luci-i18n-frps-en=y
 # CONFIG_PACKAGE_luci-i18n-frps-es is not set
 # CONFIG_PACKAGE_luci-i18n-frps-fi is not set
 # CONFIG_PACKAGE_luci-i18n-frps-fr is not set
@@ -337,7 +331,6 @@ CONFIG_PACKAGE_luci-i18n-frps-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-opkg-da is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-de is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-el is not set
-CONFIG_PACKAGE_luci-i18n-opkg-en=y
 # CONFIG_PACKAGE_luci-i18n-opkg-es is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-fi is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-fr is not set
@@ -370,7 +363,6 @@ CONFIG_PACKAGE_luci-i18n-opkg-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-samba4-da is not set
 # CONFIG_PACKAGE_luci-i18n-samba4-de is not set
 # CONFIG_PACKAGE_luci-i18n-samba4-el is not set
-# CONFIG_PACKAGE_luci-i18n-samba4-en is not set
 # CONFIG_PACKAGE_luci-i18n-samba4-es is not set
 # CONFIG_PACKAGE_luci-i18n-samba4-fi is not set
 # CONFIG_PACKAGE_luci-i18n-samba4-fr is not set
@@ -405,7 +397,6 @@ CONFIG_PACKAGE_luci-i18n-opkg-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-transmission-da is not set
 # CONFIG_PACKAGE_luci-i18n-transmission-de is not set
 # CONFIG_PACKAGE_luci-i18n-transmission-el is not set
-CONFIG_PACKAGE_luci-i18n-transmission-en=y
 # CONFIG_PACKAGE_luci-i18n-transmission-es is not set
 # CONFIG_PACKAGE_luci-i18n-transmission-fi is not set
 # CONFIG_PACKAGE_luci-i18n-transmission-fr is not set
@@ -438,7 +429,6 @@ CONFIG_PACKAGE_luci-i18n-transmission-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-ttyd-da is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-de is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-el is not set
-CONFIG_PACKAGE_luci-i18n-ttyd-en=y
 # CONFIG_PACKAGE_luci-i18n-ttyd-es is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-fi is not set
 # CONFIG_PACKAGE_luci-i18n-ttyd-fr is not set
@@ -471,7 +461,6 @@ CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-upnp-da is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-de is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-el is not set
-CONFIG_PACKAGE_luci-i18n-upnp-en=y
 # CONFIG_PACKAGE_luci-i18n-upnp-es is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-fi is not set
 # CONFIG_PACKAGE_luci-i18n-upnp-fr is not set
@@ -504,7 +493,6 @@ CONFIG_PACKAGE_luci-i18n-upnp-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-wol-da is not set
 # CONFIG_PACKAGE_luci-i18n-wol-de is not set
 # CONFIG_PACKAGE_luci-i18n-wol-el is not set
-CONFIG_PACKAGE_luci-i18n-wol-en=y
 # CONFIG_PACKAGE_luci-i18n-wol-es is not set
 # CONFIG_PACKAGE_luci-i18n-wol-fi is not set
 # CONFIG_PACKAGE_luci-i18n-wol-fr is not set

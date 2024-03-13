@@ -38,11 +38,10 @@
 #
 # Set default parameters
 make_path="${PWD}"
-openwrt_dir="openwrt/imagebuilder"
+openwrt_dir="imagebuilder"
 imagebuilder_path="${make_path}/${openwrt_dir}"
 custom_files_path="${make_path}/config/imagebuilder/files"
 custom_config_file="${make_path}/config/imagebuilder/config"
-[[ -d "${imagebuilder_path}" ]] || mkdir -p ${imagebuilder_path}
 
 # Set default parameters
 STEPS="[\033[95m STEPS \033[0m]"
@@ -85,7 +84,7 @@ download_imagebuilder() {
     mv -f *-imagebuilder-* ${openwrt_dir}
 
     sync && sleep 3
-    echo -e "${INFO} [ ${make_path} ] directory status: $(ls . -l 2>/dev/null)"
+    echo -e "${INFO} [ ${make_path} ] directory status: $(ls . -al 2>/dev/null)"
 }
 
 # Adjust related files in the ImageBuilder directory
@@ -102,6 +101,7 @@ adjust_settings() {
         sed -i "s|CONFIG_TARGET_ROOTFS_SQUASHFS=.*|# CONFIG_TARGET_ROOTFS_SQUASHFS is not set|g" .config
         sed -i "s|CONFIG_TARGET_IMAGES_GZIP=.*|# CONFIG_TARGET_IMAGES_GZIP is not set|g" .config
     else
+        echo -e "${INFO} [ ${imagebuilder_path} ] directory status: $(ls . -al 2>/dev/null)"
         error_msg "There is no .config file in the [ ${download_file} ]"
     fi
 
@@ -142,7 +142,7 @@ custom_packages() {
     # ......
 
     sync && sleep 3
-    echo -e "${INFO} [ packages ] directory status: $(ls packages -l 2>/dev/null)"
+    echo -e "${INFO} [ packages ] directory status: $(ls packages -al 2>/dev/null)"
 }
 
 # Add custom packages, lib, theme, app and i18n, etc.
@@ -172,7 +172,7 @@ custom_files() {
         cp -rf ${custom_files_path}/* files
 
         sync && sleep 3
-        echo -e "${INFO} [ files ] directory status: $(ls files -l 2>/dev/null)"
+        echo -e "${INFO} [ files ] directory status: $(ls files -al 2>/dev/null)"
     else
         echo -e "${INFO} No customized files were added."
     fi
@@ -190,13 +190,13 @@ rebuild_firmware() {
         coreutils-truncate curl docker docker-compose dockerd dosfstools dumpe2fs e2freefrag e2fsprogs \
         exfat-mkfs f2fs-tools f2fsck fdisk gawk getopt git gzip hostapd-common iconv iw iwinfo jq \
         jshn kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 libjson-script liblucihttp \
-        liblucihttp-lua libnetwork losetup lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted \
+        liblucihttp-lua losetup lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted \
         perl-http-date perlbase-file perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 \
         pigz ppp ppp-mod-pppoe proto-bonding pv rename resize2fs runc tar tini ttyd tune2fs \
         uclient-fetch uhttpd uhttpd-mod-ubus unzip uqmi usb-modeswitch uuidgen wget-ssl whereis \
         which wpad-basic wwan xfs-fsck xfs-mkfs xz xz-utils ziptool zoneinfo-asia zoneinfo-core zstd \
         \
-        luci luci-base luci-compat luci-i18n-base-en luci-i18n-base-zh-cn luci-lib-base luci-lib-docker \
+        luci luci-base luci-compat luci-i18n-base-zh-cn luci-lib-base luci-lib-docker \
         luci-lib-ip luci-lib-ipkg luci-lib-jsonc luci-lib-nixio luci-mod-admin-full luci-mod-network \
         luci-mod-status luci-mod-system luci-proto-3g luci-proto-bonding luci-proto-ipip luci-proto-ipv6 \
         luci-proto-ncm luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay \
@@ -210,7 +210,7 @@ rebuild_firmware() {
     make image PROFILE="${target_profile}" PACKAGES="${my_packages}" FILES="files"
 
     sync && sleep 3
-    echo -e "${INFO} [ ${openwrt_dir}/bin/targets/*/* ] directory status: $(ls bin/targets/*/* -l 2>/dev/null)"
+    echo -e "${INFO} [ ${openwrt_dir}/bin/targets/*/* ] directory status: $(ls bin/targets/*/* -al 2>/dev/null)"
     echo -e "${SUCCESS} The rebuild is successful, the current path: [ ${PWD} ]"
 }
 
@@ -223,7 +223,7 @@ op_sourse="${1%:*}"
 op_branch="${1#*:}"
 echo -e "${INFO} Rebuild path: [ ${PWD} ]"
 echo -e "${INFO} Rebuild Source: [ ${op_sourse} ], Branch: [ ${op_branch} ]"
-echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${imagebuilder_path}) \n"
+echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${make_path}) \n"
 #
 # Perform related operations
 download_imagebuilder
@@ -234,6 +234,6 @@ custom_files
 rebuild_firmware
 #
 # Show server end information
-echo -e "Server space usage after compilation: \n$(df -hT ${imagebuilder_path}) \n"
+echo -e "Server space usage after compilation: \n$(df -hT ${make_path}) \n"
 # All process completed
 wait

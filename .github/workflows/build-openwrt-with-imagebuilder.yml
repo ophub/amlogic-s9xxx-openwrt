@@ -15,14 +15,11 @@ on:
       releases_branch:
         description: "Select the releases branch"
         required: false
-        default: "openwrt:22.03.5"
+        default: "openwrt:23.05.2"
         type: choice
         options:
-          - openwrt:22.03.5
-          - openwrt:21.02.7
-          - openwrt:19.07.10
-          - openwrt:18.06.9
-          - immortalwrt:21.02.7
+          - openwrt:23.05.2
+          - immortalwrt:23.05.1
       openwrt_board:
         description: "Select device board"
         required: false
@@ -260,11 +257,6 @@ jobs:
         id: imagebuilder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          openwrt_makepath="/builder/openwrt"
-          [[ -d "${openwrt_makepath}" ]] || mkdir -p "${openwrt_makepath}"
-          ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
-          ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
-
           RELEASES_BRANCH="${{ inputs.releases_branch }}"
           chmod +x ${IMAGEBUILDER_SH}
           ${IMAGEBUILDER_SH} ${RELEASES_BRANCH}
@@ -274,15 +266,18 @@ jobs:
       - name: Clear server space
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         run: |
-          cd openwrt/imagebuilder
+          cd imagebuilder
           rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+
+          [[ -d "/builder/openwrt" ]] || mkdir -p /builder/openwrt
+          ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
           df -hT ${PWD}
 
       - name: Packaging OpenWrt
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
-          openwrt_path: openwrt/imagebuilder/bin/targets/*/*/*rootfs.tar.gz
+          openwrt_path: imagebuilder/bin/targets/*/*/*rootfs.tar.gz
           openwrt_board: ${{ inputs.openwrt_board }}
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}

@@ -84,7 +84,7 @@ download_imagebuilder() {
     mv -f *-imagebuilder-* ${openwrt_dir}
 
     sync && sleep 3
-    echo -e "${INFO} [ ${make_path} ] directory status: $(ls . -al 2>/dev/null)"
+    echo -e "${INFO} [ ${make_path} ] directory status: $(ls -al 2>/dev/null)"
 }
 
 # Adjust related files in the ImageBuilder directory
@@ -101,7 +101,7 @@ adjust_settings() {
         sed -i "s|CONFIG_TARGET_ROOTFS_SQUASHFS=.*|# CONFIG_TARGET_ROOTFS_SQUASHFS is not set|g" .config
         sed -i "s|CONFIG_TARGET_IMAGES_GZIP=.*|# CONFIG_TARGET_IMAGES_GZIP is not set|g" .config
     else
-        echo -e "${INFO} [ ${imagebuilder_path} ] directory status: $(ls . -al 2>/dev/null)"
+        echo -e "${INFO} [ ${imagebuilder_path} ] directory status: $(ls -al 2>/dev/null)"
         error_msg "There is no .config file in the [ ${download_file} ]"
     fi
 
@@ -109,7 +109,7 @@ adjust_settings() {
     # ......
 
     sync && sleep 3
-    echo -e "${INFO} [ openwrt ] directory status: $(ls -al 2>/dev/null)"
+    echo -e "${INFO} [ ${imagebuilder_path} ] directory status: $(ls -al 2>/dev/null)"
 }
 
 # Add custom packages
@@ -142,7 +142,7 @@ custom_packages() {
     # ......
 
     sync && sleep 3
-    echo -e "${INFO} [ packages ] directory status: $(ls packages -al 2>/dev/null)"
+    echo -e "${INFO} [ packages ] directory status: $(ls -al 2>/dev/null)"
 }
 
 # Add custom packages, lib, theme, app and i18n, etc.

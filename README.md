@@ -127,7 +127,6 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 
 - `sudo ./make` : Use default configuration, use the latest kernel package in the kernel library, and package all models of TV boxes.
 - `sudo ./make -b s905x3 -k 6.1.10` : Recommended. Use default configuration for related kernel packaging.
-- `sudo ./make -b s905x3 -k 6.x.y` : Package the relevant kernels using the default configuration; the kernel uses the 6.x.y series (where 6.x.y represents series kernels such as 6.1.y and 6.6.y, etc. starting with 6.).
 - `sudo ./make -b s905x3 -k 6.1.y` : Package the relevant kernels using the default configuration; the kernel utilizes the latest version of the 6.1.y series.
 - `sudo ./make -b s905x3_s905d -k 6.1.10_5.15.50` : Use the default configuration and package multiple kernels at the same time. Use `_` to connect multiple kernel parameters.
 - `sudo ./make -b s905x3 -k 6.1.10 -s 1024` : Use the default configuration, specify a kernel, a model for packaging, and set the firmware size to 1024 MiB.

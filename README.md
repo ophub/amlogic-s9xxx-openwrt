@@ -122,7 +122,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -u        | kernelUsage   | Set the `tag suffix` of the kernel to be used, such as [stable](https://github.com/ophub/kernel/releases/tag/kernel_stable), [flippy](https://github.com/ophub/kernel/releases/tag/kernel_flippy), [dev](https://github.com/ophub/kernel/releases/tag/kernel_dev), [beta](https://github.com/ophub/kernel/releases/tag/kernel_beta). Default: `stable` |
 | -k        | Kernel        | Specify the [kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable) name, such as `-k 5.10.125`. Connect multiple kernels with `_`, such as `-k 5.10.125_5.15.50`. The kernel version freely specified by the `-k` parameter is only valid for kernels using `stable/flippy/dev/beta`. Other kernel series such as [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) / [rk35xx](https://github.com/ophub/kernel/releases/tag/kernel_rk35xx) / [h6](https://github.com/ophub/kernel/releases/tag/kernel_h6) can only use specific kernels. |
 | -a        | AutoKernel    | Set whether to automatically adopt the latest version of the same series of kernels. When set to `true`, it will automatically search the kernel library for updates of the same series as the kernel specified in `-k`, such as 5.10.125, and will automatically switch to the latest version if there is a version later than 5.10.125. When set to `false`, it will compile the specified version of the kernel. Default: `true` |
-| -s        | Size          | Set the size of the system's ROOTFS partition. The system size must be greater than 2048MiB. For example: `-s 2560`. Default: `2560` |
+| -s        | Size          | Set the size of the system's image partitions. When setting only the ROOTFS partition size, you can specify a single value, for example: `-s 1024`. When setting both BOOTFS and ROOTFS partition sizes, use / to connect the two values, for example: `-s 256/1024`. The default value is `256/1024` |
 | -n        | BuilderName   | Set the signature of the OpenWrt system builder. Do not include spaces when setting signatures. Default: `none` |
 
 - `sudo ./make` : Use default configuration, use the latest kernel package in the kernel library, and package all models of TV boxes.
@@ -165,7 +165,7 @@ These parameters correspond to the `local packaging command`, please refer to th
 | kernel_usage | stable | Set the `tags suffix` of the kernel to be used, functionality refers to `-u` |
 | openwrt_kernel | 6.1.1_5.15.1 | Set the kernel version, functionality refers to `-k` |
 | auto_kernel | true | Set whether to automatically adopt the latest version of the same series of kernels, functionality refers to `-a` |
-| openwrt_size | 1024 | Set the size of the firmware ROOTFS partition, functionality refers to `-s` |
+| openwrt_size | 256/1024 | Set the size of the system BOOTFS and ROOTFS partitions, function reference `-s` |
 | builder_name | None | Set the signature of the OpenWrt system builder, functionality refers to `-n` |
 
 - ### GitHub Actions Output Variables Explanation

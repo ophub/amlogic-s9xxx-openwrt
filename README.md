@@ -150,7 +150,7 @@ You can modify the related personalized firmware configuration files in the [con
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     openwrt_board: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    openwrt_kernel: 6.1.10_5.15.50
+    openwrt_kernel: 6.1.y_5.15.y
 ```
 
 - ### GitHub Actions Input Parameters Explanation
@@ -163,7 +163,7 @@ These parameters correspond to the `local packaging command`, please refer to th
 | openwrt_board | all | Set the `board` of the box to be packaged, functionality refers to `-b` |
 | kernel_repo | ophub/kernel | Specify `<owner>/<repo>` of the kernel repository on github.com, functionality refers to `-r` |
 | kernel_usage | stable | Set the `tags suffix` of the kernel to be used, functionality refers to `-u` |
-| openwrt_kernel | 6.1.1_5.15.1 | Set the kernel version, functionality refers to `-k` |
+| openwrt_kernel | 6.1.y_5.15.y | Set the kernel version, functionality refers to `-k` |
 | auto_kernel | true | Set whether to automatically adopt the latest version of the same series of kernels, functionality refers to `-a` |
 | openwrt_size | 256/1024 | Set the size of the system BOOTFS and ROOTFS partitions, function reference `-s` |
 | builder_name | None | Set the signature of the OpenWrt system builder, functionality refers to `-n` |
@@ -208,7 +208,7 @@ For instructions on how to compile the kernel, see [compile-kernel](https://gith
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel
-    kernel_version: 6.1.10_5.15.50
+    kernel_version: 6.1.y_5.15.y
     kernel_auto: true
     kernel_sign: -yourname
 ```

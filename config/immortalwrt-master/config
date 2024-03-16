@@ -42,6 +42,7 @@ CONFIG_TARGET_armsr=y
 # CONFIG_TARGET_realtek is not set
 # CONFIG_TARGET_rockchip is not set
 # CONFIG_TARGET_sifiveu is not set
+# CONFIG_TARGET_starfive is not set
 # CONFIG_TARGET_archs38 is not set
 # CONFIG_TARGET_omap is not set
 # CONFIG_TARGET_uml is not set
@@ -1964,6 +1965,7 @@ CONFIG_PACKAGE_rt2800-usb-firmware=y
 # CONFIG_PACKAGE_rt61-pci-firmware is not set
 CONFIG_PACKAGE_rt73-usb-firmware=y
 CONFIG_PACKAGE_rtl8188eu-firmware=y
+# CONFIG_PACKAGE_rtl8188fu-firmware is not set
 CONFIG_PACKAGE_rtl8192ce-firmware=y
 CONFIG_PACKAGE_rtl8192cu-firmware=y
 CONFIG_PACKAGE_rtl8192de-firmware=y
@@ -2180,7 +2182,6 @@ CONFIG_PACKAGE_kmod-gpio-pca953x=y
 # CONFIG_PACKAGE_kmod-hwmon-adt7410 is not set
 # CONFIG_PACKAGE_kmod-hwmon-adt7475 is not set
 CONFIG_PACKAGE_kmod-hwmon-core=y
-# CONFIG_PACKAGE_kmod-hwmon-coretemp is not set
 # CONFIG_PACKAGE_kmod-hwmon-dme1737 is not set
 # CONFIG_PACKAGE_kmod-hwmon-drivetemp is not set
 # CONFIG_PACKAGE_kmod-hwmon-g762 is not set
@@ -2798,6 +2799,8 @@ CONFIG_PACKAGE_kmod-wdt-sp805=y
 # CONFIG_PACKAGE_kmod-chaoskey is not set
 # CONFIG_PACKAGE_kmod-usb-acm is not set
 # CONFIG_PACKAGE_kmod-usb-atm is not set
+# CONFIG_PACKAGE_kmod-usb-cdns is not set
+# CONFIG_PACKAGE_kmod-usb-cdns3 is not set
 # CONFIG_PACKAGE_kmod-usb-cm109 is not set
 CONFIG_PACKAGE_kmod-usb-core=y
 CONFIG_PACKAGE_kmod-usb-dwc2=y
@@ -2901,8 +2904,8 @@ CONFIG_PACKAGE_kmod-usbmon=y
 # CONFIG_PACKAGE_kmod-fb-tft is not set
 # CONFIG_PACKAGE_kmod-fb-tft-ili9486 is not set
 # CONFIG_PACKAGE_kmod-multimedia-input is not set
-# CONFIG_PACKAGE_kmod-v4l2loopback is not set
 # CONFIG_PACKAGE_kmod-video-core is not set
+# CONFIG_PACKAGE_kmod-v4l2loopback is not set
 # end of Video Support
 
 #

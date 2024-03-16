@@ -2166,7 +2166,6 @@ CONFIG_PACKAGE_kmod-gpio-pca953x=y
 # CONFIG_PACKAGE_kmod-hwmon-adt7410 is not set
 # CONFIG_PACKAGE_kmod-hwmon-adt7475 is not set
 CONFIG_PACKAGE_kmod-hwmon-core=y
-# CONFIG_PACKAGE_kmod-hwmon-coretemp is not set
 # CONFIG_PACKAGE_kmod-hwmon-dme1737 is not set
 # CONFIG_PACKAGE_kmod-hwmon-drivetemp is not set
 # CONFIG_PACKAGE_kmod-hwmon-g762 is not set
@@ -6528,6 +6527,7 @@ CONFIG_PACKAGE_ethtool=y
 # CONFIG_PACKAGE_gg is not set
 # CONFIG_PACKAGE_git-lfs is not set
 # CONFIG_PACKAGE_gnunet is not set
+# CONFIG_PACKAGE_gping is not set
 # CONFIG_PACKAGE_gre is not set
 # CONFIG_PACKAGE_gsocket is not set
 # CONFIG_PACKAGE_hnet-full is not set

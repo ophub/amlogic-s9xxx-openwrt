@@ -150,7 +150,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     openwrt_board: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    openwrt_kernel: 6.1.10_5.15.50
+    openwrt_kernel: 6.1.y_5.15.y
 ```
 
 - ### GitHub Actions 输入参数说明
@@ -163,7 +163,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | openwrt_board     | all               | 设置打包盒子的 `board` ，功能参考 `-b` |
 | kernel_repo       | ophub/kernel      | 指定 github.com 内核仓库的 `<owner>/<repo>`，功能参考 `-r` |
 | kernel_usage      | stable            | 设置使用的内核的 `tags 后缀`。功能参考 `-u` |
-| openwrt_kernel    | 6.1.1_5.15.1      | 设置内核版本，功能参考 `-k` |
+| openwrt_kernel    | 6.1.y_5.15.y      | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | openwrt_size      | 256/1024          | 设置系统 BOOTFS 和 ROOTFS 分区的大小，功能参考 `-s` |
 | builder_name      | 无                | 设置 OpenWrt 系统构建者签名，功能参考 `-n`     |
@@ -209,7 +209,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel
-    kernel_version: 6.1.10_5.15.50
+    kernel_version: 6.1.y_5.15.y
     kernel_auto: true
     kernel_sign: -yourname
 ```

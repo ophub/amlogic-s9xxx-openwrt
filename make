@@ -632,6 +632,7 @@ confirm_version() {
 
     # Replace custom kernel tags
     [[ -n "${kernel_usage}" && "${KERNEL_TAGS}" == "${default_tags}" ]] && KERNEL_TAGS="${kernel_usage}"
+    [[ "${KERNEL_TAGS}" =~ ^[1-9]+ ]] && KERNEL_DOWN_TAGS="stable" || KERNEL_DOWN_TAGS="${KERNEL_TAGS}"
 }
 
 make_image() {
@@ -1069,7 +1070,7 @@ EOF
     echo "FDTFILE='${FDTFILE}'" >>${op_release}
     echo "FAMILY='${FAMILY}'" >>${op_release}
     echo "BOARD='${board}'" >>${op_release}
-    echo "KERNEL_TAGS='${KERNEL_TAGS}'" >>${op_release}
+    echo "KERNEL_TAGS='${KERNEL_DOWN_TAGS}'" >>${op_release}
     echo "KERNEL_VERSION='${kernel}'" >>${op_release}
     echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
     echo "MAINLINE_UBOOT='/lib/u-boot/${MAINLINE_UBOOT}'" >>${op_release}

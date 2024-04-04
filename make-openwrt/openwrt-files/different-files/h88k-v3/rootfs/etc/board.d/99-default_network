@@ -62,7 +62,7 @@ json_is_a network object && exit 0
 # Init LAN and WAN
 LAN_MAC=$(generate_mac)
 WAN_MAC=$(macaddr_add $LAN_MAC +1)
-ucidef_set_interfaces_lan_wan 'eth1 eth2' 'eth0'
+ucidef_set_interfaces_lan_wan 'eth0 eth1' 'eth2'
 ucidef_set_interface_macaddr "lan" $LAN_MAC
 ucidef_set_interface_macaddr "wan" $WAN_MAC
 

@@ -1,3 +1,0 @@
-LABEL=ROOTFS / btrfs compress=zstd:6 0 1
-LABEL=BOOT /boot vfat defaults 0 2
-#tmpfs /tmp tmpfs defaults,nosuid 0 0

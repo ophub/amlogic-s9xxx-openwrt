@@ -429,6 +429,7 @@ CONFIG_SSP_SUPPORT=y
 CONFIG_BINUTILS_VERSION_2_40=y
 CONFIG_BINUTILS_VERSION="2.40"
 CONFIG_GCC_VERSION="13.2.0"
+CONFIG_GCC_USE_DEFAULT_VERSION=y
 CONFIG_LIBC="musl"
 CONFIG_TARGET_SUFFIX="musl"
 # CONFIG_IB is not set
@@ -2169,6 +2170,7 @@ CONFIG_PACKAGE_kmod-gpio-pca953x=y
 CONFIG_PACKAGE_kmod-hwmon-core=y
 # CONFIG_PACKAGE_kmod-hwmon-dme1737 is not set
 # CONFIG_PACKAGE_kmod-hwmon-drivetemp is not set
+# CONFIG_PACKAGE_kmod-hwmon-emc2305 is not set
 # CONFIG_PACKAGE_kmod-hwmon-g762 is not set
 # CONFIG_PACKAGE_kmod-hwmon-gpiofan is not set
 # CONFIG_PACKAGE_kmod-hwmon-gsc is not set
@@ -4926,7 +4928,6 @@ CONFIG_PACKAGE_luci-lib-docker=y
 CONFIG_PACKAGE_luci-light=y
 # CONFIG_PACKAGE_luci-nginx is not set
 # CONFIG_PACKAGE_luci-ssl is not set
-# CONFIG_PACKAGE_luci-ssl-nginx is not set
 # CONFIG_PACKAGE_luci-ssl-openssl is not set
 # end of 1. Collections
 
@@ -5016,7 +5017,6 @@ CONFIG_PACKAGE_luci-app-amlogic=y
 # CONFIG_PACKAGE_luci-app-dawn is not set
 # CONFIG_PACKAGE_luci-app-dcwapd is not set
 CONFIG_PACKAGE_luci-app-ddns=y
-# CONFIG_PACKAGE_luci-app-diag-core is not set
 # CONFIG_PACKAGE_luci-app-dnscrypt-proxy is not set
 CONFIG_PACKAGE_luci-app-dockerman=y
 # CONFIG_PACKAGE_luci-app-dump1090 is not set
@@ -5024,6 +5024,7 @@ CONFIG_PACKAGE_luci-app-dockerman=y
 # CONFIG_PACKAGE_luci-app-email is not set
 # CONFIG_PACKAGE_luci-app-eoip is not set
 # CONFIG_PACKAGE_luci-app-example is not set
+# CONFIG_PACKAGE_luci-app-filebrowser is not set
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-frpc=y
 CONFIG_PACKAGE_luci-app-frps=y
@@ -6529,6 +6530,8 @@ CONFIG_PACKAGE_ethtool=y
 # CONFIG_PACKAGE_fping is not set
 # CONFIG_PACKAGE_generate-ipv6-address is not set
 # CONFIG_PACKAGE_gensio-bin is not set
+# CONFIG_PACKAGE_geoip-shell is not set
+# CONFIG_PACKAGE_geoip-shell-iptables is not set
 # CONFIG_PACKAGE_geoipupdate is not set
 # CONFIG_PACKAGE_geth is not set
 # CONFIG_PACKAGE_gg is not set
@@ -7636,6 +7639,7 @@ CONFIG_PACKAGE_tini=y
 # CONFIG_PACKAGE_ucode-mod-bpf is not set
 CONFIG_PACKAGE_ucode-mod-html=y
 CONFIG_PACKAGE_ucode-mod-lua=y
+# CONFIG_PACKAGE_ucode-mod-uclient is not set
 # CONFIG_PACKAGE_ucode-mod-udebug is not set
 # CONFIG_PACKAGE_udebug-cli is not set
 # CONFIG_PACKAGE_udebugd is not set

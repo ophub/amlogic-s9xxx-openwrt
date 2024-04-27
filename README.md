@@ -1,6 +1,3 @@
-> [!NOTE]
-> Due to the adjustment of the `/boot/vmlinuz-xxx` file in the kernel from `32MB` to `64MB`, `Amlogic` series boxes must manually update the OpenWrt system bootloader, otherwise, the OpenWrt system will fail to start after updating the kernel. To manually update, download the [update file](https://github.com/ophub/kernel/releases/download/tools/adjust_the_vmlinuz_from_32mb_to_64mb_for_amlogic_devices.tar.gz), extract it, and upload the `4` files from the compressed package to the `/boot` partition to complete the update. Another method is to use the latest version of the OpenWrt firmware made `after March 8th` for a full system update, which can also achieve the replacement of files in the `/boot` partition. Choose one of these two methods, you only need to execute it once, and you do not need to replace it again when updating the kernel in the future.
-
 # OpenWrt
 
 View Chinese description | [查看中文说明](README.cn.md)

@@ -1,6 +1,3 @@
-> [!NOTE]
-> 由于内核中 `/boot/vmlinuz-xxx` 文件从 `32MB` 调整到了 `64MB`，`晶晨（Amlogic）`系列盒子必须手动更新 OpenWrt 系统启动引导文件，否则更新内核后 OpenWrt 系统将无法启动。手动下载[更新文件](https://github.com/ophub/kernel/releases/download/tools/adjust_the_vmlinuz_from_32mb_to_64mb_for_amlogic_devices.tar.gz)，解压后将压缩包中的 `4` 个文件上传 `/boot` 分区即可完成更新。另一种方法是使用 `3月8日以后` 制作的最新版 OpenWrt 固件进行完整系统更新，也可以实现对 `/boot` 分区中文件的替换。这两种方法任选一种，只需要执行一次即可，以后更新内核时不用再次替换。
-
 # OpenWrt
 
 查看英文说明 | [View English description](README.md)

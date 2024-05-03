@@ -46,11 +46,11 @@
 
 1. `Rockchip` 平台的安装方法请查看说明文档中的 [第 8 章节](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.cn.md) 的介绍，和 Armbian 的安装方法相同。
 
-2. `Amlogic` 和 `Allwinner` 平台，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入 USB 里，然后把写好固件的 USB 插入盒子。从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` ，在支持的设备下拉列表中选择你的盒子，点击 `安装 OpenWrt` 按钮进行安装。
+2. `Amlogic` 和 `Allwinner` 平台，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入 USB 里，然后把写好固件的 USB 插入盒子。浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` ，在支持的设备下拉列表中选择你的盒子，点击 `安装 OpenWrt` 按钮进行安装。
 
 - ### 升级 OpenWrt 系统或内核
 
-从浏览器访问 OpenWrt 的 IP 如: 192.168.1.1 →  `使用账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `手动上传更新 / 在线下载更新`
+浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) →  `使用账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `手动上传更新 / 在线下载更新`
 
 如果选择 `手动上传更新` [OpenWrt 固件](https://github.com/ophub/amlogic-s9xxx-openwrt/releases)，可以将编译好 OpenWrt 固件压缩包，如 openwrt_xxx_k5.15.50.img.gz 进行上传（推荐上传压缩包，系统会自动解压。如果上传解压缩后的 xxx.img 格式的文件，可能会因为文件太大而上传失败），上传完成后界面将显示 `更新固件` 的操作按钮，点击即可更新。
 
@@ -62,7 +62,7 @@
 
 如果你在使用 `docker` 等内存占用较大的应用时，觉得当前盒子的内存不够使用，可以创建 `swap` 虚拟内存分区，将 `/mnt/*4` 磁盘空间的一定容量虚拟成内存来使用。下面命令输入参数的单位是 `GB`，默认为 `1`。
 
-从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
+浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
 
 ```yaml
 openwrt-swap 1
@@ -72,7 +72,7 @@ openwrt-swap 1
 
 支持在 `TF/SD/USB` 中对盒子的 `EMMC` 分区进行备份/恢复。建议您在全新的盒子里安装 OpenWrt 系统前，先对当前盒子自带的安卓 TV 系统进行备份，以便日后在恢复电视系统等情况下使用。
 
-请从 `TF/SD/USB` 启动 OpenWrt 系统，浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
+请从 `TF/SD/USB` 启动 OpenWrt 系统，浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
 
 ```yaml
 openwrt-ddbr
@@ -85,7 +85,7 @@ openwrt-ddbr
 
 - ### 控制 LED 显示
 
-从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
+浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
 
 ```yaml
 openwrt-openvfd
@@ -93,9 +93,15 @@ openwrt-openvfd
 
 根据 [LED 屏显示控制说明](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/led_screen_display_control.md) 进行调试。
 
+- ### 恢复到初始化状态
+
+浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `备份固件配置` → `快照管理` → `初始化快照`，点击 `还原快照` 即可恢复至初始化状态。
+
+也可以在 `系统菜单` → `TTYD 终端` → 输入命令 `firstboot` 恢复系统至初始化状态。这两种方法的操作结果相同。
+
 - ### 更多使用说明
 
-使用 `firstboot` 命令可以恢复系统至初始化状态。在 OpenWrt 的使用中，一些可能遇到的常见问题详见 [使用文档](./documents/README.cn.md)
+在 OpenWrt 的使用中，一些可能遇到的常见问题详见 [使用文档](./documents/README.cn.md)
 
 ## 本地化打包
 

@@ -46,11 +46,11 @@ Choose the OpenWrt firmware corresponding to your TV box model, and refer to the
 
 1. For the `Rockchip` platform, please refer to the [Chapter 8](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.md#8-installing-armbian-to-emmc) of the instruction manual, the installation method is the same as that of Armbian.
 
-2. For the `Amlogic` and `Allwinner` platforms, use tools like [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/) to write the firmware to USB, then insert the USB with the written firmware into the box. From the browser, access the default IP of OpenWrt: 192.168.1.1 → `Log in to OpenWrt with the default account` → `System Menu` → `Amlogic Treasure Box` → `Install OpenWrt`, select your box from the dropdown list of supported devices, click `Install OpenWrt` button to install.
+2. For the `Amlogic` and `Allwinner` platforms, use tools like [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/) to write the firmware to USB, then insert the USB with the written firmware into the box. Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `Amlogic Treasure Box` → `Install OpenWrt`, select your box from the dropdown list of supported devices, click `Install OpenWrt` button to install.
 
 - ### Update OpenWrt system or kernel
 
-From your browser, access OpenWrt's IP, e.g.: 192.168.1.1 → `Log in to OpenWrt with your account` → `System Menu` → `Amlogic Treasure Box` → `Manually Upload Update / Online Download Update`
+Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with your account` → `System Menu` → `Amlogic Treasure Box` → `Manually Upload Update / Online Download Update`
 
 If you select `Manually Upload Update` [OpenWrt Firmware](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), you can upload the compressed package of the compiled OpenWrt firmware, such as openwrt_xxx_k5.15.50.img.gz (recommended to upload the compressed package, the system will automatically decompress. If you upload the decompressed xxx.img format file, it may fail due to the large file size). After the upload is complete, the interface will display the operation button of `Update Firmware`, click to update.
 
@@ -62,7 +62,7 @@ If you select `Online Download Update` for OpenWrt firmware or kernel, it will b
 
 If you feel that the current box's memory is not enough when using memory-intensive applications like `docker`, you can create a `swap` virtual memory partition, and use a certain capacity of the `/mnt/*4` disk space as memory. The unit of the input parameter in the command below is `GB`, the default is `1`.
 
-From the browser, access the default IP of OpenWrt: 192.168.1.1 → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
+Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
 
 ```yaml
 openwrt-swap 1
@@ -72,7 +72,7 @@ openwrt-swap 1
 
 Supports backing up/restoring the `EMMC` partition of the box in `TF/SD/USB`. We recommend that you backup the Android TV system that comes with the box before installing the OpenWrt system in a brand-new box for future use in restoring the TV system, etc.
 
-Please boot OpenWrt system from `TF/SD/USB`, from the browser, access the default IP of OpenWrt: 192.168.1.1 → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
+Please boot OpenWrt system from `TF/SD/USB`, from the browser, Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
 
 ```yaml
 openwrt-ddbr
@@ -85,7 +85,7 @@ Follow the prompts to enter `b` to backup the system, or enter `r` to restore th
 
 - ### Control LED Display
 
-From the browser, access the default IP of OpenWrt: 192.168.1.1 → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
+Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
 
 ```yaml
 openwrt-openvfd
@@ -93,9 +93,15 @@ openwrt-openvfd
 
 Refer to [LED Screen Display Control Description](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/led_screen_display_control.md) for debugging.
 
+- ### Restore to Initial State
+
+Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `Amlogic Service` → `Backup Firmware Config` → `Snapshot Management` → `Select Initialize Snapshot`, and click on `Restore Snap` to revert to the initial state.
+
+Alternatively, you can navigate to `System menu` → `TTYD Terminal` → Enter the command `firstboot` to restore the system to its initial state. Both methods yield the same result.
+
 - ### More Usage Instructions
 
-The `firstboot` command can restore the system to its initial state. Some common problems that might be encountered during the use of OpenWrt can be found in the [User Guide](./documents)
+Some common problems that might be encountered during the use of OpenWrt can be found in the [User Guide](./documents)
 
 ## Local Packaging
 

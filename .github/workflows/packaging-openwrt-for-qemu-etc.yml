@@ -39,6 +39,7 @@ on:
           - jp-tvbox
           - watermelon-pi
           - rock5b
+          - rock5c
           - s905
           - s905d
           - s905x2

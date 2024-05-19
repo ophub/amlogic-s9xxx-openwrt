@@ -22,13 +22,8 @@ on:
           - beikeyun
           - cm3
           - e25
-          - l1pro
-          - photonicat
-          - qemu
-          - r66s
-          - r68s
-          - jp-tvbox
           - ht2
+          - e20c
           - h28k
           - h66k
           - h68k
@@ -36,6 +31,12 @@ on:
           - h69k-max
           - h88k
           - h88k-v3
+          - l1pro
+          - photonicat
+          - qemu
+          - r66s
+          - r68s
+          - jp-tvbox
           - watermelon-pi
           - rock5b
           - s905

@@ -84,7 +84,7 @@ runs:
 
         cd ${GITHUB_ACTION_PATH}/${openwrt_outpath}
         # Generate a sha256sum verification file for each OpenWrt image file
-        for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
+        for file in *; do [[ -f "${file}" ]] && sha256sum "${file}" >"${file}.sha" 2>/dev/null; done
         rm -f *.sha.sha 2>/dev/null
         sync && sleep 3
 

@@ -1173,7 +1173,7 @@ loop_make() {
                     # Skip inapplicable kernels
                     if [[ "${KERNEL_TAGS}" =~ ^[1-9].[0-9]+ ]]; then
                         [[ "${kernel}" != "$(echo ${KERNEL_TAGS} | awk -F'.' '{print $1"."$2"."}')"* ]] && {
-                            echo -e "(${j}.${i}) ${NOTE} The [ ${board} ] device cannot use [ ${kd}/${kernel} ] kernel, skip."
+                            echo -e "(${j}.${i}) ${NOTE} Based on the settings in model_database.conf, skip the [ ${board} - ${kd}/${kernel} ] build."
                             let i++
                             continue
                         }

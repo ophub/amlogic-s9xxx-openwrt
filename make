@@ -1136,7 +1136,7 @@ loop_make() {
     j="1"
     for b in "${make_openwrt[@]}"; do
         {
-            # Set specific configuration for building OpenWrt system
+            # Set specific configuration for making OpenWrt system
             board="${b}"
             confirm_version
 
@@ -1173,7 +1173,7 @@ loop_make() {
                     # Skip inapplicable kernels
                     if [[ "${KERNEL_TAGS}" =~ ^[1-9].[0-9]+ ]]; then
                         [[ "${kernel}" != "$(echo ${KERNEL_TAGS} | awk -F'.' '{print $1"."$2"."}')"* ]] && {
-                            echo -e "(${j}.${i}) ${NOTE} Based on the settings in model_database.conf, skip the [ ${board} - ${kd}/${kernel} ] build."
+                            echo -e "(${j}.${i}) Based on model_database.conf, skip the [ ${board} - ${kd}/${kernel} ] make."
                             let i++
                             continue
                         }
@@ -1183,7 +1183,7 @@ loop_make() {
                     echo -ne "(${j}.${i}) Start making OpenWrt [\033[92m ${board} - ${KERNEL_TAGS}/${kernel} \033[0m]. "
                     now_remaining_space="$(df -Tk ${make_path} | grep '/dev/' | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                     if [[ "${now_remaining_space}" -le "3" ]]; then
-                        echo -e "${WARNING} Remaining space is less than 3G, exit this build."
+                        echo -e "${WARNING} Remaining space is less than 3G, exit this make."
                         break
                     else
                         echo "Remaining space is ${now_remaining_space}G."

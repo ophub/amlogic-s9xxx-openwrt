@@ -2560,6 +2560,15 @@ CONFIG_PACKAGE_kmod-phy-ax88796b=y
 # CONFIG_PACKAGE_kmod-phy-realtek is not set
 CONFIG_PACKAGE_kmod-phy-smsc=y
 CONFIG_PACKAGE_kmod-phylink=y
+# CONFIG_PACKAGE_kmod-qca-nss-drv-dtlsmgr is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-map-t is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-match is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-pppoe is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-pptp is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-pvxlanmgr is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-tun6rd is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-tunipip6 is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-vxlanmgr is not set
 # CONFIG_PACKAGE_kmod-qede is not set
 # CONFIG_PACKAGE_kmod-qlcnic is not set
 # CONFIG_PACKAGE_kmod-r6040 is not set
@@ -2647,6 +2656,8 @@ CONFIG_PACKAGE_kmod-pppoe=y
 # CONFIG_PACKAGE_kmod-pppol2tp is not set
 CONFIG_PACKAGE_kmod-pppox=y
 # CONFIG_PACKAGE_kmod-pptp is not set
+# CONFIG_PACKAGE_kmod-qca-mcs is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv-qdisc is not set
 # CONFIG_PACKAGE_kmod-qrtr-mhi is not set
 # CONFIG_PACKAGE_kmod-qrtr-tun is not set
 # CONFIG_PACKAGE_kmod-sched is not set
@@ -7279,6 +7290,7 @@ CONFIG_PACKAGE_openssl-util=y
 # CONFIG_PACKAGE_pservice is not set
 # CONFIG_PACKAGE_psmisc is not set
 CONFIG_PACKAGE_pv=y
+# CONFIG_PACKAGE_qca-ssdk-shell is not set
 # CONFIG_PACKAGE_qfirehose is not set
 CONFIG_PACKAGE_qmi-utils=y
 # CONFIG_PACKAGE_qrencode is not set

@@ -1,0 +1,20 @@
+
+name: Cleanup and Reset Workflow Space
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Clean workspace
+      run: |
+        echo "Before cleanup:"
+        df -h

@@ -454,6 +454,7 @@ CONFIG_TARGET_SUFFIX="musl"
 # CONFIG_SDK is not set
 # CONFIG_MAKE_TOOLCHAIN is not set
 # CONFIG_IMAGEOPT is not set
+# CONFIG_TARGET_DEFAULT_LAN_IP_FROM_PREINIT is not set
 # CONFIG_PREINITOPT is not set
 CONFIG_TARGET_PREINIT_SUPPRESS_STDERR=y
 # CONFIG_TARGET_PREINIT_DISABLE_FAILSAFE is not set
@@ -1791,6 +1792,7 @@ CONFIG_PACKAGE_netdata=y
 CONFIG_PACKAGE_autocore-arm=y
 # CONFIG_PACKAGE_automount is not set
 # CONFIG_PACKAGE_autosamba is not set
+# CONFIG_PACKAGE_cpufreq is not set
 # CONFIG_PACKAGE_ipv6helper is not set
 # CONFIG_PACKAGE_jose is not set
 CONFIG_PACKAGE_libiwinfo-data=y
@@ -2560,15 +2562,6 @@ CONFIG_PACKAGE_kmod-phy-ax88796b=y
 # CONFIG_PACKAGE_kmod-phy-realtek is not set
 CONFIG_PACKAGE_kmod-phy-smsc=y
 CONFIG_PACKAGE_kmod-phylink=y
-# CONFIG_PACKAGE_kmod-qca-nss-drv-dtlsmgr is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-map-t is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-match is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-pppoe is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-pptp is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-pvxlanmgr is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-tun6rd is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-tunipip6 is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-vxlanmgr is not set
 # CONFIG_PACKAGE_kmod-qede is not set
 # CONFIG_PACKAGE_kmod-qlcnic is not set
 # CONFIG_PACKAGE_kmod-r6040 is not set
@@ -2656,8 +2649,6 @@ CONFIG_PACKAGE_kmod-pppoe=y
 # CONFIG_PACKAGE_kmod-pppol2tp is not set
 CONFIG_PACKAGE_kmod-pppox=y
 # CONFIG_PACKAGE_kmod-pptp is not set
-# CONFIG_PACKAGE_kmod-qca-mcs is not set
-# CONFIG_PACKAGE_kmod-qca-nss-drv-qdisc is not set
 # CONFIG_PACKAGE_kmod-qrtr-mhi is not set
 # CONFIG_PACKAGE_kmod-qrtr-tun is not set
 # CONFIG_PACKAGE_kmod-sched is not set
@@ -4531,6 +4522,7 @@ CONFIG_PACKAGE_libiwinfo=y
 # CONFIG_PACKAGE_libjaylink is not set
 CONFIG_PACKAGE_libjpeg-turbo=y
 CONFIG_PACKAGE_libjson-c=y
+# CONFIG_PACKAGE_libjwt is not set
 # CONFIG_PACKAGE_libkeyutils is not set
 # CONFIG_PACKAGE_libkmod is not set
 # CONFIG_PACKAGE_libksba is not set
@@ -5913,6 +5905,7 @@ CONFIG_PACKAGE_relayd=y
 # CONFIG_PACKAGE_tc-mod-iptables is not set
 # CONFIG_PACKAGE_tc-tiny is not set
 # CONFIG_PACKAGE_tcpproxy is not set
+# CONFIG_PACKAGE_ua2f is not set
 # CONFIG_PACKAGE_udp-broadcast-relay-redux is not set
 # CONFIG_PACKAGE_vis is not set
 # CONFIG_PACKAGE_yggdrasil is not set
@@ -6158,6 +6151,7 @@ CONFIG_PACKAGE_frps=y
 # CONFIG_PACKAGE_nginx-ssl is not set
 # CONFIG_PACKAGE_nginx-ssl-util is not set
 # CONFIG_PACKAGE_nginx-ssl-util-nopcre is not set
+# CONFIG_PACKAGE_ngrokc is not set
 # CONFIG_PACKAGE_phtunnel is not set
 # CONFIG_PACKAGE_polipo is not set
 # CONFIG_PACKAGE_privoxy is not set
@@ -7290,7 +7284,6 @@ CONFIG_PACKAGE_openssl-util=y
 # CONFIG_PACKAGE_pservice is not set
 # CONFIG_PACKAGE_psmisc is not set
 CONFIG_PACKAGE_pv=y
-# CONFIG_PACKAGE_qca-ssdk-shell is not set
 # CONFIG_PACKAGE_qfirehose is not set
 CONFIG_PACKAGE_qmi-utils=y
 # CONFIG_PACKAGE_qrencode is not set

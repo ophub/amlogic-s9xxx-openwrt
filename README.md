@@ -36,7 +36,7 @@ This project, thanks to numerous [contributors](https://github.com/ophub/amlogic
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1120), [TQC-A01](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1638) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable)<br>[h6](https://github.com/ophub/kernel/releases/tag/kernel_h6) | allwinner_boxname.img |
 
 > [!TIP]
-> At present, the [s905 box](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used in `TF/SD/USB`, other models of boxes support writing to `EMMC` for use. For more information, please refer to the [Supported Device List Description](make-openwrt/openwrt-files/common-files/etc/model_database.conf). You can refer to the method in Section 12.15 of the instruction manual to [add new supported devices](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.md#1215-how-to-add-new-supported-devices). Please read the [OpenWrt User Guide](./documents) before use. It provides solutions to common issues.
+> Currently, the [s905 box](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used with a `SD card` or a `USB drive`, other models of boxes support using the `EMMC`. For more information, please refer to the [Supported Device List Description](make-openwrt/openwrt-files/common-files/etc/model_database.conf). You can refer to the method in Section 12.15 of the instruction manual to [add new supported devices](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.md#1215-how-to-add-new-supported-devices). Please read the [OpenWrt User Guide](./documents) before use. It provides solutions to common issues.
 
 ## Install and Update OpenWrt
 
@@ -70,9 +70,9 @@ openwrt-swap 1
 
 - ### Backup/Restore Original EMMC System
 
-Supports backing up/restoring the `EMMC` partition of the box in `TF/SD/USB`. We recommend that you backup the Android TV system that comes with the box before installing the OpenWrt system in a brand-new box for future use in restoring the TV system, etc.
+Supports backing up/restoring the `EMMC` to a `SD card` or a `USB flash drive`. We recommend that you backup the Android TV system that comes with the box before installing the OpenWrt system in a brand-new box for future use in restoring the TV system, etc.
 
-Please boot OpenWrt system from `TF/SD/USB`, from the browser, Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
+Please boot OpenWrt system from a `SD card` or a `USB flash drive`, then from the browser, Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
 
 ```yaml
 openwrt-ddbr
@@ -236,5 +236,5 @@ The [u-boot](https://github.com/ophub/u-boot), [kernel](https://github.com/ophub
 
 ## License
 
-The amlogic-s9xxx-openwrt © OPHUB is licensed under [GPL-2.0](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/LICENSE)
+The amlogic-s9xxx-openwrt © OPHUB is licensed under the [GPL-2.0](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/LICENSE) license
 

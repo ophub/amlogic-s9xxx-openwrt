@@ -40,6 +40,7 @@ on:
           - watermelon-pi
           - rock5b
           - rock5c
+          - rk3399
           - s905
           - s905d
           - s905x2
@@ -50,6 +51,10 @@ on:
           - vplus
           - zcube1-max
           - diy
+      customize_rk3399:
+        description: "Set customize rk3399 devices"
+        required: false
+        default: "tvi3315a:rk3399-tvi3315a.dtb/sw799:rk3399-bozz-sw799.dtb"
       openwrt_kernel:
         description: "Select kernel version"
         required: false
@@ -197,8 +202,9 @@ jobs:
         env:
           OPENWRT_ARMVIRT: openwrt/output/*rootfs.tar.gz
           SELECT_PACKITPATH: openwrt_packit
-          KERNEL_REPO_URL: ${{ inputs.kernel_repo }}
           PACKAGE_SOC: ${{ inputs.openwrt_soc }}
+          CUSTOMIZE_RK3399: ${{ inputs.customize_rk3399 }}
+          KERNEL_REPO_URL: ${{ inputs.kernel_repo }}
           KERNEL_VERSION_NAME: ${{ inputs.openwrt_kernel }}
           KERNEL_AUTO_LATEST: ${{ inputs.auto_kernel }}
           WHOAMI: ${{ inputs.builder_name }}

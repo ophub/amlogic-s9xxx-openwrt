@@ -57,12 +57,22 @@ swap_interface()
 	ip link set dev $eth_b up
 }
 
+
 json_is_a network object && exit 0
 
 # Init LAN and WAN
 LAN_MAC=$(generate_mac)
 WAN_MAC=$(macaddr_add $LAN_MAC +1)
-ucidef_set_interfaces_lan_wan 'eth0 eth1' 'eth2'
+
+machine_model=$(cat /proc/device-tree/model|tr -d "\000")
+case $machine_model in
+   "Hlink H88K V3.1") ucidef_set_interfaces_lan_wan 'eth1 eth2' 'eth0'
+                      ;;
+   "Hlink H88K-V3")   ucidef_set_interfaces_lan_wan 'eth0 eth1' 'eth2'
+                      ;;
+                 *)   ucidef_set_interfaces_lan_wan 'eth0' 'eth1'
+                      ;;
+esac
 ucidef_set_interface_macaddr "lan" $LAN_MAC
 ucidef_set_interface_macaddr "wan" $WAN_MAC
 

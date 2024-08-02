@@ -1807,6 +1807,7 @@ CONFIG_PACKAGE_libiwinfo-data=y
 
 # CONFIG_PACKAGE_aircard-pcmcia-firmware is not set
 # CONFIG_PACKAGE_airoha-en8811h-firmware is not set
+# CONFIG_PACKAGE_amd64-microcode is not set
 # CONFIG_PACKAGE_amdgpu-firmware is not set
 # CONFIG_PACKAGE_ar3k-firmware is not set
 # CONFIG_PACKAGE_ath10k-board-qca4019 is not set
@@ -3052,6 +3053,8 @@ CONFIG_PACKAGE_kmod-rtlwifi-btcoexist=y
 CONFIG_PACKAGE_kmod-rtlwifi-pci=y
 CONFIG_PACKAGE_kmod-rtlwifi-usb=y
 # CONFIG_PACKAGE_kmod-rtw88-8723de is not set
+# CONFIG_PACKAGE_kmod-rtw88-8723ds is not set
+# CONFIG_PACKAGE_kmod-rtw88-8723du is not set
 # CONFIG_PACKAGE_kmod-rtw88-8821ce is not set
 # CONFIG_PACKAGE_kmod-rtw88-8821cu is not set
 # CONFIG_PACKAGE_kmod-rtw88-8822be is not set

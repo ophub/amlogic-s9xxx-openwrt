@@ -322,6 +322,7 @@ CONFIG_KERNEL_IPV6_SEG6_LWTUNNEL=y
 CONFIG_KERNEL_PAGE_POOL=y
 # CONFIG_KERNEL_PAGE_POOL_STATS is not set
 # CONFIG_KERNEL_IP_PNP is not set
+# CONFIG_KERNEL_BTRFS_FS is not set
 
 #
 # Filesystem ACL and attr support options
@@ -2573,6 +2574,11 @@ CONFIG_PACKAGE_kmod-phylib-broadcom=y
 CONFIG_PACKAGE_kmod-phylink=y
 # CONFIG_PACKAGE_kmod-qlcnic is not set
 # CONFIG_PACKAGE_kmod-r6040 is not set
+# CONFIG_PACKAGE_kmod-r8125 is not set
+# CONFIG_PACKAGE_kmod-r8125-rss is not set
+# CONFIG_PACKAGE_kmod-r8126 is not set
+# CONFIG_PACKAGE_kmod-r8126-rss is not set
+# CONFIG_PACKAGE_kmod-r8168 is not set
 # CONFIG_PACKAGE_kmod-r8169 is not set
 CONFIG_PACKAGE_kmod-renesas-net-avb=y
 # CONFIG_PACKAGE_kmod-sfc is not set
@@ -3061,6 +3067,10 @@ CONFIG_PACKAGE_kmod-rtlwifi-usb=y
 # CONFIG_PACKAGE_kmod-rtw88-8822bu is not set
 # CONFIG_PACKAGE_kmod-rtw88-8822ce is not set
 # CONFIG_PACKAGE_kmod-rtw88-8822cu is not set
+# CONFIG_PACKAGE_kmod-rtw89-8851be is not set
+# CONFIG_PACKAGE_kmod-rtw89-8852ae is not set
+# CONFIG_PACKAGE_kmod-rtw89-8852be is not set
+# CONFIG_PACKAGE_kmod-rtw89-8852ce is not set
 # CONFIG_PACKAGE_kmod-wil6210 is not set
 # CONFIG_PACKAGE_kmod-wl12xx is not set
 # CONFIG_PACKAGE_kmod-wl18xx is not set
@@ -3147,6 +3157,7 @@ CONFIG_PACKAGE_lua=y
 # CONFIG_PACKAGE_lua-eco-mqtt is not set
 # CONFIG_PACKAGE_lua-eco-netlink is not set
 # CONFIG_PACKAGE_lua-eco-nl80211 is not set
+# CONFIG_PACKAGE_lua-eco-packet is not set
 # CONFIG_PACKAGE_lua-eco-sha1 is not set
 # CONFIG_PACKAGE_lua-eco-socket is not set
 # CONFIG_PACKAGE_lua-eco-ssh is not set
@@ -5655,7 +5666,6 @@ CONFIG_PACKAGE_luci-i18n-upnp-zh-cn=y
 #
 # CONFIG_PACKAGE_mktorrent is not set
 # CONFIG_PACKAGE_opentracker is not set
-# CONFIG_PACKAGE_opentracker6 is not set
 # CONFIG_PACKAGE_rtorrent is not set
 # CONFIG_PACKAGE_rtorrent-rpc is not set
 # CONFIG_PACKAGE_transmission-cli is not set
@@ -6222,7 +6232,6 @@ CONFIG_PACKAGE_relayd=y
 # CONFIG_PACKAGE_asterisk is not set
 # CONFIG_PACKAGE_baresip is not set
 # CONFIG_PACKAGE_coturn is not set
-# CONFIG_PACKAGE_freeswitch is not set
 # CONFIG_PACKAGE_kamailio is not set
 # CONFIG_PACKAGE_miax is not set
 # CONFIG_PACKAGE_pcapsipdump is not set

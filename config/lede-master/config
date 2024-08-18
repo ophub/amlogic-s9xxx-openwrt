@@ -1870,13 +1870,20 @@ CONFIG_PACKAGE_brcmfmac-firmware-4329-sdio=y
 # CONFIG_PACKAGE_brcmfmac-firmware-4339-sdio is not set
 CONFIG_PACKAGE_brcmfmac-firmware-43430a0-sdio=y
 # CONFIG_PACKAGE_brcmfmac-firmware-43455-sdio-phicomm-n1 is not set
+# CONFIG_PACKAGE_brcmfmac-firmware-43456-sdio is not set
+# CONFIG_PACKAGE_brcmfmac-firmware-4356-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-43602a1-pcie is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-4366b1-pcie is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-4366c0-pcie is not set
+# CONFIG_PACKAGE_brcmfmac-firmware-43752-pcie is not set
+# CONFIG_PACKAGE_brcmfmac-firmware-43752-sdio is not set
 CONFIG_PACKAGE_brcmfmac-firmware-usb=y
 # CONFIG_PACKAGE_brcmfmac-nvram-43430-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-nvram-43455-sdio is not set
+# CONFIG_PACKAGE_brcmfmac-nvram-43456-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-nvram-4356-sdio is not set
+# CONFIG_PACKAGE_brcmfmac-nvram-43752-pcie is not set
+# CONFIG_PACKAGE_brcmfmac-nvram-43752-sdio is not set
 # CONFIG_PACKAGE_brcmsmac-firmware is not set
 CONFIG_PACKAGE_carl9170-firmware=y
 # CONFIG_PACKAGE_cypress-firmware-43012-sdio is not set
@@ -4955,6 +4962,7 @@ CONFIG_PACKAGE_luci-app-frps=y
 # CONFIG_PACKAGE_luci-app-ipsec-server is not set
 # CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set
 # CONFIG_PACKAGE_luci-app-kodexplorer is not set
+# CONFIG_PACKAGE_luci-app-leigod-acc is not set
 # CONFIG_PACKAGE_luci-app-lxc is not set
 # CONFIG_PACKAGE_luci-app-minidlna is not set
 # CONFIG_PACKAGE_luci-app-mjpg-streamer is not set
@@ -6378,6 +6386,7 @@ CONFIG_PACKAGE_iw=y
 # CONFIG_PACKAGE_krb5-libs is not set
 # CONFIG_PACKAGE_krb5-server is not set
 # CONFIG_PACKAGE_krb5-server-extras is not set
+# CONFIG_PACKAGE_leigod-acc is not set
 CONFIG_PACKAGE_libipset=y
 # CONFIG_PACKAGE_libndp is not set
 # CONFIG_PACKAGE_linknx is not set
@@ -6630,6 +6639,12 @@ CONFIG_PACKAGE_wwan=y
 # CONFIG_PACKAGE_fconfig is not set
 # CONFIG_PACKAGE_uboot-envtools is not set
 # end of Boot Loaders
+
+#
+# CPE
+#
+# CONFIG_PACKAGE_sendat is not set
+# end of CPE
 
 #
 # Compression

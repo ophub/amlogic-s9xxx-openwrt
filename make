@@ -70,6 +70,7 @@ arch_info="$(uname -m)"
 host_release="$(cat /etc/os-release | grep '^VERSION_CODENAME=.*' | cut -d'=' -f2)"
 # Add custom OpenWrt firmware information
 op_release="etc/flippy-openwrt-release"
+ophub_release_file="etc/ophub-release"
 
 # Dependency files download repository
 depends_repo="https://github.com/ophub/amlogic-s9xxx-armbian"
@@ -1087,6 +1088,8 @@ EOF
     echo "BUILDER_NAME='${builder_name}'" >>${op_release}
     echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
+    # Creating an Alias
+    ln -sf /${op_release} ${ophub_release_file}
 
     cd ${current_path}
 

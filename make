@@ -1111,7 +1111,7 @@ EOF
     echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
     # Creating an Alias
-    ln -sf /${op_release} ${ophub_release_file}
+    ln -sf ${op_release#*/} ${ophub_release_file}
 
     cd ${current_path}
 

@@ -101,6 +101,14 @@ auto_kernel="true"
 # Initialize the kernel array
 declare -A tags_list
 
+# Set the Amlogic's u-boot series(u-boot-xxx.bin)
+uboot_meson_gxl=("p201.bin" "p212.bin" "s905x-s912.bin" "n1.bin" "r3300l.bin")
+uboot_meson_gxm=("p212.bin" "s905x-s912.bin" "zyxq.bin")
+uboot_meson_g12a=("x96max.bin" "e900v22c.bin")
+uboot_meson_g12b=("gtking.bin" "gtkingpro.bin" "gtkingpro-rev-a.bin" "s905x2-s922.bin")
+uboot_meson_sm1=("x96maxplus.bin" "ugoos-x3.bin" "tx3-qz.bin" "tx3-bz.bin" "skyworth-lb2004.bin")
+uboot_meson_gxbb=("p201.bin" "s905.bin")
+
 # Initialize the build device
 make_board="all"
 
@@ -606,6 +614,9 @@ confirm_version() {
     [[ -n "${MAINLINE_UBOOT}" ]] && RECORD_MAINLINE_UBOOT="/lib/u-boot/${MAINLINE_UBOOT}" || RECORD_MAINLINE_UBOOT=""
     [[ -n "${BOOTLOADER_IMG}" ]] && RECORD_BOOTLOADER_IMG="/lib/u-boot/${BOOTLOADER_IMG}" || RECORD_BOOTLOADER_IMG=""
     [[ -n "${TRUST_IMG}" ]] && RECORD_TRUST_IMG="/lib/u-boot/${TRUST_IMG}" || RECORD_TRUST_IMG=""
+    # Set the Amlogic u-boot series
+    family_rename="${FAMILY//-/_}"
+    eval "amlogic_uboot=(\${uboot_${family_rename}[@]})"
 
     # Get the kernel tags and version
     conf_kernel_tags="${KERNEL_TAGS%%/*}"
@@ -791,8 +802,16 @@ extract_openwrt() {
     rm -rf ${tag_rootfs}/lib/u-boot/*
     [[ -d "${bootloader_path}" ]] && cp -af --no-preserve=ownership ${bootloader_path}/* ${tag_rootfs}/lib/u-boot
 
-    # Copy the overload files
-    [[ "${PLATFORM}" == "amlogic" ]] && cp -rf ${uboot_path}/${PLATFORM}/overload/* ${tag_bootfs}
+    # Copy the Amlogic overload files
+    [[ "${PLATFORM}" == "amlogic" ]] && {
+        for au in "${amlogic_uboot[@]}"; do
+            if [[ -f "${uboot_path}/${PLATFORM}/overload/u-boot-${au}" ]]; then
+                cp -f ${uboot_path}/${PLATFORM}/overload/u-boot-${au} ${tag_bootfs}
+            else
+                error_msg "The [ u-boot-${au} ] file is missing in the [ ${uboot_path}/${PLATFORM}/overload ] directory."
+            fi
+        done
+    }
 
     # Remove the .git directories
     rm -rf $(find ${tmp_path} -type d -name '.git')

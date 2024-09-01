@@ -273,7 +273,7 @@ check_data() {
     cat ${model_conf} |
         sed -e 's/NULL/NA/g' -e 's/[ ][ ]*//g' |
         grep -E "^[^#ar].*" |
-        awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; NF = 8; print}' OFS=':' \
+        awk -F':' '{if ($6 != "NA") $6 = "/lib/u-boot/"$6; if ($7 != "NA") $7 = "/lib/u-boot/"$7; NF = 12; print}' OFS=':' \
             >${model_txt}
 
     # Get a list of build devices
@@ -617,6 +617,9 @@ confirm_version() {
     # Set the Amlogic u-boot series
     family_rename="${FAMILY//-/_}"
     eval "amlogic_uboot=(\${uboot_${family_rename}[@]})"
+
+    # Remove the menus that are not applicable in the model
+    grep -E ":${FAMILY}:" ${model_txt} | cut -d':' -f1-8 >temp.txt && mv -f temp.txt ${model_txt}
 
     # Get the kernel tags and version
     conf_kernel_tags="${KERNEL_TAGS%%/*}"

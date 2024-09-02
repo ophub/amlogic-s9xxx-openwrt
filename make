@@ -1114,11 +1114,9 @@ EOF
     install_menu=$(echo "${model_txt}" | awk -F'/' '{print $(NF-1)"/"$NF}')
     grep -E ":${FAMILY}:" ${install_menu} | cut -d':' -f1-8 >temp.txt && mv -f temp.txt ${install_menu}
 
-    cd ${current_path}
-
     # Create snapshot
-    mkdir -p ${tag_rootfs}/.snapshots
-    btrfs subvolume snapshot -r ${tag_rootfs}/etc ${tag_rootfs}/.snapshots/etc-000 >/dev/null 2>&1
+    mkdir -p .snapshots
+    btrfs subvolume snapshot -r etc .snapshots/etc-000 >/dev/null 2>&1
 
     sync && sleep 3
 }

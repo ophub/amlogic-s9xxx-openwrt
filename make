@@ -618,9 +618,6 @@ confirm_version() {
     family_rename="${FAMILY//-/_}"
     eval "amlogic_uboot=(\${uboot_${family_rename}[@]})"
 
-    # Remove the menus that are not applicable in the model
-    grep -E ":${FAMILY}:" ${model_txt} | cut -d':' -f1-8 >temp.txt && mv -f temp.txt ${model_txt}
-
     # Get the kernel tags and version
     conf_kernel_tags="${KERNEL_TAGS%%/*}"
     conf_kernel_list="${KERNEL_TAGS##*/}"
@@ -1112,6 +1109,10 @@ EOF
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
     # Creating an Alias
     ln -sf ${op_release#*/} ${ophub_release_file}
+
+    # Remove the menus that are not applicable in the model
+    install_menu=$(echo "${model_txt}" | awk -F'/' '{print $(NF-1)"/"$NF}')
+    grep -E ":${FAMILY}:" ${install_menu} | cut -d':' -f1-8 >temp.txt && mv -f temp.txt ${install_menu}
 
     cd ${current_path}
 

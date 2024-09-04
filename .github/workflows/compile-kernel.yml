@@ -52,6 +52,11 @@ on:
         options:
           - clang
           - gcc
+          - gcc-11.3
+          - gcc-12.2
+          - gcc-12.3
+          - gcc-13.2
+          - gcc-13.3
       compress_format:
         description: "Set the initrd compression format"
         required: false

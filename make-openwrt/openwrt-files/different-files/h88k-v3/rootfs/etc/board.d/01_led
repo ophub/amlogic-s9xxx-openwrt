@@ -7,7 +7,22 @@
 
 board_config_update
 
-ucidef_set_led_netdev "wan" "WAN" "blue:net" "eth1"
+machine_model=$(cat /proc/device-tree/model|tr -d "\000")
+
+case $machine_model in
+    "Hlink H88K V3.1")
+       ucidef_set_led_default "work" "WORK" "red:ai" "1"
+       ucidef_set_led_netdev "wan" "WAN" "green:work" "eth0"
+       ucidef_set_led_netdev "lan1" "LAN1" "blue:sata" "eth1"
+       ucidef_set_led_netdev "lan2" "LAN2" "amber:net" "eth2"
+       ;;
+    "Hlink H88K-V3")
+       ucidef_set_led_default "work" "WORK" "red:work" "1"
+       ucidef_set_led_netdev "lan1" "LAN1" "green:user" "eth0"
+       ucidef_set_led_netdev "lan2" "LAN2" "amber:sata" "eth1"
+       ucidef_set_led_netdev "wan" "WAN" "blue:net" "eth2"
+       ;;
+esac
 
 board_config_flush
 

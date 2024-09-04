@@ -1,6 +1,5 @@
-# The default order of phy interfaces for H88K is
-# eth1(2.5G) eth0(1G)
-# swap to eth0(2.5G) eth1(1G)
+# The default order of phy interfaces for RUISEN Board is
+# eth0(1G) eth1(1G)
 
 . /lib/functions/uci-defaults.sh
 . /lib/functions/system.sh
@@ -19,17 +18,14 @@ generate_mac()
         local mac_grp_5="52:54:ab:"
         local mac_grp_cnt=6
 
-        # get the cpu/emmc/sd unique id
+        # get the sd/emmc unique id
         local sd_hash
-	local cpusn=$(cat /proc/cpuinfo | grep 'Serial' | awk '{print $3}')
-	if [ -n "$cpusn" ];then
-            sd_hash=$(echo $cpusn | sha256sum | cut -f1) 
-        elif [ -f "/sys/class/block/mmcblk1/device/cid" ];then
-            sd_hash=$(sha256sum /sys/class/block/mmcblk1/device/cid | cut -f1) 
+        if [ -f "/sys/class/block/mmcblk1/device/cid" ];then
+            sd_hash=$(sha256sum /sys/class/block/mmcblk1/device/cid | cut -f1)
 	elif [ -f "/sys/class/block/mmcblk0/device/cid" ];then
-            sd_hash=$(sha256sum /sys/class/block/mmcblk0/device/cid | cut -f1) 
+            sd_hash=$(sha256sum /sys/class/block/mmcblk0/device/cid | cut -f1)
 	else
-            sd_hash=$(dd if=/dev/zero bs=1 count=68 | sha256sum | cut -f1) 
+            sd_hash=$(dd if=/dev/zero bs=1 count=68 | sha256sum | cut -f1)
 	fi
 
         # get mac address head
@@ -57,22 +53,26 @@ swap_interface()
 	ip link set dev $eth_b up
 }
 
-
-json_is_a network object && exit 0
+# Swap eth0 & eth1, or eth0 & eth2(when have ext pcie eth)
+ext_pcie_eth="0"
+if [ -d "/sys/class/pci_bus/0000:01/device/0000:01:00.0" ];then
+	pcie2_class=$(cat "/sys/class/pci_bus/0000:01/device/0000:01:00.0/class")
+	if [ "${pcie2_class}" == "0x020000" ];then
+		ext_pcie_eth="1"
+	fi
+fi
 
 # Init LAN and WAN
+json_is_a network object && exit 0
 LAN_MAC=$(generate_mac)
 WAN_MAC=$(macaddr_add $LAN_MAC +1)
 
-machine_model=$(cat /proc/device-tree/model|tr -d "\000")
-case $machine_model in
-   "Hlink H88K V3.1") ucidef_set_interfaces_lan_wan 'eth1 eth2' 'eth0'
-                      ;;
-   "Hlink H88K-V3")   ucidef_set_interfaces_lan_wan 'eth0 eth1' 'eth2'
-                      ;;
-                 *)   ucidef_set_interfaces_lan_wan 'eth0' 'eth1'
-                      ;;
-esac
+if [ $ext_pcie_eth -eq 1 ];then
+	ucidef_set_interfaces_lan_wan 'eth1 eth2' 'eth0'
+else
+	ucidef_set_interfaces_lan_wan 'eth1' 'eth0'
+fi
+
 ucidef_set_interface_macaddr "lan" $LAN_MAC
 ucidef_set_interface_macaddr "wan" $WAN_MAC
 

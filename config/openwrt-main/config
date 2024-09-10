@@ -6119,7 +6119,6 @@ CONFIG_PACKAGE_wsdd2=y
 # CONFIG_PACKAGE_nstat is not set
 # CONFIG_PACKAGE_olsrd is not set
 # CONFIG_PACKAGE_pbr is not set
-# CONFIG_PACKAGE_pbr-iptables is not set
 # CONFIG_PACKAGE_prince is not set
 # CONFIG_PACKAGE_rdma is not set
 CONFIG_PACKAGE_relayd=y
@@ -6556,6 +6555,8 @@ CONFIG_PACKAGE_ethtool=y
 # CONFIG_PACKAGE_gre is not set
 # CONFIG_PACKAGE_gsocket is not set
 # CONFIG_PACKAGE_hev-socks5-server is not set
+# CONFIG_PACKAGE_hev-socks5-tproxy is not set
+# CONFIG_PACKAGE_hev-socks5-tunnel is not set
 # CONFIG_PACKAGE_hnet-full is not set
 # CONFIG_PACKAGE_hnet-full-l2tp is not set
 # CONFIG_PACKAGE_hnet-full-secure is not set

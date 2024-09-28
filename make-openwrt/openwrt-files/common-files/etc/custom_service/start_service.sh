@@ -13,6 +13,37 @@
 # File path: /etc/custom_service/start_service.sh
 #
 #========================================================================================
+#
+# Find the partition where root is located
+ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
+if [[ -n "${ROOT_PTNAME}" ]]; then
+
+    # Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
+    case "${ROOT_PTNAME}" in
+    mmcblk?p[1-4])
+        DISK_NAME="${ROOT_PTNAME:0:-2}"
+        PARTITION_NAME="p"
+        ;;
+    [hsv]d[a-z][1-4])
+        DISK_NAME="${ROOT_PTNAME:0:-1}"
+        PARTITION_NAME=""
+        ;;
+    nvme?n?p[1-4])
+        DISK_NAME="${ROOT_PTNAME:0:-2}"
+        PARTITION_NAME="p"
+        ;;
+    *)
+        DISK_NAME=""
+        PARTITION_NAME=""
+        ;;
+    esac
+
+    PARTITION_PATH="/mnt/${DISK_NAME}${PARTITION_NAME}4"
+else
+    PARTITION_PATH=""
+fi
+#
+#========================================================================================
 
 # Custom Service Log
 custom_log="/tmp/ophub_start_service.log"
@@ -51,6 +82,18 @@ todo_rootfs_resize="/root/.todo_rootfs_resize"
 [[ -f "${todo_rootfs_resize}" && "$(cat ${todo_rootfs_resize} 2>/dev/null | xargs)" == "yes" ]] && {
     openwrt-tf 2>/dev/null &&
         echo "[$(date +"%Y.%m.%d.%H:%M:%S")] Automatically expand the partition successfully." >>${custom_log}
+}
+
+# Set swap check file
+sawp_check_file="${PARTITION_PATH}/.swap/swapfile"
+[[ -f "${sawp_check_file}" ]] && {
+    # Set swap space
+    swap_loopdev="$(losetup -f)"
+    # Mount swap file
+    losetup ${swap_loopdev} ${sawp_check_file}
+    # Enable swap
+    swapon ${swap_loopdev}
+    [[ "${?}" == 0 ]] && echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The swap file enabled successfully." >>${custom_log}
 }
 
 # Add custom log

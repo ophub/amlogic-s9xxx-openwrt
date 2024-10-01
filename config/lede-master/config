@@ -46,6 +46,7 @@ CONFIG_TARGET_armvirt=y
 # CONFIG_TARGET_realtek is not set
 # CONFIG_TARGET_rockchip is not set
 # CONFIG_TARGET_sifiveu is not set
+# CONFIG_TARGET_siflower is not set
 # CONFIG_TARGET_arc770 is not set
 # CONFIG_TARGET_archs38 is not set
 # CONFIG_TARGET_omap is not set
@@ -1862,6 +1863,7 @@ CONFIG_PACKAGE_ath10k-firmware-qca9377=y
 # CONFIG_PACKAGE_ath11k-firmware-qcn9074 is not set
 # CONFIG_PACKAGE_ath11k-firmware-wcn6750 is not set
 # CONFIG_PACKAGE_ath11k-firmware-wcn6855 is not set
+# CONFIG_PACKAGE_ath12k-firmware-wcn7850 is not set
 # CONFIG_PACKAGE_ath6k-firmware is not set
 CONFIG_PACKAGE_ath9k-htc-firmware=y
 # CONFIG_PACKAGE_bnx2-firmware is not set
@@ -1870,20 +1872,14 @@ CONFIG_PACKAGE_brcmfmac-firmware-4329-sdio=y
 # CONFIG_PACKAGE_brcmfmac-firmware-4339-sdio is not set
 CONFIG_PACKAGE_brcmfmac-firmware-43430a0-sdio=y
 # CONFIG_PACKAGE_brcmfmac-firmware-43455-sdio-phicomm-n1 is not set
-# CONFIG_PACKAGE_brcmfmac-firmware-43456-sdio is not set
-# CONFIG_PACKAGE_brcmfmac-firmware-4356-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-43602a1-pcie is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-4366b1-pcie is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-4366c0-pcie is not set
-# CONFIG_PACKAGE_brcmfmac-firmware-43752-pcie is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-43752-sdio is not set
 CONFIG_PACKAGE_brcmfmac-firmware-usb=y
 # CONFIG_PACKAGE_brcmfmac-nvram-43430-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-nvram-43455-sdio is not set
-# CONFIG_PACKAGE_brcmfmac-nvram-43456-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-nvram-4356-sdio is not set
-# CONFIG_PACKAGE_brcmfmac-nvram-43752-pcie is not set
-# CONFIG_PACKAGE_brcmfmac-nvram-43752-sdio is not set
 # CONFIG_PACKAGE_brcmsmac-firmware is not set
 CONFIG_PACKAGE_carl9170-firmware=y
 # CONFIG_PACKAGE_cypress-firmware-43012-sdio is not set
@@ -1993,12 +1989,14 @@ CONFIG_PACKAGE_rt2800-usb-firmware=y
 # CONFIG_PACKAGE_rt61-pci-firmware is not set
 CONFIG_PACKAGE_rt73-usb-firmware=y
 CONFIG_PACKAGE_rtl8188eu-firmware=y
+# CONFIG_PACKAGE_rtl8188fu-firmware is not set
 CONFIG_PACKAGE_rtl8192ce-firmware=y
 CONFIG_PACKAGE_rtl8192cu-firmware=y
 CONFIG_PACKAGE_rtl8192de-firmware=y
 CONFIG_PACKAGE_rtl8192eu-firmware=y
 CONFIG_PACKAGE_rtl8192se-firmware=y
 CONFIG_PACKAGE_rtl8723au-firmware=y
+# CONFIG_PACKAGE_rtl8723be-firmware is not set
 CONFIG_PACKAGE_rtl8723bu-firmware=y
 # CONFIG_PACKAGE_rtl8723du-firmware is not set
 # CONFIG_PACKAGE_rtl8761a-firmware is not set
@@ -2517,6 +2515,10 @@ CONFIG_PACKAGE_kmod-amazon-ena=y
 # CONFIG_PACKAGE_kmod-bnx2x is not set
 # CONFIG_PACKAGE_kmod-bnxt-en is not set
 # CONFIG_PACKAGE_kmod-dm9000 is not set
+# CONFIG_PACKAGE_kmod-dsa is not set
+# CONFIG_PACKAGE_kmod-dsa-mv88e6xxx is not set
+# CONFIG_PACKAGE_kmod-dsa-qca8k is not set
+# CONFIG_PACKAGE_kmod-dsa-tag-dsa is not set
 CONFIG_PACKAGE_kmod-dummy=y
 CONFIG_PACKAGE_kmod-dwmac-imx=y
 # CONFIG_PACKAGE_kmod-e100 is not set
@@ -2568,21 +2570,28 @@ CONFIG_PACKAGE_kmod-of-mdio=y
 CONFIG_PACKAGE_kmod-pcs-xpcs=y
 # CONFIG_PACKAGE_kmod-phy-amd is not set
 # CONFIG_PACKAGE_kmod-phy-aquantia is not set
+# CONFIG_PACKAGE_kmod-phy-at803x is not set
 CONFIG_PACKAGE_kmod-phy-ax88796b=y
 # CONFIG_PACKAGE_kmod-phy-bcm84881 is not set
 # CONFIG_PACKAGE_kmod-phy-broadcom is not set
+# CONFIG_PACKAGE_kmod-phy-intel-xway is not set
 # CONFIG_PACKAGE_kmod-phy-marvell is not set
 # CONFIG_PACKAGE_kmod-phy-marvell-10g is not set
+# CONFIG_PACKAGE_kmod-phy-micrel is not set
 # CONFIG_PACKAGE_kmod-phy-microchip is not set
+# CONFIG_PACKAGE_kmod-phy-qca83xx is not set
 # CONFIG_PACKAGE_kmod-phy-realtek is not set
 CONFIG_PACKAGE_kmod-phy-smsc=y
+# CONFIG_PACKAGE_kmod-phy-vitesse is not set
 CONFIG_PACKAGE_kmod-phylink=y
 # CONFIG_PACKAGE_kmod-qede is not set
 # CONFIG_PACKAGE_kmod-qlcnic is not set
 # CONFIG_PACKAGE_kmod-r6040 is not set
 # CONFIG_PACKAGE_kmod-r8101 is not set
 # CONFIG_PACKAGE_kmod-r8125 is not set
+# CONFIG_PACKAGE_kmod-r8125-rss is not set
 # CONFIG_PACKAGE_kmod-r8126 is not set
+# CONFIG_PACKAGE_kmod-r8126-rss is not set
 # CONFIG_PACKAGE_kmod-r8168 is not set
 # CONFIG_PACKAGE_kmod-r8169 is not set
 # CONFIG_PACKAGE_kmod-sfc is not set
@@ -2941,6 +2950,7 @@ CONFIG_PACKAGE_kmod-usbmon=y
 #
 # Wireless Drivers
 #
+# CONFIG_PACKAGE_kmod-aic8800 is not set
 # CONFIG_PACKAGE_kmod-ar5523 is not set
 CONFIG_PACKAGE_kmod-ath=y
 CONFIG_ATH_USER_REGD=y
@@ -2996,6 +3006,7 @@ CONFIG_PACKAGE_kmod-mt7601u=y
 # CONFIG_PACKAGE_kmod-mt7921s is not set
 # CONFIG_PACKAGE_kmod-mt7921u is not set
 # CONFIG_PACKAGE_kmod-mt7922-firmware is not set
+# CONFIG_PACKAGE_kmod-mt7925-firmware is not set
 # CONFIG_PACKAGE_kmod-mt7925e is not set
 # CONFIG_PACKAGE_kmod-mt7925u is not set
 # CONFIG_PACKAGE_kmod-mt7996-firmware is not set
@@ -4979,6 +4990,7 @@ CONFIG_PACKAGE_luci-app-nlbwmon=y
 # CONFIG_PACKAGE_luci-app-nps is not set
 # CONFIG_PACKAGE_luci-app-ntpc is not set
 # CONFIG_PACKAGE_luci-app-ocserv is not set
+# CONFIG_PACKAGE_luci-app-oled is not set
 # CONFIG_PACKAGE_luci-app-olsr is not set
 # CONFIG_PACKAGE_luci-app-olsr-services is not set
 # CONFIG_PACKAGE_luci-app-olsr-viz is not set

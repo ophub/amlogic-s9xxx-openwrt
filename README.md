@@ -114,7 +114,7 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 ```
 2. Clone repository to local `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. In the root directory of `~/amlogic-s9xxx-openwrt`, create `openwrt-armvirt` folder, and upload the `openwrt-armvirt-64-default-rootfs.tar.gz` file to this directory.
-4. Enter the packaging command in the root directory of `~/amlogic-s9xxx-openwrt`, such as `sudo ./make -b s905x3 -k 6.1.10`. The packaged OpenWrt firmware is placed in the `out` folder in the root directory.
+4. Enter the packaging command in the root directory of `~/amlogic-s9xxx-openwrt`, such as `sudo ./remake -b s905x3 -k 6.1.10`. The packaged OpenWrt firmware is placed in the `out` folder in the root directory.
 
 - ### Explanation of Local Packaging Parameters
 
@@ -128,15 +128,15 @@ sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
 | -s        | Size          | Set the size of the system's image partitions. When setting only the ROOTFS partition size, you can specify a single value, for example: `-s 1024`. When setting both BOOTFS and ROOTFS partition sizes, use / to connect the two values, for example: `-s 256/1024`. The default value is `256/1024` |
 | -n        | BuilderName   | Set the signature of the OpenWrt system builder. Do not include spaces when setting signatures. Default: `none` |
 
-- `sudo ./make` : Use default configuration, use the latest kernel package in the kernel library, and package all models of TV boxes.
-- `sudo ./make -b s905x3 -k 6.1.10` : Recommended. Use default configuration for related kernel packaging.
-- `sudo ./make -b s905x3 -k 6.1.y` : Package the relevant kernels using the default configuration; the kernel utilizes the latest version of the 6.1.y series.
-- `sudo ./make -b s905x3_s905d -k 6.1.10_5.15.50` : Use the default configuration and package multiple kernels at the same time. Use `_` to connect multiple kernel parameters.
-- `sudo ./make -b s905x3 -k 6.1.10 -s 1024` : Use the default configuration, specify a kernel, a model for packaging, and set the firmware size to 1024 MiB.
-- `sudo ./make -b s905x3_s905d` : Use default configuration, package all kernels for multiple models of TV boxes, use `_` to connect multiple models.
-- `sudo ./make -k 6.1.10_5.15.50` : Use the default configuration, specify multiple kernels, package all models of TV boxes, and connect kernel packages with `_`.
-- `sudo ./make -k 6.1.10_5.15.50 -a true` : Use the default configuration, specify multiple kernels, package all models of TV boxes, and connect kernel packages with `_`. Automatically upgrade to the latest kernel of the same series.
-- `sudo ./make -s 1024 -k 6.1.10` : Use the default configuration, set the firmware size to 1024 MiB, and specify the kernel as 6.1.10 to package all models of TV boxes.
+- `sudo ./remake` : Use default configuration, use the latest kernel package in the kernel library, and package all models of TV boxes.
+- `sudo ./remake -b s905x3 -k 6.1.10` : Recommended. Use default configuration for related kernel packaging.
+- `sudo ./remake -b s905x3 -k 6.1.y` : Package the relevant kernels using the default configuration; the kernel utilizes the latest version of the 6.1.y series.
+- `sudo ./remake -b s905x3_s905d -k 6.1.10_5.15.50` : Use the default configuration and package multiple kernels at the same time. Use `_` to connect multiple kernel parameters.
+- `sudo ./remake -b s905x3 -k 6.1.10 -s 1024` : Use the default configuration, specify a kernel, a model for packaging, and set the firmware size to 1024 MiB.
+- `sudo ./remake -b s905x3_s905d` : Use default configuration, package all kernels for multiple models of TV boxes, use `_` to connect multiple models.
+- `sudo ./remake -k 6.1.10_5.15.50` : Use the default configuration, specify multiple kernels, package all models of TV boxes, and connect kernel packages with `_`.
+- `sudo ./remake -k 6.1.10_5.15.50 -a true` : Use the default configuration, specify multiple kernels, package all models of TV boxes, and connect kernel packages with `_`. Automatically upgrade to the latest kernel of the same series.
+- `sudo ./remake -s 1024 -k 6.1.10` : Use the default configuration, set the firmware size to 1024 MiB, and specify the kernel as 6.1.10 to package all models of TV boxes.
 
 ## Use GitHub Actions for Compilation
 

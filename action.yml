@@ -80,7 +80,7 @@ runs:
         [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
         [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
-        sudo ./make ${make_command}
+        sudo ./remake ${make_command}
 
         cd ${GITHUB_ACTION_PATH}/${openwrt_outpath}
         # Generate a sha256sum verification file for each OpenWrt image file

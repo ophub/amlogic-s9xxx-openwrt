@@ -5,7 +5,7 @@
 # License version 2. This program is licensed "as is" without any
 # warranty of any kind, whether express or implied.
 #
-# This file is a part of the make OpenWrt
+# This file is a part of the Remake OpenWrt
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
 # Description: Automatically Packaged OpenWrt
@@ -16,7 +16,7 @@
 # Copyright (C) 2021~ https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md
 # Copyright (C) 2020~ https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Command: sudo ./make
+# Command: sudo ./remake
 # Command optional parameters please refer to the source code repository
 #
 #======================================== Functions list ========================================

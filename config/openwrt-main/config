@@ -5194,6 +5194,8 @@ CONFIG_PACKAGE_luci-app-upnp=y
 #
 # 4. Themes
 #
+CONFIG_PACKAGE_luci-theme-argon=y
+
 CONFIG_PACKAGE_luci-theme-bootstrap=y
 CONFIG_PACKAGE_luci-theme-material=y
 # CONFIG_PACKAGE_luci-theme-openwrt is not set

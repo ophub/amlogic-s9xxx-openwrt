@@ -5075,6 +5075,15 @@ CONFIG_PACKAGE_luci-mod-system=y
 #
 # 3. Applications
 #
+
+CONFIG_PACKAGE_luci-app-ddnsto=y
+CONFIG_PACKAGE_luci-app-diskman=y
+CONFIG_PACKAGE_luci-app-istorex=y
+CONFIG_PACKAGE_luci-app-linkease=y
+CONFIG_PACKAGE_luci-app-quickstart=y
+CONFIG_PACKAGE_luci-app-unishare=y
+CONFIG_PACKAGE_luci-nginxer=y
+
 # CONFIG_PACKAGE_luci-app-acl is not set
 # CONFIG_PACKAGE_luci-app-acme is not set
 # CONFIG_PACKAGE_luci-app-adblock is not set
@@ -5184,6 +5193,9 @@ CONFIG_PACKAGE_luci-app-upnp=y
 #
 # 4. Themes
 #
+
+CONFIG_PACKAGE_luci-theme-argon=y
+
 CONFIG_PACKAGE_luci-theme-bootstrap=y
 CONFIG_PACKAGE_luci-theme-material=y
 # CONFIG_PACKAGE_luci-theme-openwrt is not set

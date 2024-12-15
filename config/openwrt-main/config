@@ -463,6 +463,7 @@ CONFIG_FEED_packages=y
 CONFIG_FEED_luci=y
 CONFIG_FEED_routing=y
 CONFIG_FEED_telephony=y
+CONFIG_FEED_video=y
 
 #
 # Base system
@@ -486,6 +487,7 @@ CONFIG_BUSYBOX_DEFAULT_SHOW_USAGE=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_VERBOSE_USAGE=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_COMPRESS_USAGE is not set
 CONFIG_BUSYBOX_DEFAULT_LFS=y
+# CONFIG_BUSYBOX_DEFAULT_TIME64 is not set
 # CONFIG_BUSYBOX_DEFAULT_PAM is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_DEVPTS=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_UTMP is not set
@@ -560,8 +562,8 @@ CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_MAX_LEN=512
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_VI is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_HISTORY=256
-# CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_SAVEHISTORY is not set
-# CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_SAVE_ON_EXIT is not set
+CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_SAVEHISTORY=y
+CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_SAVE_ON_EXIT=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_REVERSE_SEARCH is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_TAB_COMPLETION=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_USERNAME_COMPLETION is not set
@@ -870,6 +872,7 @@ CONFIG_BUSYBOX_DEFAULT_FEATURE_FIND_NEWER=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_FIND_SAMEFILE is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_FIND_EXEC=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_FIND_EXEC_PLUS is not set
+# CONFIG_BUSYBOX_DEFAULT_FEATURE_FIND_EXEC_OK is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_FIND_USER=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_FIND_GROUP=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_FIND_NOT=y
@@ -1160,6 +1163,7 @@ CONFIG_BUSYBOX_DEFAULT_CRONTAB=y
 # CONFIG_BUSYBOX_DEFAULT_FLASH_LOCK is not set
 # CONFIG_BUSYBOX_DEFAULT_FLASH_UNLOCK is not set
 # CONFIG_BUSYBOX_DEFAULT_FLASHCP is not set
+# CONFIG_BUSYBOX_DEFAULT_GETFATTR is not set
 # CONFIG_BUSYBOX_DEFAULT_HDPARM is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_HDPARM_GET_IDENTITY is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
@@ -1295,6 +1299,7 @@ CONFIG_BUSYBOX_DEFAULT_IP=y
 # CONFIG_BUSYBOX_DEFAULT_IPNEIGH is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_IP_ADDRESS=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_IP_LINK=y
+# CONFIG_BUSYBOX_DEFAULT_FEATURE_IP_LINK_CAN is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_IP_ROUTE=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_IP_ROUTE_DIR="/etc/iproute2"
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_IP_TUNNEL is not set
@@ -1370,6 +1375,7 @@ CONFIG_BUSYBOX_DEFAULT_FEATURE_TRACEROUTE_VERBOSE=y
 # CONFIG_BUSYBOX_DEFAULT_WHOIS is not set
 # CONFIG_BUSYBOX_DEFAULT_ZCIP is not set
 # CONFIG_BUSYBOX_DEFAULT_UDHCPD is not set
+# CONFIG_BUSYBOX_DEFAULT_FEATURE_UDHCPD_BOOTP is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
 CONFIG_BUSYBOX_DEFAULT_DHCPD_LEASES_FILE=""
@@ -1490,7 +1496,6 @@ CONFIG_BUSYBOX_DEFAULT_ASH_EXPAND_PRMT=y
 CONFIG_BUSYBOX_DEFAULT_ASH_ECHO=y
 CONFIG_BUSYBOX_DEFAULT_ASH_PRINTF=y
 CONFIG_BUSYBOX_DEFAULT_ASH_TEST=y
-# CONFIG_BUSYBOX_DEFAULT_ASH_SLEEP is not set
 # CONFIG_BUSYBOX_DEFAULT_ASH_HELP is not set
 CONFIG_BUSYBOX_DEFAULT_ASH_GETOPTS=y
 CONFIG_BUSYBOX_DEFAULT_ASH_CMDCMD=y
@@ -1651,6 +1656,7 @@ CONFIG_PACKAGE_urngd=y
 CONFIG_PACKAGE_usign=y
 # CONFIG_PACKAGE_uxc is not set
 CONFIG_PACKAGE_wifi-scripts=y
+# CONFIG_WIFI_SCRIPTS_UCODE is not set
 CONFIG_PACKAGE_wireless-tools=y
 # CONFIG_PACKAGE_zram-swap is not set
 # CONFIG_PACKAGE_zyxel-bootconfig is not set
@@ -2043,6 +2049,13 @@ CONFIG_PACKAGE_wireless-regdb=y
 # CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSerifCondensed-Italic is not set
 # end of DejaVu
 # end of Fonts
+
+#
+# Games
+#
+# CONFIG_PACKAGE_gzdoom is not set
+# CONFIG_PACKAGE_sdl2-doom is not set
+# end of Games
 
 #
 # Kernel modules
@@ -3744,6 +3757,7 @@ CONFIG_RUST_SCCACHE_DIR=""
 #
 CONFIG_PACKAGE_ucode=y
 # CONFIG_PACKAGE_ucode-mod-debug is not set
+CONFIG_PACKAGE_ucode-mod-digest=y
 CONFIG_PACKAGE_ucode-mod-fs=y
 # CONFIG_PACKAGE_ucode-mod-log is not set
 CONFIG_PACKAGE_ucode-mod-math=y
@@ -4507,6 +4521,12 @@ CONFIG_WOLFSSL_ALT_NAMES=y
 #
 # Video
 #
+# CONFIG_PACKAGE_edid-decode is not set
+# CONFIG_PACKAGE_fribidi is not set
+# CONFIG_PACKAGE_harfbuzz is not set
+# CONFIG_PACKAGE_libassimp is not set
+# CONFIG_PACKAGE_libcairo is not set
+# CONFIG_PACKAGE_libdisplay-info is not set
 # CONFIG_PACKAGE_libdrm is not set
 # CONFIG_PACKAGE_libdrm-amdgpu is not set
 # CONFIG_PACKAGE_libdrm-etnaviv is not set
@@ -4514,6 +4534,37 @@ CONFIG_WOLFSSL_ALT_NAMES=y
 # CONFIG_PACKAGE_libdrm-omap is not set
 # CONFIG_PACKAGE_libdrm-radeon is not set
 # CONFIG_PACKAGE_libdrm-tegra is not set
+# CONFIG_PACKAGE_libepoxy is not set
+# CONFIG_PACKAGE_libglapi is not set
+CONFIG_HAVE_MESA=y
+# CONFIG_PACKAGE_libglm is not set
+# CONFIG_PACKAGE_libgraphene is not set
+# CONFIG_PACKAGE_libmesa-amd is not set
+# CONFIG_PACKAGE_libmesa-broadcom is not set
+# CONFIG_PACKAGE_libmesa-etnaviv is not set
+# CONFIG_PACKAGE_libmesa-lima is not set
+# CONFIG_PACKAGE_libmesa-llvmpipe is not set
+# CONFIG_PACKAGE_libmesa-nouveau is not set
+# CONFIG_PACKAGE_libmesa-panfrost is not set
+# CONFIG_PACKAGE_libmesa-softpipe is not set
+# CONFIG_PACKAGE_libmesa-tegra is not set
+# CONFIG_PACKAGE_libmesa-virgl is not set
+# CONFIG_PACKAGE_libmesa-zink is not set
+# CONFIG_PACKAGE_libopencl-amd is not set
+# CONFIG_PACKAGE_libopencl-nouveau is not set
+# CONFIG_PACKAGE_libosmesa-llvmpipe is not set
+# CONFIG_PACKAGE_libosmesa-softpipe is not set
+# CONFIG_PACKAGE_libpango is not set
+# CONFIG_PACKAGE_libseat is not set
+# CONFIG_PACKAGE_libva is not set
+# CONFIG_PACKAGE_libvulkan-broadcom is not set
+# CONFIG_PACKAGE_libvulkan-imagination is not set
+# CONFIG_PACKAGE_libvulkan-lvp is not set
+# CONFIG_PACKAGE_libvulkan-panfrost is not set
+# CONFIG_PACKAGE_libvulkan-radeon is not set
+# CONFIG_PACKAGE_seatd is not set
+# CONFIG_PACKAGE_vulkan-loader is not set
+# CONFIG_PACKAGE_wayland-info is not set
 # end of Video
 
 #
@@ -4524,6 +4575,7 @@ CONFIG_WOLFSSL_ALT_NAMES=y
 # CONFIG_PACKAGE_libimobiledevice-glue is not set
 # CONFIG_PACKAGE_libirecovery is not set
 # CONFIG_PACKAGE_libplist is not set
+# CONFIG_PACKAGE_libtatsu is not set
 # CONFIG_PACKAGE_libusbmuxd is not set
 # end of libimobiledevice
 
@@ -4540,6 +4592,7 @@ CONFIG_WOLFSSL_ALT_NAMES=y
 # CONFIG_PACKAGE_cJSON is not set
 # CONFIG_PACKAGE_ccid is not set
 # CONFIG_PACKAGE_check is not set
+# CONFIG_PACKAGE_cog is not set
 # CONFIG_PACKAGE_confuse is not set
 # CONFIG_PACKAGE_czmq is not set
 # CONFIG_PACKAGE_davici is not set
@@ -4549,6 +4602,7 @@ CONFIG_WOLFSSL_ALT_NAMES=y
 # CONFIG_PACKAGE_getdns is not set
 # CONFIG_PACKAGE_giflib is not set
 CONFIG_PACKAGE_glib2=y
+# CONFIG_PACKAGE_glslang is not set
 # CONFIG_PACKAGE_google-authenticator-libpam is not set
 # CONFIG_PACKAGE_gperftools-headers is not set
 # CONFIG_PACKAGE_gperftools-runtime is not set
@@ -4593,8 +4647,11 @@ CONFIG_PACKAGE_libcap-ng=y
 # CONFIG_PACKAGE_libcbor is not set
 # CONFIG_PACKAGE_libcgroup is not set
 CONFIG_PACKAGE_libcharset=y
+# CONFIG_PACKAGE_libclang is not set
+# CONFIG_PACKAGE_libclang-cpp is not set
 # CONFIG_PACKAGE_libcli is not set
 # CONFIG_PACKAGE_libcoap is not set
+# CONFIG_PACKAGE_libcogcore is not set
 CONFIG_PACKAGE_libcomerr=y
 # CONFIG_PACKAGE_libconfig is not set
 # CONFIG_PACKAGE_libctf is not set
@@ -4655,6 +4712,7 @@ CONFIG_PACKAGE_libdeflate=y
 CONFIG_PACKAGE_libdht=y
 # CONFIG_PACKAGE_libdmapsharing is not set
 # CONFIG_PACKAGE_libdnet is not set
+# CONFIG_PACKAGE_libdouble-conversion is not set
 # CONFIG_PACKAGE_libdw is not set
 CONFIG_PACKAGE_libe2p=y
 # CONFIG_PACKAGE_libecdsautil is not set
@@ -4746,6 +4804,7 @@ CONFIG_PACKAGE_libjson-c=y
 # CONFIG_PACKAGE_libleptonica is not set
 # CONFIG_PACKAGE_libloragw is not set
 # CONFIG_PACKAGE_libltdl is not set
+# CONFIG_PACKAGE_liblto is not set
 CONFIG_PACKAGE_liblua=y
 # CONFIG_PACKAGE_liblua5.3 is not set
 # CONFIG_PACKAGE_liblua5.4 is not set
@@ -4877,6 +4936,7 @@ CONFIG_PACKAGE_libqrtr-glib=y
 # CONFIG_PACKAGE_libradiotap is not set
 CONFIG_PACKAGE_libreadline=y
 # CONFIG_PACKAGE_libredblack is not set
+# CONFIG_PACKAGE_libremarks is not set
 # CONFIG_PACKAGE_librouteros is not set
 # CONFIG_PACKAGE_libroxml is not set
 # CONFIG_PACKAGE_librrd1 is not set
@@ -4887,6 +4947,8 @@ CONFIG_PACKAGE_libreadline=y
 # CONFIG_PACKAGE_libsasl2 is not set
 # CONFIG_PACKAGE_libsasl2-sasldb is not set
 # CONFIG_PACKAGE_libsasl2-utils is not set
+# CONFIG_PACKAGE_libsdl2 is not set
+# CONFIG_PACKAGE_libsdl2-mixer is not set
 CONFIG_PACKAGE_libseccomp=y
 # CONFIG_PACKAGE_libselinux is not set
 # CONFIG_PACKAGE_libsemanage is not set
@@ -4965,9 +5027,12 @@ CONFIG_PACKAGE_libwebp=y
 CONFIG_PACKAGE_libwebsockets-full=y
 # CONFIG_PACKAGE_libwebsockets-mbedtls is not set
 # CONFIG_PACKAGE_libwebsockets-openssl is not set
+# CONFIG_PACKAGE_libwpe is not set
+# CONFIG_PACKAGE_libwpewebkit is not set
 # CONFIG_PACKAGE_libwrap is not set
 # CONFIG_PACKAGE_libxerces-c is not set
 # CONFIG_PACKAGE_libxerces-c-samples is not set
+# CONFIG_PACKAGE_libxkbcommon is not set
 CONFIG_PACKAGE_libxml2=y
 # CONFIG_PACKAGE_libxmlb is not set
 # CONFIG_PACKAGE_libxslt is not set
@@ -4977,6 +5042,7 @@ CONFIG_PACKAGE_libxml2=y
 # CONFIG_PACKAGE_libyubikey is not set
 # CONFIG_PACKAGE_libzmq-curve is not set
 # CONFIG_PACKAGE_libzmq-nc is not set
+# CONFIG_PACKAGE_libzmusic is not set
 # CONFIG_PACKAGE_linux-atm is not set
 # CONFIG_PACKAGE_lmdb is not set
 # CONFIG_PACKAGE_log4cplus is not set
@@ -5014,6 +5080,10 @@ CONFIG_PACKAGE_terminfo=y
 # CONFIG_PACKAGE_tinycdb is not set
 # CONFIG_PACKAGE_totem-pl-parser is not set
 # CONFIG_PACKAGE_uw-imap is not set
+# CONFIG_PACKAGE_wpebackend-fdo is not set
+# CONFIG_PACKAGE_wpewebkit-driver is not set
+# CONFIG_PACKAGE_wpewebkit-minibrowser is not set
+# CONFIG_PACKAGE_xkeyboard-config is not set
 # CONFIG_PACKAGE_xmlrpc-c-abyss is not set
 # CONFIG_PACKAGE_xmlrpc-c-client is not set
 # CONFIG_PACKAGE_xmlrpc-c-internal is not set
@@ -5141,6 +5211,7 @@ CONFIG_PACKAGE_luci-app-dockerman=y
 # CONFIG_PACKAGE_luci-app-eoip is not set
 # CONFIG_PACKAGE_luci-app-example is not set
 # CONFIG_PACKAGE_luci-app-filebrowser is not set
+# CONFIG_PACKAGE_luci-app-filemanager is not set
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-frpc=y
 CONFIG_PACKAGE_luci-app-frps=y
@@ -6191,7 +6262,6 @@ CONFIG_PACKAGE_wsdd2=y
 # CONFIG_PACKAGE_nstat is not set
 # CONFIG_PACKAGE_olsrd is not set
 # CONFIG_PACKAGE_pbr is not set
-# CONFIG_PACKAGE_pbr-netifd is not set
 # CONFIG_PACKAGE_prince is not set
 # CONFIG_PACKAGE_rdma is not set
 CONFIG_PACKAGE_relayd=y
@@ -6492,6 +6562,7 @@ CONFIG_PACKAGE_uhttpd-mod-ubus=y
 # CONFIG_PACKAGE_pixiewps is not set
 # CONFIG_PACKAGE_reaver is not set
 # CONFIG_PACKAGE_wavemon is not set
+# CONFIG_PACKAGE_wfb-ng is not set
 # CONFIG_PACKAGE_wifischedule is not set
 # end of Wireless
 
@@ -6576,8 +6647,8 @@ CONFIG_PACKAGE_wpad-basic=y
 # CONFIG_PACKAGE_ahcpd is not set
 # CONFIG_PACKAGE_alfred is not set
 # CONFIG_PACKAGE_alist is not set
-CONFIG_PACKAGE_apcupsd=y
-CONFIG_PACKAGE_apcupsd-cgi=y
+# CONFIG_PACKAGE_apcupsd is not set
+# CONFIG_PACKAGE_apcupsd-cgi is not set
 # CONFIG_PACKAGE_apinger is not set
 # CONFIG_PACKAGE_apinger-rrd is not set
 # CONFIG_PACKAGE_atlas-probe is not set
@@ -7209,6 +7280,16 @@ CONFIG_PACKAGE_zoneinfo-core=y
 # end of Utilities
 
 #
+# Video
+#
+# CONFIG_PACKAGE_kmscube is not set
+# CONFIG_PACKAGE_libgtk-demos is not set
+# CONFIG_PACKAGE_libgtk-utils is not set
+# CONFIG_PACKAGE_libsdl2-tests is not set
+# CONFIG_PACKAGE_vkmark is not set
+# end of Video
+
+#
 # Virtualization
 #
 # CONFIG_PACKAGE_qemu-aarch64-softmmu is not set
@@ -7789,6 +7870,72 @@ CONFIG_PACKAGE_whereis=y
 # CONFIG_PACKAGE_yq is not set
 # CONFIG_PACKAGE_zyxel-reset is not set
 # end of Utilities
+
+#
+# Video
+#
+
+#
+# Frameworks and Toolkits
+#
+# CONFIG_PACKAGE_cage is not set
+# CONFIG_PACKAGE_libgdk-pixbuf is not set
+# CONFIG_PACKAGE_libgtk is not set
+# CONFIG_PACKAGE_libwayland is not set
+# CONFIG_PACKAGE_qt5base-concurrent is not set
+# CONFIG_PACKAGE_qt5base-core is not set
+# CONFIG_PACKAGE_qt5base-gui is not set
+# CONFIG_PACKAGE_qt5base-network is not set
+# CONFIG_PACKAGE_qt5base-plugin-bearer-generic is not set
+# CONFIG_PACKAGE_qt5base-plugin-imageformats-ico is not set
+# CONFIG_PACKAGE_qt5base-plugin-imageformats-jpeg is not set
+# CONFIG_PACKAGE_qt5base-plugin-input-evdevkeyboard is not set
+# CONFIG_PACKAGE_qt5base-plugin-input-evdevmouse is not set
+# CONFIG_PACKAGE_qt5base-plugin-input-evdevtablet is not set
+# CONFIG_PACKAGE_qt5base-plugin-input-evdevtouch is not set
+# CONFIG_PACKAGE_qt5base-plugin-input-libinput is not set
+# CONFIG_PACKAGE_qt5base-plugin-platforms-linuxfb is not set
+# CONFIG_PACKAGE_qt5base-plugin-platforms-minimal is not set
+# CONFIG_PACKAGE_qt5base-plugin-platforms-offscreen is not set
+# CONFIG_PACKAGE_qt5base-plugin-platforms-vnc is not set
+# CONFIG_PACKAGE_qt5base-printSupport is not set
+# CONFIG_PACKAGE_qt5base-sql is not set
+# CONFIG_PACKAGE_qt5base-test is not set
+# CONFIG_PACKAGE_qt5base-widgets is not set
+# CONFIG_PACKAGE_qt5base-xml is not set
+# CONFIG_PACKAGE_qt5quick2-2d-sw-renderer-GLstubs is not set
+# CONFIG_PACKAGE_qt5quick2-controls2 is not set
+# CONFIG_PACKAGE_qt5quick2-qml is not set
+# CONFIG_PACKAGE_qt5quick2-qml-models is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtlabs-animation is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtlabs-folderlistmodel is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtlabs-models is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtlabs-settings is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtlabs-sharedimage is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtlabs-wavefrontmesh is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtqml-models2 is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtqml-statemachine is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtqml-workerscript2 is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtquick-layouts is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtquick-localstorage is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtquick-shapes is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtquick-window2 is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qtquick2 is not set
+# CONFIG_PACKAGE_qt5quick2-qml-module-qttest is not set
+# CONFIG_PACKAGE_qt5quick2-qml-worker-script is not set
+# CONFIG_PACKAGE_qt5quick2-quick is not set
+# CONFIG_PACKAGE_qt5quick2-quick-shapes is not set
+# CONFIG_PACKAGE_qt5quick2-quick-test is not set
+# CONFIG_PACKAGE_qt5quick2-quick-widgets is not set
+# CONFIG_PACKAGE_qt5script-script is not set
+# CONFIG_PACKAGE_qt5script-scriptTools is not set
+# CONFIG_PACKAGE_qt5translations is not set
+# CONFIG_PACKAGE_wayland-protocols is not set
+# CONFIG_PACKAGE_wayland-scanner is not set
+# CONFIG_PACKAGE_weston is not set
+# CONFIG_PACKAGE_wlroots is not set
+# end of Frameworks and Toolkits
+# end of Video
 
 #
 # Xorg

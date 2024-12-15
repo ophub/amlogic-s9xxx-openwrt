@@ -82,6 +82,7 @@ CONFIG_DEFAULT_e2fsprogs=y
 CONFIG_DEFAULT_firewall=y
 CONFIG_DEFAULT_fstools=y
 CONFIG_DEFAULT_ip-full=y
+CONFIG_DEFAULT_ip6tables=y
 CONFIG_DEFAULT_ipset=y
 CONFIG_DEFAULT_iptables=y
 CONFIG_DEFAULT_iptables-mod-extra=y
@@ -93,6 +94,7 @@ CONFIG_DEFAULT_kmod-fsl-dpaa2-net=y
 CONFIG_DEFAULT_kmod-fsl-fec=y
 CONFIG_DEFAULT_kmod-gpio-pca953x=y
 CONFIG_DEFAULT_kmod-i2c-mux-pca954x=y
+CONFIG_DEFAULT_kmod-ipt-nat6=y
 CONFIG_DEFAULT_kmod-ipt-raw=y
 CONFIG_DEFAULT_kmod-mvpp2=y
 CONFIG_DEFAULT_kmod-nf-nathelper=y
@@ -106,6 +108,7 @@ CONFIG_DEFAULT_kmod-tun=y
 CONFIG_DEFAULT_kmod-vmxnet3=y
 CONFIG_DEFAULT_libc=y
 CONFIG_DEFAULT_libgcc=y
+CONFIG_DEFAULT_libip6tc=y
 CONFIG_DEFAULT_libustream-openssl=y
 CONFIG_DEFAULT_logd=y
 CONFIG_DEFAULT_luci=y
@@ -200,6 +203,7 @@ CONFIG_TARGET_ROOTFS_PARTSIZE=160
 # Global build settings
 #
 CONFIG_JSON_OVERVIEW_IMAGE_INFO=y
+# CONFIG_JSON_CYCLONEDX_SBOM is not set
 # CONFIG_ALL_NONSHARED is not set
 # CONFIG_ALL_KMODS is not set
 # CONFIG_ALL is not set
@@ -217,7 +221,6 @@ CONFIG_DISPLAY_SUPPORT=y
 CONFIG_SHADOW_PASSWORDS=y
 # CONFIG_CLEAN_IPKG is not set
 # CONFIG_IPK_FILES_CHECKSUMS is not set
-# CONFIG_INCLUDE_CONFIG is not set
 # CONFIG_REPRODUCIBLE_DEBUG_INFO is not set
 # CONFIG_COLLECT_KERNEL_DEBUG is not set
 
@@ -230,13 +233,13 @@ CONFIG_KERNEL_PRINTK=y
 CONFIG_KERNEL_SWAP=y
 # CONFIG_KERNEL_PROC_STRIPPED is not set
 CONFIG_KERNEL_DEBUG_FS=y
-CONFIG_KERNEL_ARM_PMU=y
 # CONFIG_KERNEL_PERF_EVENTS is not set
 # CONFIG_KERNEL_PROFILING is not set
 # CONFIG_KERNEL_UBSAN is not set
 # CONFIG_KERNEL_KASAN is not set
 # CONFIG_KERNEL_KCOV is not set
 # CONFIG_KERNEL_TASKSTATS is not set
+# CONFIG_KERNEL_PSI is not set
 CONFIG_KERNEL_KALLSYMS=y
 # CONFIG_KERNEL_FTRACE is not set
 CONFIG_KERNEL_DEBUG_KERNEL=y
@@ -337,6 +340,7 @@ CONFIG_KERNEL_IPV6_SEG6_LWTUNNEL=y
 CONFIG_KERNEL_MPTCP=y
 CONFIG_KERNEL_MPTCP_IPV6=y
 # CONFIG_KERNEL_IP_PNP is not set
+# CONFIG_KERNEL_BTRFS_FS is not set
 
 #
 # Filesystem ACL and attr support options
@@ -374,6 +378,7 @@ CONFIG_KERNEL_EXT4_FS_SECURITY=y
 # CONFIG_KERNEL_F2FS_FS_SECURITY is not set
 # CONFIG_KERNEL_UBIFS_FS_SECURITY is not set
 # CONFIG_KERNEL_JFFS2_FS_SECURITY is not set
+# CONFIG_KERNEL_WERROR is not set
 # end of Kernel build options
 
 #
@@ -382,6 +387,8 @@ CONFIG_KERNEL_EXT4_FS_SECURITY=y
 # CONFIG_DEBUG is not set
 # CONFIG_USE_GC_SECTIONS is not set
 # CONFIG_USE_LTO is not set
+CONFIG_MOLD=y
+# CONFIG_USE_MOLD is not set
 CONFIG_IPV6=y
 
 #
@@ -390,8 +397,7 @@ CONFIG_IPV6=y
 # CONFIG_NO_STRIP is not set
 # CONFIG_USE_STRIP is not set
 CONFIG_USE_SSTRIP=y
-CONFIG_SSTRIP_ARGS="-z"
-# CONFIG_STRIP_KERNEL_EXPORTS is not set
+CONFIG_SSTRIP_DISCARD_TRAILING_ZEROES=y
 # CONFIG_USE_MKLIBS is not set
 
 #
@@ -421,17 +427,13 @@ CONFIG_SECCOMP=y
 # end of Global build settings
 
 # CONFIG_DEVEL is not set
-# CONFIG_BROKEN is not set
 CONFIG_BINARY_FOLDER=""
 CONFIG_DOWNLOAD_TOOL_CUSTOM=""
 CONFIG_DOWNLOAD_FOLDER=""
 CONFIG_LOCALMIRROR=""
 CONFIG_AUTOREBUILD=y
-# CONFIG_AUTOREMOVE is not set
-# CONFIG_BUILD_ALL_HOST_TOOLS is not set
 CONFIG_BUILD_SUFFIX=""
 CONFIG_TARGET_ROOTFS_DIR=""
-# CONFIG_CCACHE is not set
 CONFIG_CCACHE_DIR=""
 CONFIG_KERNEL_CFLAGS=""
 CONFIG_EXTERNAL_KERNEL_TREE=""
@@ -455,7 +457,7 @@ CONFIG_USE_MUSL=y
 CONFIG_SSP_SUPPORT=y
 CONFIG_BINUTILS_VERSION_2_40=y
 CONFIG_BINUTILS_VERSION="2.40"
-CONFIG_GCC_VERSION="11.3.0"
+CONFIG_GCC_VERSION="13.3.0"
 CONFIG_LIBC="musl"
 CONFIG_TARGET_SUFFIX="musl"
 # CONFIG_IB is not set
@@ -1802,6 +1804,9 @@ CONFIG_PACKAGE_netdata=y
 CONFIG_PACKAGE_autocore-arm=y
 # CONFIG_PACKAGE_automount is not set
 # CONFIG_PACKAGE_autosamba is not set
+CONFIG_PACKAGE_autosamba_INCLUDE_KSMBD=y
+# CONFIG_PACKAGE_autosamba_INCLUDE_SAMBA3 is not set
+# CONFIG_PACKAGE_autosamba_INCLUDE_SAMBA4 is not set
 # CONFIG_PACKAGE_cpufreq is not set
 # CONFIG_PACKAGE_ipv6helper is not set
 # CONFIG_PACKAGE_jose is not set
@@ -3178,6 +3183,7 @@ CONFIG_PACKAGE_uuid=y
 CONFIG_NODEJS_16=y
 # CONFIG_NODEJS_18 is not set
 # CONFIG_NODEJS_20 is not set
+# CONFIG_NODEJS_22 is not set
 # end of Configuration
 
 # CONFIG_PACKAGE_node-arduino-firmata is not set
@@ -3192,12 +3198,6 @@ CONFIG_NODEJS_16=y
 # CONFIG_PACKAGE_node-serialport is not set
 # CONFIG_PACKAGE_node-serialport-bindings is not set
 # end of Node.js
-
-#
-# PHP7
-#
-# CONFIG_PACKAGE_php7 is not set
-# end of PHP7
 
 #
 # PHP8
@@ -6632,8 +6632,8 @@ CONFIG_PACKAGE_adbyby=y
 # CONFIG_PACKAGE_ahcpd is not set
 # CONFIG_PACKAGE_alfred is not set
 # CONFIG_PACKAGE_alist is not set
-CONFIG_PACKAGE_apcupsd=y
-CONFIG_PACKAGE_apcupsd-cgi=y
+# CONFIG_PACKAGE_apcupsd is not set
+# CONFIG_PACKAGE_apcupsd-cgi is not set
 # CONFIG_PACKAGE_apinger is not set
 # CONFIG_PACKAGE_apinger-rrd is not set
 # CONFIG_PACKAGE_atlas-probe is not set

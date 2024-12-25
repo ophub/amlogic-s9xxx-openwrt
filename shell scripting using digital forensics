@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# Digital Forensics Collection Script
+# Author: Your Name
+# Date: YYYY-MM-DD
+# Description: This script collects basic forensic information from a Linux system.
+
+# Create a directory to store the forensic data
+FORCE_DIR="forensic_data_$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$FORCE_DIR"
+
+# Collect system information
+echo "Collecting system information..."
+uname -a > "$FORCE_DIR/system_info.txt"
+echo "System information collected."
+
+# Collect user information
+echo "Collecting user information..."
+cat /etc/passwd > "$FORCE_DIR/user_info.txt"
+echo "User  information collected."
+
+# Collect currently running processes
+echo "Collecting running processes..."
+ps aux > "$FORCE_DIR/running_processes.txt"
+echo "Running processes collected."
+
+# Collect network information
+echo "Collecting network information..."
+ifconfig > "$FORCE_DIR/network_info.txt"
+netstat -tuln >> "$FORCE_DIR/network_info.txt"
+echo "Network information collected."
+
+# Collect last login information
+echo "Collecting last login information..."
+last > "$FORCE_DIR/last_login_info.txt"
+echo "Last login information collected."
+
+# Collect installed packages (Debian-based systems)
+if command -v dpkg > /dev/null; then
+    echo "Collecting installed packages..."
+    dpkg -l > "$FORCE_DIR/installed_packages.txt"
+    echo "Installed packages collected."
+fi
+
+# Collect installed packages (Red Hat-based systems)
+if command -v rpm > /dev/null; then
+    echo "Collecting installed packages..."
+    rpm -qa > "$FORCE_DIR/installed_packages.txt"
+    echo "Installed packages collected."
+fi
+
+# Collect system logs
+echo "Collecting system logs..."
+cp /var/log/syslog "$FORCE_DIR/syslog.txt" 2>/dev/null
+cp /var/log/messages "$FORCE_DIR/messages.txt" 2>/dev/null
+echo "System logs collected."
+
+# Collect crontab entries
+echo "Collecting crontab entries..."
+crontab -l > "$FORCE_DIR/crontab_entries.txt" 2>/dev/null
+echo "Crontab entries collected."
+
+# Collect file system information
+echo "Collecting file system information..."
+df -h > "$FORCE_DIR/file_system_info.txt"
+echo "File system information collected."
+
+# Collect open files
+echo "Collecting open files..."
+lsof > "$FORCE_DIR/open_files.txt"
+echo "Open files collected."
+
+# Finish
+echo "Forensic data collection completed. Data stored in: $FORCE_DIR"

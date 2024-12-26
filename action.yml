@@ -96,7 +96,7 @@ runs:
         echo -e "PACKAGED_OUTPUTPATH: ${PWD}/${openwrt_outpath}"
         echo -e "PACKAGED_OUTPUTDATE: $(date +"%m.%d.%H%M")"
         echo -e "PACKAGED_STATUS: success"
-        echo -e "PACKAGED_OUTPUTPATH files list: \n$(ls -l ${PWD}/${openwrt_outpath} 2>/dev/null)"
+        echo -e "PACKAGED_OUTPUTPATH files list: \n$(ls -l ${PWD}/${openwrt_outpath}/ 2>/dev/null)"
 
 branding:
   icon: "terminal"

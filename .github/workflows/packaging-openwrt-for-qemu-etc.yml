@@ -75,7 +75,7 @@ on:
         type: choice
         options:
           - ophub/kernel
-          - breakings/OpenWrt
+          - breakingbadboy/OpenWrt
       auto_kernel:
         description: "Auto use the latest kernel"
         required: false

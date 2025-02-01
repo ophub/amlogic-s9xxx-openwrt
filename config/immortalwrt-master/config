@@ -36,6 +36,7 @@ CONFIG_TARGET_armsr=y
 # CONFIG_TARGET_qoriq is not set
 # CONFIG_TARGET_imx is not set
 # CONFIG_TARGET_qualcommax is not set
+# CONFIG_TARGET_qualcommbe is not set
 # CONFIG_TARGET_ipq40xx is not set
 # CONFIG_TARGET_ipq806x is not set
 # CONFIG_TARGET_realtek is not set
@@ -3176,6 +3177,8 @@ CONFIG_PACKAGE_kmod-rtlwifi-usb=y
 # end of Wireless Drivers
 
 CONFIG_PACKAGE_kmod-cdrom=y
+# CONFIG_PACKAGE_kmod-packet-diag is not set
+# CONFIG_PACKAGE_kmod-unix-diag is not set
 # end of Kernel modules
 
 #
@@ -4616,6 +4619,8 @@ CONFIG_MBEDTLS_THREADING_PTHREAD=y
 # CONFIG_MBEDTLS_VERSION_FEATURES is not set
 CONFIG_MBEDTLS_PSA_CRYPTO_CLIENT=y
 # CONFIG_MBEDTLS_DEPRECATED_WARNING is not set
+CONFIG_MBEDTLS_SHA256_USE_ARMV8_A_CRYPTO_IF_PRESENT=y
+CONFIG_MBEDTLS_SHA512_USE_A64_CRYPTO_IF_PRESENT=y
 CONFIG_MBEDTLS_SSL_PROTO_TLS1_2=y
 CONFIG_MBEDTLS_SSL_PROTO_TLS1_3=y
 CONFIG_MBEDTLS_SSL_TLS1_3_COMPATIBILITY_MODE=y
@@ -4904,6 +4909,7 @@ CONFIG_LIBCURL_FILE=y
 CONFIG_LIBCURL_FTP=y
 # CONFIG_LIBCURL_GOPHER is not set
 CONFIG_LIBCURL_HTTP=y
+# CONFIG_LIBCURL_WEBSOCKETS is not set
 CONFIG_LIBCURL_COOKIES=y
 # CONFIG_LIBCURL_IMAP is not set
 # CONFIG_LIBCURL_LDAP is not set
@@ -5543,7 +5549,6 @@ CONFIG_PACKAGE_luci-app-package-manager=y
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server is not set
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs is not set
 CONFIG_PACKAGE_luci-app-passwall_INCLUDE_SingBox=y
-# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus is not set
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_tuic_client is not set
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geodata is not set
 CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geoview=y
@@ -5566,6 +5571,7 @@ CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geoview=y
 # CONFIG_PACKAGE_luci-app-rclone_INCLUDE_rclone-webui is not set
 # CONFIG_PACKAGE_luci-app-rclone_INCLUDE_rclone-ng is not set
 # CONFIG_PACKAGE_luci-app-rp-pppoe-server is not set
+# CONFIG_PACKAGE_luci-app-rustdesk-server is not set
 CONFIG_PACKAGE_luci-app-samba4=y
 # CONFIG_PACKAGE_luci-app-scutclient is not set
 # CONFIG_PACKAGE_luci-app-ser2net is not set
@@ -6427,6 +6433,7 @@ CONFIG_PACKAGE_ddns-scripts=y
 # CONFIG_PACKAGE_ddns-scripts-digitalocean is not set
 # CONFIG_PACKAGE_ddns-scripts-dnspod is not set
 # CONFIG_PACKAGE_ddns-scripts-dnspod-com is not set
+# CONFIG_PACKAGE_ddns-scripts-dnspod-v3 is not set
 # CONFIG_PACKAGE_ddns-scripts-freedns is not set
 # CONFIG_PACKAGE_ddns-scripts-gandi is not set
 # CONFIG_PACKAGE_ddns-scripts-gcp is not set
@@ -6989,8 +6996,6 @@ CONFIG_PACKAGE_frps=y
 # CONFIG_PACKAGE_srelay is not set
 # CONFIG_PACKAGE_tinyproxy is not set
 # CONFIG_PACKAGE_trojan is not set
-# CONFIG_PACKAGE_trojan-go is not set
-# CONFIG_PACKAGE_trojan-plus is not set
 # CONFIG_PACKAGE_tuic-client is not set
 # CONFIG_PACKAGE_tuic-server is not set
 CONFIG_PACKAGE_uhttpd=y
@@ -7103,6 +7108,7 @@ CONFIG_PACKAGE_6in4=y
 # CONFIG_PACKAGE_ahcpd is not set
 # CONFIG_PACKAGE_alfred is not set
 # CONFIG_PACKAGE_alist is not set
+# CONFIG_PACKAGE_antiblock is not set
 # CONFIG_PACKAGE_apcupsd is not set
 # CONFIG_PACKAGE_apcupsd-cgi is not set
 # CONFIG_PACKAGE_apinger is not set
@@ -7153,6 +7159,7 @@ CONFIG_PACKAGE_ethtool=y
 # CONFIG_PACKAGE_flent is not set
 # CONFIG_PACKAGE_foolsm is not set
 # CONFIG_PACKAGE_fping is not set
+# CONFIG_PACKAGE_fsh is not set
 # CONFIG_PACKAGE_generate-ipv6-address is not set
 # CONFIG_PACKAGE_gensio-bin is not set
 # CONFIG_PACKAGE_geoip-shell is not set
@@ -8005,6 +8012,7 @@ CONFIG_PACKAGE_coreutils-truncate=y
 # CONFIG_PACKAGE_coreutils-yes is not set
 # CONFIG_PACKAGE_cpulimit is not set
 # CONFIG_PACKAGE_cpulimit-ng is not set
+# CONFIG_PACKAGE_cpupower is not set
 # CONFIG_PACKAGE_cpusage is not set
 # CONFIG_PACKAGE_crconf is not set
 # CONFIG_PACKAGE_crelay is not set
@@ -8199,6 +8207,7 @@ CONFIG_PACKAGE_openssl-util=y
 # CONFIG_PACKAGE_pciutils is not set
 # CONFIG_PACKAGE_pcsc-tools is not set
 # CONFIG_PACKAGE_pcscd is not set
+# CONFIG_PACKAGE_pkgen is not set
 # CONFIG_PACKAGE_pnpids is not set
 # CONFIG_PACKAGE_podman is not set
 
@@ -8326,6 +8335,7 @@ CONFIG_PACKAGE_tini=y
 # CONFIG_PACKAGE_ucode-mod-bpf is not set
 CONFIG_PACKAGE_ucode-mod-html=y
 CONFIG_PACKAGE_ucode-mod-lua=y
+# CONFIG_PACKAGE_ucode-mod-pkgen is not set
 # CONFIG_PACKAGE_ucode-mod-uclient is not set
 # CONFIG_PACKAGE_ucode-mod-udebug is not set
 # CONFIG_PACKAGE_udebug-cli is not set
@@ -8365,12 +8375,6 @@ CONFIG_PACKAGE_whereis=y
 # CONFIG_PACKAGE_yq is not set
 # CONFIG_PACKAGE_zyxel-reset is not set
 # end of Utilities
-
-#
-# Utils
-#
-# CONFIG_PACKAGE_cpupower is not set
-# end of Utils
 
 #
 # Video

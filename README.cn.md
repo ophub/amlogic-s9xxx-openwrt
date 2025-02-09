@@ -110,7 +110,7 @@ openwrt-openvfd
 sudo apt-get update -y
 sudo apt-get full-upgrade -y
 # For Ubuntu-22.04
-sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
+sudo apt-get install -y $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
 ```
 2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armvirt` 文件夹, 并将 `openwrt-armvirt-64-default-rootfs.tar.gz` 文件上传至此目录。

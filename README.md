@@ -110,7 +110,7 @@ Some common problems that might be encountered during the use of OpenWrt can be 
 sudo apt-get update -y
 sudo apt-get full-upgrade -y
 # For Ubuntu-22.04
-sudo apt-get install -y $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
+sudo apt-get install -y $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
 ```
 2. Clone repository to local `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. In the root directory of `~/amlogic-s9xxx-openwrt`, create `openwrt-armvirt` folder, and upload the `openwrt-armvirt-64-default-rootfs.tar.gz` file to this directory.

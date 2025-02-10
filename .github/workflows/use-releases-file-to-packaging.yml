@@ -309,19 +309,20 @@ jobs:
           ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
-          latest_version="$(curl -s \
-                              -H "Accept: application/vnd.github+json" \
-                              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                              https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=100 |
-                              jq '.[]' |
-                              jq -s --arg RTK "OpenWrt_${{ inputs.source_branch }}_" '.[] | select(.tag_name | contains($RTK))' |
-                              jq -s '.[].assets[] | {data:.updated_at, url:.browser_download_url}' |
-                              jq -s --arg BOARD "-rootfs.tar.gz" '.[] | select(.url | endswith($BOARD))' |
-                              jq -s 'sort_by(.data)|reverse[]' |
-                              jq -s '.[0]' -c
-                          )"
+          latest_version=$(curl -s \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=100 | \
+                jq -r --arg RTK "OpenWrt_${{ inputs.source_branch }}_" \
+                --arg BOARD "-rootfs.tar.gz" \
+                '[.[] | select(.tag_name | contains($RTK))] |
+                map(.assets[] | select(.browser_download_url | endswith($BOARD))) |
+                sort_by(.updated_at) |
+                reverse |
+                .[0] |
+                {data: .updated_at, url: .browser_download_url}')
 
-          [[ "${latest_version}" == "null" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
+          [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
           latest_updated_at="$(echo ${latest_version} | jq -r '.data')"
           latest_url="$(echo ${latest_version} | jq -r '.url')"
 

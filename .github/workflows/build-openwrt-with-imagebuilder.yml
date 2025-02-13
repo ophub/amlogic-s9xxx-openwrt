@@ -285,23 +285,44 @@ jobs:
           chmod +x ${IMAGEBUILDER_SH}
           ${IMAGEBUILDER_SH} ${RELEASES_BRANCH}
           echo "RELEASES_TAG=${RELEASES_BRANCH/:/_}" >> ${GITHUB_ENV}
+          echo "build_tag=OpenWrt_imagebuilder_${{ env.RELEASES_TAG }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Clear server space
+        id: clean
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         run: |
           cd imagebuilder
-          rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+          [[ -d "output" ]] || mkdir output
+          cp -f bin/targets/*/*/*rootfs.tar.gz output/
+          cp -f .config output/config
+          rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
+
+          # Generate sha256sum file
+          cd output/
+          for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
 
           [[ -d "/builder/openwrt" ]] || mkdir -p /builder/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
           df -hT ${PWD}
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Upload OpenWrt to Release
+        uses: ncipollo/release-action@main
+        if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
+        with:
+          tag: ${{ steps.imagebuilder.outputs.build_tag }}
+          artifacts: imagebuilder/output/*
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Packaging OpenWrt
-        if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
-          openwrt_path: imagebuilder/bin/targets/*/*/*rootfs.tar.gz
+          openwrt_path: imagebuilder/output/*rootfs.tar.gz
           openwrt_board: ${{ inputs.openwrt_board }}
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}
@@ -313,7 +334,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
-          tag: OpenWrt_imagebuilder_${{ env.RELEASES_TAG }}_${{ env.PACKAGED_OUTPUTDATE }}
+          tag: ${{ steps.imagebuilder.outputs.build_tag }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           removeArtifacts: false

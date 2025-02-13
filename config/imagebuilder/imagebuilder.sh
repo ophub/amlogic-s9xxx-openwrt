@@ -63,24 +63,13 @@ download_imagebuilder() {
     cd ${make_path}
     echo -e "${STEPS} Start downloading OpenWrt files..."
 
-    # Determine the target system (Imagebuilder files naming has changed since 23.05.0)
-    if [[ "${op_branch:0:2}" -ge "23" && "${op_branch:3:2}" -ge "05" ]]; then
-        target_system="armsr/armv8"
-        target_name="armsr-armv8"
-        target_profile=""
-    else
-        target_system="armvirt/64"
-        target_name="armvirt-64"
-        target_profile="Default"
-    fi
-
     # Downloading imagebuilder files
-    download_file="https://downloads.${op_sourse}.org/releases/${op_branch}/targets/${target_system}/${op_sourse}-imagebuilder-${op_branch}-${target_name}.Linux-x86_64.tar.xz"
+    download_file="https://downloads.${op_sourse}.org/releases/${op_branch}/targets/armsr/armv8/${op_sourse}-imagebuilder-${op_branch}-armsr-armv8.Linux-x86_64.tar.zst"
     curl -fsSOL ${download_file}
     [[ "${?}" -eq "0" ]] || error_msg "Download failed: [ ${download_file} ]"
 
     # Unzip and change the directory name
-    tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
+    tar -I zstd -xvf *-imagebuilder-*.tar.zst -C . && sync && rm -f *-imagebuilder-*.tar.zst
     mv -f *-imagebuilder-* ${openwrt_dir}
 
     sync && sleep 3
@@ -207,7 +196,7 @@ rebuild_firmware() {
         "
 
     # Rebuild firmware
-    make image PROFILE="${target_profile}" PACKAGES="${my_packages}" FILES="files"
+    make image PROFILE="" PACKAGES="${my_packages}" FILES="files"
 
     sync && sleep 3
     echo -e "${INFO} [ ${openwrt_dir}/bin/targets/*/* ] directory status: $(ls bin/targets/*/* -al 2>/dev/null)"

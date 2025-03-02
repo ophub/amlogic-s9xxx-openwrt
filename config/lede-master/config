@@ -1882,6 +1882,7 @@ CONFIG_PACKAGE_ath9k-htc-firmware=y
 CONFIG_PACKAGE_brcmfmac-firmware-4329-sdio=y
 # CONFIG_PACKAGE_brcmfmac-firmware-4339-sdio is not set
 CONFIG_PACKAGE_brcmfmac-firmware-43430a0-sdio=y
+# CONFIG_PACKAGE_brcmfmac-firmware-43430b0-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-43455-sdio-phicomm-n1 is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-43602a1-pcie is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-4366b1-pcie is not set
@@ -1889,6 +1890,7 @@ CONFIG_PACKAGE_brcmfmac-firmware-43430a0-sdio=y
 # CONFIG_PACKAGE_brcmfmac-firmware-43752-sdio is not set
 CONFIG_PACKAGE_brcmfmac-firmware-usb=y
 # CONFIG_PACKAGE_brcmfmac-nvram-43430-sdio is not set
+# CONFIG_PACKAGE_brcmfmac-nvram-43430b0-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-nvram-43455-sdio is not set
 # CONFIG_PACKAGE_brcmfmac-nvram-4356-sdio is not set
 # CONFIG_PACKAGE_brcmsmac-firmware is not set
@@ -2973,7 +2975,8 @@ CONFIG_PACKAGE_kmod-usbmon=y
 #
 # Wireless Drivers
 #
-# CONFIG_PACKAGE_kmod-aic8800 is not set
+# CONFIG_PACKAGE_kmod-aic8800s is not set
+# CONFIG_PACKAGE_kmod-aic8800u is not set
 # CONFIG_PACKAGE_kmod-ar5523 is not set
 CONFIG_PACKAGE_kmod-ath=y
 CONFIG_ATH_USER_REGD=y
@@ -5065,7 +5068,6 @@ CONFIG_PACKAGE_luci-app-opkg=y
 # end of Configuration
 
 # CONFIG_PACKAGE_luci-app-pbr is not set
-# CONFIG_PACKAGE_luci-app-pcimodem is not set
 # CONFIG_PACKAGE_luci-app-pgyvpn is not set
 # CONFIG_PACKAGE_luci-app-phtunnel is not set
 # CONFIG_PACKAGE_luci-app-polipo is not set
@@ -5120,7 +5122,6 @@ CONFIG_PACKAGE_TURBOACC_INCLUDE_BBR_CCA=y
 # CONFIG_PACKAGE_luci-app-unbound is not set
 CONFIG_PACKAGE_luci-app-upnp=y
 CONFIG_PACKAGE_luci-app-usb-printer=y
-# CONFIG_PACKAGE_luci-app-usbmodem is not set
 # CONFIG_PACKAGE_luci-app-usteer is not set
 # CONFIG_PACKAGE_luci-app-uugamebooster is not set
 # CONFIG_PACKAGE_luci-app-v2ray-server is not set
@@ -6845,6 +6846,7 @@ CONFIG_PACKAGE_ppp-mod-pppoe=y
 CONFIG_PACKAGE_proto-bonding=y
 # CONFIG_PACKAGE_proxychains-ng is not set
 # CONFIG_PACKAGE_ptunnel-ng is not set
+# CONFIG_PACKAGE_quectel-cm is not set
 # CONFIG_PACKAGE_radsecproxy is not set
 # CONFIG_PACKAGE_ratched is not set
 # CONFIG_PACKAGE_ratechecker is not set
@@ -7007,12 +7009,6 @@ CONFIG_PACKAGE_wwan=y
 # CONFIG_PACKAGE_fconfig is not set
 # CONFIG_PACKAGE_uboot-envtools is not set
 # end of Boot Loaders
-
-#
-# CPE
-#
-# CONFIG_PACKAGE_sendat is not set
-# end of CPE
 
 #
 # Compression
@@ -7684,7 +7680,6 @@ CONFIG_PACKAGE_pv=y
 # CONFIG_PACKAGE_qfirehose is not set
 CONFIG_PACKAGE_qmi-utils=y
 # CONFIG_PACKAGE_qrencode is not set
-# CONFIG_PACKAGE_quectel-CM-5G is not set
 # CONFIG_PACKAGE_quota is not set
 # CONFIG_PACKAGE_ravpower-mcu is not set
 # CONFIG_PACKAGE_readsb is not set
@@ -7708,6 +7703,7 @@ CONFIG_PACKAGE_runc=y
 # CONFIG_PACKAGE_selinux-chcat is not set
 # CONFIG_PACKAGE_selinux-semanage is not set
 # CONFIG_PACKAGE_semodule-utils is not set
+# CONFIG_PACKAGE_sendat is not set
 # CONFIG_PACKAGE_serdisplib-tools is not set
 # CONFIG_PACKAGE_setools is not set
 # CONFIG_PACKAGE_setserial is not set

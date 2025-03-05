@@ -2536,7 +2536,7 @@ CONFIG_PACKAGE_kmod-nft-netdev=y
 CONFIG_PACKAGE_kmod-nft-offload=y
 # CONFIG_PACKAGE_kmod-nft-queue is not set
 # CONFIG_PACKAGE_kmod-nft-socket is not set
-# CONFIG_PACKAGE_kmod-nft-tproxy is not set
+CONFIG_PACKAGE_kmod-nft-tproxy=y
 # CONFIG_PACKAGE_kmod-nft-xfrm is not set
 # end of Netfilter Extensions
 

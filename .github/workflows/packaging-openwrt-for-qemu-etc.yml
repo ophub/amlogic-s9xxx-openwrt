@@ -188,7 +188,7 @@ jobs:
           curl -fsSL "${latest_url}" -o "${armvirt_tarfile_path}/${openwrt_filename}"
           [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
 
-          echo "build_tag=OpenWrt_aarch64_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
+          echo "build_tag=OpenWrt_armv8_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Clone packit source code

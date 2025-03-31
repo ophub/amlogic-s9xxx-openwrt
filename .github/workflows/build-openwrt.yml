@@ -417,8 +417,8 @@ jobs:
             - Default IP: 192.168.1.1
             - Default username: root
             - Default password: password
-            - Default WIFI name: OpenWrt
-            - Default WIFI password: none
+            - Default WIFI name: LEDE
+            - Default kernel ${{ inputs.kernel_usage }}
             ### Install to EMMC
             - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
             ### OpenWrt source code

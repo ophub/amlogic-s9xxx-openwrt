@@ -5181,7 +5181,6 @@ CONFIG_PACKAGE_luci-theme-argon=y
 CONFIG_PACKAGE_luci-theme-bootstrap=y
 CONFIG_PACKAGE_luci-theme-design=y
 # CONFIG_PACKAGE_luci-theme-material is not set
-CONFIG_PACKAGE_luci-theme-netgear=y
 # end of 4. Themes
 
 #

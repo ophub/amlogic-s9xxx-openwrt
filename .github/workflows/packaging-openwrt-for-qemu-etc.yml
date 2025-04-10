@@ -21,9 +21,11 @@ on:
           - ak88
           - beikeyun
           - cm3
-          - e25
-          - ht2
           - e20c
+          - e25
+          - e52c
+          - e54c
+          - ht2
           - h28k
           - h66k
           - h68k
@@ -31,13 +33,12 @@ on:
           - h69k-max
           - h88k
           - h88k-v3
+          - jp-tvbox
           - l1pro
           - photonicat
           - qemu
           - r66s
           - r68s
-          - jp-tvbox
-          - watermelon-pi
           - rock5b
           - rock5c
           - rk3399
@@ -49,6 +50,7 @@ on:
           - s922x
           - s922x-n2
           - vplus
+          - watermelon-pi
           - zcube1-max
           - diy
       customize_rk3399:

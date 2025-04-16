@@ -1875,6 +1875,7 @@ CONFIG_PACKAGE_ath10k-firmware-qca9377=y
 # CONFIG_PACKAGE_ath11k-firmware-qcn9074 is not set
 # CONFIG_PACKAGE_ath11k-firmware-wcn6750 is not set
 # CONFIG_PACKAGE_ath11k-firmware-wcn6855 is not set
+# CONFIG_PACKAGE_ath12k-firmware-qcn9274 is not set
 # CONFIG_PACKAGE_ath12k-firmware-wcn7850 is not set
 # CONFIG_PACKAGE_ath6k-firmware is not set
 CONFIG_PACKAGE_ath9k-htc-firmware=y
@@ -2377,6 +2378,7 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 # LED modules
 #
 # CONFIG_PACKAGE_kmod-input-leds is not set
+# CONFIG_PACKAGE_kmod-led-group-multi-color is not set
 # CONFIG_PACKAGE_kmod-leds-gpio is not set
 # CONFIG_PACKAGE_kmod-leds-ktd202x is not set
 # CONFIG_PACKAGE_kmod-leds-lp5562 is not set
@@ -2675,6 +2677,7 @@ CONFIG_PACKAGE_kmod-phylink=y
 # CONFIG_PACKAGE_kmod-r8101 is not set
 # CONFIG_PACKAGE_kmod-r8125 is not set
 # CONFIG_PACKAGE_kmod-r8126 is not set
+# CONFIG_PACKAGE_kmod-r8127 is not set
 # CONFIG_PACKAGE_kmod-r8168 is not set
 # CONFIG_PACKAGE_kmod-r8169 is not set
 CONFIG_PACKAGE_kmod-renesas-net-avb=y
@@ -2754,6 +2757,7 @@ CONFIG_PACKAGE_kmod-mdio-bus-mux=y
 # CONFIG_PACKAGE_kmod-openvswitch-gre is not set
 # CONFIG_PACKAGE_kmod-openvswitch-vxlan is not set
 # CONFIG_PACKAGE_kmod-ovpn-dco-v2 is not set
+# CONFIG_PACKAGE_kmod-packet-diag is not set
 # CONFIG_PACKAGE_kmod-pf-ring is not set
 # CONFIG_PACKAGE_kmod-pktgen is not set
 CONFIG_PACKAGE_kmod-ppp=y
@@ -2796,6 +2800,7 @@ CONFIG_PACKAGE_kmod-slhc=y
 # CONFIG_PACKAGE_kmod-tls is not set
 # CONFIG_PACKAGE_kmod-trelay is not set
 CONFIG_PACKAGE_kmod-tun=y
+# CONFIG_PACKAGE_kmod-unix-diag is not set
 CONFIG_PACKAGE_kmod-veth=y
 # CONFIG_PACKAGE_kmod-vxlan is not set
 # CONFIG_PACKAGE_kmod-wireguard is not set
@@ -3193,8 +3198,6 @@ CONFIG_PACKAGE_kmod-rtlwifi-usb=y
 # end of Wireless Drivers
 
 CONFIG_PACKAGE_kmod-cdrom=y
-# CONFIG_PACKAGE_kmod-packet-diag is not set
-# CONFIG_PACKAGE_kmod-unix-diag is not set
 # end of Kernel modules
 
 #
@@ -3455,6 +3458,7 @@ CONFIG_NODEJS_NPM_CACHE_DIR=""
 # CONFIG_PACKAGE_node-pi-spi is not set
 # CONFIG_PACKAGE_node-pixel-change is not set
 # CONFIG_PACKAGE_node-pm2 is not set
+# CONFIG_PACKAGE_node-pnpm is not set
 # CONFIG_PACKAGE_node-pty is not set
 # CONFIG_PACKAGE_node-raw-socket is not set
 # CONFIG_PACKAGE_node-red is not set
@@ -5936,6 +5940,7 @@ CONFIG_PACKAGE_luci-i18n-frps-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-ksmbd-de is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-el is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-es is not set
+# CONFIG_PACKAGE_luci-i18n-ksmbd-fa is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-fi is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-fr is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-he is not set
@@ -6489,6 +6494,7 @@ CONFIG_PACKAGE_ddns-scripts=y
 # CONFIG_PACKAGE_ddns-scripts-pdns is not set
 # CONFIG_PACKAGE_ddns-scripts-porkbun is not set
 # CONFIG_PACKAGE_ddns-scripts-route53 is not set
+# CONFIG_PACKAGE_ddns-scripts-scaleway is not set
 CONFIG_PACKAGE_ddns-scripts-services=y
 # CONFIG_PACKAGE_ddns-scripts-transip is not set
 # CONFIG_PACKAGE_ddns-scripts-utils is not set
@@ -6766,6 +6772,7 @@ CONFIG_PACKAGE_relayd=y
 # CONFIG_PACKAGE_openssh-sftp-avahi-service is not set
 # CONFIG_PACKAGE_openssh-sftp-client is not set
 # CONFIG_PACKAGE_openssh-sftp-server is not set
+# CONFIG_PACKAGE_openssh-sk-helper is not set
 # CONFIG_PACKAGE_sshtunnel is not set
 # CONFIG_PACKAGE_tmate is not set
 # end of SSH
@@ -7059,6 +7066,7 @@ CONFIG_PACKAGE_uhttpd-mod-ubus=y
 # CONFIG_PACKAGE_reaver is not set
 # CONFIG_PACKAGE_wavemon is not set
 # CONFIG_PACKAGE_wfb-ng is not set
+# CONFIG_PACKAGE_wfb-ng-tun is not set
 # CONFIG_PACKAGE_wifischedule is not set
 # end of Wireless
 
@@ -7208,7 +7216,6 @@ CONFIG_PACKAGE_ethtool=y
 # CONFIG_PACKAGE_go-nats is not set
 # CONFIG_PACKAGE_go-wol is not set
 # CONFIG_PACKAGE_gost is not set
-# CONFIG_PACKAGE_gping is not set
 # CONFIG_PACKAGE_gre is not set
 # CONFIG_PACKAGE_gsocket is not set
 # CONFIG_PACKAGE_hev-socks5-server is not set
@@ -7539,6 +7546,7 @@ CONFIG_PACKAGE_wwan=y
 #
 # CONFIG_PACKAGE_dumpimage is not set
 # CONFIG_PACKAGE_fconfig is not set
+# CONFIG_PACKAGE_fit-check-sign is not set
 # CONFIG_PACKAGE_uboot-envtools is not set
 # end of Boot Loaders
 
@@ -8113,6 +8121,7 @@ CONFIG_DOCKER_STO_EXT4=y
 # CONFIG_PACKAGE_ecdsautils is not set
 # CONFIG_PACKAGE_efibootmgr is not set
 # CONFIG_PACKAGE_elektra-kdb is not set
+# CONFIG_PACKAGE_enterprise-numbers is not set
 # CONFIG_PACKAGE_evtest is not set
 # CONFIG_PACKAGE_extract is not set
 # CONFIG_PACKAGE_eza is not set

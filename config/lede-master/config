@@ -2,6 +2,9 @@
 # Automatically generated file; DO NOT EDIT.
 # LEDE Configuration
 #
+CONFIG_PACKAGE_luci-app-atinout=y
+CONFIG_PACKAGE_luci-app-modeminfo=y
+CONFIG_PACKAGE_luci-app-smstools3=y
 CONFIG_MODULES=y
 CONFIG_HAVE_DOT_CONFIG=y
 CONFIG_HOST_OS_LINUX=y

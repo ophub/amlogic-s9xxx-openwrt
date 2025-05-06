@@ -35,7 +35,6 @@ on:
           - h88k
           - h88k-v3
           - jp-tvbox
-          - netfusion
           - l1pro
           - photonicat
           - qemu

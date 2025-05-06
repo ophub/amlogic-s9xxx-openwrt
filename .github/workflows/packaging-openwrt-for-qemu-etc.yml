@@ -22,6 +22,7 @@ on:
           - beikeyun
           - cm3
           - e20c
+          - e24c
           - e25
           - e52c
           - e54c
@@ -34,6 +35,7 @@ on:
           - h88k
           - h88k-v3
           - jp-tvbox
+          - netfusion
           - l1pro
           - photonicat
           - qemu

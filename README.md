@@ -113,7 +113,7 @@ sudo apt-get full-upgrade -y
 sudo apt-get install -y $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
 ```
 2. Clone repository to local `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
-3. In the root directory of `~/amlogic-s9xxx-openwrt`, create `openwrt-armvirt` folder, and upload the `openwrt-armvirt-64-default-rootfs.tar.gz` file to this directory.
+3. In the root directory of `~/amlogic-s9xxx-openwrt`, create `openwrt-armsr` folder, and upload the `openwrt-armsr-armv8-generic-rootfs.tar.gz` file to this directory.
 4. Enter the packaging command in the root directory of `~/amlogic-s9xxx-openwrt`, such as `sudo ./remake -b s905x3 -k 6.1.10`. The packaged OpenWrt firmware is placed in the `out` folder in the root directory.
 
 - ### Explanation of Local Packaging Parameters
@@ -144,11 +144,11 @@ You can modify the related personalized firmware configuration files in the [con
 
 1. You can view the personalized firmware configuration instructions in the [user documentation](./documents). The compilation process control file is [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
 2. New compilation: In github.com's [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) select ***`Build OpenWrt`***. Click the ***`Run workflow`*** button for one-stop firmware compilation and packaging.
-3. Re-compilation: If there is already a compiled `openwrt-armvirt-64-default-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), and you just want to remake other different boards, you can skip the compilation of OpenWrt source files and go directly to the second production. Select ***`Use Releases file to Packaging`*** on the [Actions](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page, and click the ***`Run workflow`*** button to recompile.
-4. More Support: The compiled `openwrt-armvirt-64-default-rootfs.tar.gz` file is a universal file for making firmware for different boards. It is also applicable for creating OpenWrt firmware using [unifreq](https://github.com/unifreq/openwrt_packit)'s packaging scripts. As the pioneer of using OpenWrt and Armbian systems in TV boxes, he provides support for more devices, such as OpenWrt (QEMU version) used in the Armbian system through a `KVM` virtual machine, and Amlogic, Rockchip, and Allwinner series, etc. For packaging methods, please refer to the instructions in his repository. In Actions, through [packaging-openwrt-for-qemu-etc.yml](.github/workflows/packaging-openwrt-for-qemu-etc.yml), you can call his packaging scripts to create more firmware.
+3. Re-compilation: If there is already a compiled `openwrt-armsr-armv8-generic-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), and you just want to remake other different boards, you can skip the compilation of OpenWrt source files and go directly to the second production. Select ***`Use Releases file to Packaging`*** on the [Actions](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) page, and click the ***`Run workflow`*** button to recompile.
+4. More Support: The compiled `openwrt-armsr-armv8-generic-rootfs.tar.gz` file is a universal file for making firmware for different boards. It is also applicable for creating OpenWrt firmware using [unifreq](https://github.com/unifreq/openwrt_packit)'s packaging scripts. As the pioneer of using OpenWrt and Armbian systems in TV boxes, he provides support for more devices, such as OpenWrt (QEMU version) used in the Armbian system through a `KVM` virtual machine, and Amlogic, Rockchip, and Allwinner series, etc. For packaging methods, please refer to the instructions in his repository. In Actions, through [packaging-openwrt-for-qemu-etc.yml](.github/workflows/packaging-openwrt-for-qemu-etc.yml), you can call his packaging scripts to create more firmware.
 
 ```yaml
-- name: Package Armvirt as OpenWrt
+- name: Package armsr-armv8 as OpenWrt
   uses: ophub/amlogic-s9xxx-openwrt@main
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
@@ -162,7 +162,7 @@ These parameters correspond to the `local packaging command`, please refer to th
 
 | Parameter | Default Value | Description |
 | --------- | ------------- | ----------- |
-| openwrt_path | None | Set the file path of `openwrt-armvirt-64-default-rootfs.tar.gz`, you can use relative path like `openwrt/bin/targets/*/*/*rootfs.tar.gz` or a network file download URL like `https://github.com/*/releases/*/*rootfs.tar.gz` |
+| openwrt_path | None | Set the file path of `openwrt-armsr-armv8-generic-rootfs.tar.gz`, you can use relative path like `openwrt/bin/targets/*/*/*rootfs.tar.gz` or a network file download URL like `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_board | all | Set the `board` of the box to be packaged, functionality refers to `-b` |
 | kernel_repo | ophub/kernel | Specify `<owner>/<repo>` of the kernel repository on github.com, functionality refers to `-r` |
 | kernel_usage | stable | Set the `tags suffix` of the kernel to be used, functionality refers to `-u` |

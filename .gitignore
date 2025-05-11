@@ -2,7 +2,7 @@
 /make-openwrt/kernel
 /make-openwrt/u-boot
 /openwrt
-/openwrt-armvirt
+/openwrt-armsr
 /out
 /tmp
 .DS_Store

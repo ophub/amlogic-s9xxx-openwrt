@@ -169,11 +169,11 @@ This achieves the modification of the source code. Through the diy-part1.sh and 
 
 ### 4.3 Using Image Builder to Build Firmware
 
-The OpenWrt official website provides a ready-made openwrt-imagebuilder-*-armvirt-64.Linux-x86_64.tar.xz file (download address: [https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)). The official Image Builder can be used to add packages and plugins to this file, and an openwrt-rootfs.tar.gz file can usually be made in just a few minutes. The manufacturing method can be found in the official documentation: [Use Image Builder](https://openwrt.org/zh/docs/guide-user/additional-software/imagebuilder)
+The OpenWrt official website provides a ready-made `openwrt-imagebuilder-*-armsr-armv8.Linux-x86_64.tar.zst` file (download address: [https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)). The official Image Builder can be used to add packages and plugins to this file, and an openwrt-rootfs.tar.gz file can usually be made in just a few minutes. The manufacturing method can be found in the official documentation: [Use Image Builder](https://openwrt.org/zh/docs/guide-user/additional-software/imagebuilder)
 
 This repository provides a one-click manufacturing service. You just need to pass the branch parameters into the [imagebuilder script](imagebuilder/imagebuilder.sh) to complete the production.
 
-- Localized production command: In the `~/amlogic-s9xxx-openwrt` root directory, run the command `sudo ./config/imagebuilder/imagebuilder.sh openwrt:21.02.3` to generate. The parameter `21.02.3` is the current available `releases` version number for [download](https://downloads.openwrt.org/releases). The generated file is located in the `openwrt/bin/targets/armvirt/64` directory.
+- Localized production command: In the `~/amlogic-s9xxx-openwrt` root directory, run the command `sudo ./config/imagebuilder/imagebuilder.sh openwrt:21.02.3` to generate. The parameter `21.02.3` is the current available `releases` version number for [download](https://downloads.openwrt.org/releases). The generated file is located in the `openwrt/bin/targets/armsr/armv8` directory.
 
 - Produce in `Actions` on github.com: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
 

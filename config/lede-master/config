@@ -38,7 +38,7 @@ CONFIG_HOST_OS_LINUX=y
 # CONFIG_TARGET_octeontx is not set
 # CONFIG_TARGET_oxnas is not set
 # CONFIG_TARGET_phytium is not set
-CONFIG_TARGET_armvirt=y
+CONFIG_TARGET_armsr=y
 # CONFIG_TARGET_qualcommax is not set
 # CONFIG_TARGET_qualcommbe is not set
 # CONFIG_TARGET_ipq40xx is not set
@@ -53,13 +53,13 @@ CONFIG_TARGET_armvirt=y
 # CONFIG_TARGET_uml is not set
 # CONFIG_TARGET_zynq is not set
 # CONFIG_TARGET_x86 is not set
-# CONFIG_TARGET_armvirt_32 is not set
-CONFIG_TARGET_armvirt_64=y
+# CONFIG_TARGET_armsr-armv7 is not set
+CONFIG_TARGET_armsr-armv8=y
 # CONFIG_TARGET_MULTI_PROFILE is not set
-CONFIG_TARGET_armvirt_64_DEVICE_generic=y
+CONFIG_TARGET_armsr-armv8_DEVICE_generic=y
 CONFIG_HAS_SUBTARGETS=y
 CONFIG_HAS_DEVICES=y
-CONFIG_TARGET_BOARD="armvirt"
+CONFIG_TARGET_BOARD="armsr"
 CONFIG_TARGET_SUBTARGET="64"
 CONFIG_TARGET_PROFILE="DEVICE_generic"
 CONFIG_TARGET_ARCH_PACKAGES="aarch64_generic"

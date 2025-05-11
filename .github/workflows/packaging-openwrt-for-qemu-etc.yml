@@ -167,17 +167,17 @@ jobs:
         working-directory: /builder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          armvirt_tarfile_repo="ophub/amlogic-s9xxx-openwrt"
+          armsr_tarfile_repo="ophub/amlogic-s9xxx-openwrt"
           releases_tag_keywords="OpenWrt_lede_"
 
-          armvirt_tarfile_path="openwrt/output"
-          [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
+          armsr_tarfile_path="openwrt/output"
+          [[ -d "${armsr_tarfile_path}" ]] || mkdir -p ${armsr_tarfile_path}
           ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
 
           latest_version=$(curl -s \
                 -H "Accept: application/vnd.github+json" \
                 -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                https://api.github.com/repos/${armvirt_tarfile_repo}/releases?per_page=100 | \
+                https://api.github.com/repos/${armsr_tarfile_repo}/releases?per_page=100 | \
                 jq -r --arg RTK "${releases_tag_keywords}" \
                 --arg BOARD "-rootfs.tar.gz" \
                 '[.[] | select(.tag_name | contains($RTK))] |
@@ -192,7 +192,7 @@ jobs:
           latest_url="$(echo ${latest_version} | jq -r '.url')"
 
           openwrt_filename="${latest_url##*/}"
-          curl -fsSL "${latest_url}" -o "${armvirt_tarfile_path}/${openwrt_filename}"
+          curl -fsSL "${latest_url}" -o "${armsr_tarfile_path}/${openwrt_filename}"
           [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
 
           echo "build_tag=OpenWrt_armv8_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
@@ -212,7 +212,7 @@ jobs:
         uses: ophub/flippy-openwrt-actions@main
         if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
         env:
-          OPENWRT_ARMVIRT: openwrt/output/*rootfs.tar.gz
+          OPENWRT_ARMSR: openwrt/output/*rootfs.tar.gz
           SELECT_PACKITPATH: openwrt_packit
           PACKAGE_SOC: ${{ inputs.openwrt_soc }}
           CUSTOMIZE_RK3399: ${{ inputs.customize_rk3399 }}

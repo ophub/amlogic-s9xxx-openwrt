@@ -1893,6 +1893,7 @@ CONFIG_PACKAGE_ath10k-firmware-qca9377=y
 # CONFIG_PACKAGE_ath11k-firmware-qcn9074 is not set
 # CONFIG_PACKAGE_ath11k-firmware-wcn6750 is not set
 # CONFIG_PACKAGE_ath11k-firmware-wcn6855 is not set
+# CONFIG_PACKAGE_ath12k-firmware-qcn9274 is not set
 # CONFIG_PACKAGE_ath12k-firmware-wcn7850 is not set
 # CONFIG_PACKAGE_ath6k-firmware is not set
 CONFIG_PACKAGE_ath9k-htc-firmware=y
@@ -2985,6 +2986,7 @@ CONFIG_PACKAGE_kmod-usbmon=y
 # CONFIG_PACKAGE_kmod-drm-buddy is not set
 # CONFIG_PACKAGE_kmod-drm-display-helper is not set
 # CONFIG_PACKAGE_kmod-drm-kms-helper is not set
+# CONFIG_PACKAGE_kmod-drm-panel-mipi-dbi is not set
 # CONFIG_PACKAGE_kmod-drm-ttm is not set
 # CONFIG_PACKAGE_kmod-fb is not set
 # CONFIG_PACKAGE_kmod-fb-cfb-copyarea is not set
@@ -6117,7 +6119,6 @@ CONFIG_BIND_ENABLE_DOH=y
 # CONFIG_PACKAGE_bind-server-filter-aaaa is not set
 # CONFIG_PACKAGE_bind-tools is not set
 # CONFIG_PACKAGE_chinadns-ng is not set
-# CONFIG_PACKAGE_ddns-go is not set
 CONFIG_PACKAGE_ddns-scripts=y
 # CONFIG_PACKAGE_ddns-scripts-cloudflare is not set
 # CONFIG_PACKAGE_ddns-scripts-cnkuai is not set
@@ -6617,6 +6618,7 @@ CONFIG_PACKAGE_uqmi=y
 CONFIG_PACKAGE_cgi-io=y
 # CONFIG_PACKAGE_clamav is not set
 # CONFIG_PACKAGE_cloudflared is not set
+# CONFIG_PACKAGE_ddns-go is not set
 # CONFIG_PACKAGE_dufs is not set
 # CONFIG_PACKAGE_e2guardian is not set
 # CONFIG_PACKAGE_etebase is not set

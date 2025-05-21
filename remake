@@ -28,7 +28,7 @@
 #
 # init_var           : Initialize all variables
 # check_data         : Check the validity of the data
-# find_openwrt       : Find OpenWrt file (openwrt-armvirt/*rootfs.tar.gz)
+# find_openwrt       : Find OpenWrt file (openwrt-armsr/*rootfs.tar.gz)
 # git_pull_dir       : Download the files from the git repository
 # download_depends   : Download the dependency files
 # query_kernel       : Query the latest kernel version
@@ -52,7 +52,7 @@ current_path="${PWD}"
 make_path="${current_path}/openwrt"
 tmp_path="${make_path}/tmp"
 out_path="${make_path}/out"
-openwrt_path="${current_path}/openwrt-armvirt"
+openwrt_path="${current_path}/openwrt-armsr"
 openwrt_rootfs_file="*rootfs.tar.gz"
 resource_path="${current_path}/make-openwrt"
 kernel_path="${resource_path}/kernel"

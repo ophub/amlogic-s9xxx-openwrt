@@ -7,7 +7,7 @@ inputs:
     required: false
     default: "ophub"
   openwrt_path:
-    description: "Select armvirt64 file path."
+    description: "Select armsr-armv8 file path."
     required: false
     default: "openwrt/bin/targets/*/*/*rootfs.tar.gz"
   openwrt_board:
@@ -44,12 +44,12 @@ runs:
   steps:
     - shell: bash
       run: |
-        cd ${GITHUB_ACTION_PATH}
+        cd ${{ github.action_path }}
         echo -e "ophub package actions path: [ ${PWD} ]"
 
         openwrt_filename="${{ inputs.openwrt_path }}"
         openwrt_savefile="${openwrt_filename##*/}"
-        openwrt_savepath="openwrt-armvirt"
+        openwrt_savepath="openwrt-armsr"
         openwrt_outpath="openwrt/out"
         echo -e "Get openwrt file input parameters: [ ${openwrt_filename} ]"
         [[ -z "${openwrt_filename}" ]] && echo -e "The [ openwrt_path ] variable must be specified." && exit 1
@@ -70,7 +70,7 @@ runs:
         sync
         echo -e "About the [ ${openwrt_savepath} ] directory: \n$(ls -l ${openwrt_savepath} 2>/dev/null)"
 
-        cd ${GITHUB_ACTION_PATH}
+        cd ${{ github.action_path }}
         echo -e "Start to make openwrt..."
         make_command=""
         [[ -n "${{ inputs.openwrt_board }}" ]] && make_command="${make_command} -b ${{ inputs.openwrt_board }}"
@@ -82,13 +82,13 @@ runs:
         [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
         sudo ./remake ${make_command}
 
-        cd ${GITHUB_ACTION_PATH}/${openwrt_outpath}
+        cd ${{ github.action_path }}/${openwrt_outpath}
         # Generate a sha256sum verification file for each OpenWrt image file
         for file in *; do [[ -f "${file}" ]] && sha256sum "${file}" >"${file}.sha" 2>/dev/null; done
         rm -f *.sha.sha 2>/dev/null
         sync && sleep 3
 
-        cd ${GITHUB_ACTION_PATH}
+        cd ${{ github.action_path }}
         echo -e "Output environment variables."
         echo "PACKAGED_OUTPUTPATH=${PWD}/${openwrt_outpath}" >> ${GITHUB_ENV}
         echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> ${GITHUB_ENV}

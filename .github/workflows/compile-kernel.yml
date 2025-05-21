@@ -33,8 +33,21 @@ on:
           - 5.4.y_5.10.y
           - 5.15.y_6.1.y
           - 6.6.y_6.12.y
+          - 5.4.y_5.10.y_5.15.y
+          - 6.1.y_6.6.y_6.12.y
+          - all
       kernel_auto:
         description: "Auto use the latest kernel"
+        required: false
+        default: true
+        type: boolean
+      silent_log:
+        description: "Use silent logging"
+        required: false
+        default: true
+        type: boolean
+      delete_source:
+        description: "Delete the source after compilation"
         required: false
         default: true
         type: boolean
@@ -59,6 +72,7 @@ on:
           - gcc-12.3
           - gcc-13.2
           - gcc-13.3
+          - gcc-14.2
       compress_format:
         description: "Set the initrd compression format"
         required: false
@@ -83,7 +97,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04-arm
     if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
 
     steps:
@@ -129,7 +143,7 @@ jobs:
           sudo mkdir -p /builder
           sudo mount /dev/github/runner /builder
           sudo chown -R runner.runner /builder
-          df -Th
+          df -hT
 
       - name: Create a mapped directory
         id: mapped
@@ -149,10 +163,12 @@ jobs:
           kernel_source: ${{ inputs.kernel_source }}
           kernel_version: ${{ inputs.kernel_version }}
           kernel_auto: ${{ inputs.kernel_auto }}
+          delete_source: ${{ inputs.delete_source }}
           kernel_package: ${{ inputs.kernel_package }}
           kernel_sign: ${{ inputs.kernel_sign }}
           kernel_toolchain: ${{ inputs.kernel_toolchain }}
           compress_format: ${{ inputs.compress_format }}
+          silent_log: ${{ inputs.silent_log }}
 
       - name: Upload Kernel to Release
         uses: ncipollo/release-action@main
@@ -161,6 +177,8 @@ jobs:
           tag: kernel_stable
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             The kernel can be used to compile Armbian and OpenWrt.

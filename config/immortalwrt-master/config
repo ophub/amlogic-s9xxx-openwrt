@@ -438,7 +438,7 @@ CONFIG_USE_MUSL=y
 CONFIG_SSP_SUPPORT=y
 CONFIG_BINUTILS_VERSION_2_42=y
 CONFIG_BINUTILS_VERSION="2.42"
-CONFIG_GCC_VERSION="13.3.0"
+CONFIG_GCC_VERSION="14.2.0"
 CONFIG_GCC_USE_DEFAULT_VERSION=y
 CONFIG_LIBC="musl"
 CONFIG_TARGET_SUFFIX="musl"
@@ -1875,6 +1875,7 @@ CONFIG_PACKAGE_ath10k-firmware-qca9377=y
 # CONFIG_PACKAGE_ath11k-firmware-qcn9074 is not set
 # CONFIG_PACKAGE_ath11k-firmware-wcn6750 is not set
 # CONFIG_PACKAGE_ath11k-firmware-wcn6855 is not set
+# CONFIG_PACKAGE_ath12k-firmware-qcn9274 is not set
 # CONFIG_PACKAGE_ath12k-firmware-wcn7850 is not set
 # CONFIG_PACKAGE_ath6k-firmware is not set
 CONFIG_PACKAGE_ath9k-htc-firmware=y
@@ -1948,6 +1949,8 @@ CONFIG_PACKAGE_edgeport-firmware=y
 # CONFIG_PACKAGE_i915-firmware-guc is not set
 # CONFIG_PACKAGE_i915-firmware-huc is not set
 # CONFIG_PACKAGE_ibt-firmware is not set
+# CONFIG_PACKAGE_ice-firmware is not set
+# CONFIG_PACKAGE_ivpu-firmware is not set
 # CONFIG_PACKAGE_iwl3945-firmware is not set
 # CONFIG_PACKAGE_iwl4965-firmware is not set
 # CONFIG_PACKAGE_iwlwifi-firmware-ax101 is not set
@@ -2376,6 +2379,7 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 # LED modules
 #
 # CONFIG_PACKAGE_kmod-input-leds is not set
+# CONFIG_PACKAGE_kmod-led-group-multi-color is not set
 # CONFIG_PACKAGE_kmod-leds-gpio is not set
 # CONFIG_PACKAGE_kmod-leds-ktd202x is not set
 # CONFIG_PACKAGE_kmod-leds-lp5562 is not set
@@ -2398,7 +2402,6 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 # Libraries
 #
 CONFIG_PACKAGE_kmod-asn1-decoder=y
-CONFIG_PACKAGE_kmod-asn1-encoder=y
 # CONFIG_PACKAGE_kmod-lib-842 is not set
 # CONFIG_PACKAGE_kmod-lib-cordic is not set
 CONFIG_PACKAGE_kmod-lib-crc-ccitt=y
@@ -2504,7 +2507,6 @@ CONFIG_PACKAGE_kmod-ipt-ipset=y
 CONFIG_PACKAGE_kmod-ipt-nat=y
 # CONFIG_PACKAGE_kmod-ipt-nat-extra is not set
 CONFIG_PACKAGE_kmod-ipt-nat6=y
-# CONFIG_PACKAGE_kmod-ipt-nathelper-rtsp is not set
 # CONFIG_PACKAGE_kmod-ipt-nflog is not set
 # CONFIG_PACKAGE_kmod-ipt-nfqueue is not set
 # CONFIG_PACKAGE_kmod-ipt-offload is not set
@@ -2538,6 +2540,7 @@ CONFIG_PACKAGE_kmod-nf-nat=y
 CONFIG_PACKAGE_kmod-nf-nat6=y
 # CONFIG_PACKAGE_kmod-nf-nathelper is not set
 # CONFIG_PACKAGE_kmod-nf-nathelper-extra is not set
+# CONFIG_PACKAGE_kmod-nf-nathelper-rtsp is not set
 CONFIG_PACKAGE_kmod-nf-reject=y
 CONFIG_PACKAGE_kmod-nf-reject6=y
 # CONFIG_PACKAGE_kmod-nf-socket is not set
@@ -2615,6 +2618,7 @@ CONFIG_PACKAGE_kmod-fsl-pcs-lynx=y
 CONFIG_PACKAGE_kmod-fsl-xgmac-mdio=y
 # CONFIG_PACKAGE_kmod-hfcmulti is not set
 # CONFIG_PACKAGE_kmod-hfcpci is not set
+# CONFIG_PACKAGE_kmod-hinic is not set
 # CONFIG_PACKAGE_kmod-i40e is not set
 # CONFIG_PACKAGE_kmod-iavf is not set
 # CONFIG_PACKAGE_kmod-ice is not set
@@ -2674,6 +2678,7 @@ CONFIG_PACKAGE_kmod-phylink=y
 # CONFIG_PACKAGE_kmod-r8101 is not set
 # CONFIG_PACKAGE_kmod-r8125 is not set
 # CONFIG_PACKAGE_kmod-r8126 is not set
+# CONFIG_PACKAGE_kmod-r8127 is not set
 # CONFIG_PACKAGE_kmod-r8168 is not set
 # CONFIG_PACKAGE_kmod-r8169 is not set
 CONFIG_PACKAGE_kmod-renesas-net-avb=y
@@ -2753,6 +2758,7 @@ CONFIG_PACKAGE_kmod-mdio-bus-mux=y
 # CONFIG_PACKAGE_kmod-openvswitch-gre is not set
 # CONFIG_PACKAGE_kmod-openvswitch-vxlan is not set
 # CONFIG_PACKAGE_kmod-ovpn-dco-v2 is not set
+# CONFIG_PACKAGE_kmod-packet-diag is not set
 # CONFIG_PACKAGE_kmod-pf-ring is not set
 # CONFIG_PACKAGE_kmod-pktgen is not set
 CONFIG_PACKAGE_kmod-ppp=y
@@ -2795,6 +2801,7 @@ CONFIG_PACKAGE_kmod-slhc=y
 # CONFIG_PACKAGE_kmod-tls is not set
 # CONFIG_PACKAGE_kmod-trelay is not set
 CONFIG_PACKAGE_kmod-tun=y
+# CONFIG_PACKAGE_kmod-unix-diag is not set
 CONFIG_PACKAGE_kmod-veth=y
 # CONFIG_PACKAGE_kmod-vxlan is not set
 # CONFIG_PACKAGE_kmod-wireguard is not set
@@ -2977,6 +2984,7 @@ CONFIG_PACKAGE_kmod-usb-storage-extras=y
 CONFIG_PACKAGE_kmod-usb-uhci=y
 CONFIG_PACKAGE_kmod-usb-wdm=y
 CONFIG_PACKAGE_kmod-usb-xhci-hcd=y
+# CONFIG_PACKAGE_kmod-usb-xhci-pci-renesas is not set
 # CONFIG_PACKAGE_kmod-usb-yealink is not set
 CONFIG_PACKAGE_kmod-usb2=y
 CONFIG_PACKAGE_kmod-usb2-pci=y
@@ -3192,8 +3200,6 @@ CONFIG_PACKAGE_kmod-rtlwifi-usb=y
 # end of Wireless Drivers
 
 CONFIG_PACKAGE_kmod-cdrom=y
-# CONFIG_PACKAGE_kmod-packet-diag is not set
-# CONFIG_PACKAGE_kmod-unix-diag is not set
 # end of Kernel modules
 
 #
@@ -3398,6 +3404,7 @@ CONFIG_NODEJS_NPM_CACHE_DIR=""
 # CONFIG_PACKAGE_node-exorcist is not set
 # CONFIG_PACKAGE_node-expat is not set
 # CONFIG_PACKAGE_node-express is not set
+# CONFIG_PACKAGE_node-ffi-napi is not set
 # CONFIG_PACKAGE_node-ffmpeg-for-homebridge is not set
 # CONFIG_PACKAGE_node-firmata is not set
 # CONFIG_PACKAGE_node-forever is not set
@@ -3413,6 +3420,7 @@ CONFIG_NODEJS_NPM_CACHE_DIR=""
 # CONFIG_PACKAGE_node-homebridge-camera-ffmpeg is not set
 # CONFIG_PACKAGE_node-homebridge-camera-ui is not set
 # CONFIG_PACKAGE_node-homebridge-cmd4 is not set
+# CONFIG_PACKAGE_node-homebridge-config-ui-x is not set
 # CONFIG_PACKAGE_node-homebridge-eufy-security is not set
 # CONFIG_PACKAGE_node-homebridge-ewelink is not set
 # CONFIG_PACKAGE_node-homebridge-hue is not set
@@ -3431,8 +3439,6 @@ CONFIG_NODEJS_NPM_CACHE_DIR=""
 # CONFIG_PACKAGE_node-jsonfile is not set
 # CONFIG_PACKAGE_node-lambda is not set
 # CONFIG_PACKAGE_node-level is not set
-# CONFIG_PACKAGE_node-leveldown is not set
-# CONFIG_PACKAGE_node-levelup is not set
 # CONFIG_PACKAGE_node-logfmt is not set
 # CONFIG_PACKAGE_node-lwm2m-node-lib is not set
 # CONFIG_PACKAGE_node-mdns is not set
@@ -3454,6 +3460,7 @@ CONFIG_NODEJS_NPM_CACHE_DIR=""
 # CONFIG_PACKAGE_node-pi-spi is not set
 # CONFIG_PACKAGE_node-pixel-change is not set
 # CONFIG_PACKAGE_node-pm2 is not set
+# CONFIG_PACKAGE_node-pnpm is not set
 # CONFIG_PACKAGE_node-pty is not set
 # CONFIG_PACKAGE_node-raw-socket is not set
 # CONFIG_PACKAGE_node-red is not set
@@ -3473,6 +3480,7 @@ CONFIG_NODEJS_NPM_CACHE_DIR=""
 # CONFIG_PACKAGE_node-serialport-bindings-cpp is not set
 # CONFIG_PACKAGE_node-serialport-list is not set
 # CONFIG_PACKAGE_node-shx is not set
+# CONFIG_PACKAGE_node-simple-xmpp is not set
 # CONFIG_PACKAGE_node-sleep is not set
 # CONFIG_PACKAGE_node-socket.io is not set
 # CONFIG_PACKAGE_node-socket.io-client is not set
@@ -3494,6 +3502,7 @@ CONFIG_NODEJS_NPM_CACHE_DIR=""
 # CONFIG_PACKAGE_node-websocket is not set
 # CONFIG_PACKAGE_node-ws is not set
 # CONFIG_PACKAGE_node-yarn is not set
+# CONFIG_PACKAGE_node-zeromq is not set
 # CONFIG_PACKAGE_node-zigbee2mqtt is not set
 # CONFIG_PACKAGE_node-zwave-js-ui is not set
 # CONFIG_PACKAGE_node-zwave-js-ui-bundle is not set
@@ -3800,6 +3809,7 @@ CONFIG_PACKAGE_perlbase-xsloader=y
 # CONFIG_PACKAGE_python3-jsonschema-specifications is not set
 # CONFIG_PACKAGE_python3-lib2to3 is not set
 # CONFIG_PACKAGE_python3-libmodbus is not set
+# CONFIG_PACKAGE_python3-libtorrent is not set
 # CONFIG_PACKAGE_python3-light is not set
 
 #
@@ -4781,8 +4791,6 @@ CONFIG_WOLFSSL_ALT_NAMES=y
 # CONFIG_PACKAGE_libdrm-radeon is not set
 # CONFIG_PACKAGE_libdrm-tegra is not set
 # CONFIG_PACKAGE_libepoxy is not set
-# CONFIG_PACKAGE_libglapi is not set
-CONFIG_HAVE_MESA=y
 # CONFIG_PACKAGE_libglm is not set
 # CONFIG_PACKAGE_libgraphene is not set
 # CONFIG_PACKAGE_libmesa-amd is not set
@@ -4808,6 +4816,8 @@ CONFIG_HAVE_MESA=y
 # CONFIG_PACKAGE_libvulkan-lvp is not set
 # CONFIG_PACKAGE_libvulkan-panfrost is not set
 # CONFIG_PACKAGE_libvulkan-radeon is not set
+CONFIG_HAVE_MESA=y
+CONFIG_MESA_USE_LLVM=y
 # CONFIG_PACKAGE_seatd is not set
 # CONFIG_PACKAGE_vulkan-loader is not set
 # CONFIG_PACKAGE_wayland-info is not set
@@ -4860,6 +4870,7 @@ CONFIG_PACKAGE_glib2=y
 # CONFIG_PACKAGE_icu is not set
 # CONFIG_PACKAGE_icu-data-tools is not set
 # CONFIG_PACKAGE_icu-full-data is not set
+# CONFIG_PACKAGE_iniparser is not set
 CONFIG_PACKAGE_jansson=y
 # CONFIG_PACKAGE_json-glib is not set
 # CONFIG_PACKAGE_jsoncpp is not set
@@ -4954,6 +4965,7 @@ CONFIG_LIBCURL_UNIX_SOCKETS=y
 # CONFIG_LIBCURL_LIBCURL_OPTION is not set
 # CONFIG_LIBCURL_VERBOSE is not set
 # CONFIG_LIBCURL_NTLM is not set
+# CONFIG_LIBCURL_HTTP_AUTH is not set
 # CONFIG_PACKAGE_libcurl-gnutls is not set
 CONFIG_PACKAGE_libdaemon=y
 # CONFIG_PACKAGE_libdaq3 is not set
@@ -5507,7 +5519,6 @@ CONFIG_PACKAGE_luci-app-frps=y
 # CONFIG_PACKAGE_luci-app-homeproxy is not set
 # CONFIG_PACKAGE_luci-app-https-dns-proxy is not set
 # CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set
-# CONFIG_PACKAGE_luci-app-ipsec-vpnserver-manyusers is not set
 # CONFIG_PACKAGE_luci-app-irqbalance is not set
 # CONFIG_PACKAGE_luci-app-kcptun is not set
 # CONFIG_PACKAGE_luci-app-keepalived is not set
@@ -5599,7 +5610,6 @@ CONFIG_PACKAGE_luci-app-samba4=y
 # CONFIG_PACKAGE_luci-app-smartdns is not set
 # CONFIG_PACKAGE_luci-app-sms-tool-js is not set
 # CONFIG_PACKAGE_luci-app-snmpd is not set
-# CONFIG_PACKAGE_luci-app-socat is not set
 # CONFIG_PACKAGE_luci-app-softether is not set
 # CONFIG_PACKAGE_luci-app-softethervpn is not set
 # CONFIG_PACKAGE_luci-app-speederv2 is not set
@@ -5934,6 +5944,7 @@ CONFIG_PACKAGE_luci-i18n-frps-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-ksmbd-de is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-el is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-es is not set
+# CONFIG_PACKAGE_luci-i18n-ksmbd-fa is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-fi is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-fr is not set
 # CONFIG_PACKAGE_luci-i18n-ksmbd-he is not set
@@ -6487,6 +6498,7 @@ CONFIG_PACKAGE_ddns-scripts=y
 # CONFIG_PACKAGE_ddns-scripts-pdns is not set
 # CONFIG_PACKAGE_ddns-scripts-porkbun is not set
 # CONFIG_PACKAGE_ddns-scripts-route53 is not set
+# CONFIG_PACKAGE_ddns-scripts-scaleway is not set
 CONFIG_PACKAGE_ddns-scripts-services=y
 # CONFIG_PACKAGE_ddns-scripts-transip is not set
 # CONFIG_PACKAGE_ddns-scripts-utils is not set
@@ -6764,6 +6776,7 @@ CONFIG_PACKAGE_relayd=y
 # CONFIG_PACKAGE_openssh-sftp-avahi-service is not set
 # CONFIG_PACKAGE_openssh-sftp-client is not set
 # CONFIG_PACKAGE_openssh-sftp-server is not set
+# CONFIG_PACKAGE_openssh-sk-helper is not set
 # CONFIG_PACKAGE_sshtunnel is not set
 # CONFIG_PACKAGE_tmate is not set
 # end of SSH
@@ -7057,6 +7070,7 @@ CONFIG_PACKAGE_uhttpd-mod-ubus=y
 # CONFIG_PACKAGE_reaver is not set
 # CONFIG_PACKAGE_wavemon is not set
 # CONFIG_PACKAGE_wfb-ng is not set
+# CONFIG_PACKAGE_wfb-ng-tun is not set
 # CONFIG_PACKAGE_wifischedule is not set
 # end of Wireless
 
@@ -7206,7 +7220,6 @@ CONFIG_PACKAGE_ethtool=y
 # CONFIG_PACKAGE_go-nats is not set
 # CONFIG_PACKAGE_go-wol is not set
 # CONFIG_PACKAGE_gost is not set
-# CONFIG_PACKAGE_gping is not set
 # CONFIG_PACKAGE_gre is not set
 # CONFIG_PACKAGE_gsocket is not set
 # CONFIG_PACKAGE_hev-socks5-server is not set
@@ -7358,6 +7371,7 @@ CONFIG_PACKAGE_proto-bonding=y
 # CONFIG_PACKAGE_radsecproxy is not set
 # CONFIG_PACKAGE_ratched is not set
 # CONFIG_PACKAGE_ratechecker is not set
+# CONFIG_PACKAGE_realtek-poe is not set
 # CONFIG_PACKAGE_redsocks is not set
 # CONFIG_PACKAGE_remserial is not set
 # CONFIG_PACKAGE_respondd is not set
@@ -7535,7 +7549,9 @@ CONFIG_PACKAGE_wwan=y
 #
 # Boot Loaders
 #
+# CONFIG_PACKAGE_dumpimage is not set
 # CONFIG_PACKAGE_fconfig is not set
+# CONFIG_PACKAGE_fit-check-sign is not set
 # CONFIG_PACKAGE_uboot-envtools is not set
 # end of Boot Loaders
 
@@ -7913,6 +7929,7 @@ CONFIG_PACKAGE_acpid=y
 # CONFIG_PACKAGE_bluez-utils-btmon is not set
 # CONFIG_PACKAGE_bluez-utils-extra is not set
 # CONFIG_PACKAGE_bluld is not set
+# CONFIG_PACKAGE_boltbrowser is not set
 # CONFIG_PACKAGE_bonniexx is not set
 # CONFIG_PACKAGE_borgbackup is not set
 # CONFIG_PACKAGE_bossa is not set
@@ -8110,6 +8127,7 @@ CONFIG_DOCKER_STO_EXT4=y
 # CONFIG_PACKAGE_ecdsautils is not set
 # CONFIG_PACKAGE_efibootmgr is not set
 # CONFIG_PACKAGE_elektra-kdb is not set
+# CONFIG_PACKAGE_enterprise-numbers is not set
 # CONFIG_PACKAGE_evtest is not set
 # CONFIG_PACKAGE_extract is not set
 # CONFIG_PACKAGE_eza is not set
@@ -8174,6 +8192,7 @@ CONFIG_PACKAGE_iconv=y
 CONFIG_PACKAGE_iwinfo=y
 # CONFIG_PACKAGE_joker is not set
 CONFIG_PACKAGE_jq=y
+# CONFIG_PACKAGE_jq-full is not set
 CONFIG_PACKAGE_jshn=y
 # CONFIG_PACKAGE_kmod is not set
 # CONFIG_PACKAGE_lcd4linux-custom is not set
@@ -8276,6 +8295,7 @@ CONFIG_PACKAGE_openssl-util=y
 # CONFIG_PACKAGE_prometheus-node-exporter-lua is not set
 # CONFIG_PACKAGE_prometheus-node-exporter-ucode is not set
 # CONFIG_PACKAGE_prometheus-statsd-exporter is not set
+# CONFIG_PACKAGE_provision is not set
 # CONFIG_PACKAGE_pservice is not set
 # CONFIG_PACKAGE_psmisc is not set
 CONFIG_PACKAGE_pv=y
@@ -8394,6 +8414,7 @@ CONFIG_PACKAGE_ucode-mod-lua=y
 # CONFIG_PACKAGE_ugps is not set
 # CONFIG_PACKAGE_uhubctl is not set
 # CONFIG_PACKAGE_uledd is not set
+# CONFIG_PACKAGE_unetmsg is not set
 # CONFIG_PACKAGE_unix2dos is not set
 # CONFIG_PACKAGE_unshare is not set
 CONFIG_PACKAGE_usb-modeswitch=y

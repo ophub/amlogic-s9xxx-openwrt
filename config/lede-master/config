@@ -4754,7 +4754,7 @@ CONFIG_PACKAGE_libnl-tiny=y
 # CONFIG_PACKAGE_libowipcalc is not set
 # CONFIG_PACKAGE_libp11 is not set
 # CONFIG_PACKAGE_libpagekite is not set
-# CONFIG_PACKAGE_libpam is not set
+CONFIG_PACKAGE_libpam=y
 CONFIG_PACKAGE_libparted=y
 # CONFIG_PACKAGE_libpbc is not set
 CONFIG_PACKAGE_libpcap=y

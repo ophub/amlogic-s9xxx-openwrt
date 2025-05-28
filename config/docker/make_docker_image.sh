@@ -171,7 +171,7 @@ make_dockerimg() {
     rm -rf ${tmp_path}
 
     sync && sleep 3
-    echo -e "${INFO} Docker files list: \n$(ls -l ${out_path})"
+    echo -e "${INFO} Docker files list: \n$(ls -lh ${out_path})"
     echo -e "${SUCCESS} Docker image successfully created."
 }
 

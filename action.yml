@@ -68,7 +68,7 @@ runs:
             fi
         fi
         sync
-        echo -e "About the [ ${openwrt_savepath} ] directory: \n$(ls -l ${openwrt_savepath} 2>/dev/null)"
+        echo -e "About the [ ${openwrt_savepath} ] directory: \n$(ls -lh ${openwrt_savepath} 2>/dev/null)"
 
         cd ${{ github.action_path }}
         echo -e "Start to make openwrt..."
@@ -96,7 +96,7 @@ runs:
         echo -e "PACKAGED_OUTPUTPATH: ${PWD}/${openwrt_outpath}"
         echo -e "PACKAGED_OUTPUTDATE: $(date +"%m.%d.%H%M")"
         echo -e "PACKAGED_STATUS: success"
-        echo -e "PACKAGED_OUTPUTPATH files list: \n$(ls -l ${PWD}/${openwrt_outpath}/ 2>/dev/null)"
+        echo -e "PACKAGED_OUTPUTPATH files list: \n$(ls -lh ${PWD}/${openwrt_outpath}/ 2>/dev/null)"
 
 branding:
   icon: "terminal"

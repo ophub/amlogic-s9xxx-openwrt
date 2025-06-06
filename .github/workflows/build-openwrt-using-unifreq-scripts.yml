@@ -1,10 +1,10 @@
 #=====================================================================================
-# Description: Packaging OpenWrt for qemu, allwinner, rockchip and amlogic
+# Description: Build OpenWrt using Unifreq scripts
 # Copyright (C) 2021 https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2021 https://github.com/ophub/flippy-openwrt-actions
 #=====================================================================================
 
-name: Packaging QEMU and others
+name: Build OpenWrt using Unifreq scripts
 
 on:
   repository_dispatch:

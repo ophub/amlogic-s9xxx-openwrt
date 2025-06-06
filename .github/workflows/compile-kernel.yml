@@ -1,10 +1,10 @@
 #==========================================================================
-# Description: Compile the kernel using docker
+# Description: Compile the kernel
 # Copyright (C) 2021 https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2021 https://github.com/ophub/amlogic-s9xxx-armbian
 #==========================================================================
 
-name: Compile the kernel using docker
+name: Compile the kernel
 
 on:
   repository_dispatch:
@@ -78,16 +78,6 @@ on:
           - gzip
           - zstd
           - lzma
-      docker_image:
-        description: "Select Armbian docker image"
-        required: false
-        default: "bookworm"
-        type: choice
-        options:
-          - jammy
-          - noble
-          - bookworm
-          - bullseye
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
@@ -148,42 +138,21 @@ jobs:
           sudo mkdir -p /builder
           sudo mount /dev/github/runner /builder
           sudo chown -R runner.runner /builder
-          df -Th
-          echo "status=success" >> ${GITHUB_OUTPUT}
+          df -hT
 
-      - name: Install Docker
-        id: install
+      - name: Create a mapped directory
+        id: mapped
         working-directory: /builder
-        if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
         run: |
           df -hT ${PWD}
-          curl -fsSL https://get.docker.com | sh
-          sudo usermod -aG docker $USER
-          sudo newgrp docker
-          echo "status=success" >> ${GITHUB_OUTPUT}
-
-      - name: Pull Docker Image [ ${{ inputs.docker_image }} ]
-        id: pull
-        working-directory: /builder
-        if: ${{ steps.install.outputs.status }} == 'success' && !cancelled()
-        run: |
-          # Create a docker mapping directory
-          mkdir -p /builder/compile-kernel/{kernel,output}
-          ln -sf /builder/compile-kernel/kernel /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/kernel
-          ln -sf /builder/compile-kernel/output /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/output
-
-          # Pull the Armbian Docker image
-          docker run -d --privileged \
-              --name armbian-ophub \
-              -v /builder/compile-kernel:/opt/kernel/compile-kernel \
-              --restart=always \
-              ophub/armbian-${{ inputs.docker_image }}:latest
-
+          mkdir -p /builder/{kernel,output}
+          ln -sf /builder/kernel /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/kernel
+          ln -sf /builder/output /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/output
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
-        if: ${{ steps.pull.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
           kernel_source: ${{ inputs.kernel_source }}

@@ -1,9 +1,9 @@
 #=====================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Use Releases file to packaging
+# Description: Build OpenWrt using releases files
 #=====================================================================================
 
-name: Use Releases file to Packaging
+name: Build OpenWrt using releases files
 
 on:
   repository_dispatch:

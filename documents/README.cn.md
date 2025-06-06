@@ -173,7 +173,7 @@ OpenWrt 官方网站提供了制作好的 `openwrt-imagebuilder-*-armsr-armv8.Li
 
 - 本地化制作命令：可以在 `~/amlogic-s9xxx-openwrt` 根目录下运行 `sudo ./config/imagebuilder/imagebuilder.sh openwrt:21.02.3` 指令即可生成。其中的参数 `21.02.3` 是当前可以[下载](https://downloads.openwrt.org/releases)使用的 `releases` 版本号。生成的文件在 `openwrt/bin/targets/armsr/armv8` 目录下。
 
-- 使用 github.com 的 `Actions` 中进行制作：[Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
+- 使用 github.com 的 `Actions` 中进行制作：[Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-using-imagebuilder.yml)
 
 ## 5. 编译固件
 
@@ -195,7 +195,7 @@ OpenWrt 官方网站提供了制作好的 `openwrt-imagebuilder-*-armsr-armv8.Li
 
 ### 5.2 定时编译
 
-在 .github/workflows/build-openwrt.yml 文件里，使用 Cron 设置定时编译，5 个不同位置分别代表的意思为 分钟 (0 - 59) / 小时 (0 - 23) / 日期 (1 - 31) / 月份 (1 - 12) / 星期几 (0 - 6)(星期日 - 星期六)。通过修改不同位置的数值来设定时间。系统默认使用 UTC 标准时间，请根据你所在国家时区的不同进行换算。
+在 .github/workflows/build-openwrt-system-image.yml 文件里，使用 Cron 设置定时编译，5 个不同位置分别代表的意思为 分钟 (0 - 59) / 小时 (0 - 23) / 日期 (1 - 31) / 月份 (1 - 12) / 星期几 (0 - 6)(星期日 - 星期六)。通过修改不同位置的数值来设定时间。系统默认使用 UTC 标准时间，请根据你所在国家时区的不同进行换算。
 
 ```yaml
 schedule:
@@ -204,7 +204,7 @@ schedule:
 
 ### 5.3 使用逻辑卷扩大 Github Actions 编译空间
 
-Github Actions 编译空间默认是 84G，除去系统和必要软件包外，可用空间在 50G 左右，当编译全部固件时会遇到空间不足的问题，可以使用逻辑卷扩大编译空间至 110G 左右。参考 [.github/workflows/build-openwrt.yml](../.github/workflows/build-openwrt.yml) 文件里的方法，使用下面的命令创建逻辑卷。并在编译时使用逻辑卷的路径。
+Github Actions 编译空间默认是 84G，除去系统和必要软件包外，可用空间在 50G 左右，当编译全部固件时会遇到空间不足的问题，可以使用逻辑卷扩大编译空间至 110G 左右。参考 [.github/workflows/build-openwrt-system-image.yml](../.github/workflows/build-openwrt-system-image.yml) 文件里的方法，使用下面的命令创建逻辑卷。并在编译时使用逻辑卷的路径。
 
 ```yaml
 - name: Create simulated physical disk
@@ -228,7 +228,7 @@ Github Actions 编译空间默认是 84G，除去系统和必要软件包外，�
 
 ## 6. 保存固件
 
-固件保存的设置也在 .github/workflows/build-openwrt.yml 文件里控制。我们将编译好的固件通过脚本自动上传到 github 官方提供的 Actions 和 Releases 里面，或者上传到第三方（ 如 WeTransfer ）。
+固件保存的设置也在 .github/workflows/build-openwrt-system-image.yml 文件里控制。我们将编译好的固件通过脚本自动上传到 github 官方提供的 Actions 和 Releases 里面，或者上传到第三方（ 如 WeTransfer ）。
 
 现在 github 里 Actions 的最长保存期是 90 天，Releases 是永久，第三方如 WeTransfer 是 7 天。首先我们感谢这些服务商提供的免费支持，但是也请各位节约使用，我们提倡合理使用免费服务。
 
@@ -298,7 +298,7 @@ Github Actions 编译空间默认是 84G，除去系统和必要软件包外，�
 
 ### 7.3 从第三方下载
 
-在 .github/workflows/build-openwrt.yml 文件里，我们默认关闭了上传至第三方的选项，如果你需要，把 false 改为 ture ，下次编译完成就上传到第三方了。第三方的网址可以在固件编译流程的日志里看到，也可以输出到编译信息里。
+在 .github/workflows/build-openwrt-system-image.yml 文件里，我们默认关闭了上传至第三方的选项，如果你需要，把 false 改为 ture ，下次编译完成就上传到第三方了。第三方的网址可以在固件编译流程的日志里看到，也可以输出到编译信息里。
 
 ```yaml
 UPLOAD_COWTRANSFER: false
@@ -367,7 +367,7 @@ openwer-kernel -s
 
 GitHub官方给出了详细的说明，关于 GitHub Actions 的使用方法，你可以从这里开始认识它: [GitHub Actions 快速入门](https://docs.github.com/cn/actions/quickstart)
 
-让我们以现在仓库中正在使用的这个编译流程控制文件为例简单介绍下: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
+让我们以现在仓库中正在使用的这个编译流程控制文件为例简单介绍下: [build-openwrt-system-image.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-system-image.yml)
 
 #### 10.2.1 更换编译源码库的地址和分支
 
@@ -423,7 +423,7 @@ REPO_BRANCH: openwrt-21.02
 
 ### 10.5 自定义软件默认配置信息
 
-我们在使用的 openwrt 的时候，已经对很多软件进行了配置，这些软件的配置信息大部分都保存在了你的 openwrt 的 /etc/config/ 等相关目录下，把这些配置信息的存储文件复制到 GitHub 中仓库根目录下的 files 文件夹中，请保持目录结构和文件名称相同。在 openwrt 编译时，这些配置信息的存储文件将会被编译到你的固件中，具体做法在 .github/workflows/build-openwrt.yml 文件中，让我们在一起看看这段代码吧：
+我们在使用的 openwrt 的时候，已经对很多软件进行了配置，这些软件的配置信息大部分都保存在了你的 openwrt 的 /etc/config/ 等相关目录下，把这些配置信息的存储文件复制到 GitHub 中仓库根目录下的 files 文件夹中，请保持目录结构和文件名称相同。在 openwrt 编译时，这些配置信息的存储文件将会被编译到你的固件中，具体做法在 .github/workflows/build-openwrt-system-image.yml 文件中，让我们在一起看看这段代码吧：
 
 ```yaml
 - name: Load custom configuration

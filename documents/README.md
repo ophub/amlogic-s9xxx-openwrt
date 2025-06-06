@@ -175,7 +175,7 @@ This repository provides a one-click manufacturing service. You just need to pas
 
 - Localized production command: In the `~/amlogic-s9xxx-openwrt` root directory, run the command `sudo ./config/imagebuilder/imagebuilder.sh openwrt:21.02.3` to generate. The parameter `21.02.3` is the current available `releases` version number for [download](https://downloads.openwrt.org/releases). The generated file is located in the `openwrt/bin/targets/armsr/armv8` directory.
 
-- Produce in `Actions` on github.com: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-with-imagebuilder.yml)
+- Produce in `Actions` on github.com: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-using-imagebuilder.yml)
 
 ## 5. Firmware Compilation
 
@@ -197,7 +197,7 @@ In the navigation bar of your own repository, click the Actions button, and then
 
 ### 5.2 Scheduled Compilation
 
-In the .github/workflows/build-openwrt.yml file, use Cron to set up scheduled compilation. The 5 different positions represent minute (0 - 59) / hour (0 - 23) / date (1 - 31) / month (1 - 12) / day of the week (0 - 6) (Sunday - Saturday) respectively. By modifying the values at different positions to set the time. The system defaults to UTC standard time, please convert according to the different time zones of your country.
+In the .github/workflows/build-openwrt-system-image.yml file, use Cron to set up scheduled compilation. The 5 different positions represent minute (0 - 59) / hour (0 - 23) / date (1 - 31) / month (1 - 12) / day of the week (0 - 6) (Sunday - Saturday) respectively. By modifying the values at different positions to set the time. The system defaults to UTC standard time, please convert according to the different time zones of your country.
 
 ```yaml
 schedule:
@@ -206,7 +206,7 @@ schedule:
 
 ### 5.3 Expanding Github Actions Compilation Space Using Logical Volumes
 
-The default compile space for Github Actions is 84G, with about 50G available after considering the system and necessary software packages. When compiling all firmware, you may encounter an issue with insufficient space, which can be addressed by using logical volumes to expand the compile space to approximately 110G. Refer to the method in the [.github/workflows/build-openwrt.yml](../.github/workflows/build-openwrt.yml) file, and use the commands below to create a logical volume. Then, use the path of the logical volume during the compilation process.
+The default compile space for Github Actions is 84G, with about 50G available after considering the system and necessary software packages. When compiling all firmware, you may encounter an issue with insufficient space, which can be addressed by using logical volumes to expand the compile space to approximately 110G. Refer to the method in the [.github/workflows/build-openwrt-system-image.yml](../.github/workflows/build-openwrt-system-image.yml) file, and use the commands below to create a logical volume. Then, use the path of the logical volume during the compilation process.
 
 ```yaml
 - name: Create simulated physical disk
@@ -230,7 +230,7 @@ The default compile space for Github Actions is 84G, with about 50G available af
 
 ## 6. Saving Firmware
 
-The settings for firmware saving are also controlled in the .github/workflows/build-openwrt.yml file. We automatically upload the compiled firmware to the Actions and Releases provided by the official github through scripts, or to a third party (such as WeTransfer).
+The settings for firmware saving are also controlled in the .github/workflows/build-openwrt-system-image.yml file. We automatically upload the compiled firmware to the Actions and Releases provided by the official github through scripts, or to a third party (such as WeTransfer).
 
 Currently, the longest storage period in Actions on github is 90 days, Releases is permanent, and third parties such as WeTransfer are 7 days. First of all, we thank these service providers for their free support, but please also save everyone's use. We advocate reasonable use of free services.
 
@@ -302,7 +302,7 @@ Enter from the Release section in the lower right corner of the repository homep
 
 ### 7.3 Download from Third Party
 
-In the .github/workflows/build-openwrt.yml file, we have the option to upload to a third party turned off by default. If you need it, change false to true, and it will upload to the third party the next time the compilation is complete. The URL of the third party can be seen in the log of the firmware compilation process, and it can also be output to the compilation information.
+In the .github/workflows/build-openwrt-system-image.yml file, we have the option to upload to a third party turned off by default. If you need it, change false to true, and it will upload to the third party the next time the compilation is complete. The URL of the third party can be seen in the log of the firmware compilation process, and it can also be output to the compilation information.
 
 ```yaml
 UPLOAD_COWTRANSFER: false
@@ -372,7 +372,7 @@ After you complete the personalized configuration of OpenWrt locally, save and e
 
 GitHub's official detailed instructions on how to use GitHub Actions are available. You can start getting to know it here: [GitHub Actions Quick Start](https://docs.github.com/en/actions/quickstart)
 
-Let's take a simple look at the current compilation process control file being used in the repository as an example: [build-openwrt.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt.yml)
+Let's take a simple look at the current compilation process control file being used in the repository as an example: [build-openwrt-system-image.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-system-image.yml)
 
 #### 10.2.1 Changing the Address and Branch of the Compilation Source Code Repository
 
@@ -428,7 +428,7 @@ When you look at the feeds.conf.default file in the source code repository, have
 
 ### 10.5 Customize default software configuration information
 
-When we are using openwrt, we have configured many pieces of software. Most of the configuration information of these software is saved in the /etc/config/ and other related directories of your openwrt. Copy these configuration information storage files to the files folder in the root directory of the repository on GitHub. Please keep the directory structure and file names the same. During the openwrt compilation, these configuration information storage files will be compiled into your firmware. The specific method is in the .github/workflows/build-openwrt.yml file. Let's take a look at this piece of code together:
+When we are using openwrt, we have configured many pieces of software. Most of the configuration information of these software is saved in the /etc/config/ and other related directories of your openwrt. Copy these configuration information storage files to the files folder in the root directory of the repository on GitHub. Please keep the directory structure and file names the same. During the openwrt compilation, these configuration information storage files will be compiled into your firmware. The specific method is in the .github/workflows/build-openwrt-system-image.yml file. Let's take a look at this piece of code together:
 
 ```yaml
 - name: Load custom configuration

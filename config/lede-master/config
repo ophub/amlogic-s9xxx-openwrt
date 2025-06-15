@@ -2373,6 +2373,7 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 #
 # CONFIG_PACKAGE_kmod-input-leds is not set
 # CONFIG_PACKAGE_kmod-leds-gpio is not set
+# CONFIG_PACKAGE_kmod-leds-lp5523 is not set
 # CONFIG_PACKAGE_kmod-leds-lp5562 is not set
 # CONFIG_PACKAGE_kmod-leds-lp55xx-common is not set
 # CONFIG_PACKAGE_kmod-leds-mlxcpld is not set
@@ -3057,6 +3058,7 @@ CONFIG_PACKAGE_ATH_DFS=y
 # CONFIG_PACKAGE_kmod-ath10k-ct-smallbuffers is not set
 # CONFIG_PACKAGE_kmod-ath11k is not set
 # CONFIG_PACKAGE_kmod-ath11k-pci is not set
+# CONFIG_PACKAGE_kmod-ath12k is not set
 # CONFIG_PACKAGE_kmod-ath5k is not set
 CONFIG_PACKAGE_kmod-ath6kl=y
 # CONFIG_PACKAGE_kmod-ath6kl-sdio is not set
@@ -3122,6 +3124,7 @@ CONFIG_PACKAGE_kmod-rtl8192c-common=y
 CONFIG_PACKAGE_kmod-rtl8192cu=y
 # CONFIG_PACKAGE_kmod-rtl8192de is not set
 # CONFIG_PACKAGE_kmod-rtl8192se is not set
+# CONFIG_PACKAGE_kmod-rtl8723be is not set
 CONFIG_PACKAGE_kmod-rtl8723bs=y
 # CONFIG_PACKAGE_kmod-rtl8723du is not set
 # CONFIG_PACKAGE_kmod-rtl8821ae is not set
@@ -3133,7 +3136,19 @@ CONFIG_PACKAGE_kmod-rtl8723bs=y
 CONFIG_PACKAGE_kmod-rtlwifi=y
 # CONFIG_PACKAGE_RTLWIFI_DEBUG is not set
 CONFIG_PACKAGE_kmod-rtlwifi-usb=y
-# CONFIG_PACKAGE_kmod-rtw88 is not set
+# CONFIG_PACKAGE_kmod-rtw88-8723de is not set
+# CONFIG_PACKAGE_kmod-rtw88-8723ds is not set
+# CONFIG_PACKAGE_kmod-rtw88-8723du is not set
+# CONFIG_PACKAGE_kmod-rtw88-8821ce is not set
+# CONFIG_PACKAGE_kmod-rtw88-8821cu is not set
+# CONFIG_PACKAGE_kmod-rtw88-8822be is not set
+# CONFIG_PACKAGE_kmod-rtw88-8822bu is not set
+# CONFIG_PACKAGE_kmod-rtw88-8822ce is not set
+# CONFIG_PACKAGE_kmod-rtw88-8822cu is not set
+# CONFIG_PACKAGE_kmod-rtw89-8851be is not set
+# CONFIG_PACKAGE_kmod-rtw89-8852ae is not set
+# CONFIG_PACKAGE_kmod-rtw89-8852be is not set
+# CONFIG_PACKAGE_kmod-rtw89-8852ce is not set
 # CONFIG_PACKAGE_kmod-wil6210 is not set
 # CONFIG_PACKAGE_kmod-wl12xx is not set
 # CONFIG_PACKAGE_kmod-wl18xx is not set

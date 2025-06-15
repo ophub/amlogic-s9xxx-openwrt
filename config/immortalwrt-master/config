@@ -45,7 +45,6 @@ CONFIG_TARGET_armsr=y
 # CONFIG_TARGET_sifiveu is not set
 # CONFIG_TARGET_siflower is not set
 # CONFIG_TARGET_starfive is not set
-# CONFIG_TARGET_archs38 is not set
 # CONFIG_TARGET_omap is not set
 # CONFIG_TARGET_uml is not set
 # CONFIG_TARGET_zynq is not set
@@ -118,6 +117,7 @@ CONFIG_DEFAULT_uci=y
 CONFIG_DEFAULT_uclient-fetch=y
 CONFIG_DEFAULT_urandom-seed=y
 CONFIG_DEFAULT_urngd=y
+CONFIG_HAS_TESTING_KERNEL=y
 CONFIG_HAS_FPU=y
 CONFIG_AUDIO_SUPPORT=y
 CONFIG_GPIO_SUPPORT=y
@@ -196,6 +196,7 @@ CONFIG_USE_APK=y
 #
 # General build options
 #
+# CONFIG_TESTING_KERNEL is not set
 CONFIG_DISPLAY_SUPPORT=y
 # CONFIG_BUILD_PATENTED is not set
 # CONFIG_BUILD_NLS is not set
@@ -2031,6 +2032,7 @@ CONFIG_PACKAGE_rtl8761a-firmware=y
 CONFIG_PACKAGE_rtl8761b-firmware=y
 CONFIG_PACKAGE_rtl8761bu-firmware=y
 # CONFIG_PACKAGE_rtl8812a-firmware is not set
+# CONFIG_PACKAGE_rtl8814a-firmware is not set
 # CONFIG_PACKAGE_rtl8821a-firmware is not set
 CONFIG_PACKAGE_rtl8821ae-firmware=y
 # CONFIG_PACKAGE_rtl8821ce-firmware is not set
@@ -2308,6 +2310,7 @@ CONFIG_PACKAGE_kmod-hwmon-core=y
 # CONFIG_PACKAGE_kmod-i2c-algo-pcf is not set
 CONFIG_PACKAGE_kmod-i2c-core=y
 # CONFIG_PACKAGE_kmod-i2c-designware-pci is not set
+# CONFIG_PACKAGE_kmod-i2c-designware-platform is not set
 # CONFIG_PACKAGE_kmod-i2c-gpio is not set
 CONFIG_PACKAGE_kmod-i2c-mux=y
 # CONFIG_PACKAGE_kmod-i2c-mux-gpio is not set
@@ -2382,6 +2385,7 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 # CONFIG_PACKAGE_kmod-led-group-multi-color is not set
 # CONFIG_PACKAGE_kmod-leds-gpio is not set
 # CONFIG_PACKAGE_kmod-leds-ktd202x is not set
+# CONFIG_PACKAGE_kmod-leds-lp5523 is not set
 # CONFIG_PACKAGE_kmod-leds-lp5562 is not set
 # CONFIG_PACKAGE_kmod-leds-lp55xx-common is not set
 # CONFIG_PACKAGE_kmod-leds-pca955x is not set
@@ -2606,6 +2610,7 @@ CONFIG_PACKAGE_kmod-dwmac-sun8i=y
 # CONFIG_PACKAGE_kmod-e100 is not set
 # CONFIG_PACKAGE_kmod-e1000 is not set
 CONFIG_PACKAGE_kmod-e1000e=y
+# CONFIG_PACKAGE_kmod-enc28j60 is not set
 # CONFIG_PACKAGE_kmod-et131x is not set
 # CONFIG_PACKAGE_kmod-ethoc is not set
 CONFIG_PACKAGE_kmod-fixed-phy=y
@@ -2891,6 +2896,8 @@ CONFIG_PACKAGE_kmod-rtc-rx8025=y
 # CONFIG_PACKAGE_kmod-mmc-spi is not set
 # CONFIG_PACKAGE_kmod-spi-bitbang is not set
 # CONFIG_PACKAGE_kmod-spi-dev is not set
+# CONFIG_PACKAGE_kmod-spi-dw is not set
+# CONFIG_PACKAGE_kmod-spi-dw-mmio is not set
 # CONFIG_PACKAGE_kmod-spi-gpio is not set
 # end of SPI Support
 
@@ -3181,6 +3188,8 @@ CONFIG_PACKAGE_kmod-rtlwifi-usb=y
 # CONFIG_PACKAGE_kmod-rtw88-8723ds is not set
 # CONFIG_PACKAGE_kmod-rtw88-8723du is not set
 # CONFIG_PACKAGE_kmod-rtw88-8812au is not set
+# CONFIG_PACKAGE_kmod-rtw88-8814ae is not set
+# CONFIG_PACKAGE_kmod-rtw88-8814au is not set
 # CONFIG_PACKAGE_kmod-rtw88-8821au is not set
 # CONFIG_PACKAGE_kmod-rtw88-8821ce is not set
 # CONFIG_PACKAGE_kmod-rtw88-8821cu is not set
@@ -3560,12 +3569,16 @@ CONFIG_PACKAGE_perl-http-date=y
 # CONFIG_PACKAGE_perl-inline is not set
 # CONFIG_PACKAGE_perl-inline-c is not set
 # CONFIG_PACKAGE_perl-io-async is not set
+# CONFIG_PACKAGE_perl-io-async-ssl is not set
 # CONFIG_PACKAGE_perl-io-html is not set
 # CONFIG_PACKAGE_perl-io-socket-ssl is not set
 # CONFIG_PACKAGE_perl-lockfile-simple is not set
 # CONFIG_PACKAGE_perl-lwp-mediatypes is not set
+# CONFIG_PACKAGE_perl-metrics-any is not set
+# CONFIG_PACKAGE_perl-net-async-http is not set
 # CONFIG_PACKAGE_perl-net-cidr-lite is not set
 # CONFIG_PACKAGE_perl-net-dns is not set
+# CONFIG_PACKAGE_perl-net-dns-sec is not set
 # CONFIG_PACKAGE_perl-net-http is not set
 # CONFIG_PACKAGE_perl-net-ssleay is not set
 # CONFIG_PACKAGE_perl-net-telnet is not set
@@ -4868,6 +4881,7 @@ CONFIG_MESA_USE_LLVM=y
 # CONFIG_PACKAGE_dtndht is not set
 # CONFIG_PACKAGE_efivar is not set
 # CONFIG_PACKAGE_ell is not set
+# CONFIG_PACKAGE_ethtool-lua is not set
 # CONFIG_PACKAGE_getdns is not set
 # CONFIG_PACKAGE_giflib is not set
 CONFIG_PACKAGE_glib2=y
@@ -5071,6 +5085,7 @@ CONFIG_PACKAGE_libiperf3=y
 CONFIG_PACKAGE_libiwinfo=y
 # CONFIG_PACKAGE_libjaylink is not set
 # CONFIG_PACKAGE_libjcat is not set
+# CONFIG_PACKAGE_libjemalloc is not set
 # CONFIG_PACKAGE_libjpeg-turbo is not set
 CONFIG_PACKAGE_libjson-c=y
 # CONFIG_PACKAGE_libjwt is not set
@@ -5463,6 +5478,7 @@ CONFIG_PACKAGE_luci-mod-system=y
 #
 # 3. Applications
 #
+# CONFIG_PACKAGE_luci-app-3cat is not set
 # CONFIG_PACKAGE_luci-app-3ginfo-lite is not set
 # CONFIG_PACKAGE_luci-app-acl is not set
 # CONFIG_PACKAGE_luci-app-acme is not set
@@ -6486,6 +6502,7 @@ CONFIG_PACKAGE_avahi-dbus-daemon=y
 # CONFIG_PACKAGE_bind-nslookup is not set
 # CONFIG_PACKAGE_bind-rndc is not set
 # CONFIG_PACKAGE_bind-server is not set
+# CONFIG_BIND_JEMALLOC is not set
 # CONFIG_PACKAGE_bind-tools is not set
 # CONFIG_PACKAGE_chinadns-ng is not set
 # CONFIG_PACKAGE_ddns-go is not set
@@ -6994,6 +7011,16 @@ CONFIG_PACKAGE_uqmi=y
 #
 # Web Servers/Proxies
 #
+# CONFIG_PACKAGE_3proxy is not set
+# CONFIG_PACKAGE_3proxy-mod-ftppr is not set
+# CONFIG_PACKAGE_3proxy-mod-mycrypt is not set
+# CONFIG_PACKAGE_3proxy-mod-pop3p is not set
+# CONFIG_PACKAGE_3proxy-mod-proxy is not set
+# CONFIG_PACKAGE_3proxy-mod-smtpp is not set
+# CONFIG_PACKAGE_3proxy-mod-socks is not set
+# CONFIG_PACKAGE_3proxy-mod-tcppm is not set
+# CONFIG_PACKAGE_3proxy-mod-tlspr is not set
+# CONFIG_PACKAGE_3proxy-mod-udppm is not set
 # CONFIG_PACKAGE_apache is not set
 # CONFIG_PACKAGE_brook is not set
 CONFIG_PACKAGE_cgi-io=y
@@ -7297,6 +7324,8 @@ CONFIG_PACKAGE_libipset=y
 # CONFIG_PACKAGE_mii-tool is not set
 # CONFIG_PACKAGE_mikrotik-btest is not set
 # CONFIG_PACKAGE_mini_snmpd is not set
+# CONFIG_PACKAGE_mini_snmpd-16 is not set
+# CONFIG_PACKAGE_mini_snmpd-52 is not set
 # CONFIG_PACKAGE_minimalist-pcproxy is not set
 # CONFIG_PACKAGE_modemmanager is not set
 # CONFIG_PACKAGE_mosquitto-client-nossl is not set
@@ -7379,6 +7408,7 @@ CONFIG_PACKAGE_proto-bonding=y
 # CONFIG_PACKAGE_ptunnel-ng is not set
 # CONFIG_PACKAGE_q is not set
 # CONFIG_PACKAGE_qcsuper is not set
+# CONFIG_PACKAGE_radius-mac is not set
 # CONFIG_PACKAGE_radsecproxy is not set
 # CONFIG_PACKAGE_ratched is not set
 # CONFIG_PACKAGE_ratechecker is not set
@@ -8236,6 +8266,7 @@ CONFIG_PACKAGE_lsof=y
 # CONFIG_PACKAGE_mandoc is not set
 # CONFIG_PACKAGE_mbedtls-util is not set
 # CONFIG_PACKAGE_mbim-utils is not set
+# CONFIG_PACKAGE_mbpoll is not set
 # CONFIG_PACKAGE_mbtools is not set
 # CONFIG_PACKAGE_mc is not set
 # CONFIG_PACKAGE_mc-skins is not set

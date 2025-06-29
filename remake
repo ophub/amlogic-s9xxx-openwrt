@@ -686,6 +686,10 @@ make_image() {
     }
 
     # Special procedures for flashing specific boards
+    # Reset default parameters
+    write_board_file="no"
+    adjust_kernel_files="no"
+    # Check the personalization settings of this board
     board_release="${different_files}/${board}/rootfs/etc/openwrt-board-release.conf"
     [[ -f "${board_release}" ]] && source ${board_release}
 

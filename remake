@@ -685,6 +685,12 @@ make_image() {
         bootfs_type="fat32"
     }
 
+    # Special procedures for flashing specific boards
+    board_release="${different_files}/${board}/rootfs/etc/openwrt-board-release.conf"
+    [[ -f "${board_release}" ]] && source ${board_release}
+
+    # echo -e "${INFO} The [ ${board} ] OpenWrt image partition status: [ skip:${skip_mb} / boot:${boot_mb} / rootfs:${root_mb} ] MiB."
+
     # Set OpenWrt filename
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
     openwrt_filename="openwrt${source_codename}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
@@ -751,7 +757,7 @@ make_image() {
             dd if="${bootloader_path}/${MAINLINE_UBOOT}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=16384 2>/dev/null
             #echo -e "${INFO} 02. For [ ${board} ] write bootloader: ${MAINLINE_UBOOT}"
         elif [[ "${BOOTLOADER_IMG}" == "u-boot-rockchip.bin" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]]; then
-            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc seek=64 2>/dev/null
+            dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 seek=64 2>/dev/null
             #echo -e "${INFO} 03. For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
         elif [[ -n "${BOOTLOADER_IMG}" && -f "${bootloader_path}/${BOOTLOADER_IMG}" ]]; then
             dd if="${bootloader_path}/${BOOTLOADER_IMG}" of="${loop_new}" conv=fsync,notrunc bs=512 skip=64 seek=64 2>/dev/null
@@ -772,6 +778,9 @@ make_image() {
             #echo -e "${INFO} 02. For [ ${board} ] write bootloader: ${BOOTLOADER_IMG}"
         fi
     }
+
+    # Special procedures for flashing specific boards
+    [[ "${write_board_file}" == "yes" ]] && write_board_bootloader
 }
 
 extract_openwrt() {
@@ -867,6 +876,9 @@ replace_kernel() {
     tar -mxzf ${kernel_modules} -C ${tag_rootfs}/lib/modules
     (cd ${tag_rootfs}/lib/modules/${kernel_name}/ && rm -f build source *.ko 2>/dev/null && find ./ -type f -name '*.ko' -exec ln -s {} ./ \;)
     [[ "$(ls ${tag_rootfs}/lib/modules/${kernel_name} -l 2>/dev/null | grep "^d" | wc -l)" -eq "1" ]] || error_msg "/usr/lib/modules kernel folder is missing."
+
+    # Special procedures for flashing specific boards
+    [[ "${adjust_kernel_files}" == "yes" ]] && adjust_kernel_files_cmd
 }
 
 refactor_bootfs() {

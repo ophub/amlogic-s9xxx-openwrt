@@ -43,17 +43,17 @@ do_checkdisk() {
 
     # Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
     case "${ROOT_PTNAME}" in
-    mmcblk?p[1-4])
+    mmcblk?p[1-9])
         DISK_NAME="${ROOT_PTNAME:0:-2}"
         PT_PRE="${DISK_NAME}p"
         LB_PRE="MMC_"
         ;;
-    [hsv]d[a-z][1-4])
+    [hsv]d[a-z][1-9])
         DISK_NAME="${ROOT_PTNAME:0:-1}"
         PT_PRE="${DISK_NAME}"
         LB_PRE="USB_"
         ;;
-    nvme?n?p[1-4])
+    nvme?n?p[1-9])
         DISK_NAME="${ROOT_PTNAME:0:-2}"
         PT_PRE="${DISK_NAME}p"
         LB_PRE="NVME_"
@@ -92,7 +92,7 @@ create_new_partition() {
 
     # Calculate partition positions
     echo -e "${INFO} Start calculating partition location..."
-    END_P2="$(fdisk -l | grep "/dev/${DISK_NAME}" | sed -n '$p' | awk '{print $3}' | xargs)"
+    END_P2="$(fdisk -l | grep "/dev/${DISK_NAME}p2" | sed -n '$p' | awk '{print $3}' | xargs)"
     [[ -z "${END_P2}" || -z "$(echo ${END_P2} | sed -n "/^[0-9]\+$/p")" ]] && error_msg "Unable to get starting position!"
     START_P3="$(((END_P2 + 1) / 2048 + 1))"
 

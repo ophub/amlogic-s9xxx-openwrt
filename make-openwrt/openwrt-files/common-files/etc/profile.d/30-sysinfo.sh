@@ -20,15 +20,15 @@ ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3
 if [[ -n "${ROOT_PTNAME}" ]]; then
 	# find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
 	case "${ROOT_PTNAME}" in
-	mmcblk?p[1-4])
+	mmcblk?p[1-9])
 		DISK_NAME="${ROOT_PTNAME:0:-2}"
 		PARTITION_NAME="p"
 		;;
-	[hsv]d[a-z][1-4])
+	[hsv]d[a-z][1-9])
 		DISK_NAME="${ROOT_PTNAME:0:-1}"
 		PARTITION_NAME=""
 		;;
-	nvme?n?p[1-4])
+	nvme?n?p[1-9])
 		DISK_NAME="${ROOT_PTNAME:0:-2}"
 		PARTITION_NAME="p"
 		;;

@@ -477,7 +477,7 @@ download_depends() {
     chmod +x ${common_files}/usr/sbin/*
     # Move the files to the storage directory
     mkdir -p ${common_files}/usr/share/amlogic
-    cp -af --no-preserve=ownership ${git_path}/luci-app-amlogic/root/usr/share/amlogic ${common_files}/usr/share/amlogic
+    cp -af --no-preserve=ownership ${git_path}/luci-app-amlogic/root/usr/share/amlogic/* ${common_files}/usr/share/amlogic
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} app/share download completed." || error_msg "app/share download failed."
     chmod +x ${common_files}/usr/share/amlogic/*
     # Delete temporary files

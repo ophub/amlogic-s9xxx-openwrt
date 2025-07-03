@@ -54,7 +54,13 @@ do_update_conf() {
     echo -e "${STEPS} Start updating the openfvd config files..."
 
     # Check dependencies
-    [[ -z "$(opkg list-installed | awk '{print $1}' | grep -w '^git$')" ]] && opkg update && opkg install --force-reinstall git
+    if command -v opkg >/dev/null 2>&1; then
+        [[ -z "$(opkg list-installed | awk '{print $1}' | grep -w '^git$')" ]] && opkg update && opkg install --force-reinstall git
+    elif command -v apk >/dev/null 2>&1; then
+        [[ -z "$(apk list --installed | grep '^git-')" ]] && apk update && apk add --force-overwrite --allow-untrusted git
+    else
+        error_msg "Package manager not found, please install git manually."
+    fi
 
     # Get the latest scripts
     git_tmp_path="$(mktemp -d)"

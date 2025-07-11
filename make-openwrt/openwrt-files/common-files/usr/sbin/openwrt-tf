@@ -41,20 +41,26 @@ do_checkdisk() {
     ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
     [[ -z "${ROOT_PTNAME}" ]] && error_msg "Cannot find the partition corresponding to the root file system!"
 
-    # Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
+    # Find the disk where the partition is located, supporting multi-digit partition numbers
     case "${ROOT_PTNAME}" in
-    mmcblk?p[1-9])
-        DISK_NAME="${ROOT_PTNAME:0:-2}"
+    mmcblk?p[0-9]*)
+        # Using sed to remove the trailing 'p' and all numbers
+        # For example, mmcblk0p1 -> mmcblk0
+        DISK_NAME=$(echo "${ROOT_PTNAME}" | sed -E 's/p[0-9]+$//')
         PT_PRE="${DISK_NAME}p"
         LB_PRE="MMC_"
         ;;
-    [hsv]d[a-z][1-9])
-        DISK_NAME="${ROOT_PTNAME:0:-1}"
+    [hsv]d[a-z][0-9]*)
+        # Using sed to remove all trailing numbers
+        # For example, sda1 -> sda
+        DISK_NAME=$(echo "${ROOT_PTNAME}" | sed -E 's/[0-9]+$//')
         PT_PRE="${DISK_NAME}"
         LB_PRE="USB_"
         ;;
-    nvme?n?p[1-9])
-        DISK_NAME="${ROOT_PTNAME:0:-2}"
+    nvme?n?p[0-9]*)
+        # Using sed to remove the trailing 'p' and all numbers
+        # For example, nvme0n1p1 -> nvme0n1
+        DISK_NAME=$(echo "${ROOT_PTNAME}" | sed -E 's/p[0-9]+$//')
         PT_PRE="${DISK_NAME}p"
         LB_PRE="NVME_"
         ;;
@@ -92,7 +98,7 @@ create_new_partition() {
 
     # Calculate partition positions
     echo -e "${INFO} Start calculating partition location..."
-    END_P2="$(fdisk -l | grep "/dev/${DISK_NAME}p2" | sed -n '$p' | awk '{print $3}' | xargs)"
+    END_P2="$(fdisk -l | grep "/dev/${PT_PRE}2" | sed -n '$p' | awk '{print $3}' | xargs)"
     [[ -z "${END_P2}" || -z "$(echo ${END_P2} | sed -n "/^[0-9]\+$/p")" ]] && error_msg "Unable to get starting position!"
     START_P3="$(((END_P2 + 1) / 2048 + 1))"
 
@@ -107,13 +113,13 @@ create_new_partition() {
     mkdir -p /mnt/${PT_PRE}3
     umount -f /dev/${PT_PRE}3 2>/dev/null
     mkfs.btrfs -f -U ${ROOTFS_UUID} -L "${LB_PRE}ROOTFS2" -m single "/dev/${PT_PRE}3" >/dev/null 2>&1
-    mount | grep "/mnt/${PT_PRE}3" > /dev/null || mount -t btrfs -o compress=zstd:6 "/dev/${PT_PRE}3" "/mnt/${PT_PRE}3"
+    mount | grep "/mnt/${PT_PRE}3" >/dev/null || mount -t btrfs -o compress=zstd:6 "/dev/${PT_PRE}3" "/mnt/${PT_PRE}3"
 
     # Format the fourth partition
     mkdir -p /mnt/${PT_PRE}4
     umount -f /dev/${PT_PRE}4 2>/dev/null
     mkfs.btrfs -f -U ${SHARED_UUID} -L "${LB_PRE}SHARED" -m single "/dev/${PT_PRE}4" >/dev/null 2>&1
-    mount | grep "/mnt/${PT_PRE}4" > /dev/null || mount -t btrfs -o compress=zstd:6 "/dev/${PT_PRE}4" "/mnt/${PT_PRE}4"
+    mount | grep "/mnt/${PT_PRE}4" >/dev/null || mount -t btrfs -o compress=zstd:6 "/dev/${PT_PRE}4" "/mnt/${PT_PRE}4"
 
     # Adjust docker data storage location
     [[ -f "/etc/init.d/dockerd" ]] && {

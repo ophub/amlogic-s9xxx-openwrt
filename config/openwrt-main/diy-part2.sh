@@ -37,7 +37,7 @@ git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom.git pac
 git clone https://github.com/Leo-Jo-My/luci-theme-opentomcat.git packages/luci-theme-opentomcat
 git clone https://github.com/sirpdboy/luci-theme-opentopd.git packages/luci-theme-opentopd
 
-git clone https://github.com/very20101/small-package packages/smpackage
+git clone https://github.com/very20101/small-package smpackage
 
 ## Add extra package
 #git clone https://github.com/kenzok8/small-package smpackage

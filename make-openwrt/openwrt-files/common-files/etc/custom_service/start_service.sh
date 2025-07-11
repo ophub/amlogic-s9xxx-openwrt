@@ -12,19 +12,31 @@
 # Dependent script: /etc/rc.local
 # File path: /etc/custom_service/start_service.sh
 #
-#========================================================================================
+# Version: 1.1
 #
-# Find the partition where root is located
-ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
-if [[ -n "${ROOT_PTNAME}" ]]; then
+#========================================================================================
 
-    # Find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
+# A helper function for logging with a timestamp.
+custom_log="/tmp/ophub_start_service.log"
+log_message() {
+    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] $1" >>"${custom_log}"
+}
+
+# Clear previous log and start new session.
+log_message "Start the custom service..."
+
+# Find the partition where the root filesystem is located.
+ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
+PARTITION_PATH=""
+if [[ -n "${ROOT_PTNAME}" ]]; then
+    log_message "Detected root partition name: ${ROOT_PTNAME}"
+    # Find the disk where the partition is located.
     case "${ROOT_PTNAME}" in
     mmcblk?p[1-9])
         DISK_NAME="${ROOT_PTNAME:0:-2}"
         PARTITION_NAME="p"
         ;;
-    [hsv]d[a-z][1-9])
+    [hsv]d[a-z][1-9]*)
         DISK_NAME="${ROOT_PTNAME:0:-1}"
         PARTITION_NAME=""
         ;;
@@ -35,72 +47,83 @@ if [[ -n "${ROOT_PTNAME}" ]]; then
     *)
         DISK_NAME=""
         PARTITION_NAME=""
+        log_message "Warning: Unrecognized root partition format '${ROOT_PTNAME}'."
         ;;
     esac
 
-    PARTITION_PATH="/mnt/${DISK_NAME}${PARTITION_NAME}4"
+    if [[ -n "${DISK_NAME}" ]]; then
+        # The 4th partition is assumed for swap/data.
+        PARTITION_PATH="/mnt/${DISK_NAME}${PARTITION_NAME}4"
+        log_message "Derived disk name: ${DISK_NAME}. Target data partition path: ${PARTITION_PATH}"
+    fi
 else
-    PARTITION_PATH=""
+    log_message "Error: Could not determine root partition."
 fi
-#
-#========================================================================================
-
-# Custom Service Log
-custom_log="/tmp/ophub_start_service.log"
-
-# Add custom log
-echo "[$(date +"%Y.%m.%d.%H:%M:%S")] Start the custom service..." >${custom_log}
 
 # Add network performance optimization
-[[ -x "/usr/sbin/balethirq.pl" ]] && {
-    perl /usr/sbin/balethirq.pl 2>/dev/null &&
-        echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The network optimization service started successfully." >>${custom_log}
-}
+if [[ -x "/usr/sbin/balethirq.pl" ]]; then
+    (perl /usr/sbin/balethirq.pl 2>/dev/null) || true
+    log_message "Network optimization service (balethirq.pl) execution attempted."
+fi
 
 # Led display control
 openvfd_enable="no"
 openvfd_boxid="15"
-[[ "${openvfd_enable}" == "yes" && -n "${openvfd_boxid}" && -x "/usr/sbin/openwrt-openvfd" ]] && {
-    openwrt-openvfd ${openvfd_boxid} &&
-        echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The openvfd service started successfully." >>${custom_log}
-}
+if [[ "${openvfd_enable}" == "yes" && -n "${openvfd_boxid}" && -x "/usr/sbin/openwrt-openvfd" ]]; then
+    (openwrt-openvfd "${openvfd_boxid}") || true
+    log_message "OpenVFD service execution attempted."
+fi
 
 # For vplus(Allwinner h6) led color lights
-[[ -x "/usr/bin/rgb-vplus" ]] && {
+if [[ -x "/usr/bin/rgb-vplus" ]]; then
     rgb-vplus --RedName=RED --GreenName=GREEN --BlueName=BLUE &
-    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The LED of Vplus is enabled successfully." >>${custom_log}
-}
+    log_message "Vplus RGB LED service started in background."
+fi
 
 # For fan control service
-[[ -x "/usr/bin/pwm-fan.pl" ]] && {
+if [[ -x "/usr/bin/pwm-fan.pl" ]]; then
     perl /usr/bin/pwm-fan.pl 2>/dev/null &
-    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The fan control service enabled successfully." >>${custom_log}
-}
+    log_message "Fan control service (pwm-fan.pl) started in background."
+fi
 
-# For oes(A311d) led color lights
-[[ -x "/usr/bin/oes_sata_leds.sh" ]] && {
+# For oes(A311d) SATA LED status monitoring
+if [[ -x "/usr/bin/oes_sata_leds.sh" ]]; then
     /usr/bin/oes_sata_leds.sh >/var/log/oes-sata-leds.log 2>&1 &
-    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The SATA status check on WXY-OES(A311D) enabled successfully." >>${custom_log}
-}
+    log_message "SATA status check service (oes_sata_leds.sh) started in background."
+fi
 
 # Automatic expansion of the third and fourth partitions
 todo_rootfs_resize="/root/.todo_rootfs_resize"
-[[ -f "${todo_rootfs_resize}" && "$(cat ${todo_rootfs_resize} 2>/dev/null | xargs)" == "yes" ]] && {
-    openwrt-tf 2>/dev/null &&
-        echo "[$(date +"%Y.%m.%d.%H:%M:%S")] Automatically expand the partition successfully." >>${custom_log}
-}
+if [[ -f "${todo_rootfs_resize}" && "$(cat "${todo_rootfs_resize}" 2>/dev/null | xargs)" == "yes" ]]; then
+    (openwrt-tf 2>/dev/null) || true
+    log_message "Automatic partition expansion (openwrt-tf) attempted."
+fi
 
-# Set swap check file
-sawp_check_file="${PARTITION_PATH}/.swap/swapfile"
-[[ -f "${sawp_check_file}" ]] && {
-    # Set swap space
-    swap_loopdev="$(losetup -f)"
-    # Mount swap file
-    losetup ${swap_loopdev} ${sawp_check_file}
-    # Enable swap
-    swapon ${swap_loopdev}
-    [[ "${?}" == 0 ]] && echo "[$(date +"%Y.%m.%d.%H:%M:%S")] The swap file enabled successfully." >>${custom_log}
-}
+# Set swap space
+if [[ -n "${PARTITION_PATH}" && -d "${PARTITION_PATH}" ]]; then
+    swap_check_file="${PARTITION_PATH}/.swap/swapfile"
+    if [[ -f "${swap_check_file}" ]]; then
+        log_message "Swap file found at ${swap_check_file}. Attempting to enable."
 
-# Add custom log
-echo "[$(date +"%Y.%m.%d.%H:%M:%S")] All custom services executed successfully!" >>${custom_log}
+        # 'local' keyword removed, as we are in the main script body.
+        swap_loopdev="$(losetup -f)"
+        if [[ -z "${swap_loopdev}" ]]; then
+            log_message "Error: Could not find a free loop device. Skipping swap setup."
+        else
+            # Only proceed if a loop device was found.
+            # The '&&' ensures that 'swapon' is only attempted if 'losetup' succeeds.
+            if losetup "${swap_loopdev}" "${swap_check_file}" && swapon "${swap_loopdev}"; then
+                log_message "Swap file enabled successfully on ${swap_loopdev}."
+            else
+                # If the chain fails at any point, log the error and clean up.
+                log_message "Error: Failed to setup swap on ${swap_loopdev}. Cleaning up..."
+                losetup -d "${swap_loopdev}" 2>/dev/null # Attempt to detach the loop device.
+            fi
+        fi
+    fi
+else
+    log_message "Warning: Swap partition path '${PARTITION_PATH}' does not exist."
+fi
+
+# Finalization
+log_message "All custom services have been processed."

@@ -2,4 +2,4 @@ src-git packages https://git.openwrt.org/feed/packages.git
 src-git luci https://git.openwrt.org/project/luci.git
 src-git routing https://git.openwrt.org/feed/routing.git
 src-git telephony https://git.openwrt.org/feed/telephony.git
-src-git smpackage https://github.com/kenzok8/small-package
+src-git smpackage https://github.com/very20101/small-package

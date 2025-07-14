@@ -365,6 +365,7 @@ jobs:
         id: compile
         run: |
           cd openwrt/
+          rm -rf package/feeds/smpackage/trojan-plus
           echo -e "$(nproc) thread compile"
           make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
           echo "status=success" >> ${GITHUB_OUTPUT}

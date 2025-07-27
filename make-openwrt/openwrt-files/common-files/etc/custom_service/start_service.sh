@@ -25,6 +25,16 @@ log_message() {
 # Clear previous log and start new session.
 log_message "Start the custom service..."
 
+# System Identification
+# Set the release check file to identify the device type.
+ophub_release_file="/etc/ophub-release"
+FDT_FILE="" # Initialize FDT_FILE to be empty.
+
+[[ -f "${ophub_release_file}" ]] && { FDT_FILE="$(grep -oE 'meson.*dtb' "${ophub_release_file}")"; }
+[[ -z "${FDT_FILE}" && -f "/boot/uEnv.txt" ]] && { FDT_FILE="$(grep -E '^FDT=.*\.dtb$' /boot/uEnv.txt | sed -E 's#.*/##')"; }
+[[ -z "${FDT_FILE}" && -f "/boot/armbianEnv.txt" ]] && { FDT_FILE="$(grep -E '^fdtfile=.*\.dtb$' /boot/armbianEnv.txt | sed -E 's#.*/##')"; }
+log_message "Detected FDT file: ${FDT_FILE:-'not found'}"
+
 # Find the partition where the root filesystem is located.
 ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
 PARTITION_PATH=""

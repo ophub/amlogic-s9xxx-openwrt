@@ -436,8 +436,8 @@ CONFIG_HAS_BPF_TOOLCHAIN=y
 # CONFIG_HAS_PREBUILT_LLVM_TOOLCHAIN is not set
 CONFIG_USE_MUSL=y
 CONFIG_SSP_SUPPORT=y
-CONFIG_BINUTILS_VERSION_2_42=y
-CONFIG_BINUTILS_VERSION="2.42"
+CONFIG_BINUTILS_VERSION_2_44=y
+CONFIG_BINUTILS_VERSION="2.44"
 CONFIG_GCC_VERSION="14.3.0"
 CONFIG_GCC_USE_DEFAULT_VERSION=y
 CONFIG_LIBC="musl"
@@ -1599,11 +1599,9 @@ CONFIG_DROPBEAR_DEBUG_TRACE=0
 #
 # CONFIG_DROPBEAR_DO_HOST_LOOKUP is not set
 CONFIG_DROPBEAR_SVR_PUBKEY_OPTIONS=y
-# CONFIG_DROPBEAR_LASTLOG is not set
-# CONFIG_DROPBEAR_WTMP is not set
 
 #
-# * note: utmp is unavailable with musl libc
+# * note: lastlog/login()/utmp/wtmp are unavailable with musl libc
 #
 
 #
@@ -2324,6 +2322,7 @@ CONFIG_PACKAGE_kmod-fs-nfs-common-rpcsec=y
 CONFIG_PACKAGE_kmod-fs-nfs-v3=y
 CONFIG_PACKAGE_kmod-fs-nfs-v4=y
 CONFIG_PACKAGE_kmod-fs-nfsd=y
+# CONFIG_PACKAGE_kmod-fs-nilfs2 is not set
 CONFIG_PACKAGE_kmod-fs-ntfs3=y
 CONFIG_PACKAGE_kmod-fs-reiserfs=y
 CONFIG_PACKAGE_kmod-fs-smbfs-common=y
@@ -2545,9 +2544,9 @@ CONFIG_PACKAGE_kmod-nls-cp437=y
 # CONFIG_PACKAGE_kmod-nls-cp862 is not set
 # CONFIG_PACKAGE_kmod-nls-cp864 is not set
 # CONFIG_PACKAGE_kmod-nls-cp866 is not set
-# CONFIG_PACKAGE_kmod-nls-cp932 is not set
-# CONFIG_PACKAGE_kmod-nls-cp936 is not set
-# CONFIG_PACKAGE_kmod-nls-cp950 is not set
+CONFIG_PACKAGE_kmod-nls-cp932=y
+CONFIG_PACKAGE_kmod-nls-cp936=y
+CONFIG_PACKAGE_kmod-nls-cp950=y
 CONFIG_PACKAGE_kmod-nls-iso8859-1=y
 # CONFIG_PACKAGE_kmod-nls-iso8859-13 is not set
 # CONFIG_PACKAGE_kmod-nls-iso8859-15 is not set
@@ -2973,6 +2972,7 @@ CONFIG_PACKAGE_kmod-wdt-sp805=y
 #
 # RTC Real-Time Clock Support
 #
+# CONFIG_PACKAGE_kmod-rtc-bq32k is not set
 # CONFIG_PACKAGE_kmod-rtc-ds1307 is not set
 # CONFIG_PACKAGE_kmod-rtc-ds1374 is not set
 # CONFIG_PACKAGE_kmod-rtc-ds1672 is not set
@@ -4639,6 +4639,8 @@ CONFIG_PACKAGE_libxtables=y
 #
 # CONFIG_PACKAGE_libdcwproto is not set
 # CONFIG_PACKAGE_libdcwsocket is not set
+# CONFIG_PACKAGE_libnetsnmp-nossl is not set
+# CONFIG_PACKAGE_libnetsnmp-ssl is not set
 # CONFIG_PACKAGE_libsctp is not set
 # CONFIG_PACKAGE_libslirp is not set
 # CONFIG_PACKAGE_libuhttpd-mbedtls is not set
@@ -5071,9 +5073,8 @@ CONFIG_LIBCURL_COOKIES=y
 # CONFIG_LIBCURL_SMTP is not set
 # CONFIG_LIBCURL_TELNET is not set
 CONFIG_LIBCURL_TFTP=y
-CONFIG_LIBCURL_NGHTTP2=y
-# CONFIG_LIBCURL_NGHTTP3 is not set
-# CONFIG_LIBCURL_NGTCP2 is not set
+CONFIG_LIBCURL_HTTP2=y
+# CONFIG_LIBCURL_HTTP3 is not set
 
 #
 # Miscellaneous
@@ -5236,7 +5237,6 @@ CONFIG_PACKAGE_libnetfilter-conntrack=y
 # CONFIG_PACKAGE_libnetfilter-cttimeout is not set
 # CONFIG_PACKAGE_libnetfilter-log is not set
 # CONFIG_PACKAGE_libnetfilter-queue is not set
-# CONFIG_PACKAGE_libnetsnmp is not set
 CONFIG_PACKAGE_libnettle=y
 
 #
@@ -5251,6 +5251,9 @@ CONFIG_PACKAGE_libnftnl=y
 CONFIG_PACKAGE_libnghttp2=y
 # CONFIG_PACKAGE_libnghttp3 is not set
 # CONFIG_PACKAGE_libngtcp2 is not set
+# CONFIG_PACKAGE_libnilfs is not set
+# CONFIG_PACKAGE_libnilfscleaner is not set
+# CONFIG_PACKAGE_libnilfsgc is not set
 # CONFIG_PACKAGE_libnl is not set
 # CONFIG_PACKAGE_libnl-cli is not set
 CONFIG_PACKAGE_libnl-core=y
@@ -5650,7 +5653,6 @@ CONFIG_PACKAGE_luci-app-ksmbd=y
 # CONFIG_PACKAGE_luci-app-lldpd is not set
 # CONFIG_PACKAGE_luci-app-lorawan-basicstation is not set
 # CONFIG_PACKAGE_luci-app-lxc is not set
-# CONFIG_PACKAGE_luci-app-mentohust is not set
 # CONFIG_PACKAGE_luci-app-microsocks is not set
 # CONFIG_PACKAGE_luci-app-minidlna is not set
 # CONFIG_PACKAGE_luci-app-mjpg-streamer is not set
@@ -6369,7 +6371,6 @@ CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn=y
 # Campus Network
 #
 # CONFIG_PACKAGE_bitsrunlogin-go is not set
-# CONFIG_PACKAGE_mentohust is not set
 # CONFIG_PACKAGE_minieap is not set
 # CONFIG_PACKAGE_njit8021xclient is not set
 # CONFIG_PACKAGE_scutclient is not set
@@ -6829,6 +6830,7 @@ CONFIG_PACKAGE_wsdd2=y
 #
 # Routing and Redirection
 #
+# CONFIG_PACKAGE_ampr-ripd is not set
 # CONFIG_PACKAGE_babel-pinger is not set
 # CONFIG_PACKAGE_babeld is not set
 # CONFIG_PACKAGE_batmand is not set
@@ -7527,9 +7529,12 @@ CONFIG_PACKAGE_samba4-utils=y
 # CONFIG_PACKAGE_slirp4netns is not set
 # CONFIG_PACKAGE_smbinfo is not set
 # CONFIG_PACKAGE_snmp-mibs is not set
-# CONFIG_PACKAGE_snmp-utils is not set
-# CONFIG_PACKAGE_snmpd is not set
-# CONFIG_PACKAGE_snmptrapd is not set
+# CONFIG_PACKAGE_snmp-utils-nossl is not set
+# CONFIG_PACKAGE_snmp-utils-ssl is not set
+# CONFIG_PACKAGE_snmpd-nossl is not set
+# CONFIG_PACKAGE_snmpd-ssl is not set
+# CONFIG_PACKAGE_snmptrapd-nossl is not set
+# CONFIG_PACKAGE_snmptrapd-ssl is not set
 # CONFIG_PACKAGE_snowflake-broker is not set
 # CONFIG_PACKAGE_snowflake-client is not set
 # CONFIG_PACKAGE_snowflake-probetest is not set
@@ -7819,8 +7824,8 @@ CONFIG_PACKAGE_dosfstools=y
 # CONFIG_PACKAGE_e2freefrag is not set
 CONFIG_PACKAGE_e2fsprogs=y
 # CONFIG_PACKAGE_e4crypt is not set
-# CONFIG_PACKAGE_exfat-fsck is not set
-# CONFIG_PACKAGE_exfat-mkfs is not set
+CONFIG_PACKAGE_exfat-fsck=y
+CONFIG_PACKAGE_exfat-mkfs=y
 CONFIG_PACKAGE_f2fs-tools=y
 # CONFIG_PACKAGE_f2fs-tools-selinux is not set
 CONFIG_PACKAGE_f2fsck=y
@@ -7838,6 +7843,15 @@ CONFIG_PACKAGE_mkf2fs=y
 # CONFIG_PACKAGE_ncdu is not set
 # CONFIG_PACKAGE_nfs-utils is not set
 # CONFIG_PACKAGE_nfs-utils-libs is not set
+# CONFIG_PACKAGE_nilfs-checkpoint is not set
+# CONFIG_PACKAGE_nilfs-clean is not set
+# CONFIG_PACKAGE_nilfs-cleanerd is not set
+# CONFIG_PACKAGE_nilfs-dumpseg is not set
+# CONFIG_PACKAGE_nilfs-lssu is not set
+# CONFIG_PACKAGE_nilfs-mkfs is not set
+# CONFIG_PACKAGE_nilfs-mount is not set
+# CONFIG_PACKAGE_nilfs-resize is not set
+# CONFIG_PACKAGE_nilfs-tune is not set
 # CONFIG_PACKAGE_ntfs-3g is not set
 # CONFIG_PACKAGE_ntfs-3g-low is not set
 # CONFIG_PACKAGE_ntfs-3g-utils is not set

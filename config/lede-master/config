@@ -2573,6 +2573,7 @@ CONFIG_PACKAGE_kmod-nft-offload=y
 CONFIG_PACKAGE_kmod-nft-socket=y
 CONFIG_PACKAGE_kmod-nft-tproxy=y
 # CONFIG_PACKAGE_kmod-nft-xfrm is not set
+# CONFIG_PACKAGE_kmod-oaf is not set
 # end of Netfilter Extensions
 
 #
@@ -5196,6 +5197,9 @@ CONFIG_PACKAGE_luci-app-nlbwmon=y
 # CONFIG_PACKAGE_luci-app-olsr-viz is not set
 # CONFIG_PACKAGE_luci-app-omcproxy is not set
 # CONFIG_PACKAGE_luci-app-openclash is not set
+CONFIG_PACKAGE_iptables-mod-tproxy=y
+CONFIG_PACKAGE_iptables-mod-extra=y
+CONFIG_PACKAGE_ipset=y
 # CONFIG_PACKAGE_luci-app-openlist is not set
 CONFIG_PACKAGE_luci-app-openvpn=y
 CONFIG_PACKAGE_luci-app-openvpn-server=y
@@ -5942,6 +5946,7 @@ CONFIG_PACKAGE_luci-i18n-zerotier-zh-cn=y
 #
 # Campus Network
 #
+# CONFIG_PACKAGE_bitsrunlogin-go is not set
 # CONFIG_PACKAGE_minieap is not set
 # CONFIG_PACKAGE_njit8021xclient is not set
 # CONFIG_PACKAGE_scutclient is not set
@@ -6049,7 +6054,6 @@ CONFIG_PACKAGE_iptables-mod-conntrack-extra=y
 # CONFIG_PACKAGE_iptables-mod-delude is not set
 # CONFIG_PACKAGE_iptables-mod-dhcpmac is not set
 # CONFIG_PACKAGE_iptables-mod-dnetmap is not set
-CONFIG_PACKAGE_iptables-mod-extra=y
 # CONFIG_PACKAGE_iptables-mod-filter is not set
 CONFIG_PACKAGE_iptables-mod-fullconenat=y
 # CONFIG_PACKAGE_iptables-mod-fuzzy is not set
@@ -6080,7 +6084,6 @@ CONFIG_PACKAGE_iptables-mod-socket=y
 # CONFIG_PACKAGE_iptables-mod-sysrq is not set
 # CONFIG_PACKAGE_iptables-mod-tarpit is not set
 # CONFIG_PACKAGE_iptables-mod-tee is not set
-CONFIG_PACKAGE_iptables-mod-tproxy=y
 # CONFIG_PACKAGE_iptables-mod-trace is not set
 # CONFIG_PACKAGE_iptables-mod-u32 is not set
 # CONFIG_PACKAGE_iptaccount is not set
@@ -6649,6 +6652,7 @@ CONFIG_PACKAGE_git=y
 CONFIG_PACKAGE_comgt=y
 # CONFIG_PACKAGE_comgt-directip is not set
 CONFIG_PACKAGE_comgt-ncm=y
+# CONFIG_PACKAGE_modemband is not set
 # CONFIG_PACKAGE_umbim is not set
 CONFIG_PACKAGE_uqmi=y
 # end of WWAN
@@ -6656,7 +6660,18 @@ CONFIG_PACKAGE_uqmi=y
 #
 # Web Servers/Proxies
 #
+# CONFIG_PACKAGE_3proxy is not set
+# CONFIG_PACKAGE_3proxy-mod-ftppr is not set
+# CONFIG_PACKAGE_3proxy-mod-mycrypt is not set
+# CONFIG_PACKAGE_3proxy-mod-pop3p is not set
+# CONFIG_PACKAGE_3proxy-mod-proxy is not set
+# CONFIG_PACKAGE_3proxy-mod-smtpp is not set
+# CONFIG_PACKAGE_3proxy-mod-socks is not set
+# CONFIG_PACKAGE_3proxy-mod-tcppm is not set
+# CONFIG_PACKAGE_3proxy-mod-tlspr is not set
+# CONFIG_PACKAGE_3proxy-mod-udppm is not set
 # CONFIG_PACKAGE_apache is not set
+# CONFIG_PACKAGE_brook is not set
 CONFIG_PACKAGE_cgi-io=y
 # CONFIG_PACKAGE_clamav is not set
 # CONFIG_PACKAGE_cloudflared is not set
@@ -6801,10 +6816,12 @@ CONFIG_PACKAGE_adbyby=y
 # CONFIG_PACKAGE_ahcpd is not set
 # CONFIG_PACKAGE_alfred is not set
 # CONFIG_PACKAGE_alist is not set
+# CONFIG_PACKAGE_antiblock is not set
 # CONFIG_PACKAGE_apcupsd is not set
 # CONFIG_PACKAGE_apcupsd-cgi is not set
 # CONFIG_PACKAGE_apinger is not set
 # CONFIG_PACKAGE_apinger-rrd is not set
+# CONFIG_PACKAGE_appfilter is not set
 # CONFIG_PACKAGE_atlas-probe is not set
 # CONFIG_PACKAGE_atlas-sw-probe is not set
 # CONFIG_PACKAGE_atlas-sw-probe-rpc is not set
@@ -6858,6 +6875,7 @@ CONFIG_PACKAGE_ethtool=y
 # CONFIG_PACKAGE_geth is not set
 # CONFIG_PACKAGE_gg is not set
 # CONFIG_PACKAGE_gnunet is not set
+# CONFIG_PACKAGE_gost is not set
 # CONFIG_PACKAGE_gre is not set
 # CONFIG_PACKAGE_hnet-full is not set
 # CONFIG_PACKAGE_hnet-full-l2tp is not set
@@ -6878,7 +6896,6 @@ CONFIG_PACKAGE_iperf3=y
 # CONFIG_PACKAGE_iperf3-ssl is not set
 CONFIG_PACKAGE_ipip=y
 # CONFIG_PACKAGE_ipip6 is not set
-CONFIG_PACKAGE_ipset=y
 # CONFIG_PACKAGE_ipset-dns is not set
 # CONFIG_PACKAGE_iptraf-ng is not set
 # CONFIG_PACKAGE_iputils-arping is not set
@@ -7008,6 +7025,7 @@ CONFIG_PACKAGE_proto-bonding=y
 # CONFIG_PACKAGE_rpcbind is not set
 # CONFIG_PACKAGE_rssileds is not set
 # CONFIG_PACKAGE_rsyslog is not set
+# CONFIG_PACKAGE_rustdesk-server is not set
 # CONFIG_PACKAGE_safe-search is not set
 # CONFIG_PACKAGE_samba36-server is not set
 CONFIG_PACKAGE_samba4-admin=y
@@ -7127,6 +7145,7 @@ CONFIG_PACKAGE_wwan=y
 # CONFIG_PACKAGE_shairport-sync-openssl is not set
 # CONFIG_PACKAGE_shine is not set
 # CONFIG_PACKAGE_sox is not set
+# CONFIG_PACKAGE_spotifyd is not set
 # CONFIG_PACKAGE_squeezelite-full is not set
 # CONFIG_PACKAGE_squeezelite-mini is not set
 # CONFIG_PACKAGE_svox is not set

@@ -30,7 +30,7 @@ on:
           - ophub/openwrt-aarch64:latest
 
 env:
-  TZ: America/New_York
+  TZ: Etc/UTC
   MAKE_DOCKER_SH: config/docker/make_docker_image.sh
   DOCKER_OUTPATH: out
 

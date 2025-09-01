@@ -239,7 +239,7 @@ on:
           - yourname
 
 env:
-  TZ: America/New_York
+  TZ: Etc/UTC
   IMAGEBUILDER_SH: config/imagebuilder/imagebuilder.sh
 
 jobs:

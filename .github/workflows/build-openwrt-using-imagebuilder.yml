@@ -15,15 +15,15 @@ on:
       releases_branch:
         description: "Select the releases branch"
         required: false
-        default: "openwrt:24.10.2"
+        default: "openwrt:24.10.3"
         type: choice
         options:
+          - openwrt:24.10.3
           - openwrt:24.10.2
           - openwrt:24.10.1
-          - openwrt:24.10.0
+          - immortalwrt:24.10.3
           - immortalwrt:24.10.2
           - immortalwrt:24.10.1
-          - immortalwrt:24.10.0
       openwrt_board:
         description: "Select device board"
         required: false

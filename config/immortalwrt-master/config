@@ -1884,7 +1884,6 @@ CONFIG_PACKAGE_u-boot-qemu_armv8=y
 # CONFIG_PACKAGE_gcc is not set
 # CONFIG_PACKAGE_gdb is not set
 # CONFIG_PACKAGE_gdbserver is not set
-# CONFIG_PACKAGE_gitlab-runner is not set
 # CONFIG_PACKAGE_go-rice is not set
 # CONFIG_PACKAGE_gperf is not set
 # CONFIG_PACKAGE_ledhwbmon is not set
@@ -2627,6 +2626,7 @@ CONFIG_PACKAGE_kmod-ipt-physdev=y
 CONFIG_PACKAGE_kmod-ipt-tproxy=y
 # CONFIG_PACKAGE_kmod-ipt-u32 is not set
 # CONFIG_PACKAGE_kmod-netatop is not set
+CONFIG_PACKAGE_kmod-nf-conncount=y
 CONFIG_PACKAGE_kmod-nf-conntrack=y
 CONFIG_PACKAGE_kmod-nf-conntrack-netlink=y
 CONFIG_PACKAGE_kmod-nf-conntrack6=y
@@ -4632,28 +4632,6 @@ CONFIG_PACKAGE_libyaml=y
 # end of Languages
 
 #
-# LibElektra
-#
-# CONFIG_PACKAGE_libelektra-core is not set
-# CONFIG_PACKAGE_libelektra-cpp is not set
-# CONFIG_PACKAGE_libelektra-crypto is not set
-# CONFIG_PACKAGE_libelektra-curlget is not set
-# CONFIG_PACKAGE_libelektra-dbus is not set
-# CONFIG_PACKAGE_libelektra-ev is not set
-# CONFIG_PACKAGE_libelektra-extra is not set
-# CONFIG_PACKAGE_libelektra-lua is not set
-# CONFIG_PACKAGE_libelektra-plugins is not set
-# CONFIG_PACKAGE_libelektra-python3 is not set
-# CONFIG_PACKAGE_libelektra-resolvers is not set
-# CONFIG_PACKAGE_libelektra-uv is not set
-# CONFIG_PACKAGE_libelektra-xerces is not set
-# CONFIG_PACKAGE_libelektra-xml is not set
-# CONFIG_PACKAGE_libelektra-yajl is not set
-# CONFIG_PACKAGE_libelektra-yamlcpp is not set
-# CONFIG_PACKAGE_libelektra-zmq is not set
-# end of LibElektra
-
-#
 # Networking
 #
 # CONFIG_PACKAGE_libdcwproto is not set
@@ -5503,7 +5481,6 @@ CONFIG_PACKAGE_terminfo=y
 # CONFIG_PACKAGE_xkeyboard-config is not set
 # CONFIG_PACKAGE_xmlrpc-c-abyss is not set
 # CONFIG_PACKAGE_xmlrpc-c-client is not set
-# CONFIG_PACKAGE_xmlrpc-c-internal is not set
 # CONFIG_PACKAGE_xmlrpc-c-libxml2 is not set
 # CONFIG_PACKAGE_xmlrpc-c-server is not set
 # CONFIG_PACKAGE_xmlrpc-c-server-abyss is not set
@@ -8072,7 +8049,6 @@ CONFIG_PACKAGE_dbus=y
 # CONFIG_PACKAGE_ecdsautils is not set
 # CONFIG_PACKAGE_edid-decode is not set
 # CONFIG_PACKAGE_efibootmgr is not set
-# CONFIG_PACKAGE_elektra-kdb is not set
 # CONFIG_PACKAGE_enterprise-numbers is not set
 # CONFIG_PACKAGE_evtest is not set
 # CONFIG_PACKAGE_extract is not set

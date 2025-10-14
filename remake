@@ -68,6 +68,8 @@ model_txt="${common_files}/etc/model_database.txt"
 # System operation environment
 arch_info="$(uname -m)"
 host_release="$(cat /etc/os-release | grep '^VERSION_CODENAME=.*' | cut -d'=' -f2)"
+# Add personalized settings for special devices, such as [ s922x-oes-plus ]
+board_release_file="etc/openwrt-board-release.conf"
 # Add custom OpenWrt firmware information
 op_release="etc/flippy-openwrt-release"
 ophub_release_file="etc/ophub-release"
@@ -706,7 +708,7 @@ make_image() {
     write_board_file="no"
     adjust_kernel_files="no"
     # Check the personalization settings of this board
-    board_release="${different_files}/${board}/rootfs/etc/openwrt-board-release.conf"
+    board_release="${different_files}/${board}/rootfs/${board_release_file}"
     [[ -f "${board_release}" ]] && source ${board_release}
 
     # echo -e "${INFO} The [ ${board} ] OpenWrt image partition status: [ skip:${skip_mb} / boot:${boot_mb} / rootfs:${root_mb} ] MiB."

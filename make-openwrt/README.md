@@ -21,3 +21,7 @@ Create a folder corresponding to the version number under the `kernel` directory
 ## u-boot
 
 System boot files, according to different versions of the kernel, will be automated by installation/update and other related scripts when needed. The necessary u-boot will be automatically downloaded from the [ophub/u-boot](https://github.com/ophub/u-boot) repository to the `u-boot` directory.
+
+## scripts
+
+When executing `remake`, the required dependency packages for the current server environment will be installed automatically. Other script files are used to assist with compiling or building the OpenWrt system.

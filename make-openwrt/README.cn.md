@@ -22,3 +22,6 @@
 
 系统启动引导文件，根据不同版本的内核，在需要使用时将由安装/更新等相关脚本自动化完成。需要的 u-boot 将从 [ophub/u-boot](https://github.com/ophub/u-boot) 仓库自动下载至 `u-boot` 目录。
 
+## scripts
+
+在执行 `remake` 时会自动安装当前服务器环境所需的依赖软件包。其他脚本文件用于辅助编译或制作 OpenWrt 系统。

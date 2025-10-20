@@ -105,12 +105,12 @@ openwrt-openvfd
 
 ## 本地化打包
 
-1. 安装必要的软件包（如 Ubuntu 22.04 LTS 用户）
+1. 安装必要的软件包（如 Ubuntu 24.04 LTS 用户）
 ```yaml
 sudo apt-get update -y
 sudo apt-get full-upgrade -y
-# For Ubuntu-22.04
-sudo apt-get install -y $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
+# For Ubuntu-24.04
+sudo apt-get install -y $(curl -fsSL https://tinyurl.com/ubuntu2404-make-openwrt)
 ```
 2. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armsr` 文件夹, 并将 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 文件上传至此目录。

@@ -105,12 +105,12 @@ Some common problems that might be encountered during the use of OpenWrt can be 
 
 ## Local Packaging
 
-1. Install necessary packages (for Ubuntu 22.04 LTS users)
+1. Install necessary packages (for Ubuntu 24.04 LTS users)
 ```yaml
 sudo apt-get update -y
 sudo apt-get full-upgrade -y
-# For Ubuntu-22.04
-sudo apt-get install -y $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
+# For Ubuntu-24.04
+sudo apt-get install -y $(curl -fsSL https://tinyurl.com/ubuntu2404-make-openwrt)
 ```
 2. Clone repository to local `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. In the root directory of `~/amlogic-s9xxx-openwrt`, create `openwrt-armsr` folder, and upload the `openwrt-armsr-armv8-generic-rootfs.tar.gz` file to this directory.

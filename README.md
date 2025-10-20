@@ -104,15 +104,14 @@ Alternatively, you can navigate to `System menu` → `TTYD Terminal` → Enter t
 Some common problems that might be encountered during the use of OpenWrt can be found in the [User Guide](./documents)
 
 ## Local Packaging
-
-1. Install necessary packages (for Ubuntu 24.04 LTS users)
+1. Clone repository to local `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
+2. Install necessary packages (for Ubuntu 24.04)
 ```yaml
 sudo apt-get update -y
 sudo apt-get full-upgrade -y
 # For Ubuntu-24.04
-sudo apt-get install -y $(curl -fsSL https://tinyurl.com/ubuntu2404-make-openwrt)
+sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depends)
 ```
-2. Clone repository to local `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 3. In the root directory of `~/amlogic-s9xxx-openwrt`, create `openwrt-armsr` folder, and upload the `openwrt-armsr-armv8-generic-rootfs.tar.gz` file to this directory.
 4. Enter the packaging command in the root directory of `~/amlogic-s9xxx-openwrt`, such as `sudo ./remake -b s905x3 -k 6.1.10`. The packaged OpenWrt firmware is placed in the `out` folder in the root directory.
 

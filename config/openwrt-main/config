@@ -102,7 +102,7 @@ CONFIG_DEFAULT_kmod-vmxnet3=y
 CONFIG_DEFAULT_kmod-wdt-sp805=y
 CONFIG_DEFAULT_libc=y
 CONFIG_DEFAULT_libgcc=y
-CONFIG_DEFAULT_libustream-openssl=y
+CONFIG_DEFAULT_libustream-mbedtls=y
 CONFIG_DEFAULT_logd=y
 CONFIG_DEFAULT_mkf2fs=y
 CONFIG_DEFAULT_mtd=y
@@ -3350,6 +3350,8 @@ CONFIG_GOLANG_BUILD_CACHE_DIR=""
 # Lua
 #
 # CONFIG_PACKAGE_cqueues is not set
+# CONFIG_PACKAGE_cqueues-lua5.3 is not set
+# CONFIG_PACKAGE_cqueues-lua5.4 is not set
 # CONFIG_PACKAGE_dkjson is not set
 # CONFIG_PACKAGE_json4lua is not set
 # CONFIG_PACKAGE_ldbus is not set
@@ -3426,6 +3428,8 @@ CONFIG_HAS_LUAJIT_ARCH=y
 # CONFIG_PACKAGE_luajit2 is not set
 # CONFIG_PACKAGE_lualanes is not set
 # CONFIG_PACKAGE_luaossl is not set
+# CONFIG_PACKAGE_luaossl-lua5.3 is not set
+# CONFIG_PACKAGE_luaossl-lua5.4 is not set
 # CONFIG_PACKAGE_luaposix is not set
 # CONFIG_PACKAGE_luarocks is not set
 # CONFIG_PACKAGE_luasec is not set
@@ -5094,11 +5098,13 @@ CONFIG_LIBQMI_COLLECTION_BASIC=y
 
 # CONFIG_PACKAGE_libqrencode is not set
 CONFIG_PACKAGE_libqrtr-glib=y
+# CONFIG_PACKAGE_libquickjs is not set
 # CONFIG_PACKAGE_libradcli is not set
 # CONFIG_PACKAGE_libradiotap is not set
 CONFIG_PACKAGE_libreadline=y
 # CONFIG_PACKAGE_libredblack is not set
 # CONFIG_PACKAGE_libremarks is not set
+# CONFIG_PACKAGE_librhash is not set
 # CONFIG_PACKAGE_librouteros is not set
 # CONFIG_PACKAGE_libroxml is not set
 # CONFIG_PACKAGE_librrd1 is not set
@@ -5176,6 +5182,7 @@ CONFIG_PACKAGE_libusb-1.0=y
 # CONFIG_PACKAGE_libustream-mbedtls is not set
 CONFIG_PACKAGE_libustream-openssl=y
 # CONFIG_PACKAGE_libustream-wolfssl is not set
+# CONFIG_PACKAGE_libutp is not set
 CONFIG_PACKAGE_libuuid=y
 CONFIG_PACKAGE_libuv=y
 # CONFIG_PACKAGE_libuwifi is not set
@@ -5184,13 +5191,14 @@ CONFIG_PACKAGE_libuv=y
 # CONFIG_PACKAGE_libvorbisidec is not set
 # CONFIG_PACKAGE_libvpx is not set
 # CONFIG_PACKAGE_libwacom is not set
-CONFIG_PACKAGE_libwebp=y
+# CONFIG_PACKAGE_libwebp is not set
 CONFIG_PACKAGE_libwebsockets-full=y
 # CONFIG_PACKAGE_libwebsockets-mbedtls is not set
 # CONFIG_PACKAGE_libwebsockets-openssl is not set
 # CONFIG_PACKAGE_libwpe is not set
 # CONFIG_PACKAGE_libwpewebkit is not set
 # CONFIG_PACKAGE_libwrap is not set
+# CONFIG_PACKAGE_libwxbase is not set
 # CONFIG_PACKAGE_libxdp is not set
 # CONFIG_PACKAGE_libxerces-c is not set
 # CONFIG_PACKAGE_libxerces-c-samples is not set

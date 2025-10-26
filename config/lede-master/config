@@ -224,6 +224,7 @@ CONFIG_JSON_OVERVIEW_IMAGE_INFO=y
 CONFIG_SIGNED_PACKAGES=y
 CONFIG_SIGNATURE_CHECK=y
 CONFIG_DOWNLOAD_CHECK_CERTIFICATE=y
+# CONFIG_USE_APK is not set
 
 #
 # General build options
@@ -4723,6 +4724,7 @@ CONFIG_PACKAGE_libncurses=y
 # CONFIG_PACKAGE_libnftnl is not set
 CONFIG_PACKAGE_libnghttp2=y
 # CONFIG_PACKAGE_libnl is not set
+# CONFIG_PACKAGE_libnl-cli is not set
 # CONFIG_PACKAGE_libnl-core is not set
 # CONFIG_PACKAGE_libnl-genl is not set
 # CONFIG_PACKAGE_libnl-nf is not set
@@ -4862,7 +4864,7 @@ CONFIG_PACKAGE_libuci=y
 # CONFIG_PACKAGE_libucl is not set
 CONFIG_PACKAGE_libuclient=y
 CONFIG_PACKAGE_libucode=y
-# CONFIG_PACKAGE_libudebug is not set
+CONFIG_PACKAGE_libudebug=y
 # CONFIG_PACKAGE_libudev-zero is not set
 # CONFIG_PACKAGE_libudns is not set
 # CONFIG_PACKAGE_libuecc is not set
@@ -7513,7 +7515,6 @@ CONFIG_PACKAGE_openssl-util=y
 # CONFIG_PACKAGE_pciutils is not set
 # CONFIG_PACKAGE_pcsc-tools is not set
 # CONFIG_PACKAGE_pcscd is not set
-# CONFIG_PACKAGE_pkgen is not set
 # CONFIG_PACKAGE_podman is not set
 # CONFIG_PACKAGE_podman-selinux is not set
 # CONFIG_PACKAGE_poemgr is not set
@@ -7623,9 +7624,8 @@ CONFIG_PACKAGE_TAR_ZSTD=y
 # CONFIG_PACKAGE_ucode-mod-bpf is not set
 CONFIG_PACKAGE_ucode-mod-html=y
 CONFIG_PACKAGE_ucode-mod-lua=y
-# CONFIG_PACKAGE_ucode-mod-pkgen is not set
+# CONFIG_PACKAGE_ucode-mod-uclient is not set
 # CONFIG_PACKAGE_ucode-mod-udebug is not set
-# CONFIG_PACKAGE_ucode-mod-uline is not set
 # CONFIG_PACKAGE_udebug-cli is not set
 # CONFIG_PACKAGE_udebugd is not set
 # CONFIG_PACKAGE_udns-dnsget is not set

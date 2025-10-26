@@ -321,8 +321,8 @@ jobs:
           rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
 
           # Generate sha256sum file
-          cd output/
-          for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
+          #cd output/
+          #for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
 
           [[ -d "/builder/openwrt" ]] || mkdir -p /builder/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt

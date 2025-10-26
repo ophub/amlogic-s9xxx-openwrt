@@ -390,8 +390,8 @@ jobs:
           rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
 
           # Generate sha256sum file
-          cd output/
-          for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
+          #cd output/
+          #for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
 
           # Set output information
           df -hT ${PWD}

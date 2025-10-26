@@ -4872,8 +4872,8 @@ CONFIG_PACKAGE_libucode=y
 # CONFIG_PACKAGE_libupnp is not set
 # CONFIG_PACKAGE_libupnpp is not set
 CONFIG_PACKAGE_liburcu=y
-# CONFIG_PACKAGE_liburing is not set
-# CONFIG_PACKAGE_libusb-1.0 is not set
+CONFIG_PACKAGE_liburing=y
+CONFIG_PACKAGE_libusb-1.0=y
 # CONFIG_PACKAGE_libusb-compat is not set
 # CONFIG_PACKAGE_libustream-mbedtls is not set
 CONFIG_PACKAGE_libustream-openssl=y

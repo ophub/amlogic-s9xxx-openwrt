@@ -22,6 +22,7 @@ Github Actions is a service launched by Microsoft. It provides a very well-confi
       - [Example 2, Replace an Existing Same-Named Software Package in the Current Source Code Library with a Third-Party Software Package](#example-2-replace-an-existing-same-named-software-package-in-the-current-source-code-library-with-a-third-party-software-package)
       - [Example 3, Achieve Certain Requirements by Modifying the Code in the Source Code Library](#example-3-achieve-certain-requirements-by-modifying-the-code-in-the-source-code-library)
     - [4.3 Using Image Builder to Build Firmware](#43-using-image-builder-to-build-firmware)
+    - [4.4 How to keep your configuration when switching source code branches](#44-how-to-keep-your-configuration-when-switching-source-code-branches)
   - [5. Firmware Compilation](#5-firmware-compilation)
     - [5.1 Manual Compilation](#51-manual-compilation)
     - [5.2 Scheduled Compilation](#52-scheduled-compilation)
@@ -173,9 +174,42 @@ The OpenWrt official website provides a ready-made `openwrt-imagebuilder-*-armsr
 
 This repository provides a one-click manufacturing service. You just need to pass the branch parameters into the [imagebuilder script](imagebuilder/imagebuilder.sh) to complete the production.
 
-- Localized production command: In the `~/amlogic-s9xxx-openwrt` root directory, run the command `sudo ./config/imagebuilder/imagebuilder.sh openwrt:21.02.3` to generate. The parameter `21.02.3` is the current available `releases` version number for [download](https://downloads.openwrt.org/releases). The generated file is located in the `openwrt/bin/targets/armsr/armv8` directory.
+- Localized production command: In the `~/amlogic-s9xxx-openwrt` root directory, run the command `sudo ./config/imagebuilder/imagebuilder.sh openwrt:24.10.4` to generate. The parameter `24.10.4` is the current available `releases` version number for [download](https://downloads.openwrt.org/releases). The generated file is located in the `openwrt/bin/targets/armsr/armv8` directory.
 
 - Produce in `Actions` on github.com: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-using-imagebuilder.yml)
+
+### 4.4 How to keep your configuration when switching source code branches
+
+The source code repositories for both [OpenWrt](https://github.com/openwrt/openwrt) and [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) provide multiple branches to meet the needs of different users, which are mainly divided into Snapshot and Stable versions. Taking the official OpenWrt repository as an example, its `main` branch is the cutting-edge snapshot version. It contains the latest added features and software updates, primarily targeting developers and advanced users who want to experience new functionalities, but its stability has not been fully verified. On the other hand, versioned branches like `openwrt-24.10` are stable versions. They are based on a specific development point and have undergone comprehensive testing and bug fixing by the community. They are the officially recommended versions for the vast majority of regular users in production environments.
+
+If you have previously customized a `.config` file on the `main` branch and wish to switch to the more stable `openwrt-24.10` branch for compilation, directly copying the `.config` file is not feasible because the configuration options and software versions may differ between the two branches. The following method is recommended, as it can safely preserve your personalized settings and apply them to the new branch:
+
+```shell
+# 1. In the main branch, generate the configuration difference file
+# This command will extract all the modifications you have made relative to the default configuration.
+./scripts/diffconfig.sh > myconfig.diff
+
+# 2. Switch to the openwrt-24.10 stable branch
+git checkout openwrt-24.10
+git pull
+
+# 3. Update and install the feeds for the new branch
+./scripts/feeds update -a
+./scripts/feeds install -a
+
+# 4. Apply the configuration difference file to the new branch
+# This will become the basis for generating the full configuration.
+cp -f myconfig.diff .config
+
+# 5. Generate the complete .config file
+# The system will generate a complete configuration file based on your differentiated configuration and the defaults of the stable branch.
+make defconfig
+
+# 6. (Important) Check and fine-tune the configuration
+# Open the menu to check if your packages and options have been applied correctly.
+# Due to version differences, some packages in the main branch may not exist in the stable version and require manual adjustment.
+make menuconfig
+```
 
 ## 5. Firmware Compilation
 

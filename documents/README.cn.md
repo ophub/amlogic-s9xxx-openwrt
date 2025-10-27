@@ -22,6 +22,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
       - [举例2，用第三方软件包替换当前源码库中的已有的同名软件包](#举例2用第三方软件包替换当前源码库中的已有的同名软件包)
       - [举例3，通过修改源码库中的代码来实现某些需求](#举例3通过修改源码库中的代码来实现某些需求)
     - [4.3 使用 Image Builder 制作固件](#43-使用-image-builder-制作固件)
+    - [4.4 如何保留配置切换源码分支](#44-如何保留配置切换源码分支)
   - [5. 编译固件](#5-编译固件)
     - [5.1 手动编译](#51-手动编译)
     - [5.2 定时编译](#52-定时编译)
@@ -171,9 +172,42 @@ OpenWrt 官方网站提供了制作好的 `openwrt-imagebuilder-*-armsr-armv8.Li
 
 本仓库提供了一键制作服务，你只需要把分支参数传入 [imagebuilder 脚本](imagebuilder/imagebuilder.sh) 即可完成制作。
 
-- 本地化制作命令：可以在 `~/amlogic-s9xxx-openwrt` 根目录下运行 `sudo ./config/imagebuilder/imagebuilder.sh openwrt:21.02.3` 指令即可生成。其中的参数 `21.02.3` 是当前可以[下载](https://downloads.openwrt.org/releases)使用的 `releases` 版本号。生成的文件在 `openwrt/bin/targets/armsr/armv8` 目录下。
+- 本地化制作命令：可以在 `~/amlogic-s9xxx-openwrt` 根目录下运行 `sudo ./config/imagebuilder/imagebuilder.sh openwrt:24.10.4` 指令即可生成。其中的参数 `24.10.4` 是当前可以[下载](https://downloads.openwrt.org/releases)使用的 `releases` 版本号。生成的文件在 `openwrt/bin/targets/armsr/armv8` 目录下。
 
 - 使用 github.com 的 `Actions` 中进行制作：[Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-using-imagebuilder.yml)
+
+### 4.4 如何保留配置切换源码分支
+
+[OpenWrt](https://github.com/openwrt/openwrt) 与 [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) 的源码仓库均提供了多个分支，以满足不同用户的需求，主要分为快照版（Snapshot）和稳定版（Stable）。以 OpenWrt 官方仓库为例，其中的 `main` 分支是开发前沿的快照版，它包含了最新添加的功能和软件更新，主要面向开发者和希望体验新特性的高级用户，但其稳定性未经充分验证。而 `openwrt-24.10` 等版本号分支是稳定版，它们基于某个特定的开发节点，经过了社区的全面测试和错误修复，是官方推荐给绝大多数普通用户在生产环境中使用的版本。
+
+如果您之前在 `main` 分支上已经定制了一份 `.config` 配置文件，并且希望切换到更稳定的 `openwrt-24.10` 分支进行编译，直接复制 `.config` 文件是不可行的，因为两个分支的配置选项和软件版本可能存在差异。推荐使用以下方法，它能安全地保留您的个性化设置并将其应用到新分支：
+
+```shell
+# 1. 在 main 分支下，生成配置差异文件
+# 这个命令会提取出您相对于默认配置所做的所有修改。
+./scripts/diffconfig.sh > myconfig.diff
+
+# 2. 切换到 openwrt-24.10 稳定版分支
+git checkout openwrt-24.10
+git pull
+
+# 3. 更新并安装新分支的 feeds
+./scripts/feeds update -a
+./scripts/feeds install -a
+
+# 4. 将配置差异文件应用到新分支
+# 这会成为生成完整配置的基础
+cp -f myconfig.diff .config
+
+# 5. 生成完整的 .config 文件
+# 系统会基于您的差异化配置，并结合稳定版分支的默认值，生成一份完整的配置文件。
+make defconfig
+
+# 6. （重要）核对并微调配置
+# 打开菜单，检查您的软件包和选项是否都已正确应用。
+# 由于版本差异，某些在 main 分支中的软件包在稳定版中可能不存在，需要您手动调整。
+make menuconfig
+```
 
 ## 5. 编译固件
 

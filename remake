@@ -995,10 +995,13 @@ refactor_rootfs() {
     }
 
     # Modify the cpu mode to schedutil
-    [[ -f "etc/config/cpufreq" ]] && sed -i "s/ondemand/schedutil/" etc/config/cpufreq
+    [[ -f "etc/config/cpufreq" ]] && sed -i "s|ondemand|schedutil|" etc/config/cpufreq
 
     # Turn off speed limit by default
     [[ -f "etc/config/nft-qos" ]] && sed -i "s|option limit_enable.*|option limit_enable '0'|g" etc/config/nft-qos
+
+    # Disable the OpenSSL acceleration engine
+    [[ -f "etc/ssl/openssl.cnf" ]] && sed -i "s|^engines = engines_sect|#engines = engines_sect|g" etc/ssl/openssl.cnf
 
     # Add USB and wireless network drivers
     [[ -f "etc/modules.d/usb-net-rtl8150" ]] || echo "rtl8150" >etc/modules.d/usb-net-rtl8150

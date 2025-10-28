@@ -180,17 +180,17 @@ This repository provides a one-click manufacturing service. You just need to pas
 
 ### 4.4 How to keep your configuration when switching source code branches
 
-The source code repositories for both [OpenWrt](https://github.com/openwrt/openwrt) and [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) provide multiple branches to meet the needs of different users, which are mainly divided into Snapshot and Stable versions. Taking the official OpenWrt repository as an example, its `main` branch is the cutting-edge snapshot version. It contains the latest added features and software updates, primarily targeting developers and advanced users who want to experience new functionalities, but its stability has not been fully verified. On the other hand, versioned branches like `openwrt-24.10` are stable versions. They are based on a specific development point and have undergone comprehensive testing and bug fixing by the community. They are the officially recommended versions for the vast majority of regular users in production environments.
+The source code repositories for both [OpenWrt](https://github.com/openwrt/openwrt) and [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) provide multiple branches to meet the needs of different users, which are mainly divided into Snapshot and Stable versions. Taking the official OpenWrt repository as an example, its `main` branch is the cutting-edge snapshot version. It contains the latest added features and software updates, primarily targeting developers and advanced users who want to experience new functionalities, but its stability has not been fully verified. On the other hand, versioned branches like `v24.10.4` are stable versions. They are based on a specific development point and have undergone comprehensive testing and bug fixing by the community. They are the officially recommended versions for the vast majority of regular users in production environments.
 
-If you have previously customized a `.config` file on the `main` branch and wish to switch to the more stable `openwrt-24.10` branch for compilation, directly copying the `.config` file is not feasible because the configuration options and software versions may differ between the two branches. The following method is recommended, as it can safely preserve your personalized settings and apply them to the new branch:
+If you have previously customized a `.config` file on the `main` branch and wish to switch to the more stable `v24.10.4` branch for compilation, directly copying the `.config` file is not feasible because the configuration options and software versions may differ between the two branches. The following method is recommended, as it can safely preserve your personalized settings and apply them to the new branch:
 
 ```shell
 # 1. In the main branch, generate the configuration difference file
 # This command will extract all the modifications you have made relative to the default configuration.
 ./scripts/diffconfig.sh > myconfig.diff
 
-# 2. Switch to the openwrt-24.10 stable branch
-git checkout openwrt-24.10
+# 2. Switch to the v24.10.4 stable branch
+git checkout v24.10.4
 git pull
 
 # 3. Update and install the feeds for the new branch

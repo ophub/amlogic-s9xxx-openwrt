@@ -402,14 +402,16 @@ find_openwrt() {
     source_release_file="etc/openwrt_release"
     temp_dir="$(mktemp -d)"
     (cd ${temp_dir} && tar -mxzf "${openwrt_path}/${openwrt_default_file}" "./${source_release_file}" 2>/dev/null)
-    # Find custom DISTRIB_SOURCEREPO, DISTRIB_SOURCECODE and DISTRIB_SOURCEBRANCH, such as [ openwrt/lede, main/openwrt-24.10 ]
+    # Find custom parameters
     [[ -f "${temp_dir}/${source_release_file}" ]] && {
-        # Get DISTRIB_SOURCEREPO
-        source_repo="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCEREPO=.*" | head -n 1 | cut -d"'" -f2)"
-        # Get DISTRIB_SOURCECODE
-        source_codename="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCECODE=.*" | head -n 1 | cut -d"'" -f2)"
-        # Get DISTRIB_SOURCEBRANCH
-        source_branch="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCEBRANCH=.*" | head -n 1 | cut -d"'" -f2)"
+        # Load the OpenWrt release information
+        source "${temp_dir}/${source_release_file}"
+        # For example, DISTRIB_SOURCEREPO='github.com/openwrt/openwrt'
+        source_repo="${DISTRIB_SOURCEREPO:-""}"
+        # For example, DISTRIB_SOURCECODE='openwrt'
+        source_codename="${DISTRIB_SOURCECODE:-""}"
+        # For example, DISTRIB_SOURCEBRANCH='openwrt-24.10'
+        source_branch="${DISTRIB_SOURCEBRANCH:-""}"
 
         # Print the source information
         echo -e "${INFO} The source codename: [ ${source_codename} ], source branch: [ ${source_branch} ], source repository: [ ${source_repo} ]."
@@ -712,8 +714,7 @@ make_image() {
 
     # Set OpenWrt filename
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
-    openwrt_alias="${source_codename}"
-    if [[ "${openwrt_alias}" == "openwrt" ]]; then openwrt_alias="official"; fi
+    [[ "${source_codename}" == "openwrt" ]] && openwrt_alias="official" || openwrt_alias="${source_codename}"
     openwrt_filename="openwrt_${openwrt_alias}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
     build_image_file="${out_path}/${openwrt_filename}"
     rm -f ${build_image_file}

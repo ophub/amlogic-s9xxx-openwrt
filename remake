@@ -396,26 +396,23 @@ find_openwrt() {
     fi
 
     # Extract the OpenWrt release information file
+    source_repo=""
     source_codename=""
+    source_branch=""
     source_release_file="etc/openwrt_release"
     temp_dir="$(mktemp -d)"
     (cd ${temp_dir} && tar -mxzf "${openwrt_path}/${openwrt_default_file}" "./${source_release_file}" 2>/dev/null)
-    # Find custom DISTRIB_SOURCECODE, such as [ official/lede ]
+    # Find custom DISTRIB_SOURCEREPO, DISTRIB_SOURCECODE and DISTRIB_SOURCEBRANCH, such as [ openwrt/lede, main/openwrt-24.10 ]
     [[ -f "${temp_dir}/${source_release_file}" ]] && {
+        # Get DISTRIB_SOURCEREPO
+        source_repo="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCEREPO=.*" | head -n 1 | cut -d"'" -f2)"
+        # Get DISTRIB_SOURCECODE
         source_codename="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCECODE=.*" | head -n 1 | cut -d"'" -f2)"
-        [[ -n "${source_codename}" ]] && {
-            # Record OpenWrt source codes repository
-            case "${source_codename}" in
-            official) OPENWRT_SOURCECODE="github.com/openwrt/openwrt" ;;
-            lede) OPENWRT_SOURCECODE="github.com/coolsnowwolf/lede" ;;
-            immortalwrt) OPENWRT_SOURCECODE="github.com/immortalwrt/immortalwrt" ;;
-            *) OPENWRT_SOURCECODE="unknown" ;;
-            esac
+        # Get DISTRIB_SOURCEBRANCH
+        source_branch="$(cat ${temp_dir}/${source_release_file} 2>/dev/null | grep -oE "^DISTRIB_SOURCEBRANCH=.*" | head -n 1 | cut -d"'" -f2)"
 
-            # Complete filename
-            [[ "${source_codename:0:1}" != "_" ]] && source_codename="_${source_codename}"
-        }
-        echo -e "${INFO} The source_codename: [ ${source_codename} ], OpenWrt source code repository: [ ${OPENWRT_SOURCECODE} ]"
+        # Print the source information
+        echo -e "${INFO} The source codename: [ ${source_codename} ], source branch: [ ${source_branch} ], source repository: [ ${source_repo} ]."
     }
     # Remove temporary directory
     rm -rf ${temp_dir}
@@ -715,7 +712,9 @@ make_image() {
 
     # Set OpenWrt filename
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
-    openwrt_filename="openwrt${source_codename}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
+    openwrt_alias="${source_codename}"
+    if [[ "${openwrt_alias}" == "openwrt" ]]; then openwrt_alias="official"; fi
+    openwrt_filename="openwrt_${openwrt_alias}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
     build_image_file="${out_path}/${openwrt_filename}"
     rm -f ${build_image_file}
 
@@ -971,9 +970,14 @@ refactor_rootfs() {
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" etc/fstab
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|g" etc/config/fstab
 
-    # Set the keyword for tags in Releases
-    [[ -n "${source_codename}" ]] && {
-        sed -i "s|option amlogic_firmware_tag.*|option amlogic_firmware_tag '${source_codename}'|g" etc/config/amlogic
+    # Set the keyword for tags and branch in Releases
+    [[ -n "${source_codename}" ]] && tags_str="_${source_codename}" || tags_str=""
+    [[ -n "${source_branch}" ]] && tags_str+="_${source_branch}_"
+    [[ -n "${tags_str}" ]] && {
+        sed -i "s|option amlogic_firmware_tag.*|option amlogic_firmware_tag '${tags_str}'|g" etc/config/amlogic
+    }
+    [[ -n "${conf_kernel_tags}" ]] && {
+        sed -i "s|option amlogic_kernel_branch.*|option amlogic_kernel_branch '${conf_kernel_tags}'|g" etc/config/amlogic
     }
 
     # Modify the default script to [ bash ] for [ cpustat ]
@@ -1160,7 +1164,9 @@ EOF
     else
         echo "SHOW_INSTALL_MENU='yes'" >>${op_release}
     fi
-    echo "OPENWRT_SOURCECODE='${OPENWRT_SOURCECODE}'" >>${op_release}
+    echo "OPENWRT_SOURCEREPO='${source_repo}'" >>${op_release}
+    echo "OPENWRT_SOURCECODE='${source_code}'" >>${op_release}
+    echo "OPENWRT_SOURCEBRANCH='${source_branch}'" >>${op_release}
     echo "BUILDER_NAME='${builder_name}'" >>${op_release}
     echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
     echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}

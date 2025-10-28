@@ -178,17 +178,17 @@ OpenWrt 官方网站提供了制作好的 `openwrt-imagebuilder-*-armsr-armv8.Li
 
 ### 4.4 如何保留配置切换源码分支
 
-[OpenWrt](https://github.com/openwrt/openwrt) 与 [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) 的源码仓库均提供了多个分支，以满足不同用户的需求，主要分为快照版（Snapshot）和稳定版（Stable）。以 OpenWrt 官方仓库为例，其中的 `main` 分支是开发前沿的快照版，它包含了最新添加的功能和软件更新，主要面向开发者和希望体验新特性的高级用户，但其稳定性未经充分验证。而 `openwrt-24.10` 等版本号分支是稳定版，它们基于某个特定的开发节点，经过了社区的全面测试和错误修复，是官方推荐给绝大多数普通用户在生产环境中使用的版本。
+[OpenWrt](https://github.com/openwrt/openwrt) 与 [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) 的源码仓库均提供了多个分支，以满足不同用户的需求，主要分为快照版（Snapshot）和稳定版（Stable）。以 OpenWrt 官方仓库为例，其中的 `main` 分支是开发前沿的快照版，它包含了最新添加的功能和软件更新，主要面向开发者和希望体验新特性的高级用户，但其稳定性未经充分验证。而 `v24.10.4` 等版本号分支是稳定版，它们基于某个特定的开发节点，经过了社区的全面测试和错误修复，是官方推荐给绝大多数普通用户在生产环境中使用的版本。
 
-如果您之前在 `main` 分支上已经定制了一份 `.config` 配置文件，并且希望切换到更稳定的 `openwrt-24.10` 分支进行编译，直接复制 `.config` 文件是不可行的，因为两个分支的配置选项和软件版本可能存在差异。推荐使用以下方法，它能安全地保留您的个性化设置并将其应用到新分支：
+如果您之前在 `main` 分支上已经定制了一份 `.config` 配置文件，并且希望切换到更稳定的 `v24.10.4` 分支进行编译，直接复制 `.config` 文件是不可行的，因为两个分支的配置选项和软件版本可能存在差异。推荐使用以下方法，它能安全地保留您的个性化设置并将其应用到新分支：
 
 ```shell
 # 1. 在 main 分支下，生成配置差异文件
 # 这个命令会提取出您相对于默认配置所做的所有修改。
 ./scripts/diffconfig.sh > myconfig.diff
 
-# 2. 切换到 openwrt-24.10 稳定版分支
-git checkout openwrt-24.10
+# 2. 切换到 v24.10.4 稳定版分支
+git checkout v24.10.4
 git pull
 
 # 3. 更新并安装新分支的 feeds

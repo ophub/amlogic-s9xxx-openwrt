@@ -37,7 +37,7 @@ This project, thanks to numerous [contributors](https://github.com/ophub/amlogic
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1120), [TQC-A01](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1638) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable)<br>[h6](https://github.com/ophub/kernel/releases/tag/kernel_h6) | allwinner_boxname.img |
 
 > [!TIP]
-> Currently, the [s905 box](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used with a `SD card` or a `USB drive`, other models of boxes support using the `EMMC`. For more information, please refer to the [Supported Device List Description](make-openwrt/openwrt-files/common-files/etc/model_database.conf). You can refer to the method in Section 12.15 of the instruction manual to [add new supported devices](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.md#1215-how-to-add-new-supported-devices). Please read the [OpenWrt User Guide](./documents) before use. It provides solutions to common issues.
+> Currently, the [s905 box](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used with a `SD card` or a `USB drive`, other models of boxes support using the `EMMC`. For more information, please refer to the [✅Supported Device List Description](make-openwrt/openwrt-files/common-files/etc/model_database.conf). You can refer to the method in Section 12.15 of the instruction manual to [add new supported devices](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.md#1215-how-to-add-new-supported-devices). Please read the [OpenWrt User Guide](./documents) before use. It provides solutions to common issues.
 
 ## Install and Update OpenWrt
 
@@ -196,8 +196,8 @@ For more information, please refer to the [User Documentation](./documents)
 
 | System Name    | Default Username | Default Password  | SSH Port  | IP Address  |
 | -------------- | ---------------- | ----------------- | --------- | ----------- |
-| [OpenWrt.OS](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) | root | password | 22 | 192.168.1.1 |
-| [OpenWrt.Docker](https://hub.docker.com/u/ophub) | root | password | 22 | 192.168.1.1 |
+| 🛜 [OpenWrt.OS](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) | root | password | 22 | 192.168.1.1 |
+| 🐋 [OpenWrt.Docker](https://hub.docker.com/u/ophub) | root | password | 22 | 192.168.1.1 |
 
 ## Compile the Kernel
 

@@ -2225,7 +2225,7 @@ CONFIG_PACKAGE_kmod-scsi-core=y
 CONFIG_PACKAGE_kmod-crypto-acompress=y
 CONFIG_PACKAGE_kmod-crypto-aead=y
 CONFIG_PACKAGE_kmod-crypto-arc4=y
-# CONFIG_PACKAGE_kmod-crypto-authenc is not set
+CONFIG_PACKAGE_kmod-crypto-authenc=y
 CONFIG_PACKAGE_kmod-crypto-blake2b=y
 CONFIG_PACKAGE_kmod-crypto-cbc=y
 CONFIG_PACKAGE_kmod-crypto-ccm=y

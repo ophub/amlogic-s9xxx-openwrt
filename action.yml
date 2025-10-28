@@ -83,6 +83,8 @@ runs:
         sudo ./remake ${make_command}
 
         cd ${{ github.action_path }}/${openwrt_outpath}
+        # Copy OpenWrt rootfs.tar.gz file to the output directory
+        sudo cp -vf "${{ github.action_path }}/${openwrt_savepath}/${openwrt_savefile}" . || true
         # Generate a sha256sum verification file for each OpenWrt image file
         #for file in *; do [[ -f "${file}" ]] && sha256sum "${file}" >"${file}.sha" 2>/dev/null; done
         #rm -f *.sha.sha 2>/dev/null

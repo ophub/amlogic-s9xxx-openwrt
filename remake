@@ -971,15 +971,13 @@ refactor_rootfs() {
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" etc/fstab
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|g" etc/config/fstab
 
-    # Set the keyword for tags and branch in Releases
+    # Set the tags for luci-app-amlogic
     [[ -n "${source_codename}" ]] && tags_str="_${source_codename}" || tags_str=""
     [[ -n "${source_branch}" ]] && tags_str+="_${source_branch}_"
-    [[ -n "${tags_str}" ]] && {
-        sed -i "s|option amlogic_firmware_tag.*|option amlogic_firmware_tag '${tags_str}'|g" etc/config/amlogic
-    }
-    [[ -n "${conf_kernel_tags}" ]] && {
-        sed -i "s|option amlogic_kernel_branch.*|option amlogic_kernel_branch '${conf_kernel_tags}'|g" etc/config/amlogic
-    }
+    [[ -n "${tags_str}" ]] && sed -i "s|option amlogic_firmware_tag.*|option amlogic_firmware_tag '${tags_str}'|g" etc/config/amlogic
+    # Set the branch for luci-app-amlogic
+    kernel_patchlevel="$(echo ${kernel} | awk -F '.' '{print $1"."$2}')"
+    sed -i "s|option amlogic_kernel_branch.*|option amlogic_kernel_branch '${kernel_patchlevel}'|g" etc/config/amlogic
 
     # Modify the default script to [ bash ] for [ cpustat ]
     [[ -x "bin/bash" ]] && {
@@ -1166,7 +1164,7 @@ EOF
         echo "SHOW_INSTALL_MENU='yes'" >>${op_release}
     fi
     echo "OPENWRT_SOURCEREPO='${source_repo}'" >>${op_release}
-    echo "OPENWRT_SOURCECODE='${source_code}'" >>${op_release}
+    echo "OPENWRT_SOURCECODE='${source_codename}'" >>${op_release}
     echo "OPENWRT_SOURCEBRANCH='${source_branch}'" >>${op_release}
     echo "BUILDER_NAME='${builder_name}'" >>${op_release}
     echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}

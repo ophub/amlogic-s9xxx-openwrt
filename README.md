@@ -194,13 +194,10 @@ For more information, please refer to the [User Documentation](./documents)
 
 ## Default Information for OpenWrt Firmware
 
-| Name | Value |
-| ---- | ---- |
-| Default IP | 192.168.1.1 |
-| Default Account | root |
-| Default Password | password |
-| Default WIFI Name | OpenWrt |
-| Default WIFI Password | None |
+| System Name    | Default Username | Default Password  | SSH Port  | IP Address  |
+| -------------- | ---------------- | ----------------- | --------- | ----------- |
+| [OpenWrt.OS](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) | root | password | 22 | 192.168.1.1 |
+| [OpenWrt.Docker](https://hub.docker.com/u/ophub) | root | password | 22 | 192.168.1.1 |
 
 ## Compile the Kernel
 

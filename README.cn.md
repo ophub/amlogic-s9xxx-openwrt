@@ -195,13 +195,10 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
 
 ## OpenWrt 固件默认信息
 
-| 名称 | 值 |
-| ---- | ---- |
-| 默认 IP | 192.168.1.1 |
-| 默认账号 | root |
-| 默认密码 | password |
-| 默认 WIFI 名称 | OpenWrt |
-| 默认 WIFI 密码 | 无 |
+| 系统名称        | 默认账号 | 默认密码  | SSH 端口 | IP 地址 |
+| -------------- | ------- | ------- | ------- | ------- |
+| [OpenWrt.OS](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) | root | password | 22 | 192.168.1.1 |
+| [OpenWrt.Docker](https://hub.docker.com/u/ophub) | root | password | 22 | 192.168.1.1 |
 
 ## 编译内核
 

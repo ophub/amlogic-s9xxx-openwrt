@@ -62,7 +62,7 @@ runs:
         else
             if [[ -z "$(ls ${openwrt_savepath}/${openwrt_savefile} 2>/dev/null)" ]]; then
                 echo -e "Copy OpenWrt rootfs file: [ ${openwrt_filename} ]"
-                cp -vf ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
+                cp -vf ${{ github.workspace }}/${openwrt_filename} ${openwrt_savepath}/ 2>/dev/null
             else
                 echo -e "The [ ${openwrt_savepath}/${openwrt_savefile} ] file already exists, skipping."
             fi
@@ -82,12 +82,10 @@ runs:
         [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
         sudo ./remake ${make_command}
 
-        cd ${{ github.action_path }}/${openwrt_outpath}
+        cd ${{ github.action_path }}
         # Copy OpenWrt rootfs.tar.gz file to the output directory
-        sudo cp -vf "${{ github.action_path }}/${openwrt_savepath}/${openwrt_savefile}" . || true
-        # Generate a sha256sum verification file for each OpenWrt image file
-        #for file in *; do [[ -f "${file}" ]] && sha256sum "${file}" >"${file}.sha" 2>/dev/null; done
-        #rm -f *.sha.sha 2>/dev/null
+        echo -e "About the [ ${openwrt_savepath} ] directory: \n$(ls -lh ${openwrt_savepath} 2>/dev/null)"
+        sudo cp -vf ${openwrt_savepath}/${openwrt_savefile} ${openwrt_outpath}/ || true
         sync && sleep 3
 
         cd ${{ github.action_path }}

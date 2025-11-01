@@ -971,11 +971,13 @@ refactor_rootfs() {
     sed -i "s|LABEL=ROOTFS|UUID=${ROOTFS_UUID}|g" etc/fstab
     sed -i "s|option label 'ROOTFS'|option uuid '${ROOTFS_UUID}'|g" etc/config/fstab
 
-    # Set the tags for luci-app-amlogic
+    # Set the OpenWrt download tags for luci-app-amlogic
     [[ -n "${source_codename}" ]] && tags_str="_${source_codename}" || tags_str=""
     [[ -n "${source_branch}" ]] && tags_str+="_${source_branch}_"
     [[ -n "${tags_str}" ]] && sed -i "s|option amlogic_firmware_tag.*|option amlogic_firmware_tag '${tags_str}'|g" etc/config/amlogic
-    # Set the branch for luci-app-amlogic
+    # Set the kernel download tags for luci-app-amlogic
+    sed -i "s|option amlogic_kernel_tags.*|option amlogic_kernel_tags 'kernel_${conf_kernel_tags}'|g" etc/config/amlogic
+    # Set the OpenWrt and kernel download branches for luci-app-amlogic
     kernel_patchlevel="$(echo ${kernel} | awk -F '.' '{print $1"."$2}')"
     sed -i "s|option amlogic_kernel_branch.*|option amlogic_kernel_branch '${kernel_patchlevel}'|g" etc/config/amlogic
 

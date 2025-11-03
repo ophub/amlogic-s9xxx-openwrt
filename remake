@@ -117,6 +117,9 @@ make_board="all"
 # Set OpenWrt firmware size (Unit: MiB, boot_mb >= 256, root_mb >= 512)
 boot_mb="256"
 root_mb="1024"
+# Set OpenWrt default IP address
+openwrt_ip="192.168.1.1"
+ip_regex="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
 # Set OpenWrt builder signature
 builder_name=""
 
@@ -181,7 +184,7 @@ init_var() {
     echo -e "${STEPS} Start Initializing Variables..."
 
     # If it is followed by [ : ], it means that the option requires a parameter value
-    local options="b:r:u:k:a:s:n:"
+    local options="b:r:u:k:a:p:s:n:"
     parsed_args=$(getopt -o "${options}" -- "${@}")
     [[ ${?} -ne 0 ]] && error_msg "Parameter parsing failed."
     eval set -- "${parsed_args}"
@@ -233,6 +236,14 @@ init_var() {
                 shift 2
             else
                 error_msg "Invalid -a parameter [ ${2} ]!"
+            fi
+            ;;
+        -p | --IP)
+            if [[ -n "${2}" && "${2}" =~ ${ip_regex} ]]; then
+                openwrt_ip="${2}"
+                shift 2
+            else
+                error_msg "Invalid -p parameter [ ${2} ]!"
             fi
             ;;
         -s | --Size)
@@ -965,6 +976,11 @@ refactor_rootfs() {
 
     # Add directory
     mkdir -p .reserved boot run
+
+    # Set default IP address
+    [[ "${openwrt_ip}" != "192.168.1.1" && -f "bin/config_generate" ]] && {
+        sed -i "/lan) ipad=\${ipaddr:-/s/\${ipaddr:-\"[^\"]*\"}/\${ipaddr:-\"${openwrt_ip}\"}/" bin/config_generate
+    }
 
     # Edit fstab
     [[ -f "etc/fstab" && -f "etc/config/fstab" ]] || error_msg "The [ fstab ] files does not exist."

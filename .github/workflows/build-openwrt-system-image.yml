@@ -228,6 +228,10 @@ on:
           - flippy
           - dev
           - beta
+      openwrt_ip:
+        description: "Set OpenWrt default IP address."
+        required: false
+        default: "192.168.1.1"
       openwrt_storage:
         description: "Select image storage type."
         required: false
@@ -357,7 +361,7 @@ jobs:
           [[ -f "${FEEDS_CONF}" ]] && cp -f ${FEEDS_CONF} openwrt/feeds.conf.default
           chmod +x ${DIY_P1_SH}
           cd openwrt/
-          ${GITHUB_WORKSPACE}/${DIY_P1_SH}
+          ${{ github.workspace }}/${DIY_P1_SH}
 
       - name: Update feeds
         run: cd openwrt/ && ./scripts/feeds update -a
@@ -371,7 +375,7 @@ jobs:
           [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
           chmod +x ${DIY_P2_SH}
           cd openwrt/
-          ${GITHUB_WORKSPACE}/${DIY_P2_SH}
+          ${{ github.workspace }}/${DIY_P2_SH} "${{ inputs.openwrt_ip }}"
 
       - name: Download package
         id: package
@@ -401,10 +405,6 @@ jobs:
           cp -f .config output/config
           rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
 
-          # Generate sha256sum file
-          #cd output/
-          #for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
-
           # Set output information
           df -hT ${PWD}
           echo "status=success" >> ${GITHUB_OUTPUT}
@@ -425,6 +425,7 @@ jobs:
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
           openwrt_path: openwrt/output/*rootfs.tar.gz
+          openwrt_ip: ${{ inputs.openwrt_ip }}
           openwrt_board: ${{ inputs.openwrt_board }}
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}

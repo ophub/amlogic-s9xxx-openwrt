@@ -34,6 +34,10 @@ inputs:
     description: "Set the rootfs size(Unit: MiB)."
     required: false
     default: ""
+  openwrt_ip:
+    description: "Set the rootfs IP address."
+    required: false
+    default: "192.168.1.1"
   builder_name:
     description: "Set OpenWrt builder signature."
     required: false
@@ -78,6 +82,7 @@ runs:
         [[ -n "${{ inputs.kernel_usage }}" ]] && make_command="${make_command} -u ${{ inputs.kernel_usage }}"
         [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
         [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
+        [[ -n "${{ inputs.openwrt_ip }}" ]] && make_command="${make_command} -p ${{ inputs.openwrt_ip }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
         [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
         sudo ./remake ${make_command}

@@ -407,9 +407,6 @@ find_openwrt() {
     fi
 
     # Extract the OpenWrt release information file
-    source_repo=""
-    source_codename=""
-    source_branch=""
     source_release_file="etc/openwrt_release"
     temp_dir="$(mktemp -d)"
     (cd ${temp_dir} && tar -mxzf "${openwrt_path}/${openwrt_default_file}" "./${source_release_file}" 2>/dev/null)
@@ -723,10 +720,13 @@ make_image() {
 
     # echo -e "${INFO} The [ ${board} ] OpenWrt image partition status: [ skip:${skip_mb} / boot:${boot_mb} / rootfs:${root_mb} ] MiB."
 
-    # Set OpenWrt filename
+    # Check output directory
     [[ -d "${out_path}" ]] || mkdir -p ${out_path}
+    # Add the source codename to the OpenWrt filename
     [[ "${source_codename}" == "openwrt" ]] && openwrt_alias="official" || openwrt_alias="${source_codename}"
-    openwrt_filename="openwrt_${openwrt_alias}_${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
+    [[ -n "${openwrt_alias}" ]] && openwrt_alias+="_" || openwrt_alias=""
+    # Set OpenWrt image filename
+    openwrt_filename="openwrt_${openwrt_alias}${PLATFORM}_${board}_k${kernel}_$(date +"%Y.%m.%d").img"
     build_image_file="${out_path}/${openwrt_filename}"
     rm -f ${build_image_file}
 

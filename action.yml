@@ -66,7 +66,7 @@ runs:
         else
             if [[ -z "$(ls ${openwrt_savepath}/${openwrt_savefile} 2>/dev/null)" ]]; then
                 echo -e "Copy OpenWrt rootfs file: [ ${openwrt_filename} ]"
-                cp -vf ${{ github.workspace }}/${openwrt_filename} ${openwrt_savepath}/ 2>/dev/null
+                cp -vf ${{ github.workspace }}/${openwrt_filename} ${openwrt_savepath}/ || true
             else
                 echo -e "The [ ${openwrt_savepath}/${openwrt_savefile} ] file already exists, skipping."
             fi

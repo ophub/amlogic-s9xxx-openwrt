@@ -93,8 +93,8 @@ stable_kernel=("5.15.y" "6.1.y")
 flippy_kernel=(${stable_kernel[@]})
 dev_kernel=(${stable_kernel[@]})
 beta_kernel=(${stable_kernel[@]})
-rk3588_kernel=("5.10.y")
-rk35xx_kernel=("5.10.y")
+rk3588_kernel=("6.1.y")
+rk35xx_kernel=("6.1.y")
 h6_kernel=("6.6.y")
 specific_6xy=("6.1.y" "6.6.y" "6.12.y")
 specific_5xy=("5.4.y" "5.10.y" "5.15.y")
@@ -111,15 +111,15 @@ uboot_meson_g12b=("gtking.bin" "gtkingpro.bin" "gtkingpro-rev-a.bin" "s905x2-s92
 uboot_meson_sm1=("x96maxplus.bin" "ugoos-x3.bin" "tx3-qz.bin" "tx3-bz.bin" "skyworth-lb2004.bin")
 uboot_meson_gxbb=("p201.bin" "s905.bin")
 
-# Initialize the build device
-make_board="all"
-
-# Set OpenWrt firmware size (Unit: MiB, boot_mb >= 256, root_mb >= 512)
-boot_mb="256"
-root_mb="1024"
 # Set OpenWrt default IP address
 openwrt_ip="192.168.1.1"
 ip_regex="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+
+# Initialize the build device
+make_board="all"
+# Set OpenWrt firmware size (Unit: MiB, boot_mb >= 256, root_mb >= 512)
+boot_mb="256"
+root_mb="1024"
 # Set OpenWrt builder signature
 builder_name=""
 

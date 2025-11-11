@@ -397,14 +397,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             ### OpenWrt Image information
-            - Default IP: 192.168.1.1
-            - Default username: root
-            - Default password: password
-            - Default WIFI name: OpenWrt
-            - Default WIFI password: none
+            - Default IP: `192.168.1.1`
+            - Default username: `root`
+            - Default password: `password`
+            - Default WIFI name: `OpenWrt`
+            - Default WIFI password: `none`
             ### Install to EMMC
-            - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
+            - Login to OpenWrt → `System` → `Amlogic Service` → `Install OpenWrt`
             ### OpenWrt source code
             - [${{ steps.down.outputs.REPO_NAME }}](${{ steps.down.outputs.REPO_URL }}/tree/${{ steps.down.outputs.REPO_BRANCH }})
-            ### OpenWrt Image Verification
-            - sha256sum
+            ### Applicable platform
+            - 🐧 `arm64`
+            - 🐋 Docker image: https://hub.docker.com/u/ophub

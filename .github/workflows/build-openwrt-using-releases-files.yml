@@ -364,11 +364,11 @@ jobs:
           curl -fsSL "${latest_url}" -o "${armsr_tarfile_path}/${openwrt_filename}"
           [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
 
-          echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
+          echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
           df -hT ${PWD}
-          echo "REPO_URL=${REPO_URL}" >> ${GITHUB_OUTPUT}
-          echo "REPO_NAME=${REPO_NAME}" >> ${GITHUB_OUTPUT}
-          echo "REPO_BRANCH=${REPO_BRANCH}" >> ${GITHUB_OUTPUT}
+          echo "REPO_URL=${REPO_URL}" >> ${GITHUB_ENV}
+          echo "REPO_NAME=${REPO_NAME}" >> ${GITHUB_ENV}
+          echo "REPO_BRANCH=${REPO_BRANCH}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Packaging OpenWrt
@@ -388,7 +388,7 @@ jobs:
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
-          tag: ${{ steps.down.outputs.build_tag }}
+          tag: ${{ env.build_tag }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           removeArtifacts: false
@@ -405,7 +405,7 @@ jobs:
             ### Install to EMMC
             - Login to OpenWrt → `System` → `Amlogic Service` → `Install OpenWrt`
             ### OpenWrt source code
-            - [${{ steps.down.outputs.REPO_NAME }}](${{ steps.down.outputs.REPO_URL }}/tree/${{ steps.down.outputs.REPO_BRANCH }})
+            - [${{ env.REPO_NAME }}](${{ env.REPO_URL }}/tree/${{ env.REPO_BRANCH }})
             ### Applicable platform
             - 🐧 `arm64`
             - 🐋 Docker image: https://hub.docker.com/u/ophub

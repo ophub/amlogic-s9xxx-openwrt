@@ -100,6 +100,7 @@ on:
 
 env:
   TZ: Etc/UTC
+  CCACHE_DIR: /builder/ccache
 
 jobs:
   build:
@@ -184,7 +185,7 @@ jobs:
         if: ${{ steps.install.outputs.status }} == 'success' && !cancelled()
         run: |
           # Create a docker mapping directory
-          mkdir -p /builder/compile-kernel/{kernel,output}
+          mkdir -p /builder/{compile-kernel/{kernel,output},ccache}
           ln -sf /builder/compile-kernel/kernel /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/kernel
           ln -sf /builder/compile-kernel/output /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/output
 
@@ -192,12 +193,22 @@ jobs:
           docker run -d --privileged \
               --name armbian-ophub \
               -v /builder/compile-kernel:/opt/kernel/compile-kernel \
+              -v /builder/ccache:/root/.ccache \
               -v /etc/localtime:/etc/localtime:ro \
               -v /etc/timezone:/etc/timezone:ro \
+              -e CCACHE_DIR=/root/.ccache \
               --restart=always \
               ophub/armbian-${{ inputs.docker_image }}:arm64
 
           echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: /builder/ccache
+          key: kernel-${{ inputs.kernel_version }}-${{ inputs.kernel_toolchain }}-${{ github.sha }}
+          restore-keys: |
+            kernel-${{ inputs.kernel_version }}-${{ inputs.kernel_toolchain }}-
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
@@ -213,6 +224,10 @@ jobs:
           kernel_toolchain: ${{ inputs.kernel_toolchain }}
           compress_format: ${{ inputs.compress_format }}
           silent_log: ${{ inputs.silent_log }}
+
+      - name: Show ccache statistics
+        run: |
+          ccache -s
 
       - name: Upload Kernel to Release
         uses: ncipollo/release-action@main

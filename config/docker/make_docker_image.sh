@@ -183,6 +183,3 @@ check_depends
 find_openwrt
 adjust_settings
 make_dockerimg
-#
-# All process completed
-wait

@@ -288,5 +288,3 @@ custom_settings
 # Show server end information
 echo -e "${SUCCESS} OpenWrt ImageBuilder processed successfully."
 echo -e "${INFO} Server space usage after compilation: \n$(df -hT ${make_path}) \n"
-# All process completed
-wait

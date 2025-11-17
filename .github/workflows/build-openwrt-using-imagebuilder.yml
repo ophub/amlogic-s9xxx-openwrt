@@ -228,7 +228,6 @@ on:
         options:
           - stable
           - flippy
-          - dev
           - beta
       openwrt_ip:
         description: "Set OpenWrt default IP address."

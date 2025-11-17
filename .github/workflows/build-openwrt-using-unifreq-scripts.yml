@@ -193,7 +193,7 @@ jobs:
           latest_version=$(curl -s \
                 -H "Accept: application/vnd.github+json" \
                 -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                https://api.github.com/repos/${armsr_tarfile_repo}/releases?per_page=100 | \
+                https://api.github.com/repos/${armsr_tarfile_repo}/releases?per_page=20 | \
                 jq -r --arg RTK "${releases_tag_keywords}" \
                 --arg BOARD "-rootfs.tar.gz" \
                 '[.[] | select(.tag_name | contains($RTK))] |

@@ -38,6 +38,10 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
   - [8. 安装 OpenWrt](#8-安装-openwrt)
     - [8.1 在编译时集成 luci-app-amlogic 操作面板](#81-在编译时集成-luci-app-amlogic-操作面板)
     - [8.2 使用操作面板安装](#82-使用操作面板安装)
+    - [8.3 安装 Docker 版本的 OpenWrt](#83-安装-docker-版本的-openwrt)
+      - [8.3.1 安装 Docker 运行环境](#831-安装-docker-运行环境)
+      - [8.3.2 设置 macvlan 网络](#832-设置-macvlan-网络)
+      - [8.3.3 运行 OpenWrt Docker 容器](#833-运行-openwrt-docker-容器)
   - [9. 升级 OpenWrt 系统或内核](#9-升级-openwrt-系统或内核)
   - [10. 个性化固件定制晋级教程](#10-个性化固件定制晋级教程)
     - [10.1 认识完整的 .config 文件](#101-认识完整的-config-文件)
@@ -363,6 +367,64 @@ git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 1. `Rockchip` 平台的安装方法请查看说明文档中的 [第 8 章节](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.cn.md) 的介绍，和 Armbian 的安装方法相同。
 
 2. `Amlogic` 和 `Allwinner` 平台，使用 [Rufus](https://rufus.ie/) 或者 [balenaEtcher](https://www.balena.io/etcher/) 等工具将固件写入 USB 里，然后把写好固件的 USB 插入盒子。从浏览器访问 OpenWrt 的默认 IP: 192.168.1.1 → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `安装 OpenWrt` 。
+
+### 8.3 安装 Docker 版本的 OpenWrt
+
+可以在 Ubuntu/Debian/Armbian 等系统中使用 Docker 版本的 OpenWrt 镜像。这些镜像托管在 [Docker Hub](https://hub.docker.com/r/ophub) 上，可以直接下载使用。
+
+#### 8.3.1 安装 Docker 运行环境
+
+这里以 Ubuntu 系统为例，使用下面的命令安装 Docker 运行环境：
+
+```shell
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+sudo newgrp docker
+```
+
+#### 8.3.2 设置 macvlan 网络
+
+```shell
+# 查看已有的 docker 网络是否包含 macvlan 网络
+docker network ls
+
+# 如果没有 macvlan 网络，则创建 macvlan 网络
+# 其中的网段、网关和网卡名称根据自己的实际网络修改
+docker network create -d macvlan \
+    --subnet=10.1.1.0/24 \
+    --gateway=10.1.1.1 \
+    -o parent=eth0 \
+    macvlan
+```
+
+#### 8.3.3 运行 OpenWrt Docker 容器
+
+```shell
+# 以后台方式运行 OpenWrt 容器
+docker run -d --name=openwrt \
+    --network macnet \
+    --privileged \
+    --restart always \
+    ophub/openwrt-armv8:latest
+
+# 查看 OpenWrt 容器日志
+docker logs -f openwrt
+
+# 进入 OpenWrt 容器
+docker exec -it openwrt bash
+
+# 修改 IP、网关、DNS等
+# 修改完成后按 ESC 键，并输入 :wq! 保存修改结果
+vi /etc/config/network
+# 重启网络服务
+/etc/init.d/network restart
+
+# 退出 OpenWrt 容器
+exit
+
+# 停止并删除 OpenWrt 容器
+docker rm -f openwrt
+```
 
 ## 9. 升级 OpenWrt 系统或内核
 

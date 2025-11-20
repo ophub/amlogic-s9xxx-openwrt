@@ -38,6 +38,10 @@ Github Actions is a service launched by Microsoft. It provides a very well-confi
   - [8. Install OpenWrt](#8-install-openwrt)
     - [8.1 Integrating luci-app-amlogic Operation Panel at Compilation Time](#81-integrating-luci-app-amlogic-operation-panel-at-compilation-time)
     - [8.2 Install Using the Operation Panel](#82-install-using-the-operation-panel)
+    - [8.3 Install the Docker Version of OpenWrt](#83-install-the-docker-version-of-openwrt)
+      - [8.3.1 Install Docker Runtime Environment](#831-install-docker-runtime-environment)
+      - [8.3.2 Configure macvlan Network](#832-configure-macvlan-network)
+      - [8.3.3 Run the OpenWrt Docker Container](#833-run-the-openwrt-docker-container)
   - [9. Update OpenWrt system or kernel](#9-update-openwrt-system-or-kernel)
   - [10. Advanced Tutorial on Personalized Firmware Customization](#10-advanced-tutorial-on-personalized-firmware-customization)
     - [10.1 Getting to Know the Complete .config File](#101-getting-to-know-the-complete-config-file)
@@ -367,6 +371,64 @@ For more instructions on the plugin, see: [https://github.com/ophub/luci-app-aml
 1. For the `Rockchip` platform, please refer to the introduction in the [Chapter 8](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.md#8-installing-armbian-to-emmc) of the instruction manual, which is the same as the Armbian installation method.
 
 2. For the `Amlogic` and `Allwinner` platforms, use tools like [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher/) to write the firmware into the USB, then insert the USB with the firmware into the box. Access the default IP of OpenWrt from the browser: 192.168.1.1 → `Log in to OpenWrt using the default account` → `System Menu` → `Amlogic Treasure Box` → `Install OpenWrt`.
+
+### 8.3 Install the Docker Version of OpenWrt
+
+You can use Docker versions of OpenWrt images on systems such as Ubuntu, Debian, and Armbian. These images are hosted on [Docker Hub](https://hub.docker.com/r/ophub) and can be downloaded directly for use.
+
+#### 8.3.1 Install Docker Runtime Environment
+
+Here, taking the Ubuntu system as an example, use the following commands to install the Docker runtime environment:
+
+```shell
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+sudo newgrp docker
+```
+
+#### 8.3.2 Configure macvlan Network
+
+```shell
+# Check if existing docker networks include a macvlan network
+docker network ls
+
+# If there is no macvlan network, create one
+# Modify the subnet, gateway, and interface name according to your actual network
+docker network create -d macvlan \
+    --subnet=10.1.1.0/24 \
+    --gateway=10.1.1.1 \
+    -o parent=eth0 \
+    macvlan
+```
+
+#### 8.3.3 Run the OpenWrt Docker Container
+
+```shell
+# Run the OpenWrt container in detached mode
+docker run -d --name=openwrt \
+    --network macnet \
+    --privileged \
+    --restart always \
+    ophub/openwrt-armv8:latest
+
+# View OpenWrt container logs
+docker logs -f openwrt
+
+# Enter the OpenWrt container
+docker exec -it openwrt bash
+
+# Modify IP, gateway, DNS, etc.
+# After modification, press the ESC key, enter :wq! to save the changes.
+vi /etc/config/network
+# restart the network service
+/etc/init.d/network restart
+
+# Exit the OpenWrt container
+exit
+
+# Stop and remove the OpenWrt container
+docker rm -f openwrt
+```
 
 ## 9. Update OpenWrt system or kernel
 

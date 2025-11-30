@@ -202,7 +202,6 @@ CONFIG_DISPLAY_SUPPORT=y
 # CONFIG_BUILD_PATENTED is not set
 # CONFIG_BUILD_NLS is not set
 CONFIG_SHADOW_PASSWORDS=y
-# CONFIG_CLEAN_IPKG is not set
 # CONFIG_REPRODUCIBLE_DEBUG_INFO is not set
 # CONFIG_COLLECT_KERNEL_DEBUG is not set
 
@@ -388,6 +387,7 @@ CONFIG_SSTRIP_DISCARD_TRAILING_ZEROES=y
 #
 # Hardening build options
 #
+# CONFIG_PKG_FANALYZER is not set
 CONFIG_PKG_CHECK_FORMAT_SECURITY=y
 # CONFIG_PKG_ASLR_PIE_NONE is not set
 CONFIG_PKG_ASLR_PIE_REGULAR=y
@@ -408,6 +408,7 @@ CONFIG_PKG_FORTIFY_SOURCE_1=y
 # CONFIG_PKG_RELRO_NONE is not set
 # CONFIG_PKG_RELRO_PARTIAL is not set
 CONFIG_PKG_RELRO_FULL=y
+CONFIG_PKG_DT_RELR=y
 # CONFIG_SELINUX is not set
 CONFIG_USE_SECCOMP=y
 # end of Global build settings
@@ -1951,6 +1952,7 @@ CONFIG_PACKAGE_ath10k-firmware-qca9377=y
 # CONFIG_PACKAGE_ath10k-firmware-qca99x0-ct-full-htt is not set
 # CONFIG_PACKAGE_ath10k-firmware-qca99x0-ct-htt is not set
 # CONFIG_PACKAGE_ath11k-firmware-ipq5018 is not set
+# CONFIG_PACKAGE_ath11k-firmware-ipq5018-qcn6122 is not set
 # CONFIG_PACKAGE_ath11k-firmware-ipq6018 is not set
 # CONFIG_PACKAGE_ath11k-firmware-ipq8074 is not set
 # CONFIG_PACKAGE_ath11k-firmware-qca2066 is not set
@@ -3376,6 +3378,7 @@ CONFIG_PACKAGE_lua=y
 # CONFIG_PACKAGE_lua-eco-log is not set
 # CONFIG_PACKAGE_lua-eco-md5 is not set
 # CONFIG_PACKAGE_lua-eco-mqtt is not set
+# CONFIG_PACKAGE_lua-eco-net is not set
 # CONFIG_PACKAGE_lua-eco-netlink is not set
 # CONFIG_PACKAGE_lua-eco-nl80211 is not set
 # CONFIG_PACKAGE_lua-eco-packet is not set
@@ -4616,6 +4619,7 @@ CONFIG_PACKAGE_libopenssl-conf=y
 CONFIG_PACKAGE_libopenssl-devcrypto=y
 # CONFIG_PACKAGE_libopenssl-gost_engine is not set
 # CONFIG_PACKAGE_libopenssl-legacy is not set
+# CONFIG_PACKAGE_libopenssl-oqsprovider is not set
 # CONFIG_PACKAGE_libwolfssl is not set
 
 #
@@ -4906,9 +4910,7 @@ CONFIG_PACKAGE_libffi=y
 # CONFIG_PACKAGE_libfmt is not set
 # CONFIG_PACKAGE_libfreetype is not set
 # CONFIG_PACKAGE_libfstrm is not set
-# CONFIG_PACKAGE_libftdi is not set
 # CONFIG_PACKAGE_libftdi1 is not set
-# CONFIG_PACKAGE_libgabe is not set
 # CONFIG_PACKAGE_libgcrypt is not set
 CONFIG_PACKAGE_libgd=y
 # CONFIG_LIBGD_TIFF is not set
@@ -5046,6 +5048,7 @@ CONFIG_PACKAGE_libnl-tiny=y
 # CONFIG_PACKAGE_libopus is not set
 # CONFIG_PACKAGE_libopusenc is not set
 # CONFIG_PACKAGE_libopusfile is not set
+# CONFIG_PACKAGE_liboqs is not set
 # CONFIG_PACKAGE_liborcania is not set
 # CONFIG_PACKAGE_libout123 is not set
 # CONFIG_PACKAGE_libowipcalc is not set
@@ -5201,7 +5204,6 @@ CONFIG_PACKAGE_libxml2=y
 # CONFIG_PACKAGE_libyaml-cpp is not set
 # CONFIG_PACKAGE_libyang is not set
 # CONFIG_PACKAGE_libyder is not set
-# CONFIG_PACKAGE_libyubikey is not set
 # CONFIG_PACKAGE_libzmq-curve is not set
 # CONFIG_PACKAGE_libzmq-nc is not set
 # CONFIG_PACKAGE_libzmusic is not set
@@ -5252,7 +5254,6 @@ CONFIG_PACKAGE_terminfo=y
 # CONFIG_PACKAGE_xmlrpc-c-server is not set
 # CONFIG_PACKAGE_xmlrpc-c-server-abyss is not set
 # CONFIG_PACKAGE_yajl is not set
-# CONFIG_PACKAGE_yubico-pam is not set
 CONFIG_PACKAGE_zlib=y
 
 #
@@ -5500,7 +5501,7 @@ CONFIG_PACKAGE_luci-lib-json=y
 CONFIG_PACKAGE_luci-lib-jsonc=y
 CONFIG_PACKAGE_luci-lib-nixio=y
 # CONFIG_PACKAGE_luci-lib-px5g is not set
-# CONFIG_PACKAGE_luci-lib-uqr is not set
+CONFIG_PACKAGE_luci-lib-uqr=y
 # end of 6. Libraries
 
 CONFIG_PACKAGE_luci-i18n-amlogic-zh-cn=y
@@ -6923,7 +6924,6 @@ CONFIG_PACKAGE_chat=y
 # CONFIG_PACKAGE_dnstap is not set
 # CONFIG_PACKAGE_dnstop is not set
 # CONFIG_PACKAGE_ds-lite is not set
-# CONFIG_PACKAGE_esniper is not set
 # CONFIG_PACKAGE_esp2net is not set
 # CONFIG_PACKAGE_etherwake is not set
 # CONFIG_PACKAGE_etherwake-nfqueue is not set
@@ -7015,6 +7015,7 @@ CONFIG_PACKAGE_libipset=y
 # CONFIG_PACKAGE_mptcpize is not set
 # CONFIG_PACKAGE_mtr-json is not set
 # CONFIG_PACKAGE_mtr-nojson is not set
+# CONFIG_PACKAGE_nanomq is not set
 # CONFIG_PACKAGE_natmap is not set
 # CONFIG_PACKAGE_nbd is not set
 # CONFIG_PACKAGE_nbd-server is not set
@@ -7040,7 +7041,6 @@ CONFIG_PACKAGE_nlbwmon=y
 # CONFIG_PACKAGE_nut is not set
 # CONFIG_PACKAGE_obfs4proxy is not set
 CONFIG_PACKAGE_odhcp6c=y
-CONFIG_PACKAGE_odhcp6c_ext_cer_id=0
 # CONFIG_PACKAGE_odhcpd is not set
 CONFIG_PACKAGE_odhcpd-ipv6only=y
 # CONFIG_PACKAGE_ola is not set
@@ -8141,7 +8141,6 @@ CONFIG_PACKAGE_whereis=y
 # CONFIG_PACKAGE_yanglint is not set
 # CONFIG_PACKAGE_yara is not set
 # CONFIG_PACKAGE_ykclient is not set
-# CONFIG_PACKAGE_ykpers is not set
 # CONFIG_PACKAGE_yq is not set
 # CONFIG_PACKAGE_zyxel-reset is not set
 # end of Utilities

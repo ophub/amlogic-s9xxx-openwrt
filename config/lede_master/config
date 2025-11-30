@@ -1996,6 +1996,7 @@ CONFIG_PACKAGE_brcmfmac-firmware-usb=y
 # CONFIG_PACKAGE_mt7925bt-firmware is not set
 # CONFIG_PACKAGE_mt7981-wo-firmware is not set
 # CONFIG_PACKAGE_mt7986-wo-firmware is not set
+# CONFIG_PACKAGE_mt7987-2p5g-phy-firmware is not set
 # CONFIG_PACKAGE_mt7988-2p5g-phy-firmware is not set
 # CONFIG_PACKAGE_mt7988-wo-firmware is not set
 # CONFIG_PACKAGE_mwifiex-pcie-firmware is not set

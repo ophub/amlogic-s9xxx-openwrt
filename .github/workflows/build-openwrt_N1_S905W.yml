@@ -9,7 +9,7 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      source_branch: N1_S905W
+      source_branch:
         description: "Select the source branch"
         required: false
         default: "immortalwrt_master"

@@ -1,0 +1,34 @@
+
+. /lib/functions/uci-defaults.sh
+. /lib/functions/system.sh
+
+rockchip_setup_interfaces()
+{
+    local board="$1"
+    ucidef_set_interfaces_lan_wan "eth0" "eth1"
+    ucidef_add_switch "switch0" \
+        "1:lan" "2:lan" "3:lan" "0:wan" "6u@eth0" "7u@eth1"
+}
+
+rockchip_setup_macs()
+{
+    local board="$1"
+    local lan_mac=""
+    local wan_mac=""
+    local label_mac=""
+
+    wan_mac=$(macaddr_generate_from_mmc_cid mmcblk2)
+    lan_mac=$(macaddr_add "$wan_mac" 1)
+
+    [ -n "$lan_mac" ] && ucidef_set_interface_macaddr "lan" $lan_mac
+    [ -n "$wan_mac" ] && ucidef_set_interface_macaddr "wan" $wan_mac
+    [ -n "$label_mac" ] && ucidef_set_label_macaddr $label_mac
+}
+
+board_config_update
+board="nsy,g16-plus"
+rockchip_setup_interfaces $board
+rockchip_setup_macs $board
+board_config_flush
+
+exit 0

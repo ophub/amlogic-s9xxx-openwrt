@@ -265,7 +265,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Initialization environment
         id: init
@@ -337,6 +339,10 @@ jobs:
           ln -sf /builder/openwrt ${{ github.workspace }}/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
+          # Create ccache directory
+          mkdir -p ccache
+          ln -sf /builder/ccache ${{ github.workspace }}/openwrt/.ccache
+
           # Set output information
           echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
           echo -e "REPO_URL: [ ${REPO_URL} ]\nREPO_BRANCH: [ ${REPO_BRANCH} ]\nREPO_NAME: [ ${REPO_NAME} ]"
@@ -376,12 +382,41 @@ jobs:
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
 
+      - name: Get OpenWrt source hash
+        id: openwrthash
+        if: ${{ steps.pull.outputs.status }} == 'success' && !cancelled()
+        run: |
+          # Get the latest source hash from the kernel repository
+          repo_path="$(echo "${{ env.REPO_URL }}" | awk -F"github.com/" '{print $2}')"
+          api_url="https://api.github.com/repos/${repo_path}/git/ref/heads/${{ env.REPO_BRANCH }}"
+          source_hash=$(curl -fsSL -m 20 \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              ${api_url} |
+              jq -r '.object.sha'
+          )
+          [[ -z "${source_hash}" || "${source_hash}" == "null" ]] && source_hash="${{ github.sha }}"
+          echo "source_hash=${source_hash}" >> ${GITHUB_ENV}
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: /builder/ccache
+          key: openwrt-${{ env.REPO_NAME }}-${{ env.source_hash }}
+          restore-keys: |
+            openwrt-${{ env.REPO_NAME }}-
+
       - name: Compile the OpenWrt
         id: compile
         run: |
           cd openwrt/
           echo -e "$(nproc) thread compile"
           make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
+
+          echo -e "ccache statistics:"
+          ccache -s 2>/dev/null
+
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Clear server space

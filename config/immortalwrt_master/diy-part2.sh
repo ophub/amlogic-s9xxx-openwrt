@@ -25,6 +25,17 @@ sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package
 echo "DISTRIB_SOURCEREPO='github.com/immortalwrt/immortalwrt'" >>package/base-files/files/etc/openwrt_release
 echo "DISTRIB_SOURCECODE='immortalwrt'" >>package/base-files/files/etc/openwrt_release
 echo "DISTRIB_SOURCEBRANCH='master'" >>package/base-files/files/etc/openwrt_release
+
+# Set ccache
+# Remove existing ccache settings
+sed -i '/CONFIG_CCACHE/d' .config
+# Apply new ccache configuration
+if [[ "${2}" == "true" ]]; then
+    echo "CONFIG_CCACHE=y" >>.config
+    echo 'CONFIG_CCACHE_DIR="$(TOPDIR)/.ccache"' >>.config
+else
+    echo 'CONFIG_CCACHE_DIR=""' >>.config
+fi
 #
 # ------------------------------- Main source ends -------------------------------
 
@@ -38,4 +49,3 @@ git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 # git apply ../config/patches/{0001*,0002*}.patch --directory=feeds/luci
 #
 # ------------------------------- Other ends -------------------------------
-

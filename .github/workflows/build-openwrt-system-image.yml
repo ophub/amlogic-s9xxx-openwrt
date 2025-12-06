@@ -233,6 +233,11 @@ on:
         description: "Set OpenWrt default IP address."
         required: false
         default: "192.168.1.1"
+      use_ccache:
+        description: "Auto use ccache."
+        required: false
+        default: true
+        type: boolean
       openwrt_storage:
         description: "Select image storage type."
         required: false
@@ -257,6 +262,7 @@ env:
   DIY_P1_SH: config/${{ inputs.source_branch }}/diy-part1.sh
   DIY_P2_SH: config/${{ inputs.source_branch }}/diy-part2.sh
   TZ: Etc/UTC
+  CCACHE_DIR: /builder/ccache
 
 jobs:
   build:
@@ -371,7 +377,7 @@ jobs:
           [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
           chmod +x ${DIY_P2_SH}
           cd openwrt/
-          ${{ github.workspace }}/${DIY_P2_SH} "${{ inputs.openwrt_ip }}"
+          ${{ github.workspace }}/${DIY_P2_SH} "${{ inputs.openwrt_ip }}" "${{ inputs.use_ccache }}"
 
       - name: Download package
         id: package
@@ -428,7 +434,7 @@ jobs:
           [[ -d "output" ]] || mkdir output
           cp -f bin/targets/*/*/*rootfs.tar.gz output/
           cp -f .config output/config
-          rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
+          ls -A | grep -vE '^(output|\.ccache)$' | xargs rm -rf || true
 
           # Set output information
           df -hT ${PWD}

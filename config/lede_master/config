@@ -236,6 +236,7 @@ CONFIG_DISPLAY_SUPPORT=y
 CONFIG_SHADOW_PASSWORDS=y
 # CONFIG_CLEAN_IPKG is not set
 # CONFIG_IPK_FILES_CHECKSUMS is not set
+# CONFIG_INCLUDE_CONFIG is not set
 # CONFIG_REPRODUCIBLE_DEBUG_INFO is not set
 # CONFIG_COLLECT_KERNEL_DEBUG is not set
 
@@ -422,6 +423,7 @@ CONFIG_IPV6=y
 # CONFIG_USE_STRIP is not set
 CONFIG_USE_SSTRIP=y
 CONFIG_SSTRIP_DISCARD_TRAILING_ZEROES=y
+# CONFIG_STRIP_KERNEL_EXPORTS is not set
 # CONFIG_USE_MKLIBS is not set
 
 #
@@ -466,9 +468,18 @@ CONFIG_CCACHE_DIR="$(TOPDIR)/.ccache"
 CONFIG_KERNEL_CFLAGS=""
 CONFIG_EXTERNAL_KERNEL_TREE=""
 CONFIG_KERNEL_GIT_CLONE_URI=""
+# CONFIG_BUILD_LOG is not set
 CONFIG_BUILD_LOG_DIR=""
+# CONFIG_SRC_TREE_OVERRIDE is not set
 CONFIG_EXTRA_OPTIMIZATION="-fno-caller-saves -fno-plt"
+# CONFIG_TARGET_OPTIONS is not set
 CONFIG_TARGET_OPTIMIZATION="-Os -pipe -mcpu=generic"
+CONFIG_BPF_TOOLCHAIN_NONE=y
+# CONFIG_BPF_TOOLCHAIN_HOST is not set
+# CONFIG_BPF_TOOLCHAIN_BUILD_LLVM is not set
+# CONFIG_EXTERNAL_TOOLCHAIN is not set
+CONFIG_NEED_TOOLCHAIN=y
+# CONFIG_TOOLCHAINOPTS is not set
 # CONFIG_EXTRA_TARGET_ARCH is not set
 CONFIG_EXTRA_BINUTILS_CONFIG_OPTIONS=""
 # CONFIG_DWARVES is not set
@@ -477,6 +488,7 @@ CONFIG_EXTRA_GCC_CONFIG_OPTIONS=""
 # CONFIG_GCC_DEFAULT_SSP is not set
 # CONFIG_SJLJ_EXCEPTIONS is not set
 # CONFIG_INSTALL_GFORTRAN is not set
+# CONFIG_INSTALL_GCCGO is not set
 CONFIG_MUSL_DISABLE_CRYPT_SIZE_HACK=y
 CONFIG_GDB=y
 # CONFIG_GDB_PYTHON is not set
@@ -2739,8 +2751,14 @@ CONFIG_PACKAGE_kmod-mdio-bus-mux=y
 # CONFIG_PACKAGE_kmod-nsh is not set
 # CONFIG_PACKAGE_kmod-openvswitch is not set
 # CONFIG_PACKAGE_kmod-openvswitch-geneve is not set
+# CONFIG_PACKAGE_kmod-openvswitch-geneve-intree is not set
 # CONFIG_PACKAGE_kmod-openvswitch-gre is not set
+# CONFIG_PACKAGE_kmod-openvswitch-gre-intree is not set
+# CONFIG_PACKAGE_kmod-openvswitch-intree is not set
+# CONFIG_PACKAGE_kmod-openvswitch-lisp-intree is not set
+# CONFIG_PACKAGE_kmod-openvswitch-stt-intree is not set
 # CONFIG_PACKAGE_kmod-openvswitch-vxlan is not set
+# CONFIG_PACKAGE_kmod-openvswitch-vxlan-intree is not set
 # CONFIG_PACKAGE_kmod-ovpn-dco-v2 is not set
 # CONFIG_PACKAGE_kmod-pf-ring is not set
 # CONFIG_PACKAGE_kmod-pktgen is not set
@@ -2961,6 +2979,7 @@ CONFIG_PACKAGE_kmod-usb-core=y
 # CONFIG_PACKAGE_kmod-usb-storage is not set
 # CONFIG_PACKAGE_kmod-usb-storage-extras is not set
 # CONFIG_PACKAGE_kmod-usb-storage-uas is not set
+# CONFIG_PACKAGE_kmod-usb-test is not set
 # CONFIG_PACKAGE_kmod-usb-uhci is not set
 # CONFIG_PACKAGE_kmod-usb-wdm is not set
 # CONFIG_PACKAGE_kmod-usb-yealink is not set
@@ -3647,6 +3666,7 @@ CONFIG_PACKAGE_python3-logging=y
 # CONFIG_PACKAGE_python3-openssl is not set
 # CONFIG_PACKAGE_python3-orjson is not set
 # CONFIG_PACKAGE_python3-outcome is not set
+# CONFIG_PACKAGE_python3-packages is not set
 # CONFIG_PACKAGE_python3-packaging is not set
 # CONFIG_PACKAGE_python3-paho-mqtt is not set
 # CONFIG_PACKAGE_python3-paramiko is not set
@@ -4777,6 +4797,7 @@ CONFIG_PACKAGE_libpcap=y
 # Configuration
 #
 # CONFIG_PCAP_HAS_USB is not set
+# CONFIG_PCAP_HAS_BT is not set
 # CONFIG_PCAP_HAS_NETFILTER is not set
 # end of Configuration
 
@@ -5038,6 +5059,7 @@ CONFIG_LUCI_LANG_zh_Hans=y
 CONFIG_PACKAGE_luci-compat=y
 CONFIG_PACKAGE_luci-lua-runtime=y
 CONFIG_PACKAGE_luci-mod-admin-full=y
+# CONFIG_PACKAGE_luci-mod-admin-mini is not set
 # CONFIG_PACKAGE_luci-mod-battstatus is not set
 # CONFIG_PACKAGE_luci-mod-dashboard is not set
 # CONFIG_PACKAGE_luci-mod-dsl is not set
@@ -5085,6 +5107,7 @@ CONFIG_PACKAGE_luci-app-arpbind=y
 # CONFIG_PACKAGE_luci-app-clouddrive2 is not set
 # CONFIG_PACKAGE_luci-app-cloudflared is not set
 # CONFIG_PACKAGE_luci-app-commands is not set
+# CONFIG_PACKAGE_luci-app-coovachilli is not set
 # CONFIG_PACKAGE_luci-app-cpufreq is not set
 # CONFIG_PACKAGE_luci-app-cpulimit is not set
 # CONFIG_PACKAGE_luci-app-crowdsec-firewall-bouncer is not set
@@ -5127,6 +5150,7 @@ CONFIG_PACKAGE_luci-app-frps=y
 # CONFIG_PACKAGE_luci-app-ledtrig-usbport is not set
 # CONFIG_PACKAGE_luci-app-leigod-acc is not set
 # CONFIG_PACKAGE_luci-app-lorawan-basicstation is not set
+# CONFIG_PACKAGE_luci-app-ltqtapi is not set
 # CONFIG_PACKAGE_luci-app-lucky is not set
 # CONFIG_PACKAGE_luci-app-lxc is not set
 # CONFIG_PACKAGE_luci-app-microsocks is not set
@@ -5310,6 +5334,7 @@ CONFIG_PACKAGE_luci-lib-ipkg=y
 CONFIG_PACKAGE_luci-lib-jsonc=y
 CONFIG_PACKAGE_luci-lib-nixio=y
 # CONFIG_PACKAGE_luci-lib-px5g is not set
+# CONFIG_PACKAGE_luci-lib-rpcc is not set
 # end of 6. Libraries
 
 CONFIG_PACKAGE_default-settings=y
@@ -5593,6 +5618,7 @@ CONFIG_PACKAGE_luci-i18n-wol-zh-cn=y
 # Mail
 #
 # CONFIG_PACKAGE_alpine is not set
+# CONFIG_PACKAGE_alpine-nossl is not set
 # CONFIG_PACKAGE_bogofilter is not set
 # CONFIG_PACKAGE_dovecot is not set
 # CONFIG_PACKAGE_dovecot-pigeonhole is not set
@@ -5722,6 +5748,7 @@ CONFIG_PACKAGE_luci-i18n-wol-zh-cn=y
 # CONFIG_PACKAGE_rp-pppoe-common is not set
 # CONFIG_PACKAGE_rp-pppoe-relay is not set
 # CONFIG_PACKAGE_rp-pppoe-server is not set
+# CONFIG_PACKAGE_rp-pppoe-sniff is not set
 # end of Dial-in/up
 
 #
@@ -6439,6 +6466,9 @@ CONFIG_PACKAGE_uhttpd-mod-ubus=y
 # CONFIG_PACKAGE_hcxdumptool is not set
 # CONFIG_PACKAGE_hcxtools is not set
 # CONFIG_PACKAGE_horst is not set
+# CONFIG_PACKAGE_kismet-client is not set
+# CONFIG_PACKAGE_kismet-drone is not set
+# CONFIG_PACKAGE_kismet-server is not set
 # CONFIG_PACKAGE_pixiewps is not set
 # CONFIG_PACKAGE_reaver is not set
 # CONFIG_PACKAGE_wavemon is not set
@@ -7458,6 +7488,7 @@ CONFIG_PACKAGE_jq=y
 CONFIG_PACKAGE_jshn=y
 # CONFIG_PACKAGE_kmod is not set
 # CONFIG_PACKAGE_lcd4linux-custom is not set
+# CONFIG_PACKAGE_lcd4linux-full is not set
 # CONFIG_PACKAGE_lcdproc-clients is not set
 # CONFIG_PACKAGE_lcdproc-drivers is not set
 # CONFIG_PACKAGE_lcdproc-server is not set

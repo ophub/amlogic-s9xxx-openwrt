@@ -418,6 +418,8 @@ jobs:
 
           echo -e "ccache statistics:"
           ccache -s 2>/dev/null
+          echo -e "ccache directory size:"
+          du -sh $(pwd)/.ccache 2>/dev/null || echo "No ccache directory."
 
           echo "status=success" >> ${GITHUB_OUTPUT}
 

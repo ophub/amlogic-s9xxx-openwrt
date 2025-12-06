@@ -262,7 +262,7 @@ env:
   DIY_P1_SH: config/${{ inputs.source_branch }}/diy-part1.sh
   DIY_P2_SH: config/${{ inputs.source_branch }}/diy-part2.sh
   TZ: Etc/UTC
-  CCACHE_DIR: /builder/ccache
+  CCACHE_DIR: /builder/openwrt/.ccache
 
 jobs:
   build:
@@ -345,10 +345,6 @@ jobs:
           ln -sf /builder/openwrt ${{ github.workspace }}/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
-          # Create ccache directory
-          mkdir -p ccache
-          ln -sf /builder/ccache ${{ github.workspace }}/openwrt/.ccache
-
           # Set output information
           echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
           echo -e "REPO_URL: [ ${REPO_URL} ]\nREPO_BRANCH: [ ${REPO_BRANCH} ]\nREPO_NAME: [ ${REPO_NAME} ]"
@@ -408,7 +404,7 @@ jobs:
       - name: Cache ccache
         uses: actions/cache@v4
         with:
-          path: /builder/ccache
+          path: /builder/openwrt/.ccache
           key: openwrt-${{ env.REPO_NAME }}-${{ env.source_hash }}
           restore-keys: |
             openwrt-${{ env.REPO_NAME }}-

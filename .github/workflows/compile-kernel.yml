@@ -24,7 +24,6 @@ on:
         default: "6.12.y"
         type: choice
         options:
-          - 5.4.y
           - 5.10.y
           - 5.15.y
           - 6.1.y

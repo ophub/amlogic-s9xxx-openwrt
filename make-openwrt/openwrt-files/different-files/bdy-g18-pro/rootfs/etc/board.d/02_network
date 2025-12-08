@@ -1,23 +1,27 @@
-
 . /lib/functions/uci-defaults.sh
 . /lib/functions/system.sh
 
-rockchip_setup_interfaces()
-{
+rockchip_setup_interfaces() {
     local board="$1"
+    # RTL8367 for switch0
     ucidef_set_interfaces_lan_wan "eth0" "eth1"
     ucidef_add_switch "switch0" \
         "0:lan" "1:lan" "2:lan" "3:lan" "4:wan" "6u@eth0" "7u@eth1"
 }
 
-rockchip_setup_macs()
-{
+rockchip_setup_macs() {
     local board="$1"
     local lan_mac=""
     local wan_mac=""
     local label_mac=""
 
-    wan_mac=$(macaddr_generate_from_mmc_cid mmcblk2)
+    wan_mac=$(macaddr_generate_from_mmc_cid mmcblk0)
+
+    if [ -z "$wan_mac" ]; then
+        echo "WARNING: Failed to get MAC from mmcblk0, generating random MAC" >&2
+        wan_mac=$(macaddr_random)
+    fi
+
     lan_mac=$(macaddr_add "$wan_mac" 1)
 
     [ -n "$lan_mac" ] && ucidef_set_interface_macaddr "lan" $lan_mac

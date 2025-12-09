@@ -3,10 +3,7 @@
 
 rockchip_setup_interfaces() {
     local board="$1"
-    # RTL8367 for switch0
-    ucidef_set_interfaces_lan_wan "eth0" "eth1"
-    ucidef_add_switch "switch0" \
-        "0:lan" "1:lan" "2:lan" "3:lan" "4:wan" "6u@eth0" "7u@eth1"
+    ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" "wan"
 }
 
 rockchip_setup_macs() {

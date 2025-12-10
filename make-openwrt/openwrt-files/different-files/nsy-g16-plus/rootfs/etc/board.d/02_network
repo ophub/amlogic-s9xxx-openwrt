@@ -11,7 +11,7 @@ check_mac_format() {
 # Set up network interfaces for Rockchip-based boards
 rockchip_setup_interfaces() {
     local board="$1"
-    ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" "wan"
+    ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" "wan"
 }
 
 # Set up MAC addresses for Rockchip-based boards

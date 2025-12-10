@@ -35,7 +35,7 @@ on:
         default: true
         type: boolean
       delete_source:
-        description: "Delete the source after compilation"
+        description: "Delete source after compilation"
         required: false
         default: true
         type: boolean

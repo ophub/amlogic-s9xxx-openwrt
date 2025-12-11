@@ -4103,7 +4103,6 @@ CONFIG_PACKAGE_python3-logging=y
 # CONFIG_PACKAGE_python3-typing-extensions is not set
 # CONFIG_PACKAGE_python3-ubus is not set
 # CONFIG_PACKAGE_python3-uci is not set
-# CONFIG_PACKAGE_python3-unidecode is not set
 # CONFIG_PACKAGE_python3-unittest is not set
 # CONFIG_PACKAGE_python3-urllib is not set
 # CONFIG_PACKAGE_python3-urllib3 is not set
@@ -4874,7 +4873,7 @@ CONFIG_OPENSSL_ENGINE=y
 CONFIG_PACKAGE_libopenssl-conf=y
 CONFIG_PACKAGE_libopenssl-devcrypto=y
 # CONFIG_PACKAGE_libopenssl-gost_engine is not set
-CONFIG_PACKAGE_libopenssl-legacy=m
+CONFIG_PACKAGE_libopenssl-legacy=y
 # CONFIG_PACKAGE_libopenssl-oqsprovider is not set
 # CONFIG_PACKAGE_libwolfssl is not set
 

@@ -1,0 +1,46 @@
+# Check if wireless config file exists
+[ -e /etc/config/wireless ] || exit 0
+
+. /lib/functions.sh
+
+# -----------------------------------------------------------
+# 1. Configure 2G (radio0)
+# -----------------------------------------------------------
+uci set wireless.radio0.disabled='0'
+uci set wireless.radio0.country='CN'
+uci set wireless.radio0.band='2g'
+uci set wireless.radio0.channel='11'
+uci set wireless.radio0.htmode='HT20'
+uci set wireless.radio0.cell_density='0'
+
+# Interface settings: SSID=OpenWrt, no password
+uci set wireless.default_radio0.device='radio0'
+uci set wireless.default_radio0.network='lan'
+uci set wireless.default_radio0.mode='ap'
+uci set wireless.default_radio0.ssid='OpenWrt'
+uci set wireless.default_radio0.encryption='none'
+
+# -----------------------------------------------------------
+# 2. Configure 5G (radio1)
+# -----------------------------------------------------------
+uci set wireless.radio1.disabled='0'
+uci set wireless.radio1.country='CN'
+uci set wireless.radio1.band='5g'
+uci set wireless.radio1.channel='36'
+uci set wireless.radio1.htmode='VHT160'
+uci set wireless.radio1.cell_density='1'
+
+# Interface settings: SSID=OpenWrt, no password
+uci set wireless.default_radio1.device='radio1'
+uci set wireless.default_radio1.network='lan'
+uci set wireless.default_radio1.mode='ap'
+uci set wireless.default_radio1.ssid='OpenWrt'
+uci set wireless.default_radio1.encryption='none'
+
+# -----------------------------------------------------------
+# 3. Apply changes
+# -----------------------------------------------------------
+uci commit wireless
+wifi reload
+
+exit 0

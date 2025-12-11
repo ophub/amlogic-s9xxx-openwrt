@@ -700,7 +700,7 @@ Network -> File Transfer -> curl、wget-ssl
         -> Version Control Systems -> git
         -> WirelessAPD   -> hostapd-common
                          -> wpa-cli
-                         -> wpad-basic
+                         -> wpad-mesh-openssl
         -> iw
 
 

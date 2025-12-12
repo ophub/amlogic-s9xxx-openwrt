@@ -509,12 +509,12 @@ Refer to the [parameter instructions](../README.md#gitHub-actions-input-paramete
 The default [/etc/banner](../openwrt-files/common-files/etc/banner) information is as follows, you can use a [banner generator](https://www.bootschool.net/ascii) to customize your own personalized banner information (the style below is `slant`), just overwrite the file with the same name.
 
 ```shell
-      ____                 _       __     __        ____
-     / __ \____  ___  ____| |     / /____/ /_      / __ )____  _  __
-    / / / / __ \/ _ \/ __ \ | /| / / ___/ __/_____/ __  / __ \| |/_/
-   / /_/ / /_/ /  __/ / / / |/ |/ / /  / /_/_____/ /_/ / /_/ />  <
-   \____/ .___/\___/_/ /_/|__/|__/_/   \__/     /_____/\____/_/|_|
-       /_/  H E L L O - W O R L D    W I R E L E S S - F R E E D O M
+     ____                 _       __     __        __    ___    ____
+    / __ \____  ___  ____| |     / /____/ /_      / /   /   |  / __ )
+   / / / / __ \/ _ \/ __ \ | /| / / ___/ __/     / /   / /| | / __  |
+  / /_/ / /_/ /  __/ / / / |/ |/ / /  / /_      / /___/ ___ |/ /_/ /
+  \____/ .___/\___/_/ /_/|__/|__/_/   \__/     /_____/_/  |_/_____/
+      /_/ H E L L O - W O R L D   @   W I R E L E S S - F R E E D O M
 ───────────────────────────────────────────────────────────────────────
 ```
 

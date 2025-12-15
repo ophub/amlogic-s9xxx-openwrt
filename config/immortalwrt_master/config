@@ -468,6 +468,7 @@ CONFIG_TARGET_SUFFIX="musl"
 # CONFIG_SDK_LLVM_BPF is not set
 # CONFIG_MAKE_TOOLCHAIN is not set
 # CONFIG_IMAGEOPT is not set
+CONFIG_EXTRA_IMAGE_NAME=""
 # CONFIG_TARGET_DEFAULT_LAN_IP_FROM_PREINIT is not set
 # CONFIG_PREINITOPT is not set
 CONFIG_TARGET_PREINIT_SUPPRESS_STDERR=y
@@ -2937,6 +2938,7 @@ CONFIG_PACKAGE_kmod-slhc=y
 # CONFIG_PACKAGE_kmod-tcp-bbr is not set
 # CONFIG_PACKAGE_kmod-tcp-hybla is not set
 # CONFIG_PACKAGE_kmod-tcp-scalable is not set
+# CONFIG_PACKAGE_kmod-team is not set
 # CONFIG_PACKAGE_kmod-tls is not set
 # CONFIG_PACKAGE_kmod-trelay is not set
 CONFIG_PACKAGE_kmod-tun=y
@@ -7026,7 +7028,6 @@ CONFIG_PACKAGE_frps=y
 # CONFIG_PACKAGE_npc is not set
 # CONFIG_PACKAGE_nps is not set
 # CONFIG_PACKAGE_privoxy is not set
-# CONFIG_PACKAGE_radicale is not set
 # CONFIG_PACKAGE_radicale2 is not set
 # CONFIG_PACKAGE_radicale2-examples is not set
 # CONFIG_PACKAGE_redsocks2 is not set
@@ -7351,7 +7352,6 @@ CONFIG_PACKAGE_ppp-mod-pppoe=y
 # CONFIG_PACKAGE_pppstats is not set
 CONFIG_PACKAGE_proto-bonding=y
 # CONFIG_PACKAGE_proxychains-ng is not set
-# CONFIG_PACKAGE_ptunnel-ng is not set
 # CONFIG_PACKAGE_q is not set
 # CONFIG_PACKAGE_qcsuper is not set
 # CONFIG_PACKAGE_radius-mac is not set

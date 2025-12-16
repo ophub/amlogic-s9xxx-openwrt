@@ -1,8 +1,8 @@
-#=====================================================================================
+#==========================================================================
 # Description: Build OpenWrt using Unifreq scripts
 # Copyright (C) 2021 https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2021 https://github.com/ophub/flippy-openwrt-actions
-#=====================================================================================
+#==========================================================================
 
 name: Build OpenWrt using Unifreq scripts
 
@@ -11,13 +11,15 @@ on:
   workflow_dispatch:
     inputs:
       openwrt_soc:
-        description: "Select device board"
+        description: "Select device board."
         required: false
         default: "all"
         type: choice
         options:
           - all
           - s922x_s905x3_s905x2_s912_s905d_s905
+          - rock5b_h28k_r66s_vplus
+          - 100ask-dshanpi-a1
           - ak88
           - beikeyun
           - cm3
@@ -52,16 +54,29 @@ on:
           - s922x-n2
           - vplus
           - watermelon-pi
+          - yixun-rs6pro
           - zcube1-max
           - diy
       customize_rk3399:
         description: "Set customize rk3399 devices"
         required: false
-        default: "none"
+        default: "tvi3315a:rk3399-tvi3315a.dtb/sw799:rk3399-bozz-sw799.dtb"
         type: choice
         options:
           - tvi3315a:rk3399-tvi3315a.dtb/sw799:rk3399-bozz-sw799.dtb
           - none
+      openwrt_ip:
+        description: "Set OpenWrt default IP address"
+        required: false
+        default: "192.168.1.1"
+      kernel_repo:
+        description: "Set the kernel repository"
+        required: false
+        default: "ophub/kernel"
+        type: choice
+        options:
+          - breakingbadboy/OpenWrt
+          - ophub/kernel
       openwrt_kernel:
         description: "Select kernel version"
         required: false
@@ -78,19 +93,15 @@ on:
           - 6.1.y_6.12.y
           - 6.1.y_6.6.y
           - 6.6.y_6.12.y
-      kernel_repo:
-        description: "Set the kernel repository"
-        required: false
-        default: "ophub/kernel"
-        type: choice
-        options:
-          - ophub/kernel
-          - breakingbadboy/OpenWrt
       auto_kernel:
         description: "Auto use the latest kernel"
         required: false
         default: true
         type: boolean
+      script_diy_path:
+        description: "Set custom script loading path"
+        required: false
+        default: ""
       openwrt_storage:
         description: "Select image storage type."
         required: false
@@ -119,7 +130,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
 
       - name: Initialization environment
         id: init
@@ -166,66 +177,67 @@ jobs:
           df -Th
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Download OpenWrt
-        id: down
+      - name: Download OpenWrt rootfs file
+        id: download
         working-directory: /builder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          armsr_tarfile_repo="ophub/amlogic-s9xxx-openwrt"
-          releases_tag_keywords="OpenWrt_lede_"
-
-          armsr_tarfile_path="openwrt/output"
+          # Create download directory
+          armsr_tarfile_path="opt/download"
           [[ -d "${armsr_tarfile_path}" ]] || mkdir -p ${armsr_tarfile_path}
-          ln -sf /builder/openwrt ${{ github.workspace }}/openwrt
+          sudo rm -rf /opt && sudo ln -sf /builder/opt /opt
+          ln -sf /builder/opt ${{ github.workspace }}/opt
 
+          # Get name (file name) and url (API asset URL)
           latest_version=$(curl -s \
-                -H "Accept: application/vnd.github+json" \
-                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                https://api.github.com/repos/${armsr_tarfile_repo}/releases?per_page=20 | \
-                jq -r --arg RTK "${releases_tag_keywords}" \
-                --arg BOARD "-rootfs.tar.gz" \
-                '[.[] | select(.tag_name | contains($RTK))] |
-                map(.assets[] | select(.browser_download_url | endswith($BOARD))) |
-                sort_by(.updated_at) |
-                reverse |
-                .[0] |
-                {data: .updated_at, url: .browser_download_url}')
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/releases?per_page=20 | \
+              jq -r --arg RTK "OpenWrt_lede_" \
+              --arg BOARD "-rootfs.tar.gz" \
+              '[.[] | select(.tag_name | contains($RTK))] |
+              map(.assets[] | select(.name | endswith($BOARD))) |
+              sort_by(.updated_at) |
+              reverse |
+              .[0] |
+              {data: .updated_at, url: .url, name: .name}')
 
-          [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
-          latest_updated_at="$(echo ${latest_version} | jq -r '.data')"
+          [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && {
+              echo "Invalid OpenWrt rootfs download address."
+              exit 1
+          }
+
+          # Get URL and filename separately
           latest_url="$(echo ${latest_version} | jq -r '.url')"
+          openwrt_filename="$(echo ${latest_version} | jq -r '.name')"
 
-          openwrt_filename="${latest_url##*/}"
-          curl -fsSL "${latest_url}" -o "${armsr_tarfile_path}/${openwrt_filename}"
-          [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
+          # Download using API method (add octet-stream header)
+          echo "Downloading: ${openwrt_filename}"
+          curl -fsSL \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/octet-stream" \
+              "${latest_url}" \
+              -o "${armsr_tarfile_path}/${openwrt_filename}"
+          [[ "${?}" -ne "0" ]] && echo "Download failed." && exit 1
 
           echo "build_tag=OpenWrt_armv8_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Clone packit source code
-        working-directory: /builder
-        if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
-        run: |
-          SCRIPT_REPO_URL="https://github.com/unifreq/openwrt_packit"
-          SCRIPT_REPO_BRANCH="master"
-          SELECT_PACKITPATH="openwrt_packit"
-          git clone -q --single-branch --depth=1 --branch=${SCRIPT_REPO_BRANCH} ${SCRIPT_REPO_URL} ${SELECT_PACKITPATH}
-          ln -sf /builder/${SELECT_PACKITPATH} /opt/${SELECT_PACKITPATH}
-
-      - name: Packaging OpenWrt
+      - name: Package OpenWrt Firmware
         uses: ophub/flippy-openwrt-actions@main
-        if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.download.outputs.status }} == 'success' && !cancelled()
         env:
-          OPENWRT_ARMSR: openwrt/output/*rootfs.tar.gz
-          SELECT_PACKITPATH: openwrt_packit
+          OPENWRT_ARMSR: opt/download/*rootfs.tar.gz
           PACKAGE_SOC: ${{ inputs.openwrt_soc }}
-          CUSTOMIZE_RK3399: ${{ inputs.customize_rk3399 }}
           KERNEL_REPO_URL: ${{ inputs.kernel_repo }}
           KERNEL_VERSION_NAME: ${{ inputs.openwrt_kernel }}
           KERNEL_AUTO_LATEST: ${{ inputs.auto_kernel }}
+          OPENWRT_IP: ${{ inputs.openwrt_ip }}
+          CUSTOMIZE_RK3399: ${{ inputs.customize_rk3399 }}
+          SCRIPT_DIY_PATH: ${{ inputs.script_diy_path }}
           WHOAMI: ${{ inputs.builder_name }}
 
-      - name: Upload the packaged OpenWrt
+      - name: Upload OpenWrt Firmware to Release
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:

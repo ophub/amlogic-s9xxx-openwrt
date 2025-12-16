@@ -332,26 +332,37 @@ jobs:
           ln -sf /builder/openwrt ${{ github.workspace }}/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
+          # Get name (file name) and url (API asset URL)
           latest_version=$(curl -s \
-                -H "Accept: application/vnd.github+json" \
-                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                https://api.github.com/repos/${{ github.repository }}/releases?per_page=20 | \
-                jq -r --arg RTK "OpenWrt_${{ inputs.source_branch }}_" \
-                --arg BOARD "-rootfs.tar.gz" \
-                '[.[] | select(.tag_name | contains($RTK))] |
-                map(.assets[] | select(.browser_download_url | endswith($BOARD))) |
-                sort_by(.updated_at) |
-                reverse |
-                .[0] |
-                {data: .updated_at, url: .browser_download_url}')
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/releases?per_page=20 | \
+              jq -r --arg RTK "OpenWrt_${{ inputs.source_branch }}_" \
+              --arg BOARD "-rootfs.tar.gz" \
+              '[.[] | select(.tag_name | contains($RTK))] |
+              map(.assets[] | select(.name | endswith($BOARD))) |
+              sort_by(.updated_at) |
+              reverse |
+              .[0] |
+              {data: .updated_at, url: .url, name: .name}')
 
-          [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
-          latest_updated_at="$(echo ${latest_version} | jq -r '.data')"
+          [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && {
+              echo "Invalid OpenWrt rootfs download address."
+              exit 1
+          }
+
+          # Get URL and filename separately
           latest_url="$(echo ${latest_version} | jq -r '.url')"
+          openwrt_filename="$(echo ${latest_version} | jq -r '.name')"
 
-          openwrt_filename="${latest_url##*/}"
-          curl -fsSL "${latest_url}" -o "${armsr_tarfile_path}/${openwrt_filename}"
-          [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
+          # Download using API method (add octet-stream header)
+          echo "Downloading: ${openwrt_filename}"
+          curl -fsSL \
+               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/octet-stream" \
+               "${latest_url}" \
+               -o "${armsr_tarfile_path}/${openwrt_filename}"
+          [[ "${?}" -ne "0" ]] && echo "Download failed." && exit 1
 
           echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
           df -hT ${PWD}

@@ -17,7 +17,7 @@ on:
         type: choice
         options:
           - unifreq
-          - codesnas
+          - ophub
       kernel_version:
         description: "Select kernel version"
         required: false

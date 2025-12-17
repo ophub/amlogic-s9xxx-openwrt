@@ -60,13 +60,17 @@ runs:
         [[ -d "${openwrt_savepath}" ]] || mkdir -p ${openwrt_savepath}
         [[ -d "${openwrt_outpath}" ]] || mkdir -p ${openwrt_outpath}
 
-        if [[ "${openwrt_filename}" == http* ]]; then
+        if [[ "${openwrt_filename}" =~ ^http ]]; then
             echo -e "Download file: [ ${openwrt_filename} ]"
             curl -fsSL "${openwrt_filename}" -o "${openwrt_savepath}/${openwrt_savefile}"
         else
             if [[ -z "$(ls ${openwrt_savepath}/${openwrt_savefile} 2>/dev/null)" ]]; then
                 echo -e "Copy OpenWrt rootfs file: [ ${openwrt_filename} ]"
-                cp -vf ${{ github.workspace }}/${openwrt_filename} ${openwrt_savepath}/ || true
+                if [[ "${openwrt_filename}" =~ ^/ ]]; then
+                    cp -vf ${openwrt_filename} ${openwrt_savepath}/ || true
+                else
+                    cp -vf ${{ github.workspace }}/${openwrt_filename} ${openwrt_savepath}/ || true
+                fi
             else
                 echo -e "The [ ${openwrt_savepath}/${openwrt_savefile} ] file already exists, skipping."
             fi

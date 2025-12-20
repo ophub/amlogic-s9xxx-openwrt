@@ -32,6 +32,7 @@ FDT_FILE="" # Initialize FDT_FILE to be empty.
 
 [[ -f "${ophub_release_file}" ]] && { FDT_FILE="$(grep -oE 'meson.*dtb' "${ophub_release_file}")"; }
 [[ -z "${FDT_FILE}" && -f "/boot/uEnv.txt" ]] && { FDT_FILE="$(grep -E '^FDT=.*\.dtb$' /boot/uEnv.txt | sed -E 's#.*/##')"; }
+[[ -z "${FDT_FILE}" && -f "/boot/extlinux/extlinux.conf" ]] && { FDT_FILE="$(grep -E '/dtb/.*\.dtb$' /boot/extlinux/extlinux.conf | sed -E 's#.*/##')"; }
 [[ -z "${FDT_FILE}" && -f "/boot/armbianEnv.txt" ]] && { FDT_FILE="$(grep -E '^fdtfile=.*\.dtb$' /boot/armbianEnv.txt | sed -E 's#.*/##')"; }
 log_message "Detected FDT file: ${FDT_FILE:-'not found'}"
 
@@ -78,7 +79,7 @@ fi
 
 # Add network performance optimization
 if [[ -x "/usr/sbin/balethirq.pl" ]]; then
-    (perl /usr/sbin/balethirq.pl 2>/dev/null) || true
+    (perl /usr/sbin/balethirq.pl >/dev/null 2>&1) &
     log_message "Network optimization service (balethirq.pl) execution attempted."
 fi
 
@@ -86,7 +87,7 @@ fi
 openvfd_enable="no"
 openvfd_boxid="15"
 if [[ "${openvfd_enable}" == "yes" && -n "${openvfd_boxid}" && -x "/usr/sbin/openwrt-openvfd" ]]; then
-    (openwrt-openvfd "${openvfd_boxid}") || true
+    (openwrt-openvfd "${openvfd_boxid}" >/dev/null 2>&1) &
     log_message "OpenVFD service execution attempted."
 fi
 
@@ -98,7 +99,7 @@ fi
 
 # For fan control service
 if [[ -x "/usr/bin/pwm-fan.pl" ]]; then
-    perl /usr/bin/pwm-fan.pl 2>/dev/null &
+    perl /usr/bin/pwm-fan.pl >/dev/null 2>&1 &
     log_message "Fan control service (pwm-fan.pl) started in background."
 fi
 
@@ -111,35 +112,44 @@ fi
 # Automatic expansion of the third and fourth partitions
 todo_rootfs_resize="/root/.todo_rootfs_resize"
 if [[ -f "${todo_rootfs_resize}" && "$(cat "${todo_rootfs_resize}" 2>/dev/null | xargs)" == "yes" ]]; then
-    (openwrt-tf 2>/dev/null) || true
+    (openwrt-tf >/dev/null 2>&1) &
     log_message "Automatic partition expansion (openwrt-tf) attempted."
 fi
 
 # Set swap space
-if [[ -n "${PARTITION_PATH}" && -d "${PARTITION_PATH}" ]]; then
-    swap_check_file="${PARTITION_PATH}/.swap/swapfile"
-    if [[ -f "${swap_check_file}" ]]; then
-        log_message "Swap file found at ${swap_check_file}. Attempting to enable."
+(
+    # Wait for disk mount (max 30 seconds)
+    for i in {1..10}; do
+        [[ -d "${PARTITION_PATH}" ]] && break
+        sleep 3
+    done
 
-        # 'local' keyword removed, as we are in the main script body.
-        swap_loopdev="$(losetup -f)"
-        if [[ -z "${swap_loopdev}" ]]; then
-            log_message "Error: Could not find a free loop device. Skipping swap setup."
-        else
-            # Only proceed if a loop device was found.
-            # The '&&' ensures that 'swapon' is only attempted if 'losetup' succeeds.
-            if losetup "${swap_loopdev}" "${swap_check_file}" && swapon "${swap_loopdev}"; then
-                log_message "Swap file enabled successfully on ${swap_loopdev}."
+    # Check and enable swap file if it exists
+    if [[ -n "${PARTITION_PATH}" && -d "${PARTITION_PATH}" ]]; then
+        swap_check_file="${PARTITION_PATH}/.swap/swapfile"
+        if [[ -f "${swap_check_file}" ]]; then
+            log_message "Swap file found at ${swap_check_file}. Attempting to enable."
+
+            # 'local' keyword removed, as we are in the main script body.
+            swap_loopdev="$(losetup -f)"
+            if [[ -z "${swap_loopdev}" ]]; then
+                log_message "Error: Could not find a free loop device. Skipping swap setup."
             else
-                # If the chain fails at any point, log the error and clean up.
-                log_message "Error: Failed to setup swap on ${swap_loopdev}. Cleaning up..."
-                losetup -d "${swap_loopdev}" 2>/dev/null # Attempt to detach the loop device.
+                # Only proceed if a loop device was found.
+                # The '&&' ensures that 'swapon' is only attempted if 'losetup' succeeds.
+                if losetup "${swap_loopdev}" "${swap_check_file}" && swapon "${swap_loopdev}"; then
+                    log_message "Swap file enabled successfully on ${swap_loopdev}."
+                else
+                    # If the chain fails at any point, log the error and clean up.
+                    log_message "Error: Failed to setup swap on ${swap_loopdev}. Cleaning up..."
+                    losetup -d "${swap_loopdev}" 2>/dev/null # Attempt to detach the loop device.
+                fi
             fi
         fi
+    else
+        log_message "Warning: Swap partition path '${PARTITION_PATH}' does not exist."
     fi
-else
-    log_message "Warning: Swap partition path '${PARTITION_PATH}' does not exist."
-fi
+) &
 
 # Finalization
 log_message "All custom services have been processed."

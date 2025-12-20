@@ -179,13 +179,13 @@ rebuild_firmware() {
     # Selecting default packages, lib, theme, app and i18n, etc.
     my_packages="\
         base-files bash bc blkid block-mount blockd btrfs-progs busybox bzip2 \
-        cgi-io chattr comgt comgt-ncm containerd coremark coreutils coreutils-base64 coreutils-nohup \
+        cgi-io comgt comgt-ncm containerd coremark coreutils coreutils-base64 coreutils-nohup \
         coreutils-truncate curl dosfstools dumpe2fs e2fsprogs kmod-usb2 kmod-usb-net-rndis \
         exfat-mkfs f2fs-tools f2fsck fdisk gawk getopt git gzip hostapd-common iconv iw iwinfo jq \
         jshn kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 libjson-script liblucihttp \
         liblucihttp-lua lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted \
         perl-http-date perlbase-file perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 \
-        pigz ppp ppp-mod-pppoe pv rename resize2fs runc tar ttyd tune2fs httping screen \
+        ppp ppp-mod-pppoe pv rename resize2fs runc tar ttyd tune2fs httping screen \
         uclient-fetch uhttpd uhttpd-mod-ubus unzip uqmi usb-modeswitch uuidgen wget-ssl \
         which wwan xfs-fsck xfs-mkfs xz xz-utils ziptool zoneinfo-asia zoneinfo-core \
         \

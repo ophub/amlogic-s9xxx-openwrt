@@ -178,26 +178,26 @@ rebuild_firmware() {
 
     # Selecting default packages, lib, theme, app and i18n, etc.
     my_packages="\
-        base-files bash bc blkid block-mount blockd btrfs-progs busybox bzip2 \
-        cgi-io comgt comgt-ncm containerd coremark coreutils coreutils-base64 coreutils-nohup \
-        coreutils-truncate curl dosfstools dumpe2fs e2fsprogs kmod-usb2 kmod-usb-net-rndis \
-        exfat-mkfs f2fs-tools f2fsck fdisk gawk getopt git gzip hostapd-common iconv iw iwinfo jq \
-        jshn kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 libjson-script liblucihttp \
-        liblucihttp-lua lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted \
-        perl-http-date perlbase-file perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 \
-        ppp ppp-mod-pppoe pv rename resize2fs runc tar ttyd tune2fs httping screen \
-        uclient-fetch uhttpd uhttpd-mod-ubus unzip uqmi usb-modeswitch uuidgen wget-ssl \
-        which wwan xfs-fsck xfs-mkfs xz xz-utils ziptool zoneinfo-asia zoneinfo-core \
+        base-files bash bc blkid block-mount btrfs-progs busybox bzip2 ip-full libc \
+        cgi-io comgt comgt-ncm coreutils coreutils-stat coreutils-base64 coreutils-nohup \
+        curl dosfstools e2fsprogs exfat-mkfs f2fs-tools f2fsck fdisk gawk wpa-supplicant \
+        iw iwinfo jq jshn kmod-brcmfmac kmod-brcmutil nano htop liblucihttp-lua ca-bundle \
+        losetup lsblk lscpu mkf2fs mount-utils openssl-util parted iconv fping git gzip \
+        perlbase-file perlbase-unicode perlbase-utf8 perlbase-essential perlbase-time \
+        perlbase-xsloader rpcd rpcd-mod-file rpcd-mod-iwinfo rpcd-mod-luci rpcd-mod-rrdns \
+        uhttpd uhttpd-mod-ubus openssh-sftp-server ppp ppp-mod-pppoe pv ntfs-3g tar ttyd \
+        kmod-usb2 kmod-usb-net-rndis wwan httping uclient-fetch unzip uqmi usb-modeswitch \
+        uuidgen xz xz-utils ziptool zoneinfo-asia zoneinfo-core \
         \
-        luci luci-compat luci-lib-base kmod-usb-net-huawei-cdc-ncm kmod-mii kmod-usb-net \
+        luci luci-compat luci-lib-base kmod-usb-net-huawei-cdc-ncm kmod-usb-net \
         luci-lib-ip luci-lib-ipkg luci-lib-jsonc luci-lib-nixio luci-mod-admin-full luci-mod-network \
         luci-mod-status luci-mod-system luci-proto-3g luci-proto-ipv6 luci-proto-mbim mbim-utils \
-        luci-proto-ncm luci-proto-ppp luci-proto-qmi screen kmod-usb-wdm kmod-usb-net-qmi-wwan
-        luci-proto-qmi kmod-usb-net-cdc-ether kmod-usb-serial-wwan qmi-utils kmod-usb-serial \
-        kmod-usb-serial-option kmod-usb-serial-qualcomm kmod-usb-net-cdc-ncm kmod-usb-net-cdc-mbim \
-        umbim modemmanager luci-proto-modemmanager \
+        luci-proto-ncm luci-proto-ppp luci-proto-qmi screen kmod-tun \
+        kmod-usb-wdm kmod-usb-net-qmi-wwan luci-proto-qmi kmod-usb-net-cdc-ether \
+        kmod-usb-serial-option kmod-usb-serial kmod-usb-serial-wwan qmi-utils kmod-usb-serial-qualcomm \
+        kmod-usb-net-cdc-ncm kmod-usb-net-cdc-mbim umbim modemmanager luci-proto-modemmanager \
         \
-        luci-app-amlogic luci-i18n-amlogic-zh-cn \
+        luci-i18n-base-zh-cn luci-app-amlogic \
         \
         ${config_list} \
         "

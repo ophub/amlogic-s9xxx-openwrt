@@ -15,17 +15,17 @@ on:
       releases_branch:
         description: "Select the releases branch"
         required: false
-        default: "openwrt:24.10.4"
+        default: "openwrt:24.10.5"
         type: choice
         options:
-          - openwrt:24.10.4
+          - openwrt:24.10.5
           - openwrt:24.10.3
           - immortalwrt:24.10.4
           - immortalwrt:24.10.3
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "all"
+        default: "s905x-b860h"
         type: choice
         options:
           - all
@@ -198,7 +198,7 @@ on:
       openwrt_kernel:
         description: "Select kernel version"
         required: false
-        default: "6.1.y_6.12.y"
+        default: "6.6.y"
         type: choice
         options:
           - 5.10.y
@@ -239,12 +239,12 @@ on:
       builder_name:
         description: "Set OpenWrt builder signature."
         required: false
-        default: "ophub"
+        default: "freedom"
         type: choice
         options:
           - ophub
           - angel
-          - yourname
+          - freedom
 
 env:
   TZ: Etc/UTC
@@ -358,7 +358,7 @@ jobs:
             ### OpenWrt Image information
             - Default IP: `192.168.1.1`
             - Default username: `root`
-            - Default password: `password`
+            - Default password: `none`
             - Default WIFI name: `OpenWrt`
             - Default WIFI password: `none`
             ### Install to EMMC

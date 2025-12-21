@@ -85,8 +85,11 @@ runs:
         # Custom OpenWrt remake files
         if [[ -n "${{ inputs.openwrt_files }}" && "${{ inputs.openwrt_files }}" != "false" ]]; then
             echo -e "Add my custom OpenWrt remake files..."
+            copy_from_path="${{ inputs.openwrt_files }}"
+            copy_from_path="${copy_from_path%/}"
+            [[ "${copy_from_path}" != /* ]] && copy_from_path="${{ github.workspace }}/${copy_from_path}"
             copy_to_path="make-openwrt/openwrt-files/common-files"
-            cp -avf --no-preserve=ownership ${{ github.workspace }}/${{ inputs.openwrt_files }}/. ${copy_to_path}/
+            cp -avf --no-preserve=ownership "${copy_from_path}/." "${copy_to_path}/" || true
         else
             echo -e "Use the default OpenWrt remake files."
         fi

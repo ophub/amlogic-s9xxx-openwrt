@@ -454,7 +454,7 @@ download_depends() {
     git_pull_dir ${uboot_repo} main ${git_path}
     # Move the u-boot files to the storage directory
     mkdir -p ${uboot_path}
-    cp -af --no-preserve=ownership ${git_path}/u-boot/* ${uboot_path}
+    cp -af --no-preserve=ownership ${git_path}/u-boot/. ${uboot_path}
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: u-boot download completed." || error_msg "OpenWrt: u-boot download failed."
     # Delete temporary files
     rm -rf ${git_path}
@@ -464,7 +464,7 @@ download_depends() {
     git_pull_dir ${firmware_repo} main ${git_path}
     # Move the firmware files to the storage directory
     mkdir -p ${firmware_path}
-    cp -af --no-preserve=ownership ${git_path}/firmware/* ${firmware_path}
+    cp -af --no-preserve=ownership ${git_path}/firmware/. ${firmware_path}
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: firmware download completed." || error_msg "OpenWrt: firmware download failed."
     # Delete temporary files
     rm -rf ${git_path}
@@ -473,12 +473,12 @@ download_depends() {
     git_path="$(mktemp -d)"
     git_pull_dir ${depends_repo} main ${git_path}
     # Move the platform files to the storage directory
-    cp -af --no-preserve=ownership ${git_path}/build-armbian/armbian-files/platform-files/* ${platform_files}
+    cp -af --no-preserve=ownership ${git_path}/build-armbian/armbian-files/platform-files/. ${platform_files}
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: platform-files download completed." || error_msg "OpenWrt: platform-files download failed."
     # Remove the special files in the [ sbin ] directory of the Armbian system
     rm -rf $(find ${platform_files} -type d -name "sbin")
     # Move the different files to the storage directory
-    cp -af --no-preserve=ownership ${git_path}/build-armbian/armbian-files/different-files/* ${different_files}
+    cp -af --no-preserve=ownership ${git_path}/build-armbian/armbian-files/different-files/. ${different_files}
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: different-files download completed." || error_msg "OpenWrt: different-files download failed."
     # Move the balethirq related files to the storage directory
     cp -f --no-preserve=ownership ${git_path}/build-armbian/armbian-files/common-files/usr/sbin/balethirq.pl ${common_files}/usr/sbin
@@ -491,12 +491,12 @@ download_depends() {
     git_path="$(mktemp -d)"
     git_pull_dir ${script_repo} main ${git_path}
     # Move the sbin files to the storage directory
-    cp -af --no-preserve=ownership ${git_path}/luci-app-amlogic/root/usr/sbin/* ${common_files}/usr/sbin
+    cp -af --no-preserve=ownership ${git_path}/luci-app-amlogic/root/usr/sbin/. ${common_files}/usr/sbin
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} luci-app-amlogic: sbin download completed." || error_msg "luci-app-amlogic: sbin download failed."
     chmod +x ${common_files}/usr/sbin/*
     # Move the share files to the storage directory
     mkdir -p ${common_files}/usr/share/amlogic
-    cp -af --no-preserve=ownership ${git_path}/luci-app-amlogic/root/usr/share/amlogic/* ${common_files}/usr/share/amlogic
+    cp -af --no-preserve=ownership ${git_path}/luci-app-amlogic/root/usr/share/amlogic/. ${common_files}/usr/share/amlogic
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} luci-app-amlogic: share download completed." || error_msg "luci-app-amlogic: share download failed."
     chmod +x ${common_files}/usr/share/amlogic/*
     # Delete temporary files
@@ -844,24 +844,24 @@ extract_openwrt() {
     rm -f ${tag_rootfs}/rom/sbin/firstboot
 
     # Copy the common files
-    [[ -d "${common_files}" ]] && cp -af --no-preserve=ownership ${common_files}/* ${tag_rootfs}
+    [[ -d "${common_files}" ]] && cp -af --no-preserve=ownership ${common_files}/. ${tag_rootfs}
 
     # Copy the platform files
     platform_bootfs="${platform_files}/${PLATFORM}/bootfs"
     platform_rootfs="${platform_files}/${PLATFORM}/rootfs"
-    [[ -d "${platform_bootfs}" ]] && cp -rf ${platform_bootfs}/* ${tag_bootfs}
-    [[ -d "${platform_rootfs}" ]] && cp -af --no-preserve=ownership ${platform_rootfs}/* ${tag_rootfs}
+    [[ -d "${platform_bootfs}" ]] && cp -rf ${platform_bootfs}/. ${tag_bootfs}
+    [[ -d "${platform_rootfs}" ]] && cp -af --no-preserve=ownership ${platform_rootfs}/. ${tag_rootfs}
 
     # Copy the different files
     different_bootfs="${different_files}/${board}/bootfs"
     different_rootfs="${different_files}/${board}/rootfs"
-    [[ -d "${different_bootfs}" ]] && cp -rf ${different_bootfs}/* ${tag_bootfs}
-    [[ -d "${different_rootfs}" ]] && cp -af --no-preserve=ownership ${different_rootfs}/* ${tag_rootfs}
+    [[ -d "${different_bootfs}" ]] && cp -rf ${different_bootfs}/. ${tag_bootfs}
+    [[ -d "${different_rootfs}" ]] && cp -af --no-preserve=ownership ${different_rootfs}/. ${tag_rootfs}
 
     # Copy the bootloader files
     [[ -d "${tag_rootfs}/lib/u-boot" ]] || mkdir -p "${tag_rootfs}/lib/u-boot"
     rm -rf ${tag_rootfs}/lib/u-boot/*
-    [[ -d "${bootloader_path}" ]] && cp -af --no-preserve=ownership ${bootloader_path}/* ${tag_rootfs}/lib/u-boot
+    [[ -d "${bootloader_path}" ]] && cp -af --no-preserve=ownership ${bootloader_path}/. ${tag_rootfs}/lib/u-boot
 
     # Copy the Amlogic overload files
     [[ "${PLATFORM}" == "amlogic" ]] && {

@@ -50,7 +50,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
       - [10.2.2 更改盒子的型号和内核版本号](#1022-更改盒子的型号和内核版本号)
     - [10.3 自定义 banner 信息](#103-自定义-banner-信息)
     - [10.4 自定义 feeds 配置文件](#104-自定义-feeds-配置文件)
-    - [10.5 自定义软件默认配置信息](#105-自定义软件默认配置信息)
+    - [10.5 自定义 OpenWrt 默认配置文件](#105-自定义-openwrt-默认配置文件)
       - [10.5.1 第一种方法是在编译时添加自定义文件](#1051-第一种方法是在编译时添加自定义文件)
       - [10.5.2 第二种方法是在打包时添加自定义文件](#1052-第二种方法是在打包时添加自定义文件)
     - [10.6 Opkg 软件包管理](#106-opkg-软件包管理)
@@ -503,7 +503,7 @@ REPO_BRANCH: openwrt-21.02
 
 ### 10.3 自定义 banner 信息
 
-默认的 [/etc/banner](../openwrt-files/common-files/etc/banner) 信息如下，你可以使用 [banner 生成器](https://www.bootschool.net/ascii) 定制专属自己的个性化 banner 信息（下面的样式为 `slant`），覆盖同名文件即可。
+默认的 [/etc/banner](../openwrt-files/common-files/etc/banner) 信息如下，你可以使用 [banner 生成器](https://www.bootschool.net/ascii) 定制专属自己的个性化 banner 信息（下面的样式为 `slant`）。使用 `10.5.2` 的方法可以在制作 OpenWrt 时添加自定义 banner 以及其他 OpenWrt 文件。
 
 ```shell
      ____                 _       __     __        __    ___    ____
@@ -519,7 +519,7 @@ REPO_BRANCH: openwrt-21.02
 
 当你查看源码库中的 feeds.conf.default 文件时，你是不是发现这里引入了很多软件包的源码库呢，没错，我们在 GitHub 上可以找到 openwrt 官方提供的源码库，还有很多人分享的 openwrt 的分支及软件包，如果你了解他们，可以从这里添加。比如 coolsnowwolf 源码库中的 [feeds.conf.default](https://github.com/coolsnowwolf/lede/blob/master/feeds.conf.default)
 
-### 10.5 自定义软件默认配置信息
+### 10.5 自定义 OpenWrt 默认配置文件
 
 #### 10.5.1 第一种方法是在编译时添加自定义文件
 

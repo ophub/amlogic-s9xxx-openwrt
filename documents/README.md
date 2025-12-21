@@ -50,7 +50,7 @@ Github Actions is a service launched by Microsoft. It provides a very well-confi
       - [10.2.2 Changing the Model and Kernel Version Number of the Box](#1022-changing-the-model-and-kernel-version-number-of-the-box)
     - [10.3 Customizing Banner Information](#103-customizing-banner-information)
     - [10.4 Customize feeds configuration file](#104-customize-feeds-configuration-file)
-    - [10.5 Customize default software configuration information](#105-customize-default-software-configuration-information)
+    - [10.5 Customize OpenWrt default configuration files](#105-customize-openwrt-default-configuration-files)
       - [10.5.1 First method is to add custom files during compilation](#1051-first-method-is-to-add-custom-files-during-compilation)
       - [10.5.2 Second method is to use the openwrt\_files parameter to add custom files](#1052-second-method-is-to-use-the-openwrt_files-parameter-to-add-custom-files)
     - [10.6 Opkg package management](#106-opkg-package-management)
@@ -508,7 +508,7 @@ Refer to the [parameter instructions](../README.md#gitHub-actions-input-paramete
 
 ### 10.3 Customizing Banner Information
 
-The default [/etc/banner](../openwrt-files/common-files/etc/banner) information is as follows, you can use a [banner generator](https://www.bootschool.net/ascii) to customize your own personalized banner information (the style below is `slant`), just overwrite the file with the same name.
+The default [/etc/banner](../openwrt-files/common-files/etc/banner) information is as follows, you can use a [banner generator](https://www.bootschool.net/ascii) to customize your own personalized banner information (the style below is `slant`). Use the method described in `10.5.2` to add a custom banner and other OpenWrt files when building OpenWrt.
 
 ```shell
      ____                 _       __     __        __    ___    ____
@@ -524,7 +524,7 @@ The default [/etc/banner](../openwrt-files/common-files/etc/banner) information 
 
 When you look at the feeds.conf.default file in the source code repository, have you noticed that it introduces many package source code repositories? Yes, we can find the source code repository provided by the official openwrt on GitHub, and many people share the branches and packages of openwrt. If you are familiar with them, you can add from here. For example, the [feeds.conf.default](https://github.com/coolsnowwolf/lede/blob/master/feeds.conf.default) in the coolsnowwolf source code repository.
 
-### 10.5 Customize default software configuration information
+### 10.5 Customize OpenWrt default configuration files
 
 #### 10.5.1 First method is to add custom files during compilation
 

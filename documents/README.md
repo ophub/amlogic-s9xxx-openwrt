@@ -51,6 +51,8 @@ Github Actions is a service launched by Microsoft. It provides a very well-confi
     - [10.3 Customizing Banner Information](#103-customizing-banner-information)
     - [10.4 Customize feeds configuration file](#104-customize-feeds-configuration-file)
     - [10.5 Customize default software configuration information](#105-customize-default-software-configuration-information)
+      - [10.5.1 First method is to add custom files during compilation](#1051-first-method-is-to-add-custom-files-during-compilation)
+      - [10.5.2 Second method is to use the openwrt\_files parameter to add custom files](#1052-second-method-is-to-use-the-openwrt_files-parameter-to-add-custom-files)
     - [10.6 Opkg package management](#106-opkg-package-management)
     - [10.7 Manage packages using the Web interface](#107-manage-packages-using-the-web-interface)
     - [10.8 How to restore the original Android TV system](#108-how-to-restore-the-original-android-tv-system)
@@ -524,6 +526,8 @@ When you look at the feeds.conf.default file in the source code repository, have
 
 ### 10.5 Customize default software configuration information
 
+#### 10.5.1 First method is to add custom files during compilation
+
 When we are using openwrt, we have configured many pieces of software. Most of the configuration information of these software is saved in the /etc/config/ and other related directories of your openwrt. Copy these configuration information storage files to the files folder in the root directory of the repository on GitHub. Please keep the directory structure and file names the same. During the openwrt compilation, these configuration information storage files will be compiled into your firmware. The specific method is in the .github/workflows/build-openwrt-system-image.yml file. Let's take a look at this piece of code together:
 
 ```yaml
@@ -537,6 +541,19 @@ When we are using openwrt, we have configured many pieces of software. Most of t
 ```
 
 Please do not copy those configuration information files that involve privacy. If your repository is public, the files you put in the files directory are also public. Do not expose secrets. Some password information can be encrypted using private key settings and other methods that you just learned in the GitHub Actions Quick Start Guide. You must understand what you are doing.
+
+#### 10.5.2 Second method is to use the openwrt_files parameter to add custom files
+
+Using ophub to package OpenWrt, the `openwrt_files` parameter can be used to add or override custom files to ophub's [common-files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/make-openwrt/openwrt-files/common-files) directory. The directory structure must be consistent with the OpenWrt root directory to ensure that the files are correctly overwritten in the firmware (for example, default configuration files should be placed in the `etc/config/` subdirectory). An example of the setting method:
+
+```yaml
+- name: Packaging OpenWrt
+  uses: ophub/amlogic-s9xxx-openwrt@main
+  with:
+    openwrt_path: openwrt/output/*rootfs.tar.gz
+    openwrt_files: files
+    ...
+```
 
 ### 10.6 Opkg package management
 

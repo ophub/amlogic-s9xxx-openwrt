@@ -170,17 +170,18 @@ You can modify the related personalized firmware configuration files in the [con
 
 These parameters correspond to the `local packaging command`, please refer to the explanations above.
 
-| Parameter | Default Value | Description |
-| --------- | ------------- | ----------- |
-| openwrt_path | None | Set the file path of `openwrt-armsr-armv8-generic-rootfs.tar.gz`, you can use relative path like `openwrt/bin/targets/*/*/*rootfs.tar.gz` or a network file download URL like `https://github.com/*/releases/*/*rootfs.tar.gz` |
-| openwrt_board | all | Set the `board` of the box to be packaged, functionality refers to `-b` |
-| kernel_repo | ophub/kernel | Specify `<owner>/<repo>` of the kernel repository on github.com, functionality refers to `-r` |
-| kernel_usage | stable | Set the `tags suffix` of the kernel to be used, functionality refers to `-u` |
-| openwrt_kernel | 6.1.y_5.15.y | Set the kernel version, functionality refers to `-k` |
-| auto_kernel | true | Set whether to automatically adopt the latest version of the same series of kernels, functionality refers to `-a` |
-| openwrt_ip | 192.168.1.1 | Set the default IP address of the OpenWrt system, functionality refers to `-p` |
-| openwrt_size | 256/1024 | Set the size of the system BOOTFS and ROOTFS partitions, function reference `-s` |
-| builder_name | None | Set the signature of the OpenWrt system builder, functionality refers to `-n` |
+| Parameter      | Default Value | Description                              |
+| -------------- | ------------- | ---------------------------------------- |
+| openwrt_path   | None          | Set the file path of `openwrt-armsr-armv8-generic-rootfs.tar.gz`, you can use relative path like `openwrt/bin/targets/*/*/*rootfs.tar.gz` or a network file download URL like `https://github.com/*/releases/*/*rootfs.tar.gz` |
+| openwrt_board  | all           | Set the `board` of the box to be packaged, functionality refers to `-b` |
+| kernel_repo    | ophub/kernel  | Specify `<owner>/<repo>` of the kernel repository on github.com, functionality refers to `-r` |
+| kernel_usage   | stable        | Set the `tags suffix` of the kernel to be used, functionality refers to `-u` |
+| openwrt_kernel | 6.1.y_5.15.y  | Set the kernel version, functionality refers to `-k` |
+| auto_kernel    | true          | Set whether to automatically adopt the latest version of the same series of kernels, functionality refers to `-a` |
+| openwrt_ip     | 192.168.1.1   | Set the default IP address of the OpenWrt system, functionality refers to `-p` |
+| openwrt_size   | 256/1024      | Set the size of the system BOOTFS and ROOTFS partitions, function reference `-s` |
+| openwrt_files  | false         | Adds custom OpenWrt files. If set, all files in this directory will be copied to [common-files](make-openwrt/openwrt-files/common-files). The directory structure must mirror the OpenWrt root directory to ensure files are correctly overlaid(e.g., default configuration files should be placed under `etc/config/`). |
+| builder_name   | None          | Set the signature of the OpenWrt system builder, functionality refers to `-n` |
 
 - ### GitHub Actions Output Variables Explanation
 

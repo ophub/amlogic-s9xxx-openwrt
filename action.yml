@@ -38,6 +38,10 @@ inputs:
     description: "Set the rootfs IP address."
     required: false
     default: "192.168.1.1"
+  openwrt_files:
+    description: "Add custom OpenWrt files."
+    required: false
+    default: ""
   builder_name:
     description: "Set OpenWrt builder signature."
     required: false
@@ -77,6 +81,15 @@ runs:
         fi
         sync
         echo -e "About the [ ${openwrt_savepath} ] directory: \n$(ls -lh ${openwrt_savepath} 2>/dev/null)"
+
+        # Custom OpenWrt remake files
+        if [[ -n "${{ inputs.openwrt_files }}" && "${{ inputs.openwrt_files }}" != "false" ]]; then
+            echo -e "Add my custom OpenWrt remake files..."
+            copy_to_path="make-openwrt/openwrt-files/common-files"
+            cp -avf --no-preserve=ownership ${{ github.workspace }}/${{ inputs.openwrt_files }}/. ${copy_to_path}/
+        else
+            echo -e "Use the default OpenWrt remake files."
+        fi
 
         cd ${{ github.action_path }}
         echo -e "Start to make openwrt..."

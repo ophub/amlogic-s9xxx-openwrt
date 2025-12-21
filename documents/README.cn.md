@@ -51,6 +51,8 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
     - [10.3 自定义 banner 信息](#103-自定义-banner-信息)
     - [10.4 自定义 feeds 配置文件](#104-自定义-feeds-配置文件)
     - [10.5 自定义软件默认配置信息](#105-自定义软件默认配置信息)
+      - [10.5.1 第一种方法是在编译时添加自定义文件](#1051-第一种方法是在编译时添加自定义文件)
+      - [10.5.2 第二种方法是在打包时添加自定义文件](#1052-第二种方法是在打包时添加自定义文件)
     - [10.6 Opkg 软件包管理](#106-opkg-软件包管理)
     - [10.7 使用 Web 界面管理软件包](#107-使用-web-界面管理软件包)
     - [10.8 如何恢复原安卓 TV 系统](#108-如何恢复原安卓-tv-系统)
@@ -519,6 +521,8 @@ REPO_BRANCH: openwrt-21.02
 
 ### 10.5 自定义软件默认配置信息
 
+#### 10.5.1 第一种方法是在编译时添加自定义文件
+
 我们在使用的 openwrt 的时候，已经对很多软件进行了配置，这些软件的配置信息大部分都保存在了你的 openwrt 的 /etc/config/ 等相关目录下，把这些配置信息的存储文件复制到 GitHub 中仓库根目录下的 files 文件夹中，请保持目录结构和文件名称相同。在 openwrt 编译时，这些配置信息的存储文件将会被编译到你的固件中，具体做法在 .github/workflows/build-openwrt-system-image.yml 文件中，让我们在一起看看这段代码吧：
 
 ```yaml
@@ -532,6 +536,19 @@ REPO_BRANCH: openwrt-21.02
 ```
 
 请不要复制那些涉及隐私的配置信息文件，如果你的仓库是公开的，那么你放在 files 目录里的文件也是公开的，千万不要把秘密公开。一些密码等信息，可以使用你刚才在 GitHub Actions 快速上手指南里学习到的私钥设置等方法来加密使用。你一定要了解你在做什么。
+
+#### 10.5.2 第二种方法是在打包时添加自定义文件
+
+使用 ophub 打包 OpenWrt 时，使用 `openwrt_files` 参数可以添加或覆盖自定义文件到 ophub 的 [common-files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/make-openwrt/openwrt-files/common-files) 目录。目录结构必须与 OpenWrt 根目录保持一致，以确保文件被正确覆盖到固件中（例如：默认配置文件应存放于 `etc/config/` 子目录下）。设置方法举例：
+
+```yaml
+- name: Packaging OpenWrt
+  uses: ophub/amlogic-s9xxx-openwrt@main
+  with:
+    openwrt_path: openwrt/output/*rootfs.tar.gz
+    openwrt_files: files
+    ...
+```
 
 ### 10.6 Opkg 软件包管理
 

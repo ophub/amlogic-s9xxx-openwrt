@@ -170,7 +170,7 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
 
 相关参数与`本地打包命令`相对应，请参考上面的说明。
 
-| 参数               | 默认值             | 说明                                        |
+| 参数               | 默认值             | 说明                                      |
 |-------------------|-------------------|-------------------------------------------|
 | openwrt_path      | 无                | 设置 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 的文件路径，可以使用相对路径如 `openwrt/bin/targets/*/*/*rootfs.tar.gz` 或网络文件下载地址如 `https://github.com/*/releases/*/*rootfs.tar.gz` |
 | openwrt_board     | all               | 设置打包盒子的 `board` ，功能参考 `-b` |
@@ -180,6 +180,7 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | openwrt_ip        | 192.168.1.1       | 设置 OpenWrt 系统的默认 IP 地址，功能参考 `-p` |
 | openwrt_size      | 256/1024          | 设置系统 BOOTFS 和 ROOTFS 分区的大小，功能参考 `-s` |
+| openwrt_files     | false             | 添加自定义 OpenWrt 文件。设置后，该目录下的所有文件将被复制到 [common-files](make-openwrt/openwrt-files/common-files) 中。目录结构必须与 OpenWrt 根目录保持一致，以确保文件被正确覆盖到固件中（例如：默认配置文件应存放于 `etc/config/` 子目录下）。 |
 | builder_name      | 无                | 设置 OpenWrt 系统构建者签名，功能参考 `-n`     |
 
 

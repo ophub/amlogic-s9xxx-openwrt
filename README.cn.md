@@ -1,3 +1,7 @@
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/5fcf18e1-ed16-49d3-9004-5301ac8d4309" alt="OpenWrt" />
+</div>
+
 # OpenWrt
 
 查看英文说明 | [View English description](README.md)

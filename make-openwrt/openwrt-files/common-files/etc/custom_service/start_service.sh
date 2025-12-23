@@ -116,6 +116,24 @@ if [[ -f "${todo_rootfs_resize}" && "$(cat "${todo_rootfs_resize}" 2>/dev/null |
     log_message "Automatic partition expansion (openwrt-tf) attempted."
 fi
 
+# For nsy-g16-plus/nsy-g68-plus/bdy-g18-pro board
+if [[ "${FDT_FILE}" =~ ^(rk3568-nsy-g16-plus\.dtb|rk3568-nsy-g68-plus\.dtb|rk3568-bdy-g18-pro\.dtb)$ ]]; then
+    (
+        # Unify the MTU to 1500
+        ip link set eth0 mtu 1500
+        ip link set br-lan mtu 1500
+        # Disable network interface offload features
+        ethtool -K eth0 tso off gso off gro off tx off rx off
+
+        # Disable firewall flow offloading
+        uci set firewall.@defaults[0].flow_offloading='0'
+        uci set firewall.@defaults[0].flow_offloading_hw='0'
+        uci commit firewall
+        /etc/init.d/firewall restart
+    ) &
+    log_message "Network optimizations for ${FDT_FILE} applied."
+fi
+
 # Set swap space
 (
     # Wait for disk mount (max 30 seconds)

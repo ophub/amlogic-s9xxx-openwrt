@@ -119,11 +119,20 @@ fi
 # For nsy-g16-plus/nsy-g68-plus/bdy-g18-pro board
 if [[ "${FDT_FILE}" =~ ^(rk3568-nsy-g16-plus\.dtb|rk3568-nsy-g68-plus\.dtb|rk3568-bdy-g18-pro\.dtb)$ ]]; then
     (
-        # Unify the MTU to 1500
-        ip link set eth0 mtu 1500
-        ip link set br-lan mtu 1500
-        # Disable network interface offload features
-        ethtool -K eth0 tso off gso off gro off tx off rx off
+        # Wait for network to be up
+        sleep 10
+
+        # Set MTU to 1500 for eth0 and br-lan
+        set_mtu() {
+            [[ -d "/sys/class/net/${1}" ]] && ip link set "${1}" mtu 1500 >/dev/null 2>&1
+        }
+        set_mtu eth0
+        set_mtu br-lan
+
+        # Close offloading features to improve stability
+        if [[ -d "/sys/class/net/eth0" ]] && command -v ethtool >/dev/null 2>&1; then
+            ethtool -K eth0 tso off gso off gro off tx off rx off >/dev/null 2>&1
+        fi
 
         # Disable firewall flow offloading
         uci set firewall.@defaults[0].flow_offloading='0'

@@ -5303,7 +5303,7 @@ CONFIG_PACKAGE_zlib=y
 # 1. Collections
 #
 CONFIG_PACKAGE_luci=y
-CONFIG_PACKAGE_luci-lib-docker=y
+# CONFIG_PACKAGE_luci-lib-docker is not set
 CONFIG_PACKAGE_luci-light=y
 # CONFIG_PACKAGE_luci-nginx is not set
 # CONFIG_PACKAGE_luci-ssl is not set
@@ -5402,7 +5402,7 @@ CONFIG_PACKAGE_luci-app-attendedsysupgrade=y
 # CONFIG_PACKAGE_luci-app-dawn is not set
 # CONFIG_PACKAGE_luci-app-dcwapd is not set
 CONFIG_PACKAGE_luci-app-ddns=y
-CONFIG_PACKAGE_luci-app-dockerman=y
+# CONFIG_PACKAGE_luci-app-dockerman is not set
 # CONFIG_PACKAGE_luci-app-dump1090 is not set
 # CONFIG_PACKAGE_luci-app-email is not set
 # CONFIG_PACKAGE_luci-app-eoip is not set
@@ -5685,7 +5685,7 @@ CONFIG_PACKAGE_luci-i18n-ddns-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-dockerman-uk is not set
 # CONFIG_PACKAGE_luci-i18n-dockerman-vi is not set
 # CONFIG_PACKAGE_luci-i18n-dockerman-yua is not set
-CONFIG_PACKAGE_luci-i18n-dockerman-zh-cn=y
+# CONFIG_PACKAGE_luci-i18n-dockerman-zh-cn is not set
 # CONFIG_PACKAGE_luci-i18n-dockerman-zh-tw is not set
 # CONFIG_PACKAGE_luci-i18n-firewall-ar is not set
 # CONFIG_PACKAGE_luci-i18n-firewall-bg is not set
@@ -7829,9 +7829,9 @@ CONFIG_PACKAGE_dbus=y
 # CONFIG_PACKAGE_digitemp-usb is not set
 # CONFIG_PACKAGE_dmesg is not set
 # CONFIG_PACKAGE_dmidecode is not set
-CONFIG_PACKAGE_docker=y
-CONFIG_PACKAGE_docker-compose=y
-CONFIG_PACKAGE_dockerd=y
+# CONFIG_PACKAGE_docker is not set
+# CONFIG_PACKAGE_docker-compose is not set
+# CONFIG_PACKAGE_dockerd is not set
 # CONFIG_DOCKER_CHECK_CONFIG is not set
 # CONFIG_DOCKER_CGROUP_OPTIONS is not set
 # CONFIG_DOCKER_OPTIONAL_FEATURES is not set

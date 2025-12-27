@@ -139,43 +139,8 @@ jobs:
           df -Th
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Install Docker
-        id: install
-        working-directory: /builder
-        if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
-        run: |
-          df -hT ${PWD}
-          curl -fsSL https://get.docker.com | sh
-          sudo usermod -aG docker $USER
-          sudo newgrp docker
-          echo "status=success" >> ${GITHUB_OUTPUT}
-
-      - name: Pull Docker Image [ ${{ inputs.docker_image }} ]
-        id: pull
-        working-directory: /builder
-        if: ${{ steps.install.outputs.status }} == 'success' && !cancelled()
-        run: |
-          # Create a docker mapping directory
-          mkdir -p /builder/{compile-kernel/{kernel,output},ccache}
-          ln -sf /builder/compile-kernel/kernel /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/kernel
-          ln -sf /builder/compile-kernel/output /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/output
-
-          # Pull the Armbian Docker image
-          docker run -d --privileged \
-              --name armbian-ophub \
-              -v /builder/compile-kernel:/opt/kernel/compile-kernel \
-              -v /builder/ccache:/root/.ccache \
-              -v /etc/localtime:/etc/localtime:ro \
-              -v /etc/timezone:/etc/timezone:ro \
-              -e CCACHE_DIR=/root/.ccache \
-              --restart=always \
-              ophub/armbian-${{ inputs.docker_image }}:arm64
-
-          echo "status=success" >> ${GITHUB_OUTPUT}
-
       - name: Get kernel source hash
         id: kernelhash
-        if: ${{ steps.pull.outputs.status }} == 'success' && !cancelled()
         run: |
           # Get the latest source hash from the kernel repository
           api_url="https://api.github.com/repos/${{ inputs.kernel_source }}/linux-${{ inputs.kernel_version }}/git/ref/heads/main"
@@ -199,7 +164,7 @@ jobs:
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
-        if: ${{ steps.pull.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
           kernel_source: ${{ inputs.kernel_source }}
@@ -210,6 +175,8 @@ jobs:
           kernel_sign: ${{ inputs.kernel_sign }}
           kernel_toolchain: ${{ inputs.kernel_toolchain }}
           ccache_clear: ${{ inputs.ccache_clear }}
+          docker_hostpath: /builder
+          docker_image: ophub/armbian-${{ inputs.docker_image }}:arm64
 
       - name: Upload Kernel to Release
         uses: ncipollo/release-action@main

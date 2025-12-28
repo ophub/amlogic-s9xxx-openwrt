@@ -105,7 +105,8 @@ runs:
         [[ -n "${{ inputs.openwrt_ip }}" ]] && make_command="${make_command} -p ${{ inputs.openwrt_ip }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
         [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
-        sudo ./remake ${make_command}
+        read -r -a make_args <<< "${make_command}"
+        sudo ./remake "${make_args[@]}"
 
         cd ${{ github.action_path }}
         # Copy OpenWrt rootfs.tar.gz file to the output directory

@@ -296,7 +296,7 @@ check_data() {
             >${model_txt}
 
     # Get a list of build devices
-    if [[ "${make_board}" =~ ^(all|top55|after55)$ ]]; then
+    if [[ "${make_board}" =~ ^(all|first55|from55|last20)$ ]]; then
         board_list=":(yes)"
         make_openwrt=($(
             cat ${model_conf} |
@@ -311,13 +311,18 @@ check_data() {
     [[ "${#make_openwrt[@]}" -eq 0 ]] && error_msg "The board is missing, stop making."
 
     # Get the list of boards before the first 55
-    [[ "${make_board}" == "top55" ]] && {
+    [[ "${make_board}" == "first55" ]] && {
         make_openwrt=("${make_openwrt[@]:0:55}")
         board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
     }
     # Get the list of boards after the first 55
-    [[ "${make_board}" == "after55" ]] && {
+    [[ "${make_board}" == "from55" ]] && {
         make_openwrt=("${make_openwrt[@]:55}")
+        board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
+    }
+    # Get the list of boards after the last 20
+    [[ "${make_board}" == "last20" ]] && {
+        make_openwrt=("${make_openwrt[@]: -20}")
         board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
     }
 

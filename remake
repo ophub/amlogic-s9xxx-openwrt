@@ -477,11 +477,11 @@ download_depends() {
     # Download Armbian repository files
     git_path="$(mktemp -d)"
     git_pull_dir ${depends_repo} main ${git_path}
+    # Remove the special files in the [ sbin ] directory of the Armbian system
+    find "${git_path}" -type d -path "*/platform-files/*/rootfs/usr/sbin" -prune -exec rm -rf {} +
     # Move the platform files to the storage directory
     cp -af --no-preserve=ownership ${git_path}/build-armbian/armbian-files/platform-files/. ${platform_files}
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: platform-files download completed." || error_msg "OpenWrt: platform-files download failed."
-    # Remove the special files in the [ sbin ] directory of the Armbian system
-    rm -rf $(find ${platform_files} -type d -name "sbin")
     # Move the different files to the storage directory
     cp -af --no-preserve=ownership ${git_path}/build-armbian/armbian-files/different-files/. ${different_files}
     [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: different-files download completed." || error_msg "OpenWrt: different-files download failed."

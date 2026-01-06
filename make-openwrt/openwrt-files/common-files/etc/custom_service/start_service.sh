@@ -84,15 +84,19 @@ if [[ -x "/usr/sbin/balethirq.pl" ]]; then
 fi
 
 # Led display control, Only for Amlogic devices (meson-*) with valid boxid.
-openvfd_enable="no"
-openvfd_boxid="15"
+openvfd_enable="no"  # yes or no, set to "yes" to enable OpenVFD service.
+openvfd_boxid="15"   # Set the boxid according to your device. Refer to the documentation for details.
+openvfd_restart="no" # yes or no, set to "yes" to restart the OpenVFD service.
 if [[ "${openvfd_boxid}" != "0" && "${FDT_FILE}" =~ ^meson- ]]; then
     (
-        # Always try to turn off first
-        openwrt-openvfd "0" >/dev/null 2>&1
-        sleep 3
-        # Then turn on if enabled
+        # Start OpenVFD service
         [[ "${openvfd_enable}" == "yes" ]] && openwrt-openvfd "${openvfd_boxid}" >/dev/null 2>&1
+        # Some devices require a restart to clear 'BOOT' and related messages
+        [[ "${openvfd_restart}" == "yes" ]] && {
+            openwrt-openvfd "0" >/dev/null 2>&1
+            sleep 3
+            openwrt-openvfd "${openvfd_boxid}" >/dev/null 2>&1
+        }
         log_message "OpenVFD service execution attempted."
     ) &
 fi

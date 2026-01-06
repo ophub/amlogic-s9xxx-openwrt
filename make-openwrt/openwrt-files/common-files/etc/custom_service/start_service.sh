@@ -12,7 +12,7 @@
 # Dependent script: /etc/rc.local
 # File path: /etc/custom_service/start_service.sh
 #
-# Version: 1.1
+# Version: 1.3
 #
 #========================================================================================
 
@@ -28,12 +28,12 @@ log_message "Start the custom service..."
 # System Identification
 # Set the release check file to identify the device type.
 ophub_release_file="/etc/ophub-release"
-FDT_FILE="" # Initialize FDT_FILE to be empty.
+FDT_FILE=""
 
-[[ -f "${ophub_release_file}" ]] && { FDT_FILE="$(grep -oE 'meson.*dtb' "${ophub_release_file}")"; }
-[[ -z "${FDT_FILE}" && -f "/boot/uEnv.txt" ]] && { FDT_FILE="$(grep -E '^FDT=.*\.dtb$' /boot/uEnv.txt | sed -E 's#.*/##')"; }
-[[ -z "${FDT_FILE}" && -f "/boot/extlinux/extlinux.conf" ]] && { FDT_FILE="$(grep -E '/dtb/.*\.dtb$' /boot/extlinux/extlinux.conf | sed -E 's#.*/##')"; }
-[[ -z "${FDT_FILE}" && -f "/boot/armbianEnv.txt" ]] && { FDT_FILE="$(grep -E '^fdtfile=.*\.dtb$' /boot/armbianEnv.txt | sed -E 's#.*/##')"; }
+[[ -f "${ophub_release_file}" ]] && { FDT_FILE="$(grep -oE 'meson.*dtb' "${ophub_release_file}" || true)"; }
+[[ -z "${FDT_FILE}" && -f "/boot/uEnv.txt" ]] && { FDT_FILE="$(grep -E '^FDT=.*\.dtb$' /boot/uEnv.txt | sed -E 's#.*/##' || true)"; }
+[[ -z "${FDT_FILE}" && -f "/boot/extlinux/extlinux.conf" ]] && { FDT_FILE="$(grep -E '/dtb/.*\.dtb$' /boot/extlinux/extlinux.conf | sed -E 's#.*/##' || true)"; }
+[[ -z "${FDT_FILE}" && -f "/boot/armbianEnv.txt" ]] && { FDT_FILE="$(grep -E '^fdtfile=.*\.dtb$' /boot/armbianEnv.txt | sed -E 's#.*/##' || true)"; }
 log_message "Detected FDT file: ${FDT_FILE:-'not found'}"
 
 # Find the partition where the root filesystem is located.
@@ -69,7 +69,7 @@ if [[ -n "${ROOT_PTNAME}" ]]; then
     esac
 
     if [[ -n "${DISK_NAME}" ]]; then
-        # The 4th partition is assumed for swap/data.
+        # The 4th partition is assumed for swap/data based on Ophub's layout.
         PARTITION_PATH="/mnt/${DISK_NAME}${PARTITION_NAME}4"
         log_message "Derived disk name: ${DISK_NAME}. Target data partition path: ${PARTITION_PATH}"
     fi
@@ -83,17 +83,23 @@ if [[ -x "/usr/sbin/balethirq.pl" ]]; then
     log_message "Network optimization service (balethirq.pl) execution attempted."
 fi
 
-# Led display control
+# Led display control, Only for Amlogic devices (meson-*) with valid boxid.
 openvfd_enable="no"
 openvfd_boxid="15"
-if [[ "${openvfd_enable}" == "yes" && -n "${openvfd_boxid}" && -x "/usr/sbin/openwrt-openvfd" ]]; then
-    (openwrt-openvfd "${openvfd_boxid}" >/dev/null 2>&1) &
-    log_message "OpenVFD service execution attempted."
+if [[ "${openvfd_boxid}" != "0" && "${FDT_FILE}" =~ ^meson- ]]; then
+    (
+        # Always try to turn off first
+        openwrt-openvfd "0" >/dev/null 2>&1
+        sleep 3
+        # Then turn on if enabled
+        [[ "${openvfd_enable}" == "yes" ]] && openwrt-openvfd "${openvfd_boxid}" >/dev/null 2>&1
+        log_message "OpenVFD service execution attempted."
+    ) &
 fi
 
 # For vplus(Allwinner h6) led color lights
 if [[ -x "/usr/bin/rgb-vplus" ]]; then
-    rgb-vplus --RedName=RED --GreenName=GREEN --BlueName=BLUE &
+    rgb-vplus --RedName=RED --GreenName=GREEN --BlueName=BLUE >/dev/null 2>&1 &
     log_message "Vplus RGB LED service started in background."
 fi
 
@@ -116,7 +122,7 @@ if [[ -f "${todo_rootfs_resize}" && "$(cat "${todo_rootfs_resize}" 2>/dev/null |
     log_message "Automatic partition expansion (openwrt-tf) attempted."
 fi
 
-# For nsy-g16-plus/nsy-g68-plus/bdy-g18-pro board
+# For nsy-g16-plus/nsy-g68-plus/bdy-g18-pro board (Rockchip)
 if [[ "${FDT_FILE}" =~ ^(rk3568-nsy-g16-plus\.dtb|rk3568-nsy-g68-plus\.dtb|rk3568-bdy-g18-pro\.dtb)$ ]]; then
     (
         # Wait for network to be up
@@ -134,7 +140,7 @@ if [[ "${FDT_FILE}" =~ ^(rk3568-nsy-g16-plus\.dtb|rk3568-nsy-g68-plus\.dtb|rk356
             ethtool -K eth0 tso off gso off gro off tx off rx off >/dev/null 2>&1
         fi
 
-        # Disable firewall flow offloading
+        # Disable firewall flow offloading (OpenWrt specific)
         uci set firewall.@defaults[0].flow_offloading='0'
         uci set firewall.@defaults[0].flow_offloading_hw='0'
         uci commit firewall
@@ -146,7 +152,7 @@ fi
 # Set swap space
 (
     # Wait for disk mount (max 30 seconds)
-    for i in {1..10}; do
+    for i in $(seq 1 10); do
         [[ -d "${PARTITION_PATH}" ]] && break
         sleep 3
     done
@@ -157,24 +163,25 @@ fi
         if [[ -f "${swap_check_file}" ]]; then
             log_message "Swap file found at ${swap_check_file}. Attempting to enable."
 
-            # 'local' keyword removed, as we are in the main script body.
-            swap_loopdev="$(losetup -f)"
+            # Find first unused loop device
+            swap_loopdev="$(losetup -f 2>/dev/null)"
+
             if [[ -z "${swap_loopdev}" ]]; then
                 log_message "Error: Could not find a free loop device. Skipping swap setup."
             else
-                # Only proceed if a loop device was found.
-                # The '&&' ensures that 'swapon' is only attempted if 'losetup' succeeds.
+                # Try to setup loop device and enable swap
                 if losetup "${swap_loopdev}" "${swap_check_file}" && swapon "${swap_loopdev}"; then
                     log_message "Swap file enabled successfully on ${swap_loopdev}."
                 else
-                    # If the chain fails at any point, log the error and clean up.
+                    # Cleanup if failed
                     log_message "Error: Failed to setup swap on ${swap_loopdev}. Cleaning up..."
-                    losetup -d "${swap_loopdev}" 2>/dev/null # Attempt to detach the loop device.
+                    losetup -d "${swap_loopdev}" 2>/dev/null
                 fi
             fi
         fi
     else
-        log_message "Warning: Swap partition path '${PARTITION_PATH}' does not exist."
+        # This is not an error, just means no external partition is mounted
+        log_message "Info: Target swap partition '${PARTITION_PATH}' not mounted or found."
     fi
 ) &
 

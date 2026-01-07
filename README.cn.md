@@ -233,6 +233,7 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
 
 - [unifreq](https://github.com/unifreq/openwrt_packit) 为晶晨、瑞芯微和全志等更多盒子制作了 `OpenWrt` 系统，属于盒子圈的标杆，推荐使用。
 - [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 项目提供了在盒子中使用的 `Armbian` 系统，在支持 OpenWrt 的相关设备中同样适用。
+- [fnnas](https://github.com/ophub/fnnas) 项目提供了在盒子中使用的 `FnNAS` 系统，在支持 OpenWrt 的相关设备中同样适用。
 
 ## 链接
 

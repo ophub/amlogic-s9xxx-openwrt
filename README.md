@@ -232,6 +232,7 @@ The [u-boot](https://github.com/ophub/u-boot), [kernel](https://github.com/ophub
 
 - [unifreq](https://github.com/unifreq/openwrt_packit) has made `OpenWrt` systems for more boxes such as Amlogic, Rockchip, and Allwinner. It is a benchmark in the box circle, recommended for use.
 - The [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) project provides the `Armbian` system used in the box, which is also applicable in devices that support OpenWrt.
+- The [fnnas](https://github.com/ophub/fnnas) project provides the `FnNAS` system used in the box, which is also applicable to devices that support OpenWrt.
 
 ## Links
 

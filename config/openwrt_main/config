@@ -1818,7 +1818,6 @@ CONFIG_ZABBIX_POSTGRESQL=y
 # CONFIG_PACKAGE_zabbix-sender-gnutls is not set
 # CONFIG_PACKAGE_zabbix-sender-openssl is not set
 # CONFIG_PACKAGE_zabbix-server is not set
-# CONFIG_PACKAGE_zabbix-server-frontend is not set
 # CONFIG_PACKAGE_zabbix-server-gnutls is not set
 # CONFIG_PACKAGE_zabbix-server-openssl is not set
 # end of Zabbix
@@ -2356,6 +2355,7 @@ CONFIG_PACKAGE_kmod-gpio-pca953x=y
 # CONFIG_PACKAGE_kmod-hwmon-ad7418 is not set
 # CONFIG_PACKAGE_kmod-hwmon-adcxx is not set
 # CONFIG_PACKAGE_kmod-hwmon-adt7410 is not set
+# CONFIG_PACKAGE_kmod-hwmon-adt7470 is not set
 # CONFIG_PACKAGE_kmod-hwmon-adt7475 is not set
 CONFIG_PACKAGE_kmod-hwmon-core=y
 # CONFIG_PACKAGE_kmod-hwmon-dme1737 is not set
@@ -2391,6 +2391,7 @@ CONFIG_PACKAGE_kmod-hwmon-core=y
 # CONFIG_PACKAGE_kmod-hwmon-vid is not set
 # CONFIG_PACKAGE_kmod-hwmon-w83793 is not set
 # CONFIG_PACKAGE_kmod-pmbus-core is not set
+# CONFIG_PACKAGE_kmod-pmbus-sensors is not set
 # CONFIG_PACKAGE_kmod-pmbus-zl6100 is not set
 # end of Hardware Monitoring Support
 
@@ -2773,6 +2774,7 @@ CONFIG_PACKAGE_kmod-phy-marvell-10g=y
 # CONFIG_PACKAGE_kmod-phy-maxlinear is not set
 # CONFIG_PACKAGE_kmod-phy-micrel is not set
 # CONFIG_PACKAGE_kmod-phy-microchip is not set
+# CONFIG_PACKAGE_kmod-phy-motorcomm is not set
 # CONFIG_PACKAGE_kmod-phy-qca83xx is not set
 # CONFIG_PACKAGE_kmod-phy-realtek is not set
 # CONFIG_PACKAGE_kmod-phy-rtl8261n is not set
@@ -3431,7 +3433,6 @@ CONFIG_LUA_ECO_OPENSSL=y
 # CONFIG_PACKAGE_lua-ffi-lua5.3 is not set
 # CONFIG_PACKAGE_lua-ffi-lua5.4 is not set
 # CONFIG_PACKAGE_lua-libmodbus is not set
-# CONFIG_PACKAGE_lua-lzlib is not set
 # CONFIG_PACKAGE_lua-md5 is not set
 # CONFIG_PACKAGE_lua-mobdebug is not set
 # CONFIG_PACKAGE_lua-mosquitto is not set
@@ -3485,11 +3486,6 @@ CONFIG_HAS_LUAJIT_ARCH=y
 # PHP8
 #
 # CONFIG_PACKAGE_php8 is not set
-CONFIG_PHP8_LIBXML=y
-CONFIG_PHP8_DOM=y
-CONFIG_PHP8_GETTEXT=y
-CONFIG_PHP8_INTL=y
-# CONFIG_PHP8_FULLICUDATA is not set
 # end of PHP8
 
 #
@@ -3836,6 +3832,7 @@ CONFIG_PACKAGE_python3-logging=y
 # CONFIG_PACKAGE_python3-paho-mqtt is not set
 # CONFIG_PACKAGE_python3-paramiko is not set
 # CONFIG_PACKAGE_python3-passlib is not set
+# CONFIG_PACKAGE_python3-pika is not set
 # CONFIG_PACKAGE_python3-pillow is not set
 # CONFIG_PACKAGE_python3-pip is not set
 # CONFIG_PACKAGE_python3-pkg-resources is not set
@@ -3961,6 +3958,7 @@ CONFIG_PACKAGE_ucode=y
 # CONFIG_PACKAGE_ucode-mod-debug is not set
 CONFIG_PACKAGE_ucode-mod-digest=y
 CONFIG_PACKAGE_ucode-mod-fs=y
+# CONFIG_PACKAGE_ucode-mod-io is not set
 CONFIG_PACKAGE_ucode-mod-log=y
 CONFIG_PACKAGE_ucode-mod-math=y
 CONFIG_PACKAGE_ucode-mod-nl80211=y
@@ -4597,6 +4595,7 @@ CONFIG_PACKAGE_libopenssl=y
 #
 # CONFIG_OPENSSL_OPTIMIZE_SPEED is not set
 # CONFIG_OPENSSL_SMALL_FOOTPRINT is not set
+# CONFIG_OPENSSL_KTLS is not set
 CONFIG_OPENSSL_WITH_ASM=y
 CONFIG_OPENSSL_WITH_DEPRECATED=y
 # CONFIG_OPENSSL_NO_DEPRECATED is not set
@@ -5171,6 +5170,8 @@ CONFIG_PACKAGE_libss=y
 # CONFIG_PACKAGE_libsysrepo is not set
 # CONFIG_PACKAGE_libtalloc is not set
 CONFIG_PACKAGE_libtasn1=y
+# CONFIG_PACKAGE_libteam is not set
+# CONFIG_PACKAGE_libteamdctl is not set
 # CONFIG_PACKAGE_libtheora is not set
 # CONFIG_PACKAGE_libtiff is not set
 # CONFIG_PACKAGE_libtins is not set
@@ -6272,7 +6273,6 @@ CONFIG_PACKAGE_ddns-scripts=y
 # CONFIG_PACKAGE_ddns-scripts-ns1 is not set
 # CONFIG_PACKAGE_ddns-scripts-nsupdate is not set
 # CONFIG_PACKAGE_ddns-scripts-one is not set
-# CONFIG_PACKAGE_ddns-scripts-ovh is not set
 # CONFIG_PACKAGE_ddns-scripts-pdns is not set
 # CONFIG_PACKAGE_ddns-scripts-porkbun is not set
 # CONFIG_PACKAGE_ddns-scripts-route53 is not set
@@ -6767,8 +6767,7 @@ CONFIG_PACKAGE_frps=y
 # CONFIG_PACKAGE_nginx-ssl-util is not set
 # CONFIG_PACKAGE_nginx-ssl-util-nopcre is not set
 # CONFIG_PACKAGE_privoxy is not set
-# CONFIG_PACKAGE_radicale2 is not set
-# CONFIG_PACKAGE_radicale2-examples is not set
+# CONFIG_PACKAGE_radicale3 is not set
 # CONFIG_PACKAGE_sockd is not set
 # CONFIG_PACKAGE_socksify is not set
 # CONFIG_PACKAGE_spawn-fcgi is not set
@@ -7125,6 +7124,9 @@ CONFIG_PACKAGE_samba4-utils=y
 # CONFIG_PACKAGE_tayga is not set
 # CONFIG_PACKAGE_tcpdump is not set
 # CONFIG_PACKAGE_tcpdump-mini is not set
+# CONFIG_PACKAGE_teamd is not set
+# CONFIG_PACKAGE_teamdctl is not set
+# CONFIG_PACKAGE_teamnl is not set
 # CONFIG_PACKAGE_telnet-bsd is not set
 # CONFIG_PACKAGE_tgt is not set
 # CONFIG_PACKAGE_tmate-ssh-server is not set
@@ -8079,7 +8081,6 @@ CONFIG_PACKAGE_ucode-mod-lua=y
 # CONFIG_PACKAGE_ufp-neigh is not set
 # CONFIG_PACKAGE_ugps is not set
 # CONFIG_PACKAGE_uhubctl is not set
-# CONFIG_PACKAGE_uledd is not set
 # CONFIG_PACKAGE_unetmsg is not set
 # CONFIG_PACKAGE_unix2dos is not set
 # CONFIG_PACKAGE_unshare is not set

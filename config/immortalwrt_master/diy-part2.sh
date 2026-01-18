@@ -63,9 +63,9 @@ git clone https://github.com/zzsj0928/luci-app-pushbot package/luci-app-pushbot
 
 # 1. 处理 Golang 环境 (MosDNS v5 需要新版 Go)
 # 移除源码自带的旧版 Go
-rm -rf feeds/packages/lang/golang
+# rm -rf feeds/packages/lang/golang
 # 拉取 sbwml 维护的新版 Go (22.x/23.x/24.x 分支通常通用，这里用 24.x)
-git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
+# git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
 
 # 2. 处理 v2ray-geodata (防止与 feeds 中的旧版本冲突)
 # 移除 feeds 里的 geodata

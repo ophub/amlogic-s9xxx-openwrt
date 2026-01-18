@@ -5630,6 +5630,7 @@ CONFIG_PACKAGE_luci-app-amlogic=y
 # CONFIG_PACKAGE_luci-app-apinger is not set
 # CONFIG_PACKAGE_luci-app-appfilter is not set
 CONFIG_PACKAGE_luci-app-argon-config=y
+CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=y
 # CONFIG_PACKAGE_luci-app-aria2 is not set
 # CONFIG_PACKAGE_luci-app-arpbind is not set
 CONFIG_PACKAGE_luci-app-attendedsysupgrade=y
@@ -7011,7 +7012,7 @@ CONFIG_PACKAGE_frps=y
 # CONFIG_PACKAGE_kcptun-config is not set
 # CONFIG_PACKAGE_kcptun-server is not set
 # CONFIG_PACKAGE_librespeed-go is not set
-# CONFIG_PACKAGE_lighttpd is not set
+CONFIG_PACKAGE_lighttpd=y
 # CONFIG_PACKAGE_microsocks is not set
 # CONFIG_PACKAGE_naiveproxy is not set
 # CONFIG_PACKAGE_nginx-full is not set
@@ -8504,7 +8505,6 @@ CONFIG_PACKAGE_whereis=y
 # end of Font-Utils
 # end of Xorg
 
-CONFIG_PACKAGE_luci-app-store=y
 
 # 1. 选中 TurboACC 主程序
 CONFIG_PACKAGE_luci-app-turboacc=y

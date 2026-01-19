@@ -80,6 +80,28 @@ git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 # ---------- MosDNS v5 编译准备 (结束) ----------
 
+# ----------  luci-app-store ---------- 
+# 1. 移除可能存在的冲突包（防止 feeds 和手动 clone 同时存在）
+rm -rf feeds/luci/applications/luci-app-store
+
+# 2. 拉取 iStore 官方源码到本地 package 目录
+# 这一步会将整个仓库下载到 package/istore，包含子目录 luci/luci-app-store 等
+git clone https://github.com/linkease/istore package/istore
+
+# 3. 批量修复 Makefile 版本号问题
+# 使用 find 命令查找 package/istore 下所有子目录中的 Makefile
+for f in $(find package/istore -name Makefile); do
+    # 修复：去掉版本号里不合规的 "-1" (例如 0.1.32-1 -> 0.1.32)
+    sed -i 's/PKG_VERSION:=0.1.32-1/PKG_VERSION:=0.1.32/g' "$f"
+    
+    # 预防性修复：如果未来版本变成 0.1.33-1 等其他数字，也可以用通用的正则修复
+    # 下面这行是进阶写法，上面的指定版本写法更安全，二选一即可，建议保留上面的
+    # sed -i 's/PKG_VERSION:=\([0-9.]\+\)-[0-9]\+/PKG_VERSION:=\1/g' "$f"
+done
+# ----------  luci-app-store ----------
+
+# adguardhome
+git clone https://github.com/ColdDewLy/luci-app-adguardhome.git package/luci-app-adguardhome
 
 # ---------------------------------------------------------
 # 自定义 LAN 口默认配置 (在第一次开机时生效)

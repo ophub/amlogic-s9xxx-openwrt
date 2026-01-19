@@ -7013,6 +7013,8 @@ CONFIG_PACKAGE_frps=y
 # CONFIG_PACKAGE_kcptun-server is not set
 # CONFIG_PACKAGE_librespeed-go is not set
 CONFIG_PACKAGE_lighttpd=y
+CONFIG_PACKAGE_lighttpd-mod-redirect=y
+CONFIG_PACKAGE_lighttpd-mod-proxy=y
 # CONFIG_PACKAGE_microsocks is not set
 # CONFIG_PACKAGE_naiveproxy is not set
 # CONFIG_PACKAGE_nginx-full is not set

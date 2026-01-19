@@ -53,11 +53,14 @@ git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 # git apply ../config/patches/{0001*,0002*}.patch --directory=feeds/luci
 #
 # ------------------------------- Other ends -------------------------------
+
+
+# Add Turbo ACC 网络加速
 curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
-
-
+# Add luci-app-pushbot
 git clone https://github.com/zzsj0928/luci-app-pushbot package/luci-app-pushbot
-
+# adguardhome
+git clone https://github.com/ColdDewLy/luci-app-adguardhome.git package/luci-app-adguardhome
 
 # ---------- MosDNS v5 编译准备 (开始) ----------
 
@@ -80,7 +83,8 @@ git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 # ---------- MosDNS v5 编译准备 (结束) ----------
 
-# ----------  luci-app-store ---------- 
+
+# ----------  luci-app-store start ---------- 
 # 1. 移除可能存在的冲突包（防止 feeds 和手动 clone 同时存在）
 rm -rf feeds/luci/applications/luci-app-store
 
@@ -98,53 +102,11 @@ for f in $(find package/istore -name Makefile); do
     # 下面这行是进阶写法，上面的指定版本写法更安全，二选一即可，建议保留上面的
     # sed -i 's/PKG_VERSION:=\([0-9.]\+\)-[0-9]\+/PKG_VERSION:=\1/g' "$f"
 done
-# ----------  luci-app-store ----------
-
-# adguardhome
-git clone https://github.com/ColdDewLy/luci-app-adguardhome.git package/luci-app-adguardhome
-
-# ---------------------------------------------------------
-# 自定义 LAN 口默认配置 (在第一次开机时生效)
-# ---------------------------------------------------------
-
-# 1. 创建 uci-defaults 目录 (如果不存在)
-mkdir -p files/etc/uci-defaults
-
-# 2. 生成自定义网络配置脚本 '99-custom-network'
-# EOF 里的内容即为开机自动执行的命令
-cat > files/etc/uci-defaults/99-custom-network << "EOF"
-#!/bin/sh
-
-# 设置 LAN 口 IP 地址
-uci set network.lan.ipaddr='10.0.0.2'
-
-# 设置子网掩码
-uci set network.lan.netmask='255.255.255.0'
-
-# 设置 DNS (多个 DNS 用空格分开)
-uci set network.lan.dns='223.5.5.5 1.1.1.1'
-
-# 设置 IPv6 分配长度
-uci set network.lan.ip6assign='64'
-
-# --- 关键：物理接口与桥接设置 ---
-# 如果你想强制指定 eth0 并不使用桥接 (br-lan)，取消下面几行的注释：
-uci set network.lan.device='eth0'
-# uci delete network.lan.type   # 删除桥接类型
-
-# 如果你想保持默认的桥接模式 (推荐，兼容性更好)，但确保包含 eth0：
-# 新版 OpenWrt (DSA 架构) 通常不需要手动指定 eth0，系统会自动识别
-# 但为了保险，可以强制设置：
-uci set network.lan.proto='static'
-
-# 提交应用更改
-uci commit network
-
-# 重启网络服务 (可选，让设置立即生效，但在启动过程中通常不需要)
-# /etc/init.d/network restart
-
-exit 0
-EOF
+# ----------  luci-app-store end ----------
 
 # 3. 赋予脚本可执行权限 (虽然 uci-defaults 不需要 x 权限也能跑，但习惯加上)
-chmod +x files/etc/uci-defaults/99-custom-network
+chmod +x files/etc/uci-defaults/99-custom
+
+
+# 设置默认主题为 Argon
+sed -i 's/luci.main.mediaurlbase=\/luci-static\/.*$/luci.main.mediaurlbase=\/luci-static\/argon/g' feeds/luci/modules/luci-base/root/etc/config/luci

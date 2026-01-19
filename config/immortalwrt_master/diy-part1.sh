@@ -8,8 +8,6 @@
 
 # Add a feed source
 # sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
-# 添加 TurboACC 源
-echo 'src-git turboacc https://github.com/chenmozhijin/turboacc.git;luci' >> feeds.conf.default
 
 # other
 # rm -rf package/emortal/{autosamba,ipv6-helper}

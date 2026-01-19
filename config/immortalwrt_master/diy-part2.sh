@@ -70,6 +70,8 @@ git clone https://github.com/zzsj0928/luci-app-pushbot package/luci-app-pushbot
 # 2. 处理 v2ray-geodata (防止与 feeds 中的旧版本冲突)
 # 移除 feeds 里的 geodata
 rm -rf feeds/packages/net/v2ray-geodata
+rm -rf feeds/packages/net/mosdns
+rm -rf feeds/luci/applications/luci-app-mosdns
 
 # 3. 拉取 MosDNS v5 和 对应的 Geodata 到本地 package 目录
 # 这样可以确保拥有最高优先级

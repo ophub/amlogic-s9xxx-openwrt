@@ -12,7 +12,7 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "openwrt_main"
+        default: "immortalwrt_master"
         type: choice
         options:
           - openwrt_main
@@ -21,15 +21,16 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "all"
+        default: "s905d"
         type: choice
         options:
           - s905d
+          - all
           
       openwrt_kernel:
         description: "Select kernel version"
         required: false
-        default: "6.1.y_6.12.y"
+        default: "6.12.y"
         type: choice
         options:
           - 5.10.y
@@ -66,7 +67,7 @@ on:
       openwrt_ip:
         description: "Set OpenWrt default IP address."
         required: false
-        default: "192.168.1.1"
+        default: "10.0.0.1"
       use_ccache:
         description: "Auto use ccache."
         required: false
@@ -83,7 +84,7 @@ on:
       builder_name:
         description: "Set OpenWrt builder signature."
         required: false
-        default: "ophub"
+        default: "colddew"
         type: choice
         options:
           - colddew

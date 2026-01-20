@@ -32,6 +32,10 @@ uci set network.lan.device='eth0'
 # 但为了保险，可以强制设置：
 uci set network.lan.proto='static'
 
+
+# 设置默认主题为 Argon
+uci set luci.main.mediaurlbase='/luci-static/argon'
+
 # 提交应用更改
 uci commit network
 

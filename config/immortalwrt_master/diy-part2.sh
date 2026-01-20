@@ -106,7 +106,3 @@ done
 
 # 3. 赋予脚本可执行权限 (虽然 uci-defaults 不需要 x 权限也能跑，但习惯加上)
 chmod +x files/etc/uci-defaults/99-custom
-
-
-# 设置默认主题为 Argon
-sed -i 's/luci.main.mediaurlbase=\/luci-static\/.*$/luci.main.mediaurlbase=\/luci-static\/argon/g' feeds/luci/modules/luci-base/root/etc/config/luci

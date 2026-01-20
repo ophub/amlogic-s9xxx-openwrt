@@ -7457,7 +7457,7 @@ CONFIG_PACKAGE_vlmcsd=y
 # CONFIG_PACKAGE_vnstat is not set
 # CONFIG_PACKAGE_vnstat2 is not set
 # CONFIG_PACKAGE_vxlan is not set
-# CONFIG_PACKAGE_wakeonlan is not set
+CONFIG_PACKAGE_wakeonlan=y
 # CONFIG_PACKAGE_wg-installer-client is not set
 # CONFIG_PACKAGE_wg-installer-server is not set
 # CONFIG_PACKAGE_wifi-presence is not set

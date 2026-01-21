@@ -241,7 +241,7 @@ on:
       openwrt_ip:
         description: "Set OpenWrt default IP address."
         required: false
-        default: "192.168.1.1"
+        default: "192.168.10.1"
       use_ccache:
         description: "Auto use ccache."
         required: false

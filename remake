@@ -296,7 +296,7 @@ check_data() {
             >${model_txt}
 
     # Get a list of build devices
-    if [[ "${make_board}" =~ ^(all|first50|from50|last20)$ ]]; then
+    if [[ "${make_board}" =~ ^(all|first50|range50_100|range100_150|last20)$ ]]; then
         board_list=":(yes)"
         make_openwrt=($(
             cat ${model_conf} |
@@ -310,14 +310,19 @@ check_data() {
     fi
     [[ "${#make_openwrt[@]}" -eq 0 ]] && error_msg "The board is missing, stop making."
 
-    # Select the first 50 boards (Index 0-49)
+    # Select the first 50 boards
     [[ "${make_board}" == "first50" ]] && {
         make_openwrt=("${make_openwrt[@]:0:50}")
         board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
     }
-    # Select the remaining boards starting from the 51st (Skip first 50)
-    [[ "${make_board}" == "from50" ]] && {
-        make_openwrt=("${make_openwrt[@]:50}")
+    # Select the boards from 51st to 100th
+    [[ "${make_board}" == "range50_100" ]] && {
+        make_openwrt=("${make_openwrt[@]:50:50}")
+        board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
+    }
+    # Select the boards from 101st to 150th
+    [[ "${make_board}" == "range100_150" ]] && {
+        make_openwrt=("${make_openwrt[@]:100:50}")
         board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
     }
     # Select the last 20 boards

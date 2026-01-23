@@ -126,7 +126,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+    if: ${{ github.event.repository.owner.id == github.event.sender.id }}
 
     steps:
       - name: Checkout
@@ -180,7 +180,7 @@ jobs:
       - name: Download OpenWrt rootfs file
         id: download
         working-directory: /builder
-        if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.init.outputs.status == 'success' && !cancelled() }}
         run: |
           # Create download directory
           armsr_tarfile_path="opt/download"
@@ -225,7 +225,7 @@ jobs:
 
       - name: Package OpenWrt Firmware
         uses: ophub/flippy-openwrt-actions@main
-        if: ${{ steps.download.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.download.outputs.status == 'success' && !cancelled() }}
         env:
           OPENWRT_ARMSR: opt/download/*rootfs.tar.gz
           PACKAGE_SOC: ${{ inputs.openwrt_soc }}
@@ -239,7 +239,7 @@ jobs:
 
       - name: Upload OpenWrt Firmware to Release
         uses: ncipollo/release-action@main
-        if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
+        if: ${{ env.PACKAGED_STATUS == 'success' && !cancelled() }}
         with:
           tag: ${{ env.build_tag }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*

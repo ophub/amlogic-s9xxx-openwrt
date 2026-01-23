@@ -296,7 +296,7 @@ check_data() {
             >${model_txt}
 
     # Get a list of build devices
-    if [[ "${make_board}" =~ ^(all|first50|from50|last20)$ ]]; then
+    if [[ "${make_board}" =~ ^(all|first50|range50_100|range100_150|last20)$ ]]; then
         board_list=":(yes)"
         make_openwrt=($(
             cat ${model_conf} |
@@ -310,14 +310,19 @@ check_data() {
     fi
     [[ "${#make_openwrt[@]}" -eq 0 ]] && error_msg "The board is missing, stop making."
 
-    # Select the first 50 boards (Index 0-49)
+    # Select the first 50 boards
     [[ "${make_board}" == "first50" ]] && {
         make_openwrt=("${make_openwrt[@]:0:50}")
         board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
     }
-    # Select the remaining boards starting from the 51st (Skip first 50)
-    [[ "${make_board}" == "from50" ]] && {
-        make_openwrt=("${make_openwrt[@]:50}")
+    # Select the boards from 51st to 100th
+    [[ "${make_board}" == "range50_100" ]] && {
+        make_openwrt=("${make_openwrt[@]:50:50}")
+        board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
+    }
+    # Select the boards from 101st to 150th
+    [[ "${make_board}" == "range100_150" ]] && {
+        make_openwrt=("${make_openwrt[@]:100:50}")
         board_list=":($(echo ${make_openwrt[@]} | sed -e 's/ /\|/g')):(yes|no)"
     }
     # Select the last 20 boards
@@ -455,24 +460,30 @@ download_depends() {
     echo -e "${STEPS} Start downloading dependency files..."
 
     # Download u-boot files
-    git_path="$(mktemp -d)"
-    git_pull_dir ${uboot_repo} main ${git_path}
-    # Move the u-boot files to the storage directory
-    mkdir -p ${uboot_path}
-    cp -af --no-preserve=ownership ${git_path}/u-boot/. ${uboot_path}
-    [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: u-boot download completed." || error_msg "OpenWrt: u-boot download failed."
-    # Delete temporary files
-    rm -rf ${git_path}
+    uboot_num="$(find "${uboot_path}/rockchip" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)"
+    [[ -n "${uboot_num}" && "${uboot_num}" -le "5" ]] && {
+        git_path="$(mktemp -d)"
+        git_pull_dir ${uboot_repo} main ${git_path}
+        # Move the u-boot files to the storage directory
+        mkdir -p ${uboot_path}
+        cp -af --no-preserve=ownership ${git_path}/u-boot/. ${uboot_path}
+        [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: u-boot download completed." || error_msg "OpenWrt: u-boot download failed."
+        # Delete temporary files
+        rm -rf ${git_path}
+    } || echo -e "${INFO} OpenWrt: u-boot files exist, skip downloading."
 
     # Download firmware files
-    git_path="$(mktemp -d)"
-    git_pull_dir ${firmware_repo} main ${git_path}
-    # Move the firmware files to the storage directory
-    mkdir -p ${firmware_path}
-    cp -af --no-preserve=ownership ${git_path}/firmware/. ${firmware_path}
-    [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: firmware download completed." || error_msg "OpenWrt: firmware download failed."
-    # Delete temporary files
-    rm -rf ${git_path}
+    firmware_num="$(find "${firmware_path}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)"
+    [[ -n "${firmware_num}" && "${firmware_num}" -le "5" ]] && {
+        git_path="$(mktemp -d)"
+        git_pull_dir ${firmware_repo} main ${git_path}
+        # Move the firmware files to the storage directory
+        mkdir -p ${firmware_path}
+        cp -af --no-preserve=ownership ${git_path}/firmware/. ${firmware_path}
+        [[ "${?}" -eq 0 ]] && echo -e "${INFO} OpenWrt: firmware download completed." || error_msg "OpenWrt: firmware download failed."
+        # Delete temporary files
+        rm -rf ${git_path}
+    } || echo -e "${INFO} OpenWrt: firmware files exist, skip downloading."
 
     # Download Armbian repository files
     git_path="$(mktemp -d)"

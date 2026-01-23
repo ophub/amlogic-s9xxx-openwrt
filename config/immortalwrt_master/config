@@ -8523,5 +8523,6 @@ CONFIG_PACKAGE_kmod-shortcut-fe-cm=y
 # 3. 确保 FullCone NAT 被选中 (提升游戏联机体验)
 CONFIG_PACKAGE_kmod-nft-fullcone=y
 
-CONFIG_PACKAGE_luci-app-store=y
+# CONFIG_PACKAGE_luci-app-store=y
 CONFIG_PACKAGE_luci-app-pushbot=y
+CONFIG_PACKAGE_luci-app-momo=y

@@ -57,6 +57,7 @@ on:
           - fine3399
           - firefly-rk3399
           - fmx1-pro
+          - fmx1-pro-b
           - gzpeite-p01
           - h28k
           - h66k
@@ -82,6 +83,7 @@ on:
           - nanopi-r5s
           - nsy-g16-plus
           - nsy-g68-plus
+          - orangepi-3b
           - orangepi-5-plus
           - orangepi-5b
           - orangepi-zero3

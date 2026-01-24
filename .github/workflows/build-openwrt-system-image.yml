@@ -24,6 +24,77 @@ on:
         default: "s905d"
         type: choice
         options:
+          - all
+          - first50
+          - range50_100
+          - range100_150
+          - last20
+          - a311d-oes_s922x-oes-plus_wxy-oect
+          - nsy-g16-plus_nsy-g68-plus_bdy-g18-pro
+          - s905d_s905x3_s912_s922x-ct2000
+          - a311d
+          - a311d-oes
+          - alark35-3500
+          - anas3035
+          - aio-3399b
+          - bdy-g18-pro
+          - beikeyun
+          - chainedbox
+          - cm3588-nas
+          - crrc
+          - dc-a588
+          - dg3399
+          - dg-tn3568
+          - dlfr100
+          - e20c
+          - e25
+          - eaidk-610
+          - emb3531
+          - fine3399
+          - firefly-rk3399
+          - fmx1-pro
+          - fmx1-pro-b
+          - gzpeite-p01
+          - h28k
+          - h66k
+          - h68k
+          - h69k
+          - h88k
+          - h88k-v3
+          - h96-max-m2
+          - hs530r
+          - hugsun-x99
+          - ipc-r
+          - jp-tvbox
+          - king3399
+          - kylin3399
+          - lckfb-tspi
+          - leez
+          - lx-r3s
+          - lz-k3568
+          - mrkaio-m68s
+          - nanopc-t6
+          - nanopi-m5
+          - nanopi-r5c
+          - nanopi-r5s
+          - nsy-g16-plus
+          - nsy-g68-plus
+          - orangepi-3b
+          - orangepi-5-plus
+          - orangepi-5b
+          - orangepi-zero3
+          - panther-x2
+          - photonicat
+          - r66s
+          - r68s
+          - renegade-rk3328
+          - rk3318-box
+          - rock5b
+          - rock5c
+          - ruisen-box
+          - s905
+          - s905-beelink-mini
+          - s905-mxqpro-plus
           - s905d
           - all
           

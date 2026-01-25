@@ -18,6 +18,8 @@ on:
           - openwrt_main
           - immortalwrt_master
           - lede_master
+          - openwrt_24.10.5
+          - immortalwrt_24.10.4
       openwrt_board:
         description: "Select device board"
         required: false

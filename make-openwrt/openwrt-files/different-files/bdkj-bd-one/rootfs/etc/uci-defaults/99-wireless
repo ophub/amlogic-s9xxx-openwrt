@@ -1,0 +1,60 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+# =======================================================
+# 1. Configure wireless settings
+# =======================================================
+if [ ! -f /etc/config/wireless ]; then
+    wifi config
+fi
+
+# -----------------------------------------------------------
+# 2. Configure 2G (radio0) - HT20 (N mode)
+# -----------------------------------------------------------
+# Check if radio0 exists to avoid errors
+if uci get wireless.radio0 >/dev/null 2>&1; then
+    uci set wireless.radio0.disabled='0'
+    uci set wireless.radio0.country='CN'
+    uci set wireless.radio0.band='2g'
+    uci set wireless.radio0.channel='6'
+    uci set wireless.radio0.htmode='HT20'
+    uci set wireless.radio0.cell_density='0'
+    uci set wireless.radio0.legacy_rates='0'
+
+    # Interface settings
+    uci set wireless.default_radio0.device='radio0'
+    uci set wireless.default_radio0.network='lan'
+    uci set wireless.default_radio0.mode='ap'
+    uci set wireless.default_radio0.ssid='OpenWrt'
+    uci set wireless.default_radio0.encryption='none'
+fi
+
+# -----------------------------------------------------------
+# 3. Configure 5G (radio1) - VHT80 (AC mode)
+# -----------------------------------------------------------
+# Check if radio1 exists to avoid errors
+if uci get wireless.radio1 >/dev/null 2>&1; then
+    uci set wireless.radio1.disabled='0'
+    uci set wireless.radio1.country='CN'
+    uci set wireless.radio1.band='5g'
+    uci set wireless.radio1.channel='149'
+    uci set wireless.radio1.htmode='VHT80'
+    uci set wireless.radio1.cell_density='1'
+    uci set wireless.radio1.legacy_rates='0'
+
+    # Interface settings
+    uci set wireless.default_radio1.device='radio1'
+    uci set wireless.default_radio1.network='lan'
+    uci set wireless.default_radio1.mode='ap'
+    uci set wireless.default_radio1.ssid='OpenWrt'
+    uci set wireless.default_radio1.encryption='none'
+fi
+
+# -----------------------------------------------------------
+# 4. Apply changes
+# -----------------------------------------------------------
+uci commit wireless
+wifi reload
+
+exit 0

@@ -1,0 +1,71 @@
+. /lib/functions/uci-defaults.sh
+. /lib/functions/system.sh
+
+# Function to check MAC address format
+check_mac_format() {
+    local mac="$1"
+    echo "${mac}" | grep -E -q "^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$"
+    return $?
+}
+
+# Set up network interfaces for Rockchip-based boards
+rockchip_setup_interfaces() {
+    local board="$1"
+    ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" "wan"
+}
+
+# Set up MAC addresses for Rockchip-based boards
+rockchip_setup_macs() {
+    local board="$1"
+    local base_mac=""
+    local lan_mac=""
+    local wan_mac=""
+    local tmp_mac=""
+
+    # Try to get MAC from mmcblk0 CID
+    if [ -b "/dev/mmcblk0" ] || [ -e "/sys/block/mmcblk0" ]; then
+        tmp_mac="$(macaddr_generate_from_mmc_cid mmcblk0 2>/dev/null)"
+        if check_mac_format "${tmp_mac}"; then
+            base_mac="${tmp_mac}"
+            echo "Used mmcblk0 MAC: ${base_mac}" >/dev/console
+        fi
+    fi
+
+    # Fallback to eth0 MAC
+    if [ -z "${base_mac}" ] && [ -f /sys/class/net/eth0/address ]; then
+        tmp_mac="$(cat /sys/class/net/eth0/address)"
+        if check_mac_format "${tmp_mac}"; then
+            base_mac="${tmp_mac}"
+            echo "Used eth0 MAC: ${base_mac}" >/dev/console
+        fi
+    fi
+
+    # Final fallback to random MAC
+    if [ -z "${base_mac}" ]; then
+        echo "WARNING: Failed to get valid MAC, generating random one" >/dev/console
+        base_mac="$(macaddr_random)"
+    fi
+
+    # Ensure MAC is uppercase
+    base_mac="$(echo "${base_mac}" | tr 'a-z' 'A-Z')"
+
+    # Derive LAN and WAN MACs
+    lan_mac="${base_mac}"
+    wan_mac="$(macaddr_add "${base_mac}" 1)"
+
+    # Write MAC addresses to configuration
+    [ -n "${lan_mac}" ] && ucidef_set_interface_macaddr "lan" "${lan_mac}"
+    [ -n "${wan_mac}" ] && ucidef_set_interface_macaddr "wan" "${wan_mac}"
+    [ -n "${lan_mac}" ] && ucidef_set_label_macaddr "${lan_mac}"
+}
+
+board_config_update
+# Set board name
+board="bendian,bd-one"
+
+rockchip_setup_interfaces ${board}
+rockchip_setup_macs ${board}
+
+board_config_flush
+
+exit 0

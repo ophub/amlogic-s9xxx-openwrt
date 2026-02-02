@@ -2306,7 +2306,7 @@ CONFIG_PACKAGE_kmod-crypto-hmac=y
 CONFIG_PACKAGE_kmod-crypto-manager=y
 CONFIG_PACKAGE_kmod-crypto-md4=y
 CONFIG_PACKAGE_kmod-crypto-md5=y
-# CONFIG_PACKAGE_kmod-crypto-michael-mic is not set
+CONFIG_PACKAGE_kmod-crypto-michael-mic=y
 # CONFIG_PACKAGE_kmod-crypto-misc is not set
 CONFIG_PACKAGE_kmod-crypto-null=y
 # CONFIG_PACKAGE_kmod-crypto-pcbc is not set
@@ -2922,7 +2922,8 @@ CONFIG_PACKAGE_kmod-pppoe=y
 # CONFIG_PACKAGE_kmod-pppol2tp is not set
 CONFIG_PACKAGE_kmod-pppox=y
 # CONFIG_PACKAGE_kmod-pptp is not set
-# CONFIG_PACKAGE_kmod-qrtr-mhi is not set
+CONFIG_PACKAGE_kmod-qrtr=y
+CONFIG_PACKAGE_kmod-qrtr-mhi=y
 # CONFIG_PACKAGE_kmod-qrtr-tun is not set
 # CONFIG_PACKAGE_kmod-sched is not set
 # CONFIG_PACKAGE_kmod-sched-act-police is not set
@@ -2981,7 +2982,7 @@ CONFIG_PACKAGE_kmod-keys-encrypted=y
 CONFIG_PACKAGE_kmod-keys-trusted=y
 # CONFIG_PACKAGE_kmod-lkdtm is not set
 # CONFIG_PACKAGE_kmod-lp is not set
-# CONFIG_PACKAGE_kmod-mhi-bus is not set
+CONFIG_PACKAGE_kmod-mhi-bus=y
 # CONFIG_PACKAGE_kmod-mhi-pci-generic is not set
 CONFIG_PACKAGE_kmod-mmc=y
 # CONFIG_PACKAGE_kmod-mtd-rw is not set
@@ -3231,6 +3232,7 @@ CONFIG_ATH10K_LEDS=y
 # CONFIG_PACKAGE_kmod-ath10k-sdio is not set
 # CONFIG_PACKAGE_kmod-ath10k-smallbuffers is not set
 CONFIG_PACKAGE_kmod-ath11k=y
+# CONFIG_ATH11K_THERMAL is not set
 CONFIG_PACKAGE_kmod-ath11k-pci=y
 # CONFIG_PACKAGE_kmod-ath12k is not set
 # CONFIG_PACKAGE_kmod-ath5k is not set
@@ -3303,6 +3305,7 @@ CONFIG_PACKAGE_kmod-mt7916-firmware=y
 # CONFIG_PACKAGE_kmod-mwifiex-sdio is not set
 # CONFIG_PACKAGE_kmod-mwl8k is not set
 # CONFIG_PACKAGE_kmod-owl-loader is not set
+CONFIG_PACKAGE_kmod-qcom-qmi-helpers=y
 CONFIG_PACKAGE_kmod-rsi91x=y
 # CONFIG_PACKAGE_kmod-rsi91x-sdio is not set
 CONFIG_PACKAGE_kmod-rsi91x-usb=y

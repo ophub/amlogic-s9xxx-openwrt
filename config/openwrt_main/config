@@ -2924,7 +2924,7 @@ CONFIG_PACKAGE_kmod-sched-core=y
 # CONFIG_PACKAGE_kmod-sit is not set
 CONFIG_PACKAGE_kmod-slhc=y
 # CONFIG_PACKAGE_kmod-slip is not set
-# CONFIG_PACKAGE_kmod-tcp-bbr is not set
+CONFIG_PACKAGE_kmod-tcp-bbr=y
 # CONFIG_PACKAGE_kmod-tcp-hybla is not set
 # CONFIG_PACKAGE_kmod-tcp-scalable is not set
 # CONFIG_PACKAGE_kmod-team is not set
@@ -3199,8 +3199,8 @@ CONFIG_ATH10K_LEDS=y
 # CONFIG_PACKAGE_kmod-ath10k-ct is not set
 # CONFIG_PACKAGE_kmod-ath10k-ct-smallbuffers is not set
 # CONFIG_PACKAGE_kmod-ath10k-smallbuffers is not set
-# CONFIG_PACKAGE_kmod-ath11k is not set
-# CONFIG_PACKAGE_kmod-ath11k-pci is not set
+CONFIG_PACKAGE_kmod-ath11k=y
+CONFIG_PACKAGE_kmod-ath11k-pci=y
 # CONFIG_PACKAGE_kmod-ath12k is not set
 # CONFIG_PACKAGE_kmod-ath5k is not set
 CONFIG_PACKAGE_kmod-ath6kl=y

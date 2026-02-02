@@ -1920,7 +1920,7 @@ CONFIG_PACKAGE_libiwinfo-data=y
 # CONFIG_PACKAGE_ath12k-firmware-qcn9274 is not set
 # CONFIG_PACKAGE_ath12k-firmware-wcn7850 is not set
 # CONFIG_PACKAGE_ath6k-firmware is not set
-# CONFIG_PACKAGE_ath9k-htc-firmware is not set
+CONFIG_PACKAGE_ath9k-htc-firmware=y
 # CONFIG_PACKAGE_bnx2-firmware is not set
 # CONFIG_PACKAGE_bnx2x-firmware is not set
 # CONFIG_PACKAGE_brcmfmac-firmware-4329-sdio is not set
@@ -2177,7 +2177,7 @@ CONFIG_PACKAGE_kmod-crypto-hmac=y
 CONFIG_PACKAGE_kmod-crypto-manager=y
 # CONFIG_PACKAGE_kmod-crypto-md4 is not set
 # CONFIG_PACKAGE_kmod-crypto-md5 is not set
-# CONFIG_PACKAGE_kmod-crypto-michael-mic is not set
+CONFIG_PACKAGE_kmod-crypto-michael-mic=y
 # CONFIG_PACKAGE_kmod-crypto-misc is not set
 CONFIG_PACKAGE_kmod-crypto-null=y
 # CONFIG_PACKAGE_kmod-crypto-pcbc is not set
@@ -2771,7 +2771,8 @@ CONFIG_PACKAGE_kmod-pppoe=y
 # CONFIG_PACKAGE_kmod-pppol2tp is not set
 CONFIG_PACKAGE_kmod-pppox=y
 # CONFIG_PACKAGE_kmod-pptp is not set
-# CONFIG_PACKAGE_kmod-qrtr-mhi is not set
+CONFIG_PACKAGE_kmod-qrtr=y
+CONFIG_PACKAGE_kmod-qrtr-mhi=y
 # CONFIG_PACKAGE_kmod-qrtr-tun is not set
 # CONFIG_PACKAGE_kmod-sched is not set
 # CONFIG_PACKAGE_kmod-sched-act-ipt is not set
@@ -2804,7 +2805,7 @@ CONFIG_PACKAGE_kmod-tcp-bbr=y
 # CONFIG_PACKAGE_kmod-tls is not set
 # CONFIG_PACKAGE_kmod-trelay is not set
 CONFIG_PACKAGE_kmod-tun=y
-# CONFIG_PACKAGE_kmod-veth is not set
+CONFIG_PACKAGE_kmod-veth=y
 # CONFIG_PACKAGE_kmod-vrf is not set
 # CONFIG_PACKAGE_kmod-vxlan is not set
 # CONFIG_PACKAGE_kmod-wireguard is not set
@@ -2837,7 +2838,7 @@ CONFIG_PACKAGE_kmod-fsl-mc-dpio=y
 # CONFIG_PACKAGE_kmod-keys-trusted is not set
 # CONFIG_PACKAGE_kmod-lkdtm is not set
 # CONFIG_PACKAGE_kmod-lp is not set
-# CONFIG_PACKAGE_kmod-mhi-bus is not set
+CONFIG_PACKAGE_kmod-mhi-bus=y
 # CONFIG_PACKAGE_kmod-mhi-pci-generic is not set
 CONFIG_PACKAGE_kmod-mmc=y
 # CONFIG_PACKAGE_kmod-mtd-rw is not set
@@ -2853,7 +2854,7 @@ CONFIG_PACKAGE_kmod-pps=y
 # CONFIG_PACKAGE_kmod-pps-ldisc is not set
 CONFIG_PACKAGE_kmod-ptp=y
 # CONFIG_PACKAGE_kmod-ramoops is not set
-# CONFIG_PACKAGE_kmod-random-core is not set
+CONFIG_PACKAGE_kmod-random-core=y
 # CONFIG_PACKAGE_kmod-reed-solomon is not set
 CONFIG_PACKAGE_kmod-regmap-core=y
 CONFIG_PACKAGE_kmod-regmap-i2c=y
@@ -3063,18 +3064,33 @@ CONFIG_PACKAGE_kmod-usb-core=y
 # CONFIG_PACKAGE_kmod-aic8800s is not set
 # CONFIG_PACKAGE_kmod-aic8800u is not set
 # CONFIG_PACKAGE_kmod-ar5523 is not set
-# CONFIG_PACKAGE_kmod-ath is not set
-# CONFIG_PACKAGE_kmod-ath10k is not set
+CONFIG_PACKAGE_kmod-ath=y
+CONFIG_ATH_USER_REGD=y
+# CONFIG_PACKAGE_ATH_DEBUG is not set
+CONFIG_PACKAGE_ATH_DFS=y
+# CONFIG_PACKAGE_ATH_DYNACK is not set
+CONFIG_PACKAGE_kmod-ath10k=y
+CONFIG_ATH10K_LEDS=y
+# CONFIG_ATH10K_THERMAL is not set
 # CONFIG_PACKAGE_kmod-ath10k-ct is not set
 # CONFIG_PACKAGE_kmod-ath10k-ct-smallbuffers is not set
-# CONFIG_PACKAGE_kmod-ath11k is not set
-# CONFIG_PACKAGE_kmod-ath11k-pci is not set
+# CONFIG_PACKAGE_kmod-ath10k-pci is not set
+# CONFIG_PACKAGE_kmod-ath10k-sdio is not set
+# CONFIG_PACKAGE_kmod-ath10k-smallbuffers is not set
+CONFIG_PACKAGE_kmod-ath11k=y
+# CONFIG_ATH11K_THERMAL is not set
+CONFIG_PACKAGE_kmod-ath11k-pci=y
 # CONFIG_PACKAGE_kmod-ath12k is not set
 # CONFIG_PACKAGE_kmod-ath5k is not set
+CONFIG_PACKAGE_kmod-ath6kl=y
 # CONFIG_PACKAGE_kmod-ath6kl-sdio is not set
-# CONFIG_PACKAGE_kmod-ath6kl-usb is not set
-# CONFIG_PACKAGE_kmod-ath9k is not set
-# CONFIG_PACKAGE_kmod-ath9k-htc is not set
+CONFIG_PACKAGE_kmod-ath6kl-usb=y
+CONFIG_PACKAGE_kmod-ath9k=y
+CONFIG_ATH9K_HWRNG=y
+# CONFIG_ATH9K_SUPPORT_PCOEM is not set
+# CONFIG_ATH9K_TX99 is not set
+CONFIG_PACKAGE_kmod-ath9k-common=y
+CONFIG_PACKAGE_kmod-ath9k-htc=y
 # CONFIG_PACKAGE_kmod-b43 is not set
 CONFIG_PACKAGE_kmod-brcmfmac=y
 CONFIG_BRCMFMAC_SDIO=y
@@ -3135,6 +3151,7 @@ CONFIG_PACKAGE_kmod-mt7916-firmware=y
 # CONFIG_PACKAGE_kmod-mwifiex-sdio is not set
 # CONFIG_PACKAGE_kmod-mwl8k is not set
 # CONFIG_PACKAGE_kmod-owl-loader is not set
+CONFIG_PACKAGE_kmod-qcom-qmi-helpers=y
 # CONFIG_PACKAGE_kmod-rsi91x is not set
 # CONFIG_PACKAGE_kmod-rsi91x-sdio is not set
 # CONFIG_PACKAGE_kmod-rsi91x-usb is not set

@@ -400,7 +400,6 @@ jobs:
 
       - name: Get OpenWrt source hash
         id: openwrthash
-        if: ${{ steps.pull.outputs.status == 'success' && !cancelled() }}
         run: |
           # Get the latest source hash from the kernel repository
           repo_path="$(echo "${{ env.REPO_URL }}" | awk -F"github.com/" '{print $2}')"

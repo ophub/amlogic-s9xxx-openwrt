@@ -37,6 +37,7 @@ on:
           - alark35-3500
           - anas3035
           - aio-3399b
+          - bdkj-bd-one
           - bdy-g18-pro
           - beikeyun
           - chainedbox
@@ -73,6 +74,7 @@ on:
           - lx-r3s
           - lz-k3568
           - mrkaio-m68s
+          - nanopc-t4
           - nanopc-t6
           - nanopi-m5
           - nanopi-r5c
@@ -82,6 +84,7 @@ on:
           - orangepi-3b
           - orangepi-5-plus
           - orangepi-5b
+          - orangepi-zero2w
           - orangepi-zero3
           - panther-x2
           - photonicat
@@ -89,6 +92,7 @@ on:
           - r68s
           - renegade-rk3328
           - rk3318-box
+          - rock-5-itx
           - rock5b
           - rock5c
           - ruisen-box
@@ -182,6 +186,7 @@ on:
           - smart-am60
           - station-m1
           - station-m2
+          - station-p2
           - sv-33a6x
           - swan1-w28
           - sw799
@@ -212,6 +217,7 @@ on:
           - 6.1.y
           - 6.6.y
           - 6.12.y
+          - 6.18.y
           - 5.10.y_5.15.y
           - 5.15.y_6.1.y
           - 6.1.y_6.12.y
@@ -395,7 +401,6 @@ jobs:
 
       - name: Get OpenWrt source hash
         id: openwrthash
-        if: ${{ steps.pull.outputs.status == 'success' && !cancelled() }}
         run: |
           # Get the latest source hash from the kernel repository
           repo_path="$(echo "${{ env.REPO_URL }}" | awk -F"github.com/" '{print $2}')"

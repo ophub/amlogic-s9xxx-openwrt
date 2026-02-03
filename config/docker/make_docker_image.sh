@@ -125,6 +125,16 @@ adjust_settings() {
         sed -i "s/ondemand/schedutil/g" ${tmp_path}/etc/config/cpufreq
     }
 
+    # Disable the OpenSSL acceleration engine
+    [[ -f "${tmp_path}/etc/ssl/openssl.cnf" ]] && {
+        sed -i "s|^engines = engines_sect|#engines = engines_sect|g" ${tmp_path}/etc/ssl/openssl.cnf
+    }
+
+    # Turn off speed limit by default
+    [[ -f "${tmp_path}/etc/config/nft-qos" ]] && {
+        sed -i "s|option limit_enable.*|option limit_enable '0'|g" ${tmp_path}/etc/config/nft-qos
+    }
+
     # Relink the kmod program
     [[ -f "${common_files}/sbin/kmod" ]] && (
         echo -e "${INFO} Adjust kmod settings."

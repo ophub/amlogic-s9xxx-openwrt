@@ -81,6 +81,14 @@ else
     log_message "Error: Could not determine root partition."
 fi
 
+# Disable the OpenSSL acceleration engine if enabled
+ssl_conf="/etc/ssl/openssl.cnf"
+[[ -f "${ssl_conf}" && -n "$(grep '^engines = engines_sect' "${ssl_conf}" || true)" ]] && {
+    sed -i "s|^engines = engines_sect|#engines = engines_sect|g" "${ssl_conf}"
+    /etc/init.d/uhttpd restart >/dev/null 2>&1 || true
+    log_message "Disabled OpenSSL engines in ${ssl_conf} and restarted uhttpd."
+}
+
 # Add network performance optimization
 if [[ -x "/usr/sbin/balethirq.pl" ]]; then
     (perl /usr/sbin/balethirq.pl >/dev/null 2>&1) &

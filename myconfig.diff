@@ -5,4 +5,4 @@ git pull
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 cp -f myconfig.diff .config
-
+make menuconfig

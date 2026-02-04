@@ -1,8 +1,25 @@
-
+# 1. 在 main 分支下，生成配置差异文件
+# 这个命令会提取出您相对于默认配置所做的所有修改。
 ./scripts/diffconfig.sh > myconfig.diff
+
+# 2. 切换到 v24.10.4 稳定版分支
 git checkout v24.10.4
 git pull
+
+# 3. 更新并安装新分支的 feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a
+
+# 4. 将配置差异文件应用到新分支
+# 这会成为生成完整配置的基础
 cp -f myconfig.diff .config
+
+# 5. 生成完整的 .config 文件
+# 系统会基于您的差异化配置，并结合稳定版分支的默认值，生成一份完整的配置文件。
+make defconfig
+
+# 6. （重要）核对并微调配置
+# 打开菜单，检查您的软件包和选项是否都已正确应用。
+# 由于版本差异，某些在 main 分支中的软件包在稳定版中可能不存在，需要您手动调整。
 make menuconfig
+

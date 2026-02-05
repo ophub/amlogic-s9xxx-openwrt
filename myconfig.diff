@@ -1,1 +1,8 @@
 
+./scripts/diffconfig.sh > myconfig.diff
+git checkout v24.10.4
+git pullscripts/feeds update -a
+./scripts/feeds install -acp -f myconfig.diff .config
+cp -f myconfig.diff .config
+make defconfig
+make menuconfig

@@ -168,7 +168,7 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
   with:
     openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
     openwrt_board: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-    openwrt_kernel: 6.1.y_5.15.y
+    openwrt_kernel: 6.12.y_6.18.y
     openwrt_ip: 192.168.1.1
 ```
 
@@ -182,7 +182,7 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
 | openwrt_board     | all               | 设置打包盒子的 `board` ，功能参考 `-b` |
 | kernel_repo       | ophub/kernel      | 指定 github.com 内核仓库的 `<owner>/<repo>`，功能参考 `-r` |
 | kernel_usage      | stable            | 设置使用的内核的 `tags 后缀`。功能参考 `-u` |
-| openwrt_kernel    | 6.1.y_5.15.y      | 设置内核版本，功能参考 `-k` |
+| openwrt_kernel    | 6.12.y_6.18.y     | 设置内核版本，功能参考 `-k` |
 | auto_kernel       | true              | 设置是否自动采用同系列最新版本内核。功能参考 `-a` |
 | openwrt_ip        | 192.168.1.1       | 设置 OpenWrt 系统的默认 IP 地址，功能参考 `-p` |
 | openwrt_size      | 256/1024          | 设置系统 BOOTFS 和 ROOTFS 分区的大小，功能参考 `-s` |
@@ -220,7 +220,7 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
   uses: ophub/amlogic-s9xxx-armbian@main
   with:
     build_target: kernel
-    kernel_version: 6.1.y_5.15.y
+    kernel_version: 6.12.y_6.18.y
     kernel_auto: true
     kernel_sign: -yourname
 ```

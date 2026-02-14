@@ -2863,7 +2863,7 @@ CONFIG_PACKAGE_kmod-vmxnet3=y
 # CONFIG_PACKAGE_kmod-appletalk is not set
 # CONFIG_PACKAGE_kmod-atm is not set
 # CONFIG_PACKAGE_kmod-ax25 is not set
-# CONFIG_PACKAGE_kmod-batman-adv is not set
+CONFIG_PACKAGE_kmod-batman-adv=y
 CONFIG_PACKAGE_kmod-bonding=y
 # CONFIG_PACKAGE_kmod-bpf-test is not set
 CONFIG_PACKAGE_kmod-dnsresolver=y
@@ -5832,7 +5832,7 @@ CONFIG_PACKAGE_luci-theme-material=y
 #
 CONFIG_PACKAGE_luci-proto-3g=y
 # CONFIG_PACKAGE_luci-proto-autoip is not set
-# CONFIG_PACKAGE_luci-proto-batman-adv is not set
+CONFIG_PACKAGE_luci-proto-batman-adv=y
 # CONFIG_PACKAGE_luci-proto-external is not set
 # CONFIG_PACKAGE_luci-proto-gre is not set
 # CONFIG_PACKAGE_luci-proto-hnet is not set

@@ -121,14 +121,18 @@ openwrt-openvfd
 ## 本地化打包
 1. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 2. 安装必要的软件包（如 Ubuntu 24.04）
-```yaml
+
+在 `~/amlogic-s9xxx-openwrt` 根目录中输入安装命令：
+
+```shell
 sudo apt-get update -y
 sudo apt-get full-upgrade -y
 # For Ubuntu-24.04
 sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depends)
 ```
+
 3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armsr` 文件夹, 并将 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 文件上传至此目录。
-4. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./remake -b s905x3 -k 6.1.10`。打包完成的 OpenWrt 固件放在根目录下的 `out` 文件夹里。
+4. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./remake -b s905x3 -k 6.1.10`。打包完成的 OpenWrt 固件放在根目录下的 `openwrt/out` 文件夹里。
 
 - ### 本地化打包参数说明
 

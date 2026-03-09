@@ -10,15 +10,14 @@ if [ ! -f /etc/config/wireless ]; then
 fi
 
 # -----------------------------------------------------------
-# 2. Configure 2G (radio0) - HT20 (N mode)
+# 2. Configure MT7615E (radio0) as 5G ONLY
 # -----------------------------------------------------------
-# Check if radio0 exists to avoid errors
 if uci get wireless.radio0 >/dev/null 2>&1; then
     uci set wireless.radio0.disabled='0'
     uci set wireless.radio0.country='CN'
-    uci set wireless.radio0.band='2g'
-    uci set wireless.radio0.channel='6'
-    uci set wireless.radio0.htmode='HT20'
+    uci set wireless.radio0.band='5g'
+    uci set wireless.radio0.channel='149'
+    uci set wireless.radio0.htmode='VHT80'
     uci set wireless.radio0.cell_density='0'
     uci set wireless.radio0.legacy_rates='0'
 
@@ -31,24 +30,10 @@ if uci get wireless.radio0 >/dev/null 2>&1; then
 fi
 
 # -----------------------------------------------------------
-# 3. Configure 5G (radio1) - VHT80 (AC mode)
+# 3. Disable the ghost interface (radio1) to prevent conflicts
 # -----------------------------------------------------------
-# Check if radio1 exists to avoid errors
 if uci get wireless.radio1 >/dev/null 2>&1; then
-    uci set wireless.radio1.disabled='0'
-    uci set wireless.radio1.country='CN'
-    uci set wireless.radio1.band='5g'
-    uci set wireless.radio1.channel='149'
-    uci set wireless.radio1.htmode='VHT80'
-    uci set wireless.radio1.cell_density='1'
-    uci set wireless.radio1.legacy_rates='0'
-
-    # Interface settings
-    uci set wireless.default_radio1.device='radio1'
-    uci set wireless.default_radio1.network='lan'
-    uci set wireless.default_radio1.mode='ap'
-    uci set wireless.default_radio1.ssid='OpenWrt'
-    uci set wireless.default_radio1.encryption='none'
+    uci set wireless.radio1.disabled='1'
 fi
 
 # -----------------------------------------------------------

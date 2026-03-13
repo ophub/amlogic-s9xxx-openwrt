@@ -30,90 +30,90 @@ CONFIG_TARGET_armsr=y
 # CONFIG_TARGET_malta is not set
 # CONFIG_TARGET_pistachio is not set
 # CONFIG_TARGET_mvebu is not set
-# CONFIG_TARGET_kirkwood is not set
-# CONFIG_TARGET_mediatek is not set
-# CONFIG_TARGET_ramips is not set
-# CONFIG_TARGET_at91 is not set
-# CONFIG_TARGET_tegra is not set
-# CONFIG_TARGET_layerscape is not set
-# CONFIG_TARGET_imx is not set
-# CONFIG_TARGET_octeontx is not set
-# CONFIG_TARGET_oxnas is not set
-# CONFIG_TARGET_phytium is not set
-# CONFIG_TARGET_qualcommax is not set
-# CONFIG_TARGET_qualcommbe is not set
-# CONFIG_TARGET_ipq40xx is not set
-# CONFIG_TARGET_ipq806x is not set
-# CONFIG_TARGET_realtek is not set
-# CONFIG_TARGET_rockchip is not set
-# CONFIG_TARGET_stm32 is not set
-# CONFIG_TARGET_sifiveu is not set
-# CONFIG_TARGET_siflower is not set
-# CONFIG_TARGET_starfive is not set
-# CONFIG_TARGET_arc770 is not set
-# CONFIG_TARGET_archs38 is not set
-# CONFIG_TARGET_omap is not set
-# CONFIG_TARGET_uml is not set
-# CONFIG_TARGET_zynq is not set
-# CONFIG_TARGET_x86 is not set
-# CONFIG_TARGET_armsr_armv7 is not set
-CONFIG_TARGET_armsr_armv8=y
-# CONFIG_TARGET_MULTI_PROFILE is not set
-CONFIG_TARGET_armsr_armv8_DEVICE_generic=y
+# CONFIG_TARGET_kirkwood未设置
+# CONFIG_TARGET_mediatek未设置
+未设置# CONFIG_TARGET_ramips
+# CONFIG_TARGET_at91未设置
+# CONFIG_TARGET_tegra未设置
+未设置# CONFIG_TARGET_layerscape
+未设置# CONFIG_TARGET_imx
+未设置# CONFIG_TARGET_octeontx
+未设置# CONFIG_TARGET_oxnas
+未设置# CONFIG_TARGET_phytium
+# CONFIG _ TARGET _ qualcommax未设置
+# CONFIG_TARGET_qualcommbe未设置
+# CONFIG_TARGET_ipq40xx未设置
+# CONFIG_TARGET_ipq806x未设置
+未设置# CONFIG_TARGET_realtek
+未设置# CONFIG_TARGET_rockchip
+# CONFIG_TARGET_stm32未设置
+未设置# CONFIG_TARGET_sifiveu
+未设置# CONFIG _ TARGET _ siflower
+未设置# CONFIG_TARGET_starfive
+# CONFIG_TARGET_arc770未设置
+# CONFIG_TARGET_archs38未设置
+# CONFIG_TARGET_omap未设置
+没有设置# CONFIG_TARGET_uml
+未设置# CONFIG_TARGET_zynq
+未设置# CONFIG_TARGET_x86
+# CONFIG_TARGET_armsr_armv7未设置
+配置_目标_armsr_armv8=y
+未设置# CONFIG_TARGET_MULTI_PROFILE
+配置_目标_ armsr _ armv8 _设备_通用=y
 CONFIG_HAS_SUBTARGETS=y
-CONFIG_HAS_DEVICES=y
-CONFIG_TARGET_BOARD="armsr"
-CONFIG_TARGET_SUBTARGET="armv8"
-CONFIG_TARGET_PROFILE="DEVICE_generic"
-CONFIG_TARGET_ARCH_PACKAGES="aarch64_generic"
-CONFIG_DEFAULT_TARGET_OPTIMIZATION="-Os -pipe -mcpu=generic"
-CONFIG_CPU_TYPE="generic"
-CONFIG_LINUX_6_6=y
-CONFIG_DEFAULT_base-files=y
+配置_散列_设备=y
+CONFIG_TARGET_BOARD="armsr "
+CONFIG_TARGET_SUBTARGET="armv8 "
+配置目标配置文件= "设备通用"
+CONFIG _ TARGET _ ARCH _ PACKAGES = " AAR ch 64 _ generic "
+CONFIG _ DEFAULT _ TARGET _ OPTIMIZATION = "-Os-pipe-mcpu = general "
+CONFIG_CPU_TYPE="generic "
+配置_LINUX_6_6=y
+配置默认基本文件=y
 CONFIG_DEFAULT_blkid=y
-CONFIG_DEFAULT_block-mount=y
+配置默认块装载=y
 CONFIG_DEFAULT_busybox=y
-CONFIG_DEFAULT_ca-bundle=y
-CONFIG_DEFAULT_ca-certificates=y
+配置_默认_ca-bundle=y
+配置默认ca证书=y
 CONFIG_DEFAULT_coremark=y
-CONFIG_DEFAULT_curl=y
-CONFIG_DEFAULT_ddns-scripts_aliyun=y
-CONFIG_DEFAULT_ddns-scripts_dnspod=y
-CONFIG_DEFAULT_default-settings=y
+配置默认卷曲=y
+CONFIG _ DEFAULT _ ddns-scripts _ aliyun = y
+CONFIG _ DEFAULT _ ddns-scripts _ dnspod = y
+配置默认设置=y
 CONFIG_DEFAULT_dnsmasq-full=y
 CONFIG_DEFAULT_dropbear=y
 CONFIG_DEFAULT_e2fsprogs=y
-CONFIG_DEFAULT_firewall=y
+配置默认防火墙=y
 CONFIG_DEFAULT_fstools=y
-CONFIG_DEFAULT_ip-full=y
+配置默认ip完整=y
 CONFIG_DEFAULT_ip6tables=y
-CONFIG_DEFAULT_ipset=y
+CONFIG _ DEFAULT _ ipset = y
 CONFIG_DEFAULT_iptables=y
-CONFIG_DEFAULT_iptables-mod-extra=y
-CONFIG_DEFAULT_iptables-mod-tproxy=y
-CONFIG_DEFAULT_kmod-amazon-ena=y
-CONFIG_DEFAULT_kmod-atlantic=y
+CONFIG _ DEFAULT _ iptables-mod-extra = y
+CONFIG _ DEFAULT _ iptables-mod-t proxy = y
+CONFIG _ DEFAULT _ kmod-Amazon-ENA = y
+配置_默认_kmod-atlantic=y
 CONFIG_DEFAULT_kmod-bcmgenet=y
-CONFIG_DEFAULT_kmod-dwmac-imx=y
-CONFIG_DEFAULT_kmod-dwmac-rockchip=y
-CONFIG_DEFAULT_kmod-dwmac-sun8i=y
+CONFIG _ DEFAULT _ kmod-dw MAC-imx = y
+CONFIG _ DEFAULT _ kmod-dw MAC-rockchip = y
+CONFIG _ DEFAULT _ kmod-dw MAC-sun8i = y
 CONFIG_DEFAULT_kmod-e1000e=y
 CONFIG_DEFAULT_kmod-fs-vfat=y
-CONFIG_DEFAULT_kmod-fsl-dpaa1-net=y
-CONFIG_DEFAULT_kmod-fsl-dpaa2-net=y
-CONFIG_DEFAULT_kmod-fsl-enetc-net=y
-CONFIG_DEFAULT_kmod-fsl-fec=y
-CONFIG_DEFAULT_kmod-gpio-pca953x=y
-CONFIG_DEFAULT_kmod-i2c-mux-pca954x=y
+CONFIG _ DEFAULT _ kmod-fsl-DPA a1-net = y
+CONFIG _ DEFAULT _ kmod-fsl-DPA a2-net = y
+CONFIG _ DEFAULT _ kmod-fsl-enetc-net = y
+配置_默认_kmod-fsl-fec=y
+CONFIG _ DEFAULT _ kmod-gpio-PCA 953 x = y
+CONFIG _ DEFAULT _ kmod-I2C-mux-PCA 954 x = y
 CONFIG_DEFAULT_kmod-ipt-nat6=y
-CONFIG_DEFAULT_kmod-ipt-raw=y
+配置_默认_kmod-ipt-raw=y
 CONFIG_DEFAULT_kmod-mvneta=y
 CONFIG_DEFAULT_kmod-mvpp2=y
-CONFIG_DEFAULT_kmod-nf-nathelper=y
-CONFIG_DEFAULT_kmod-nf-nathelper-extra=y
-CONFIG_DEFAULT_kmod-octeontx2-net=y
-CONFIG_DEFAULT_kmod-phy-aquantia=y
-CONFIG_DEFAULT_kmod-phy-broadcom=y
+CONFIG _ DEFAULT _ kmod-nf-NAT helper = y
+CONFIG _ DEFAULT _ kmod-nf-NAT helper-extra = y
+CONFIG _ DEFAULT _ kmod-octeontx 2-net = y
+CONFIG _ DEFAULT _ kmod-phy-aquantia = y
+CONFIG _ DEFAULT _ kmod-phy-Broadcom = y
 CONFIG_DEFAULT_kmod-phy-marvell=y
 CONFIG_DEFAULT_kmod-phy-marvell-10g=y
 CONFIG_DEFAULT_kmod-phy-realtek=y
@@ -236,7 +236,7 @@ CONFIG_DISPLAY_SUPPORT=y
 CONFIG_SHADOW_PASSWORDS=y
 # CONFIG_CLEAN_IPKG is not set
 # CONFIG_IPK_FILES_CHECKSUMS is not set
-# CONFIG_INCLUDE_CONFIG is not set
+未设置# CONFIG_INCLUDE_CONFIG
 # CONFIG_REPRODUCIBLE_DEBUG_INFO is not set
 # CONFIG_COLLECT_KERNEL_DEBUG is not set
 
@@ -5142,18 +5142,18 @@ CONFIG_PACKAGE_luci-mod-system=y
 # CONFIG_PACKAGE_luci-app-adblock-fast is not set
 # CONFIG_PACKAGE_luci-app-adguardhome is not set
 # CONFIG_PACKAGE_luci-app-adguardhome_INCLUDE_binary is not set
-# CONFIG_PACKAGE_luci-app-advanced-reboot is not set
-# CONFIG_PACKAGE_luci-app-advancedsetting is not set
+CONFIG_PACKAGE_luci-app-advanced-reboot=y
+CONFIG_PACKAGE_luci-app-advancedsetting=y
 # CONFIG_PACKAGE_luci-app-ahcp is not set
 # CONFIG_PACKAGE_luci-app-airplay2 is not set
 # CONFIG_PACKAGE_luci-app-alist is not set
 CONFIG_PACKAGE_luci-app-amlogic=y
 # CONFIG_PACKAGE_luci-app-amule is not set
 # CONFIG_PACKAGE_luci-app-apinger is not set
-# CONFIG_PACKAGE_luci-app-aria2 is not set
+CONFIG_PACKAGE_luci-app-aria2=y
 CONFIG_PACKAGE_luci-app-arpbind=y
 # CONFIG_PACKAGE_luci-app-attendedsysupgrade is not set
-# CONFIG_PACKAGE_luci-app-autoreboot is not set
+CONFIG_PACKAGE_luci-app-autoreboot=y
 # CONFIG_PACKAGE_luci-app-babeld is not set
 # CONFIG_PACKAGE_luci-app-banip is not set
 # CONFIG_PACKAGE_luci-app-bcp38 is not set
@@ -5177,7 +5177,7 @@ CONFIG_PACKAGE_luci-app-arpbind=y
 # CONFIG_PACKAGE_luci-app-dawn is not set
 # CONFIG_PACKAGE_luci-app-dcwapd is not set
 # CONFIG_PACKAGE_luci-app-ddns is not set
-# CONFIG_PACKAGE_luci-app-ddns-go is not set
+CONFIG_PACKAGE_luci-app-ddns-go=y
 # CONFIG_PACKAGE_luci-app-diag-core is not set
 CONFIG_PACKAGE_luci-app-diskman=y
 CONFIG_PACKAGE_luci-app-diskman_INCLUDE_btrfs_progs=y
@@ -5310,7 +5310,7 @@ CONFIG_PACKAGE_TURBOACC_INCLUDE_FLOW_OFFLOADING=y
 # CONFIG_PACKAGE_TURBOACC_INCLUDE_SHORTCUT_FE_CM is not set
 CONFIG_PACKAGE_TURBOACC_INCLUDE_BBR_CCA=y
 # CONFIG_PACKAGE_luci-app-ua2f is not set
-# CONFIG_PACKAGE_luci-app-udpxy is not set
+CONFIG_PACKAGE_luci-app-udpxy=y
 # CONFIG_PACKAGE_luci-app-uhttpd is not set
 # CONFIG_PACKAGE_luci-app-unblockneteasemusic is not set
 # CONFIG_PACKAGE_luci-app-unbound is not set
@@ -5340,7 +5340,7 @@ CONFIG_PACKAGE_luci-app-wol=y
 #
 # 4. Themes
 #
-# CONFIG_PACKAGE_luci-theme-argon is not set
+CONFIG_PACKAGE_luci-theme-argon
 CONFIG_PACKAGE_luci-theme-bootstrap=y
 # CONFIG_PACKAGE_luci-theme-design is not set
 CONFIG_PACKAGE_luci-theme-material=y
@@ -6882,7 +6882,7 @@ CONFIG_PACKAGE_ppp-mod-pppoe=y
 # CONFIG_PACKAGE_uacme-ualpn is not set
 CONFIG_PACKAGE_uclient-fetch=y
 # CONFIG_PACKAGE_udptunnel is not set
-# CONFIG_PACKAGE_udpxy is not set
+CONFIG_PACKAGE_udpxy=y
 # CONFIG_PACKAGE_ulogd is not set
 # CONFIG_PACKAGE_umdns is not set
 # CONFIG_PACKAGE_unet-cli is not set

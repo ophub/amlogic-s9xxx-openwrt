@@ -6,9 +6,9 @@
 
 View Chinese description | [查看中文说明](README.cn.md)
 
-The [OpenWrt](https://openwrt.org/) project is a Linux router operating system for embedded devices. OpenWrt is not a single and immutable firmware, but rather provides a fully writable filesystem with package management capabilities, allowing you to freely select the required software packages to customize the router system. For developers, OpenWrt is a framework that allows application development without having to build a complete firmware around it; for ordinary users, it means having the capability for complete customization, and the ability to use the device in unexpected ways. It has over 3000+ standardized application software packages and extensive third-party plugin support, allowing you to easily apply them to various supported devices. Now you can replace the Android TV system on your TV box with the OpenWrt system, turning it into a powerful router.
+The [OpenWrt](https://openwrt.org/) project is a Linux router operating system designed for embedded devices. Rather than being a single, immutable firmware, OpenWrt provides a fully writable filesystem with package management capabilities, allowing you to freely select the software packages you need to customize your router system. For developers, OpenWrt serves as a framework for building applications without the need to create a complete firmware around it; for end users, it provides full customization capabilities, enabling the device to be used in versatile and unexpected ways. With over 3,000 standardized application packages and extensive third-party plugin support, you can easily deploy them across a wide range of supported devices. Now you can replace the Android TV system on your TV box with the OpenWrt system, transforming it into a powerful router.
 
-This project, thanks to numerous [contributors](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md), builds the OpenWrt system for `Amlogic`, `Rockchip`, and `Allwinner` boxes. It supports writing to eMMC for use, supports updating the kernel, and more. For detailed usage instructions, see the [OpenWrt User Guide](./documents). The latest firmware can be downloaded from [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). You are welcome to `Fork` and customize the software packages. If you find it useful, you can click the `Star` in the upper right corner of the repository to show your support.
+This project, thanks to numerous [contributors](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md), builds the OpenWrt system for `Amlogic`, `Rockchip`, and `Allwinner` boxes. It supports installation to eMMC, kernel updates, and more. For detailed usage instructions, see the [OpenWrt User Guide](./documents). The latest firmware can be downloaded from [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases). You are welcome to `Fork` this repository and customize the software packages. If you find this project helpful, please consider clicking `Star` in the upper right corner of the repository to show your support.
 
 ## Default Information for OpenWrt Firmware
 
@@ -55,7 +55,7 @@ This project, thanks to numerous [contributors](https://github.com/ophub/amlogic
 
 ## Install and Update OpenWrt
 
-Choose the OpenWrt firmware corresponding to your TV box model, and refer to the corresponding instructions for the use of different devices.
+Choose the OpenWrt firmware corresponding to your TV box model, and refer to the relevant documentation for device-specific usage instructions.
 
 - ### Install OpenWrt
 
@@ -75,7 +75,7 @@ If you select `Online Download Update` for OpenWrt firmware or kernel, it will b
 
 - ### Create swap for OpenWrt
 
-If you feel that the current box's memory is not enough when using memory-intensive applications like `docker`, you can create a `swap` virtual memory partition, and use a certain capacity of the `/mnt/*4` disk space as memory. The unit of the input parameter in the command below is `GB`, the default is `1`.
+If you find the available memory insufficient when running memory-intensive applications such as `docker`, you can create a `swap` virtual memory partition, using a portion of the `/mnt/*4` disk space as virtual memory. The unit for the input parameter in the command below is `GB`, with a default value of `1`.
 
 Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
 
@@ -85,9 +85,9 @@ openwrt-swap 1
 
 - ### Backup/Restore Original EMMC System
 
-Supports backing up/restoring the `EMMC` to a `SD card` or a `USB flash drive`. We recommend that you backup the Android TV system that comes with the box before installing the OpenWrt system in a brand-new box for future use in restoring the TV system, etc.
+Supports backing up and restoring the `EMMC` partition via `TF/SD/USB`. It is recommended to back up the original Android TV system before installing OpenWrt on a brand-new box, in case you need to restore it later.
 
-Please boot OpenWrt system from a `SD card` or a `USB flash drive`, then from the browser, Browser access to OpenWrt's IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
+Please boot OpenWrt system from a `SD card` or a `USB flash drive`, then access OpenWrt via browser at its IP (e.g. 192.168.1.1) → `Log in to OpenWrt with the default account` → `System Menu` → `TTYD Terminal` → enter the command
 
 ```yaml
 openwrt-ddbr
@@ -116,7 +116,7 @@ Alternatively, you can navigate to `System menu` → `TTYD Terminal` → Enter t
 
 - ### More Usage Instructions
 
-Some common problems that might be encountered during the use of OpenWrt can be found in the [User Guide](./documents)
+For common issues and solutions encountered during OpenWrt usage, please refer to the [User Guide](./documents)
 
 ## Local Packaging
 1. Clone repository to local `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
@@ -163,8 +163,8 @@ You can modify the related personalized firmware configuration files in the [con
 
 1. You can view the personalized firmware configuration instructions in the [user documentation](./documents). The compilation process control file is [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-system-image.yml)
 2. New compilation: In github.com's [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) select ***`Build OpenWrt system image`***. Click the ***`Run workflow`*** button for one-stop firmware compilation and packaging.
-3. Re-compilation: If there is already a compiled `openwrt-armsr-armv8-generic-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), and you just want to remake other different boards, you can skip compiling the Armbian source files and directly use [build-openwrt-using-releases-files.yml](.github/workflows/build-openwrt-using-releases-files.yml) for secondary build.
-4. More Support: The compiled `openwrt-armsr-armv8-generic-rootfs.tar.gz` file is a universal file for making firmware for different boards. It is also applicable for creating OpenWrt firmware using [unifreq](https://github.com/unifreq/openwrt_packit)'s packaging scripts. As the pioneer of using OpenWrt and Armbian systems in TV boxes, he provides support for more devices, such as OpenWrt (QEMU version) used in the Armbian system through a `KVM` virtual machine, and Amlogic, Rockchip, and Allwinner series, etc. For packaging methods, please refer to the instructions in his repository. In Actions, through [build-openwrt-using-unifreq-scripts.yml](.github/workflows/build-openwrt-using-unifreq-scripts.yml), you can call his packaging scripts to create more firmware.
+3. Re-compilation: If there is already a compiled `openwrt-armsr-armv8-generic-rootfs.tar.gz` file in [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases), and you only need to rebuild for other board types, you can skip the OpenWrt source compilation and directly use [build-openwrt-using-releases-files.yml](.github/workflows/build-openwrt-using-releases-files.yml) for a secondary build.
+4. More Support: The compiled `openwrt-armsr-armv8-generic-rootfs.tar.gz` file is a universal file for building firmware for various board types. It is also compatible with [unifreq](https://github.com/unifreq/openwrt_packit)'s packaging scripts for creating OpenWrt firmware. As the pioneer of running OpenWrt and Armbian systems on TV boxes, unifreq provides support for additional devices, including OpenWrt ([QEMU version](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md)) running via `KVM` virtual machines in [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian), as well as Amlogic, Rockchip, and Allwinner series. For packaging methods, refer to his repository documentation. In Actions, you can use [build-openwrt-using-unifreq-scripts.yml](.github/workflows/build-openwrt-using-unifreq-scripts.yml) to invoke his packaging scripts for building additional firmware.
 
 ```yaml
 - name: Package armsr-armv8 as OpenWrt
@@ -230,15 +230,15 @@ For instructions on how to compile the kernel, see [compile-kernel](https://gith
 
 ## Resource Description
 
-When making the OpenWrt system, the files used, such as [kernel](https://github.com/ophub/kernel) and [u-boot](https://github.com/ophub/u-boot), are the same files used to create the [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system. In order to avoid repeated maintenance, related content has been classified and placed in the corresponding resource repositories, and will be automatically downloaded from the relevant repositories during use.
+When building the OpenWrt system, the [kernel](https://github.com/ophub/kernel) and [u-boot](https://github.com/ophub/u-boot) files used are the same as those used to build the [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) system. To avoid redundant maintenance, related content has been organized into the corresponding resource repositories and will be automatically downloaded from them during use.
 
-The [u-boot](https://github.com/ophub/u-boot), [kernel](https://github.com/ophub/kernel) and other resources used by this system mainly come from the [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit) project. Some files are shared by users in the [Pull](https://github.com/ophub/amlogic-s9xxx-openwrt/pulls) and [Issues](https://github.com/ophub/amlogic-s9xxx-openwrt/issues) of the [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) / [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) / [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) / [kernel](https://github.com/ophub/kernel) / [u-boot](https://github.com/ophub/u-boot) and other projects. `unifreq` has opened the door for us to use OpenWrt in TV boxes. Deeply influenced by him, my firmware production and usage follow his consistent standards. To thank these pioneers and sharers, I have recorded them in [CONTRIBUTORS.md](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md). Once again, I want to thank everyone for giving new life and meaning to the boxes.
+The [u-boot](https://github.com/ophub/u-boot), [kernel](https://github.com/ophub/kernel), and other resources used by this system are primarily derived from the [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit) project. Some files are contributed by users through [Pull Requests](https://github.com/ophub/amlogic-s9xxx-openwrt/pulls) and [Issues](https://github.com/ophub/amlogic-s9xxx-openwrt/issues) in the [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) / [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) / [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) / [kernel](https://github.com/ophub/kernel) / [u-boot](https://github.com/ophub/u-boot) and other projects. `unifreq` pioneered the use of OpenWrt in TV boxes. Deeply influenced by his work, my firmware production and usage follow his consistent standards. To acknowledge these pioneers and contributors, I have recorded them in [CONTRIBUTORS.md](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md). Once again, thank you to everyone for giving new life and meaning to these boxes.
 
 ## Other Distributions
 
-- [unifreq](https://github.com/unifreq/openwrt_packit) has made `OpenWrt` systems for more boxes such as Amlogic, Rockchip, and Allwinner. It is a benchmark in the box circle, recommended for use.
-- The [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) project provides the `Armbian` system used in the box, which is also applicable in devices that support OpenWrt.
-- The [fnnas](https://github.com/ophub/fnnas) project provides the `FnNAS` system used in the box, which is also applicable to devices that support OpenWrt.
+- [unifreq](https://github.com/unifreq/openwrt_packit) has built `OpenWrt` systems for a wide range of boxes including Amlogic, Rockchip, and Allwinner platforms. It is the benchmark project in the TV box community and is highly recommended.
+- The [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) project provides the `Armbian` system for TV boxes, which is also compatible with devices that support OpenWrt.
+- The [fnnas](https://github.com/ophub/fnnas) project provides the `FnNAS` system for TV boxes, which is also compatible with devices that support OpenWrt.
 
 ## Links
 
@@ -249,5 +249,4 @@ The [u-boot](https://github.com/ophub/u-boot), [kernel](https://github.com/ophub
 
 ## License
 
-The amlogic-s9xxx-openwrt © OPHUB is licensed under the [GPL-2.0](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/LICENSE) license
-
+The amlogic-s9xxx-openwrt © OPHUB is licensed under the [GPL-2.0](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/LICENSE) license.

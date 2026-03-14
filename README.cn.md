@@ -6,9 +6,9 @@
 
 查看英文说明 | [View English description](README.md)
 
-[OpenWrt](https://openwrt.org/) 项目是一个针对嵌入式设备的 Linux 路由器操作系统。OpenWrt 不是一个单一且不可更改的固件，而是提供了具有软件包管理功能的完全可写的文件系统，让您可以自由选择需要的软件包来定制路由器系统。对于开发人员来说，OpenWrt 是一个无需围绕它构建完整固件就能开发应用程序的框架；对于普通用户来说，这意味着拥有了完全定制的能力，能以意想不到的方式使用该设备。它拥有超过 3000+ 个标准化应用软件包和非常丰富的第三方插件支持，让您可以轻松地将他们应用于各种支持的设备。现在你可以将电视盒子的安卓 TV 系统更换为 OpenWrt 系统，让他成为一台功能强大的路由器。
+[OpenWrt](https://openwrt.org/) 项目是一个针对嵌入式设备的 Linux 路由器操作系统。OpenWrt 不是单一且不可修改的固件，而是提供了具有软件包管理功能的完全可写文件系统，让您可以自由选择所需的软件包来定制路由器系统。对于开发人员而言，OpenWrt 是一个无需围绕它构建完整固件即可开发应用程序的框架；对于普通用户而言，这意味着拥有完全的定制能力，能以灵活多样的方式使用设备。它拥有超过 3000 个标准化应用软件包以及丰富的第三方插件支持，让您可以轻松地将它们应用于各种支持的设备。现在，您可以将电视盒子的安卓 TV 系统替换为 OpenWrt 系统，使其成为一台功能强大的路由器。
 
-本项目托众多的[贡献者](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md)，为 `Amlogic`，`Rockchip` 和 `Allwinner` 盒子构建 OpenWrt 系统。支持写入 eMMC 中使用，支持更新内核等功能，使用方法详见 [OpenWrt 使用文档](./documents/README.cn.md)。最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。欢迎你 `Fork` 并进行个性化软件包定制。如果对你有用，可以点仓库右上角的 `Star` 表示支持。
+本项目依托众多[贡献者](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md)的支持，为 `Amlogic`、`Rockchip` 和 `Allwinner` 盒子构建 OpenWrt 系统。支持写入 eMMC 使用、内核更新等功能，详细使用方法请参阅 [OpenWrt 使用文档](./documents/README.cn.md)。最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。欢迎您 `Fork` 本仓库并进行个性化软件包定制。如果对您有帮助，可以点击仓库右上角的 `Star` 表示支持。
 
 ## OpenWrt 固件默认信息
 
@@ -55,7 +55,7 @@
 
 ## 安装及升级 OpenWrt 的相关说明
 
-选择和你的电视盒子型号对应的 OpenWrt 固件，不同设备的使用方法查看对应的说明。
+请选择与您的电视盒子型号对应的 OpenWrt 固件，不同设备的使用方法请参阅相应说明。
 
 - ### 安装 OpenWrt
 
@@ -67,15 +67,15 @@
 
 浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) →  `使用账户登录进入 OpenWrt` → `系统菜单` → `晶晨宝盒` → `手动上传更新 / 在线下载更新`
 
-如果选择 `手动上传更新` [OpenWrt 固件](https://github.com/ophub/amlogic-s9xxx-openwrt/releases)，可以将编译好 OpenWrt 固件压缩包，如 openwrt_xxx_k5.15.50.img.gz 进行上传（推荐上传压缩包，系统会自动解压。如果上传解压缩后的 xxx.img 格式的文件，可能会因为文件太大而上传失败），上传完成后界面将显示 `更新固件` 的操作按钮，点击即可更新。
+如果选择 `手动上传更新` [OpenWrt 固件](https://github.com/ophub/amlogic-s9xxx-openwrt/releases)，可以上传编译好的 OpenWrt 固件压缩包，如 openwrt_xxx_k5.15.50.img.gz（推荐上传压缩包，系统会自动解压；若上传解压后的 xxx.img 格式文件，可能因文件过大而导致上传失败）。上传完成后，界面将显示 `更新固件` 操作按钮，点击即可更新。
 
-如果选择 `手动上传更新` [OpenWrt 内核](https://github.com/ophub/kernel/releases/tag/kernel_stable)，可以将 `boot-xxx.tar.gz`, `dtb-xxx.tar.gz`, `modules-xxx.tar.gz` 这 3 个内核文件上传（其他内核文件不需要，如果同时上传也不影响更新，系统可以准确识别需要的内核文件），上传完成后界面将显示 `更新内核` 的操作按钮，点击即可更新。内核更新失败造成系统无法启动时，可以使用 `openwrt-kernel -s` 命令进行内核恢复，方法详见[内核恢复](documents/README.cn.md#9-升级-openwrt-系统或内核)
+如果选择 `手动上传更新` [OpenWrt 内核](https://github.com/ophub/kernel/releases/tag/kernel_stable)，可以上传 `boot-xxx.tar.gz`、`dtb-xxx.tar.gz`、`modules-xxx.tar.gz` 这 3 个内核文件（其他内核文件无需上传，即使同时上传也不影响更新，系统可以准确识别所需的内核文件）。上传完成后，界面将显示 `更新内核` 操作按钮，点击即可更新。若内核更新失败导致系统无法启动，可以使用 `openwrt-kernel -s` 命令进行内核恢复，方法详见[内核恢复](documents/README.cn.md#9-升级-openwrt-系统或内核)
 
-如果选择 `在线下载更新` OpenWrt 固件或内核，将根据`插件设置`中的`固件下载地址`和`内核下载地址`进行下载，你可以自定义修改下载来源，具体操作方法详见 [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 的编译与使用说明。
+如果选择 `在线下载更新` OpenWrt 固件或内核，系统将根据`插件设置`中的`固件下载地址`和`内核下载地址`进行下载。您可以自定义修改下载来源，具体操作方法详见 [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) 的编译与使用说明。
 
 - ### 为 OpenWrt 创建 swap
 
-如果你在使用 `docker` 等内存占用较大的应用时，觉得当前盒子的内存不够使用，可以创建 `swap` 虚拟内存分区，将 `/mnt/*4` 磁盘空间的一定容量虚拟成内存来使用。下面命令输入参数的单位是 `GB`，默认为 `1`。
+如果您在使用 `docker` 等内存占用较大的应用时，发现当前盒子的内存不足，可以创建 `swap` 虚拟内存分区，将 `/mnt/*4` 磁盘空间的一定容量虚拟为内存使用。以下命令的输入参数单位为 `GB`，默认值为 `1`。
 
 浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
 
@@ -85,7 +85,7 @@ openwrt-swap 1
 
 - ### 备份/还原 EMMC 原系统
 
-支持在 `TF/SD/USB` 中对盒子的 `EMMC` 分区进行备份/恢复。建议您在全新的盒子里安装 OpenWrt 系统前，先对当前盒子自带的安卓 TV 系统进行备份，以便日后在恢复电视系统等情况下使用。
+支持通过 `TF/SD/USB` 对盒子的 `EMMC` 分区进行备份与恢复。建议您在全新的盒子上安装 OpenWrt 系统之前，先备份盒子自带的安卓 TV 系统，以便日后需要恢复时使用。
 
 请从 `TF/SD/USB` 启动 OpenWrt 系统，浏览器访问 OpenWrt 的 IP(例如 192.168.1.1) → `使用默认账户登录进入 OpenWrt` → `系统菜单` → `TTYD 终端` → 输入命令
 
@@ -116,13 +116,13 @@ openwrt-openvfd
 
 - ### 更多使用说明
 
-在 OpenWrt 的使用中，一些可能遇到的常见问题详见 [使用文档](./documents/README.cn.md)
+在使用 OpenWrt 的过程中，常见问题及解决方案详见 [使用文档](./documents/README.cn.md)
 
 ## 本地化打包
 1. Clone 仓库到本地 `git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git`
 2. 安装必要的软件包（如 Ubuntu 24.04）
 
-在 `~/amlogic-s9xxx-openwrt` 根目录中输入安装命令：
+在 `~/amlogic-s9xxx-openwrt` 根目录下执行以下安装命令：
 
 ```shell
 sudo apt-get update -y
@@ -131,8 +131,8 @@ sudo apt-get full-upgrade -y
 sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depends)
 ```
 
-3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armsr` 文件夹, 并将 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 文件上传至此目录。
-4. 在 `~/amlogic-s9xxx-openwrt` 根目录中输入打包命令，如 `sudo ./remake -b s905x3 -k 6.1.10`。打包完成的 OpenWrt 固件放在根目录下的 `openwrt/out` 文件夹里。
+3. 在 `~/amlogic-s9xxx-openwrt` 根目录下创建 `openwrt-armsr` 文件夹，并将 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 文件上传至此目录。
+4. 在 `~/amlogic-s9xxx-openwrt` 根目录下执行打包命令，如 `sudo ./remake -b s905x3 -k 6.1.10`。打包完成的 OpenWrt 固件将存放在根目录下的 `openwrt/out` 文件夹中。
 
 - ### 本地化打包参数说明
 
@@ -141,7 +141,7 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
 | -b   | Board      | 指定需要编译的设备代号。例如，`-b s905x3` 表示编译代号为 s905x3 的设备，多个设备可用下划线连接，如 `-b s905x3_s905d`。特殊值：`all` 表示编译全部设备，`first50` 表示编译设备库中的前 50 个，`range50_100` 表示从第 51 个开始至第 100 个，`range100_150` 表示从第 101 个开始至第 150 个，`last20` 表示最后的 20 个。设备代号列表详见 [model_database.conf](make-openwrt/openwrt-files/common-files/etc/model_database.conf) 中的 `BOARD` 配置项。默认值为 `all` |
 | -r   | KernelRepo | 指定 github.com 内核仓库的 `<owner>/<repo>`。默认值：`ophub/kernel` |
 | -u   | kernelUsage | 设置使用的内核的 `tags 后缀`，如 [stable](https://github.com/ophub/kernel/releases/tag/kernel_stable), [flippy](https://github.com/ophub/kernel/releases/tag/kernel_flippy), [beta](https://github.com/ophub/kernel/releases/tag/kernel_beta)。默认值：`stable` |
-| -k   | Kernel     | 指定 [kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable) 名称，如 `-k 5.10.125` . 多个内核使用 `_` 进行连接，如 `-k 5.10.125_5.15.50` 。通过 `-k` 参数自由指定的内核版本只对使用 `stable/flippy/beta` 的内核有效。其他内核系列例如 [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) / [rk35xx](https://github.com/ophub/kernel/releases/tag/kernel_rk35xx) / 其他内核系列例如 [h6](https://github.com/ophub/kernel/releases/tag/kernel_h6) 等只能使用特定内核。  |
+| -k   | Kernel     | 指定 [kernel](https://github.com/ophub/kernel/releases/tag/kernel_stable) 名称，如 `-k 5.10.125`。多个内核使用 `_` 连接，如 `-k 5.10.125_5.15.50`。通过 `-k` 参数自由指定的内核版本仅对使用 `stable/flippy/beta` 的内核有效。其他内核系列如 [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) / [rk35xx](https://github.com/ophub/kernel/releases/tag/kernel_rk35xx) / [h6](https://github.com/ophub/kernel/releases/tag/kernel_h6) 等只能使用特定内核。  |
 | -a   | AutoKernel | 设置是否自动采用同系列最新版本内核。当为 `true` 时，将自动在内核库中查找在 `-k` 中指定的内核如 5.10.125 的同系列是否有更新的版本，如有 5.10.125 之后的最新版本时，将自动更换为最新版。设置为 `false` 时将编译指定版本内核。默认值：`true` |
 | -p   | IP       | 指定 OpenWrt 系统的默认 IP 地址，例如： `-p 10.1.1.1`。默认值：`192.168.1.1` |
 | -s   | Size       | 对系统的镜像分区大小进行设置，只设置 ROOTFS 分区大小时可以只指定一个数值，例如： `-s 1024`。需要同时设置 BOOTFS 和 ROOTFS 分区大小时，使用 / 对两个数值进行连接，例如： `-s 256/1024`。默认值：`256/1024` |
@@ -159,12 +159,12 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
 
 ## 使用 GitHub Actions 进行编译
 
-你可以通过修改 [config](config) 目录的相关个性化固件配置文件，以及 [.yml](.github/workflows) 文件, 自定义和编译适合你的 OpenWrt 固件,  固件可以上传至 github.com 的 `Actions` 和 `Releases` 等处.
+您可以通过修改 [config](config) 目录下的个性化固件配置文件以及 [.yml](.github/workflows) 文件，自定义并编译适合您的 OpenWrt 固件，固件可以上传至 github.com 的 `Actions` 和 `Releases` 等处。
 
-1. 你可以在 [使用文档](./documents/README.cn.md) 中查看个性化固件配置说明。编译流程控制文件是 [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-system-image.yml)
-2. 全新编译：在 github.com 的 [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) 选择 ***`Build OpenWrt system image`*** . 点击 ***`Run workflow`*** 按钮进行固件一站式编译和打包。
-3. 再次编译：如果 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中有已经编译好的 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 文件，你只是想再次制作其他不同 board 的盒子，可以跳过 OpenWrt 源文件的编译，直接使用 [build-openwrt-using-releases-files.yml](.github/workflows/build-openwrt-using-releases-files.yml) 进行二次制作。
-4. 更多支持：编译好的 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 文件是制作各种不同 board 固件的通用文件，也适用于使用 [unifreq](https://github.com/unifreq/openwrt_packit) 的打包脚本制作 OpenWrt 固件。他作为在盒子里使用 OpenWrt 和 Armbian 系统的开创者，对更多的设备进行了支持，如在 [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 系统中通过 `KVM` 虚拟机使用的 OpenWrt（[QEMU 版](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md)）、Amlogic、Rockchip，以及 Allwinner 系列等。打包方法详见他的仓库说明，在 Actions 中通过 [build-openwrt-using-unifreq-scripts.yml](.github/workflows/build-openwrt-using-unifreq-scripts.yml) 可以调用他的打包脚本制作更多固件。
+1. 您可以在 [使用文档](./documents/README.cn.md) 中查看个性化固件配置说明。编译流程控制文件为 [.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-system-image.yml)
+2. 全新编译：在 github.com 的 [Action](https://github.com/ophub/amlogic-s9xxx-openwrt/actions) 页面选择 ***`Build OpenWrt system image`***，点击 ***`Run workflow`*** 按钮进行固件一站式编译和打包。
+3. 再次编译：如果 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中已有编译好的 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 文件，且您只需重新制作其他不同 board 的盒子，可以跳过 OpenWrt 源码编译，直接使用 [build-openwrt-using-releases-files.yml](.github/workflows/build-openwrt-using-releases-files.yml) 进行二次制作。
+4. 更多支持：编译好的 `openwrt-armsr-armv8-generic-rootfs.tar.gz` 文件是制作各种不同 board 固件的通用文件，也适用于使用 [unifreq](https://github.com/unifreq/openwrt_packit) 的打包脚本制作 OpenWrt 固件。作为在盒子中使用 OpenWrt 和 Armbian 系统的开创者，他支持了更多设备，包括在 [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 系统中通过 `KVM` 虚拟机使用的 OpenWrt（[QEMU 版](https://github.com/unifreq/openwrt_packit/blob/master/files/qemu-aarch64/qemu-aarch64-readme.md)）、Amlogic、Rockchip 以及 Allwinner 系列等。打包方法详见其仓库说明，在 Actions 中可通过 [build-openwrt-using-unifreq-scripts.yml](.github/workflows/build-openwrt-using-unifreq-scripts.yml) 调用其打包脚本制作更多固件。
 
 ```yaml
 - name: Package armsr-armv8 as OpenWrt
@@ -231,15 +231,15 @@ sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depen
 
 ## 资源说明
 
-制作 OpenWrt 系统时，所使用的 [kernel](https://github.com/ophub/kernel) 和 [u-boot](https://github.com/ophub/u-boot) 等文件，与制作 [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 系统使用的是相同的文件。为了不重复维护，相关内容归类放在了对应的资源仓库，在使用时将自动从相关仓库进行下载。
+制作 OpenWrt 系统时，所使用的 [kernel](https://github.com/ophub/kernel) 和 [u-boot](https://github.com/ophub/u-boot) 等文件与制作 [Armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 系统使用的文件相同。为避免重复维护，相关内容已归类至对应的资源仓库，使用时将自动从相关仓库下载。
 
-本系统所使用的 [u-boot](https://github.com/ophub/u-boot), [kernel](https://github.com/ophub/kernel) 等资源主要从 [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit) 的项目中复制而来，部分文件由用户在 [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) / [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) / [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) / [kernel](https://github.com/ophub/kernel) / [u-boot](https://github.com/ophub/u-boot) 等项目的 [Pull](https://github.com/ophub/amlogic-s9xxx-openwrt/pulls) 和 [Issues](https://github.com/ophub/amlogic-s9xxx-openwrt/issues) 中提供分享。`unifreq` 为我们开启了在电视盒子中使用 OpenWrt 的大门，深受其影响，我的固件在制作和使用中继承了他一贯的标准。为感谢这些开拓者和分享者，我统一在 [CONTRIBUTORS.md](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md) 中进行了记录。再次感谢大家为盒子赋予了新的生命和意义。
+本系统所使用的 [u-boot](https://github.com/ophub/u-boot)、[kernel](https://github.com/ophub/kernel) 等资源主要源自 [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit) 项目，部分文件由用户在 [amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt) / [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) / [luci-app-amlogic](https://github.com/ophub/luci-app-amlogic) / [kernel](https://github.com/ophub/kernel) / [u-boot](https://github.com/ophub/u-boot) 等项目的 [Pull](https://github.com/ophub/amlogic-s9xxx-openwrt/pulls) 和 [Issues](https://github.com/ophub/amlogic-s9xxx-openwrt/issues) 中贡献分享。`unifreq` 为我们开启了在电视盒子中使用 OpenWrt 的大门，我的固件在制作和使用中深受其影响，并沿用了他一贯的标准。为感谢这些开拓者和分享者，我已统一在 [CONTRIBUTORS.md](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md) 中进行记录。再次感谢大家为盒子赋予了新的生命和意义。
 
 ## 其他发行版
 
-- [unifreq](https://github.com/unifreq/openwrt_packit) 为晶晨、瑞芯微和全志等更多盒子制作了 `OpenWrt` 系统，属于盒子圈的标杆，推荐使用。
-- [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 项目提供了在盒子中使用的 `Armbian` 系统，在支持 OpenWrt 的相关设备中同样适用。
-- [fnnas](https://github.com/ophub/fnnas) 项目提供了在盒子中使用的 `FnNAS` 系统，在支持 OpenWrt 的相关设备中同样适用。
+- [unifreq](https://github.com/unifreq/openwrt_packit) 为晶晨、瑞芯微和全志等更多盒子制作了 `OpenWrt` 系统，是盒子圈的标杆项目，推荐使用。
+- [amlogic-s9xxx-armbian](https://github.com/ophub/amlogic-s9xxx-armbian) 项目提供了适用于盒子的 `Armbian` 系统，同样兼容支持 OpenWrt 的相关设备。
+- [fnnas](https://github.com/ophub/fnnas) 项目提供了适用于盒子的 `FnNAS` 系统，同样兼容支持 OpenWrt 的相关设备。
 
 ## 链接
 

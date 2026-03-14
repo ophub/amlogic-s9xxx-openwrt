@@ -5,7 +5,7 @@
 # Build and Push to: https://hub.docker.com/
 #=====================================================================================
 
-name: Build and publish OpenWrt Docker image
+name: Build OpenWrt Docker image
 
 on:
   repository_dispatch:

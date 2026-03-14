@@ -930,7 +930,7 @@ replace_kernel() {
 }
 
 refactor_bootfs() {
-    process_msg "(4/6) Configuring bootfs partition."
+    process_msg "(4/6) Configuring bootfs files."
     cd ${tag_bootfs}
 
     # Process Amlogic series boot partition files
@@ -986,7 +986,7 @@ refactor_bootfs() {
 }
 
 refactor_rootfs() {
-    process_msg "(5/6) Configuring rootfs partition."
+    process_msg "(5/6) Configuring rootfs files."
     cd ${tag_rootfs}
 
     # Add directory
@@ -1217,7 +1217,7 @@ EOF
 }
 
 clean_tmp() {
-    process_msg "(6/6) Cleaning up temporary files."
+    process_msg "(6/6) Cleaning temporary files."
     cd ${current_path}
 
     # Unmount the OpenWrt image file

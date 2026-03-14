@@ -5,10 +5,10 @@
 # License version 2. This program is licensed "as is" without any
 # warranty of any kind, whether express or implied.
 #
-# This file is a part of the make OpenWrt for Amlogic s9xxx tv box
+# This file is a part of the OpenWrt Image Builder workflow
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Description: Build OpenWrt with Image Builder
+# Description: Build OpenWrt firmware using the official Image Builder
 # Copyright (C) 2021~ https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2021~ https://github.com/ophub/amlogic-s9xxx-openwrt
 # Copyright (C) 2021~ https://downloads.openwrt.org/releases
@@ -18,22 +18,22 @@
 #                https://downloads.immortalwrt.org/releases
 #
 # Documentation: https://openwrt.org/docs/guide-user/additional-software/imagebuilder
-# Instructions:  Download OpenWrt firmware from the official OpenWrt,
-#                Use Image Builder to add packages, lib, theme, app and i18n, etc.
+# Instructions:  Download the official OpenWrt Image Builder,
+#                then use it to add packages, libraries, themes, apps, and i18n support.
 #
 # Command: ./config/imagebuilder/imagebuilder.sh <source:branch>
 #          ./config/imagebuilder/imagebuilder.sh openwrt:24.10.4
 #
 #======================================== Functions list ========================================
 #
-# error_msg               : Output error message
-# download_imagebuilder   : Downloading OpenWrt ImageBuilder
-# adjust_settings         : Adjust related file settings
-# custom_packages         : Add custom packages
-# custom_config           : Add custom config
-# custom_files            : Add custom files
-# rebuild_firmware        : rebuild_firmware
-# custom_settings         : Custom settings after rebuild
+# error_msg               : Output error message and abort
+# download_imagebuilder   : Download and extract the OpenWrt Image Builder
+# adjust_settings         : Adjust Image Builder .config settings
+# custom_packages         : Download and add custom packages
+# custom_config           : Load custom package configuration
+# custom_files            : Add custom overlay files
+# rebuild_firmware        : Build firmware using Image Builder
+# custom_settings         : Apply post-build customizations
 #
 #================================ Set make environment variables ================================
 #
@@ -56,7 +56,7 @@ ERROR="[\033[91m ERROR \033[0m]"
 #
 #================================================================================================
 
-# Encountered a serious error, abort the script execution
+# Output error message and abort script execution
 error_msg() {
     echo -e "${ERROR} ${1}"
     exit 1
@@ -65,7 +65,7 @@ error_msg() {
 # Downloading OpenWrt ImageBuilder
 download_imagebuilder() {
     cd ${make_path}
-    echo -e "${STEPS} Start downloading OpenWrt files..."
+    echo -e "${STEPS} Downloading OpenWrt ImageBuilder..."
 
     # Downloading imagebuilder files
     if [[ "${op_sourse}" == "immortalwrt" ]]; then
@@ -75,20 +75,20 @@ download_imagebuilder() {
     fi
     download_file="https://${download_url}/releases/${op_branch}/targets/armsr/armv8/${op_sourse}-imagebuilder-${op_branch}-armsr-armv8.Linux-x86_64.tar.zst"
     curl -fsSOL ${download_file}
-    [[ "${?}" -eq "0" ]] || error_msg "Download failed: [ ${download_file} ]"
+    [[ "${?}" -eq "0" ]] || error_msg "Failed to download: [ ${download_file} ]"
 
     # Unzip and change the directory name
     tar -I zstd -xvf *-imagebuilder-*.tar.zst -C . && sync && rm -f *-imagebuilder-*.tar.zst
     mv -f *-imagebuilder-* ${openwrt_dir}
 
     sync && sleep 3
-    echo -e "${INFO} [ ${make_path} ] directory status: \n$(ls -lh . 2>/dev/null)"
+    echo -e "${INFO} [ ${make_path} ] directory contents: \n$(ls -lh . 2>/dev/null)"
 }
 
 # Adjust related files in the ImageBuilder directory
 adjust_settings() {
     cd ${imagebuilder_path}
-    echo -e "${STEPS} Start adjusting .config file settings..."
+    echo -e "${STEPS} Adjusting ImageBuilder .config settings..."
 
     # For .config file
     if [[ -s ".config" ]]; then
@@ -99,15 +99,15 @@ adjust_settings() {
         sed -i "s|CONFIG_TARGET_ROOTFS_SQUASHFS=.*|# CONFIG_TARGET_ROOTFS_SQUASHFS is not set|g" .config
         sed -i "s|CONFIG_TARGET_IMAGES_GZIP=.*|# CONFIG_TARGET_IMAGES_GZIP is not set|g" .config
     else
-        echo -e "${INFO} [ ${imagebuilder_path} ] directory status: \n$(ls -lh . 2>/dev/null)"
-        error_msg "There is no .config file in the [ ${download_file} ]"
+        echo -e "${INFO} [ ${imagebuilder_path} ] directory contents: \n$(ls -lh . 2>/dev/null)"
+        error_msg "No .config file found in [ ${download_file} ]."
     fi
 
     # For other files
     # ......
 
     sync && sleep 3
-    echo -e "${INFO} [ ${imagebuilder_path} ] directory status: \n$(ls -lh . 2>/dev/null)"
+    echo -e "${INFO} [ ${imagebuilder_path} ] directory contents: \n$(ls -lh . 2>/dev/null)"
 }
 
 # Add custom packages
@@ -115,7 +115,7 @@ adjust_settings() {
 # If one does not exist and place your custom ipk within this directory.
 custom_packages() {
     cd ${imagebuilder_path}
-    echo -e "${STEPS} Start adding custom packages..."
+    echo -e "${STEPS} Adding custom packages..."
 
     # Create a [ packages ] directory
     [[ -d "packages" ]] || mkdir packages
@@ -140,20 +140,20 @@ custom_packages() {
     # ......
 
     sync && sleep 3
-    echo -e "${INFO} [ packages ] directory status: \n$(ls -lh . 2>/dev/null)"
+    echo -e "${INFO} [ packages ] directory contents: \n$(ls -lh . 2>/dev/null)"
 }
 
 # Add custom packages, lib, theme, app and i18n, etc.
 custom_config() {
     cd ${imagebuilder_path}
-    echo -e "${STEPS} Start adding custom config..."
+    echo -e "${STEPS} Loading custom package configuration..."
 
     config_list=""
     if [[ -s "${custom_config_file}" ]]; then
         config_list="$(sed -n 's/^CONFIG_PACKAGE_\(.*\)=y$/\1/p' "${custom_config_file}" | tr '\n' ' ')"
-        echo -e "${INFO} Custom config list: \n$(echo "${config_list}" | tr ' ' '\n')"
+        echo -e "${INFO} Custom package list: \n$(echo "${config_list}" | tr ' ' '\n')"
     else
-        echo -e "${INFO} No custom config was added."
+        echo -e "${INFO} No custom package configuration found."
     fi
 }
 
@@ -162,7 +162,7 @@ custom_config() {
 # The [ files ] directory should be placed in the Image Builder root directory where you issue the make command.
 custom_files() {
     cd ${imagebuilder_path}
-    echo -e "${STEPS} Start adding custom files..."
+    echo -e "${STEPS} Adding custom files..."
 
     if [[ -d "${custom_files_path}" ]]; then
         # Copy custom files
@@ -170,16 +170,16 @@ custom_files() {
         cp -rf ${custom_files_path}/* files
 
         sync && sleep 3
-        echo -e "${INFO} [ files ] directory status: \n$(ls -lh files/ 2>/dev/null)"
+        echo -e "${INFO} [ files ] directory contents: \n$(ls -lh files/ 2>/dev/null)"
     else
-        echo -e "${INFO} No customized files were added."
+        echo -e "${INFO} No custom files found."
     fi
 }
 
 # Rebuild OpenWrt firmware
 rebuild_firmware() {
     cd ${imagebuilder_path}
-    echo -e "${STEPS} Start building OpenWrt with Image Builder..."
+    echo -e "${STEPS} Building OpenWrt firmware with Image Builder..."
 
     # Selecting default packages, lib, theme, app and i18n, etc.
     my_packages="\
@@ -208,14 +208,14 @@ rebuild_firmware() {
     make image PROFILE="" PACKAGES="${my_packages}" FILES="files"
 
     sync && sleep 3
-    echo -e "${INFO} [ ${openwrt_dir}/bin/targets/*/*/ ] directory status: \n$(ls -lh bin/targets/*/*/ 2>/dev/null)"
-    echo -e "${INFO} The rebuild is successful."
+    echo -e "${INFO} [ ${openwrt_dir}/bin/targets/*/*/ ] directory contents: \n$(ls -lh bin/targets/*/*/ 2>/dev/null)"
+    echo -e "${INFO} Firmware build completed successfully."
 }
 
 # Custom settings after rebuild
 custom_settings() {
     cd ${imagebuilder_path}
-    echo -e "${STEPS} Start performing custom settings after rebuild..."
+    echo -e "${STEPS} Applying post-build customizations..."
 
     # Clean up temporary and output directories
     [[ -d "${tmp_path}" ]] && rm -rf "${tmp_path:?}"/* || mkdir -p "${tmp_path}"
@@ -226,9 +226,9 @@ custom_settings() {
 
     # Check if the original archive exists
     if [[ ! -f "${original_archive}" ]]; then
-        error_msg "No *rootfs.tar.gz found."
+        error_msg "No rootfs.tar.gz archive found in build output."
     else
-        echo -e "${INFO} Processing: ${original_archive}"
+        echo -e "${INFO} Found rootfs archive: ${original_archive}"
 
         # Get the filename and path
         original_filename="$(basename "${original_archive}")"
@@ -242,7 +242,7 @@ custom_settings() {
         # Modify etc/openwrt_release
         release_file="${unpack_path}/etc/openwrt_release"
         if [[ -f "${release_file}" ]]; then
-            echo -e "${INFO} Modifying etc/openwrt_release..."
+            echo -e "${INFO} Updating etc/openwrt_release..."
             {
                 echo "DISTRIB_SOURCEREPO='github.com/${op_sourse}/${op_sourse}'"
                 echo "DISTRIB_SOURCECODE='${op_sourse}'"
@@ -257,7 +257,7 @@ custom_settings() {
         (cd "${unpack_path}" && tar -czpf "${tmp_path}/${original_filename}" ./)
 
         # Move the repacked archive to the output directory
-        echo -e "${INFO} Moving repacked OpenWrt rootfs file to output directory..."
+        echo -e "${INFO} Moving modified rootfs to output directory..."
         mv -f "${tmp_path}/${original_filename}" "${output_path}/"
         # Copy the config file to the output directory
         cp -f .config "${output_path}/config" || true
@@ -266,20 +266,20 @@ custom_settings() {
     sync && sleep 3
     cd ${make_path}
     rm -rf "${imagebuilder_path}"
-    echo -e "${INFO} [ ${output_path} ] directory status: \n$(ls -lh ${output_path}/ 2>/dev/null)"
-    echo -e "${INFO} Modification successfully."
+    echo -e "${INFO} [ ${output_path} ] directory contents: \n$(ls -lh ${output_path}/ 2>/dev/null)"
+    echo -e "${INFO} Post-build customizations applied successfully."
 }
 
 # Show welcome message
-echo -e "${STEPS} Welcome to Rebuild OpenWrt Using the Image Builder."
-[[ -x "${0}" ]] || error_msg "Please give the script permission to run: [ chmod +x ${0} ]"
-[[ -z "${1}" ]] && error_msg "Please specify the OpenWrt Branch, such as [ ${0} openwrt:24.10.4 ]"
-[[ "${1}" =~ ^[a-z]{3,}:[0-9]+ ]] || error_msg "Incoming parameter format <source:branch>: openwrt:24.10.4"
+echo -e "${STEPS} Welcome to the OpenWrt Image Builder."
+[[ -x "${0}" ]] || error_msg "Please grant execution permission: [ chmod +x ${0} ]"
+[[ -z "${1}" ]] && error_msg "Please specify the OpenWrt source and branch, e.g. [ ${0} openwrt:24.10.4 ]"
+[[ "${1}" =~ ^[a-z]{3,}:[0-9]+ ]] || error_msg "Invalid parameter format. Expected <source:branch>, e.g. openwrt:24.10.4"
 op_sourse="${1%:*}"
 op_branch="${1#*:}"
-echo -e "${INFO} Rebuild path: [ ${PWD} ]"
-echo -e "${INFO} Rebuild Source: [ ${op_sourse} ], Branch: [ ${op_branch} ]"
-echo -e "${INFO} Server space usage before starting to compile: \n$(df -hT ${make_path}) \n"
+echo -e "${INFO} Working directory: [ ${PWD} ]"
+echo -e "${INFO} Source: [ ${op_sourse} ], Branch: [ ${op_branch} ]"
+echo -e "${INFO} Server disk usage before build: \n$(df -hT ${make_path}) \n"
 #
 # Perform related operations
 download_imagebuilder
@@ -291,5 +291,5 @@ rebuild_firmware
 custom_settings
 #
 # Show server end information
-echo -e "${SUCCESS} OpenWrt ImageBuilder processed successfully."
-echo -e "${INFO} Server space usage after compilation: \n$(df -hT ${make_path}) \n"
+echo -e "${SUCCESS} OpenWrt Image Builder completed successfully."
+echo -e "${INFO} Server disk usage after build: \n$(df -hT ${make_path}) \n"

@@ -53,23 +53,23 @@ runs:
     - shell: bash
       run: |
         cd ${{ github.action_path }}
-        echo -e "ophub package actions path: [ ${PWD} ]"
+        echo -e "Action workspace path: [ ${PWD} ]"
 
         openwrt_filename="${{ inputs.openwrt_path }}"
         openwrt_savefile="${openwrt_filename##*/}"
         openwrt_savepath="openwrt-armsr"
         openwrt_outpath="openwrt/out"
-        echo -e "Get openwrt file input parameters: [ ${openwrt_filename} ]"
-        [[ -z "${openwrt_filename}" ]] && echo -e "The [ openwrt_path ] variable must be specified." && exit 1
+        echo -e "OpenWrt rootfs input path: [ ${openwrt_filename} ]"
+        [[ -z "${openwrt_filename}" ]] && echo -e "The [ openwrt_path ] parameter is required but not specified." && exit 1
         [[ -d "${openwrt_savepath}" ]] || mkdir -p ${openwrt_savepath}
         [[ -d "${openwrt_outpath}" ]] || mkdir -p ${openwrt_outpath}
 
         if [[ "${openwrt_filename}" =~ ^http ]]; then
-            echo -e "Download file: [ ${openwrt_filename} ]"
+            echo -e "Downloading OpenWrt rootfs file: [ ${openwrt_filename} ]"
             curl -fsSL "${openwrt_filename}" -o "${openwrt_savepath}/${openwrt_savefile}"
         else
             if [[ -z "$(ls ${openwrt_savepath}/${openwrt_savefile} 2>/dev/null)" ]]; then
-                echo -e "Copy OpenWrt rootfs file: [ ${openwrt_filename} ]"
+                echo -e "Copying OpenWrt rootfs file: [ ${openwrt_filename} ]"
                 if [[ "${openwrt_filename}" =~ ^/ ]]; then
                     cp -vf ${openwrt_filename} -t ${openwrt_savepath}/ || true
                 else
@@ -80,22 +80,22 @@ runs:
             fi
         fi
         sync
-        echo -e "About the [ ${openwrt_savepath} ] directory: \n$(ls -lh ${openwrt_savepath} 2>/dev/null)"
+        echo -e "Contents of the [ ${openwrt_savepath} ] directory: \n$(ls -lh ${openwrt_savepath} 2>/dev/null)"
 
-        # Custom OpenWrt remake files
+        # Apply custom OpenWrt files
         if [[ -n "${{ inputs.openwrt_files }}" && "${{ inputs.openwrt_files }}" != "false" ]]; then
-            echo -e "Add my custom OpenWrt remake files..."
+            echo -e "Applying custom OpenWrt files..."
             copy_from_path="${{ inputs.openwrt_files }}"
             copy_from_path="${copy_from_path%/}"
             [[ "${copy_from_path}" != /* ]] && copy_from_path="${{ github.workspace }}/${copy_from_path}"
             copy_to_path="make-openwrt/openwrt-files/common-files"
             cp -avf --no-preserve=ownership "${copy_from_path}/." -t "${copy_to_path}/" || true
         else
-            echo -e "Use the default OpenWrt remake files."
+            echo -e "Using the default OpenWrt files."
         fi
 
         cd ${{ github.action_path }}
-        echo -e "Start to make openwrt..."
+        echo -e "Starting OpenWrt build process..."
         make_command=""
         [[ -n "${{ inputs.openwrt_board }}" ]] && make_command="${make_command} -b ${{ inputs.openwrt_board }}"
         [[ -n "${{ inputs.kernel_repo }}" ]] && make_command="${make_command} -r ${{ inputs.kernel_repo }}"
@@ -110,19 +110,19 @@ runs:
 
         cd ${{ github.action_path }}
         # Copy OpenWrt rootfs.tar.gz file to the output directory
-        echo -e "About the [ ${openwrt_savepath} ] directory: \n$(ls -lh ${openwrt_savepath} 2>/dev/null)"
+        echo -e "Contents of the [ ${openwrt_savepath} ] directory: \n$(ls -lh ${openwrt_savepath} 2>/dev/null)"
         sudo cp -vf ${openwrt_savepath}/${openwrt_savefile} -t ${openwrt_outpath}/ || true
         sync && sleep 3
 
         cd ${{ github.action_path }}
-        echo -e "Output environment variables."
+        echo -e "Setting output environment variables."
         echo "PACKAGED_OUTPUTPATH=${PWD}/${openwrt_outpath}" >> ${GITHUB_ENV}
         echo "PACKAGED_OUTPUTDATE=$(date +"%m.%d.%H%M")" >> ${GITHUB_ENV}
         echo "PACKAGED_STATUS=success" >> ${GITHUB_ENV}
         echo -e "PACKAGED_OUTPUTPATH: ${PWD}/${openwrt_outpath}"
         echo -e "PACKAGED_OUTPUTDATE: $(date +"%m.%d.%H%M")"
         echo -e "PACKAGED_STATUS: success"
-        echo -e "PACKAGED_OUTPUTPATH files list: \n$(ls -lh ${PWD}/${openwrt_outpath}/ 2>/dev/null)"
+        echo -e "PACKAGED_OUTPUTPATH files: \n$(ls -lh ${PWD}/${openwrt_outpath}/ 2>/dev/null)"
 
 branding:
   icon: "terminal"

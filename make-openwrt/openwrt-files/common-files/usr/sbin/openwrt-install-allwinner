@@ -8,7 +8,7 @@
 # This file is a part of the make OpenWrt
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Description: Install openwrt to eMMC for Allwinner boxes
+# Description: Install OpenWrt to eMMC for Allwinner devices
 # Copyright (C) 2022- https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2022- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
@@ -40,7 +40,7 @@ ERROR="[\033[91m ERROR \033[0m]"
 #
 #================================================================================================
 
-# Encountered a serious error, abort the script execution
+# Output error message and abort script execution
 error_msg() {
     echo -e "${ERROR} ${1}"
     exit 1
@@ -48,7 +48,7 @@ error_msg() {
 
 # Check dependencies
 check_depends() {
-    echo -e "${STEPS} Start checking dependencies..."
+    echo -e "${STEPS} Checking required dependencies..."
 
     necessary_packages=(
         "tar"
@@ -58,7 +58,7 @@ check_depends() {
 
     i="1"
     for package in ${necessary_packages[*]}; do
-        [[ -n "$(which "${package}" 2>/dev/null)" ]] || error_msg "Missing [ ${package} ] packages."
+        [[ -n "$(which "${package}" 2>/dev/null)" ]] || error_msg "Required package [ ${package} ] is not installed."
         let i++
     done
 }
@@ -73,26 +73,26 @@ get_root_partition_name() {
         [[ -n "${partition_name}" ]] && break
     done
 
-    [[ -z "${partition_name}" ]] && error_msg "Cannot find the root partition!"
+    [[ -z "${partition_name}" ]] && error_msg "Unable to determine the root filesystem partition!"
     echo "${partition_name}"
 }
 
 # Initialize all variables
 init_var() {
-    echo -e "${STEPS} Start initializing the environment..."
+    echo -e "${STEPS} Initializing installation environment..."
 
-    # View device configuration information
-    [[ -s "${op_release}" ]] || error_msg "[ ${op_release} ] file is missing!"
+    # Verify device configuration information
+    [[ -s "${op_release}" ]] || error_msg "Required configuration file [ ${op_release} ] is missing!"
     PLATFORM="$(cat "${op_release}" | grep -E "^PLATFORM" | awk -F"'" '{print $2}')"
     FDTFILE="$(cat "${op_release}" | grep -E "^FDTFILE" | awk -F"'" '{print $2}')"
     FAMILY="$(cat "${op_release}" | grep -E "^FAMILY" | awk -F"'" '{print $2}')"
     MAINLINE_UBOOT="$(cat "${op_release}" | grep -E "^MAINLINE_UBOOT" | awk -F"'" '{print $2}')"
     BOOTLOADER_IMG="$(cat "${op_release}" | grep -E "^ANDROID_UBOOT" | awk -F"'" '{print $2}')"
 
-    # Check key files and parameters
-    [[ "${PLATFORM}" == "allwinner" ]] || error_msg "This script only supports [ Allwinner ] series boxes."
-    [[ -f "${BOOTLOADER_IMG}" ]] || error_msg "Missing BOOTLOADER_IMG file: [ ${BOOTLOADER_IMG} ]."
-    [[ -n "${FDTFILE}" && -n "${FAMILY}" ]] || error_msg "Config is missing in [ ${op_release} ] file."
+    # Verify key files and parameters
+    [[ "${PLATFORM}" == "allwinner" ]] || error_msg "This script only supports Allwinner platform devices."
+    [[ -f "${BOOTLOADER_IMG}" ]] || error_msg "Required bootloader image not found: [ ${BOOTLOADER_IMG} ]."
+    [[ -n "${FDTFILE}" && -n "${FAMILY}" ]] || error_msg "FDTFILE or FAMILY configuration is missing in [ ${op_release} ]."
 
     # Display device configuration information
     echo -e "${INFO} PLATFORM: [ ${PLATFORM} ]"
@@ -115,7 +115,7 @@ init_var() {
     [[ -z "${install_emmc}" ]] && error_msg "The eMMC storage not found in this device!"
     # Location of emmc
     DEV_EMMC="/dev/${install_emmc}"
-    echo -e "${INFO} The device eMMC name: [ ${DEV_EMMC} ]"
+    echo -e "${INFO} Target eMMC device: [ ${DEV_EMMC} ]"
 
     # Create a file preprocessing directory
     [[ -d "${tmp_path}" ]] && rm -rf ${tmp_path}/*
@@ -137,13 +137,13 @@ init_var() {
 # Create emmc partition
 create_partition() {
     cd /
-    echo -e "${STEPS} Start creating eMMC partition..."
+    echo -e "${STEPS} Creating eMMC partitions..."
 
     # Backup the bootloader, necessary for system recovery
     [[ -d "/usr/lib/u-boot" ]] || mkdir -p /usr/lib/u-boot
     MYBOX_UBOOT="/usr/lib/u-boot/mybox-bootloader.img"
     if [[ ! -f "${MYBOX_UBOOT}" ]]; then
-        echo -e "${INFO} Start backing up the default bootloader."
+        echo -e "${INFO} Backing up the original bootloader..."
         dd if="${DEV_EMMC}" of="${MYBOX_UBOOT}" bs=1M count=4 conv=fsync
         [[ "${?}" -eq "0" ]] || error_msg "Using dd to backup [ ${MYBOX_UBOOT} ] failed."
     else
@@ -160,7 +160,7 @@ create_partition() {
     # Clear emmc disk data
     exists_pts="$(parted ${DEV_EMMC} print 2>/dev/null | grep 'primary' | wc -l)"
     if [[ "${exists_pts}" -gt "0" ]]; then
-        echo -e "${INFO} Delete the existing [ ${exists_pts} ] partitions."
+        echo -e "${INFO} Deleting existing [ ${exists_pts} ] partition(s)."
         i=1
         while [[ "${i}" -le "${exists_pts}" ]]; do
             umount -f ${DEV_EMMC}p${i} 2>/dev/null
@@ -169,7 +169,7 @@ create_partition() {
             let i++
         done
     fi
-    echo -e "${INFO} Remove the current bootloader."
+    echo -e "${INFO} Clearing existing bootloader area."
 
     # Set partition size (Unit: MiB)
     BLANK1="16"
@@ -178,7 +178,7 @@ create_partition() {
     ROOT2="960"
 
     # Format emmc disk
-    echo -e "${INFO} Start create MBR and partition."
+    echo -e "${INFO} Creating MBR partition table..."
     parted -s "${DEV_EMMC}" mklabel msdos
     parted -s "${DEV_EMMC}" mkpart primary fat32 $((BLANK1))MiB $((BLANK1 + BOOT - 1))MiB
     parted -s "${DEV_EMMC}" mkpart primary btrfs $((BLANK1 + BOOT))MiB $((BLANK1 + BOOT + ROOT1 - 1))MiB
@@ -205,7 +205,7 @@ create_partition() {
 # Copy bootfs partition files
 copy_bootfs() {
     cd /
-    echo -e "${STEPS} Start processing the BOOTFS partition..."
+    echo -e "${STEPS} Processing BOOTFS partition..."
 
     PART_BOOT="${DEV_EMMC}p1"
 
@@ -215,13 +215,13 @@ copy_bootfs() {
         [[ "${?}" -eq "0" ]] || error_msg "Failed to umount [ ${PART_BOOT} ]."
     fi
 
-    echo -e "${INFO} Start formatting BOOTFS partition..."
+    echo -e "${INFO} Formatting BOOTFS partition..."
     mkfs.fat -F 32 -n "EMMC_BOOT" ${PART_BOOT} >/dev/null 2>&1
     [[ "${?}" -eq "0" ]] || error_msg "Failed to format BOOTFS using [ mkfs.fat ]."
     mount -o rw ${PART_BOOT} ${DIR_INSTALL}
     [[ "${?}" -eq "0" ]] || error_msg "Failed to mount BOOTFS partition."
 
-    echo -e "${INFO} Start copy BOOTFS partition data."
+    echo -e "${INFO} Copying BOOTFS partition data..."
     cp -rf /boot/* ${DIR_INSTALL}
     rm -rf ${DIR_INSTALL}/'System Volume Information'
 
@@ -229,7 +229,7 @@ copy_bootfs() {
     armbianenv_rootdev="UUID=${ROOTFS1_UUID}"
     armbianenv_conf_file="${DIR_INSTALL}/armbianEnv.txt"
     [[ -f "${armbianenv_conf_file}" ]] && {
-        echo -e "${INFO} Update the [ armbianEnv.conf ] file."
+        echo -e "${INFO} Updating [ armbianEnv.txt ] file."
         sed -i "s|^fdtfile=.*|fdtfile=${PLATFORM}/${FDTFILE}|g" ${armbianenv_conf_file}
         sed -i "s|^rootfstype=.*|rootfstype=btrfs|g" ${armbianenv_conf_file}
         sed -i "s|^rootdev=.*|rootdev=${armbianenv_rootdev}|g" ${armbianenv_conf_file}
@@ -241,7 +241,7 @@ copy_bootfs() {
     uenv_mount_string="UUID=${ROOTFS1_UUID} rootflags=compress=zstd:6 rootfstype=btrfs"
     uenv_conf_file="${DIR_INSTALL}/uEnv.txt"
     [[ -f "${uenv_conf_file}" ]] && {
-        echo -e "${INFO} Update the [ uEnv.txt ] file."
+        echo -e "${INFO} Updating [ uEnv.txt ] file."
         sed -i "s|root=.*console=ttyS0|root=${uenv_mount_string} console=ttyS0|g" ${uenv_conf_file}
         sed -i "s|sun.*.dtb|${FDTFILE}|g" ${uenv_conf_file}
     }
@@ -249,12 +249,12 @@ copy_bootfs() {
     # Update [ /boot/extlinux/extlinux.conf ] settings
     boot_extlinux_file="${DIR_INSTALL}/extlinux/extlinux.conf"
     [[ -f "${boot_extlinux_file}" ]] && {
-        echo -e "${INFO} Update the [ extlinux.conf ] file."
+        echo -e "${INFO} Updating [ extlinux.conf ] file."
         sed -i "s|root=.*console=ttyS0|root=${uenv_mount_string} console=ttyS0|g" ${boot_extlinux_file}
         sed -i "s|sun.*.dtb|${FDTFILE}|g" ${boot_extlinux_file}
     }
 
-    # Replace eMMC boot files
+    # Replace eMMC-specific boot files
     [[ -f "${DIR_INSTALL}/boot-emmc.scr" ]] && mv -f ${DIR_INSTALL}/boot-emmc.scr ${DIR_INSTALL}/boot.scr
     [[ -f "${DIR_INSTALL}/boot-emmc.cmd" ]] && mv -f ${DIR_INSTALL}/boot-emmc.cmd ${DIR_INSTALL}/boot.cmd
 
@@ -266,7 +266,7 @@ copy_bootfs() {
 # Copy rootfs partition files
 copy_rootfs() {
     cd /
-    echo -e "${STEPS} Start processing the ROOTFS1 partition..."
+    echo -e "${STEPS} Processing ROOTFS1 partition..."
 
     PART_ROOT="${DEV_EMMC}p2"
 
@@ -276,7 +276,7 @@ copy_rootfs() {
         [[ "${?}" -eq "0" ]] || error_msg "Failed to umount [ ${PART_ROOT} ]."
     fi
 
-    echo -e "${INFO} Start formatting ROOTFS1 partition..."
+    echo -e "${INFO} Formatting ROOTFS1 partition..."
     mkfs.btrfs -f -U ${ROOTFS1_UUID} -L "MMC_ROOTFS1" -m single ${PART_ROOT} >/dev/null 2>&1
     [[ "${?}" -eq "0" ]] || error_msg "Failed to format ROOTFS1 using [ mkfs.btrfs ]"
     mount -t btrfs -o compress=zstd:6 ${PART_ROOT} ${DIR_INSTALL}
@@ -285,7 +285,7 @@ copy_rootfs() {
     # Create snapshot directory
     btrfs subvolume create ${DIR_INSTALL}/etc >/dev/null 2>&1
 
-    echo -e "${INFO} Start copy ROOTFS partition data."
+    echo -e "${INFO} Copying ROOTFS partition data..."
     # Create relevant directories
     mkdir -p ${DIR_INSTALL}/{boot/,dev/,overlay/,rom/,mnt/,proc/,run/,sys/,tmp/,.reserved/,.snapshots/}
     chmod 1777 ${DIR_INSTALL}/tmp
@@ -305,7 +305,7 @@ copy_rootfs() {
     ln -sf /tmp ${DIR_INSTALL}/var
 
     # Generate etc/fstab
-    echo -e "${INFO} Generate the new fstab file."
+    echo -e "${INFO} Generating new fstab file."
     rm -f ${DIR_INSTALL}/etc/fstab
     cat >${DIR_INSTALL}/etc/fstab <<EOF
 UUID=${ROOTFS1_UUID}    /        btrfs    compress=zstd:6      0 1
@@ -324,7 +324,7 @@ EOF
     ln -sf /mnt/${install_emmc}p4/docker/ ${DIR_INSTALL}/opt/docker
 
     # Update docker settings
-    echo -e "${INFO} Update docker data storage path."
+    echo -e "${INFO} Updating Docker data storage path."
     [[ -f "${DIR_INSTALL}/etc/docker/daemon.json" ]] && {
         sed -i "s|mnt\/.*\/docker|mnt\/${install_emmc}p4\/docker|" ${DIR_INSTALL}/etc/docker/daemon.json
     }
@@ -333,7 +333,7 @@ EOF
     }
 
     # Generate initialization snapshot
-    echo -e "${INFO} Create initial /etc snapshot."
+    echo -e "${INFO} Creating initial /etc snapshot."
     btrfs subvolume snapshot -r ${DIR_INSTALL}/etc ${DIR_INSTALL}/.snapshots/etc-000 >/dev/null 2>&1
 
     sync && sleep 3
@@ -344,11 +344,11 @@ EOF
     umount -f ${DEV_EMMC}p3 2>/dev/null
     umount -f ${DEV_EMMC}p4 2>/dev/null
 
-    echo -e "${STEPS} Start formatting ROOTFS2 partition..."
+    echo -e "${STEPS} Formatting ROOTFS2 partition..."
     mkfs.btrfs -f -U ${ROOTFS2_UUID} -L "MMC_ROOTFS2" -m single ${DEV_EMMC}p3 >/dev/null 2>&1
     [[ "${?}" -eq "0" ]] || error_msg "Failed to format ROOTFS2 using [ mkfs.btrfs ]"
 
-    echo -e "${STEPS} Start formatting SHARE_DATA partition..."
+    echo -e "${STEPS} Formatting SHARE_DATA partition..."
     mkfs.btrfs -f -U ${SHARE_DATA_UUID} -L "SHARE_DATA" -m single ${DEV_EMMC}p4 >/dev/null 2>&1
     [[ "${?}" -eq "0" ]] || error_msg "Failed to format SHARE_DATA using [ mkfs.btrfs ]"
 }
@@ -358,7 +358,7 @@ EOF
     error_msg "Please grant execution permission: [ chmod +x /usr/sbin/openwrt-install-allwinner ]"
 }
 
-echo -e "${STEPS} Start install OpenWrt to eMMC..."
+echo -e "${STEPS} Starting OpenWrt installation to eMMC..."
 
 # Check dependencies
 check_depends
@@ -371,5 +371,5 @@ copy_bootfs
 # Copy rootfs partition files
 copy_rootfs
 
-echo -e "${SUCCESS} Successful installed, please unplug the USB, re-insert the power supply to start the OpenWrt."
+echo -e "${SUCCESS} Installation completed successfully. Please remove the USB drive and re-insert the power supply to boot OpenWrt."
 exit 0

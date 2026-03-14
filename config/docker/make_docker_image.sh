@@ -5,10 +5,10 @@
 # License version 2. This program is licensed "as is" without any
 # warranty of any kind, whether express or implied.
 #
-# This file is a part of the make OpenWrt
+# This file is a part of the OpenWrt Docker Image Builder
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Description: Creating a Docker Image
+# Description: Create a Docker image from an OpenWrt rootfs archive
 # Copyright (C) 2021~ https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2021~ https://github.com/ophub/amlogic-s9xxx-openwrt
 #
@@ -18,9 +18,9 @@
 #
 # error_msg         : Output error message
 # check_depends     : Check dependencies
-# find_openwrt      : Find OpenWrt file (openwrt/*rootfs.tar.gz)
-# adjust_settings   : Adjust related file settings
-# make_dockerimg    : make docker image
+# find_openwrt      : Locate the OpenWrt rootfs archive (openwrt/*rootfs.tar.gz)
+# adjust_settings   : Adjust rootfs configuration for Docker
+# make_dockerimg    : Build and package the Docker image
 #
 #================================ Set make environment variables ================================
 #
@@ -50,7 +50,7 @@ error_msg() {
 }
 
 check_depends() {
-    # Check the necessary dependencies
+    # Check the required dependencies
     is_dpkg="0"
     dpkg_packages=("tar" "gzip")
     i="1"
@@ -61,39 +61,39 @@ check_depends() {
 
     # Install missing packages
     if [[ "${is_dpkg}" -eq "1" ]]; then
-        echo -e "${STEPS} Start installing the necessary dependencies..."
+        echo -e "${STEPS} Installing required dependencies..."
         sudo apt-get update
         sudo apt-get install -y ${dpkg_packages[*]}
-        [[ "${?}" -ne "0" ]] && error_msg "Dependency installation failed."
+        [[ "${?}" -ne "0" ]] && error_msg "Failed to install required dependencies."
     fi
 }
 
 find_openwrt() {
     cd ${current_path}
-    echo -e "${STEPS} Start searching for OpenWrt file..."
+    echo -e "${STEPS} Searching for OpenWrt rootfs file..."
 
     # Find whether the OpenWrt file exists
     openwrt_file_name="$(ls ${openwrt_path}/${openwrt_rootfs_file} 2>/dev/null | head -n 1 | awk -F "/" '{print $NF}')"
     if [[ -n "${openwrt_file_name}" ]]; then
-        echo -e "${INFO} OpenWrt file: [ ${openwrt_file_name} ]"
+        echo -e "${INFO} Found OpenWrt rootfs file: [ ${openwrt_file_name} ]"
     else
-        error_msg "There is no [ ${openwrt_rootfs_file} ] file in the [ ${openwrt_path} ] directory."
+        error_msg "No [ ${openwrt_rootfs_file} ] file found in the [ ${openwrt_path} ] directory."
     fi
 
     # Check whether the Dockerfile exists
-    [[ -f "${docker_path}/Dockerfile" ]] || error_msg "Missing Dockerfile."
+    [[ -f "${docker_path}/Dockerfile" ]] || error_msg "Required Dockerfile is missing."
 }
 
 adjust_settings() {
     cd ${current_path}
-    echo -e "${STEPS} Start adjusting OpenWrt file settings..."
+    echo -e "${STEPS} Adjusting OpenWrt rootfs settings..."
 
-    echo -e "${INFO} Unpack Openwrt."
+    echo -e "${INFO} Unpacking OpenWrt rootfs..."
     rm -rf ${tmp_path} && mkdir -p ${tmp_path}
     tar -xzf ${openwrt_path}/${openwrt_file_name} -C ${tmp_path}
 
     # Remove unused files
-    echo -e "${INFO} Remove useless files."
+    echo -e "${INFO} Removing unnecessary files..."
     rm -rf ${tmp_path}/lib/firmware/*
     rm -rf ${tmp_path}/lib/modules/*
     rm -f ${tmp_path}/root/.todo_rootfs_resize
@@ -114,14 +114,14 @@ adjust_settings() {
 
     # Turn off hw_flow by default
     [[ -f "${tmp_path}/etc/config/turboacc" ]] && {
-        echo -e "${INFO} Adjust turboacc settings."
+        echo -e "${INFO} Adjusting TurboACC settings."
         sed -i "s|option hw_flow.*|option hw_flow '0'|g" ${tmp_path}/etc/config/turboacc
         sed -i "s|option sw_flow.*|option sw_flow '0'|g" ${tmp_path}/etc/config/turboacc
     }
 
     # Modify the cpu mode to schedutil
     [[ -f "${tmp_path}/etc/config/cpufreq" ]] && {
-        echo -e "${INFO} Adjust cpufreq settings"
+        echo -e "${INFO} Adjusting CPU frequency settings."
         sed -i "s/ondemand/schedutil/g" ${tmp_path}/etc/config/cpufreq
     }
 
@@ -137,7 +137,7 @@ adjust_settings() {
 
     # Relink the kmod program
     [[ -f "${common_files}/sbin/kmod" ]] && (
-        echo -e "${INFO} Adjust kmod settings."
+        echo -e "${INFO} Adjusting kernel module links."
         cp -f ${common_files}/sbin/kmod ${tmp_path}/sbin/kmod
         chmod +x ${tmp_path}/sbin/kmod
         kmod_list="depmod insmod lsmod modinfo modprobe rmmod"
@@ -150,7 +150,7 @@ adjust_settings() {
     # Add version information to the banner
     [[ -f "${common_files}/etc/banner" ]] && {
         cp -f ${common_files}/etc/banner ${tmp_path}/etc/banner
-        echo -e "${INFO} Adjust banner settings."
+        echo -e "${INFO} Updating system banner."
         echo " Board: docker | Production Date: $(date +%Y-%m-%d)" >>${tmp_path}/etc/banner
         echo "───────────────────────────────────────────────────────────────────────" >>${tmp_path}/etc/banner
     }
@@ -158,36 +158,36 @@ adjust_settings() {
 
 make_dockerimg() {
     cd ${tmp_path}
-    echo -e "${STEPS} Start making docker image..."
+    echo -e "${STEPS} Building Docker image..."
 
     # Make docker image
     tar -czf ${docker_rootfs_file} *
-    [[ "${?}" -eq "0" ]] || error_msg "Docker image creation failed."
+    [[ "${?}" -eq "0" ]] || error_msg "Docker rootfs archive creation failed."
 
     # Move the docker image to the output directory
     rm -rf ${out_path} && mkdir -p ${out_path}
     mv -f ${docker_rootfs_file} ${out_path}
-    [[ "${?}" -eq "0" ]] || error_msg "Docker image move failed."
-    echo -e "${INFO} Docker image packaging succeeded."
+    [[ "${?}" -eq "0" ]] || error_msg "Failed to move Docker image to output directory."
+    echo -e "${INFO} Docker rootfs archived successfully."
 
     cd ${current_path}
 
     # Add Dockerfile
     cp -f ${docker_path}/Dockerfile ${out_path}
-    [[ "${?}" -eq "0" ]] || error_msg "Dockerfile addition failed."
+    [[ "${?}" -eq "0" ]] || error_msg "Failed to add Dockerfile."
     echo -e "${INFO} Dockerfile added successfully."
 
     # Remove temporary directory
     rm -rf ${tmp_path}
 
     sync && sleep 3
-    echo -e "${INFO} Docker files list: \n$(ls -lh ${out_path})"
-    echo -e "${SUCCESS} Docker image successfully created."
+    echo -e "${INFO} Docker output files: \n$(ls -lh ${out_path})"
+    echo -e "${SUCCESS} Docker image created successfully."
 }
 
 # Show welcome message
-echo -e "${STEPS} Welcome to the Docker Image Maker Tool."
-echo -e "${INFO} Make path: [ ${PWD} ]"
+echo -e "${STEPS} Welcome to the Docker Image Builder."
+echo -e "${INFO} Working directory: [ ${PWD} ]"
 #
 check_depends
 find_openwrt

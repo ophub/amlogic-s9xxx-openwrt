@@ -8,7 +8,7 @@
 # This file is a part of the make OpenWrt for Amlogic s9xxx tv box
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Description: Restoring the system initialization state
+# Description: Reset the system to its initial state
 # Copyright (C) 2021- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
 # Command: firstboot
@@ -21,36 +21,36 @@ SUCCESS="[\033[92m SUCCESS \033[0m]"
 OPTIONS="[\033[93m OPTIONS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 
-# Encountered a serious error, abort the script execution
+# Output error message and abort script execution
 error_msg() {
     echo -e "${ERROR} ${1}"
     exit 1
 }
 
-# Perform recovery
+# Perform system reset by restoring the initial /etc snapshot
 do_recovery() {
     snap_name=".snapshots/etc-000"
     if btrfs subvolume list -rt / | grep "${snap_name}" >/dev/null; then
         cd /
         rm -rf etc.backup && mv etc etc.backup
         if [[ "${?}" -eq "0" ]]; then
-            echo -e "${INFO} Start restoring initialization..."
+            echo -e "${INFO} Restoring system to initial state..."
             btrfs subvolume snapshot "${snap_name}" etc
             [[ "${?}" -eq "0" ]] && rm -rf etc.backup
 
             sync && sleep 3
-            echo -e "${SUCCESS} Recovery successful, restarting..." && reboot
+            echo -e "${SUCCESS} System restored successfully, rebooting..." && reboot
         else
             rm -rf etc && mv etc.backup etc && sync
-            error_msg "Failed to move /etc directory, give up initialization!"
+            error_msg "Failed to backup /etc directory, aborting reset!"
         fi
     else
-        error_msg "Missing initialization snapshot: [ /${snap_name} ], cannot restore!"
+        error_msg "Initial snapshot [ /${snap_name} ] not found, unable to restore!"
     fi
 }
 
-echo -e "${STEPS} Welcome to the Recovery Initialization Tool."
+echo -e "${STEPS} Welcome to the System Reset Tool."
 [[ -x "/sbin/firstboot" ]] || error_msg "Please grant execution permission: [ chmod +x /sbin/firstboot ]"
 
-# Perform recovery
+# Perform system reset
 do_recovery

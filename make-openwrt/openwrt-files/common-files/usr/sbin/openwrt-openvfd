@@ -8,7 +8,7 @@
 # This file is a part of the Armbian for Amlogic TV Boxes
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Description: LED display control
+# Description: LED display control for OpenVFD devices
 # Copyright (C) 2022- https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2022- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
@@ -49,9 +49,9 @@ error_msg() {
     exit 1
 }
 
-# Update openvfd config files
+# Update OpenVFD config files
 do_update_conf() {
-    echo -e "${STEPS} Start updating the openfvd config files..."
+    echo -e "${STEPS} Updating OpenVFD configuration files..."
 
     # Check dependencies
     if command -v opkg >/dev/null 2>&1; then
@@ -70,31 +70,31 @@ do_update_conf() {
     echo "${openvfd_dir}/*" >>.git/info/sparse-checkout
     git remote add origin ${openvfd_repo}
     git pull --quiet --depth=1 origin main
-    [[ "${?}" -ne "0" ]] && error_msg "Download [ ${openvfd_repo} ] scripts failed."
+    [[ "${?}" -ne "0" ]] && error_msg "Failed to download scripts from [ ${openvfd_repo} ]."
 
     # Update related files
     mkdir -p ${openvfd_path}
     cp -af --no-preserve=ownership ${git_tmp_path}/${openvfd_dir}/* ${openvfd_path}
-    [[ "${?}" -ne "0" ]] && error_msg "Sync [ ${openvfd_repo} ] scripts failed."
+    [[ "${?}" -ne "0" ]] && error_msg "Failed to sync files from [ ${openvfd_repo} ]."
     chmod +x ${openvfd_path}/vfdservice
 
     # Clean up temporary files
     rm -rf ${git_tmp_path} 2>/dev/null
 
     sync && sleep 3
-    echo -e "${SUCCESS} Openfvd config files update completed."
+    echo -e "${SUCCESS} OpenVFD configuration files updated successfully."
     exit 0
 }
 
-# Turn on the led screen display
+# Turn on the LED screen display
 do_start() {
-    echo -e "${STEPS} Start the led screen display..."
+    echo -e "${STEPS} Starting LED display..."
 
-    # Check config files and services
+    # Check configuration files and services
     conf_file="${openvfd_path}/conf/${1}"
     if [[ -s "${conf_file}" && -x "${openvfd_service}" ]]; then
         source "${conf_file}" 2>/dev/null
-        echo -e "${INFO} Using LED Profiles: ${conf_file}"
+        echo -e "${INFO} Using LED configuration profile: ${conf_file}"
     else
         error_msg "The LED profile [ ${conf_file} ] does not exist!"
     fi
@@ -116,23 +116,23 @@ do_start() {
 
     if [[ -n "${functions}" ]]; then
         for func in ${functions}; do
-            echo -e "${INFO} turn led ${func} on ... "
+            echo -e "${INFO} Enabling LED function: ${func}"
             echo "${func}" >/sys/class/leds/openvfd/led_on 2>/dev/null
         done
     fi
 
-    echo -e "${SUCCESS} Enable LED display!"
+    echo -e "${SUCCESS} LED display enabled successfully!"
     exit 0
 }
 
-# Turn off the led screen display
+# Turn off the LED screen display
 do_stop() {
-    echo -e "${STEPS} Start to turn off the led screen display..."
+    echo -e "${STEPS} Stopping LED display..."
 
     killall -9 vfdservice 2>/dev/null
     rmmod openvfd -f 2>/dev/null
 
-    echo -e "${SUCCESS} Disable LED display!"
+    echo -e "${SUCCESS} LED display disabled successfully!"
     exit 0
 }
 
@@ -156,7 +156,7 @@ do_select_box() {
     99 | diy) do_start diy.conf ;;
     0 | stop) do_stop ;;
     1 | quit) echo "quit!" && exit 0 ;;
-    *) error_msg "Invalid input!" ;;
+    *) error_msg "Invalid selection!" ;;
     esac
 }
 

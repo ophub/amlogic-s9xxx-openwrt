@@ -8,7 +8,7 @@
 # This file is a part of the make OpenWrt for Amlogic s9xxx tv box
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 #
-# Description: Create TF/SD/USB remaining space partition
+# Description: Expand TF/SD/USB storage with additional partitions
 # Copyright (C) 2021- https://github.com/unifreq/openwrt_packit
 # Copyright (C) 2021- https://github.com/ophub/amlogic-s9xxx-openwrt
 #
@@ -16,7 +16,7 @@
 #
 #========================= Set default parameters ===========================
 #
-# Automatically expand file
+# Automatically expand partition flag file
 todo_rootfs_resize="/root/.todo_rootfs_resize"
 #
 # Set font color
@@ -29,7 +29,7 @@ ERROR="[\033[91m ERROR \033[0m]"
 #
 #===========================================================================
 
-# Encountered a serious error, abort the script execution
+# Output error message and abort script execution
 error_msg() {
     echo -e "${ERROR} ${1}"
     exit 1
@@ -39,7 +39,7 @@ error_msg() {
 do_checkdisk() {
     # Find the partition where root is located
     ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
-    [[ -z "${ROOT_PTNAME}" ]] && error_msg "Cannot find the partition corresponding to the root file system!"
+    [[ -z "${ROOT_PTNAME}" ]] && error_msg "Unable to determine the root filesystem partition!"
 
     # Find the disk where the partition is located, supporting multi-digit partition numbers
     case "${ROOT_PTNAME}" in
@@ -65,16 +65,16 @@ do_checkdisk() {
         LB_PRE="NVME_"
         ;;
     *)
-        error_msg "Unable to recognize the disk type of ${ROOT_PTNAME}!"
+        error_msg "Unrecognized disk type: ${ROOT_PTNAME}!"
         ;;
     esac
-    echo -e "${INFO} OpenWrt running: [ ${LB_PRE:0:-1} - /dev/${DISK_NAME} ]."
+    echo -e "${INFO} OpenWrt storage device: [ ${LB_PRE:0:-1} - /dev/${DISK_NAME} ]."
 
     # Check whether partition is required
     [[ -n "$(lsblk -l -o NAME | grep -oE "^${PT_PRE}4")" ]] && {
-        # Delete auto-extending file
+        # Remove auto-expansion flag file
         rm -f ${todo_rootfs_resize}
-        echo -e "${TIPS} Partitioned, no operation required."
+        echo -e "${TIPS} Partitions already exist, no action needed."
         exit 0
     }
 
@@ -84,31 +84,31 @@ do_checkdisk() {
 # Create the 3rd and 4th partition
 create_new_partition() {
     # Generate New UUID
-    echo -e "${STEPS} Start generating new partition UUID..."
+    echo -e "${STEPS} Generating new partition UUIDs..."
     ROOTFS_UUID="$(cat /proc/sys/kernel/random/uuid)"
     [[ -z "${ROOTFS_UUID}" ]] && ROOTFS_UUID="$(uuidgen)"
     SHARED_UUID="$(cat /proc/sys/kernel/random/uuid)"
     [[ -z "${SHARED_UUID}" ]] && SHARED_UUID="$(uuidgen)"
-    [[ -z "${ROOTFS_UUID}" || -z "${SHARED_UUID}" ]] && error_msg "The new UUID is invalid, cannot continue."
+    [[ -z "${ROOTFS_UUID}" || -z "${SHARED_UUID}" ]] && error_msg "UUID generation failed, cannot continue."
 
-    # Repair disk size
-    echo -e "${INFO} Start repairing hard disk size..."
+    # Verify and repair disk geometry
+    echo -e "${INFO} Verifying disk geometry..."
     printf 'f\n' | parted ---pretend-input-tty /dev/${DISK_NAME} unit MiB print || repair_status="no"
-    [[ "${repair_status}" == "no" ]] && error_msg "Disk size repair failed, stop partitioning."
+    [[ "${repair_status}" == "no" ]] && error_msg "Disk geometry repair failed, aborting partitioning."
 
-    # Calculate partition positions
-    echo -e "${INFO} Start calculating partition location..."
+    # Calculate partition layout
+    echo -e "${INFO} Calculating partition layout..."
     END_P2="$(fdisk -l | grep "/dev/${PT_PRE}2" | sed -n '$p' | awk '{print $3}' | xargs)"
-    [[ -z "${END_P2}" || -z "$(echo ${END_P2} | sed -n "/^[0-9]\+$/p")" ]] && error_msg "Unable to get starting position!"
+    [[ -z "${END_P2}" || -z "$(echo ${END_P2} | sed -n "/^[0-9]\+$/p")" ]] && error_msg "Unable to determine partition starting position!"
     START_P3="$(((END_P2 + 1) / 2048 + 1))"
 
-    # Create the partition
-    echo -e "${INFO} Start creating new partitions..."
+    # Create new partitions
+    echo -e "${INFO} Creating new partitions..."
     ROOTFS_MB="1024"
     parted /dev/${DISK_NAME} mkpart primary btrfs $((START_P3))MiB $((START_P3 + ROOTFS_MB - 1))MiB 2>/dev/null
     parted /dev/${DISK_NAME} mkpart primary btrfs $((START_P3 + ROOTFS_MB))MiB 100% 2>/dev/null
 
-    echo -e "${INFO} Start formatting new partition..."
+    echo -e "${INFO} Formatting new partitions..."
     # Format the third partition
     mkdir -p /mnt/${PT_PRE}3
     umount -f /dev/${PT_PRE}3 2>/dev/null
@@ -123,7 +123,7 @@ create_new_partition() {
 
     # Adjust docker data storage location
     [[ -f "/etc/init.d/dockerd" ]] && {
-        echo -e "${INFO} Start adjusting docker settings..."
+        echo -e "${INFO} Adjusting Docker storage settings..."
         /etc/init.d/dockerd stop 2>/dev/null
         /etc/init.d/dockerd disable 2>/dev/null
         rm -rf "/opt/docker" 2>/dev/null
@@ -157,13 +157,13 @@ EOF
         /etc/init.d/dockerd enable 2>/dev/null
     }
 
-    # Delete auto-extending file
+    # Remove auto-expansion flag file
     rm -f ${todo_rootfs_resize}
-    echo -e "${SUCCESS} Create partition successfully."
+    echo -e "${SUCCESS} Partitions created successfully."
 }
 
 # Show welcome message
-echo -e "${STEPS} Welcome to Partition Creation Tool."
+echo -e "${STEPS} Welcome to the Partition Expansion Tool."
 
 do_checkdisk
 create_new_partition

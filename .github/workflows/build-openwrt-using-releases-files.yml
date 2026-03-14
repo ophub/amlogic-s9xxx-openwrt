@@ -285,7 +285,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Initialization environment
+      - name: Initialize the build environment
         id: init
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -311,7 +311,7 @@ jobs:
           timedatectl status || true
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Create simulated physical disk
+      - name: Create virtual disk for extended storage
         run: |
           mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
           root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
@@ -335,7 +335,7 @@ jobs:
         working-directory: /builder
         if: ${{ steps.init.outputs.status == 'success' && !cancelled() }}
         run: |
-          # Set up compilation source code
+          # Determine the OpenWrt source code repository
           if [[ "${{ inputs.source_branch }}" =~ ^openwrt ]]; then
               REPO_URL="https://github.com/openwrt/openwrt"
           elif [[ "${{ inputs.source_branch }}" =~ ^lede ]]; then
@@ -343,7 +343,7 @@ jobs:
           elif [[ "${{ inputs.source_branch }}" =~ ^immortalwrt ]]; then
               REPO_URL="https://github.com/immortalwrt/immortalwrt"
           else
-              echo "Unknown source code repository."
+              echo "Error: Unknown source code repository."
               exit 1
           fi
           source_branch_input="${{ inputs.source_branch }}"
@@ -355,7 +355,7 @@ jobs:
           ln -sf /builder/openwrt ${{ github.workspace }}/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
-          # Get name (file name) and url (API asset URL)
+          # Query the latest release asset via GitHub API
           latest_version=$(curl -s \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
@@ -370,22 +370,22 @@ jobs:
               {data: .updated_at, url: .url, name: .name}')
 
           [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && {
-              echo "Invalid OpenWrt rootfs download address."
+              echo "Error: Failed to resolve OpenWrt rootfs download URL."
               exit 1
           }
 
-          # Get URL and filename separately
+          # Extract download URL and filename
           latest_url="$(echo ${latest_version} | jq -r '.url')"
           openwrt_filename="$(echo ${latest_version} | jq -r '.name')"
 
-          # Download using API method (add octet-stream header)
+          # Download asset via GitHub API (binary stream)
           echo "Downloading: ${openwrt_filename}"
           curl -fsSL \
                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                -H "Accept: application/octet-stream" \
                "${latest_url}" \
                -o "${armsr_tarfile_path}/${openwrt_filename}"
-          [[ "${?}" -ne "0" ]] && echo "Download failed." && exit 1
+          [[ "${?}" -ne "0" ]] && echo "Error: Download failed." && exit 1
 
           echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
           df -hT ${PWD}
@@ -394,7 +394,7 @@ jobs:
           echo "REPO_BRANCH=${REPO_BRANCH}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Packaging OpenWrt
+      - name: Package OpenWrt for target boards
         if: ${{ steps.down.outputs.status == 'success' && !cancelled() }}
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
@@ -407,7 +407,7 @@ jobs:
           kernel_usage: ${{ inputs.kernel_usage }}
           builder_name: ${{ inputs.builder_name }}
 
-      - name: Upload the packaged OpenWrt
+      - name: Upload packaged OpenWrt to Release
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS == 'success' && !cancelled() }}
         with:
@@ -419,7 +419,7 @@ jobs:
           makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            ### OpenWrt Image information
+            ### OpenWrt Image Information
             - Default IP: `192.168.1.1`
             - Default username: `root`
             - Default password: `password`
@@ -429,6 +429,6 @@ jobs:
             - Login to OpenWrt → `System` → `Amlogic Service` → `Install OpenWrt`
             ### OpenWrt source code
             - [${{ env.REPO_NAME }}](${{ env.REPO_URL }}/tree/${{ env.REPO_BRANCH }})
-            ### Applicable platform
+            ### Applicable Platform
             - 🐧 `arm64`
             - 🐋 Docker image: https://hub.docker.com/u/ophub

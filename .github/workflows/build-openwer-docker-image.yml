@@ -1,11 +1,11 @@
 #=====================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Build OpenWrt Docker image
+# Description: Build and publish OpenWrt Docker image
 # Instructions: https://github.com/docker/build-push-action
 # Build and Push to: https://hub.docker.com/
 #=====================================================================================
 
-name: Build OpenWrt Docker image
+name: Build and publish OpenWrt Docker image
 
 on:
   repository_dispatch:
@@ -47,7 +47,7 @@ jobs:
         id: down
         if: (!cancelled())
         run: |
-          # Get OpenWrt file
+          # Retrieve the latest OpenWrt rootfs file from releases
           latest_version=$(curl -s \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
@@ -62,15 +62,15 @@ jobs:
               {data: .updated_at, url: .url, name: .name}')
 
           [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && {
-              echo "Invalid OpenWrt rootfs file download address."
+              echo "Error: Failed to resolve OpenWrt rootfs download URL."
               exit 1
           }
 
-          # Get URL and filename separately
+          # Extract download URL and filename
           latest_url="$(echo ${latest_version} | jq -r '.url')"
           openwrt_filename="$(echo ${latest_version} | jq -r '.name')"
 
-          # Download using API method (add octet-stream header)
+          # Download asset via GitHub API (binary stream)
           echo "Downloading: ${openwrt_filename}"
           [[ -d "openwrt" ]] || mkdir -p openwrt
           curl -fsSL \
@@ -78,7 +78,7 @@ jobs:
                -H "Accept: application/octet-stream" \
                "${latest_url}" \
                -o "openwrt/${openwrt_filename}"
-          [[ "${?}" -ne "0" ]] && echo "Download failed." && exit 1
+          [[ "${?}" -ne "0" ]] && echo "Error: Download failed." && exit 1
 
           echo "status=success" >> ${GITHUB_OUTPUT}
 
@@ -103,7 +103,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Push to Docker Hub
+      - name: Push image to Docker Hub
         id: push
         if: (!cancelled())
         uses: docker/build-push-action@v5

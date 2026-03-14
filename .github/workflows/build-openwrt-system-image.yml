@@ -1,9 +1,9 @@
 #============================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description: Build OpenWrt system image
+# Description: Build OpenWrt system image from source
 #============================================================================================
 
-name: Build OpenWrt system image
+name: Build OpenWrt system image from source
 
 on:
   repository_dispatch:
@@ -297,7 +297,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Initialization environment
+      - name: Initialize the build environment
         id: init
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -323,7 +323,7 @@ jobs:
           timedatectl status || true
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Create simulated physical disk
+      - name: Create virtual disk for extended storage
         run: |
           mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
           root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
@@ -347,7 +347,7 @@ jobs:
         working-directory: /builder
         if: ${{ steps.init.outputs.status == 'success' && !cancelled() }}
         run: |
-          # Set up compilation source code
+          # Determine the OpenWrt source code repository
           if [[ "${{ inputs.source_branch }}" =~ ^openwrt ]]; then
               REPO_URL="https://github.com/openwrt/openwrt"
           elif [[ "${{ inputs.source_branch }}" =~ ^lede ]]; then
@@ -355,19 +355,19 @@ jobs:
           elif [[ "${{ inputs.source_branch }}" =~ ^immortalwrt ]]; then
               REPO_URL="https://github.com/immortalwrt/immortalwrt"
           else
-              echo "Unknown source code repository."
+              echo "Error: Unknown source code repository."
               exit 1
           fi
           source_branch_input="${{ inputs.source_branch }}"
           REPO_NAME="${source_branch_input%_*}"
           REPO_BRANCH="${source_branch_input##*_}"
 
-          # Clone source code
+          # Clone the source code repository
           git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL} openwrt
           ln -sf /builder/openwrt ${{ github.workspace }}/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
-          # Set output information
+          # Export build metadata
           echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
           echo -e "REPO_URL: [ ${REPO_URL} ]\nREPO_BRANCH: [ ${REPO_BRANCH} ]\nREPO_NAME: [ ${REPO_NAME} ]"
           df -hT ${PWD}
@@ -406,7 +406,7 @@ jobs:
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
 
-      - name: Get OpenWrt source hash
+      - name: Get OpenWrt source commit hash
         id: openwrthash
         run: |
           # Get the latest source hash from the kernel repository
@@ -430,36 +430,36 @@ jobs:
           restore-keys: |
             openwrt-${{ env.REPO_NAME }}-
 
-      - name: Compile the OpenWrt
+      - name: Compile the OpenWrt firmware
         id: compile
         run: |
           cd openwrt/
-          echo -e "$(nproc) thread compile"
+          echo -e "Compiling with $(nproc) threads"
           make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
 
           echo -e "ccache statistics:"
           ccache -s 2>/dev/null
           echo -e "ccache directory size:"
-          du -sh $(pwd)/.ccache 2>/dev/null || echo "No ccache directory."
+          du -sh $(pwd)/.ccache 2>/dev/null || echo "No ccache directory found."
 
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Clear server space
+      - name: Clean up build files and reclaim disk space
         id: clean
         if: ${{ steps.compile.outputs.status == 'success' && !cancelled() }}
         run: |
-          # Clean up server space
+          # Clean up build artifacts and reclaim disk space
           cd openwrt/
           [[ -d "output" ]] || mkdir output
           cp -f bin/targets/*/*/*rootfs.tar.gz output/
           cp -f .config output/config
           ls -A | grep -vE '^(output|\.ccache)$' | xargs rm -rf || true
 
-          # Set output information
+          # Export build metadata
           df -hT ${PWD}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Upload OpenWrt to Release
+      - name: Upload OpenWrt rootfs to Release
         uses: ncipollo/release-action@main
         if: ${{ steps.clean.outputs.status == 'success' && !cancelled() }}
         with:
@@ -471,7 +471,7 @@ jobs:
           makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Packaging OpenWrt
+      - name: Package OpenWrt for target boards
         if: ${{ steps.clean.outputs.status == 'success' && !cancelled() }}
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
@@ -484,7 +484,7 @@ jobs:
           kernel_usage: ${{ inputs.kernel_usage }}
           builder_name: ${{ inputs.builder_name }}
 
-      - name: Upload the packaged OpenWrt
+      - name: Upload packaged OpenWrt to Release
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS == 'success' && !cancelled() }}
         with:
@@ -496,7 +496,7 @@ jobs:
           makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            ### OpenWrt Image information
+            ### OpenWrt Image Information
             - Default IP: `192.168.1.1`
             - Default username: `root`
             - Default password: `password`
@@ -506,6 +506,6 @@ jobs:
             - Login to OpenWrt → `System` → `Amlogic Service` → `Install OpenWrt`
             ### OpenWrt source code
             - [${{ env.REPO_NAME }}](${{ env.REPO_URL }}/tree/${{ env.REPO_BRANCH }})
-            ### Applicable platform
+            ### Applicable Platform
             - 🐧 `arm64`
             - 🐋 Docker image: https://hub.docker.com/u/ophub

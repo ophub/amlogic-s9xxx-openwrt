@@ -123,18 +123,16 @@ custom_packages() {
 
     # Download luci-app-amlogic
     amlogic_api="https://api.github.com/repos/ophub/luci-app-amlogic/releases"
-    #
-    amlogic_plugin="luci-app-amlogic"
-    amlogic_plugin_down="$(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*${amlogic_plugin}.*.ipk" | head -n 1)"
-    curl -fsSOJL ${amlogic_plugin_down}
-    [[ "${?}" -eq "0" ]] || error_msg "[ ${amlogic_plugin} ] download failed!"
-    echo -e "${INFO} The [ ${amlogic_plugin} ] is downloaded successfully."
-    #
-    amlogic_i18n_cn="luci-i18n-amlogic-zh-cn"
-    amlogic_i18n_down="$(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*${amlogic_i18n_cn}.*.ipk" | head -n 1)"
-    curl -fsSOJL ${amlogic_i18n_down}
-    [[ "${?}" -eq "0" ]] || error_msg "[ ${amlogic_i18n_cn} ] download failed!"
-    echo -e "${INFO} The [ ${amlogic_i18n_cn} ] is downloaded successfully."
+    # Get the latest release version
+    amlogic_plugin_latest_version="$(curl -s ${amlogic_api} | grep tag_name | head -n1 | cut -d '"' -f4)"
+    # Get the download URLs for the latest release assets (ipk or apk files)
+    amlogic_plugin_list=($(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*/${amlogic_plugin_latest_version}/.*\.(ipk|apk)"))
+
+    # Download the latest release assets
+    for plugin_url in "${amlogic_plugin_list[@]}"; do
+        curl -fsSOJL "${plugin_url}"
+        [[ "${?}" -eq "0" ]] && echo -e "${INFO} The [ ${plugin_url} ] is downloaded successfully."
+    done
 
     # Download other luci-app-xxx
     # ......
@@ -153,7 +151,7 @@ custom_config() {
         config_list="$(sed -n 's/^CONFIG_PACKAGE_\(.*\)=y$/\1/p' "${custom_config_file}" | tr '\n' ' ')"
         echo -e "${INFO} Custom package list: \n$(echo "${config_list}" | tr ' ' '\n')"
     else
-        echo -e "${INFO} No custom package configuration found."
+        echo -e "${INFO} No custom configuration file found, skipped."
     fi
 }
 
@@ -172,7 +170,7 @@ custom_files() {
         sync && sleep 3
         echo -e "${INFO} [ files ] directory contents: \n$(ls -lh files/ 2>/dev/null)"
     else
-        echo -e "${INFO} No custom files found."
+        echo -e "${INFO} No custom files added, skipped."
     fi
 }
 
@@ -194,7 +192,7 @@ rebuild_firmware() {
         uclient-fetch uhttpd uhttpd-mod-ubus unzip uqmi usb-modeswitch uuidgen wget-ssl whereis \
         which wpad-basic wwan xfs-fsck xfs-mkfs xz xz-utils ziptool zoneinfo-asia zoneinfo-core zstd \
         \
-        luci luci-base luci-compat luci-i18n-base-zh-cn luci-lib-base luci-lib-docker \
+        luci luci-base luci-compat luci-i18n-base-zh-cn luci-lib-base \
         luci-lib-ip luci-lib-ipkg luci-lib-jsonc luci-lib-nixio luci-mod-admin-full luci-mod-network \
         luci-mod-status luci-mod-system luci-proto-3g luci-proto-ipip luci-proto-ipv6 \
         luci-proto-ncm luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay \

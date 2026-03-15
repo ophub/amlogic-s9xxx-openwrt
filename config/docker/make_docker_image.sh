@@ -18,9 +18,11 @@
 #
 # error_msg         : Output error message
 # check_depends     : Check dependencies
+# check_docker      : Check and install Docker environment
 # find_openwrt      : Locate the OpenWrt rootfs archive (openwrt/*rootfs.tar.gz)
 # adjust_settings   : Adjust rootfs configuration for Docker
 # make_dockerimg    : Build and package the Docker image
+# export_docker     : Export offline Docker image
 #
 #================================ Set make environment variables ================================
 #
@@ -34,6 +36,9 @@ make_path="${current_path}/make-openwrt"
 common_files="${make_path}/openwrt-files/common-files"
 tmp_path="${current_path}/tmp"
 out_path="${current_path}/out"
+# Set Docker image name and tag
+[[ -n "${1}" ]] && docker_os="${1}" || docker_os="diy"
+[[ -n "${2}" ]] && docker_arch="${2}" || docker_arch="arm64"
 
 # Set default parameters
 STEPS="[\033[95m STEPS \033[0m]"
@@ -66,6 +71,44 @@ check_depends() {
         sudo apt-get install -y ${dpkg_packages[*]}
         [[ "${?}" -ne "0" ]] && error_msg "Failed to install required dependencies."
     fi
+}
+
+check_docker() {
+    echo -e "${STEPS} Checking Docker environment..."
+
+    # Check if docker command exists
+    if command -v docker >/dev/null 2>&1; then
+        local docker_ver="$(docker --version 2>/dev/null)"
+        echo -e "${INFO} Docker is installed: [ ${docker_ver} ]"
+
+        # Check if Docker daemon is running
+        if docker info >/dev/null 2>&1; then
+            echo -e "${INFO} Docker daemon is running."
+        else
+            echo -e "${WARNING} Docker daemon is not running, attempting to start..."
+            sudo systemctl start docker 2>/dev/null || sudo service docker start 2>/dev/null
+            sleep 3
+            docker info >/dev/null 2>&1 || error_msg "Failed to start Docker daemon."
+            echo -e "${SUCCESS} Docker daemon started successfully."
+        fi
+        return 0
+    fi
+
+    echo -e "${INFO} Docker is not installed, installing..."
+    # Install Docker using the official convenience script
+    curl -fsSL https://get.docker.com | sudo sh
+    sudo usermod -aG docker ${USER}
+
+    # Verify installation
+    command -v docker >/dev/null 2>&1 || error_msg "Docker installation failed."
+
+    # Start and enable Docker service
+    sudo systemctl start docker 2>/dev/null || sudo service docker start 2>/dev/null
+    sudo systemctl enable docker 2>/dev/null
+    sleep 3
+    docker info >/dev/null 2>&1 || error_msg "Docker installed but daemon failed to start."
+
+    echo -e "${SUCCESS} Docker installed and started successfully: [ $(docker --version) ]"
 }
 
 find_openwrt() {
@@ -185,11 +228,42 @@ make_dockerimg() {
     echo -e "${SUCCESS} Docker image created successfully."
 }
 
+export_docker() {
+    cd ${current_path}
+
+    echo -e "${STEPS} Building and exporting offline Docker image..."
+
+    # Set image name and tag (Docker requires lowercase image names)
+    local docker_image_name="openwrt-docker-${docker_os}-${docker_arch}"
+    local full_image="${docker_image_name}:${docker_arch}"
+
+    # Build docker image locally
+    cd ${out_path}
+    docker build --platform linux/${docker_arch} -t "${full_image}" .
+    [[ "${?}" -eq "0" ]] || error_msg "Docker image build failed."
+    echo -e "${INFO} Docker image [ ${full_image} ] built successfully."
+
+    # Clean up build artifacts, keep only the exported image
+    rm -f ${out_path}/{${docker_rootfs_file},Dockerfile}
+
+    # Export image to tar.gz file
+    local export_file="${out_path}/${docker_image_name}.tar.gz"
+    (set -o pipefail && docker save "${full_image}" | gzip >"${export_file}")
+    [[ "${?}" -eq "0" ]] || error_msg "Docker image export failed."
+
+    # Display export info
+    local file_size="$(ls -lh ${export_file} | awk '{print $5}')"
+    echo -e "${SUCCESS} Offline Docker image exported: [ ${export_file} ] (${file_size})"
+    echo -e "${INFO} Users can import with: [ docker load -i $(basename ${export_file}) ]"
+}
+
 # Show welcome message
 echo -e "${STEPS} Welcome to the Docker Image Builder."
 echo -e "${INFO} Working directory: [ ${PWD} ]"
 #
 check_depends
+check_docker
 find_openwrt
 adjust_settings
 make_dockerimg
+export_docker

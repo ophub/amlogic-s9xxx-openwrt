@@ -1,7 +1,6 @@
 #=====================================================================================
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Build and publish OpenWrt Docker image
-# Instructions: https://github.com/docker/build-push-action
 # Build and Push to: https://hub.docker.com/
 #=====================================================================================
 
@@ -23,16 +22,15 @@ on:
       docker_img:
         description: "Set the docker image"
         required: false
-        default: "ophub/openwrt-armv8:latest"
+        default: "ophub/openwrt-armv8"
         type: choice
         options:
-          - ophub/openwrt-armv8:latest
-          - ophub/openwrt-aarch64:latest
+          - ophub/openwrt-armv8
+          - ophub/openwrt-aarch64
 
 env:
   TZ: Etc/UTC
   MAKE_DOCKER_SH: config/docker/make_docker_image.sh
-  DOCKER_OUTPATH: out
 
 jobs:
   build:
@@ -47,39 +45,60 @@ jobs:
         id: down
         if: (!cancelled())
         run: |
-          # Retrieve the latest OpenWrt rootfs file from releases
+          # Determine the OpenWrt source code repository
+          if [[ "${{ inputs.source_branch }}" =~ ^openwrt ]]; then
+              REPO_URL="https://github.com/openwrt/openwrt"
+          elif [[ "${{ inputs.source_branch }}" =~ ^lede ]]; then
+              REPO_URL="https://github.com/coolsnowwolf/lede"
+          elif [[ "${{ inputs.source_branch }}" =~ ^immortalwrt ]]; then
+              REPO_URL="https://github.com/immortalwrt/immortalwrt"
+          else
+              echo "Error: Unknown source code repository."
+              exit 1
+          fi
+          source_branch_input="${{ inputs.source_branch }}"
+          REPO_NAME="${source_branch_input%_*}"
+          REPO_BRANCH="${source_branch_input##*_}"
+
+          # Query the latest release asset via GitHub API
           latest_version=$(curl -s \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               https://api.github.com/repos/${{ github.repository }}/releases?per_page=20 | \
-              jq -r --arg RTK "OpenWrt_${{ inputs.source_branch }}_save_" \
-              --arg BOARD "rootfs" \
-              '[.[] | select(.tag_name | contains($RTK))] |
-              map(.assets[] | select(.name | contains($BOARD) and endswith(".tar.gz"))) |
-              sort_by(.updated_at) |
+              jq -r --arg RTK "OpenWrt_${{ inputs.source_branch }}_" \
+              --arg BOARD "-rootfs.tar.gz" \
+              '[.[] | select(.tag_name | contains($RTK)) |
+              {tag: .tag_name} + (.assets[] | select(.name | endswith($BOARD)) |
+              {data: .updated_at, url: .url, name: .name})] |
+              sort_by(.data) |
               reverse |
-              .[0] |
-              {data: .updated_at, url: .url, name: .name}')
+              .[0]')
 
           [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && {
               echo "Error: Failed to resolve OpenWrt rootfs download URL."
               exit 1
           }
 
-          # Extract download URL and filename
+          # Extract download URL, filename, and release tag
           latest_url="$(echo ${latest_version} | jq -r '.url')"
           openwrt_filename="$(echo ${latest_version} | jq -r '.name')"
+          release_tag="$(echo ${latest_version} | jq -r '.tag')"
+          echo "Matched release tag: ${release_tag}"
+          echo "build_tag=${release_tag}" >> ${GITHUB_OUTPUT}
 
           # Download asset via GitHub API (binary stream)
-          echo "Downloading: ${openwrt_filename}"
           [[ -d "openwrt" ]] || mkdir -p openwrt
+          echo "Downloading: ${openwrt_filename}"
           curl -fsSL \
                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                -H "Accept: application/octet-stream" \
                "${latest_url}" \
                -o "openwrt/${openwrt_filename}"
           [[ "${?}" -ne "0" ]] && echo "Error: Download failed." && exit 1
-
+          df -hT ${PWD}
+          echo "REPO_URL=${REPO_URL}" >> ${GITHUB_ENV}
+          echo "REPO_NAME=${REPO_NAME}" >> ${GITHUB_ENV}
+          echo "REPO_BRANCH=${REPO_BRANCH}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Build the Docker image
@@ -87,33 +106,61 @@ jobs:
         if: ${{ steps.down.outputs.status == 'success' && !cancelled() }}
         run: |
           chmod +x ${MAKE_DOCKER_SH}
-          ${MAKE_DOCKER_SH}
+          ${MAKE_DOCKER_SH} ${{ inputs.source_branch }} arm64
+
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Set up QEMU
-        id: qemu
-        if: (!cancelled())
-        uses: docker/setup-qemu-action@v4
-
-      - name: Set up Docker Buildx
-        id: buildx
-        if: (!cancelled())
-        uses: docker/setup-buildx-action@v4
+      - name: Upload packaged OpenWrt to Release
+        uses: ncipollo/release-action@main
+        if: ${{ steps.make.outputs.status == 'success' && !cancelled() }}
+        with:
+          tag: ${{ steps.down.outputs.build_tag }}
+          artifacts: out/*.tar.gz
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            ### OpenWrt Image Information
+            - Default IP: `192.168.1.1`
+            - Default username: `root`
+            - Default password: `password`
+            - Default WIFI name: `OpenWrt`
+            - Default WIFI password: `none`
+            ### Install to EMMC
+            - Login to OpenWrt → `System` → `Amlogic Service` → `Install OpenWrt`
+            ### OpenWrt source code
+            - [${{ env.REPO_NAME }}](${{ env.REPO_URL }}/tree/${{ env.REPO_BRANCH }})
+            ### Applicable Platform
+            - 🐧 `arm64`
+            - 🐋 Docker image: https://hub.docker.com/u/ophub
 
       - name: Login to Docker Hub
         id: login
-        if: (!cancelled())
+        if: ${{ steps.make.outputs.status == 'success' && !cancelled() }}
         uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Push image to Docker Hub
+      - name: Load and push image to Docker Hub
         id: push
-        if: (!cancelled())
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          platforms: linux/arm64
-          context: ${{ env.DOCKER_OUTPATH }}
-          tags: "${{ inputs.docker_img }}"
+        if: ${{ steps.make.outputs.status == 'success' && !cancelled() }}
+        run: |
+          # Load the offline Docker image built by make_docker_image.sh
+          offline_image="$(ls out/*.tar.gz 2>/dev/null | head -n 1)"
+          [[ -z "${offline_image}" ]] && echo "Error: No offline image found." && exit 1
+          loaded_image="$(docker load -i "${offline_image}" | grep -oP 'Loaded image: \K.*')"
+          [[ -z "${loaded_image}" ]] && echo "Error: Failed to load Docker image." && exit 1
+          echo "Loaded image: ${loaded_image}"
+
+          # Tag for Docker Hub
+          docker tag "${loaded_image}" "${{ inputs.docker_img }}:arm64"
+          docker tag "${loaded_image}" "${{ inputs.docker_img }}:latest"
+
+          # Push to Docker Hub
+          docker push "${{ inputs.docker_img }}:arm64"
+          docker push "${{ inputs.docker_img }}:latest"
+
+          echo "status=success" >> ${GITHUB_OUTPUT}

@@ -1254,13 +1254,13 @@ loop_make() {
                     kernel="${k}"
 
                     # Check disk space size
-                    echo -ne "(${j}.${i}) Start making OpenWrt [\033[92m ${board} - ${conf_kernel_tags}/${kernel} \033[0m]. "
+                    echo -ne "(${j}.${i}) Making OpenWrt [\033[92m ${board} - ${conf_kernel_tags}/${kernel} \033[0m]. "
                     now_remaining_space="$(df -Tk ${make_path} | tail -n1 | awk '{print $5}' | echo $(($(xargs) / 1024 / 1024)))"
                     if [[ "${now_remaining_space}" -le "3" ]]; then
-                        echo -e "${WARNING} Insufficient disk space (< 3 GiB), skipping this build."
+                        echo -e "${WARNING} Remaining space is less than 3 GiB. Skipping this make."
                         break
                     else
-                        echo "Available disk space: ${now_remaining_space} GiB."
+                        echo "Remaining space: ${now_remaining_space} GiB."
                     fi
 
                     # Execute the following functions in sequence
@@ -1271,7 +1271,7 @@ loop_make() {
                     refactor_rootfs
                     clean_tmp
 
-                    echo -e "(${j}.${i}) OpenWrt image built successfully. \n"
+                    echo -e "(${j}.${i}) OpenWrt built successfully. \n"
                     ((i++))
                 }
             done

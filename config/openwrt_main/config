@@ -137,6 +137,7 @@ CONFIG_ARCH_64BIT=y
 CONFIG_VIRTIO_SUPPORT=y
 CONFIG_USES_ROOTFS_PART=y
 CONFIG_USES_BOOT_PART=y
+CONFIG_REGULATOR_SUPPORT=y
 CONFIG_aarch64=y
 CONFIG_ARCH="aarch64"
 
@@ -195,6 +196,7 @@ CONFIG_SIGNED_PACKAGES=y
 CONFIG_SIGNATURE_CHECK=y
 CONFIG_DOWNLOAD_CHECK_CERTIFICATE=y
 CONFIG_USE_APK=y
+CONFIG_SIGN_EACH_PACKAGE=y
 
 #
 # General build options
@@ -504,7 +506,6 @@ CONFIG_PACKAGE_attendedsysupgrade-common=y
 CONFIG_PACKAGE_base-files=y
 CONFIG_PACKAGE_block-mount=y
 CONFIG_PACKAGE_blockd=y
-# CONFIG_PACKAGE_bridge is not set
 # CONFIG_PACKAGE_bridger is not set
 CONFIG_PACKAGE_busybox=y
 # CONFIG_BUSYBOX_CUSTOM is not set
@@ -1799,31 +1800,26 @@ CONFIG_PACKAGE_wireless-tools=y
 #
 # Zabbix
 #
-# CONFIG_PACKAGE_zabbix-agentd-gnutls is not set
-# CONFIG_PACKAGE_zabbix-agentd-nossl is not set
-# CONFIG_PACKAGE_zabbix-agentd-openssl is not set
-# CONFIG_PACKAGE_zabbix-extra-mac80211 is not set
-# CONFIG_PACKAGE_zabbix-extra-network is not set
-# CONFIG_PACKAGE_zabbix-extra-wifi is not set
-# CONFIG_PACKAGE_zabbix-get-gnutls is not set
-# CONFIG_PACKAGE_zabbix-get-nossl is not set
-# CONFIG_PACKAGE_zabbix-get-openssl is not set
-# CONFIG_PACKAGE_zabbix-proxy-gnutls is not set
-# CONFIG_PACKAGE_zabbix-proxy-nossl is not set
+# CONFIG_PACKAGE_zabbix-agentd is not set
+# CONFIG_ZABBIX_GNUTLS is not set
+# CONFIG_ZABBIX_NOSSL is not set
+CONFIG_ZABBIX_OPENSSL=y
 
 #
-# Database Software
+# Modify features for non-core variants
 #
+CONFIG_ZABBIX_CURL=y
+CONFIG_ZABBIX_LDAP=y
+CONFIG_ZABBIX_NETSNMP=y
+# end of Modify features for non-core variants
+
+# CONFIG_PACKAGE_zabbix-agentd-basic is not set
+# CONFIG_PACKAGE_zabbix-proxy is not set
 # CONFIG_ZABBIX_MYSQL is not set
 CONFIG_ZABBIX_POSTGRESQL=y
 # CONFIG_ZABBIX_SQLITE is not set
-# CONFIG_PACKAGE_zabbix-proxy-openssl is not set
-# CONFIG_PACKAGE_zabbix-sender-gnutls is not set
-# CONFIG_PACKAGE_zabbix-sender-nossl is not set
-# CONFIG_PACKAGE_zabbix-sender-openssl is not set
-# CONFIG_PACKAGE_zabbix-server-gnutls is not set
-# CONFIG_PACKAGE_zabbix-server-nossl is not set
-# CONFIG_PACKAGE_zabbix-server-openssl is not set
+# CONFIG_PACKAGE_zabbix-proxy-basic-sqlite is not set
+# CONFIG_PACKAGE_zabbix-server is not set
 # end of Zabbix
 
 #
@@ -1938,6 +1934,8 @@ CONFIG_PACKAGE_libiwinfo-data=y
 
 # CONFIG_PACKAGE_aeonsemi-as21xxx-firmware is not set
 # CONFIG_PACKAGE_aircard-pcmcia-firmware is not set
+# CONFIG_PACKAGE_airoha-an7583-npu-firmware is not set
+# CONFIG_PACKAGE_airoha-en7581-mt7996-npu-firmware is not set
 # CONFIG_PACKAGE_airoha-en7581-npu-firmware is not set
 # CONFIG_PACKAGE_airoha-en8811h-firmware is not set
 # CONFIG_PACKAGE_amd64-microcode is not set
@@ -2350,7 +2348,7 @@ CONFIG_PACKAGE_kmod-fuse=y
 #
 # CONFIG_PACKAGE_kmod-gpio-beeper is not set
 CONFIG_PACKAGE_kmod-gpio-button-hotplug=y
-# CONFIG_PACKAGE_kmod-gpio-cascade is not set
+# CONFIG_PACKAGE_kmod-gpio-line-mux is not set
 # CONFIG_PACKAGE_kmod-gpio-nxp-74hc164 is not set
 CONFIG_PACKAGE_kmod-gpio-pca953x=y
 # CONFIG_PACKAGE_kmod-gpio-pcf857x is not set
@@ -2453,6 +2451,7 @@ CONFIG_PACKAGE_kmod-i2c-mux-pca954x=y
 # CONFIG_PACKAGE_kmod-iio-lsm6dsx-i2c is not set
 # CONFIG_PACKAGE_kmod-iio-lsm6dsx-spi is not set
 # CONFIG_PACKAGE_kmod-iio-mcp3422 is not set
+# CONFIG_PACKAGE_kmod-iio-richtek-rtq6056 is not set
 # CONFIG_PACKAGE_kmod-iio-si7020 is not set
 # CONFIG_PACKAGE_kmod-iio-sps30 is not set
 # CONFIG_PACKAGE_kmod-iio-st_accel is not set
@@ -2533,6 +2532,11 @@ CONFIG_PACKAGE_kmod-lib-zlib-inflate=y
 CONFIG_PACKAGE_kmod-lib-zstd=y
 CONFIG_PACKAGE_kmod-oid-registry=y
 # end of Libraries
+
+#
+# MultiFunction Device (MFD) Support
+#
+# end of MultiFunction Device (MFD) Support
 
 #
 # Multiplexer Support
@@ -2699,9 +2703,6 @@ CONFIG_PACKAGE_kmod-bcmgenet=y
 # CONFIG_PACKAGE_kmod-dsa-b53 is not set
 # CONFIG_PACKAGE_kmod-dsa-b53-mdio is not set
 # CONFIG_PACKAGE_kmod-dsa-ks8995 is not set
-# CONFIG_PACKAGE_kmod-dsa-ksz9477 is not set
-# CONFIG_PACKAGE_kmod-dsa-ksz9477-i2c is not set
-# CONFIG_PACKAGE_kmod-dsa-ksz9477-spi is not set
 # CONFIG_PACKAGE_kmod-dsa-mv88e6060 is not set
 # CONFIG_PACKAGE_kmod-dsa-mv88e6xxx is not set
 # CONFIG_PACKAGE_kmod-dsa-notag is not set
@@ -3006,6 +3007,12 @@ CONFIG_PACKAGE_kmod-wdt-sp805=y
 # end of PCMCIA support
 
 #
+# PSE-PD / PoE support
+#
+# CONFIG_PACKAGE_kmod-pse-pd is not set
+# end of PSE-PD / PoE support
+
+#
 # RTC Real-Time Clock Support
 #
 # CONFIG_PACKAGE_kmod-rtc-bq32k is not set
@@ -3163,6 +3170,8 @@ CONFIG_PACKAGE_kmod-usbmon=y
 # CONFIG_PACKAGE_kmod-vfio-pci is not set
 # CONFIG_PACKAGE_kmod-vhost is not set
 # CONFIG_PACKAGE_kmod-vhost-net is not set
+# CONFIG_PACKAGE_kmod-vsock is not set
+# CONFIG_PACKAGE_kmod-vsock-virtio is not set
 # end of Virtualization
 
 #
@@ -3268,9 +3277,13 @@ CONFIG_PACKAGE_kmod-mt7916-firmware=y
 # CONFIG_PACKAGE_kmod-mt7921s is not set
 # CONFIG_PACKAGE_kmod-mt7921u is not set
 # CONFIG_PACKAGE_kmod-mt7922-firmware is not set
+CONFIG_PACKAGE_kmod-mt7925-common=y
 CONFIG_PACKAGE_kmod-mt7925-firmware=y
 CONFIG_PACKAGE_kmod-mt7925e=y
 CONFIG_PACKAGE_kmod-mt7925u=y
+CONFIG_PACKAGE_kmod-mt792x-common=y
+CONFIG_PACKAGE_kmod-mt792x-usb=y
+# CONFIG_PACKAGE_kmod-mt7990-firmware is not set
 # CONFIG_PACKAGE_kmod-mt7992-23-firmware is not set
 # CONFIG_PACKAGE_kmod-mt7992-firmware is not set
 # CONFIG_PACKAGE_kmod-mt7996-233-firmware is not set
@@ -5010,7 +5023,7 @@ CONFIG_PACKAGE_libjpeg-turbo=y
 CONFIG_PACKAGE_libjson-c=y
 # CONFIG_PACKAGE_libjwt is not set
 # CONFIG_PACKAGE_libkeyutils is not set
-# CONFIG_PACKAGE_libkmod is not set
+CONFIG_PACKAGE_libkmod=y
 # CONFIG_PACKAGE_libksba is not set
 # CONFIG_PACKAGE_libldns is not set
 # CONFIG_PACKAGE_libleptonica is not set
@@ -5117,7 +5130,7 @@ CONFIG_PACKAGE_libpcap=y
 # CONFIG_PCAP_HAS_NETFILTER is not set
 # end of Configuration
 
-# CONFIG_PACKAGE_libpci is not set
+CONFIG_PACKAGE_libpci=y
 # CONFIG_PACKAGE_libpciaccess is not set
 CONFIG_PACKAGE_libpcre2=y
 # CONFIG_PCRE2_JIT_ENABLED is not set
@@ -5325,6 +5338,7 @@ CONFIG_PACKAGE_zlib=y
 # 1. Collections
 #
 CONFIG_PACKAGE_luci=y
+# CONFIG_PACKAGE_luci-layer2 is not set
 CONFIG_PACKAGE_luci-light=y
 # CONFIG_PACKAGE_luci-nginx is not set
 # CONFIG_PACKAGE_luci-ssl is not set
@@ -5402,6 +5416,7 @@ CONFIG_PACKAGE_luci-mod-system=y
 # CONFIG_PACKAGE_luci-app-acme is not set
 # CONFIG_PACKAGE_luci-app-adblock is not set
 # CONFIG_PACKAGE_luci-app-adblock-fast is not set
+# CONFIG_PACKAGE_luci-app-adguardhome is not set
 # CONFIG_PACKAGE_luci-app-advanced-reboot is not set
 CONFIG_PACKAGE_luci-app-amlogic=y
 # CONFIG_PACKAGE_luci-app-antiblock is not set
@@ -6033,7 +6048,6 @@ CONFIG_PACKAGE_luci-i18n-upnp-zh-cn=y
 #
 # CONFIG_PACKAGE_apfree-wifidog is not set
 # CONFIG_PACKAGE_coova-chilli is not set
-# CONFIG_PACKAGE_mesh11sd is not set
 # CONFIG_PACKAGE_nodogsplash is not set
 # CONFIG_PACKAGE_opennds is not set
 # CONFIG_PACKAGE_simple-captive-portal is not set
@@ -6266,6 +6280,7 @@ CONFIG_PACKAGE_ddns-scripts=y
 # CONFIG_PACKAGE_ddns-scripts-porkbun is not set
 # CONFIG_PACKAGE_ddns-scripts-route53 is not set
 # CONFIG_PACKAGE_ddns-scripts-scaleway is not set
+# CONFIG_PACKAGE_ddns-scripts-servercow is not set
 CONFIG_PACKAGE_ddns-scripts-services=y
 # CONFIG_PACKAGE_ddns-scripts-transip is not set
 # CONFIG_PACKAGE_ddns-scripts-utils is not set
@@ -6403,6 +6418,12 @@ CONFIG_PACKAGE_wsdd2=y
 # CONFIG_PACKAGE_libloragw-tests is not set
 # CONFIG_PACKAGE_libloragw-utils is not set
 # end of LoRaWAN
+
+#
+# Mesh
+#
+# CONFIG_PACKAGE_mesh11sd is not set
+# end of Mesh
 
 #
 # NMAP Suite
@@ -6805,7 +6826,7 @@ CONFIG_WPA_MSG_MIN_PRIORITY=3
 # CONFIG_WPA_WOLFSSL is not set
 CONFIG_DRIVER_11AC_SUPPORT=y
 CONFIG_DRIVER_11AX_SUPPORT=y
-# CONFIG_DRIVER_11BE_SUPPORT is not set
+CONFIG_DRIVER_11BE_SUPPORT=y
 # CONFIG_WPA_ENABLE_WEP is not set
 CONFIG_WPA_MBO_SUPPORT=y
 # CONFIG_PACKAGE_wpa-supplicant-basic is not set
@@ -6876,6 +6897,15 @@ CONFIG_PACKAGE_batctl-default=y
 # CONFIG_PACKAGE_bpfcountd is not set
 # CONFIG_PACKAGE_bpftool-full is not set
 # CONFIG_PACKAGE_bpftool-minimal is not set
+# CONFIG_PACKAGE_bsbf-autoconf-cellular is not set
+# CONFIG_PACKAGE_bsbf-autoconf-dhcp is not set
+# CONFIG_PACKAGE_bsbf-bonding is not set
+# CONFIG_PACKAGE_bsbf-mptcp is not set
+# CONFIG_PACKAGE_bsbf-netspeed is not set
+# CONFIG_PACKAGE_bsbf-plpmtu is not set
+# CONFIG_PACKAGE_bsbf-quectel-usbnet is not set
+# CONFIG_PACKAGE_bsbf-route is not set
+# CONFIG_PACKAGE_bsbf-tcp-in-udp is not set
 # CONFIG_PACKAGE_bwm-ng is not set
 # CONFIG_PACKAGE_bwping is not set
 CONFIG_PACKAGE_chat=y
@@ -7023,6 +7053,7 @@ CONFIG_PACKAGE_odhcpd-ipv6only=y
 # CONFIG_PACKAGE_phytool is not set
 # CONFIG_PACKAGE_pimbd is not set
 # CONFIG_PACKAGE_pingcheck is not set
+# CONFIG_PACKAGE_plp-mtu-discovery is not set
 CONFIG_PACKAGE_ppp=y
 # CONFIG_PACKAGE_ppp-mod-passwordfd is not set
 # CONFIG_PACKAGE_ppp-mod-pppoa is not set
@@ -7098,6 +7129,7 @@ CONFIG_PACKAGE_samba4-utils=y
 # CONFIG_PACKAGE_tac_plus is not set
 # CONFIG_PACKAGE_tac_plus-pam is not set
 # CONFIG_PACKAGE_tayga is not set
+# CONFIG_PACKAGE_tcp-in-udp is not set
 # CONFIG_PACKAGE_tcpdump is not set
 # CONFIG_PACKAGE_tcpdump-mini is not set
 # CONFIG_PACKAGE_teamd is not set
@@ -7166,7 +7198,6 @@ CONFIG_PACKAGE_wwan=y
 # CONFIG_PACKAGE_libwavpack is not set
 # CONFIG_PACKAGE_libxmp is not set
 # CONFIG_PACKAGE_madplay is not set
-# CONFIG_PACKAGE_moc is not set
 # CONFIG_PACKAGE_mpc is not set
 # CONFIG_PACKAGE_mpd-avahi-service is not set
 # CONFIG_PACKAGE_mpd-full is not set
@@ -7191,7 +7222,6 @@ CONFIG_PACKAGE_wwan=y
 # CONFIG_PACKAGE_squeezelite-custom is not set
 # CONFIG_PACKAGE_squeezelite-dynamic is not set
 # CONFIG_PACKAGE_squeezelite-full is not set
-# CONFIG_PACKAGE_svox is not set
 # CONFIG_PACKAGE_ttymidi-sysex is not set
 # CONFIG_PACKAGE_upmpdcli is not set
 # end of Sound
@@ -7903,7 +7933,6 @@ CONFIG_PACKAGE_mount-utils=y
 # CONFIG_PACKAGE_oci-runtime-tool is not set
 # CONFIG_PACKAGE_omnia-mcutool is not set
 # CONFIG_PACKAGE_open-plc-utils is not set
-# CONFIG_PACKAGE_open2300 is not set
 # CONFIG_PACKAGE_opendoas is not set
 # CONFIG_PACKAGE_openobex is not set
 # CONFIG_PACKAGE_openobex-apps is not set
@@ -7916,7 +7945,7 @@ CONFIG_PACKAGE_openssl-util=y
 # CONFIG_PACKAGE_owut is not set
 # CONFIG_PACKAGE_passh is not set
 # CONFIG_PACKAGE_pax-utils is not set
-# CONFIG_PACKAGE_pciids is not set
+CONFIG_PACKAGE_pciids=y
 CONFIG_PACKAGE_pciutils=y
 # CONFIG_PACKAGE_pcsc-tools is not set
 # CONFIG_PACKAGE_pcscd is not set

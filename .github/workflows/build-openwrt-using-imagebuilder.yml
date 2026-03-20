@@ -18,6 +18,7 @@ on:
         default: "immortalwrt:24.10.5"
         type: choice
         options:
+          - openwrt:25.12.1
           - openwrt:25.12.0
           - openwrt:24.10.5
           - openwrt:24.10.4

@@ -137,6 +137,26 @@ custom_packages() {
     # Download other luci-app-xxx
     # ......
 
+    # Remove the packages that are not needed based on the Image Builder type (APK or OPKG)
+    if grep -q "CONFIG_USE_APK=y" ../.config; then
+        echo -e "${INFO} APK-based ImageBuilder detected. Removing .ipk files..."
+        rm -f *.ipk
+
+        # Fix the filename format of APK files to be compatible with Image Builder requirements.
+        # Image Builder requires that the commit hash in the filename is preceded by a tilde (~) instead of a dot (.).
+        for file in *.apk; do
+            # Use sed to replace the last dot before the 7-character commit hash with a tilde
+            new_file=$(echo "${file}" | sed -E 's/\.([a-f0-9]{7}\.apk)/~\1/')
+            if [ "${file}" != "${new_file}" ]; then
+                mv "${file}" "${new_file}"
+                echo -e "${INFO} Renamed: ${file} -> ${new_file}"
+            fi
+        done
+    else
+        echo -e "${INFO} OPKG-based ImageBuilder detected. Removing .apk files..."
+        rm -f *.apk
+    fi
+
     sync && sleep 3
     echo -e "${INFO} [ packages ] directory contents: \n$(ls -lh . 2>/dev/null)"
 }

@@ -147,8 +147,8 @@ custom_packages() {
         for file in *.apk; do
             # Use sed to replace the last dot before the 7-character commit hash with a tilde
             new_file=$(echo "${file}" | sed -E 's/\.([a-f0-9]{7}\.apk)/~\1/')
-            if [ "${file}" != "${new_file}" ]; then
-                mv "${file}" "${new_file}"
+            if [[ "${file}" != "${new_file}" ]]; then
+                mv -f "${file}" "${new_file}" || true
                 echo -e "${INFO} Renamed: ${file} -> ${new_file}"
             fi
         done

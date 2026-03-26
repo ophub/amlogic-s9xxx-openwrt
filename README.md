@@ -4,7 +4,7 @@
 
 # OpenWrt
 
-View Chinese description | [查看中文说明](README.cn.md)
+[English Instructions](README.md) | [中文说明](README.cn.md)
 
 The [OpenWrt](https://openwrt.org/) project is a Linux router operating system designed for embedded devices. Rather than being a single, immutable firmware, OpenWrt provides a fully writable filesystem with package management capabilities, allowing you to freely select the software packages you need to customize your router system. For developers, OpenWrt serves as a framework for building applications without the need to create a complete firmware around it; for end users, it provides full customization capabilities, enabling the device to be used in versatile and unexpected ways. With over 3,000 standardized application packages and extensive third-party plugin support, you can easily deploy them across a wide range of supported devices. Now you can replace the Android TV system on your TV box with the OpenWrt system, transforming it into a powerful router.
 

@@ -1,6 +1,6 @@
 # OpenWrt Production and Usage Guide
 
-View Chinese description | [查看中文说明](README.cn.md)
+[English Instructions](README.md) | [中文说明](README.cn.md)
 
 The method of using GitHub Actions to compile OpenWrt in the cloud, along with much of the content in this guide, comes from many technological innovators and resource contributors such as P3TERX, Flippy, and others. Thanks to their generous contributions, using OpenWrt on TV boxes has become remarkably straightforward.
 

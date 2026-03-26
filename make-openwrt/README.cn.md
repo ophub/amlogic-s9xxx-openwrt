@@ -1,6 +1,6 @@
 # 目录说明
 
-查看英文说明 | [View English description](README.md)
+[English Instructions](README.md) | [中文说明](README.cn.md)
 
 相关目录中存放了编译 OpenWrt 所需的文件。
 

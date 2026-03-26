@@ -1,6 +1,6 @@
 # OpenWrt 制作及使用指南
 
-查看英文说明 | [View English description](README.md)
+[English Instructions](README.md) | [中文说明](README.cn.md)
 
 使用 GitHub Actions 云编译 OpenWrt 的方法，以及本文档中的许多内容，来源于 P3TERX、Flippy 等众多技术创新者和资源分享者。感谢他们的无私奉献，让我们得以在盒子中轻松使用 OpenWrt。
 

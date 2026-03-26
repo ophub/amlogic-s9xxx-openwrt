@@ -3163,6 +3163,7 @@ CONFIG_PACKAGE_kmod-mt7925e=y
 CONFIG_PACKAGE_kmod-mt7925u=y
 CONFIG_PACKAGE_kmod-mt792x-common=y
 CONFIG_PACKAGE_kmod-mt792x-usb=y
+# CONFIG_PACKAGE_kmod-mt7990-firmware is not set
 # CONFIG_PACKAGE_kmod-mt7992-23-firmware is not set
 # CONFIG_PACKAGE_kmod-mt7992-firmware is not set
 # CONFIG_PACKAGE_kmod-mt7996-233-firmware is not set

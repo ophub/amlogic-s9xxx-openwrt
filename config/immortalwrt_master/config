@@ -5656,6 +5656,7 @@ CONFIG_PACKAGE_luci-mod-system=y
 # CONFIG_PACKAGE_luci-app-acme is not set
 # CONFIG_PACKAGE_luci-app-adblock is not set
 # CONFIG_PACKAGE_luci-app-adblock-fast is not set
+# CONFIG_PACKAGE_luci-app-adguardhome is not set
 # CONFIG_PACKAGE_luci-app-advanced-reboot is not set
 # CONFIG_PACKAGE_luci-app-airplay2 is not set
 CONFIG_PACKAGE_luci-app-amlogic=y
@@ -7214,6 +7215,7 @@ CONFIG_PACKAGE_batctl-default=y
 # CONFIG_PACKAGE_bsbf-bonding is not set
 # CONFIG_PACKAGE_bsbf-mptcp is not set
 # CONFIG_PACKAGE_bsbf-netspeed is not set
+# CONFIG_PACKAGE_bsbf-plpmtu is not set
 # CONFIG_PACKAGE_bsbf-quectel-usbnet is not set
 # CONFIG_PACKAGE_bsbf-route is not set
 # CONFIG_PACKAGE_bsbf-tcp-in-udp is not set
@@ -7375,6 +7377,7 @@ CONFIG_PACKAGE_odhcpd-ipv6only=y
 # CONFIG_PACKAGE_phytool is not set
 # CONFIG_PACKAGE_pimbd is not set
 # CONFIG_PACKAGE_pingcheck is not set
+# CONFIG_PACKAGE_plp-mtu-discovery is not set
 CONFIG_PACKAGE_ppp=y
 # CONFIG_PACKAGE_ppp-mod-passwordfd is not set
 # CONFIG_PACKAGE_ppp-mod-pppoa is not set

@@ -17,8 +17,8 @@ on:
         type: choice
         options:
           - openwrt_main
-          - immortalwrt_master
           - lede_master
+          - immortalwrt_master
       docker_img:
         description: "Set the docker image"
         required: false

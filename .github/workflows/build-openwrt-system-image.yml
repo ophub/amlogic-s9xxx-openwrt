@@ -16,8 +16,8 @@ on:
         type: choice
         options:
           - openwrt_main
-          - immortalwrt_master
           - lede_master
+          - immortalwrt_master
       openwrt_board:
         description: "Select device board"
         required: false

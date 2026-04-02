@@ -1802,26 +1802,7 @@ CONFIG_PACKAGE_wireless-tools=y
 #
 # Zabbix
 #
-# CONFIG_PACKAGE_zabbix-agentd is not set
-# CONFIG_ZABBIX_GNUTLS is not set
-# CONFIG_ZABBIX_NOSSL is not set
-CONFIG_ZABBIX_OPENSSL=y
-
-#
-# Modify features for non-core variants
-#
-CONFIG_ZABBIX_CURL=y
-CONFIG_ZABBIX_LDAP=y
-CONFIG_ZABBIX_NETSNMP=y
-# end of Modify features for non-core variants
-
-# CONFIG_PACKAGE_zabbix-agentd-basic is not set
-# CONFIG_PACKAGE_zabbix-proxy is not set
-# CONFIG_ZABBIX_MYSQL is not set
-CONFIG_ZABBIX_POSTGRESQL=y
-# CONFIG_ZABBIX_SQLITE is not set
-# CONFIG_PACKAGE_zabbix-proxy-basic-sqlite is not set
-# CONFIG_PACKAGE_zabbix-server is not set
+# CONFIG_ZABBIX_ENABLE_ZABBIX is not set
 # end of Zabbix
 
 #
@@ -2732,6 +2713,7 @@ CONFIG_PACKAGE_kmod-bcmgenet=y
 # CONFIG_PACKAGE_kmod-dsa-ks8995 is not set
 # CONFIG_PACKAGE_kmod-dsa-mv88e6060 is not set
 # CONFIG_PACKAGE_kmod-dsa-mv88e6xxx is not set
+# CONFIG_PACKAGE_kmod-dsa-mxl862xx is not set
 # CONFIG_PACKAGE_kmod-dsa-notag is not set
 # CONFIG_PACKAGE_kmod-dsa-qca8k is not set
 # CONFIG_PACKAGE_kmod-dsa-realtek is not set
@@ -2742,6 +2724,7 @@ CONFIG_PACKAGE_kmod-bcmgenet=y
 # CONFIG_PACKAGE_kmod-dsa-vsc73xx-spi is not set
 CONFIG_PACKAGE_kmod-dummy=y
 CONFIG_PACKAGE_kmod-dwmac-imx=y
+# CONFIG_PACKAGE_kmod-dwmac-motorcomm is not set
 CONFIG_PACKAGE_kmod-dwmac-rockchip=y
 CONFIG_PACKAGE_kmod-dwmac-sun8i=y
 # CONFIG_PACKAGE_kmod-e100 is not set
@@ -3377,6 +3360,7 @@ CONFIG_PACKAGE_kmod-rtlwifi-usb=y
 # CONFIG_PACKAGE_kmod-rtw89-8851be is not set
 # CONFIG_PACKAGE_kmod-rtw89-8852ae is not set
 # CONFIG_PACKAGE_kmod-rtw89-8852be is not set
+# CONFIG_PACKAGE_kmod-rtw89-8852bu is not set
 # CONFIG_PACKAGE_kmod-rtw89-8852ce is not set
 # CONFIG_PACKAGE_kmod-rtw89-8922ae is not set
 # CONFIG_PACKAGE_kmod-wil6210 is not set
@@ -4005,7 +3989,6 @@ CONFIG_PACKAGE_python3-ctypes=y
 # CONFIG_PACKAGE_python3-frozenlist is not set
 # CONFIG_PACKAGE_python3-gensio is not set
 # CONFIG_PACKAGE_python3-gevent is not set
-# CONFIG_PACKAGE_python3-gmpy2 is not set
 # CONFIG_PACKAGE_python3-gnupg is not set
 # CONFIG_PACKAGE_python3-gpiod is not set
 # CONFIG_PACKAGE_python3-greenlet is not set
@@ -4044,7 +4027,6 @@ CONFIG_PACKAGE_python3-logging=y
 # CONFIG_PACKAGE_python3-markdown is not set
 # CONFIG_PACKAGE_python3-markupsafe is not set
 # CONFIG_PACKAGE_python3-maxminddb is not set
-# CONFIG_PACKAGE_python3-more-itertools is not set
 # CONFIG_PACKAGE_python3-msgpack is not set
 # CONFIG_PACKAGE_python3-multiprocessing is not set
 # CONFIG_PACKAGE_python3-mutagen is not set
@@ -4071,7 +4053,6 @@ CONFIG_PACKAGE_python3-logging=y
 # CONFIG_PACKAGE_python3-pika is not set
 # CONFIG_PACKAGE_python3-pillow is not set
 # CONFIG_PACKAGE_python3-pip is not set
-# CONFIG_PACKAGE_python3-pkg-resources is not set
 # CONFIG_PACKAGE_python3-platformdirs is not set
 # CONFIG_PACKAGE_python3-pluggy is not set
 # CONFIG_PACKAGE_python3-ply is not set
@@ -7217,6 +7198,7 @@ CONFIG_PACKAGE_batctl-default=y
 # CONFIG_PACKAGE_bsbf-netspeed is not set
 # CONFIG_PACKAGE_bsbf-plpmtu is not set
 # CONFIG_PACKAGE_bsbf-quectel-usbnet is not set
+# CONFIG_PACKAGE_bsbf-rate-limiting is not set
 # CONFIG_PACKAGE_bsbf-route is not set
 # CONFIG_PACKAGE_bsbf-tcp-in-udp is not set
 # CONFIG_PACKAGE_bwm-ng is not set
@@ -7368,8 +7350,8 @@ CONFIG_PACKAGE_odhcpd-ipv6only=y
 # CONFIG_PACKAGE_openelp is not set
 # CONFIG_PACKAGE_openlist is not set
 # CONFIG_PACKAGE_openthread-br is not set
-# CONFIG_PACKAGE_oscam is not set
 # CONFIG_PACKAGE_oping is not set
+# CONFIG_PACKAGE_oscam is not set
 # CONFIG_PACKAGE_pagekitec is not set
 # CONFIG_PACKAGE_pcapplusplus is not set
 # CONFIG_PACKAGE_pen is not set

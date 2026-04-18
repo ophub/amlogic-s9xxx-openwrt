@@ -2309,6 +2309,7 @@ CONFIG_PACKAGE_kmod-fs-nfs-v3=y
 CONFIG_PACKAGE_kmod-fs-nfs-v4=y
 CONFIG_PACKAGE_kmod-fs-nfsd=y
 # CONFIG_PACKAGE_kmod-fs-nilfs2 is not set
+# CONFIG_PACKAGE_kmod-fs-ntfs is not set
 CONFIG_PACKAGE_kmod-fs-ntfs3=y
 CONFIG_PACKAGE_kmod-fs-reiserfs=y
 CONFIG_PACKAGE_kmod-fs-smbfs-common=y
@@ -2659,7 +2660,6 @@ CONFIG_PACKAGE_kmod-nft-offload=y
 CONFIG_PACKAGE_kmod-nft-socket=y
 CONFIG_PACKAGE_kmod-nft-tproxy=y
 # CONFIG_PACKAGE_kmod-nft-xfrm is not set
-CONFIG_PACKAGE_kmod-oaf=y
 # end of Netfilter Extensions
 
 #
@@ -2877,7 +2877,7 @@ CONFIG_PACKAGE_kmod-netlink-diag=y
 # CONFIG_PACKAGE_kmod-openvswitch-stt-intree is not set
 # CONFIG_PACKAGE_kmod-openvswitch-vxlan is not set
 # CONFIG_PACKAGE_kmod-openvswitch-vxlan-intree is not set
-# CONFIG_PACKAGE_kmod-ovpn-dco-v2 is not set
+# CONFIG_PACKAGE_kmod-ovpn-backports is not set
 # CONFIG_PACKAGE_kmod-packet-diag is not set
 # CONFIG_PACKAGE_kmod-pf-ring is not set
 # CONFIG_PACKAGE_kmod-pktgen is not set
@@ -3775,7 +3775,6 @@ CONFIG_PACKAGE_python3-ctypes=y
 # CONFIG_PACKAGE_python3-docutils is not set
 # CONFIG_PACKAGE_python3-dotenv is not set
 # CONFIG_PACKAGE_python3-drf-nested-routers is not set
-# CONFIG_PACKAGE_python3-email is not set
 # CONFIG_PACKAGE_python3-engineio is not set
 # CONFIG_PACKAGE_python3-et_xmlfile is not set
 # CONFIG_PACKAGE_python3-evdev is not set
@@ -3874,7 +3873,6 @@ CONFIG_PACKAGE_python3-logging=y
 # CONFIG_PACKAGE_python3-pyelftools is not set
 # CONFIG_PACKAGE_python3-pyfuse3 is not set
 # CONFIG_PACKAGE_python3-pygments is not set
-# CONFIG_PACKAGE_python3-pyinotify is not set
 # CONFIG_PACKAGE_python3-pymysql is not set
 # CONFIG_PACKAGE_python3-pymysql-sha-pwd is not set
 # CONFIG_PACKAGE_python3-pynacl is not set
@@ -3892,6 +3890,7 @@ CONFIG_PACKAGE_python3-logging=y
 # CONFIG_PACKAGE_python3-pytest-xdist is not set
 # CONFIG_PACKAGE_python3-pytz is not set
 # CONFIG_PACKAGE_python3-pyudev is not set
+# CONFIG_PACKAGE_python3-pyusb is not set
 # CONFIG_PACKAGE_python3-readline is not set
 # CONFIG_PACKAGE_python3-referencing is not set
 # CONFIG_PACKAGE_python3-requests is not set
@@ -5141,9 +5140,7 @@ CONFIG_PACKAGE_libqmi=y
 #
 CONFIG_LIBQMI_WITH_MBIM_QMUX=y
 CONFIG_LIBQMI_WITH_QRTR_GLIB=y
-# CONFIG_LIBQMI_COLLECTION_MINIMAL is not set
-CONFIG_LIBQMI_COLLECTION_BASIC=y
-# CONFIG_LIBQMI_COLLECTION_FULL is not set
+CONFIG_LIBQMI_COLLECTION_FULL=y
 # end of Configuration
 
 # CONFIG_PACKAGE_libqrencode is not set
@@ -5517,7 +5514,9 @@ CONFIG_PACKAGE_luci-theme-material=y
 #
 # 5. Plugins
 #
-# CONFIG_PACKAGE_plugins-example is not set
+# CONFIG_PACKAGE_luci-plugin-2fa is not set
+# CONFIG_PACKAGE_luci-plugin-auth-example is not set
+# CONFIG_PACKAGE_luci-plugin-examples is not set
 # end of 5. Plugins
 
 #
@@ -7143,6 +7142,7 @@ CONFIG_PACKAGE_samba4-utils=y
 # CONFIG_PACKAGE_tunneldigger-broker is not set
 # CONFIG_PACKAGE_u2pnpd is not set
 # CONFIG_PACKAGE_uacme is not set
+# CONFIG_PACKAGE_uacme-dnsapi-adapter is not set
 # CONFIG_PACKAGE_uacme-ualpn is not set
 CONFIG_PACKAGE_uclient-fetch=y
 # CONFIG_PACKAGE_udhcpsnoop is not set
@@ -7664,6 +7664,7 @@ CONFIG_PACKAGE_acpid=y
 # CONFIG_PACKAGE_coap-client is not set
 # CONFIG_PACKAGE_collectd is not set
 # CONFIG_PACKAGE_colrm is not set
+# CONFIG_PACKAGE_column is not set
 # CONFIG_PACKAGE_conmon is not set
 CONFIG_PACKAGE_containerd=y
 CONFIG_PACKAGE_coremark=y
@@ -7827,6 +7828,19 @@ CONFIG_PACKAGE_file=y
 # CONFIG_PACKAGE_fuse-overlayfs is not set
 # CONFIG_PACKAGE_fwupd-daemon is not set
 # CONFIG_PACKAGE_fwupd-libs is not set
+
+#
+# Select fwupd options
+#
+# CONFIG_FWUPD_FIRMWARE_PACKAGER is not set
+# CONFIG_FWUPD_HSI is not set
+CONFIG_FWUPD_LVFS=y
+# CONFIG_FWUPD_CBOR is not set
+# CONFIG_FWUPD_LIBDRM is not set
+CONFIG_FWUPD_PLUGIN_MODEMMANAGER=y
+CONFIG_FWUPD_PLUGIN_FLASHROM=y
+# end of Select fwupd options
+
 # CONFIG_PACKAGE_fwupd-tools is not set
 # CONFIG_PACKAGE_fx is not set
 # CONFIG_PACKAGE_fxload is not set
@@ -7888,6 +7902,16 @@ CONFIG_PACKAGE_lm-sensors=y
 # CONFIG_PACKAGE_look is not set
 CONFIG_PACKAGE_losetup=y
 # CONFIG_PACKAGE_lpac is not set
+
+#
+# Configuration
+#
+CONFIG_LPAC_WITH_PCSC=y
+CONFIG_LPAC_WITH_AT=y
+CONFIG_LPAC_WITH_UQMI=y
+CONFIG_LPAC_WITH_MBIM=y
+# end of Configuration
+
 # CONFIG_PACKAGE_lrzsz is not set
 CONFIG_PACKAGE_lscpu=y
 # CONFIG_PACKAGE_lsd is not set

@@ -48,10 +48,6 @@ git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 
 # ============================================================================================================
 # ⭐⭐⭐ 以下是追加内容（你的功能） —— 不修改原作者任何内容，只追加 ⭐⭐⭐
-# ============================================================================================================
-
-echo ">>> Apply custom config options for TX8 Max (S912) ..."
-
 # ------------------------------- 网络加速（SFE / FlowOffload / FullCone / BBR） -------------------------------
 cat >> .config << "EOF"
 CONFIG_PACKAGE_kmod-shortcut-fe=y
@@ -69,14 +65,6 @@ CONFIG_PACKAGE_docker=y
 CONFIG_PACKAGE_luci-app-dockerman=y
 CONFIG_PACKAGE_kmod-veth=y
 CONFIG_PACKAGE_kmod-br-netfilter=y
-EOF
-
-# ------------------------------- OpenClash -------------------------------
-cat >> .config << "EOF"
-CONFIG_PACKAGE_luci-app-openclash=y
-CONFIG_PACKAGE_coreutils=y
-CONFIG_PACKAGE_ipset=y
-CONFIG_PACKAGE_kmod-tun=y
 EOF
 
 # ------------------------------- Daed（dae） -------------------------------

@@ -94,6 +94,12 @@ runs:
             echo -e "Using the default OpenWrt files."
         fi
 
+        # Set builder custom signature
+        [[ -n "${{ inputs.builder_name }}" ]] && {
+            builder_name="${{ inputs.builder_name }}"
+            builder_name="${builder_name// /-}"
+        }
+
         cd ${{ github.action_path }}
         echo -e "Starting OpenWrt build process..."
         make_command=""
@@ -104,7 +110,7 @@ runs:
         [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
         [[ -n "${{ inputs.openwrt_ip }}" ]] && make_command="${make_command} -p ${{ inputs.openwrt_ip }}"
         [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
-        [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
+        [[ -n "${builder_name}" ]] && make_command="${make_command} -n ${builder_name}"
         read -r -a make_args <<< "${make_command}"
         sudo ./remake "${make_args[@]}"
 

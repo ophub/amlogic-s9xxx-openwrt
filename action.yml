@@ -102,16 +102,15 @@ runs:
 
         cd ${{ github.action_path }}
         echo -e "Starting OpenWrt build process..."
-        make_command=""
-        [[ -n "${{ inputs.openwrt_board }}" ]] && make_command="${make_command} -b ${{ inputs.openwrt_board }}"
-        [[ -n "${{ inputs.kernel_repo }}" ]] && make_command="${make_command} -r ${{ inputs.kernel_repo }}"
-        [[ -n "${{ inputs.kernel_usage }}" ]] && make_command="${make_command} -u ${{ inputs.kernel_usage }}"
-        [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.openwrt_kernel }}"
-        [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
-        [[ -n "${{ inputs.openwrt_ip }}" ]] && make_command="${make_command} -p ${{ inputs.openwrt_ip }}"
-        [[ -n "${{ inputs.openwrt_size }}" ]] && make_command="${make_command} -s ${{ inputs.openwrt_size }}"
-        [[ -n "${builder_name}" ]] && make_command="${make_command} -n ${builder_name}"
-        read -r -a make_args <<< "${make_command}"
+        make_args=()
+        [[ -n "${{ inputs.openwrt_board }}"  ]] && make_args+=(-b "${{ inputs.openwrt_board }}")
+        [[ -n "${{ inputs.kernel_repo }}"    ]] && make_args+=(-r "${{ inputs.kernel_repo }}")
+        [[ -n "${{ inputs.kernel_usage }}"   ]] && make_args+=(-u "${{ inputs.kernel_usage }}")
+        [[ -n "${{ inputs.openwrt_kernel }}" ]] && make_args+=(-k "${{ inputs.openwrt_kernel }}")
+        [[ -n "${{ inputs.auto_kernel }}"    ]] && make_args+=(-a "${{ inputs.auto_kernel }}")
+        [[ -n "${{ inputs.openwrt_ip }}"     ]] && make_args+=(-p "${{ inputs.openwrt_ip }}")
+        [[ -n "${{ inputs.openwrt_size }}"   ]] && make_args+=(-s "${{ inputs.openwrt_size }}")
+        [[ -n "${builder_name}"              ]] && make_args+=(-n "${builder_name}")
         sudo ./remake "${make_args[@]}"
 
         cd ${{ github.action_path }}

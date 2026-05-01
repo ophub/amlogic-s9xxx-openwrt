@@ -590,7 +590,7 @@ query_kernel() {
                         sort -urV | head -n 1
                 )"
 
-                if [[ "${?}" -eq 0 && -n "${latest_version}" ]]; then
+                if [[ -n "${latest_version}" ]]; then
                     tmp_arr_kernels[${i}]="${latest_version}"
                 else
                     tmp_arr_kernels[${i}]="${kernel_var}"
@@ -611,14 +611,14 @@ query_kernel() {
 
 check_kernel() {
     [[ -n "${1}" ]] && check_path="${1}" || error_msg "Invalid kernel path to check."
-    check_files=($(cat "${check_path}/sha256sums" | awk '{print $2}'))
+    check_files=($(awk '{print $2}' "${check_path}/sha256sums"))
     for cf in "${check_files[@]}"; do
         {
             # Check if file exists
             [[ -s "${check_path}/${cf}" ]] || error_msg "The [ ${cf} ] file is missing."
-            # Check if the file sha256sum is correct
+            # Check if the file sha256sum is correct (exact filename match, no substring confusion)
             tmp_sha256sum="$(sha256sum "${check_path}/${cf}" | awk '{print $1}')"
-            tmp_checkcode="$(cat ${check_path}/sha256sums | grep ${cf} | awk '{print $1}')"
+            tmp_checkcode="$(awk -v f="${cf}" '$2==f {print $1}' "${check_path}/sha256sums")"
             [[ "${tmp_sha256sum}" == "${tmp_checkcode}" ]] || error_msg "[ ${cf} ]: sha256sum verification failed."
         }
     done
@@ -1229,34 +1229,33 @@ EOF
     }
 
     # Add firmware information
-    echo "PLATFORM='${PLATFORM}'" >>${op_release}
-    echo "MODEL_ID='${MODEL_ID}'" >>${op_release}
-    echo "MODEL_NAME='${MODEL_NAME}'" >>${op_release}
-    echo "SOC='${SOC}'" >>${op_release}
-    echo "FDTFILE='${FDTFILE}'" >>${op_release}
-    echo "FAMILY='${FAMILY}'" >>${op_release}
-    echo "BOARD='${board}'" >>${op_release}
-    echo "KERNEL_TAGS='${conf_kernel_tags}'" >>${op_release}
-    echo "KERNEL_VERSION='${kernel}'" >>${op_release}
-    echo "BOOT_CONF='${BOOT_CONF}'" >>${op_release}
-    echo "MAINLINE_UBOOT='${RECORD_MAINLINE_UBOOT}'" >>${op_release}
-    echo "ANDROID_UBOOT='${RECORD_BOOTLOADER_IMG}'" >>${op_release}
+    release_lines=(
+        "PLATFORM='${PLATFORM}'"
+        "MODEL_ID='${MODEL_ID}'"
+        "MODEL_NAME='${MODEL_NAME}'"
+        "SOC='${SOC}'"
+        "FDTFILE='${FDTFILE}'"
+        "FAMILY='${FAMILY}'"
+        "BOARD='${board}'"
+        "KERNEL_TAGS='${conf_kernel_tags}'"
+        "KERNEL_VERSION='${kernel}'"
+        "BOOT_CONF='${BOOT_CONF}'"
+        "MAINLINE_UBOOT='${RECORD_MAINLINE_UBOOT}'"
+        "ANDROID_UBOOT='${RECORD_BOOTLOADER_IMG}'"
+        "OPENWRT_SOURCEREPO='${source_repo}'"
+        "OPENWRT_SOURCECODE='${source_codename}'"
+        "OPENWRT_SOURCEBRANCH='${source_branch}'"
+        "BUILDER_NAME='${builder_name}'"
+        "CONTRIBUTORS='${CONTRIBUTORS}'"
+        "PACKAGED_DATE='$(date +%Y-%m-%d)'"
+    )
     if [[ "${PLATFORM}" == "rockchip" ]]; then
-        echo "TRUST_IMG='${RECORD_TRUST_IMG}'" >>${op_release}
-    elif [[ "${PLATFORM}" == "amlogic" ]]; then
-        echo "UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'" >>${op_release}
-    fi
-    if [[ "${PLATFORM}" == "rockchip" ]]; then
-        echo "SHOW_INSTALL_MENU='no'" >>${op_release}
+        release_lines+=("TRUST_IMG='${RECORD_TRUST_IMG}'" "SHOW_INSTALL_MENU='no'")
     else
-        echo "SHOW_INSTALL_MENU='yes'" >>${op_release}
+        release_lines+=("SHOW_INSTALL_MENU='yes'")
+        [[ "${PLATFORM}" == "amlogic" ]] && release_lines+=("UBOOT_OVERLOAD='${UBOOT_OVERLOAD}'")
     fi
-    echo "OPENWRT_SOURCEREPO='${source_repo}'" >>${op_release}
-    echo "OPENWRT_SOURCECODE='${source_codename}'" >>${op_release}
-    echo "OPENWRT_SOURCEBRANCH='${source_branch}'" >>${op_release}
-    echo "BUILDER_NAME='${builder_name}'" >>${op_release}
-    echo "CONTRIBUTORS='${CONTRIBUTORS}'" >>${op_release}
-    echo "PACKAGED_DATE='$(date +%Y-%m-%d)'" >>${op_release}
+    printf '%s\n' "${release_lines[@]}" >>${op_release}
     # Creating a symbolic link alias
     ln -sf ${op_release#*/} ${ophub_release_file}
 

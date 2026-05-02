@@ -16,10 +16,12 @@
 #
 #========================================================================================
 
+set +e
+
 # A helper function for logging with a timestamp.
 custom_log="/tmp/ophub_start_service.log"
 log_message() {
-    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] $1" >>"${custom_log}"
+    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] $1" >>"${custom_log}" 2>/dev/null || true
 }
 
 # Clear previous log and start new session.
@@ -84,8 +86,9 @@ fi
 # Disable the OpenSSL acceleration engine if it is enabled
 ssl_conf="/etc/ssl/openssl.cnf"
 [[ -f "${ssl_conf}" && -n "$(grep '^engines = engines_sect' "${ssl_conf}" || true)" ]] && {
-    sed -i "s|^engines = engines_sect|#engines = engines_sect|g" "${ssl_conf}"
-    /etc/init.d/uhttpd restart >/dev/null 2>&1 || true
+    sed -i "s|^engines = engines_sect|#engines = engines_sect|g" "${ssl_conf}" 2>/dev/null || true
+    # Restart in background so a hung uhttpd cannot stall this script.
+    (/etc/init.d/uhttpd restart >/dev/null 2>&1) &
     log_message "Disabled OpenSSL engine acceleration in ${ssl_conf} and restarted uhttpd."
 }
 
@@ -98,6 +101,7 @@ fi
 # Enable UDP GRO forwarding on all physical ethernet interfaces
 # View command: ethtool -k eth0 | grep -i udp
 if command -v ethtool >/dev/null 2>&1; then
+    shopt -s nullglob
     for iface in /sys/class/net/*/device; do
         iface_name="$(basename "${iface%/device}")"
         # Skip non-ethernet interfaces (type != 1) and wireless interfaces
@@ -106,6 +110,7 @@ if command -v ethtool >/dev/null 2>&1; then
         ethtool -K "${iface_name}" rx-udp-gro-forwarding on >/dev/null 2>&1
         log_message "Enabled rx-udp-gro-forwarding on ${iface_name}."
     done
+    shopt -u nullglob
 fi
 
 # LED display control, only for Amlogic devices (meson-*) with a valid box ID.
@@ -216,3 +221,4 @@ fi
 
 # Finalization
 log_message "All custom startup services have been initialized."
+exit 0

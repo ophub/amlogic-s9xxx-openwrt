@@ -16,10 +16,15 @@
 #
 #========================================================================================
 
+set +euo pipefail
+
+trap 'exit 0' EXIT
+trap '' HUP INT QUIT PIPE
+
 # A helper function for logging with a timestamp.
 custom_log="/tmp/ophub_start_service.log"
 log_message() {
-    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] $1" >>"${custom_log}"
+    echo "[$(date +"%Y.%m.%d.%H:%M:%S")] $1" >>"${custom_log}" 2>/dev/null || true
 }
 
 # Clear previous log and start new session.
@@ -29,16 +34,22 @@ log_message "Starting custom startup services..."
 dmesg -n 1 >/dev/null 2>&1 || true
 log_message "Kernel console log level set to 1 (critical only)."
 
-# System Identification
-# Detect device type from the FDT (Flattened Device Tree) file.
+# Search for the FDTFILE file (only the basename of the .dtb is needed)
 ophub_release_file="/etc/ophub-release"
-FDT_FILE=""
-
-[[ -f "${ophub_release_file}" ]] && { FDT_FILE="$(grep -oE 'meson.*dtb' "${ophub_release_file}" || true)"; }
-[[ -z "${FDT_FILE}" && -f "/boot/uEnv.txt" ]] && { FDT_FILE="$(grep -E '^FDT=.*\.dtb$' /boot/uEnv.txt | sed -E 's#.*/##' || true)"; }
-[[ -z "${FDT_FILE}" && -f "/boot/extlinux/extlinux.conf" ]] && { FDT_FILE="$(grep -E '/dtb/.*\.dtb$' /boot/extlinux/extlinux.conf | sed -E 's#.*/##' || true)"; }
-[[ -z "${FDT_FILE}" && -f "/boot/armbianEnv.txt" ]] && { FDT_FILE="$(grep -E '^fdtfile=.*\.dtb$' /boot/armbianEnv.txt | sed -E 's#.*/##' || true)"; }
-log_message "Detected FDT file: ${FDT_FILE:-'not found'}."
+FDTFILE=""
+# 1) /etc/ophub-release : FDTFILE='xxx.dtb'
+[[ -f "${ophub_release_file}" ]] &&
+    FDTFILE="$(awk -F"'" '/^FDTFILE=/ {print $2; exit}' "${ophub_release_file}" 2>/dev/null)"
+# 2) /boot/uEnv.txt : FDT=/dtb/.../xxx.dtb  (or FDT=xxx.dtb)
+[[ -z "${FDTFILE}" && -f "/boot/uEnv.txt" ]] &&
+    FDTFILE="$(grep -E '^FDT=.*\.dtb$' /boot/uEnv.txt 2>/dev/null | head -n1 | sed -E 's#^FDT=##; s#.*/##')"
+# 3) /boot/extlinux/extlinux.conf : "    fdt /dtb/.../xxx.dtb"
+[[ -z "${FDTFILE}" && -f "/boot/extlinux/extlinux.conf" ]] &&
+    FDTFILE="$(grep -Eo '/dtb/[^[:space:]]+\.dtb' /boot/extlinux/extlinux.conf 2>/dev/null | head -n1 | sed -E 's#.*/##')"
+# 4) /boot/armbianEnv.txt : fdtfile=vendor/xxx.dtb  (or fdtfile=xxx.dtb)
+[[ -z "${FDTFILE}" && -f "/boot/armbianEnv.txt" ]] &&
+    FDTFILE="$(grep -E '^fdtfile=.*\.dtb$' /boot/armbianEnv.txt 2>/dev/null | head -n1 | sed -E 's#^fdtfile=##; s#.*/##')"
+log_message "Detected FDT file: ${FDTFILE:-not found}"
 
 # Determine the disk and data partition path from the root partition.
 ROOT_PTNAME="$(df -h /boot | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
@@ -84,8 +95,9 @@ fi
 # Disable the OpenSSL acceleration engine if it is enabled
 ssl_conf="/etc/ssl/openssl.cnf"
 [[ -f "${ssl_conf}" && -n "$(grep '^engines = engines_sect' "${ssl_conf}" || true)" ]] && {
-    sed -i "s|^engines = engines_sect|#engines = engines_sect|g" "${ssl_conf}"
-    /etc/init.d/uhttpd restart >/dev/null 2>&1 || true
+    sed -i "s|^engines = engines_sect|#engines = engines_sect|g" "${ssl_conf}" 2>/dev/null || true
+    # Restart in background so a hung uhttpd cannot stall this script.
+    (/etc/init.d/uhttpd restart >/dev/null 2>&1) &
     log_message "Disabled OpenSSL engine acceleration in ${ssl_conf} and restarted uhttpd."
 }
 
@@ -98,6 +110,7 @@ fi
 # Enable UDP GRO forwarding on all physical ethernet interfaces
 # View command: ethtool -k eth0 | grep -i udp
 if command -v ethtool >/dev/null 2>&1; then
+    shopt -s nullglob
     for iface in /sys/class/net/*/device; do
         iface_name="$(basename "${iface%/device}")"
         # Skip non-ethernet interfaces (type != 1) and wireless interfaces
@@ -106,13 +119,14 @@ if command -v ethtool >/dev/null 2>&1; then
         ethtool -K "${iface_name}" rx-udp-gro-forwarding on >/dev/null 2>&1
         log_message "Enabled rx-udp-gro-forwarding on ${iface_name}."
     done
+    shopt -u nullglob
 fi
 
 # LED display control, only for Amlogic devices (meson-*) with a valid box ID.
 openvfd_enable="no"  # yes or no, set to "yes" to enable the OpenVFD service.
 openvfd_boxid="15"   # Set the box ID for your device. Refer to the documentation for details.
 openvfd_restart="no" # yes or no, set to "yes" to restart the OpenVFD service after initial start.
-if [[ "${openvfd_boxid}" != "0" && "${FDT_FILE}" =~ ^meson- ]]; then
+if [[ "${openvfd_boxid}" != "0" && "${FDTFILE}" =~ ^meson- ]]; then
     (
         # Start OpenVFD service
         [[ "${openvfd_enable}" == "yes" ]] && openwrt-openvfd "${openvfd_boxid}" >/dev/null 2>&1
@@ -152,7 +166,7 @@ if [[ -f "${todo_rootfs_resize}" && "$(cat "${todo_rootfs_resize}" 2>/dev/null |
 fi
 
 # For nsy-g16-plus/nsy-g68-plus/bdy-g18-pro boards (Rockchip)
-if [[ "${FDT_FILE}" =~ ^(rk3568-nsy-g16-plus\.dtb|rk3568-nsy-g68-plus\.dtb|rk3568-bdy-g18-pro\.dtb)$ ]]; then
+if [[ "${FDTFILE}" =~ ^(rk3568-nsy-g16-plus\.dtb|rk3568-nsy-g68-plus\.dtb|rk3568-bdy-g18-pro\.dtb)$ ]]; then
     (
         # Wait for network to be up
         sleep 10
@@ -175,7 +189,7 @@ if [[ "${FDT_FILE}" =~ ^(rk3568-nsy-g16-plus\.dtb|rk3568-nsy-g68-plus\.dtb|rk356
         uci commit firewall
         /etc/init.d/firewall restart
     ) &
-    log_message "Network optimizations for ${FDT_FILE} applied."
+    log_message "Network optimizations for ${FDTFILE} applied."
 fi
 
 # Set up swap space
@@ -216,3 +230,4 @@ fi
 
 # Finalization
 log_message "All custom startup services have been initialized."
+exit 0

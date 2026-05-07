@@ -55,6 +55,8 @@ on:
           - beikeyun
           - boca-tcn100
           - boca-tcn200
+          - bt-100m
+          - bt-1000m
           - cd1000
           - chainedbox
           - cm3588-nas

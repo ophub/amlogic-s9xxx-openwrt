@@ -12,9 +12,10 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "openwrt_main"
+        default: "all"
         type: choice
         options:
+          - all
           - openwrt_main
           - lede_master
           - immortalwrt_master
@@ -305,17 +306,41 @@ on:
           - yourname
 
 env:
-  FEEDS_CONF: config/${{ inputs.source_branch }}/feeds.conf.default
-  CONFIG_FILE: config/${{ inputs.source_branch }}/config
-  DIY_P1_SH: config/${{ inputs.source_branch }}/diy-part1.sh
-  DIY_P2_SH: config/${{ inputs.source_branch }}/diy-part2.sh
   TZ: Etc/UTC
   CCACHE_DIR: /builder/openwrt/.ccache
 
 jobs:
+  setup:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Set build matrix based on source_branch input
+        id: set-matrix
+        run: |
+          if [[ "${{ inputs.source_branch }}" == "all" ]]; then
+            MATRIX='{"include":[{"branch":"openwrt_main"},{"branch":"lede_master"},{"branch":"immortalwrt_master"}]}'
+          else
+            MATRIX='{"include":[{"branch":"${{ inputs.source_branch }}"}]}'
+          fi
+          echo "matrix=${MATRIX}" >> "${GITHUB_OUTPUT}"
+
   build:
+    needs: setup
     runs-on: ubuntu-24.04
     if: ${{ github.event.repository.owner.id == github.event.sender.id }}
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.setup.outputs.matrix) }}
+
+    name: build-${{ matrix.branch }}
+
+    env:
+      FEEDS_CONF: config/${{ matrix.branch }}/feeds.conf.default
+      CONFIG_FILE: config/${{ matrix.branch }}/config
+      DIY_P1_SH: config/${{ matrix.branch }}/diy-part1.sh
+      DIY_P2_SH: config/${{ matrix.branch }}/diy-part2.sh
 
     steps:
       - name: Checkout
@@ -368,23 +393,23 @@ jobs:
           df -Th
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Clone source code [ ${{ inputs.source_branch }} ]
+      - name: Clone source code [ ${{ matrix.branch }} ]
         id: codes
         working-directory: /builder
         if: ${{ steps.init.outputs.status == 'success' && !cancelled() }}
         run: |
           # Determine the OpenWrt source code repository
-          if [[ "${{ inputs.source_branch }}" =~ ^openwrt ]]; then
+          if [[ "${{ matrix.branch }}" =~ ^openwrt ]]; then
               REPO_URL="https://github.com/openwrt/openwrt"
-          elif [[ "${{ inputs.source_branch }}" =~ ^lede ]]; then
+          elif [[ "${{ matrix.branch }}" =~ ^lede ]]; then
               REPO_URL="https://github.com/coolsnowwolf/lede"
-          elif [[ "${{ inputs.source_branch }}" =~ ^immortalwrt ]]; then
+          elif [[ "${{ matrix.branch }}" =~ ^immortalwrt ]]; then
               REPO_URL="https://github.com/immortalwrt/immortalwrt"
           else
               echo "Error: Unknown source code repository."
               exit 1
           fi
-          source_branch_input="${{ inputs.source_branch }}"
+          source_branch_input="${{ matrix.branch }}"
           REPO_NAME="${source_branch_input%_*}"
           REPO_BRANCH="${source_branch_input##*_}"
 
@@ -394,7 +419,7 @@ jobs:
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
           # Export build metadata
-          echo "build_tag=OpenWrt_${{ inputs.source_branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
+          echo "build_tag=OpenWrt_${{ matrix.branch }}_${{ inputs.openwrt_storage }}_$(date +"%Y.%m")" >> ${GITHUB_ENV}
           echo -e "REPO_URL: [ ${REPO_URL} ]\nREPO_BRANCH: [ ${REPO_BRANCH} ]\nREPO_NAME: [ ${REPO_NAME} ]"
           df -hT ${PWD}
           echo "REPO_URL=${REPO_URL}" >> ${GITHUB_ENV}

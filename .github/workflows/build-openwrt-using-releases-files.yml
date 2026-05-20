@@ -111,6 +111,7 @@ on:
           - nsy-g68-plus
           - orangepi-3b
           - orangepi-5-plus
+          - orangepi-5-pro
           - orangepi-5b
           - orangepi-zero3
           - painet-p3
@@ -121,6 +122,7 @@ on:
           - renegade-rk3328
           - rk3318-box
           - rock-5-itx
+          - rock-3b
           - rock5b
           - rock5c
           - ruisen-box

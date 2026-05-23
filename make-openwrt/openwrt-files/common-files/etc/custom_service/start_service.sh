@@ -19,7 +19,6 @@
 set +euo pipefail
 
 trap 'exit 0' EXIT
-trap '' HUP INT QUIT PIPE
 
 # A helper function for logging with a timestamp.
 custom_log="/tmp/ophub_start_service.log"
@@ -230,4 +229,5 @@ fi
 
 # Finalization
 log_message "All custom startup services have been initialized."
+trap '' HUP INT QUIT PIPE
 exit 0

@@ -119,6 +119,7 @@ CONFIG_DEFAULT_uci=y
 CONFIG_DEFAULT_uclient-fetch=y
 CONFIG_DEFAULT_urandom-seed=y
 CONFIG_DEFAULT_urngd=y
+CONFIG_HAS_TESTING_KERNEL=y
 CONFIG_HAS_FPU=y
 CONFIG_AUDIO_SUPPORT=y
 CONFIG_GPIO_SUPPORT=y
@@ -201,6 +202,7 @@ CONFIG_SIGN_EACH_PACKAGE=y
 #
 # General build options
 #
+# CONFIG_TESTING_KERNEL is not set
 CONFIG_DISPLAY_SUPPORT=y
 # CONFIG_BUILD_PATENTED is not set
 # CONFIG_BUILD_NLS is not set
@@ -490,6 +492,12 @@ CONFIG_TARGET_INIT_ENV=""
 CONFIG_TARGET_INIT_CMD="/sbin/init"
 CONFIG_TARGET_INIT_SUPPRESS_STDERR=y
 # CONFIG_VERSIONOPT is not set
+# CONFIG_TARGET_BUTTON_CUSTOMIZATION is not set
+# CONFIG_TARGET_BUTTON_CUSTOMIZATION_FAILSAFE_DISABLED is not set
+# CONFIG_TARGET_BUTTON_CUSTOMIZATION_POWER_DISABLED is not set
+# CONFIG_TARGET_BUTTON_CUSTOMIZATION_REBOOT_DISABLED is not set
+# CONFIG_TARGET_BUTTON_CUSTOMIZATION_RESET_DISABLED is not set
+# CONFIG_TARGET_BUTTON_CUSTOMIZATION_RF_KILL_DISABLED is not set
 CONFIG_PER_FEED_REPO=y
 CONFIG_FEED_packages=y
 CONFIG_FEED_luci=y
@@ -1670,6 +1678,7 @@ CONFIG_DROPBEAR_KEX_REKEY_TIMEOUT=28800
 CONFIG_DROPBEAR_KEX_REKEY_DATA=1073741824
 CONFIG_DROPBEAR_AUTH_TIMEOUT=300
 CONFIG_DROPBEAR_MAX_AUTH_TRIES=10
+CONFIG_DROPBEAR_MAX_PUBKEY_QUERIES=15
 CONFIG_DROPBEAR_UNAUTH_CLOSE_DELAY=0
 CONFIG_DROPBEAR_MAX_UNAUTH_PER_IP=5
 CONFIG_DROPBEAR_MAX_UNAUTH_CLIENTS=30
@@ -1677,6 +1686,7 @@ CONFIG_DROPBEAR_DEFAULT_RECV_WINDOW=262144
 CONFIG_DROPBEAR_DEFAULT_KEEPALIVE=0
 CONFIG_DROPBEAR_DEFAULT_KEEPALIVE_LIMIT=3
 CONFIG_DROPBEAR_DEFAULT_IDLE_TIMEOUT=0
+CONFIG_DROPBEAR_DEFAULT_MAX_DURATION=0
 # end of Resource limits
 
 #
@@ -1791,6 +1801,7 @@ CONFIG_PACKAGE_usign=y
 # CONFIG_PACKAGE_uxc is not set
 CONFIG_PACKAGE_wifi-scripts=y
 # CONFIG_WIFI_SCRIPTS_UCODE is not set
+# CONFIG_WIFI_SCRIPTS_WPS_BUTTON_DISABLED is not set
 CONFIG_PACKAGE_wireless-tools=y
 # CONFIG_PACKAGE_zram-swap is not set
 # CONFIG_PACKAGE_zyxel-bootconfig is not set
@@ -2104,6 +2115,9 @@ CONFIG_PACKAGE_rtl8192de-firmware=y
 # CONFIG_PACKAGE_rtl8192du-firmware is not set
 CONFIG_PACKAGE_rtl8192eu-firmware=y
 CONFIG_PACKAGE_rtl8192se-firmware=y
+# CONFIG_PACKAGE_rtl8261n-firmware is not set
+# CONFIG_PACKAGE_rtl8261n-lp-firmware is not set
+# CONFIG_PACKAGE_rtl8264b-firmware is not set
 CONFIG_PACKAGE_rtl8723au-firmware=y
 # CONFIG_PACKAGE_rtl8723be-firmware is not set
 CONFIG_PACKAGE_rtl8723bu-firmware=y
@@ -2348,6 +2362,7 @@ CONFIG_PACKAGE_kmod-gpio-pca953x=y
 # CONFIG_PACKAGE_kmod-hwmon-adt7470 is not set
 # CONFIG_PACKAGE_kmod-hwmon-adt7475 is not set
 CONFIG_PACKAGE_kmod-hwmon-core=y
+# CONFIG_PACKAGE_kmod-hwmon-corsair-cpro is not set
 # CONFIG_PACKAGE_kmod-hwmon-dme1737 is not set
 # CONFIG_PACKAGE_kmod-hwmon-drivetemp is not set
 # CONFIG_PACKAGE_kmod-hwmon-emc2305 is not set
@@ -2996,6 +3011,10 @@ CONFIG_PACKAGE_kmod-wdt-sp805=y
 # PSE-PD / PoE support
 #
 # CONFIG_PACKAGE_kmod-pse-pd is not set
+# CONFIG_PACKAGE_kmod-pse-pd692x0 is not set
+# CONFIG_PACKAGE_kmod-pse-regulator is not set
+# CONFIG_PACKAGE_kmod-pse-si3474 is not set
+# CONFIG_PACKAGE_kmod-pse-tps23881 is not set
 # end of PSE-PD / PoE support
 
 #
@@ -5189,6 +5208,7 @@ CONFIG_PACKAGE_libsensors=y
 # CONFIG_PACKAGE_libsispmctl is not set
 # CONFIG_PACKAGE_libslang2 is not set
 CONFIG_PACKAGE_libsmartcols=y
+# CONFIG_PACKAGE_libsml is not set
 # CONFIG_PACKAGE_libsndfile is not set
 # CONFIG_PACKAGE_libsoc is not set
 # CONFIG_PACKAGE_libsocketcan is not set
@@ -5537,6 +5557,7 @@ CONFIG_PACKAGE_luci-theme-material=y
 #
 # CONFIG_PACKAGE_luci-plugin-2fa is not set
 # CONFIG_PACKAGE_luci-plugin-auth-example is not set
+# CONFIG_PACKAGE_luci-plugin-csp is not set
 # CONFIG_PACKAGE_luci-plugin-examples is not set
 # end of 5. Plugins
 
@@ -6286,6 +6307,7 @@ CONFIG_PACKAGE_avahi-dbus-daemon=y
 CONFIG_PACKAGE_ddns-scripts=y
 # CONFIG_PACKAGE_ddns-scripts-aliyun is not set
 # CONFIG_PACKAGE_ddns-scripts-beget is not set
+# CONFIG_PACKAGE_ddns-scripts-blazingfast is not set
 # CONFIG_PACKAGE_ddns-scripts-cloudflare is not set
 # CONFIG_PACKAGE_ddns-scripts-cnkuai is not set
 # CONFIG_PACKAGE_ddns-scripts-digitalocean is not set
@@ -6452,6 +6474,14 @@ CONFIG_PACKAGE_wsdd2=y
 #
 # CONFIG_PACKAGE_mesh11sd is not set
 # end of Mesh
+
+#
+# Meshtastic
+#
+# CONFIG_PACKAGE_meshtasticd-avahi-service is not set
+# CONFIG_PACKAGE_meshtasticd-full is not set
+# CONFIG_PACKAGE_meshtasticd-web is not set
+# end of Meshtastic
 
 #
 # NMAP Suite
@@ -7098,7 +7128,6 @@ CONFIG_PACKAGE_proto-bonding=y
 # CONFIG_PACKAGE_ratechecker is not set
 # CONFIG_PACKAGE_ratelimit is not set
 # CONFIG_PACKAGE_realtek-poe is not set
-# CONFIG_PACKAGE_redsocks is not set
 # CONFIG_PACKAGE_remserial is not set
 # CONFIG_PACKAGE_respondd is not set
 # CONFIG_PACKAGE_restic-rest-server is not set
@@ -8144,6 +8173,7 @@ CONFIG_PACKAGE_uuidgen=y
 # CONFIG_PACKAGE_v4l-utils is not set
 # CONFIG_PACKAGE_view1090 is not set
 # CONFIG_PACKAGE_viewadsb is not set
+# CONFIG_PACKAGE_vzlogger is not set
 # CONFIG_PACKAGE_watchcat is not set
 # CONFIG_PACKAGE_wdctl is not set
 CONFIG_PACKAGE_whereis=y

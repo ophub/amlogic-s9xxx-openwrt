@@ -2087,8 +2087,6 @@ CONFIG_PACKAGE_mt7601u-firmware=y
 # CONFIG_PACKAGE_mt7925bt-firmware is not set
 # CONFIG_PACKAGE_mt7981-wo-firmware is not set
 # CONFIG_PACKAGE_mt7986-wo-firmware is not set
-# CONFIG_PACKAGE_mt7987-2p5g-phy-firmware is not set
-# CONFIG_PACKAGE_mt7988-2p5g-phy-firmware is not set
 # CONFIG_PACKAGE_mt7988-wo-firmware is not set
 # CONFIG_PACKAGE_murata-firmware-43430-sdio is not set
 # CONFIG_PACKAGE_murata-nvram-43430-sdio is not set
@@ -3206,6 +3204,11 @@ CONFIG_PACKAGE_kmod-usbmon=y
 # end of WPAN 802.15.4 Support
 
 #
+# Watchdog Timer Support
+#
+# end of Watchdog Timer Support
+
+#
 # Wireless Drivers
 #
 # CONFIG_PACKAGE_kmod-ar5523 is not set
@@ -3973,7 +3976,6 @@ CONFIG_PACKAGE_python3-logging=y
 CONFIG_PACKAGE_python3-yaml=y
 # CONFIG_PACKAGE_python3-yaml-src is not set
 # CONFIG_PACKAGE_python3-zeroconf is not set
-# CONFIG_PACKAGE_python3-zipp is not set
 # CONFIG_PACKAGE_python3-zope-event is not set
 # CONFIG_PACKAGE_python3-zope-interface is not set
 # end of Python
@@ -7603,6 +7605,7 @@ CONFIG_PACKAGE_zoneinfo-core=y
 # CONFIG_PACKAGE_libgtk-utils is not set
 # CONFIG_PACKAGE_libsdl2-tests is not set
 # CONFIG_PACKAGE_vkmark is not set
+# CONFIG_PACKAGE_vulkaninfo is not set
 # end of Video
 
 #

@@ -7919,6 +7919,7 @@ CONFIG_PACKAGE_zoneinfo-europe=y
 # CONFIG_PACKAGE_libgtk-utils is not set
 # CONFIG_PACKAGE_libsdl2-tests is not set
 # CONFIG_PACKAGE_vkmark is not set
+# CONFIG_PACKAGE_vulkaninfo is not set
 # end of Video
 
 #

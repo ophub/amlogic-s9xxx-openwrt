@@ -43,9 +43,6 @@ else
     echo "# CONFIG_CCACHE is not set" >>.config
     echo 'CONFIG_CCACHE_DIR=""' >>.config
 fi
-
-# Fix vlmcsd build error
-sed -i 's|-C $(PKG_BUILD_DIR)$|CC="$(TARGET_CC_NOCACHE)"|' package/feeds/packages/vlmcsd/Makefile
 #
 # ------------------------------- Main source ends -------------------------------
 

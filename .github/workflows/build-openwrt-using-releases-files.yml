@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       source_branch:
-        description: "Select the source branch"
+        description: "24.10.6"
         required: false
         default: "all"
         type: choice
@@ -20,7 +20,7 @@ on:
           - lede_master
           - immortalwrt_master
       openwrt_board:
-        description: "Select device board"
+        description: "s912-m8s-pro"
         required: false
         default: "all"
         type: choice

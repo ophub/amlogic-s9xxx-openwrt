@@ -320,8 +320,6 @@ env:
 jobs:
   setup:
     runs-on: ubuntu-24.04
-    permissions:
-      contents: write
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -339,6 +337,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-24.04
     if: ${{ github.event.repository.owner.id == github.event.sender.id }}
+    permissions:
+      contents: write
 
     strategy:
       fail-fast: false

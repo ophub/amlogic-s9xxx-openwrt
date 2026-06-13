@@ -13,9 +13,10 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "openwrt_main"
+        default: "all"
         type: choice
         options:
+          - all
           - openwrt_main
           - lede_master
           - immortalwrt_master
@@ -33,32 +34,50 @@ env:
   MAKE_DOCKER_SH: config/docker/make_docker_image.sh
 
 jobs:
+  set-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Set build matrix based on source_branch input
+        id: set-matrix
+        run: |
+          if [[ "${{ inputs.source_branch }}" == "all" ]]; then
+            MATRIX='{"include":[{"source_branch":"openwrt_main","docker_img":"ophub/openwrt-armv8"},{"source_branch":"lede_master","docker_img":"ophub/openwrt-aarch64"}]}'
+          else
+            MATRIX='{"include":[{"source_branch":"${{ inputs.source_branch }}","docker_img":"${{ inputs.docker_img }}"}]}'
+          fi
+          echo "matrix=${MATRIX}" >> "${GITHUB_OUTPUT}"
+
   build:
+    needs: set-matrix
     runs-on: ubuntu-24.04-arm
     if: ${{ github.event.repository.owner.id == github.event.sender.id }}
     permissions:
       contents: write
+    strategy:
+      matrix: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Download OpenWrt rootfs file [ ${{ inputs.source_branch }} ]
+      - name: Download OpenWrt rootfs file [ ${{ matrix.source_branch }} ]
         id: down
         if: (!cancelled())
         run: |
           # Determine the OpenWrt source code repository
-          if [[ "${{ inputs.source_branch }}" =~ ^openwrt ]]; then
+          if [[ "${{ matrix.source_branch }}" =~ ^openwrt ]]; then
               REPO_URL="https://github.com/openwrt/openwrt"
-          elif [[ "${{ inputs.source_branch }}" =~ ^lede ]]; then
+          elif [[ "${{ matrix.source_branch }}" =~ ^lede ]]; then
               REPO_URL="https://github.com/coolsnowwolf/lede"
-          elif [[ "${{ inputs.source_branch }}" =~ ^immortalwrt ]]; then
+          elif [[ "${{ matrix.source_branch }}" =~ ^immortalwrt ]]; then
               REPO_URL="https://github.com/immortalwrt/immortalwrt"
           else
               echo "Error: Unknown source code repository."
               exit 1
           fi
-          source_branch_input="${{ inputs.source_branch }}"
+          source_branch_input="${{ matrix.source_branch }}"
           REPO_NAME="${source_branch_input%_*}"
           REPO_BRANCH="${source_branch_input##*_}"
 
@@ -67,7 +86,7 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               https://api.github.com/repos/${{ github.repository }}/releases?per_page=20 | \
-              jq -r --arg RTK "OpenWrt_${{ inputs.source_branch }}_" \
+              jq -r --arg RTK "OpenWrt_${{ matrix.source_branch }}_" \
               --arg BOARD "-rootfs.tar.gz" \
               '[.[] | select(.tag_name | contains($RTK)) |
               {tag: .tag_name} + (.assets[] | select(.name | endswith($BOARD)) |
@@ -108,7 +127,7 @@ jobs:
         if: ${{ steps.down.outputs.status == 'success' && !cancelled() }}
         run: |
           chmod +x ${MAKE_DOCKER_SH}
-          ${MAKE_DOCKER_SH} ${{ inputs.source_branch }} arm64
+          ${MAKE_DOCKER_SH} ${{ matrix.source_branch }} arm64
 
           echo "status=success" >> ${GITHUB_OUTPUT}
 
@@ -158,11 +177,11 @@ jobs:
           echo "Loaded image: ${loaded_image}"
 
           # Tag for Docker Hub
-          docker tag "${loaded_image}" "${{ inputs.docker_img }}:arm64"
-          docker tag "${loaded_image}" "${{ inputs.docker_img }}:latest"
+          docker tag "${loaded_image}" "${{ matrix.docker_img }}:arm64"
+          docker tag "${loaded_image}" "${{ matrix.docker_img }}:latest"
 
           # Push to Docker Hub
-          docker push "${{ inputs.docker_img }}:arm64"
-          docker push "${{ inputs.docker_img }}:latest"
+          docker push "${{ matrix.docker_img }}:arm64"
+          docker push "${{ matrix.docker_img }}:latest"
 
           echo "status=success" >> ${GITHUB_OUTPUT}

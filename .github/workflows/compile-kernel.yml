@@ -90,6 +90,8 @@ env:
 jobs:
   setup:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:

@@ -58,7 +58,7 @@ jobs:
       
     strategy:
       matrix: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
-    name: build-docker-${{ matrix.docker_img }}@${{ matrix.source_branch }}
+    name: build-docker:${{ matrix.docker_img }}@${{ matrix.source_branch }}
 
     steps:
       - name: Checkout

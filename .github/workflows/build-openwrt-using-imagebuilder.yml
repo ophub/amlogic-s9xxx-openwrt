@@ -21,9 +21,9 @@ on:
           - openwrt:25.12.4
           - openwrt:25.12.3
           - openwrt:25.12.2
+          - immortalwrt:25.12.0
           - immortalwrt:24.10.6
           - immortalwrt:24.10.5
-          - immortalwrt:24.10.4
       openwrt_board:
         description: "Select device board"
         required: false

@@ -532,17 +532,18 @@ download_depends() {
     # Remove Armbian-specific files from the [ sbin ] directory
     find "${git_tmp_path}" -type d -path "*/platform-files/*/rootfs/usr/sbin" -prune -exec rm -rf {} +
     # Move the platform files to the storage directory
-    cp -af --no-preserve=ownership "${git_tmp_path}/build-armbian/armbian-files/platform-files/." "${platform_files}" ||
+    cp -afn --no-preserve=ownership "${git_tmp_path}/build-armbian/armbian-files/platform-files/." "${platform_files}" ||
         error_msg "OpenWrt: platform-files download failed."
     echo -e "${INFO} OpenWrt: platform-files download completed."
     # Move the different files to the storage directory
-    cp -af --no-preserve=ownership "${git_tmp_path}/build-armbian/armbian-files/different-files/." "${different_files}" ||
+    cp -afn --no-preserve=ownership "${git_tmp_path}/build-armbian/armbian-files/different-files/." "${different_files}" ||
         error_msg "OpenWrt: different-files download failed."
     echo -e "${INFO} OpenWrt: different-files download completed."
     # Move the balethirq files to the storage directory
-    cp -f --no-preserve=ownership "${git_tmp_path}/build-armbian/armbian-files/common-files/usr/sbin/balethirq.pl" "${common_files}/usr/sbin" &&
-        cp -f --no-preserve=ownership "${git_tmp_path}/build-armbian/armbian-files/common-files/etc/balance_irq" "${common_files}/etc" ||
-        error_msg "OpenWrt: balethirq download failed."
+    cp -f --no-preserve=ownership "${git_tmp_path}/build-armbian/armbian-files/common-files/usr/sbin/balethirq.pl" "${common_files}/usr/sbin" ||
+        error_msg "OpenWrt: balethirq.pl download failed."
+    cp -f --no-preserve=ownership "${git_tmp_path}/build-armbian/armbian-files/common-files/etc/balance_irq" "${common_files}/etc" ||
+        error_msg "OpenWrt: balance_irq download failed."
     echo -e "${INFO} OpenWrt: balethirq download completed."
     # Delete temporary files
     rm -rf "${git_tmp_path}"

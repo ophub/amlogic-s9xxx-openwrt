@@ -1,0 +1,57 @@
+name: Build N1 Flippy6.12 SingleArm OpenWrt
+on:
+  workflow_dispatch: # 手动触发编译，无需推送代码
+env:
+  TARGET_BOARD: phicomm-n1
+  KERNEL_VER: 6.12
+  CONFIG_FILE: n1-6.12.config
+jobs:
+  build_openwrt:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 拉取自定义配置与脚本
+        uses: actions/checkout@v4
+
+      - name: 安装编译依赖
+        run: |
+          sudo apt update -y
+          sudo apt full-upgrade -y
+          sudo apt install -y build-essential flex bison libssl-dev python3 dos2unix rsync unzip git gh
+          sudo rm -rf /usr/share/dotnet /opt/ghc /mnt/swapfile
+
+      - name: 克隆ophub晶晨盒子OpenWrt源码
+        run: git clone https://github.com/ophub/amlogic-s9xxx-openwrt openwrt
+
+      - name: 复制自定义文件到源码目录
+        run: |
+          cp diy-part1.sh diy-part2.sh $CONFIG_FILE openwrt/
+          chmod +x openwrt/diy-part*.sh
+          mv openwrt/$CONFIG_FILE openwrt/.config
+
+      - name: 执行前置脚本导入small插件源
+        run: cd openwrt && ./diy-part1.sh
+
+      - name: 生成完整配置 & 预下载源码
+        run: cd openwrt && make defconfig && make download -j$(nproc)
+
+      - name: 编译固件
+        run: cd openwrt && make -j$(nproc) V=w
+
+      - name: 执行后置自定义脚本
+        run: cd openwrt && ./diy-part2.sh
+
+      - name: 打包N1专用img镜像
+        run: |
+          cd openwrt
+          sudo ./scripts/make-aml-img.sh -b ${TARGET_BOARD} -k ${KERNEL_VER} -s 1024
+
+      - name: 上传固件至GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          cd openwrt/out
+          BUILD_TAG=N1-6.12-SingleArm-$(date +%Y%m%d)
+          gh release create ${BUILD_TAG} \
+            --title "斐讯N1 Flippy6.12 单臂路由固件 small-package全套插件" \
+            --notes "内置Docker/SmartDNS/AdGuardHome/Passwall/ClashOO/全套VPN/IPv6/UPnP/流卸载/备份工具/Design主题" \
+            *.img.gz

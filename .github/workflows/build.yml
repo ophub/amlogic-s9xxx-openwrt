@@ -25,11 +25,13 @@ jobs:
       - name: 复制自定义文件到源码目录
         run: |
           cp diy-part1.sh diy-part2.sh $CONFIG_FILE openwrt/
-          chmod +x openwrt/diy-part*.sh
           mv openwrt/$CONFIG_FILE openwrt/.config
 
-      - name: 执行前置脚本导入small插件源
-        run: cd openwrt && ./diy-part1.sh
+      - name: 赋予脚本执行权限 & 执行前置脚本导入small插件源
+        run: |
+          cd openwrt
+          chmod +x diy-part1.sh diy-part2.sh
+          ./diy-part1.sh
 
       - name: 生成完整配置 & 预下载源码
         run: cd openwrt && make defconfig && make download -j$(nproc)

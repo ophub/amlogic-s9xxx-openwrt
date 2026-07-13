@@ -552,13 +552,13 @@ download_depends() {
     git_tmp_path="$(mktemp -d)"
     git_pull_dir "${script_repo}" main "${git_tmp_path}"
     # Move the sbin files to the storage directory
-    cp -af --no-preserve=ownership "${git_tmp_path}/luci-app-amlogic/root/usr/sbin/." "${common_files}/usr/sbin" ||
+    cp -af --update=none --no-preserve=ownership "${git_tmp_path}/luci-app-amlogic/root/usr/sbin/." "${common_files}/usr/sbin" ||
         error_msg "luci-app-amlogic: sbin download failed."
     echo -e "${INFO} luci-app-amlogic: sbin download completed."
     find "${common_files}/usr/sbin/" -name "openwrt-*" -exec chmod +x {} + 2>/dev/null
     # Move the share files to the storage directory
     mkdir -p "${common_files}/usr/share/amlogic"
-    cp -af --no-preserve=ownership "${git_tmp_path}/luci-app-amlogic/root/usr/share/amlogic/." "${common_files}/usr/share/amlogic" ||
+    cp -af --update=none --no-preserve=ownership "${git_tmp_path}/luci-app-amlogic/root/usr/share/amlogic/." "${common_files}/usr/share/amlogic" ||
         error_msg "luci-app-amlogic: share download failed."
     echo -e "${INFO} luci-app-amlogic: share download completed."
     find "${common_files}/usr/share/amlogic/" -type f -exec chmod +x {} + 2>/dev/null

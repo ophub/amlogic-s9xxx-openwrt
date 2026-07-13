@@ -15,15 +15,13 @@ on:
       releases_branch:
         description: "Select the releases branch"
         required: false
-        default: "openwrt:25.12.4"
+        default: "openwrt:25.12.5"
         type: choice
         options:
-          - openwrt:25.12.4
-          - openwrt:25.12.3
-          - openwrt:25.12.2
-          - immortalwrt:25.12.0
+          - openwrt:25.12.5
+          - openwrt:24.10.7
+          - immortalwrt:25.12.1
           - immortalwrt:24.10.6
-          - immortalwrt:24.10.5
       openwrt_board:
         description: "Select device board"
         required: false
@@ -316,7 +314,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: ${{ github.event.repository.owner.id == github.event.sender.id }}
     permissions:
       contents: write
@@ -337,7 +335,7 @@ jobs:
           sudo rm -f /swapfile /mnt/swapfile
           sudo apt-get -y update
           sudo apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
-          sudo apt-get -y install $(curl -fsSL https://ophub.org/ubuntu2404-make-openwrt-depends)
+          sudo apt-get -y install $(curl -fsSL https://ophub.org/ubuntu2604-make-openwrt-depends)
           sudo systemctl daemon-reload
           #sudo apt-get -y full-upgrade
           sudo apt-get -y autoremove --purge

@@ -35,7 +35,7 @@ env:
 
 jobs:
   set-matrix:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -55,7 +55,7 @@ jobs:
     if: ${{ github.event.repository.owner.id == github.event.sender.id }}
     permissions:
       contents: write
-      
+
     strategy:
       matrix: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
     name: build-docker:${{ matrix.docker_img }}@${{ matrix.source_branch }}

@@ -467,7 +467,7 @@ CONFIG_USE_MUSL=y
 CONFIG_SSP_SUPPORT=y
 CONFIG_BINUTILS_VERSION_2_46=y
 CONFIG_BINUTILS_VERSION="2.46.1"
-CONFIG_GCC_VERSION="14.3.0"
+CONFIG_GCC_VERSION="14.4.0"
 CONFIG_GCC_USE_DEFAULT_VERSION=y
 CONFIG_LIBC="musl"
 CONFIG_TARGET_SUFFIX="musl"
@@ -2148,9 +2148,8 @@ CONFIG_PACKAGE_rtl8192de-firmware=y
 # CONFIG_PACKAGE_rtl8192du-firmware is not set
 CONFIG_PACKAGE_rtl8192eu-firmware=y
 CONFIG_PACKAGE_rtl8192se-firmware=y
-# CONFIG_PACKAGE_rtl8261n-firmware is not set
-# CONFIG_PACKAGE_rtl8261n-lp-firmware is not set
-# CONFIG_PACKAGE_rtl8264b-firmware is not set
+# CONFIG_PACKAGE_rtl826x-firmware is not set
+# CONFIG_PACKAGE_rtl826x-lp-firmware is not set
 CONFIG_PACKAGE_rtl8723au-firmware=y
 # CONFIG_PACKAGE_rtl8723be-firmware is not set
 CONFIG_PACKAGE_rtl8723bu-firmware=y
@@ -2580,6 +2579,7 @@ CONFIG_PACKAGE_kmod-oid-registry=y
 # Multiplexer Support
 #
 # CONFIG_PACKAGE_kmod-mux-core is not set
+# CONFIG_PACKAGE_kmod-mux-mmio is not set
 # end of Multiplexer Support
 
 #

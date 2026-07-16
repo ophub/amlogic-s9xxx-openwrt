@@ -8330,6 +8330,15 @@ CONFIG_PACKAGE_whereis=y
 # CONFIG_PACKAGE_wayland-scanner is not set
 # CONFIG_PACKAGE_weston is not set
 # CONFIG_PACKAGE_wlroots is not set
+CONFIG_PACKAGE_kmod-nft-queue=y
+CONFIG_PACKAGE_kmod-nfnetlink-queue=y
+CONFIG_PACKAGE_kmod-nf-conntrack=y
+CONFIG_PACKAGE_iptables-mod-extra=y
+CONFIG_PACKAGE_ipset=y
+CONFIG_PACKAGE_libnetfilter-conntrack=y
+CONFIG_PACKAGE_libnftnl=y
+CONFIG_PACKAGE_curl=y
+CONFIG_PACKAGE_wget=y
 # end of Frameworks and Toolkits
 # end of Video
 

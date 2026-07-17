@@ -332,7 +332,7 @@ jobs:
         id: set-matrix
         run: |
           if [[ "${{ inputs.source_branch }}" == "all" ]]; then
-            MATRIX='{"include":[{"branch":"openwrt_main"},{"branch":"lede_master"},{"branch":"immortalwrt_master"}]}'
+            MATRIX='{"include":[{"branch":"immortalwrt_master"}]}'
           else
             MATRIX='{"include":[{"branch":"${{ inputs.source_branch }}"}]}'
           fi

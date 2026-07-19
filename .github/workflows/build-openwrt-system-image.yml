@@ -12,7 +12,7 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "all"
+        default: "immortalwrt_master"
         type: choice
         options:
           - all
@@ -22,7 +22,7 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "all"
+        default: "s905x3-hk1"
         type: choice
         options:
           - all
@@ -332,7 +332,7 @@ jobs:
         id: set-matrix
         run: |
           if [[ "${{ inputs.source_branch }}" == "all" ]]; then
-            MATRIX='{"include":[{"branch":"openwrt_main"},{"branch":"lede_master"},{"branch":"immortalwrt_master"}]}'
+            MATRIX='{"include":[{"branch":"immortalwrt_master"}]}'
           else
             MATRIX='{"include":[{"branch":"${{ inputs.source_branch }}"}]}'
           fi
@@ -388,6 +388,17 @@ jobs:
           date -u
           timedatectl status || true
           echo "status=success" >> ${GITHUB_OUTPUT}
+      - name: Cache Build Toolchain
+        uses: actions/cache@v4
+        with:
+          path: |
+            openwrt/staging_dir/host
+            openwrt/staging_dir/toolchain
+            openwrt/build_dir/host
+            ~/.ccache
+          key: ${{ runner.os }}-openwrt-toolchain-${{ hashFiles('config/immortalwrt_master/config') }}
+          restore-keys: |
+            ${{ runner.os }}-openwrt-toolchain-	
 
       - name: Create virtual disk for extended storage
         id: disk

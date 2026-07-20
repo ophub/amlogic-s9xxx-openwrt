@@ -12,7 +12,7 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "all"
+        default: "immortalwrt_master"
         type: choice
         options:
           - all
@@ -22,7 +22,7 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "all"
+        default: "s905x3"
         type: choice
         options:
           - all
@@ -246,7 +246,6 @@ on:
           - wocyber-a3
           - wxy-oect
           - wxy-oect-mod
-          - x88pro13
           - x88pro20
           - x98h
           - xiaobao
@@ -257,7 +256,7 @@ on:
       openwrt_kernel:
         description: "Select kernel version"
         required: false
-        default: "6.12.y_6.18.y"
+        default: "6.18.y"
         type: choice
         options:
           - 5.10.y
@@ -421,18 +420,18 @@ jobs:
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
           # Query the latest release asset via GitHub API
-          latest_version=$(curl -s \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              https://api.github.com/repos/${{ github.repository }}/releases?per_page=20 | \
-              jq -r --arg RTK "OpenWrt_${{ matrix.branch }}_" \
-              --arg BOARD "-rootfs.tar.gz" \
-              '[.[] | select(.tag_name | contains($RTK))] |
-              map(.assets[] | select(.name | endswith($BOARD))) |
-              sort_by(.updated_at) |
-              reverse |
-              .[0] |
-              {data: .updated_at, url: .url, name: .name}')
+           latest_version=$(curl -s \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://github.com | \
+          jq -r --arg RTK "OpenWrt_${{ matrix.branch }}_" \
+          --arg BOARD "-rootfs.tar.gz" \
+          '[.[] | select(.tag_name | contains($RTK))] |
+          map(.assets[] | select(.name | endswith($BOARD))) |
+          sort_by(.updated_at) |
+          reverse |
+          .[0] |
+          {data: .updated_at, url: .url, name: .name}')
 
           [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && {
               echo "Error: Failed to resolve OpenWrt rootfs download URL."
@@ -471,6 +470,7 @@ jobs:
           kernel_repo: ${{ inputs.kernel_repo }}
           kernel_usage: ${{ inputs.kernel_usage }}
           builder_name: ${{ inputs.builder_name }}
+		  openwrt_packages: "ffmpeg libffmpeg-full go2rtc ca-bundle ca-certificates"
 
       - name: Upload packaged OpenWrt to Release
         uses: ophub/upload-to-releases@main

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+# =======================================================
+# Add wan2 (second 2.5G NIC, eth3) to the wan firewall zone
+# so it gets NAT/masquerading like the primary WAN.
+# =======================================================
+idx=0
+while uci -q get firewall.@zone[${idx}].name >/dev/null 2>&1; do
+    if [ "$(uci -q get firewall.@zone[${idx}].name)" = "wan" ]; then
+        uci add_list firewall.@zone[${idx}].network="wan2"
+    fi
+    idx=$((idx + 1))
+done
+
+uci commit firewall
+
+exit 0

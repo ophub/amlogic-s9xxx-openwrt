@@ -1,15 +1,7 @@
 . /lib/functions/uci-defaults.sh
-. /lib/functions/system.sh
 
-# Function to check MAC address format
-check_mac_format() {
-    local mac="$1"
-    echo "${mac}" | grep -E -q "^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$"
-    return $?
-}
-
-# Set up network interfaces for bdy-g98
-#   lan1-lan8 : 1G ports of the two YT9215 switches (DSA, driver yt921x)
+# Network layout for bdy-g98
+#   lan1-lan8 : 1G ports of the two YT9215S switches (DSA, driver yt921x)
 #   eth2      : 2.5G PCIe NIC on pcie2x1l0 (RTL8125/RTL8126, r8125/r8126) -> WAN
 #   eth3      : 2.5G PCIe NIC on pcie2x1l1 (RTL8125/RTL8126, r8125/r8126) -> WAN2
 #   (eth0/eth1 are the built-in GMACs, DSA conduits, not used directly)
@@ -19,52 +11,79 @@ rockchip_setup_interfaces() {
     ucidef_set_interface "wan2" device "eth3" protocol "dhcp"
 }
 
-# Set up MAC addresses for Rockchip-based boards
+# --- MAC helpers -----------------------------------------------------------
+# Some units ship with a blank RTL8125 config EEPROM: the r8125 driver then
+# falls back to a random MAC (addr_assign_type=3) that changes every boot.
+# For those we derive a stable per-unit locally-administered MAC from a
+# persisted random seed. Units with a factory-programmed EEPROM keep their
+# burned-in MAC untouched.
+
+g98_nic_is_blank() {
+    local ifname="$1"
+    local type addr
+    type=$(cat /sys/class/net/${ifname}/addr_assign_type 2>/dev/null)
+    addr=$(cat /sys/class/net/${ifname}/address 2>/dev/null)
+    [ "$type" = "3" ] && { echo yes; return; }
+    [ -z "$addr" -o "$addr" = "00:00:00:00:00:00" ] && { echo yes; return; }
+    echo no
+}
+
+# 02:SS:SS:SS:SS:<idx> where SS is a 4-byte random seed stored on first use
+g98_seed_mac() {
+    local idx="$1"
+    local seed_file=/etc/g98-nic-seed
+    local seed
+    if [ ! -s "$seed_file" ]; then
+        cut -c1-8 /proc/sys/kernel/random/uuid > "$seed_file" 2>/dev/null
+    fi
+    seed=$(cat "$seed_file" 2>/dev/null)
+    echo "02:$(echo "$seed" | sed 's/\(..\)\(..\)\(..\)\(..\)/\1:\2:\3:\4/'):$idx"
+}
+
+# A malformed seed must never result in a bad macaddr in the uci config:
+# netifd would fail to apply it and the config becomes harder to recover
+# than a missing macaddr (which just keeps the driver default).
+g98_mac_ok() {
+    case "$1" in
+        [0-9a-f][0-9a-f]:[0-9a-f][0-9a-f]:[0-9a-f][0-9a-f]:[0-9a-f][0-9a-f]:[0-9a-f][0-9a-f]:[0-9a-f][0-9a-f]) return 0 ;;
+    esac
+    return 1
+}
+
+g98_port_mac() {
+    local ifname="$1" idx="$2"
+    if [ "$(g98_nic_is_blank "$ifname")" = "yes" ]; then
+        g98_seed_mac "$idx"
+    else
+        cat /sys/class/net/${ifname}/address
+    fi
+}
+# ---------------------------------------------------------------------------
+
+# MAC assignment:
+#   wan  = eth2's own MAC, or seed:00 if its EEPROM is blank
+#   wan2 = eth3's own MAC, or seed:01 if its EEPROM is blank
+#   lan  = eth2's factory MAC when available (doubles as the label MAC),
+#          otherwise seed:02
+# Deliberately NOT derived from: mmcblk0 CID (removable SD card; eMMC is
+# mmcblk2 and not populated by default) or eth0's address (random per boot).
 rockchip_setup_macs() {
     local board="$1"
-    local base_mac=""
-    local lan_mac=""
-    local wan_mac=""
-    local wan2_mac=""
-    local tmp_mac=""
+    local lan_mac wan_mac wan2_mac
 
-    # Try to get MAC from mmcblk0 CID
-    if [ -b "/dev/mmcblk0" ] || [ -e "/sys/block/mmcblk0" ]; then
-        tmp_mac="$(macaddr_generate_from_mmc_cid mmcblk0 2>/dev/null)"
-        if check_mac_format "${tmp_mac}"; then
-            base_mac="${tmp_mac}"
-            echo "Used mmcblk0 MAC: ${base_mac}" >/dev/console
-        fi
+    wan_mac="$(g98_port_mac eth2 00)"
+    wan2_mac="$(g98_port_mac eth3 01)"
+
+    if [ "$(g98_nic_is_blank eth2)" = "no" ]; then
+        lan_mac="$(cat /sys/class/net/eth2/address)"
+    else
+        lan_mac="$(g98_seed_mac 02)"
     fi
 
-    # Fallback to eth0 MAC
-    if [ -z "${base_mac}" ] && [ -f /sys/class/net/eth0/address ]; then
-        tmp_mac="$(cat /sys/class/net/eth0/address)"
-        if check_mac_format "${tmp_mac}"; then
-            base_mac="${tmp_mac}"
-            echo "Used eth0 MAC: ${base_mac}" >/dev/console
-        fi
-    fi
-
-    # Final fallback to random MAC
-    if [ -z "${base_mac}" ]; then
-        echo "WARNING: Failed to get valid MAC, generating random one" >/dev/console
-        base_mac="$(macaddr_random)"
-    fi
-
-    # Ensure MAC is uppercase
-    base_mac="$(echo "${base_mac}" | tr 'a-z' 'A-Z')"
-
-    # Derive LAN, WAN and WAN2 MACs
-    lan_mac="${base_mac}"
-    wan_mac="$(macaddr_add "${base_mac}" 1)"
-    wan2_mac="$(macaddr_add "${base_mac}" 2)"
-
-    # Write MAC addresses to configuration
-    [ -n "${lan_mac}" ] && ucidef_set_interface_macaddr "lan" "${lan_mac}"
-    [ -n "${wan_mac}" ] && ucidef_set_interface_macaddr "wan" "${wan_mac}"
-    [ -n "${wan2_mac}" ] && ucidef_set_interface_macaddr "wan2" "${wan2_mac}"
-    [ -n "${lan_mac}" ] && ucidef_set_label_macaddr "${lan_mac}"
+    g98_mac_ok "$lan_mac"  && ucidef_set_interface_macaddr "lan" "$lan_mac"
+    g98_mac_ok "$wan_mac"  && ucidef_set_interface_macaddr "wan" "$wan_mac"
+    g98_mac_ok "$wan2_mac" && ucidef_set_interface_macaddr "wan2" "$wan2_mac"
+    g98_mac_ok "$lan_mac"  && ucidef_set_label_macaddr "$lan_mac"
 }
 
 board_config_update

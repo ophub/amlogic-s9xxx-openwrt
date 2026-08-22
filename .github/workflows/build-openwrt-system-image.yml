@@ -526,7 +526,8 @@ jobs:
           # Clean up build artifacts and reclaim disk space
           cd openwrt/
           [[ -d "output" ]] || mkdir output
-          cp -f bin/targets/*/*/*rootfs.tar.gz output/
+          ls -alh bin/targets/*/*/* || true
+          cp -f bin/targets/*/*/*-generic-rootfs.tar.gz output/
           cp -f .config output/config
           ls -A | grep -vE '^(output|\.ccache)$' | xargs rm -rf || true
 

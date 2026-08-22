@@ -3615,7 +3615,7 @@ CONFIG_NODEJS_22=y
 # CONFIG_NODEJS_26 is not set
 # CONFIG_NODEJS_NPM_KEEP_CACHE is not set
 CONFIG_NODEJS_NPM_CACHE_DIR=""
-# CONFIG_NODEJS_HOST_BIN is not set
+CONFIG_NODEJS_HOST_BIN=y
 # end of Configuration
 
 # CONFIG_PACKAGE_node-actions-on-google is not set

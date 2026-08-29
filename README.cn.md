@@ -8,7 +8,7 @@
 
 [OpenWrt](https://openwrt.org/) 项目是一个针对嵌入式设备的 Linux 路由器操作系统。OpenWrt 不是单一且不可修改的固件，而是提供了具有软件包管理功能的完全可写文件系统，让您可以自由选择所需的软件包来定制路由器系统。对于开发人员而言，OpenWrt 是一个无需围绕它构建完整固件即可开发应用程序的框架；对于普通用户而言，这意味着拥有完全的定制能力，能以灵活多样的方式使用设备。它拥有超过 3000 个标准化应用软件包以及丰富的第三方插件支持，让您可以轻松地将它们应用于各种支持的设备。现在，您可以将电视盒子的安卓 TV 系统替换为 OpenWrt 系统，使其成为一台功能强大的路由器。
 
-本项目依托众多[贡献者](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md)的支持，为 `Amlogic`、`Rockchip` 和 `Allwinner` 盒子构建 OpenWrt 系统。支持写入 eMMC 使用、内核更新等功能，详细使用方法请参阅 [OpenWrt 使用文档](./documents/README.cn.md)。最新的固件可以在 [Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。欢迎您 `Fork` 本仓库并进行个性化软件包定制。如果对您有帮助，可以点击仓库右上角的 `Star` 表示支持。
+本项目依托众多[贡献者](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/CONTRIBUTORS.md)的支持，为 `Amlogic`、`Rockchip` 和 `Allwinner` 盒子构建 OpenWrt 系统。支持写入 eMMC 使用、内核更新等功能，详细使用方法请参阅 [📚OpenWrt 使用文档](./documents/README.cn.md)。最新的固件可以在 [⬇️Releases](https://github.com/ophub/amlogic-s9xxx-openwrt/releases) 中下载。欢迎您 `Fork` 本仓库并进行个性化软件包定制。如果对您有帮助，可以点击仓库右上角的 `⭐Star` 表示支持。
 
 ## OpenWrt 固件默认信息
 
@@ -51,7 +51,7 @@
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/3534), [TX6-H](https://github.com/ophub/amlogic-s9xxx-armbian/issues/3528), [T95-max](https://github.com/ophub/fnnas/issues/546), [TQC-A01](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1638) | [stable](https://github.com/ophub/kernel/releases/tag/kernel_stable) |
 
 > [!TIP]
-> 目前 [s905 的盒子](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173)只能在 `TF/SD/USB` 中使用，其他型号的盒子支持写入 `EMMC` 中使用。更多信息请查阅 [✅支持的设备列表说明](make-openwrt/openwrt-files/common-files/etc/model_database.conf)。可以参考说明文档中 12.15 章节的方法[添加新的支持设备](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.cn.md#1215-如何添加新的支持设备)。使用前先阅读 [OpenWrt 使用文档](./documents/README.cn.md)，常见问题都有解决方法。
+> 目前 [s905 的盒子](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173)只能在 `TF/SD/USB` 中使用，其他型号的盒子支持写入 `EMMC` 中使用。更多信息请查阅 [✅支持的设备列表说明](make-openwrt/openwrt-files/common-files/etc/model_database.conf)。可以参考说明文档中 12.15 章节的方法[✳️添加新的支持设备](https://github.com/ophub/amlogic-s9xxx-armbian/blob/main/documents/README.cn.md#1215-如何添加新的支持设备)。使用前先阅读 [📚OpenWrt 使用文档](./documents/README.cn.md)，常见问题都有解决方法。
 
 ## 安装及升级 OpenWrt 的相关说明
 

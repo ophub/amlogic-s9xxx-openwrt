@@ -2545,6 +2545,7 @@ CONFIG_PACKAGE_kmod-input-evdev=y
 # CONFIG_PACKAGE_kmod-leds-gpio is not set
 # CONFIG_PACKAGE_kmod-leds-group-multicolor is not set
 # CONFIG_PACKAGE_kmod-leds-ktd202x is not set
+# CONFIG_PACKAGE_kmod-leds-lp5521 is not set
 # CONFIG_PACKAGE_kmod-leds-lp5523 is not set
 # CONFIG_PACKAGE_kmod-leds-lp5562 is not set
 # CONFIG_PACKAGE_kmod-leds-lp55xx-common is not set
@@ -2911,6 +2912,7 @@ CONFIG_PACKAGE_kmod-vmxnet3=y
 # CONFIG_PACKAGE_kmod-9pvirtio is not set
 # CONFIG_PACKAGE_kmod-appletalk is not set
 # CONFIG_PACKAGE_kmod-atm is not set
+# CONFIG_PACKAGE_kmod-batman-adv is not set
 CONFIG_PACKAGE_kmod-bonding=y
 # CONFIG_PACKAGE_kmod-bpf-test is not set
 CONFIG_PACKAGE_kmod-dnsresolver=y
@@ -3486,11 +3488,11 @@ CONFIG_GOLANG_BUILD_CACHE_DIR=""
 # CONFIG_PACKAGE_golang-github-jedisct1-dnscrypt-proxy2-dev is not set
 # CONFIG_PACKAGE_golang-github-nextdns-nextdns-dev is not set
 # CONFIG_PACKAGE_golang-gitlab-yawning-obfs4-dev is not set
-# CONFIG_PACKAGE_golang1.26 is not set
-# CONFIG_PACKAGE_golang1.26-doc is not set
-# CONFIG_PACKAGE_golang1.26-misc is not set
-# CONFIG_PACKAGE_golang1.26-src is not set
-# CONFIG_PACKAGE_golang1.26-tests is not set
+# CONFIG_PACKAGE_golang1.27 is not set
+# CONFIG_PACKAGE_golang1.27-doc is not set
+# CONFIG_PACKAGE_golang1.27-misc is not set
+# CONFIG_PACKAGE_golang1.27-src is not set
+# CONFIG_PACKAGE_golang1.27-tests is not set
 # end of Go
 
 #
@@ -3971,7 +3973,6 @@ CONFIG_PACKAGE_libpython3=y
 # CONFIG_PACKAGE_micropython-lib-unix-src is not set
 # CONFIG_PACKAGE_micropython-mbedtls is not set
 # CONFIG_PACKAGE_micropython-nossl is not set
-# CONFIG_PACKAGE_pipx is not set
 # CONFIG_PACKAGE_python3 is not set
 # CONFIG_PACKAGE_python3-RPi.GPIO is not set
 # CONFIG_PACKAGE_python3-aio-mqtt-mod is not set
@@ -4193,7 +4194,6 @@ CONFIG_PACKAGE_python3-logging=y
 # CONFIG_PACKAGE_python3-unittest is not set
 # CONFIG_PACKAGE_python3-urllib is not set
 # CONFIG_PACKAGE_python3-urllib3 is not set
-# CONFIG_PACKAGE_python3-userpath is not set
 # CONFIG_PACKAGE_python3-uuid is not set
 # CONFIG_PACKAGE_python3-uvicorn is not set
 # CONFIG_PACKAGE_python3-venv is not set
@@ -5311,7 +5311,9 @@ CONFIG_PACKAGE_libiwinfo=y
 # CONFIG_PACKAGE_libjemalloc is not set
 # CONFIG_PACKAGE_libjpeg-turbo is not set
 CONFIG_PACKAGE_libjson-c=y
+# CONFIG_PACKAGE_libjuice is not set
 # CONFIG_PACKAGE_libjwt is not set
+# CONFIG_PACKAGE_libkcp is not set
 # CONFIG_PACKAGE_libkeyutils is not set
 CONFIG_PACKAGE_libkmod=y
 # CONFIG_PACKAGE_libksba is not set
@@ -5340,6 +5342,7 @@ CONFIG_PACKAGE_libminiupnpc=y
 # CONFIG_PACKAGE_libmms is not set
 CONFIG_PACKAGE_libmnl=y
 # CONFIG_PACKAGE_libmodbus is not set
+# CONFIG_PACKAGE_libmonocypher is not set
 # CONFIG_PACKAGE_libmosquitto-nossl is not set
 # CONFIG_PACKAGE_libmosquitto-ssl is not set
 CONFIG_PACKAGE_libmount=y
@@ -5350,6 +5353,13 @@ CONFIG_PACKAGE_libmount=y
 # CONFIG_PACKAGE_libmpg123 is not set
 CONFIG_PACKAGE_libnatpmp=y
 CONFIG_PACKAGE_libncurses=y
+
+#
+# Configuration
+#
+CONFIG_LIBNCURSES_TERMINFO=""
+# end of Configuration
+
 # CONFIG_PACKAGE_libndpi is not set
 # CONFIG_PACKAGE_libneon is not set
 # CONFIG_PACKAGE_libnet-1.2.x is not set
@@ -5761,6 +5771,7 @@ CONFIG_PACKAGE_luci-app-diskman_INCLUDE_lsblk=y
 # CONFIG_PACKAGE_luci-app-eoip is not set
 # CONFIG_PACKAGE_luci-app-eqos is not set
 # CONFIG_PACKAGE_luci-app-example is not set
+# CONFIG_PACKAGE_luci-app-fancontrol is not set
 # CONFIG_PACKAGE_luci-app-filebrowser is not set
 # CONFIG_PACKAGE_luci-app-filebrowser-go is not set
 # CONFIG_PACKAGE_luci-app-filemanager is not set
@@ -5905,6 +5916,7 @@ CONFIG_PACKAGE_luci-app-vlmcsd=y
 #
 # CONFIG_PACKAGE_luci-theme-argon is not set
 CONFIG_PACKAGE_luci-theme-bootstrap=y
+# CONFIG_PACKAGE_luci-theme-footstrap is not set
 CONFIG_PACKAGE_luci-theme-material=y
 # CONFIG_PACKAGE_luci-theme-openwrt is not set
 # CONFIG_PACKAGE_luci-theme-openwrt-2020 is not set
@@ -6406,6 +6418,7 @@ CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn=y
 # CONFIG_PACKAGE_apfree-wifidog is not set
 # CONFIG_PACKAGE_coova-chilli is not set
 # CONFIG_PACKAGE_nodogsplash is not set
+# CONFIG_PACKAGE_opennds is not set
 # CONFIG_PACKAGE_simple-captive-portal is not set
 # CONFIG_PACKAGE_uspot is not set
 # CONFIG_PACKAGE_uspot-www is not set
@@ -6761,6 +6774,12 @@ CONFIG_PACKAGE_wsdd2=y
 # end of LoRaWAN
 
 #
+# Mesh
+#
+# CONFIG_PACKAGE_mesh11sd is not set
+# end of Mesh
+
+#
 # Meshtastic
 #
 # CONFIG_PACKAGE_meshtasticd-avahi-service is not set
@@ -6874,6 +6893,7 @@ CONFIG_PACKAGE_relayd=y
 # SSH
 #
 # CONFIG_PACKAGE_autossh is not set
+# CONFIG_PACKAGE_comrade is not set
 # CONFIG_PACKAGE_csshnpd is not set
 # CONFIG_PACKAGE_mosh-client is not set
 # CONFIG_PACKAGE_mosh-full is not set
@@ -7165,6 +7185,10 @@ CONFIG_PACKAGE_uhttpd-mod-ubus=y
 #
 # CONFIG_PACKAGE_aircrack-ng is not set
 # CONFIG_PACKAGE_airmon-ng is not set
+# CONFIG_PACKAGE_alfred is not set
+# CONFIG_PACKAGE_batctl-default is not set
+# CONFIG_PACKAGE_batctl-full is not set
+# CONFIG_PACKAGE_batctl-tiny is not set
 # CONFIG_PACKAGE_dawn is not set
 # CONFIG_PACKAGE_dynapoint is not set
 # CONFIG_PACKAGE_hcxdumptool is not set
@@ -8225,6 +8249,7 @@ CONFIG_PACKAGE_dbus=y
 # CONFIG_PACKAGE_extract is not set
 # CONFIG_PACKAGE_eza is not set
 # CONFIG_PACKAGE_fan2go is not set
+# CONFIG_PACKAGE_fancontrol is not set
 # CONFIG_PACKAGE_fbtest is not set
 # CONFIG_PACKAGE_fdt-utils is not set
 CONFIG_PACKAGE_file=y

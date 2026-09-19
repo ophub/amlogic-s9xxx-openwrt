@@ -3548,10 +3548,11 @@ CONFIG_PACKAGE_lyaml=y
 # CONFIG_NODEJS_14 is not set
 # CONFIG_NODEJS_16 is not set
 # CONFIG_NODEJS_18 is not set
-CONFIG_NODEJS_20=y
+# CONFIG_NODEJS_20 is not set
 # CONFIG_NODEJS_22 is not set
-# CONFIG_NODEJS_24 is not set
+CONFIG_NODEJS_24=y
 # CONFIG_NODEJS_26 is not set
+CONFIG_NODEJS_HOST_BIN=y
 # end of Configuration
 
 # CONFIG_PACKAGE_node-arduino-firmata is not set

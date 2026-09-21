@@ -270,9 +270,13 @@ custom_settings() {
             error_msg "${release_file} not found."
         fi
 
-        # Repack the modified root filesystem
+        # Repack the modified root filesystem.
+        # This script runs unprivileged, so the unpacked tree is owned by the
+        # build user. Force uid/gid 0 on repack, otherwise every file ships
+        # with a non-root owner and rpcd's rc_check_script() drops all
+        # /etc/init.d entries from `ubus call rc list` (empty Startup page).
         echo -e "${INFO} Repacking into ${original_filename}..."
-        (cd "${unpack_path}" && tar -czpf "${tmp_path}/${original_filename}" ./)
+        (cd "${unpack_path}" && tar --numeric-owner --owner=0 --group=0 -czpf "${tmp_path}/${original_filename}" ./)
 
         # Move the repacked archive to the output directory
         echo -e "${INFO} Moving modified rootfs to output directory..."

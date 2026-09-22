@@ -20,8 +20,6 @@ on:
         options:
           - openwrt:25.12.5
           - openwrt:24.10.8
-          - immortalwrt:25.12.1
-          - immortalwrt:24.10.6
       openwrt_board:
         description: "Select device board"
         required: false

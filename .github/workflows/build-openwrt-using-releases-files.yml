@@ -267,6 +267,7 @@ on:
           - yskj
           - zcube1-max
           - zk-r39a
+          - ztl-a568
           - zysj
       openwrt_kernel:
         description: "Select kernel version"

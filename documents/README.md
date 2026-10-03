@@ -22,7 +22,7 @@ GitHub Actions is a service provided by Microsoft that offers well-configured vi
       - [Example 2, Replace an Existing Same-Named Software Package in the Current Source Code Library with a Third-Party Software Package](#example-2-replace-an-existing-same-named-software-package-in-the-current-source-code-library-with-a-third-party-software-package)
       - [Example 3, Achieve Certain Requirements by Modifying the Code in the Source Code Library](#example-3-achieve-certain-requirements-by-modifying-the-code-in-the-source-code-library)
     - [4.3 Using Image Builder to Build Firmware](#43-using-image-builder-to-build-firmware)
-    - [4.4 How to keep your configuration when switching source code branches](#44-how-to-keep-your-configuration-when-switching-source-code-branches)
+    - [4.4 How to Keep Your Configuration When Switching Source Code Branches](#44-how-to-keep-your-configuration-when-switching-source-code-branches)
   - [5. Firmware Compilation](#5-firmware-compilation)
     - [5.1 Manual Compilation](#51-manual-compilation)
     - [5.2 Scheduled Compilation](#52-scheduled-compilation)
@@ -42,20 +42,20 @@ GitHub Actions is a service provided by Microsoft that offers well-configured vi
       - [8.3.1 Install Docker Runtime Environment](#831-install-docker-runtime-environment)
       - [8.3.2 Configure macvlan Network](#832-configure-macvlan-network)
       - [8.3.3 Run the OpenWrt Docker Container](#833-run-the-openwrt-docker-container)
-  - [9. Update OpenWrt system or kernel](#9-update-openwrt-system-or-kernel)
+  - [9. Update OpenWrt System or Kernel](#9-update-openwrt-system-or-kernel)
   - [10. Advanced Tutorial on Personalized Firmware Customization](#10-advanced-tutorial-on-personalized-firmware-customization)
     - [10.1 Getting to Know the Complete .config File](#101-getting-to-know-the-complete-config-file)
     - [10.2 Understanding Workflow Files](#102-understanding-workflow-files)
       - [10.2.1 Changing the Address and Branch of the Compilation Source Code Repository](#1021-changing-the-address-and-branch-of-the-compilation-source-code-repository)
       - [10.2.2 Changing the Model and Kernel Version Number of the Box](#1022-changing-the-model-and-kernel-version-number-of-the-box)
     - [10.3 Customizing Banner Information](#103-customizing-banner-information)
-    - [10.4 Customize feeds configuration file](#104-customize-feeds-configuration-file)
-    - [10.5 Customize OpenWrt default configuration files](#105-customize-openwrt-default-configuration-files)
-      - [10.5.1 First method is to add custom files during compilation](#1051-first-method-is-to-add-custom-files-during-compilation)
-      - [10.5.2 Second method is to use the openwrt\_files parameter to add custom files](#1052-second-method-is-to-use-the-openwrt_files-parameter-to-add-custom-files)
-    - [10.6 Opkg package management](#106-opkg-package-management)
-    - [10.7 Manage packages using the Web interface](#107-manage-packages-using-the-web-interface)
-    - [10.8 How to restore the original Android TV system](#108-how-to-restore-the-original-android-tv-system)
+    - [10.4 Customize Feeds Configuration File](#104-customize-feeds-configuration-file)
+    - [10.5 Customize OpenWrt Default Configuration Files](#105-customize-openwrt-default-configuration-files)
+      - [10.5.1 The First Method Is to Add Custom Files During Compilation](#1051-the-first-method-is-to-add-custom-files-during-compilation)
+      - [10.5.2 The Second Method Is to Use the openwrt\_files Parameter to Add Custom Files](#1052-the-second-method-is-to-use-the-openwrt_files-parameter-to-add-custom-files)
+    - [10.6 Opkg Package Management](#106-opkg-package-management)
+    - [10.7 Manage Packages Using the Web Interface](#107-manage-packages-using-the-web-interface)
+    - [10.8 How to Restore the Original Android TV System](#108-how-to-restore-the-original-android-tv-system)
       - [10.8.1 Backup and Recovery Using openwrt-ddbr](#1081-backup-and-recovery-using-openwrt-ddbr)
       - [10.8.2 Recovery Using Amlogic Flashing Tool](#1082-recovery-using-amlogic-flashing-tool)
       - [10.9 Unable to Boot After Installing Mainline u-boot](#109-unable-to-boot-after-installing-mainline-u-boot)
@@ -70,7 +70,7 @@ Register your own account to proceed with firmware personalization. Click the `S
 
 ## 2. Set Privacy Variable GITHUB_TOKEN
 
-According to the [GitHub Docs](https://docs.github.com/en/actions/security-guides/automatic-token-authentication), GitHub automatically creates a unique GITHUB_TOKEN secret at the start of every workflow job for use within the workflow. You can use `{{ secrets.GITHUB_TOKEN }}` for authentication within the workflow job.
+According to the [GitHub Docs](https://docs.github.com/en/actions/security-guides/automatic-token-authentication), GitHub automatically creates a unique GITHUB_TOKEN secret at the start of every workflow job for use within the workflow. You can use `${{ secrets.GITHUB_TOKEN }}` for authentication within the workflow job.
 
 ## 3. Fork the repository and set Workflow permissions
 
@@ -105,7 +105,6 @@ CONFIG_PACKAGE_luci-i18n-base-fr=y
 ```
 
 All personalizations in the .config file follow this same pattern. For items you don't need, add `#` at the beginning of the line and change `=y` at the end to `is not set`. For items you need, remove the `#` at the beginning and change `is not set` at the end to `=y`.
-
 
 #### 4.1.2 Select Personalized Software Packages
 
@@ -173,7 +172,6 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 
 This completes the source code modification. Through the diy-part1.sh and diy-part2.sh scripts, we have added the necessary operation commands to make the compiled firmware better suit our personalized needs.
 
-
 ### 4.3 Using Image Builder to Build Firmware
 
 The OpenWrt official website provides a pre-built `openwrt-imagebuilder-*-armsr-armv8.Linux-x86_64.tar.zst` file (download address: [https://downloads.openwrt.org/releases](https://downloads.openwrt.org/releases)). The official Image Builder can be used to add packages and plugins to this file, typically generating an openwrt-rootfs.tar.gz file in just a few minutes. For detailed instructions, refer to the official documentation: [Use Image Builder](https://openwrt.org/zh/docs/guide-user/additional-software/imagebuilder)
@@ -184,7 +182,7 @@ This repository provides a one-click build service. Simply pass the branch param
 
 - Produce in `Actions` on github.com: [Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-using-imagebuilder.yml)
 
-### 4.4 How to keep your configuration when switching source code branches
+### 4.4 How to Keep Your Configuration When Switching Source Code Branches
 
 The source code repositories for both [OpenWrt](https://github.com/openwrt/openwrt) and [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) provide multiple branches to meet the needs of different users, which are mainly divided into Snapshot and Stable versions. Taking the official OpenWrt repository as an example, its `main` branch is the cutting-edge snapshot version. It contains the latest added features and software updates, primarily targeting developers and advanced users who want to experience new functionalities, but its stability has not been fully verified. On the other hand, versioned branches like `v24.10.4` are stable versions. They are based on a specific development point and have undergone comprehensive testing and bug fixing by the community. They are the officially recommended versions for the vast majority of regular users in production environments.
 
@@ -237,7 +235,7 @@ In the navigation bar of your repository, click the Actions button, then click B
 
 ### 5.2 Scheduled Compilation
 
-In the .github/workflows/build-openwrt-system-image.yml file, use Cron to set up scheduled compilation. The 5 different positions represent minute (0 - 59) / hour (0 - 23) / date (1 - 31) / month (1 - 12) / day of the week (0 - 6) (Sunday - Saturday) respectively. By modifying the values at different positions to set the time. The system defaults to UTC standard time, please convert according to the different time zones of your country.
+In the .github/workflows/build-openwrt-system-image.yml file, use Cron to set up scheduled compilation. The 5 different positions represent minute (0 - 59) / hour (0 - 23) / date (1 - 31) / month (1 - 12) / day of the week (0 - 6) (Sunday - Saturday) respectively. Set the time by modifying the values at different positions. The system defaults to UTC standard time, please convert according to the different time zones of your country.
 
 ```yaml
 schedule:
@@ -307,6 +305,7 @@ Currently, the maximum retention period for GitHub Actions artifacts is 90 days,
       Default WIFI password: none
       Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
 ```
+
 ### 6.3 Save to Third Party
 
 ```yaml
@@ -432,33 +431,32 @@ exit
 docker rm -f openwrt
 ```
 
-## 9. Update OpenWrt system or kernel
+## 9. Update OpenWrt System or Kernel
 
 Access the OpenWrt system via browser, navigate to `System` menu > `Amlogic Treasure Box`, and use the `Upgrade OpenWrt Firmware` or `Change OpenWrt Kernel` feature to upgrade. (You can downgrade from a higher version such as 5.15.50 to a lower version such as 5.10.125, or upgrade from a lower version to a higher version. The kernel version number does not affect the upgrade operation—you can freely upgrade or downgrade).
 
-[SOS]: In cases where a kernel update is incomplete due to special reasons, causing the system to fail to boot from eMMC/NVMe/sdX, you can boot an OpenWrt system with any kernel version from USB or other disks. To perform kernel rescue, go to `System Menu` > `Amlogic Service` > `Online Download Update` > `Rescue Kernel` to restore the normal use of the original system. You can also use the command `openwer-kernel -s` in the `TTYD terminal` for kernel rescue. When no disk parameter is specified, it defaults to restoring the kernel from a USB device to eMMC/NVMe/sdX. If the device has multiple disks, you can specify the exact disk name that needs to be restored. An example is as follows:
+[SOS]: In cases where a kernel update is incomplete due to special reasons, causing the system to fail to boot from eMMC/NVMe/sdX, you can boot an OpenWrt system with any kernel version from USB or other disks. To perform kernel rescue, go to `System Menu` > `Amlogic Service` > `Online Download Update` > `Rescue Kernel` to restore the normal use of the original system. You can also use the command `openwrt-kernel -s` in the `TTYD terminal` for kernel rescue. When no disk parameter is specified, it defaults to restoring the kernel from a USB device to eMMC/NVMe/sdX. If the device has multiple disks, you can specify the exact disk name that needs to be restored. An example is as follows:
 
 ```shell
 # To recover the kernel in eMMC
-openwer-kernel -s mmcblk1
+openwrt-kernel -s mmcblk1
 
 # To recover the kernel in NVMe
-openwer-kernel -s nvme0n1
+openwrt-kernel -s nvme0n1
 
 # To recover the kernel in a removable storage device
-openwer-kernel -s sda
+openwrt-kernel -s sda
 
 # Disk names can be abbreviated as mmcblk0/mmcblk1/nvme0n1/nvme1n1/sda/sdb/sdc, etc., or use the full name, such as /dev/sda
-openwer-kernel -s /dev/sda
+openwrt-kernel -s /dev/sda
 
 # When the device has only one built-in storage among eMMC/NVMe/sdX, the disk name parameter can be omitted
-openwer-kernel -s
+openwrt-kernel -s
 ```
 
 ## 10. Advanced Tutorial on Personalized Firmware Customization
 
 If you have followed the tutorial to this point, you should already have a solid understanding of the basics. However, continuing to explore further will take you on a rewarding journey. You will encounter many challenges, which requires a mindset of continuous exploration, proficiency in using search engines to solve problems, and spending time learning in OpenWrt communities.
-
 
 ### 10.1 Getting to Know the Complete .config File
 
@@ -501,7 +499,7 @@ Around line 139, look for the compile step titled `Build OpenWrt firmware`, and 
     auto_kernel: ${{ inputs.auto_kernel }}
     openwrt_size: ${{ inputs.openwrt_size }}
 ```
-Refer to the [parameter instructions](../README.md#gitHub-actions-input-parameters-explanation) related to the packaging command. The above setting options can be set by writing in fixed values, or they can be selected through the `Actions` panel:
+Refer to the [parameter instructions](../README.md#github-actions-input-parameters-explanation) related to the packaging command. The above setting options can be set by writing in fixed values, or they can be selected through the `Actions` panel:
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/181870674-1816aa21-ece4-4149-83ce-6ec7f95ece68.png width="700" />
 </div>
@@ -520,13 +518,13 @@ The default [/etc/banner](../openwrt-files/common-files/etc/banner) information 
 ───────────────────────────────────────────────────────────────────────
 ```
 
-### 10.4 Customize feeds configuration file
+### 10.4 Customize Feeds Configuration File
 
 When looking at the feeds.conf.default file in the source code repository, you'll notice it includes many package source code repositories. Indeed, on GitHub you can find the official OpenWrt source code repositories as well as many community-contributed branches and packages. If you are familiar with these resources, you can add them here. For example, see the [feeds.conf.default](https://github.com/coolsnowwolf/lede/blob/master/feeds.conf.default) in the coolsnowwolf source code repository.
 
-### 10.5 Customize OpenWrt default configuration files
+### 10.5 Customize OpenWrt Default Configuration Files
 
-#### 10.5.1 First method is to add custom files during compilation
+#### 10.5.1 The First Method Is to Add Custom Files During Compilation
 
 During your use of OpenWrt, many software packages have already been configured. Most of this configuration data is stored in the /etc/config/ and other related directories. Copy these configuration files to the files folder in the root directory of your GitHub repository, maintaining the same directory structure and file names. During OpenWrt compilation, these configuration files will be compiled into your firmware. The specific implementation is in the .github/workflows/build-openwrt-system-image.yml file, as shown below:
 
@@ -542,7 +540,7 @@ During your use of OpenWrt, many software packages have already been configured.
 
 Do not copy configuration files that contain private information. If your repository is public, the files in the files directory will also be public—never expose sensitive data. Passwords and other sensitive information can be encrypted using the private key settings and other methods described in the GitHub Actions Quick Start Guide. Ensure you understand what you are doing.
 
-#### 10.5.2 Second method is to use the openwrt_files parameter to add custom files
+#### 10.5.2 The Second Method Is to Use the openwrt_files Parameter to Add Custom Files
 
 Using ophub to package OpenWrt, the `openwrt_files` parameter can be used to add or override custom files to ophub's [common-files](https://github.com/ophub/amlogic-s9xxx-openwrt/tree/main/make-openwrt/openwrt-files/common-files) directory. The directory structure must be consistent with the OpenWrt root directory to ensure that the files are correctly overwritten in the firmware (for example, default configuration files should be placed in the `etc/config/` subdirectory). An example of the setting method:
 
@@ -555,7 +553,7 @@ Using ophub to package OpenWrt, the `openwrt_files` parameter can be used to add
     ...
 ```
 
-### 10.6 Opkg package management
+### 10.6 Opkg Package Management
 
 Similar to most Linux distributions (or mobile operating systems such as Android or iOS), system functionality can be extended by downloading and installing packages from software repositories (local or online). The opkg utility is a lightweight package manager designed for adding software to embedded device firmware. Opkg is a full-featured package manager for the root filesystem, supporting kernel modules and drivers. It attempts to resolve package dependencies from the repository; if resolution fails, it reports an error and aborts the installation. Third-party packages may have missing dependencies, which can be obtained from the package source. To ignore dependency errors, use the `--force-depends` argument.
 
@@ -563,7 +561,7 @@ Similar to most Linux distributions (or mobile operating systems such as Android
 
 - Non-official openwrt.org plugins, such as `luci-app-uugamebooster` and `luci-app-xlnetacc`, must be integrated directly during firmware compilation. These packages cannot be installed from the mirror server using opkg, but you can manually upload them to OpenWrt and install them via opkg.
 
-- On the trunk/snapshot, the kernel and kmod packages are marked as reserved, and the `opkg upgrade` command will not attempt to update them.
+- On the trunk/snapshot builds, the kernel and kmod packages are marked as reserved, and the `opkg upgrade` command will not attempt to update them.
 
 Common commands:
 ```shell
@@ -580,7 +578,7 @@ opkg list | grep <pkgs>                           #Search for packages matching 
 ```
 For more help, please check [opkg](https://openwrt.org/docs/guide-user/additional-software/opkg)
 
-### 10.7 Manage packages using the Web interface
+### 10.7 Manage Packages Using the Web Interface
 
 After installing the OpenWrt firmware on the device, additional packages can be installed via the Web interface.
 
@@ -594,7 +592,7 @@ If you want to use LuCI to configure services, please search and install `luci-a
 
 For more help, please check [packages](https://openwrt.org/packages/start)
 
-### 10.8 How to restore the original Android TV system
+### 10.8 How to Restore the Original Android TV System
 
 The Android TV system on the device is usually backed up and restored using `openwrt-ddbr`.
 
@@ -610,7 +608,7 @@ Before installing the OpenWrt system on a brand-new box, it is recommended to ba
 
 - If the box does not boot from the USB and the screen is black after being connected to a monitor, it's necessary to short-circuit the box for initialization. First, restore the box to the original Android system, then reflash the OpenWrt system. Firstly, download the [amlogic_usb_burning_tool](https://github.com/ophub/kernel/releases/tag/tools) system recovery tool and install it. Prepare a [USB A-A data cable](https://user-images.githubusercontent.com/68696949/159267576-74ad69a5-b6fc-489d-b1a6-0f8f8ff28634.png) and a [paper clip](https://user-images.githubusercontent.com/68696949/159267790-38cf4681-6827-4cb6-86b2-19c7f1943342.png).
 
-- For example, for the x96max+ model, confirm the location of the [short-circuit point](https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg) on the box's motherboard, download the [Android TV firmware package](https://github.com/ophub/kernel/releases/tag/tools) for the box. The Android TV system firmware and corresponding short-circuit point diagrams for other common devices can also be [downloaded and viewed here](https://github.com/ophub/kernel/releases/tag/tools).
+- For example, for the x96max+ model, confirm the location of the [short-circuit point](https://user-images.githubusercontent.com/68696949/110590933-67785300-81b3-11eb-9860-986ef35dca7d.jpg) on the box's motherboard, and download the [Android TV firmware package](https://github.com/ophub/kernel/releases/tag/tools) for the box. The Android TV system firmware and corresponding short-circuit point diagrams for other common devices can also be [downloaded and viewed here](https://github.com/ophub/kernel/releases/tag/tools).
 
 ```shell
 Operation method:
@@ -626,7 +624,7 @@ Operation method:
 4. When you see [ progress bar at 100% ], the flashing is complete, and the box has been restored to the Android TV system.
    Click the [ Stop ] button, unplug the [ USB A-A data cable ] between the [ box ] and [ computer ].
 5. If any step above fails, try again until successful.
-   If the progress bar does not move, you can try plugging in the power. Under normal circumstances, the power provided by the USB A-A alone is sufficient for flashing.
+   If the progress bar does not move, you can try plugging in the power. Under normal circumstances, the power supplied by the USB A-A cable alone is sufficient for flashing.
 ```
 
 Once the factory reset is complete and the box has been restored to the Android TV system, the procedure for installing OpenWrt is the same as your initial installation—simply repeat the process.
@@ -665,7 +663,7 @@ Based on the situation of your own device, there are two methods to use: initial
 
 - Insert the USB/TF/SD with the flashed firmware into the box.
 - Enable developer mode: Settings → About Device → Version number (e.g., X96max plus...), quickly click the left mouse button 5 times on the version number, until the system shows a prompt saying `Developer mode is enabled`.
-- Enable USB debugging mode: System → Advanced options → Developer options (set `Enable USB debugging` to enabled). Enable `ADB` debugging.
+- Enable USB debugging mode: System → Advanced options → Developer options (set `Enable USB debugging` to enabled), and enable `ADB` debugging.
 - Install the ADB tool: Download [adb](https://github.com/ophub/kernel/releases/tag/tools) and unzip it, copy the three files `adb.exe`, `AdbWinApi.dll`, `AdbWinUsbApi.dll` to both the `system32` and `syswow64` folders in the `c://windows/` directory, then open the `cmd` command panel, use the `adb --version` command, if it shows something, it means you can use it now.
 - Enter `cmd` command mode. Type the `adb connect 192.168.1.137` command (modify the IP according to your box, you can check it in the router device that the box is connected to), if the connection is successful, it will display `connected to 192.168.1.137:5555`.
 - Type the `adb shell reboot update` command, the box will restart and boot from the USB/TF/SD you inserted, access the firmware IP address from the browser, or SSH access to enter the firmware.

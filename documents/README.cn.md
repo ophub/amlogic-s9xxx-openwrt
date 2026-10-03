@@ -17,10 +17,10 @@ GitHub Actions 是 Microsoft 推出的一项服务，提供了性能配置优良
     - [4.1 .config 文件说明](#41-config-文件说明)
       - [4.1.1 首先让固件支持本国语言](#411-首先让固件支持本国语言)
       - [4.1.2 选择个性化软件包](#412-选择个性化软件包)
-    - [4.2 DIY脚本操作: diy-part1.sh 和 diy-part2.sh](#42-diy脚本操作-diy-part1sh-和-diy-part2sh)
-      - [举例1，添加第三方软件包](#举例1添加第三方软件包)
-      - [举例2，用第三方软件包替换当前源码库中的已有的同名软件包](#举例2用第三方软件包替换当前源码库中的已有的同名软件包)
-      - [举例3，通过修改源码库中的代码来实现某些需求](#举例3通过修改源码库中的代码来实现某些需求)
+    - [4.2 DIY 脚本操作: diy-part1.sh 和 diy-part2.sh](#42-diy-脚本操作-diy-part1sh-和-diy-part2sh)
+      - [举例 1，添加第三方软件包](#举例-1添加第三方软件包)
+      - [举例 2，用第三方软件包替换当前源码库中已有的同名软件包](#举例-2用第三方软件包替换当前源码库中已有的同名软件包)
+      - [举例 3，通过修改源码库中的代码来实现某些需求](#举例-3通过修改源码库中的代码来实现某些需求)
     - [4.3 使用 Image Builder 制作固件](#43-使用-image-builder-制作固件)
     - [4.4 如何保留配置切换源码分支](#44-如何保留配置切换源码分支)
   - [5. 编译固件](#5-编译固件)
@@ -108,7 +108,7 @@ CONFIG_PACKAGE_luci-i18n-base-fr=y
 
 #### 4.1.2 选择个性化软件包
 
-在 `#LuCI-app:` 启用和删除默认软件包的做法和上面一样,这次我们删除默认软件包里的 `luci-app-zerotier` 这个插件，就把
+在 `#LuCI-app:` 启用和删除默认软件包的做法和上面一样，这次我们删除默认软件包里的 `luci-app-zerotier` 这个插件，就把
 
 ```shell
 CONFIG_PACKAGE_luci-app-zerotier=y
@@ -121,13 +121,13 @@ CONFIG_PACKAGE_luci-app-zerotier=y
 
 相信您已经很清楚如何进行个性化配置了。.config 文件中的每一行代表一个配置项，所有配置项均可使用上述方法启用或禁用。该文件的完整内容达数千行，此处提供的仅是精简版。如何获取完整配置文件并进行更复杂的个性化定制，将在第 10 节中介绍。
 
-### 4.2 DIY脚本操作: diy-part1.sh 和 diy-part2.sh
+### 4.2 DIY 脚本操作: diy-part1.sh 和 diy-part2.sh
 
 脚本 diy-part1.sh 和 diy-part2.sh 分别在 feeds 的更新与安装前后执行。当我们引入 OpenWrt 源码库进行个性化编译时，有时需要修改源码库中的部分代码，或者添加、删除、替换某些软件包，例如修改默认 IP、主机名、主题、添加/删除软件包等。这些对源码库的修改指令可以写入这 2 个脚本中。以下以 coolsnowwolf 提供的 OpenWrt 源码库为例进行说明。
 
 我们以下的操作都以这个源码库为基础: [https://github.com/coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
 
-#### 举例1，添加第三方软件包
+#### 举例 1，添加第三方软件包
 
 第一步，在 diy-part2.sh 里加入以下代码：
 
@@ -143,7 +143,7 @@ CONFIG_PACKAGE_luci-app-ttnode=y
 
 这样就完成了第三方软件包的集成，扩充了当前源码库中没有的软件包。
 
-#### 举例2，用第三方软件包替换当前源码库中的已有的同名软件包
+#### 举例 2，用第三方软件包替换当前源码库中已有的同名软件包
 
 第一步，在 diy-part2.sh 里加入以下代码：用第一行代码先删除源码库中原来的软件，再用第二行代码引入第三方的同名软件包。
 
@@ -152,19 +152,19 @@ rm -rf package/lean/luci-theme-argon
 git clone https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
 ```
 
-第二步，到 .config 文件里添加第三方软件包
+第二步，到 .config 文件里添加第三方软件包：
 
 ```shell
 CONFIG_PACKAGE_luci-theme-argon=y
 ```
 
-这样就实现了使用第三方软件包替换当前源码库中的已有的同名软件包。
+这样就实现了使用第三方软件包替换当前源码库中已有的同名软件包。
 
-#### 举例3，通过修改源码库中的代码来实现某些需求
+#### 举例 3，通过修改源码库中的代码来实现某些需求
 
 我们为 `luci-app-cpufreq` 增加对 `aarch64` 架构的支持，以便在我们的固件中使用（某些修改需要谨慎操作，请确保您明确了解修改的影响）。
 
-源文件地址： [luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/luci/blob/master/applications/luci-app-cpufreq/Makefile) 。修改代码加入对 aarch64 的支持：
+源文件地址：[luci-app-cpufreq/Makefile](https://github.com/coolsnowwolf/luci/blob/master/applications/luci-app-cpufreq/Makefile)。修改代码加入对 aarch64 的支持：
 
 ```shell
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
@@ -180,7 +180,7 @@ OpenWrt 官方网站提供了预构建的 `openwrt-imagebuilder-*-armsr-armv8.Li
 
 - 本地化制作命令：在 `~/amlogic-s9xxx-openwrt` 根目录下执行 `sudo ./config/imagebuilder/imagebuilder.sh openwrt:24.10.4` 即可生成。其中参数 `24.10.4` 是当前可[下载](https://downloads.openwrt.org/releases)使用的 `releases` 版本号。生成的文件位于 `openwrt/bin/targets/armsr/armv8` 目录下。
 
-- 使用 github.com 的 `Actions` 中进行制作：[Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-using-imagebuilder.yml)
+- 在 github.com 的 `Actions` 中进行制作：[Build OpenWrt with Image Builder](../.github/workflows/build-openwrt-using-imagebuilder.yml)
 
 ### 4.4 如何保留配置切换源码分支
 
@@ -202,7 +202,7 @@ git pull
 ./scripts/feeds install -a
 
 # 4. 将配置差异文件应用到新分支
-# 这会成为生成完整配置的基础
+# 这会成为生成完整配置的基础。
 cp -f myconfig.diff .config
 
 # 5. 生成完整的 .config 文件
@@ -219,7 +219,7 @@ make menuconfig
 
 默认系统的配置信息记录在 [/etc/model_database.conf](../make-openwrt/openwrt-files/common-files/etc/model_database.conf) 文件中，其中 `BOARD` 名称必须唯一。
 
-`BUILD` 值为 `yes` 的是默认打包的盒子系统，可以直接使用。`BUILD` 默认值为 `no` 的未进行打包，使用时需要下载相同 `FAMILY` 的已打包系统，写入 `USB` 后，可在电脑上打开 `USB 中的 boot 分区`，修改 `/boot/uEnv.txt` 文件中的 `FDT dtb 名称`，即可适配列表中的其他盒子。
+`BUILD` 值为 `yes` 的是默认打包的盒子系统，可以直接使用。`BUILD` 值为 `no` 的默认不进行打包，使用时需要下载相同 `FAMILY` 的已打包系统，写入 `USB` 后，可在电脑上打开 `USB 中的 boot 分区`，修改 `/boot/uEnv.txt` 文件中的 `FDT dtb 名称`，即可适配列表中的其他盒子。
 
 本地编译时通过 `-b` 参数指定，在 github.com 的 Actions 中编译时通过 `openwrt_board` 参数指定。使用 `-b all` 表示打包所有 `BUILD` 为 `yes` 的设备。通过指定 `BOARD` 参数打包时，无论 `BUILD` 为 `yes` 或 `no` 均可打包，例如：`-b r68s_s905x3-tx3_s905l3a-cm311`
 
@@ -303,6 +303,7 @@ Github Actions 编译空间默认为 84G，扣除系统和必要软件包后，�
       Default WIFI password: none
       Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
 ```
+
 ### 6.3 保存到第三方
 
 ```yaml
@@ -355,7 +356,7 @@ UPLOAD_WETRANSFER: false
 
 ### 8.1 在编译时集成 luci-app-amlogic 操作面板
 
-1. 获得 luci-app-amlogic 源码，把源码放到 package 目录下，方法如下：
+1. 获取 luci-app-amlogic 源码，并将源码放到 package 目录下，方法如下：
 ```shell
 rm -rf package/luci-app-amlogic
 git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
@@ -432,23 +433,23 @@ docker rm -f openwrt
 
 通过浏览器访问 OpenWrt 系统，在 `系统` 菜单下选择 `晶晨宝盒`，通过 `升级 OpenWrt 固件` 或 `更换 OpenWrt 内核` 功能进行升级。（支持从高版本如 5.15.50 降级到低版本如 5.10.125，也支持从低版本如 5.10.125 升级到高版本如 5.15.50。内核版本号的高低不影响升级操作，可自由升级/降级）。
 
-[SOS]：因特殊原因导致的内核更新不完整等问题，造成系统无法从 eMMC/NVMe/sdX 启动时，可以从 USB 等其他磁盘启动任意内核版本的 OpenWrt 系统，在 `系统菜单` > `晶晨宝盒` > `在线下载更新` > `救援内核` 里进行内核救援，恢复原系统的正常使用；也可以在 `TTYD 终端` 里使用 `openwer-kernel -s` 命令进行内核救援。不指定磁盘参数时，默认将从 USB 设备恢复 eMMC/NVMe/sdX 中的内核，如果设备有多个磁盘，可以准确指定需要恢复的磁盘名称，举例如下：
+[SOS]：因特殊原因导致的内核更新不完整等问题，造成系统无法从 eMMC/NVMe/sdX 启动时，可以从 USB 等其他磁盘启动任意内核版本的 OpenWrt 系统，在 `系统菜单` > `晶晨宝盒` > `在线下载更新` > `救援内核` 里进行内核救援，恢复原系统的正常使用；也可以在 `TTYD 终端` 里使用 `openwrt-kernel -s` 命令进行内核救援。不指定磁盘参数时，默认将从 USB 设备恢复 eMMC/NVMe/sdX 中的内核，如果设备有多个磁盘，可以准确指定需要恢复的磁盘名称，举例如下：
 
 ```shell
 # 恢复 eMMC 中的内核
-openwer-kernel -s mmcblk1
+openwrt-kernel -s mmcblk1
 
 # 恢复 NVMe 中的内核
-openwer-kernel -s nvme0n1
+openwrt-kernel -s nvme0n1
 
 # 恢复移动存储设备中的内核
-openwer-kernel -s sda
+openwrt-kernel -s sda
 
 # 磁盘名称可以简写为 mmcblk0/mmcblk1/nvme0n1/nvme1n1/sda/sdb/sdc 等，也可以使用完整的名称，如 /dev/sda
-openwer-kernel -s /dev/sda
+openwrt-kernel -s /dev/sda
 
 # 当设备只有 eMMC/NVMe/sdX 中的一个内置存储时，可以省略磁盘名称参数
-openwer-kernel -s
+openwrt-kernel -s
 ```
 
 ## 10. 个性化固件定制晋级教程
@@ -463,9 +464,9 @@ openwer-kernel -s
 
 ### 10.2 认识 workflow 文件
 
-GitHub官方给出了详细的说明，关于 GitHub Actions 的使用方法，你可以从这里开始认识它: [GitHub Actions 快速入门](https://docs.github.com/cn/actions/quickstart)
+GitHub 官方给出了详细的说明，关于 GitHub Actions 的使用方法，你可以从这里开始认识它：[GitHub Actions 快速入门](https://docs.github.com/cn/actions/quickstart)
 
-让我们以现在仓库中正在使用的这个编译流程控制文件为例简单介绍下: [build-openwrt-system-image.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-system-image.yml)
+让我们以现在仓库中正在使用的这个编译流程控制文件为例简单介绍下：[build-openwrt-system-image.yml](https://github.com/ophub/amlogic-s9xxx-openwrt/blob/main/.github/workflows/build-openwrt-system-image.yml)
 
 #### 10.2.1 更换编译源码库的地址和分支
 
@@ -558,9 +559,9 @@ REPO_BRANCH: openwrt-21.02
 
 - 非 openwrt.org 官方插件，如 `luci-app-uugamebooster`、`luci-app-xlnetacc` 等，需要在固件编译时直接集成。这些软件包无法通过 opkg 从镜像服务器直接安装，但您可以手动上传这些软件包到 OpenWrt 并使用 opkg 进行安装。
 
-- 在主干/快照上时，内核和kmod软件包被标记为保留，`opkg upgrade` 命令将不会尝试更新它们。
+- 在主干/快照版本中，内核和 kmod 软件包被标记为保留，`opkg upgrade` 命令将不会尝试更新它们。
 
-Common commands:
+常用命令：
 ```shell
 opkg update                                       #更新可用的软件包列表
 opkg upgrade <pkgs>                               #升级软件包
@@ -597,7 +598,7 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 
 #### 10.8.1 使用 openwrt-ddbr 备份恢复
 
-建议您在全新的盒子里安装 OpenWrt 系统前，先对当前盒子自带的原安卓 TV 系统进行备份，以便在需要恢复系统时使用。请从 `TF/SD/USB` 启动 OpenWrt 系统，输入 `openwrt-ddbr` 命令，然后根据提示输入 `b` 进行系统备份，备份文件的存放路径为 `/ddbr/BACKUP-arm-64-emmc.img.gz` ，请下载保存。在需要恢复安卓 TV 系统时，将之前备份的文件上传至 `TF/SD/USB` 设备的相同路径下，输入 `openwrt-ddbr` 命令，然后根据提示输入 `r` 进行系统恢复。
+建议您在全新的盒子里安装 OpenWrt 系统前，先对当前盒子自带的原安卓 TV 系统进行备份，以便在需要恢复系统时使用。请从 `TF/SD/USB` 启动 OpenWrt 系统，输入 `openwrt-ddbr` 命令，然后根据提示输入 `b` 进行系统备份，备份文件的存放路径为 `/ddbr/BACKUP-arm-64-emmc.img.gz`，请下载保存。在需要恢复安卓 TV 系统时，将之前备份的文件上传至 `TF/SD/USB` 设备的相同路径下，输入 `openwrt-ddbr` 命令，然后根据提示输入 `r` 进行系统恢复。
 
 #### 10.8.2 使用 Amlogic 刷机工具恢复
 
@@ -618,10 +619,10 @@ opkg list | grep <pkgs>                           #查找与关键字匹配的�
 2. 使用 [ 曲别针 ] 将盒子主板上的 [ 两个短接点进行短接连接 ]，
    并同时使用 [ USB 双公头数据线 ] 将 [ 盒子 ] 与 [ 电脑 ] 进行连接。
 3. 当看到 [ 进度条开始走动 ] 后，拿走曲别针，不再短接。
-4. 当看到 [ 进度条 100% ], 则刷机完成，盒子已经恢复成 Android TV 系统。
-   点击 [ 停止 ] 按钮, 拔掉 [ 盒子 ] 和 [ 电脑 ] 之间的 [ USB 双公头数据线] 。
+4. 当看到 [ 进度条 100% ]，则刷机完成，盒子已经恢复成 Android TV 系统。
+   点击 [ 停止 ] 按钮，拔掉 [ 盒子 ] 和 [ 电脑 ] 之间的 [ USB 双公头数据线 ]。
 5. 如果以上某个步骤失败，就再来一次，直至成功。
-   如果进度条没有走动，可以尝试插入电源。通长情况下不用电源支持供电，只 USB 双公头的供电即可满足刷机要求。
+   如果进度条没有走动，可以尝试插入电源。通常情况下无需额外电源供电，仅 USB 双公头的供电即可满足刷机要求。
 ```
 
 当完成恢复出厂设置，盒子已经恢复成 Android TV 系统，其他安装 OpenWrt 系统的操作，就和你之前第一次安装系统时的要求一样了，再来一遍即可。
@@ -659,12 +660,12 @@ Hit any key to stop autoboot: 0
 #### 10.10.1 初次安装 OpenWrt 系统
 
 - 把刷好固件的 USB/TF/SD 插入盒子。
-- 开启开发者模式: 设置 → 关于本机 → 版本号 (如: X96max plus...), 在版本号上快速连击 5 次鼠标左键, 看到系统显示 `开启开发者模式` 的提示。
-- 开启 USB 调试模式: 系统 → 高级选选 → 开发者选项 (设置 `开启USB调试` 为启用)。启用 `ADB` 调试。
-- 安装 ADB 工具：下载 [adb](https://github.com/ophub/kernel/releases/tag/tools) 并解压，将 `adb.exe`，`AdbWinApi.dll`，`AdbWinUsbApi.dll` 三个文件拷⻉到 `c://windows/` 目录下的 `system32` 和 `syswow64` 两个文件夹内，然后打开 `cmd` 命令面板，使用 `adb --version` 命令，如果有显示就表示可以使用了。
-- 进入 `cmd` 命令模式。输入 `adb connect 192.168.1.137` 命令（其中的 ip 根据你的盒子修改，可以到盒子所接入的路由器设备里查看），如果链接成功会显示 `connected to 192.168.1.137:5555`
+- 开启开发者模式：设置 → 关于本机 → 版本号（如：X96max plus...），在版本号上快速连击 5 次鼠标左键，看到系统显示 `开启开发者模式` 的提示。
+- 开启 USB 调试模式：系统 → 高级选项 → 开发者选项（设置 `开启USB调试` 为启用）。启用 `ADB` 调试。
+- 安装 ADB 工具：下载 [adb](https://github.com/ophub/kernel/releases/tag/tools) 并解压，将 `adb.exe`、`AdbWinApi.dll`、`AdbWinUsbApi.dll` 三个文件拷贝到 `c://windows/` 目录下的 `system32` 和 `syswow64` 两个文件夹内，然后打开 `cmd` 命令面板，使用 `adb --version` 命令，如果有显示就表示可以使用了。
+- 进入 `cmd` 命令模式。输入 `adb connect 192.168.1.137` 命令（其中的 IP 根据你的盒子修改，可以到盒子所接入的路由器设备里查看），如果连接成功会显示 `connected to 192.168.1.137:5555`。
 - 输入 `adb shell reboot update` 命令，盒子将重启并从你插入的 USB/TF/SD 启动，从浏览器访问固件的 IP 地址，或者 SSH 访问即可进入固件。
-- 登录 OpenWrt 系统: 将你的盒子与电脑进行直连 → 关闭电脑的 WIFI 选项，只使用有线网卡 → 将有线网卡的网络设置为和 OpenWrt 相同的网段，如果 OpenWrt 的默认 IP 是: `192.168.1.1` ，你可以设置电脑的 IP 为 `192.168.1.2` ，子网掩码设置为 `255.255.255.0`, 除这 2 个选项外，其他选项不用设置。你就可以从浏览器进入 OpwnWrt 了，默认 IP : `192.168.1.1`, 默认账号: `root`, 默认密码: `password`
+- 登录 OpenWrt 系统：将你的盒子与电脑进行直连 → 关闭电脑的 WIFI 选项，只使用有线网卡 → 将有线网卡的网络设置为和 OpenWrt 相同的网段，如果 OpenWrt 的默认 IP 是：`192.168.1.1`，你可以设置电脑的 IP 为 `192.168.1.2`，子网掩码设置为 `255.255.255.0`，除这 2 个选项外，其他选项不用设置。你就可以从浏览器进入 OpenWrt 了，默认 IP：`192.168.1.1`，默认账号：`root`，默认密码：`password`。
 
 #### 10.10.2 重新安装 OpenWrt 系统
 
@@ -727,4 +728,3 @@ Utilities -> Compression -> bsdtar、pigz
              coreutils-tail、coreutils-timeout、coreutils-touch、coreutils-tr、coreutils-truncate)、
              gawk、getopt、jq、lm-sensors、losetup、pv、tar、uuidgen
 ```
-

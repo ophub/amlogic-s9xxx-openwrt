@@ -75,7 +75,6 @@ on:
         default: "ophub/kernel"
         type: choice
         options:
-          - breakingbadboy/OpenWrt
           - ophub/kernel
       openwrt_kernel:
         description: "Select kernel version"

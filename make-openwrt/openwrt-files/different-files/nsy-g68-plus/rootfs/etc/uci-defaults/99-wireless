@@ -10,7 +10,7 @@ if [ ! -f /etc/config/wireless ]; then
 fi
 
 # -----------------------------------------------------------
-# 2. Configure 2G (radio0) - HT20 (N mode)
+# 2. Configure 2G (radio0) - HE20 (AX mode)
 # -----------------------------------------------------------
 # Check if radio0 exists to avoid errors
 if uci get wireless.radio0 >/dev/null 2>&1; then
@@ -18,7 +18,7 @@ if uci get wireless.radio0 >/dev/null 2>&1; then
     uci set wireless.radio0.country='CN'
     uci set wireless.radio0.band='2g'
     uci set wireless.radio0.channel='6'
-    uci set wireless.radio0.htmode='HT20'
+    uci set wireless.radio0.htmode='HE20'
     uci set wireless.radio0.cell_density='0'
     uci set wireless.radio0.legacy_rates='0'
 
@@ -31,7 +31,7 @@ if uci get wireless.radio0 >/dev/null 2>&1; then
 fi
 
 # -----------------------------------------------------------
-# 3. Configure 5G (radio1) - VHT80 (AC mode)
+# 3. Configure 5G (radio1) - HE80 (AX mode)
 # -----------------------------------------------------------
 # Check if radio1 exists to avoid errors
 if uci get wireless.radio1 >/dev/null 2>&1; then
@@ -39,7 +39,7 @@ if uci get wireless.radio1 >/dev/null 2>&1; then
     uci set wireless.radio1.country='CN'
     uci set wireless.radio1.band='5g'
     uci set wireless.radio1.channel='149'
-    uci set wireless.radio1.htmode='VHT80'
+    uci set wireless.radio1.htmode='HE80'
     uci set wireless.radio1.cell_density='1'
     uci set wireless.radio1.legacy_rates='0'
 

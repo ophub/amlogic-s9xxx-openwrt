@@ -215,6 +215,7 @@ on:
           - s905x3-ugoosx3
           - s905x3-whale
           - s905x3-x88-pro-x3
+          - s905x3-yzd-s18
           - s905x3-x96air
           - s905x3-x96air-gb
           - s905x3-x96max
@@ -276,6 +277,7 @@ on:
           - youyeetoo-yy3568
           - youyeetoo-yy3588
           - yskj
+          - z93a
           - zcube1-max
           - zk-r39a
           - ztl-a568

@@ -431,6 +431,8 @@ CONFIG_BUILD_SUFFIX=""
 CONFIG_TARGET_ROOTFS_DIR=""
 CONFIG_CCACHE=y
 CONFIG_CCACHE_DIR="$(TOPDIR)/.ccache"
+# CONFIG_RUST_SCCACHE is not set
+CONFIG_RUST_SCCACHE_DIR=""
 CONFIG_KERNEL_CFLAGS=""
 CONFIG_EXTERNAL_KERNEL_TREE=""
 CONFIG_KERNEL_GIT_CLONE_URI=""
@@ -451,6 +453,7 @@ CONFIG_EXTRA_GCC_CONFIG_OPTIONS=""
 CONFIG_MUSL_DISABLE_CRYPT_SIZE_HACK=y
 CONFIG_GDB=y
 # CONFIG_GDB_PYTHON is not set
+# CONFIG_RUST_TOOLCHAINOPTS is not set
 CONFIG_HAS_BPF_TOOLCHAIN=y
 # CONFIG_HAS_PREBUILT_LLVM_TOOLCHAIN is not set
 CONFIG_USE_MUSL=y
@@ -608,7 +611,7 @@ CONFIG_BUSYBOX_DEFAULT_IOCTL_HEX2STR_ERROR=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_MAX_LEN=512
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_VI is not set
-CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_HISTORY=256
+CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_HISTORY=2000
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_SAVEHISTORY=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_EDITING_SAVE_ON_EXIT=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_REVERSE_SEARCH=y
@@ -1415,7 +1418,7 @@ CONFIG_BUSYBOX_DEFAULT_FEATURE_TELNETD_PORT_DEFAULT=23
 CONFIG_BUSYBOX_DEFAULT_TRACEROUTE=y
 CONFIG_BUSYBOX_DEFAULT_TRACEROUTE6=y
 CONFIG_BUSYBOX_DEFAULT_FEATURE_TRACEROUTE_VERBOSE=y
-# CONFIG_BUSYBOX_DEFAULT_FEATURE_TRACEROUTE_USE_ICMP is not set
+CONFIG_BUSYBOX_DEFAULT_FEATURE_TRACEROUTE_USE_ICMP=y
 # CONFIG_BUSYBOX_DEFAULT_TUNCTL is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_TUNCTL_UG is not set
 # CONFIG_BUSYBOX_DEFAULT_VCONFIG is not set
@@ -1603,7 +1606,7 @@ CONFIG_BUSYBOX_DEFAULT_FEATURE_SH_MATH_64=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_SH_STANDALONE is not set
 CONFIG_BUSYBOX_DEFAULT_FEATURE_SH_NOFORK=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_SH_READ_FRAC is not set
-# CONFIG_BUSYBOX_DEFAULT_FEATURE_SH_HISTFILESIZE is not set
+CONFIG_BUSYBOX_DEFAULT_FEATURE_SH_HISTFILESIZE=y
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_SH_EMBEDDED_SCRIPTS is not set
 # CONFIG_BUSYBOX_DEFAULT_KLOGD is not set
 # CONFIG_BUSYBOX_DEFAULT_FEATURE_KLOGD_KLOGCTL is not set
@@ -2324,6 +2327,7 @@ CONFIG_PACKAGE_kmod-crypto-hmac=y
 # CONFIG_PACKAGE_kmod-crypto-hw-hifn-795x is not set
 # CONFIG_PACKAGE_kmod-crypto-hw-padlock is not set
 CONFIG_PACKAGE_kmod-crypto-kpp=y
+CONFIG_PACKAGE_kmod-crypto-krb5=y
 CONFIG_PACKAGE_kmod-crypto-lib-chacha20=y
 CONFIG_PACKAGE_kmod-crypto-lib-chacha20poly1305=y
 CONFIG_PACKAGE_kmod-crypto-lib-curve25519=y
@@ -2531,6 +2535,7 @@ CONFIG_PACKAGE_kmod-i2c-mux-pca954x=y
 # CONFIG_PACKAGE_kmod-hid is not set
 # CONFIG_PACKAGE_kmod-hid-alps is not set
 # CONFIG_PACKAGE_kmod-hid-generic is not set
+# CONFIG_PACKAGE_kmod-hid-multitouch is not set
 # CONFIG_PACKAGE_kmod-input-adc-keys is not set
 CONFIG_PACKAGE_kmod-input-core=y
 # CONFIG_PACKAGE_kmod-input-gpio-encoder is not set
@@ -3098,8 +3103,10 @@ CONFIG_PACKAGE_kmod-regmap-core=y
 CONFIG_PACKAGE_kmod-regmap-i2c=y
 # CONFIG_PACKAGE_kmod-regulator-userspace-consumer is not set
 # CONFIG_PACKAGE_kmod-sdhci is not set
+# CONFIG_PACKAGE_kmod-seg-led-gpio is not set
 # CONFIG_PACKAGE_kmod-serial-8250 is not set
 # CONFIG_PACKAGE_kmod-serial-8250-exar is not set
+# CONFIG_PACKAGE_kmod-serial-sc16is7xx is not set
 # CONFIG_PACKAGE_kmod-softdog is not set
 # CONFIG_PACKAGE_kmod-ssb is not set
 # CONFIG_PACKAGE_kmod-tee is not set
@@ -3895,7 +3902,6 @@ CONFIG_PACKAGE_perl-http-date=y
 # CONFIG_PACKAGE_perl-parse-yapp is not set
 # CONFIG_PACKAGE_perl-struct-dumb is not set
 # CONFIG_PACKAGE_perl-sub-uplevel is not set
-# CONFIG_PACKAGE_perl-test-harness is not set
 # CONFIG_PACKAGE_perl-test-warn is not set
 # CONFIG_PACKAGE_perl-text-csv_xs is not set
 # CONFIG_PACKAGE_perl-time-moment is not set
@@ -4000,6 +4006,7 @@ CONFIG_PACKAGE_perlbase-selectsaver=y
 # CONFIG_PACKAGE_perlbase-sigtrap is not set
 CONFIG_PACKAGE_perlbase-socket=y
 # CONFIG_PACKAGE_perlbase-sort is not set
+# CONFIG_PACKAGE_perlbase-source is not set
 # CONFIG_PACKAGE_perlbase-storable is not set
 CONFIG_PACKAGE_perlbase-symbol=y
 # CONFIG_PACKAGE_perlbase-sys is not set
@@ -4280,8 +4287,6 @@ CONFIG_PACKAGE_python3-yaml=y
 #
 # Configuration options (for developers)
 #
-# CONFIG_RUST_SCCACHE is not set
-CONFIG_RUST_SCCACHE_DIR=""
 # end of Configuration options (for developers)
 # end of Rust
 
@@ -4349,7 +4354,6 @@ CONFIG_ZSTD_OPTIMIZE_O3=y
 # CONFIG_PACKAGE_libodbccr is not set
 # CONFIG_PACKAGE_libodbcinst is not set
 # CONFIG_PACKAGE_libpq is not set
-# CONFIG_PACKAGE_libpqxx is not set
 # CONFIG_PACKAGE_libsqlite3 is not set
 # CONFIG_PACKAGE_pgsqlodbc is not set
 # CONFIG_PACKAGE_psqlodbca is not set
@@ -4829,10 +4833,6 @@ CONFIG_PACKAGE_libyaml=y
 # CONFIG_PACKAGE_libulfius-gnutls is not set
 # CONFIG_PACKAGE_libulfius-nossl is not set
 # CONFIG_PACKAGE_libunbound is not set
-# CONFIG_PACKAGE_libuwsc-mbedtls is not set
-# CONFIG_PACKAGE_libuwsc-nossl is not set
-# CONFIG_PACKAGE_libuwsc-openssl is not set
-# CONFIG_PACKAGE_libuwsc-wolfssl is not set
 # end of Networking
 
 #
@@ -5266,7 +5266,6 @@ CONFIG_PACKAGE_libdaemon=y
 # CONFIG_PACKAGE_libdaq3 is not set
 # CONFIG_PACKAGE_libdb47 is not set
 # CONFIG_PACKAGE_libdb47xx is not set
-# CONFIG_PACKAGE_libdbi is not set
 CONFIG_PACKAGE_libdbus=y
 CONFIG_PACKAGE_libdeflate=y
 # CONFIG_PACKAGE_libdevmapper is not set
@@ -5492,14 +5491,12 @@ CONFIG_PACKAGE_libnl-genl=y
 # CONFIG_PACKAGE_libnl-nf is not set
 # CONFIG_PACKAGE_libnl-route is not set
 CONFIG_PACKAGE_libnl-tiny=y
-# CONFIG_PACKAGE_libnopoll is not set
 # CONFIG_PACKAGE_libnpth is not set
 # CONFIG_PACKAGE_libnpupnp is not set
 # CONFIG_PACKAGE_libnvme is not set
 # CONFIG_PACKAGE_liboath is not set
 # CONFIG_PACKAGE_libogg is not set
 # CONFIG_PACKAGE_libopcodes is not set
-# CONFIG_PACKAGE_libopen62541 is not set
 # CONFIG_PACKAGE_libopendkim is not set
 # CONFIG_PACKAGE_libopenelp is not set
 # CONFIG_PACKAGE_libopenobex is not set
@@ -5517,7 +5514,6 @@ CONFIG_PACKAGE_libnl-tiny=y
 # CONFIG_PACKAGE_libpagekite is not set
 # CONFIG_PACKAGE_libpam is not set
 CONFIG_PACKAGE_libparted=y
-# CONFIG_PACKAGE_libpbc is not set
 CONFIG_PACKAGE_libpcap=y
 
 #
@@ -5562,7 +5558,6 @@ CONFIG_PACKAGE_libreadline=y
 # CONFIG_PACKAGE_libremarks is not set
 # CONFIG_PACKAGE_librhash is not set
 # CONFIG_PACKAGE_librouteros is not set
-# CONFIG_PACKAGE_libroxml is not set
 # CONFIG_PACKAGE_librrd1 is not set
 # CONFIG_PACKAGE_librtlsdr is not set
 # CONFIG_PACKAGE_libruby is not set
@@ -5584,8 +5579,6 @@ CONFIG_PACKAGE_libsensors=y
 CONFIG_PACKAGE_libsmartcols=y
 # CONFIG_PACKAGE_libsml is not set
 # CONFIG_PACKAGE_libsndfile is not set
-# CONFIG_PACKAGE_libsoc is not set
-# CONFIG_PACKAGE_libsocketcan is not set
 # CONFIG_PACKAGE_libsocks is not set
 # CONFIG_PACKAGE_libsodium is not set
 # CONFIG_PACKAGE_libsoup3 is not set
@@ -5598,7 +5591,6 @@ CONFIG_PACKAGE_libss=y
 # CONFIG_PACKAGE_libssh is not set
 # CONFIG_PACKAGE_libssh2 is not set
 # CONFIG_PACKAGE_libstoken is not set
-# CONFIG_PACKAGE_libstrophe is not set
 # CONFIG_PACKAGE_libsyn123 is not set
 # CONFIG_PACKAGE_libsysrepo is not set
 # CONFIG_PACKAGE_libtalloc is not set
@@ -6007,8 +5999,6 @@ CONFIG_PACKAGE_luci-app-vlmcsd=y
 CONFIG_PACKAGE_luci-theme-bootstrap=y
 # CONFIG_PACKAGE_luci-theme-footstrap is not set
 CONFIG_PACKAGE_luci-theme-material=y
-# CONFIG_PACKAGE_luci-theme-openwrt is not set
-# CONFIG_PACKAGE_luci-theme-openwrt-2020 is not set
 # end of 4. Themes
 
 #
@@ -6444,6 +6434,8 @@ CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn=y
 # CONFIG_PACKAGE_graphicsmagick is not set
 # CONFIG_PACKAGE_grilo is not set
 # CONFIG_PACKAGE_grilo-plugins is not set
+# CONFIG_PACKAGE_gst1-device-monitor is not set
+# CONFIG_PACKAGE_gst1-mod-rtspclientsink is not set
 # CONFIG_PACKAGE_gstreamer1-libs is not set
 # CONFIG_PACKAGE_gstreamer1-plugins-bad is not set
 # CONFIG_PACKAGE_gstreamer1-plugins-base is not set
@@ -6463,6 +6455,7 @@ CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn=y
 # CONFIG_PACKAGE_libcamera-ipa-rpi-vc4 is not set
 # CONFIG_PACKAGE_libcamera-ipa-softisp is not set
 # CONFIG_PACKAGE_libcamera-v4l2 is not set
+# CONFIG_PACKAGE_libgst1rtspserver is not set
 # CONFIG_PACKAGE_lux is not set
 # CONFIG_PACKAGE_minidlna is not set
 # CONFIG_PACKAGE_minisatip is not set
@@ -6727,8 +6720,6 @@ CONFIG_PACKAGE_avahi-dbus-daemon=y
 # CONFIG_PACKAGE_dns-over-https is not set
 # CONFIG_PACKAGE_dns2socks is not set
 # CONFIG_PACKAGE_dns2tcp is not set
-# CONFIG_PACKAGE_dnscrypt-proxy is not set
-# CONFIG_PACKAGE_dnscrypt-proxy-resolvers is not set
 # CONFIG_PACKAGE_dnscrypt-proxy2 is not set
 # CONFIG_PACKAGE_dnsdist is not set
 # CONFIG_PACKAGE_dnsdist-full is not set
@@ -6737,7 +6728,6 @@ CONFIG_PACKAGE_avahi-dbus-daemon=y
 # CONFIG_PACKAGE_drill is not set
 # CONFIG_PACKAGE_family-dns is not set
 # CONFIG_PACKAGE_geoview is not set
-# CONFIG_PACKAGE_hostip is not set
 # CONFIG_PACKAGE_idn is not set
 # CONFIG_PACKAGE_idn2 is not set
 # CONFIG_PACKAGE_isc-dhcp-client-ipv4 is not set
@@ -6992,6 +6982,7 @@ CONFIG_PACKAGE_relayd=y
 # CONFIG_PACKAGE_tcfilter is not set
 # CONFIG_PACKAGE_tcpproxy is not set
 # CONFIG_PACKAGE_ua2f is not set
+# CONFIG_PACKAGE_udp-broadcast-relay-redux is not set
 # CONFIG_PACKAGE_vis is not set
 # CONFIG_PACKAGE_yggdrasil is not set
 # CONFIG_PACKAGE_yggdrasil-jumper is not set
@@ -7214,6 +7205,7 @@ CONFIG_PACKAGE_comgt=y
 # CONFIG_PACKAGE_comgt-directip is not set
 CONFIG_PACKAGE_comgt-ncm=y
 # CONFIG_PACKAGE_modemband is not set
+# CONFIG_PACKAGE_modemsignal-leds is not set
 # CONFIG_PACKAGE_quectel-cm is not set
 # CONFIG_PACKAGE_sendat is not set
 # CONFIG_PACKAGE_umbim is not set
@@ -7582,8 +7574,8 @@ CONFIG_PACKAGE_odhcpd-ipv6only=y
 # CONFIG_PACKAGE_openelp is not set
 # CONFIG_PACKAGE_openlist is not set
 # CONFIG_PACKAGE_openthread-br is not set
-# CONFIG_PACKAGE_oping is not set
 # CONFIG_PACKAGE_oscam is not set
+# CONFIG_PACKAGE_oping is not set
 # CONFIG_PACKAGE_pagekitec is not set
 # CONFIG_PACKAGE_passt is not set
 # CONFIG_PACKAGE_pcapplusplus is not set
@@ -8773,6 +8765,57 @@ CONFIG_PACKAGE_whereis=y
 # CONFIG_PACKAGE_qt5svg is not set
 # CONFIG_PACKAGE_qt5translations is not set
 # CONFIG_PACKAGE_qt5virtualkeyboard is not set
+# CONFIG_PACKAGE_qt6labs-animation is not set
+# CONFIG_PACKAGE_qt6labs-folderlistmodel is not set
+# CONFIG_PACKAGE_qt6labs-platform is not set
+# CONFIG_PACKAGE_qt6labs-qmlmodels is not set
+# CONFIG_PACKAGE_qt6labs-settings is not set
+# CONFIG_PACKAGE_qt6labs-sharedimage is not set
+# CONFIG_PACKAGE_qt6labs-wavefrontmesh is not set
+# CONFIG_PACKAGE_qt6quick is not set
+# CONFIG_PACKAGE_qt6quick-controls2 is not set
+# CONFIG_PACKAGE_qt6quick-dialogs2 is not set
+# CONFIG_PACKAGE_qt6quick-effects is not set
+# CONFIG_PACKAGE_qt6quick-layouts is not set
+# CONFIG_PACKAGE_qt6quick-particles is not set
+# CONFIG_PACKAGE_qt6quick-qml is not set
+# CONFIG_PACKAGE_qt6quick-qml-core is not set
+# CONFIG_PACKAGE_qt6quick-qml-debug is not set
+# CONFIG_PACKAGE_qt6quick-qml-meta is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtcore is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtlabs-animation is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtlabs-folderlistmodel is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtlabs-platform is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtlabs-qmlmodels is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtlabs-settings is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtlabs-sharedimage is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtlabs-wavefrontmesh is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtnetwork is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtqml is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtqml-models is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtqml-workerscript is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtqml-xmllistmodel is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick-controls is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick-dialogs is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick-effects is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick-layouts is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick-particles is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick-shapes is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick-templates is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qtquick-window is not set
+# CONFIG_PACKAGE_qt6quick-qml-mod-qttest is not set
+# CONFIG_PACKAGE_qt6quick-qml-models is not set
+# CONFIG_PACKAGE_qt6quick-qml-network is not set
+# CONFIG_PACKAGE_qt6quick-qml-workerscript is not set
+# CONFIG_PACKAGE_qt6quick-qml-xmllistmodel is not set
+# CONFIG_PACKAGE_qt6quick-shapes is not set
+# CONFIG_PACKAGE_qt6quick-templates2 is not set
+# CONFIG_PACKAGE_qt6quick-test is not set
+# CONFIG_PACKAGE_qt6quick-widgets is not set
+# CONFIG_PACKAGE_qt6svg is not set
+# CONFIG_PACKAGE_qt6svg-widgets is not set
+# CONFIG_PACKAGE_qt6translations is not set
 # CONFIG_PACKAGE_wayland-protocols is not set
 # CONFIG_PACKAGE_wayland-scanner is not set
 # end of Frameworks and Toolkits

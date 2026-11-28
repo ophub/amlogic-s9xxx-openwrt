@@ -62,6 +62,7 @@ on:
           - chainedbox
           - cm3588-nas
           - crrc
+          - cx3566-z
           - dc-a588
           - dg3399
           - dg-nas-lite
@@ -268,6 +269,7 @@ on:
           - tvi3315a
           - vontar-h618
           - vplus
+          - w152d
           - wocyber-a3
           - wxy-oect
           - wxy-oect-mod
